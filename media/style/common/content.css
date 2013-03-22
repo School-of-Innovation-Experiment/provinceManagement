@@ -1,0 +1,19 @@
+.footer-alert-bar {
+    height: auto;
+    bottom: -27px;
+    width: 100%;
+    position: fixed;
+    /* background-color: rgba(0, 0, 0, 0.75); */
+    background-color: #eee;
+    opacity: 0.75;
+    /* border-width: 1px 0 0 0; */
+    border-top: 2px solid #ccc;
+}
+
+.footer-alert-bar marquee{
+    height: 30px;
+    /* color: #ffffff; */
+    color: #666;
+    vertical-align: middle;
+    font-size: 16px;
+}

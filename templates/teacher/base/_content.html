@@ -1,0 +1,26 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<!-- index style -->
+<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap-editable/css/bootstrap-editable.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/index.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/content.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/accounts_form.css" type="text/css" media="screen" />
+
+<div class="container form-container">
+	<!-- user information bar -->
+	{% include "teacher/widgets/userinfo_basicbar.html" %}
+	<!-- important features nav-bar -->
+	{% include "teacher/widgets/features_item_navbar.html" %}
+	<!-- calculate content details -->
+	{%block calculate-content%} 
+    
+    
+    {% endblock %}
+</div>
+
+{% endblock %}

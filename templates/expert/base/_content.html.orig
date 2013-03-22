@@ -1,0 +1,43 @@
+<<<<<<< HEAD
+=======
+<!--content for calculate, layout, basic widgets-->
+
+>>>>>>> 47ec1722bab4d07aec279d2b5a48fb8d546b9684
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<<<<<<< HEAD
+  <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap-editable/css/bootstrap-editable.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/index.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/content.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/accounts_form.css" type="text/css" media="screen" />
+
+  <!-- customize css -->
+  <link rel="stylesheet" href="{{ STATIC_URL}}style/expert/content.css" type="text/css" media="screen" />
+  <div class="container form-container">
+    {% include "expert/widgets/features_item_navbar.html" %}
+    {% block calculate-content %}
+
+    {% endblock %}
+
+  </div>
+=======
+
+<!-- index style -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+
+
+<div class="container form-container ">
+	<!-- user information bar -->
+	{% include "student/widgets/userinfo_basicbar.html" %}
+	<!-- important features nav-bar -->
+	{% include "student/widgets/features_item_navbar.html" %}
+	<!-- calculate content details -->
+	{%block calculate-content%} {% endblock %}
+</div>
+
+>>>>>>> 47ec1722bab4d07aec279d2b5a48fb8d546b9684
+{% endblock %}

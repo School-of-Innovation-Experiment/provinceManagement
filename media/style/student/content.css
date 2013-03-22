@@ -1,0 +1,60 @@
+/*for student pages */
+
+p.project-title{
+  font-weight: bold;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: underline;
+  font-size: x-large;
+}
+
+div.oneline{
+  display: inline-block;
+  margin-left: 10px;
+  text-align: left;
+  margin-top:10px;
+}
+
+div.oneline > p,a,address
+{
+  display: inline-block;
+  margin-left: 20px;
+}
+
+div.oneline-packed{
+  display: inline-block;
+  margin-left: 5px;
+  text-align: left;
+}
+
+div.oneline-packed >p
+{
+  display: inline-block;
+  margin-left: 2px;
+}
+
+textarea.fill-form{
+  width: 90%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+label.project-choice{
+  margin-left:40px;
+}
+
+blockquote.comments{
+  margin-right: 100px;
+  margin-left:20px;
+}
+
+div.submit-btn{
+  margin-top:200px;
+  margin-left:100px;
+  margin-right:100px;
+
+}
+
+#grid-elements{
+  display: inline;
+}

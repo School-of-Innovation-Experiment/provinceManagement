@@ -1,0 +1,38 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+	<div class="offset3 span6">
+		<h4 class="center">投稿/审阅截止日期</h4>
+		<form class="well ">
+		<label>初期截至时间</label>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-time"></i></span><input id="earlystartdate" class="span2" type="text" />
+		</div>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-time"></i></span><input id="earlyenddate" class="span2" type="text" />
+		</div>
+		<label>终期截至时间</label>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-time"></i></span><input id="finalstartdate" class="span2" type="text" />
+		</div>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-time"></i></span><input id="finalenddate" class="span2" type="text" />
+		</div>
+		<div class="form-actions">
+		<button type="submit" class="btn btn-primary">保存更改</button>
+		</div>
+		</form>
+	</div>
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
+<script>
+	$(function(){
+		window.prettyPrint && prettyPrint();
+			$('#earlystartdate').datepicker();
+			$('#earlyenddate').datepicker();
+			$('#midstartdate').datepicker();
+			$('#midenddate').datepicker();
+			$('#finalstartdate').datepicker();
+			$('#finalenddate').datepicker();
+
+	});	
+	</script>
+{%endblock%}

@@ -1,0 +1,24 @@
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+
+<div class="container form-container">
+	<form class="form-signin" method="post" action="{% url auth_login %}">
+		<h2 class="form-signin-heading">请登陆</h2>			
+		{% include 'base/_form.html' %}			
+		<button class="btn btn-large btn-primary" type="submit">登陆</button>	
+		<input type="hidden" name="next" value="{{ next }}" />	
+		{% csrf_token %}
+	<br>
+	<br>
+	<p>{% trans "forget password" %}? <a href="{% url auth_password_reset %}">{% trans "reset" %}</a>!</p>
+	<p>{% trans "sign up" %}? <a href="{% url registration_register %}">{% trans "login" %}</a>!</p>
+	</form>	
+
+</div>
+
+{% endblock %}

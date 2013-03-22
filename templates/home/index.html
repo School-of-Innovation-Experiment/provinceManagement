@@ -1,0 +1,169 @@
+{% extends "base/base.html" %}
+
+<!-- hide nav bar -->
+{% block top-nav-bar %}
+{% endblock %}
+{% block content %}
+
+  <!-- index style -->
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/homepage.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/gh-fork-ribbon.css" type="text/css" media="screen" />
+  <div class="github-fork-ribbon-wrapper right">
+    <div class="github-fork-ribbon">
+      <a href="/">创新创业＊省级版</a>
+    </div>
+  </div>
+
+  <div class="home-title">
+    <p>欢迎使用<span style="color: #fff;"> 大学生创新创业管理平台</span></p>
+  </div>
+  <div class="home-out-wrap">
+    <div class="home-main">
+      <div class="home-aside">
+        <div class="home-nav">
+          <ul>
+            <li>
+              <a href="features/">关于</a>
+            </li>
+            <li>
+              <a href="/">主页</a>
+            </li>
+            <li>
+              <a href="school/">学校上传</a>
+            </li>
+            <li>
+              <a href="expert/">专家</a>
+            </li>
+            <li>
+              <a href="adminStaff/">省级管理员</a>
+            </li>
+            <li>
+              <a href="admin/">系统管理员</a>
+            </li>
+          </ul>
+          <hr />
+          <hr />
+
+          <ul>
+            {% if request.user.is_authenticated %}
+            <li>
+              <a href="settings/profile">用户信息</a>
+            </li>
+            <li>      
+              <a href="accounts/logout">注销</a>
+            
+            </li>
+            {% else %}
+      		  <li ><a href="/accounts/login">登陆</a></li>
+            {% endif%}
+          </ul>
+        </div>
+        <div class="home-link">
+          <h6>相关链接:</h6>
+          <ul>
+            <li><a href="http://www.dlut.edu.cn" >大连理工大学</a></li>
+            <li><a href="http://gs.dlut.edu.cn">大工研究生主页</a></li>
+            <li><a href="http://www.upln.cn/">辽宁省本科教育网</a></li>
+            <li><a href="http://dasai.upln.cn/index.php?m=yp">辽宁省大学生创新创业竞赛</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="home-content">
+        <!-- Carousel  ================================================== -->
+        <div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="item">
+              <img src="{{STATIC_URL}}/images/slide/slide-01.jpg" alt="">
+                <div class="carousel-caption">
+                  <h1>Join Chemistry Tools Group!</h1>
+                  <p class="lead">Enjoy your professional, effecifient chemistry calculate.</p>
+                  <a class="btn btn-large btn-primary" href="/accounts/register">Sign up today</a>
+                </div>
+            </div>
+            <div class="item active">
+              <img src="{{STATIC_URL}}/images/slide/slide-02.jpg" alt="">
+                <div class="carousel-caption">
+                  <h1>Core Features</h1>
+                  <p class="lead">Support some core algorithms for chemistry calculate.</p>
+                  <a class="btn btn-large btn-primary" href="/features">Explore</a>
+                </div>
+            </div>
+            <div class="item">
+              <img src="{{STATIC_URL}}/images/slide/slide-03.jpg" alt="">
+                <div class="carousel-caption">
+                  <h1>Support windows platform.</h1>
+                  <p class="lead">Learn More about our client software</p>
+                  <a class="btn btn-large btn-primary" href="/features">Learn More Client</a>
+                </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="/#myCarousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
+
+        </div><!-- /.carousel -->
+        <div class="front-wrap">
+          <div class="home-news">
+            <h3>焦点新闻 <small>Hot</small></h3>
+            <table class="news">
+              <tbody>
+                <tr>
+                  <td><h3><a href="http://news.dlut.edu.cn/article/2013/0318/47597.shtml">我校全国人大代表宁桂玲副校长昨晚返连</a></h3>
+                    <p>3月17日晚，带着全国“两会”胜利闭幕的喜悦，出席十二届全国人大一次会议的全国人大代表、我校副校长宁桂玲教授与其他大连市全国人大代表同机返连。省委常委、市委书记唐军同部分市领导，我校党委副书记兼纪委书记李成恩，学校统战部、宣传部负责同志前往机场迎接。李成恩副书记向宁桂玲副校长转达了校党委书记张德祥、校长申长雨的亲切问候。</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr />
+            <strong><a href="#">更多»</a></strong>
+          </div> <!-- home-news -->
+          <div class="home-news">
+            <h3>文件下载 <small>Documents</small></h3>
+            <table class="nav nav-list news">
+              <tbody>
+                <tr>
+                  <td >1.</td>
+                  <td>
+                    <a title="指导教师跨学部（学院）招收硕士研究生审批表" href="http://gs.dlut.edu.cn/upload/download/%E6%8C%87%E5%AF%BC%E6%95%99%E5%B8%88%E8%B7%A8%E5%AD%A6%E9%83%A8%EF%BC%88%E5%AD%A6%E9%99%A2%EF%BC%89%E6%8B%9B%E6%94%B6%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E5%AE%A1%E6%89%B9%E8%A1%A8_201334143647.doc">指导教师跨学部（学院）招收硕士研究生审批表</a>
+                  </td>
+                  <td>
+                    [13-03-05]
+                  </td>
+                </tr>
+                <tr>
+                  <td >2.</td>
+                  <td>
+                    <a href="http://gs.dlut.edu.cn/upload/download/%E5%A4%A7%E8%BF%9E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A62013%E5%B9%B4%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E6%96%B0%E7%94%9F%E4%BF%9D%E7%95%99%E5%85%A5%E5%AD%A6%E8%B5%84%E6%A0%BC%E7%94%B3%E8%AF%B7%E8%A1%A8_201334143633.doc">大连理工大学2013年硕士研究生新生保留入学资格申请表</a>
+                  </td>
+                  <td >
+                    [13-03-05]
+                  </td>
+                </tr>
+                <tr>
+                  <td >3.</td>
+                  <td>
+                    <a href="http://gs.dlut.edu.cn/upload/download/%E5%A4%A7%E8%BF%9E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A62013%E5%B9%B4%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E6%8E%A5%E6%94%B6%E6%A0%A1%E5%A4%96%E8%80%83%E7%94%9F%E8%B0%83%E5%89%82%E7%94%B3%E8%AF%B7%E8%A1%A8_201334143618.doc">大连理工大学2013年硕士研究生接收校外考生调剂申请表</a>
+                  </td>
+                  <td >
+                    [13-03-04]
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr />
+            <a href="#">更多»</a>
+          </div> <!-- home-news -->
+        </div> <!-- front-wrap -->
+      </div>
+    </div>
+  </div> <!-- out-warp -->
+
+{% endblock %}
+{% block bottom_js %}
+  {{ block.super }}
+  <script type='text/javascript' src="{{STATIC_URL}}bootstrap/assets/js/bootstrap-carousel.js"></script>
+{% endblock %}
+{% block home-footer %}
+{% endblock %}
+{% block footer-alert-bar %}
+{% endblock %}

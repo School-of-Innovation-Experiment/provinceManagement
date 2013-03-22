@@ -1,0 +1,50 @@
+<!-- new-task page -->
+{% extends "project/base/_content.html" %}
+
+{% block calculate-content%}
+<div class="container">
+  <div class="row">
+
+    <!--left month bar-->
+    <div class="span4">
+      <a class="alert span1">1月 <span class="label label-success pull-right">Pass!</span></a>
+      <a class="alert span1">2月<span class="label label-success pull-right">Pass!</span> </a>
+      <br>
+      <a class="alert span1 ">3月 <span class="label label-success pull-right">Pass!</span></a>
+      <a class="alert alert-success span1">4月 <span class="label label-important pull-right">Now</span></a>
+      <br>
+      <a class="alert alert-info span1">5月</a>
+      <a class="alert alert-info span1">6月</a>
+      <br>
+      <a class="alert alert-info span1">7月</a>
+      <a class="alert alert-info span1">8月</a>
+      <br>
+      <a class="alert alert-info span1">9月</a>
+      <a class="alert alert-info span1">10月</a>
+      <br>
+      <a class="alert alert-info span1">11月</a>
+      <a class="alert alert-info span1">12月</a>
+    </div>
+
+    <!--right content bar-->
+    <div class="span8">
+      <textarea class="fill-form" rows="8" placeholder="这个月做了什么，有那些进展..."></textarea>                                               
+      <br>
+      <blockquote class="pull-right comments">
+        <h4>
+           Good Job!
+        </h4>
+        <small>指导教师 <cite title="teacher">冯林教授</cite></small>
+        <small>2013.3.15</small>
+      </blockquote>
+      <br/> 
+      <div class="">
+        <button class="btn btn-large btn-block btn-success" type="submit">信息填写无误后，提交申请书</button>
+        </br>
+        <small class="pull-right">Tips: 截止日期前可以无限制修改，即使过了日期也可以让指导教师修改</small>
+    </div>
+  </div>
+
+  </div>
+</div>
+{% endblock %}

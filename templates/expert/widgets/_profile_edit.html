@@ -1,0 +1,55 @@
+<form class="form-horizontal" method="post" action="/expert/profile/">
+  {% csrf_token %}
+  <fieldset>
+    <legend>
+      基本信息
+    </legend>
+    <div class="control-group">
+      <label class="control-label">姓名</label>
+      <div class="controls">
+        <div class="input">
+          <input type="text" class="input-medium">
+          <select class="input-small">
+            <option value="teacher">讲师</option>
+            <option value="">副教授</option>
+            <option value="">教授</option>
+
+          </select>
+
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">所在院系</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <input type="text" class="input-xlarge">
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">邮箱</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge ">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">联系电话</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">办公地址</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">提交更改</button>
+      <button class="btn" class="btn">取消</button>
+    </div>
+  </fieldset>
+</form>
+
+

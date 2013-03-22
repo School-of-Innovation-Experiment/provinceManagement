@@ -1,0 +1,108 @@
+{% extends "showtime/base/_content.html" %}
+{%block show-content%}
+<div class="container">
+	<div class="row">
+		<div class="span6" >
+			<div class="introShow">
+			  <div class="mainShow"><a id="bigImg" href="{{STATIC_URL}}showtime/images/01.jpg" class="jqzoom" ><img id="midImg" src="{{STATIC_URL}}showtime/images/01.jpg" class="Picture220"/></a>
+			  </div>
+			  <div class="scroll" id="scroll">
+			  	<a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
+			  	<a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
+			    <ul id="thumList">
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/01.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/01.jpg" ref2="{{STATIC_URL}}showtime/images/01.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/02.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/02.jpg" ref2="{{STATIC_URL}}showtime/images/02.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture42"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/03.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/03.jpg" ref2="{{STATIC_URL}}showtime/images/03.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/04.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/04.jpg" ref2="{{STATIC_URL}}showtime/images/04.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/05.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/05.jpg" ref2="{{STATIC_URL}}showtime/images/05.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/06.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/06.jpg" ref2="{{STATIC_URL}}showtime/images/06.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/07.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/07.jpg" ref2="{{STATIC_URL}}showtime/images/07.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			      <li class="moveUnit"><a href="javascript:void(0)" title="" class="currentItem"><img src="{{STATIC_URL}}showtime/images/08.jpg" alt="" ref1="{{STATIC_URL}}showtime/images/08.jpg" ref2="{{STATIC_URL}}showtime/images/08.jpg" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+			    </ul>
+			   </div>
+			</div>
+		</div>
+		<div class="span4 well" style="margin-top:10px">
+			<div><h4>项目名称 </strong><span class="label label-info">国家级项目</span></h4>
+			<div><a href="/showtime/#content">无限传感网络节点自适应</a></div>
+			<div><label><h4>高校名称</h4><a href="http://www.dlut.edu.cn">大连理工大学</a></label></div>
+			<div><label><h4>指导教师</h4><a href="/showtime">冯林教授</a></label></div>
+			<div><label><h4>团队负责人</h4><a href="/showtime">煌煌</a></label></div>
+		</div>
+	</div>
+</div>
+	<br>
+	<br>
+	<div class="row well">
+		<section id="content">
+		<h2 style="text-align:center">具有自适应通信能力的无线传感网节点</h2>
+			<h3>项目简介</h3>
+				<p>
+			　无线传感器网络(WSN)是由大量无处不在的、具有通信与计算能力的微小传感器节点密集布设在无人值守的监控区域而构成的能够根据环境自主完成指定任务的智能自治测控网络系统，可广泛应用于航天、航空、国防、电力、能源、环境、医疗、灾难预警、空间探索等领域。2003年，MIT技术*论在预测未来技术发展的报告中，将其列为改变世界的十大新技术之一。一般情况下，WSN节点采用随机散布的方式，且存在着功耗受限、通信能力受限、计算能力受限、存储能力受限等问题，因此对设计提出了较高要求
+
+<br>　　
+WSN的应用环境多样，存在所接前端探测器不相同、布设环境不一样的可能。特别在随机布设时，各个节点所处的位置及相隔的距离无法预先确定。探测器的不同及对数据处理方式不同，产生的数据量可能不同。同时，布设的环境可能为城区、郊区、山地等不同环境。要在多变的传输需求和环境下实现良好的通信，传感网节点必须具有良好的环境适应性，即可以通过调整自身的通信参数满足不同传输要求。因此需要WSN节点具有相当的灵活性。
+
+　<br>　目前在WSN节点的设计上，大多将信息处理模块与通信模块隔离开来，分别采用不同的硬件进行处理，通信模块基本采用现有成熟产品。这样设计的系统，缺乏整体考虑，难以在体积功耗上进行最小化的设计，且由于通信模块固定，不能同时适应具有不同传输数据量、不同传输速率和不同误码率要求的系统。而这些条件是WSN中是应满足的常见要求。
+
+　　本文给出基于整体性能优化、具有相当灵活性、能够满足自适应通信要求的WSN节点实现方案，并就能耗与通信的适应性进行分析。
+		</p>
+			<h3>设计方案</h3>
+<br>
+在考虑传感器节点的通信方式前，需要首先考虑传感器的布设环境。传感器节点间一般通过无线方式进行信息交互；传感器节点的布设环境多为近地环境，直达的视距信号较少，多为衍射或折射后到达的信号，存在较多的多径干扰；传感网的布设具有不定性，节点间距离不一定相等；传感器节点间的信息交互量较少。同时，由于传感器节点大规模散布，需要减少对其他系统的干扰并提高自身抗干扰能力，并具备信息安全保密功能。
+
+　　<br>由于直达的视距信号较少，需要采用能有效利用多径方式实现通信。扩频通信体制能很好地适应多径传输环境，且可通过扩频增益的更改调整自身通信灵敏度，在距离近时能提高传输速率减小信息碰撞，在距离远时能通过有效提高灵敏度的方式来实现和其他节点的通信及自适应通信，同时考虑到信息保密安全的问题，采用直接序列扩频通信体制作为WSN的主要通信方式。由于信息交互量较小，且系统无中心节点，所以适合采用异步通信体制。
+
+　　<br>由于WSN的应用环境不定，电磁环境中可能存在固定频点干扰，因此设计的系统要求能在多个频点上跳转工作，对存在干扰的频点可实现干扰避免。
+		</p>
+		<h3>信息安全</h3>
+		<p>
+		<br>很显然，现有的传感节点具有很大的安全漏洞，攻击者通过此漏洞，可方便地获取传感节点中的机密信息、修改传感节点中的程序代码，如使得传感节点具有多个身份ID，从而以多个身份在传感器网络中进行通信，另外，攻击还可以通过获取存储在传感节点中的密钥、代码等信息进行，从而伪造或伪装成合法节点加入到传感网络中。一旦控制了传感器网络中的一部分节点后，攻击者就可以发动很多种攻击，如监听传感器网络中传输的信息，向传感器网络中发布假的路由信息或传送假的传感信息、进行拒绝服务攻击等。
+　　
+<br>对策：由于传感节点容易被物理操纵是传感器网络不可回避的安全问题，必须通过其它的技术方案来提高传感器网络的安全性能。如在通信前进行节点与节点的身份认证;设计新的密钥协商方案，使得即使有一小部分节点被操纵后，攻击者也不能或很难从获取的节点信息推导出其它节点的密钥信息等。另外，还可以通过对传感节点软件的合法性进行认证等措施来提高节点本身的安全性能。
+<br>根据无线传播和网络部署特点，攻击者很容易通过节点间的传输而获得敏感或者私有的信息，如：在使用WSN监控室内温度和灯光的场景中，部署在室外的无线接收器可以获取室内传感器发送过来的温度和灯光信息;同样攻击者通过监听室内和室外节点间信息的传输，也可以获知室内信息，从而非法获取出房屋主人的生活习惯等私密信息。[3]
+	
+		</p>
+	</section>
+	</div>
+<div>
+<script type="text/javascript" language="jscript">
+jQuery(function($) {
+    Biz.Product.Product.turn();
+    Biz.Product.Product.turn2();
+    Biz.Common.TabCtrl.tabs("tab");
+	Biz.Common.TabCtrl.tabs("tempTab");
+	Biz.Common.MoveCtrl.iniUnit('scroll', 'thumList', 4, 1);
+	Biz.Common.MoveCtrl.iniUnit('gift', 'gift_1', 3, 1);
+    Biz.Common.MoveCtrl.iniUnit('congener', 'congener_1', 3, 1);
+    Biz.Common.TableCtrl.odd();	
+    Biz.Product.Product.InitSpecialTable();
+    Biz.Product.Product.InitAlsoBuy();
+
+	//Click out event!
+	$("#backgroundPopup").click(function(){
+		Biz.Common.PopCtrl.disablePopup();
+		});
+		
+	//Press Escape event!
+	$(document).keypress(function(e){
+		if(e.keyCode==27 && popupStatus==1){
+			Biz.Common.PopCtrl.disablePopup();
+		}
+	});
+	
+    var options = {
+    zoomWidth: 300,
+    zoomHeight: 250,
+        xOffset: 20,
+        yOffset: -15,
+        title : false,
+		showEffect:"fadein",
+		hideEffect:"fadeout",
+        position: "right" 
+	}
+	$(".jqzoom").jqzoom(options);
+}); 
+</script>
+
+{%endblock%}

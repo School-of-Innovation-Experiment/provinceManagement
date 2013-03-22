@@ -1,0 +1,15 @@
+<!-- new-task page -->
+{% extends "school/base/_content.html" %}
+
+{% block calculate-content%}
+<div class="container">
+  <form method="post" action=".">
+    {% csrf_token %}
+    <!--TODO: we will load different page according by the proposal type-->
+    {% include "school/widgets/innovation_init.html" %}
+    <br/>
+    <br/>
+    {#% include "school/widgets/enterprise_init.html" %#}
+  </form>
+</div>
+{% endblock %}

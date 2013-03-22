@@ -1,0 +1,81 @@
+<form method="post" id="expert-sco-adv" action="/expert/">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="span4">
+      <table class="table table-bordered table-striped" id="score-table">
+        <colgroup>
+          <col class="span1">
+          <col class="span2">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>打分点</th>
+            <th>得分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              创新性
+            </td>
+            <td>
+              <span type="text" class="input-small uneditable-input" >85</span>
+              <span>分</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              实用性
+            </td>
+            <td>
+              <span type="text" class="input-small uneditable-input" >87</span>
+              <span>分</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              趣味性
+            </td>
+            <td>
+              <span type="text" class="input-small uneditable-input">78</span>
+              <span>分</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              最终得分
+            </td>
+            <td>
+              <span type="text" class="input-small uneditable-input" >82</span>
+              <span>分</span>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>  <!-- span4 -->
+
+    <div class="span4">
+      <h5>打分依据</h5>
+      <hr />
+      <p>专家根据创新性、实用性、趣味性等方面打分，总得分计算公式为：
+        <br />
+        最终得分 = 创新分X0.4 + 实用分X0.4 + 趣味分X0.2</p>
+    </div>
+  </div> <!-- row -->
+
+  <fieldset>
+    <legend>
+      <h4>专家评审
+        <!-- <small>就项目给出一些意见和建议</small> -->
+      </h4>
+    </legend>
+
+    <span class="fill-form" >这个项目点子比较新颖，实用性较强，有一定可行性。</span>
+  </fieldset>
+  <div class="form-actions">
+    <a class="btn btn-primary" href="#new-home-project-score-edit" data-toggle="tab">修改</a>
+  </div>
+</form>

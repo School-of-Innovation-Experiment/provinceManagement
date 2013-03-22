@@ -1,0 +1,21 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+  <form method="post" action=".">
+    {% csrf_token %}
+    <p> TinyMCE test Page </p>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p>test</p>
+    {{form.content}}
+    <button type="submit">submit</button>
+  </form>
+</div>
+{% endblock %}

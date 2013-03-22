@@ -1,0 +1,67 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+	<div class="well form-inline">
+		<span><strong>按照类别进行显示</strong></span>
+	  <select id="faculty_search" style="vertical-align:middle;">
+	  <option class="bottom" selected="True">创新实践</option>
+		<option>创业实践</option>
+	  </select>
+	  <button class="btn btn-primary">筛选</button>
+	<table class="table table-condensed">
+	<thead>
+	<tr>
+		<th>发布题目名称</th>
+		<th>所属学校</th>
+		<th>所属分类</th>
+		<th>指导教师名称</th>
+		<th>已分配专家数目</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="warning">
+		<td>污水治理</td>
+		<td>大连理工大学</td>
+		<td>创业</td>
+		<td>宋小宝</td>
+		<td>3</td>
+	</tr>
+	<tr class="warning">
+		<td>污水治理</td>
+		<td>大连理工大学</td>
+		<td>创业</td>
+		<td>宋小宝</td>
+		<td>3</td>
+	</tr>
+	<tr class="warning">
+		<td>污水治理</td>
+		<td>大连理工大学</td>
+		<td>创新</td>
+		<td>宋小宝</td>
+		<td>3</td>
+	</tr>
+	<tr class = "success">
+		<td>高维时间序列挖掘</td>
+		<td>大连理工大学</td>
+		<td>创新</td>
+		<td>宋大宝</td>
+		<td>3</td>
+	</tr>
+	</tbody>
+	</table>
+	<div id="myModal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>专家审阅</h3>
+            </div>
+            <div class="modal-body">
+              <h4>系统自动分配，以推送至相应专家</h4>
+              <p>
+	      			</p>
+						</div>
+            <div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">关闭</a>
+            </div>
+  </div>
+	<button data-toggle="modal" href="#myModal" class="btn btn-primary">指定专家进行审阅</button>
+	</div>
+{%endblock%}

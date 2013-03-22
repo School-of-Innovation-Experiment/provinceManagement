@@ -1,0 +1,120 @@
+<!-- new-task page -->
+{% extends "project/base/_content.html" %}
+
+{% block calculate-content%}
+<div class="container">
+  <!--Project Status-->
+  <div>
+    <div class="page-header">
+      <h3>项目状态</h3>
+    </div>
+      <div class="row">
+        <div class = "span6">
+           <div class="oneline">
+            <p class="project-title">新型家用应急逃生锁</p>
+            <p class="label label-info">创新训练</p>
+           </div>
+           <br/>
+          <div class="oneline">
+            <p >创新实验学院</p>
+            <p >冯林教授</p>
+          </div>
+          <br>
+          <div class="oneline">
+            <p>项目起始于 
+              <p class="label label-success">2013.4</p>
+            </p>
+          </div>
+        </div>
+
+        <div class = "span5">
+          <image class="span2" src="{{STATIC_URL}}images/success_128.png" style="width: 100px; height:100px"> 
+          <div class = "span3">
+            <div class="oneline-packed">
+                <p class="label label-info">项目初评</p>
+                <p class=" badge badge-success">Pass!</p> 
+            </div>
+            </br>
+            <div class="oneline-packed">
+                <p class="label label-info">项目启动</p>
+                <p class=" badge badge-success">Pass!</p> 
+            </div>
+            </br>
+            <div class="oneline-packed">
+                <p class="label label-important">中期审核</p>
+                <p class="label label-warning">正在进行</p>
+                <small>距结束，还有30天</small>
+            </div>
+            </br>
+            <div class="oneline-packed">
+              <p class="label ">项目加速</p>
+            </div>
+            </br>
+            <div class="oneline-packed">
+              <p class="label ">项目终评</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+  </div>
+  <!--Finance Details-->
+  <br/>
+  <!--
+  <div class="">
+    <div class="page-header">
+      <h3>项目报销</h3>
+    </div>
+    <div class="row">
+      <div class="span4">
+        <div class="alert alert-info">
+          <h4>剩余金额：6000.00</h4>
+        </div>
+      </div>
+      <div class="span4">
+        <div class="alert alert-important">
+          <h4>支出金额：14000.00</h4>
+        </div>
+      </div>
+      <div class="span4">
+        <div class="alert alert-success">
+          <h4>总金额：20000.00</h4>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr >
+          <td>#</td>
+          <td>支出明细</td>
+          <td>经手人</td>
+          <td>金额</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>买IPAD</td>
+          <td>张三</td>
+          <td>3000.00</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>论文审稿费</td>
+          <td>黎明</td>
+          <td>1500.00</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>购买图书</td>
+          <td>李名</td>
+          <td>5000.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  -->
+</div>
+{% endblock %}

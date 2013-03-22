@@ -1,0 +1,22 @@
+
+.flexiblestyle:focus{  
+    width: 230px;  
+}  
+
+
+input, textarea{  
+    color: #666;  
+    padding: 6px;  
+    margin: 10px;  
+    outline: none;  
+    overflow:hidden;  
+    border-radius: 5px;  
+    background: #fafafa;  
+    border: 1px solid #ddd;  
+    -moz-box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);  
+    -webkit-box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);  
+    box-shadow: inset 1px 1px 10px rgba(0,0,0,0.1);  
+    -webkit-transition: all .3s;  
+    -moz-transition: all .3s;  
+    -o-transition: all .3s;  
+}

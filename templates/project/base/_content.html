@@ -1,0 +1,31 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<!-- index style -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}bootstrap-editable/css/bootstrap-editable.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}inputs-ext/address/address.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}select2/select2.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysiwyg-color.css">
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}/style/student/content.css" >
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/flexible.css" >
+<div class="container form-container ">
+	<!-- user information bar -->
+	{% include "project/widgets/userinfo_basicbar.html" %}
+	<!-- important features nav-bar -->
+	{% include "project/widgets/features_item_navbar.html" %}
+	<!-- calculate content details -->
+	{%block calculate-content%} {% endblock %}
+</div>
+
+{% endblock %}
