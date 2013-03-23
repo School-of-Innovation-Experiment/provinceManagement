@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     #'tinymce',
     'south',
+    'news',
 )
 
 # A sample logging configuration. The only tangible logging

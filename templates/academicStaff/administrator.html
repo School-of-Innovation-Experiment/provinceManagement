@@ -1,0 +1,20 @@
+{% extends "academicStaff/base/_content.html" %}
+{% block staffadmin_content %}
+	<div class="container">
+		<div class="navbar ">
+			<div class="navbar-inner">
+				<ul class="nav">
+					<li><a href="/academicStaff/teacher_dispatch">院系教务教师激活</a></li>
+					<li class="divider-vertical"></li>
+					<li><a href="/academicStaff/expert_dispatch">评审专家激活</a></li>
+					<li class="divider-vertical"></li>
+	        <li><a href="/academicStaff/subject_feedback">参赛题目反馈<span id = "project_num" class="num">4</span></a></li>
+	        <li><a href="/academicStaff/settings">基本信息设置</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="container">
+			{%block nav_admin_content%}{%endblock%}
+		</div>
+	</div>
+{%endblock%}       
