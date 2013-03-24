@@ -22,6 +22,11 @@ urlpatterns = patterns('',
         direct_to_template, {'template': 'home/index.html'},
         name='index'
     ),
+           url(
+        r'^newslist/',
+        direct_to_template, {'template': 'home/news-list.html'},
+        name='newslist',
+        ),
     url(
         r'^admin/',
         include(admin.site.urls),
