@@ -1,14 +1,17 @@
 {% extends 'home/index.html' %}
 
 {% block home-content %}
-  <div class="news-main">
-    <div class="news-list">
+  <div class="news-body">
+    <div class="news-main">
       <div>
         <h3>焦点新闻 <small>Hot</small></h3>
-        <h6><a href={{ news.id }}>{{ news.news_title }}</a></h6>
-        <p>{{ news.news_content }}</p>
-      </div>
-      <div class="news-documents documents-list">
+        <h4><a href={{ news.id }}>{{ news.news_title }}</a></h4>
+        <div class="news-content">
+          <h6><a href="/news/"><<返回</a></h6>
+          <div>
+            <p>{{ news.news_content }}</p>
+          </div>
+        </div>
       </div>
     </div> <!-- news-list -->
   </div> <!-- news-main -->

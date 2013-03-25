@@ -205,7 +205,7 @@ table.documents td {
     -o-text-overflow:ellipsis;
     overflow:hidden;
 }
-.news-main {
+.news-body {
     height: 100%;
     overflow: hidden;
 }
@@ -232,4 +232,29 @@ table.documents td {
     border-radius: 0px !important;
     margin-bottom: 0 !important;
     height: 15px !important;
+}
+.news-main {
+    margin: 0;
+    width: 85%;
+    float: left;
+    height: 100%;
+    border-right: 1px solid #0064b9;
+    padding: 0 0 0 15px;
+    display: inline;
+}
+.news-main > div {
+    height: 100%;
+}
+.news-main > div > a{
+    /* bottom: 0; */
+    /* position: absolute; */
+}
+.news-content {
+    /* height: auto; */
+    height: 100%;
+    /* overflow-y: auto; */
+}
+.news-content div {
+    overflow-y: auto;
+    height: 450px;
 }
