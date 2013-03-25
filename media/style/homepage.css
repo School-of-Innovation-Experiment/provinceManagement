@@ -241,9 +241,11 @@ table.documents td {
     border-right: 1px solid #0064b9;
     padding: 0 0 0 15px;
     display: inline;
+    position: absolute;
 }
 .news-main > div {
     height: 100%;
+    position: absolute;
 }
 .news-main > div > a{
     /* bottom: 0; */
@@ -251,10 +253,14 @@ table.documents td {
 }
 .news-content {
     /* height: auto; */
-    height: 100%;
-    /* overflow-y: auto; */
+    height: 80%;
+    min-height: 440px;
 }
 .news-content div {
+    height: 100%;
+}
+.news-content div p {
+    height: 100%;
     overflow-y: auto;
-    height: 450px;
+    padding: 0 10px;
 }
