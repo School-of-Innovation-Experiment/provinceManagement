@@ -54,7 +54,6 @@ class InsituteCategory(models.Model):
     def __unicode__(self):
         return self.category
 
-
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
@@ -69,32 +68,23 @@ class UserIdentity(models.Model):
     def __unicode__(self):
         return self.identity
 
-
 class ProjectGrade(models.Model):
     """
     Project grade: Nation, Province
     """
-    grade = models.CharField(max_length=20, blank=False, unique=True,
-                             verbose_name="项目级别")
+    grade = models.CharField(max_length=20, blank=False, unique=True)
 
     class Meta:
         verbose_name = "项目级别"
         verbose_name_plural = "项目级别"
-
-    def __unicode__(self):
-        return self.grade
 
 
 class ProjectStatus(models.Model):
     """
     Project status: review, submit, result
     """
-    status = models.CharField(max_length=50, blank=False, unique=True,
-                              verbose_name="项目状态")
+    status = models.CharField(max_length=50, blank=False, unique=True)
 
     class Meta:
-        verbose_name = "项目状态"
-        verbose_name_plural = "项目状态"
-
-    def __unicode__(self):
-        return self.status
+        verbose_name = "项目级别"
+        verbose_name_plural = "项目级别"
