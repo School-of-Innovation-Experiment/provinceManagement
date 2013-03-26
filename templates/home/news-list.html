@@ -24,7 +24,7 @@
             <tr>
               <td>{{ news.index }}.</td>
               <td>
-                <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
+                <a href="{{ news.id }}">{{ news.news_title }}</a>
               </td>
               <td>
                 {{ news.news_date|date:"[y-m-d]" }}
