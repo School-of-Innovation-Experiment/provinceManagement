@@ -20,75 +20,36 @@
             <col width="15%" />
           </colgroup>
           <tbody>
+            {% for news in news_list %}
             <tr>
-              <td >1.</td>
+              <td>{{ news.index }}.</td>
               <td>
-                <a  href="http://news.dlut.edu.cn/article/2013/0319/47543.shtml">院士亲授本科课程 学子感受大师风范</a>
+                <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
               </td>
               <td>
-                [13-03-19]
+                {{ news.news_date|date:"[y-m-d]" }}
               </td>
             </tr>
-            <tr>
-              <td >2.</td>
-              <td>
-                <a href="http://news.dlut.edu.cn/article/2013/0318/47597.shtml">我校全国人大代表宁桂玲副校长昨晚返连</a>
-              </td>
-              <td >
-                [13-03-18]
-              </td>
-            </tr>
-            <tr>
-              <td >3.</td>
-              <td>
-              <a href="http://news.dlut.edu.cn/article/2013/0316/47588.shtml">我校2013年自主选拔录取测试工作顺利完成</a>
-              </td>
-              <td >
-                [13-03-16]
-              </td>
-            </tr>
-            <tr>
-              <td>4.</td>
-              <td>
-              <a href="http://news.dlut.edu.cn/article/2013/0315/47586.shtml">2012年我校研究生优秀学位论文喜获佳绩</a>
-              <td>
-                [13-03-15]
-              </td>
-              </td>
-            </tr>
-            <tr>
-              <td>5.</td>
-              <td>
-              <a href="http://news.dlut.edu.cn/article/2013/0315/47548.shtml">海岸和近海工程国家重点实验室接受评估“国考” </a>
-              <td>
-                [13-03-15]
-              </td>
-              </td>
-            </tr>
-	    <tr>
-              <td>6.</td>
-              <td>
-              <a href="http://news.dlut.edu.cn/article/2013/0314/47555.shtml">辽宁省副省长刘强一行来我校视察 </a>
-              <td>
-                [13-03-14]
-              </td>
-              </td>
-            </tr>
-	    <tr>
-              <td>7.</td>
-              <td>
-              <a href="http://news.dlut.edu.cn/article/2013/0306/47439.shtml">学校十届二次教代会圆满落幕 </a>
-              <td>
-                [13-03-06]
-              </td>
-              </td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
-
       </div>
       <hr />
-      <strong><a href="#">[1]</a></strong>
+      <div class="pagination">
+        <span class="step-links">
+          {% if news_page.has_previous %}
+          <a href="?page={{ contacts.previous_page_number }}">上一页</a>
+          {% endif %}
+
+          <span class="current">
+            第{{ news_page.number }}页，共{{ news_page.paginator.num_pages }}页
+          </span>
+
+          {% if contacts.has_next %}
+          <a href="?page={{ news_page.next_page_number }}">下一页</a>
+          {% endif %}
+        </span>
+      </div>
     </div> <!-- news-list -->
         <div class="news-list">
       <div>

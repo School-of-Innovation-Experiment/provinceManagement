@@ -18,7 +18,7 @@ for item in RegisterClass:
     admin.site.register(item)
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('news_title', 'news_datetime', 'news_content')
+    list_display = ('news_title', 'news_date', 'news_content')
 
     class Media:
         js = [

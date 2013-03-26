@@ -16,6 +16,6 @@ class News(models.Model):
                                   blank=True, max_length=100)
     news_content = models.TextField(verbose_name = u"新闻内容",
                                     blank=True)
-    news_datetime = models.DateTimeField(verbose_name = u"发表时间",
-                                         blank=True, default=datetime.datetime.now)
-
+    news_date = models.DateField(verbose_name = u"发表时间",
+                                 default=datetime.datetime.today,
+                                 blank=True)
