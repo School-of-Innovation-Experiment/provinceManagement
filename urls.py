@@ -18,11 +18,16 @@ admin.autodiscover()
 handler500 = 'djangotoolbox.errorviews.server_error'
 
 urlpatterns = patterns('',
-    url(
-        r'^$',
-        direct_to_template, {'template': 'home/index.html'},
-        name='index'
+                       url(
+        r'^',
+        include('news.urls'),
+        name="news"
     ),
+    # url(
+    #     r'^$',
+    #     direct_to_template, {'template': 'home/index.html'},
+    #     name='index'
+    # ),
     url(
         r'^admin/',
         include(admin.site.urls),
@@ -47,11 +52,6 @@ urlpatterns = patterns('',
         r'^adminStaff/',
         include('adminStaff.urls'),
         name="staff"
-    ),
-    url(
-        r'^news/',
-        include('news.urls'),
-        name="news"
     ),
     url(
         r'^features/$',
