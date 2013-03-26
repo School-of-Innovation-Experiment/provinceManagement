@@ -144,11 +144,15 @@ INSTALLED_APPS = (
     'registration',
     'users',
     'const',
+    'filemanagement',
+    'expert',
+    'school',
+    'adminStaff',
+    'news',
     #Add-on
     'debug_toolbar',
     #'tinymce',
     'south',
-    'news',
 )
 
 #Add support  to user profile
