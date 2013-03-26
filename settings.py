@@ -1,7 +1,6 @@
 # Django settings for Rest project.
 
 import os
-import logging
 from os.path import join
 
 SETTINGS_ROOT = os.path.dirname(__file__)
@@ -16,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'Management',             # Or path to database file if using sqlite3.
+        'NAME': 'ProvinceManagement',             # Or path to database file if using sqlite3.
         'USER': 'root',                       # Not used with sqlite3.
         'PASSWORD': 'root',                   # Not used with sqlite3.
         'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
@@ -60,7 +59,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = join(SETTINGS_ROOT, 'static/')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -151,35 +150,6 @@ INSTALLED_APPS = (
     'news',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
 #Add support  to user profile
 AUTH_PROFILE_MODULE = 'users.UserProfile'
 ACCOUNT_ACTIVATION_DAYS = 30
@@ -198,9 +168,6 @@ EMAIL_USE_TLS = False
 #########################
 # File Transfer settings
 PREPARE_UPLOAD_BACKEND = 'filetransfers.backends.delegate.prepare_upload'
-#PRIVATE_PREPARE_UPLOAD_BACKEND = 'djangoappengine.storage.prepare_upload'
-#PUBLIC_PREPARE_UPLOAD_BACKEND = 'djangoappengine.storage.prepare_upload'
-#SERVE_FILE_BACKEND = 'djangoappengine.storage.serve_file'
 PUBLIC_DOWNLOAD_URL_BACKEND = 'filetransfers.backends.base_url.public_download_url'
 PUBLIC_DOWNLOADS_URL_BASE = '/data/'
 
@@ -209,7 +176,7 @@ TMP_FILE_PATH = join(SETTINGS_ROOT, 'tmp/')
 #APPEND_SLASH=False
 
 #Debug
-INTERNAL_IPS = ('192.168.2.218','localhost','192.168.2.7','127.0.0.1')
+INTERNAL_IPS = ('192.168.2.218', 'localhost', '192.168.2.7', '127.0.0.1')
 
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
@@ -252,7 +219,7 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'django.request': {
             'handlers': ['console'],
@@ -268,7 +235,7 @@ LOGGING = {
 }
 
 # Website settings
-WEB_TITLE = "Management"
+WEB_TITLE = "Province Management"
 
 # TinyMCE settings
 #TINYMCE_JS_URL = os.path.join(STATIC_ROOT, "tiny_mce/tiny_mce.js")
