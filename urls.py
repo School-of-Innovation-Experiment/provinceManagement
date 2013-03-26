@@ -12,6 +12,7 @@ from django.contrib import admin
 #from gui import views as gui_views
 from users import views as users_views
 
+
 admin.autodiscover()
 
 handler500 = 'djangotoolbox.errorviews.server_error'
@@ -22,11 +23,6 @@ urlpatterns = patterns('',
         direct_to_template, {'template': 'home/index.html'},
         name='index'
     ),
-           url(
-        r'^newslist/',
-        direct_to_template, {'template': 'home/news-list.html'},
-        name='newslist',
-        ),
     url(
         r'^admin/',
         include(admin.site.urls),
@@ -66,11 +62,6 @@ urlpatterns = patterns('',
         r'^news/',
         include('news.urls'),
         name="news"
-    ),
-    url(
-        r'^showtime/$',
-       	include('showtime.urls'),
-       	name = "showtime"
     ),
     url(
         r'^newtask/$',

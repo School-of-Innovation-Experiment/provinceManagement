@@ -6,10 +6,11 @@
 {% block content %}
 
   <!-- index style -->
-  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}style/homepage.css" type="text/css" media="screen" />
   <div class="body">
 
+    <!-- showcss: ~/document/django/InnovationManagement/media/style/homepage.css -->
 
     <div class="home-title">
       <p>欢迎使用<span style="color: #fff;"> 大学生创新创业训练计划项目管理平台</span></p>
@@ -29,13 +30,19 @@
                 <a href="/show/">成果展示</a>
               </li>
               <li>
-                <a href="/school/">学校上传</a>
+                <a href="/student/">参赛团队</a>
               </li>
               <li>
                 <a href="/expert/">评审专家</a>
               </li>
               <li>
-                <a href="/adminStaff/">省级管理员</a>
+                <a href="/teacher/">指导教师</a>
+              </li>
+              <li>
+                <a href="/academicStaff/">学校教务管理员</a>
+              </li>
+              <li>
+                <a href="/facultyStaff/">学院教务管理员</a>
               </li>
               <li>
                 <a href="/admin/">系统管理员</a>
@@ -108,13 +115,15 @@
               <div class="home-news">
                 <h3>焦点新闻 <small>Hot</small></h3>
                 <table class="news">
+                  {% if the_latest_news %}
                   <tbody>
                     <tr>
-                      <td><h3><a href="http://news.dlut.edu.cn/article/2013/0318/47597.shtml">我校全国人大代表宁桂玲副校长昨晚返连</a></h3>
-                        <p>3月17日晚，带着全国“两会”胜利闭幕的喜悦，出席十二届全国人大一次会议的全国人大代表、我校副校长宁桂玲教授与其他大连市全国人大代表同机返连。省委常委、市委书记唐军同部分市领导，我校党委副书记兼纪委书记李成恩，学校统战部、宣传部负责同志前往机场迎接。李成恩副书记向宁桂玲副校长转达了校党委书记张德祥、校长申长雨的亲切问候。</p>
+                      <td><h3><a href={{ the_latest_news.id }}>{{ the_latest_news.news_title }}</a></h3>
+                        <p>{{ the_latest_news.news_content }}</p>
                       </td>
                     </tr>
                   </tbody>
+                  {% endif %}
                 </table>
                 <hr />
                 <strong><a href="newslist/">更多»</a></strong>

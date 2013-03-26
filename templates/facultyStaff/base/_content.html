@@ -1,0 +1,18 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+		<link href = "{{ STATIC_URL }}staff_static/style.css" rel = "stylesheet" type="text/css">
+  <!-- customize css -->
+  <link rel="stylesheet" href="{{ STATIC_URL}}style/expert/content.css" type="text/css" media="screen" >
+   	<div class="container form-container ">
+   	{% include "facultyStaff/widgets/userinfo_basicbar.html" %}
+ 		{%block facultystaff_content%} {% endblock %}
+ 		</div>
+{% endblock %}

@@ -1,14 +1,30 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
-Created on 2012-11-5
+Created on Sat Mar 23 17:13:58 2013
 
-@author: tianwei
+@author: Liao Pengyu
+
+Desc: urls of news
 '''
-from django.conf.urls.defaults import *
+
+
+from django.conf.urls.defaults import patterns, include, url
+# from django.views.generic.simple import direct_to_template
+
+from news import views as news_views
 from django.views.generic.simple import direct_to_template
 
-from news.views import testmce
-
 urlpatterns = patterns('',
-        url(r'^$', testmce),
-)
+                       url(r'^$',
+                           news_views.index,
+                           name='homepage',
+                           ),
+                       url(r'^(?P<news_id>\d+)$',
+                           news_views.read_news,
+                           name='read_news'
+                           ),
+                       url(r'^newslist/',
+                           direct_to_template, {'template': 'home/news-list.html'},
+                           name='newslist',
+                           ),
+    )
