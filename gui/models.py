@@ -6,7 +6,6 @@ Created on 2012-11-5
 '''
 
 from django.db import models
-from users.models import UserProfile
  
     
     

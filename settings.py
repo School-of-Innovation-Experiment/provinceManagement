@@ -143,11 +143,15 @@ INSTALLED_APPS = (
     'gui',
     'registration',
     'users',
+    'const',
+    'expert',
+    'school',
+    'adminStaff',
+    'news',
     #Add-on
     'debug_toolbar',
     #'tinymce',
     'south',
-    'news',
 )
 
 #Add support  to user profile
@@ -176,7 +180,7 @@ TMP_FILE_PATH = join(SETTINGS_ROOT, 'tmp/')
 #APPEND_SLASH=False
 
 #Debug
-INTERNAL_IPS = ('192.168.2.218', 'localhost', '192.168.2.7', '127.0.0.1')
+INTERNAL_IPS = ('192.168.2.218',)
 
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
@@ -236,6 +240,9 @@ LOGGING = {
 
 # Website settings
 WEB_TITLE = "Province Management"
+
+# project original file
+PROCESS_FILE_PATH = join("tmp", "process_file")
 
 # TinyMCE settings
 #TINYMCE_JS_URL = os.path.join(STATIC_ROOT, "tiny_mce/tiny_mce.js")
