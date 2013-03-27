@@ -8,7 +8,7 @@ Desc: school's project model, which include pre-submit, final-submit,
       project
 '''
 
-from uuid import uuid4
+import uuid
 
 from django.db import models
 from django.conf import settings
@@ -20,8 +20,8 @@ class ProjectSingle(models.Model):
     """
     Every single projects, include basic infomation, it is the base table.
     """
-    project_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    project_id = models.CharField(max_length=50, primary_key=True,
+                                  default=str(uuid.uuid4()),
                                   verbose_name="题目唯一ID")
 
     title = models.CharField(max_length=400, blank=False,
@@ -53,8 +53,8 @@ class PreSubmit(models.Model):
     """
     inheribit table, which use ProjectSingle to show pre-submit content
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.OneToOneField(ProjectSingle)
 
@@ -83,8 +83,8 @@ class FinalSubmit(models.Model):
     """
     inheribit table, which use ProjectSingle to show final-submit content
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="结题报告唯一ID")
     project_id = models.OneToOneField(ProjectSingle)
 
@@ -109,8 +109,8 @@ class TechCompetition(models.Model):
     """
     Technology competition achievement, which follows FinalSubmit
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="科技竞赛成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
@@ -134,8 +134,8 @@ class Patents(models.Model):
     """
     Patent achievement, which follows FinalSubmit
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="发明专利唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
@@ -159,8 +159,8 @@ class Papers(models.Model):
     """
     Papers achievement, which follows FinalSubmit
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="学术论文成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
@@ -184,8 +184,8 @@ class AchievementObjects(models.Model):
     """
     Achievement Objects, which follows FinalSubmit
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="实物成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
@@ -208,8 +208,8 @@ class UploadedFiles(models.Model):
     """
     content files upload, which include images, and pdf
     """
-    file_id = models.CharField(max_length=50, blank=False, unique=True,
-                               primary_key=True, default=uuid4(),
+    file_id = models.CharField(max_length=50,
+                               primary_key=True, default=str(uuid.uuid4()),
                                verbose_name="文件上传唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,

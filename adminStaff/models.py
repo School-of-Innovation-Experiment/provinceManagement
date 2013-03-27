@@ -7,7 +7,7 @@ Created on 2013-03-28
 Desc: Province Admin staff
 '''
 
-from uuid import uuid4
+import uuid
 
 from django.db import models
 
@@ -48,7 +48,8 @@ class ProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    school = models.OneToOneField(SchoolProfile, verbose_name="学校名称")
+    school = models.OneToOneField(SchoolProfile, verbose_name="学校名称",
+                                  unique=True)
     number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
     class Meta:
@@ -64,7 +65,7 @@ class ReviewTask(models.Model):
     Review Task assign
     """
     review_id = models.CharField(max_length=50, blank=False, unique=True,
-                                 primary_key=True, default=uuid4(),
+                                 primary_key=True, default=str(uuid.uuid4()),
                                  verbose_name="题目唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     experter = models.ForeignKey(ExpertProfile)
