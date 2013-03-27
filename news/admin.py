@@ -18,8 +18,8 @@ for item in RegisterClass:
     admin.site.register(item)
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('news_title', 'news_date', 'news_content')
-
+    list_display = ('news_title', 'news_date', 'news_content',)
+    # fields = list_display
     class Media:
         js = [
             # STATIC_URL + '/tiny_mce/tiny_mce_src.js',

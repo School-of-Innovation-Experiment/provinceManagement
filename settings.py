@@ -250,3 +250,4 @@ PROCESS_FILE_PATH = join("tmp", "process_file")
 #        'cleanup_on_startup':True,
 #        'custom_undo_redo_levels': 10,
 #}
+FILE_UPLOAD_PERMISSIONS = 0777

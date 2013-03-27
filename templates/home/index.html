@@ -113,7 +113,9 @@
                   <tbody>
                     <tr>
                       <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3>
-                        <p>{{ the_latest_news.news_content }}</p>
+                        {% autoescape off %}
+                        {{ the_latest_news.news_content }}
+                        {% endautoescape %}
                       </td>
                     </tr>
                   </tbody>
@@ -132,36 +134,19 @@
                       <col width="15%" />
                     </colgroup>
                     <tbody>
+                      {% for docs in homepage_docs_list %}
                       <tr>
-                        <td >1.</td>
+                        <td>{{ docs.list_index }}.</td>
                         <td>
-                          <a title="指导教师跨学部（学院）招收硕士研究生审批表" href="http://gs.dlut.edu.cn/upload/download/%E6%8C%87%E5%AF%BC%E6%95%99%E5%B8%88%E8%B7%A8%E5%AD%A6%E9%83%A8%EF%BC%88%E5%AD%A6%E9%99%A2%EF%BC%89%E6%8B%9B%E6%94%B6%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E5%AE%A1%E6%89%B9%E8%A1%A8_201334143647.doc">指导教师跨学部（学院）招收硕士研究生审批表</a>
+                          <a href="{{ docs.id }}/download_news_doc">{{ docs.document_name }}</a>
                         </td>
                         <td>
-                          [13-03-05]
+                          {{ docs.news_date|date:"[y-m-d]" }}
                         </td>
                       </tr>
-                      <tr>
-                        <td >2.</td>
-                        <td>
-                          <a href="http://gs.dlut.edu.cn/upload/download/%E5%A4%A7%E8%BF%9E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A62013%E5%B9%B4%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E6%96%B0%E7%94%9F%E4%BF%9D%E7%95%99%E5%85%A5%E5%AD%A6%E8%B5%84%E6%A0%BC%E7%94%B3%E8%AF%B7%E8%A1%A8_201334143633.doc">大连理工大学2013年硕士研究生新生保留入学资格申请表</a>
-                        </td>
-                        <td >
-                          [13-03-05]
-                        </td>
-                      </tr>
-                      <tr>
-                        <td >3.</td>
-                        <td>
-                          <a href="http://gs.dlut.edu.cn/upload/download/%E5%A4%A7%E8%BF%9E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A62013%E5%B9%B4%E7%A1%95%E5%A3%AB%E7%A0%94%E7%A9%B6%E7%94%9F%E6%8E%A5%E6%94%B6%E6%A0%A1%E5%A4%96%E8%80%83%E7%94%9F%E8%B0%83%E5%89%82%E7%94%B3%E8%AF%B7%E8%A1%A8_201334143618.doc">大连理工大学2013年硕士研究生接收校外考生调剂申请表</a>
-                        </td>
-                        <td >
-                          [13-03-04]
-                        </td>
-                      </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
-
                 </div>
                 <hr />
                 <strong><a href="newslist/">更多»</a></strong>
