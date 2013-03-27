@@ -8,5 +8,10 @@ Created on 2012-11-5
 from django.contrib import admin
 from users.models import *
 
-admin.site.register(UserProfile)
 
+RegisterClass = (SchoolProfile,
+                 ExperterProfile,
+                 AdminStaffProfile)
+
+for item in RegisterClass:
+    admin.site.register(item)
