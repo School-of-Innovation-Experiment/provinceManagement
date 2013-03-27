@@ -9,6 +9,8 @@ Desc: dict table
 
 from django.db import models
 
+from const import AUTH_CHOICES, VISITOR_USER
+
 
 class SchoolDict(models.Model):
     """
@@ -60,6 +62,7 @@ class UserIdentity(models.Model):
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
     """
     identity = models.CharField(max_length=50, blank=False, unique=True,
+                                choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
 
     class Meta:
