@@ -41,16 +41,26 @@ class ProjectControl(models.Model):
         verbose_name = "时间节点控制"
         verbose_name_plural = "时间节点控制"
 
+
 class ProjectPerLimits(models.Model):
+    """
+    Project apply number limits
+    """
     school = models.OneToOneField(SchoolProfile)
-    number = models.IntegerField(blank=False)
+    number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
     class Meta:
         verbose_name = "时间节点控制"
         verbose_name_plural = "时间节点控制"
 
+    def __unicode__(self):
+        return "%s" % (self.school)
+
 
 class ReviewTask(models.Model):
+    """
+    Review Task assign
+    """
     review_id = models.CharField(max_length=50, blank=False, unique=True,
                                  primary_key=True, default=uuid4(),
                                  verbose_name="题目唯一ID")
@@ -58,6 +68,8 @@ class ReviewTask(models.Model):
     experter = models.ForeignKey(ExperterProfile)
     comments = models.TextField(blank=False, verbose_name="评价")
     scores = models.IntegerField(blank=False, verbose_name="评分百分制")
+
+    #TODO: maybe we should extent scores field.
 
     class Meta:
         verbose_name = "评审任务"

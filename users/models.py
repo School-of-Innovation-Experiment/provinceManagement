@@ -34,7 +34,7 @@ class SchoolProfile(models.Model):
     The Administrator can modified them in admin.page
     """
     user = models.OneToOneField(User)
-    school = models.ForeignKey(SchoolDict)
+    school = models.OneToOneField(SchoolDict)
     identity = models.ForeignKey(UserIdentity)
 
     class Meta:
@@ -49,7 +49,8 @@ class ExperterProfile(models.Model):
     user = models.OneToOneField(User)
     subject = models.ForeignKey(InsituteCategory)
     identity = models.ForeignKey(UserIdentity)
-    workunit = models.CharField(max_length=100, blank=True)
+    workunit = models.CharField(max_length=100, blank=True,
+                                verbose_name="工作单位")
 
     class Meta:
         verbose_name = "评审专家"
@@ -78,5 +79,4 @@ def create_user_profile(sender, instance, created, **kwargs):
         AdminStaffProfile.objects.create(user=instance)
         UserProfile.objects.create(user=instance)
 
-post_save.connect(create_user_profile, sender=User)
-    
+post_save.connect(create_user_profile, sender=User) 
