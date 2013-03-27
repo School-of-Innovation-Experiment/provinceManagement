@@ -23,8 +23,11 @@ urlpatterns = patterns('',
                            news_views.read_news,
                            name='read_news'
                            ),
+                       url(r'^newslist/(?P<news_id>\d+)/download_news_doc$',
+                           news_views.download_news_doc,
+                           ),
                        url(r'^newslist/$',
                            news_views.list_news,
                            name='newslist',
                            ),
-    )
+                       )

@@ -258,9 +258,11 @@ table.documents td {
 }
 .news-content div {
     height: 100%;
-}
-.news-content div p {
-    height: 100%;
     overflow-y: auto;
     padding: 0 10px;
 }
+/* .news-content div p { */
+/*     height: 100%; */
+/*     overflow-y: auto; */
+/*     padding: 0 10px; */
+/* } */
