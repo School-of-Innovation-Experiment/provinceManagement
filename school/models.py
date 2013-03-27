@@ -76,7 +76,7 @@ class PreSubmit(models.Model):
         verbose_name_plural = "项目申请书"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.title
 
 
 class FinalSubmit(models.Model):
@@ -98,11 +98,11 @@ class FinalSubmit(models.Model):
                                        verbose_name="学校推荐语")
 
     class Meta:
-        verbose_name = "项目申请书"
-        verbose_name_plural = "项目申请书"
+        verbose_name = "项目结题报告"
+        verbose_name_plural = "项目结题报告"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.title
 
 
 class TechCompetition(models.Model):
@@ -127,7 +127,7 @@ class TechCompetition(models.Model):
         verbose_name_plural = "科技竞赛"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.project_id.title
 
 
 class Patents(models.Model):
@@ -152,7 +152,7 @@ class Patents(models.Model):
         verbose_name_plural = "发明专利"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.project_id.title
 
 
 class Papers(models.Model):
@@ -177,7 +177,7 @@ class Papers(models.Model):
         verbose_name_plural = "学术论文"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.project_id.title
 
 
 class AchievementObjects(models.Model):
@@ -201,16 +201,16 @@ class AchievementObjects(models.Model):
         verbose_name_plural = "实物"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.project_id.title
 
 
 class UploadedFiles(models.Model):
     """
     content files upload, which include images, and pdf
     """
-    file_id = models.Model(max_length=50, blank=False, unique=True,
-                           primary_key=True, default=uuid4(),
-                           verbose_name="文件上传唯一ID")
+    file_id = models.CharField(max_length=50, blank=False, unique=True,
+                               primary_key=True, default=uuid4(),
+                               verbose_name="文件上传唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,
                             verbose_name="文件名称")
@@ -221,4 +221,4 @@ class UploadedFiles(models.Model):
         verbose_name_plural = "文件上传"
 
     def __unicode__(self):
-        return self.project_id
+        return self.project_id.title
