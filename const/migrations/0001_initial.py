@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
         # Adding model 'ProjectCategory'
         db.create_table('const_projectcategory', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('category', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
+            ('category', self.gf('django.db.models.fields.CharField')(default='undifined', unique=True, max_length=30)),
         ))
         db.send_create_signal('const', ['ProjectCategory'])
 
@@ -32,21 +32,21 @@ class Migration(SchemaMigration):
         # Adding model 'UserIdentity'
         db.create_table('const_useridentity', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('identity', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('identity', self.gf('django.db.models.fields.CharField')(default='visitor', unique=True, max_length=50)),
         ))
         db.send_create_signal('const', ['UserIdentity'])
 
         # Adding model 'ProjectGrade'
         db.create_table('const_projectgrade', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('grade', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
+            ('grade', self.gf('django.db.models.fields.CharField')(default='undifined', unique=True, max_length=20)),
         ))
         db.send_create_signal('const', ['ProjectGrade'])
 
         # Adding model 'ProjectStatus'
         db.create_table('const_projectstatus', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('status', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('status', self.gf('django.db.models.fields.CharField')(default='undifined', unique=True, max_length=50)),
         ))
         db.send_create_signal('const', ['ProjectStatus'])
 
@@ -79,18 +79,18 @@ class Migration(SchemaMigration):
         },
         'const.projectcategory': {
             'Meta': {'object_name': 'ProjectCategory'},
-            'category': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
+            'category': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '30'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectgrade': {
             'Meta': {'object_name': 'ProjectGrade'},
-            'grade': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
+            'grade': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '20'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectstatus': {
             'Meta': {'object_name': 'ProjectStatus'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'status': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '50'})
         },
         'const.schooldict': {
             'Meta': {'object_name': 'SchoolDict'},
@@ -100,7 +100,7 @@ class Migration(SchemaMigration):
         'const.useridentity': {
             'Meta': {'object_name': 'UserIdentity'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'identity': ('django.db.models.fields.CharField', [], {'default': "'visitor'", 'unique': 'True', 'max_length': '50'})
         }
     }
 

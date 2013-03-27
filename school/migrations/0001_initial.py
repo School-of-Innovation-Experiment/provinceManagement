@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'ProjectSingle'
         db.create_table('school_projectsingle', (
-            ('project_id', self.gf('django.db.models.fields.CharField')(default=UUID('c8b44ba3-3ac3-402c-a5b7-a8d5d4bdd581'), unique=True, max_length=50, primary_key=True)),
+            ('project_id', self.gf('django.db.models.fields.CharField')(default=UUID('b572aea3-e078-4c23-ae96-ae66973c670b'), unique=True, max_length=50, primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=400)),
             ('school', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.SchoolDict'])),
             ('project_category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.ProjectCategory'])),
@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'PreSubmit'
         db.create_table('school_presubmit', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('cc72ffcd-a6be-467a-ae98-22c0e7d16938'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('471174b6-8f14-4895-8e35-01f58d94ad2b'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['school.ProjectSingle'], unique=True)),
             ('original', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
             ('background', self.gf('django.db.models.fields.TextField')()),
@@ -42,7 +42,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'FinalSubmit'
         db.create_table('school_finalsubmit', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('c206209c-9129-4175-8bce-4357789688f8'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('e070cdd4-2313-47fa-a55d-3bcc5d4ac258'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['school.ProjectSingle'], unique=True)),
             ('achievement_fashion', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
             ('achievement_summary', self.gf('django.db.models.fields.TextField')()),
@@ -53,7 +53,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'TechCompetition'
         db.create_table('school_techcompetition', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('ac8c027b-f564-4239-840b-1712177c7a67'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('100899d9-7156-4c14-b26e-08c0e8118f26'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.FinalSubmit'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('members', self.gf('django.db.models.fields.CharField')(max_length=100)),
@@ -64,7 +64,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'Patents'
         db.create_table('school_patents', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('2335c919-3fd1-4e64-a90a-c0c7e1af0806'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('50ce4a86-8763-4e30-880e-0899ad90c6ac'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.FinalSubmit'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('members', self.gf('django.db.models.fields.CharField')(max_length=100)),
@@ -75,7 +75,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'Papers'
         db.create_table('school_papers', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('a12782fb-b3a9-4b84-9aaf-0cf43a2c721f'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('cea93bf8-f2b9-4f2c-bb47-c086678e329e'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.FinalSubmit'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('members', self.gf('django.db.models.fields.CharField')(max_length=100)),
@@ -86,7 +86,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'AchievementObjects'
         db.create_table('school_achievementobjects', (
-            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('1e3abc0a-bdaa-47a6-8bff-2c554d3c5d6c'), unique=True, max_length=50, primary_key=True)),
+            ('content_id', self.gf('django.db.models.fields.CharField')(default=UUID('48126716-0560-4cdd-9e4a-f2d1685e4c9e'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.FinalSubmit'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('members', self.gf('django.db.models.fields.CharField')(max_length=100)),
@@ -97,7 +97,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'UploadedFiles'
         db.create_table('school_uploadedfiles', (
-            ('file_id', self.gf('django.db.models.fields.CharField')(default=UUID('ea5b0c16-e1be-4a3e-8982-e6eb4a6e533c'), unique=True, max_length=50, primary_key=True)),
+            ('file_id', self.gf('django.db.models.fields.CharField')(default=UUID('1db2d2e3-64c0-43ba-8a63-479d3b550e76'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.ProjectSingle'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('file_obj', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
@@ -139,18 +139,18 @@ class Migration(SchemaMigration):
         },
         'const.projectcategory': {
             'Meta': {'object_name': 'ProjectCategory'},
-            'category': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
+            'category': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '30'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectgrade': {
             'Meta': {'object_name': 'ProjectGrade'},
-            'grade': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
+            'grade': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '20'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectstatus': {
             'Meta': {'object_name': 'ProjectStatus'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'status': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '50'})
         },
         'const.schooldict': {
             'Meta': {'object_name': 'SchoolDict'},
@@ -160,7 +160,7 @@ class Migration(SchemaMigration):
         'school.achievementobjects': {
             'Meta': {'object_name': 'AchievementObjects'},
             'comments': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('1e3abc0a-bdaa-47a6-8bff-2c554d3c5d6c')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('48126716-0560-4cdd-9e4a-f2d1685e4c9e')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'finish_date': ('django.db.models.fields.DateField', [], {}),
             'members': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'project_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school.FinalSubmit']"}),
@@ -170,14 +170,14 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'FinalSubmit'},
             'achievement_fashion': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'achievement_summary': ('django.db.models.fields.TextField', [], {}),
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('c206209c-9129-4175-8bce-4357789688f8')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('e070cdd4-2313-47fa-a55d-3bcc5d4ac258')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'inspector_comments': ('django.db.models.fields.TextField', [], {}),
             'project_id': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['school.ProjectSingle']", 'unique': 'True'}),
             'school_comments': ('django.db.models.fields.TextField', [], {})
         },
         'school.papers': {
             'Meta': {'object_name': 'Papers'},
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('a12782fb-b3a9-4b84-9aaf-0cf43a2c721f')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('cea93bf8-f2b9-4f2c-bb47-c086678e329e')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'finish_date': ('django.db.models.fields.DateField', [], {}),
             'members': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'project_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school.FinalSubmit']"}),
@@ -186,7 +186,7 @@ class Migration(SchemaMigration):
         },
         'school.patents': {
             'Meta': {'object_name': 'Patents'},
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('2335c919-3fd1-4e64-a90a-c0c7e1af0806')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('50ce4a86-8763-4e30-880e-0899ad90c6ac')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'finish_date': ('django.db.models.fields.DateField', [], {}),
             'members': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'number': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -196,7 +196,7 @@ class Migration(SchemaMigration):
         'school.presubmit': {
             'Meta': {'object_name': 'PreSubmit'},
             'background': ('django.db.models.fields.TextField', [], {}),
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('cc72ffcd-a6be-467a-ae98-22c0e7d16938')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('471174b6-8f14-4895-8e35-01f58d94ad2b')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'innovation': ('django.db.models.fields.TextField', [], {}),
             'inspector_comments': ('django.db.models.fields.TextField', [], {}),
             'key_notes': ('django.db.models.fields.TextField', [], {}),
@@ -215,7 +215,7 @@ class Migration(SchemaMigration):
             'members': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
             'project_category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectCategory']"}),
             'project_grade': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectGrade']"}),
-            'project_id': ('django.db.models.fields.CharField', [], {'default': "UUID('c8b44ba3-3ac3-402c-a5b7-a8d5d4bdd581')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'project_id': ('django.db.models.fields.CharField', [], {'default': "UUID('b572aea3-e078-4c23-ae96-ae66973c670b')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'project_status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectStatus']"}),
             'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']"}),
             'telephone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
@@ -225,14 +225,14 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'TechCompetition'},
             'competition_grade': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'competition_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('ac8c027b-f564-4239-840b-1712177c7a67')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'content_id': ('django.db.models.fields.CharField', [], {'default': "UUID('100899d9-7156-4c14-b26e-08c0e8118f26')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'members': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'project_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school.FinalSubmit']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'school.uploadedfiles': {
             'Meta': {'object_name': 'UploadedFiles'},
-            'file_id': ('django.db.models.fields.CharField', [], {'default': "UUID('ea5b0c16-e1be-4a3e-8982-e6eb4a6e533c')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'file_id': ('django.db.models.fields.CharField', [], {'default': "UUID('1db2d2e3-64c0-43ba-8a63-479d3b550e76')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'file_obj': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'project_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school.ProjectSingle']"})

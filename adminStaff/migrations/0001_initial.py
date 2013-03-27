@@ -32,9 +32,9 @@ class Migration(SchemaMigration):
 
         # Adding model 'ReviewTask'
         db.create_table('adminStaff_reviewtask', (
-            ('review_id', self.gf('django.db.models.fields.CharField')(default=UUID('05b4bb2d-e550-4836-abea-4472c1c5a984'), unique=True, max_length=50, primary_key=True)),
+            ('review_id', self.gf('django.db.models.fields.CharField')(default=UUID('da3e2986-a4f8-49b3-a655-2a5f3e66843c'), unique=True, max_length=50, primary_key=True)),
             ('project_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school.ProjectSingle'])),
-            ('experter', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.ExperterProfile'])),
+            ('experter', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.ExpertProfile'])),
             ('comments', self.gf('django.db.models.fields.TextField')()),
             ('scores', self.gf('django.db.models.fields.IntegerField')()),
         ))
@@ -74,9 +74,9 @@ class Migration(SchemaMigration):
         'adminStaff.reviewtask': {
             'Meta': {'object_name': 'ReviewTask'},
             'comments': ('django.db.models.fields.TextField', [], {}),
-            'experter': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.ExperterProfile']"}),
+            'experter': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.ExpertProfile']"}),
             'project_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school.ProjectSingle']"}),
-            'review_id': ('django.db.models.fields.CharField', [], {'default': "UUID('05b4bb2d-e550-4836-abea-4472c1c5a984')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'review_id': ('django.db.models.fields.CharField', [], {'default': "UUID('da3e2986-a4f8-49b3-a655-2a5f3e66843c')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'scores': ('django.db.models.fields.IntegerField', [], {})
         },
         'auth.group': {
@@ -115,18 +115,18 @@ class Migration(SchemaMigration):
         },
         'const.projectcategory': {
             'Meta': {'object_name': 'ProjectCategory'},
-            'category': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
+            'category': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '30'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectgrade': {
             'Meta': {'object_name': 'ProjectGrade'},
-            'grade': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
+            'grade': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '20'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'const.projectstatus': {
             'Meta': {'object_name': 'ProjectStatus'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'status': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'status': ('django.db.models.fields.CharField', [], {'default': "'undifined'", 'unique': 'True', 'max_length': '50'})
         },
         'const.schooldict': {
             'Meta': {'object_name': 'SchoolDict'},
@@ -136,7 +136,7 @@ class Migration(SchemaMigration):
         'const.useridentity': {
             'Meta': {'object_name': 'UserIdentity'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'identity': ('django.db.models.fields.CharField', [], {'default': "'visitor'", 'unique': 'True', 'max_length': '50'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -154,26 +154,31 @@ class Migration(SchemaMigration):
             'members': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
             'project_category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectCategory']"}),
             'project_grade': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectGrade']"}),
-            'project_id': ('django.db.models.fields.CharField', [], {'default': "UUID('1eb66b38-fa7c-43f6-b01a-8d4194c57c7d')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
+            'project_id': ('django.db.models.fields.CharField', [], {'default': "UUID('559d6b5d-5d4a-40e7-a210-2901a303995f')", 'unique': 'True', 'max_length': '50', 'primary_key': 'True'}),
             'project_status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.ProjectStatus']"}),
             'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']"}),
             'telephone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '400'})
         },
-        'users.experterprofile': {
-            'Meta': {'object_name': 'ExperterProfile'},
+        'users.authorityrelation': {
+            'Meta': {'unique_together': "(('userid', 'authority'),)", 'object_name': 'AuthorityRelation'},
+            'authority': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'users.expertprofile': {
+            'Meta': {'object_name': 'ExpertProfile'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'jobs': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.InsituteCategory']"}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'}),
-            'workunit': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.AuthorityRelation']", 'unique': 'True'})
         },
         'users.schoolprofile': {
             'Meta': {'object_name': 'SchoolProfile'},
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
-            'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']"}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+            'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']", 'unique': 'True'}),
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.AuthorityRelation']", 'unique': 'True'})
         }
     }
 

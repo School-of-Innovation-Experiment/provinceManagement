@@ -8,55 +8,56 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'UserProfile'
-        db.create_table('users_userprofile', (
+        # Adding model 'AuthorityRelation'
+        db.create_table('users_authorityrelation', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('machinecode', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('agentID', self.gf('django.db.models.fields.CharField')(default=UUID('4dedd124-8a10-477f-9d72-dca1cd13e1f2'), unique=True, max_length=40)),
-            ('workunit', self.gf('django.db.models.fields.CharField')(max_length=2000, blank=True)),
-            ('address', self.gf('django.db.models.fields.CharField')(max_length=2000, blank=True)),
-            ('telephone', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('userid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('authority', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.UserIdentity'])),
         ))
-        db.send_create_signal('users', ['UserProfile'])
+        db.send_create_signal('users', ['AuthorityRelation'])
+
+        # Adding unique constraint on 'AuthorityRelation', fields ['userid', 'authority']
+        db.create_unique('users_authorityrelation', ['userid_id', 'authority_id'])
 
         # Adding model 'SchoolProfile'
         db.create_table('users_schoolprofile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('school', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.SchoolDict'])),
-            ('identity', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.UserIdentity'])),
+            ('address', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('school', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.SchoolDict'], unique=True)),
+            ('userid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.AuthorityRelation'], unique=True)),
         ))
         db.send_create_signal('users', ['SchoolProfile'])
 
-        # Adding model 'ExperterProfile'
-        db.create_table('users_experterprofile', (
+        # Adding model 'ExpertProfile'
+        db.create_table('users_expertprofile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
+            ('userid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.AuthorityRelation'], unique=True)),
             ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.InsituteCategory'])),
-            ('identity', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.UserIdentity'])),
-            ('workunit', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('jobs', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
         ))
-        db.send_create_signal('users', ['ExperterProfile'])
+        db.send_create_signal('users', ['ExpertProfile'])
 
         # Adding model 'AdminStaffProfile'
         db.create_table('users_adminstaffprofile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('identity', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['const.UserIdentity'])),
+            ('userid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.AuthorityRelation'], unique=True)),
+            ('jobs', self.gf('django.db.models.fields.CharField')(max_length=50)),
         ))
         db.send_create_signal('users', ['AdminStaffProfile'])
 
 
     def backwards(self, orm):
-        # Deleting model 'UserProfile'
-        db.delete_table('users_userprofile')
+        # Removing unique constraint on 'AuthorityRelation', fields ['userid', 'authority']
+        db.delete_unique('users_authorityrelation', ['userid_id', 'authority_id'])
+
+        # Deleting model 'AuthorityRelation'
+        db.delete_table('users_authorityrelation')
 
         # Deleting model 'SchoolProfile'
         db.delete_table('users_schoolprofile')
 
-        # Deleting model 'ExperterProfile'
-        db.delete_table('users_experterprofile')
+        # Deleting model 'ExpertProfile'
+        db.delete_table('users_expertprofile')
 
         # Deleting model 'AdminStaffProfile'
         db.delete_table('users_adminstaffprofile')
@@ -105,7 +106,7 @@ class Migration(SchemaMigration):
         'const.useridentity': {
             'Meta': {'object_name': 'UserIdentity'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
+            'identity': ('django.db.models.fields.CharField', [], {'default': "'visitor'", 'unique': 'True', 'max_length': '50'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -117,33 +118,28 @@ class Migration(SchemaMigration):
         'users.adminstaffprofile': {
             'Meta': {'object_name': 'AdminStaffProfile'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+            'jobs': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.AuthorityRelation']", 'unique': 'True'})
         },
-        'users.experterprofile': {
-            'Meta': {'object_name': 'ExperterProfile'},
+        'users.authorityrelation': {
+            'Meta': {'unique_together': "(('userid', 'authority'),)", 'object_name': 'AuthorityRelation'},
+            'authority': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'users.expertprofile': {
+            'Meta': {'object_name': 'ExpertProfile'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'jobs': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.InsituteCategory']"}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'}),
-            'workunit': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.AuthorityRelation']", 'unique': 'True'})
         },
         'users.schoolprofile': {
             'Meta': {'object_name': 'SchoolProfile'},
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.UserIdentity']"}),
-            'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']"}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
-        },
-        'users.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'address': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'blank': 'True'}),
-            'agentID': ('django.db.models.fields.CharField', [], {'default': "UUID('4dedd124-8a10-477f-9d72-dca1cd13e1f2')", 'unique': 'True', 'max_length': '40'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'machinecode': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'telephone': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'}),
-            'workunit': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'blank': 'True'})
+            'school': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['const.SchoolDict']", 'unique': 'True'}),
+            'userid': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['users.AuthorityRelation']", 'unique': 'True'})
         }
     }
 
