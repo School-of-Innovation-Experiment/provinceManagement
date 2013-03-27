@@ -113,7 +113,9 @@
                   <tbody>
                     <tr>
                       <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3>
-                        <p>{{ the_latest_news.news_content }}</p>
+                        {% autoescape off %}
+                        {{ the_latest_news.news_content }}
+                        {% endautoescape %}
                       </td>
                     </tr>
                   </tbody>
