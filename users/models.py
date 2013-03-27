@@ -34,7 +34,7 @@ class SchoolProfile(models.Model):
     The Administrator can modified them in admin.page
     """
     user = models.OneToOneField(User)
-    school = models.OneToOneField(SchoolDict)
+    school = models.ForeignKey(SchoolDict)
     identity = models.ForeignKey(UserIdentity)
 
     class Meta:
