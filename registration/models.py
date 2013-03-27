@@ -131,8 +131,8 @@ class RegistrationProfile(models.Model):
     objects = RegistrationManager()
     
     class Meta:
-        verbose_name = _('激活码管理')
-        verbose_name_plural = _('激活码管理')
+        verbose_name = '激活码管理'
+        verbose_name_plural = '激活码管理'
         
     def __unicode__(self):
         return u"Registration information for %s" % self.user
