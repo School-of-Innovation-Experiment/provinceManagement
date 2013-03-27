@@ -13,6 +13,7 @@ from django.db import models
 
 from const.models import *
 from school.models import *
+from users.models import *
 
 
 class ProjectControl(models.Model):
@@ -40,12 +41,21 @@ class ProjectControl(models.Model):
         verbose_name = "时间节点控制"
         verbose_name_plural = "时间节点控制"
 
+class ProjectPerLimits(models.Model):
+    school = models.OneToOneField(SchoolProfile)
+    number = models.IntegerField(blank=False)
+
+    class Meta:
+        verbose_name = "时间节点控制"
+        verbose_name_plural = "时间节点控制"
+
 
 class ReviewTask(models.Model):
     review_id = models.CharField(max_length=50, blank=False, unique=True,
                                  primary_key=True, default=uuid4(),
                                  verbose_name="题目唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
+    experter = models.ForeignKey(ExperterProfile)
     comments = models.TextField(blank=False, verbose_name="评价")
     scores = models.IntegerField(blank=False, verbose_name="评分百分制")
 
