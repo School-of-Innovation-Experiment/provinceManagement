@@ -12,6 +12,7 @@ from django.shortcuts import render, render_to_response
 from news.models import News
 from django.template import Context, loader
 from django.http import HttpResponse
+
 import datetime
 
 def get_news_content(news_id = None):
@@ -54,7 +55,7 @@ def list_news(request):
         news_page = paginator.page(paginator.num_pages)
     news_list = list(news_page.object_list)
     for news_index in xrange(len(news_list)):
-        news_list[news_index].index = news_index + 1 # .__dict__.update(dict)
+        news_list[news_index].news_list_index = news_index + 1 # .__dict__.update(dict)
     return render(request, 'home/news-list.html', \
                   Context({"news_page": news_page,
                            "news_list": news_list,}))

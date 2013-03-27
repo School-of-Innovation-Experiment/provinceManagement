@@ -9,7 +9,9 @@
         <h6><a href="/"><<返回</a></h6>
         <div class="news-content">
           <div>
-            <p>{{ news.news_content }}</p>
+            {% autoescape off %}
+            {{ news.news_content }}
+            {% endautoescape %}
           </div>
         </div>
       </div>
