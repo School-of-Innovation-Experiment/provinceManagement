@@ -14,4 +14,12 @@ A website for College students Innovation  Entrepreneurial  in Liaoning Province
  1. test server : python manage.py runserver IP:PORT
  1. visit your web browser: IP:PORT
 
+# Q&A
+ 1. When you login the website, you may meet the follow issue:
+   **Site matching query does not exist**
+   Solve: 
+    * python manage.py shell 
+    * from django.contrib.sites.models import Site
+    * new_site = Site.objects.create(domain='foo.com', name='foo.com')
+
 

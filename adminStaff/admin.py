@@ -10,7 +10,8 @@ from adminStaff.models import *
 
 
 RegisterClass = (ProjectControl,
-                 ReviewTask)
+                 ReviewTask,
+                 ProjectPerLimits)
 
 for item in RegisterClass:
     admin.site.register(item)

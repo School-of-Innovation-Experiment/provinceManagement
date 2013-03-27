@@ -63,15 +63,6 @@ urlpatterns = patterns('',
         direct_to_template, {'template': 'introduction/show.html'},
         name="show"
     ),
-    url(
-        r'^settings/profile/$',
-        users_views.profile
-    ),
-    url(
-        r'^settings/admin/$',
-        users_views.admin_account
-    ),
-
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
