@@ -140,7 +140,6 @@ INSTALLED_APPS = (
     'djangocms_admin_style',
     'django.contrib.admin',
     #Project
-    'gui',
     'registration',
     'users',
     'const',
