@@ -10,8 +10,9 @@ from users.models import *
 
 
 RegisterClass = (SchoolProfile,
-                 ExperterProfile,
-                 AdminStaffProfile)
+                 ExpertProfile,
+                 AdminStaffProfile,
+                 AuthorityRelation)
 
 for item in RegisterClass:
     admin.site.register(item)

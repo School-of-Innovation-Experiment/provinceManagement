@@ -9,6 +9,13 @@ Desc: dict table
 
 from django.db import models
 
+from const import AUTH_CHOICES, VISITOR_USER
+from const import PROJECT_CATE_CHOICES, CATE_UN
+from const import PROJECT_GRADE_CHOICES, GRADE_UN
+from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+
+from backend.utility import search_tuple
+
 
 class SchoolDict(models.Model):
     """
@@ -22,7 +29,7 @@ class SchoolDict(models.Model):
         verbose_name_plural = "学校列表"
 
     def __unicode__(self):
-        return self.schoolName
+        return "%s" % self.schoolName
 
 
 class ProjectCategory(models.Model):
@@ -30,6 +37,7 @@ class ProjectCategory(models.Model):
     Project category: Innovation, enterprise, ...
     """
     category = models.CharField(max_length=30, blank=False, unique=True,
+                                choices=PROJECT_CATE_CHOICES, default=CATE_UN,
                                 verbose_name="项目类型")
 
     class Meta:
@@ -37,7 +45,7 @@ class ProjectCategory(models.Model):
         verbose_name_plural = "项目类型"
 
     def __unicode__(self):
-        return self.category
+        return search_tuple(PROJECT_CATE_CHOICES, self.category)
 
 
 class InsituteCategory(models.Model):
@@ -60,6 +68,7 @@ class UserIdentity(models.Model):
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
     """
     identity = models.CharField(max_length=50, blank=False, unique=True,
+                                choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
 
     class Meta:
@@ -67,7 +76,7 @@ class UserIdentity(models.Model):
         verbose_name_plural = "登录权限"
 
     def __unicode__(self):
-        return self.identity
+        return search_tuple(AUTH_CHOICES, self.identity)
 
 
 class ProjectGrade(models.Model):
@@ -75,6 +84,7 @@ class ProjectGrade(models.Model):
     Project grade: Nation, Province
     """
     grade = models.CharField(max_length=20, blank=False, unique=True,
+                             choices=PROJECT_GRADE_CHOICES, default=GRADE_UN,
                              verbose_name="项目级别")
 
     class Meta:
@@ -82,7 +92,7 @@ class ProjectGrade(models.Model):
         verbose_name_plural = "项目级别"
 
     def __unicode__(self):
-        return self.grade
+        return search_tuple(PROJECT_GRADE_CHOICES, self.grade)
 
 
 class ProjectStatus(models.Model):
@@ -90,6 +100,8 @@ class ProjectStatus(models.Model):
     Project status: review, submit, result
     """
     status = models.CharField(max_length=50, blank=False, unique=True,
+                              choices=PROJECT_STATUS_CHOICES,
+                              default=STATUS_FIRST,
                               verbose_name="项目状态")
 
     class Meta:
@@ -97,4 +109,4 @@ class ProjectStatus(models.Model):
         verbose_name_plural = "项目状态"
 
     def __unicode__(self):
-        return self.status
+        return search_tuple(PROJECT_STATUS_CHOICES, self.status)
