@@ -72,4 +72,3 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
-NEWS_DOCS_NULL = '__null__'
