@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, render_to_response
 
 from news.models import News
+from const import NEWS_DOCS_NULL
 from django.template import Context, loader
 from django.http import HttpResponse
 
@@ -45,7 +46,10 @@ def index(request):
     context = {
             'the_latest_news': the_latest_news,
             }
-    context.update(getContext(News.objects.all()[:5], 1, 'homepage_docs'))
+    context.update(
+        getContext(
+            News.objects.exclude(news_document=NEWS_DOCS_NULL)[:5], \
+                1, 'homepage_docs'))
     return render(request, 'home/index.html', context)
 
 def read_news(request, news_id):
@@ -58,7 +62,7 @@ def list_news(request):
     news_list = News.objects.order_by('-news_date')
     news_page = request.GET.get('news_page')
 
-    docs_list = news_list.filter(news_document__isnull=False)
+    docs_list = news_list.exclude(news_document=NEWS_DOCS_NULL)
     docs_page = request.GET.get('docs_page')
 
     context = getContext(news_list, news_page, 'news')

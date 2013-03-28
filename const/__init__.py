@@ -69,3 +69,7 @@ PROJECT_STATUS_CHOICES = (
     (STATUS_ONGOING, u'正在进行'),
     (STATUS_FIRST, u'初始状态'),
 )
+
+
+# APP: news
+NEWS_DOCS_NULL = '__null__'

@@ -59,7 +59,8 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = join(SETTINGS_ROOT, 'static/')
+STATIC_ROOT = join(SETTINGS_ROOT, 'collect/static/')
+COMMON_STITICFILES_DIR = join(SETTINGS_ROOT, 'static/')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -75,7 +76,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    MEDIA_ROOT,
+    COMMON_STITICFILES_DIR,
 )
 
 # List of finder classes that know how to find static files in
@@ -151,6 +152,8 @@ INSTALLED_APPS = (
     'debug_toolbar',
     #'tinymce',
     'south',
+    'dajaxice',
+    'dajax',
 )
 
 #Add support  to user profile
@@ -250,4 +253,5 @@ PROCESS_FILE_PATH = join("tmp", "process_file")
 #        'cleanup_on_startup':True,
 #        'custom_undo_redo_levels': 10,
 #}
-FILE_UPLOAD_PERMISSIONS = 0777
+
+FILE_UPLOAD_PERMISSIONS = 0644 #NOTICE: the prefix 0 is important
