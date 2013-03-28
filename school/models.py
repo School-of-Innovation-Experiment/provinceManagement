@@ -40,6 +40,7 @@ class ProjectSingle(models.Model):
     members = models.CharField(max_length=400, blank=False,
                                verbose_name="团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name="社交")
+    year = models.CharField(max_length=10, blank=False, verbose_name="参加年份")
 
     class Meta:
         verbose_name = "参赛项目"
