@@ -25,13 +25,13 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in info.current_list%}
+      {%for item in current_list%}
       <tr>
-        <td><a href={{item.link}}>{{item.title}}</a></td>
-        <td>{{item.type}}</td>
-        <td>{{item.adviser}}</td>
-        <td>{{item.status}}</td>
-        <td>{{item.level}}</td>
+        <td><a href="{% url school.views.application_report_view item.project_id %}">{{item.title}}</a></td>
+        <td>{{item.project_category}}</td>
+        <td>{{item.inspector}}</td>
+        <td>{{item.project_status}}</td>
+        <td>{{item.project_grade}}</td>
       </tr>
       {%endfor%}
     </tbody>
