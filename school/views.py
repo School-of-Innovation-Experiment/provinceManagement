@@ -77,3 +77,28 @@ def statistics_view(request):
     data = {}
 
     return render(request, 'school/statistics.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+def new_report_view(request):
+    """
+    school start a new application report, then it will
+    jump the real project URL.
+    """
+
+    data = {}
+
+    return render(request, 'school/application.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+def history_view(request):
+    """
+    school history report list
+    """
+
+    data = {}
+
+    return render(request, 'school/history.html', data)

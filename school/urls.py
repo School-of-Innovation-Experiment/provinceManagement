@@ -31,4 +31,14 @@ urlpatterns = patterns('',
         r'^statistics/$',
         school_views.statistics_view,
     ),
+    url(
+        r'^new/$',
+        school_views.new_report_view,
+    ),
+    url(
+        r'^history/$',
+        school_views.history_view,
+    ),
+
+
 )

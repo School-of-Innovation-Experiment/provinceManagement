@@ -1,40 +1,36 @@
-<!-- school management page -->
+<!-- school history list page -->
 <!-- tianwei @2013.3.28 -->
 {% extends "school/base/_content.html" %}
 
 {% block calculate-content%}
 <div class="container">
   <div class="page-header">
-	  <div class="pull-right">	
-	    <a href="/school/new" class="btn btn-large btn-primary">新增项目</a>
-    </div><!--end new button-->
     <h3>
-      本年度项目列表
-      <span class="label label-info">申请上限:{{info.applications_limits}}</span>
-      <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
+      历史项目列表
     </h3> 
   </div><!--end page header-->
-  <table class="table table-hover">     
+  <table class="table table-hover">      
     <thead>
       <tr>
+        <th>年份</th>
         <th>名称</th>
         <th>项目类型</th>
         <th>指导教师</th>
-        <th>当前状态</th>
         <th>评审级别</th>
       </tr>
     </thead>
     <tbody>
-      {%for item in info.current_list%}
+      {%for item in info.history_list%}
       <tr>
+        <td>{{item.year}}</td>
         <td><a href={{item.link}}>{{item.title}}</a></td>
         <td>{{item.type}}</td>
         <td>{{item.adviser}}</td>
-        <td>{{item.status}}</td>
         <td>{{item.level}}</td>
       </tr>
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
 </div><!--end current list content-->
+
 {% endblock %}
