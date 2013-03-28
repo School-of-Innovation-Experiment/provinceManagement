@@ -12,6 +12,7 @@ import uuid
 
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from const.models import *
 
@@ -27,6 +28,7 @@ class ProjectSingle(models.Model):
     title = models.CharField(max_length=400, blank=False,
                              verbose_name="参赛题目")
 
+    adminuser = models.ForeignKey(User)
     school = models.ForeignKey(SchoolDict)
     project_category = models.ForeignKey(ProjectCategory)
     insitute = models.ForeignKey(InsituteCategory)
@@ -40,6 +42,7 @@ class ProjectSingle(models.Model):
     members = models.CharField(max_length=400, blank=False,
                                verbose_name="团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name="社交")
+    year = models.CharField(max_length=10, blank=False, verbose_name="参加年份")
 
     class Meta:
         verbose_name = "参赛项目"

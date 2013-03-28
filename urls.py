@@ -32,12 +32,10 @@ urlpatterns = patterns('',
     url(
         r'^admin/',
         include(admin.site.urls),
-        name="admin"
     ),
     url(
         r'^accounts/',
         include('registration.urls'),
-        name="accounts"
     ),
     url(
         r'^school/',
@@ -47,12 +45,10 @@ urlpatterns = patterns('',
     url(
         r'^expert/',
         include('expert.urls'),
-        name="expert"
     ),
     url(
         r'^adminStaff/',
         include('adminStaff.urls'),
-        name="staff"
     ),
     url(
         r'^features/$',
@@ -62,7 +58,6 @@ urlpatterns = patterns('',
     url(
         r'^show/$',
         direct_to_template, {'template': 'introduction/show.html'},
-        name="show"
     ),
 )
 # urlpatterns += staticfiles_urlpatterns()
