@@ -121,7 +121,7 @@ def upload_save_process(request, pid):
 
     obj = UploadedFiles()
     obj.name = name
-    obj.project_id = pid
+    obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
     obj.file_obj = f
 
