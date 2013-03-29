@@ -5,100 +5,30 @@
     <div class="news-list">
       <div>
         <div class="search">
-          <form action="http://google.yale.edu/search" method="get">
-            <input class="search-input" type="text" size="16" alt="Search.">
-            <input type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go.">
+          <form action="#" method="get">
+            <input id="news-search-input" class="search-input" type="text" size="16" alt="Search.">
+            <input id="search-news" type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go.">
           </form>
         </div>
         <h3>焦点新闻 <small>Hot</small></h3>
       </div>
-      <div class="news-documents documents-list">
-        <table class="documents">
-          <colgroup>
-            <col width="5%" />
-            <col width="75%" />
-            <col width="15%" />
-          </colgroup>
-          <tbody>
-            {% for news in news_list %}
-            <tr>
-              <td>{{ news.list_index }}.</td>
-              <td>
-                <a href="{{ news.id }}">{{ news.news_title }}</a>
-              </td>
-              <td>
-                {{ news.news_date|date:"[y-m-d]" }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <hr />
-      <div>
-        <span class="step-links">
-          {% if news_page.has_previous %}
-          <a href="?news_page={{ news_page.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            第{{ news_page.number }}页，共{{ news_page.paginator.num_pages }}页
-          </span>
-
-          {% if news_page.has_next %}
-          <a href="?news_page={{ news_page.next_page_number }}">下一页</a>
-          {% endif %}
-        </span>
-      </div>
+      {% include "home/ajax/_news_list.html" %}
     </div> <!-- news-list -->
     <div class="news-list">
       <div>
         <div class="search">
-          <form action="http://google.yale.edu/search" method="get">
-            <input class="search-input" type="text" size="16" alt="Search.">
-            <input type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go.">
+          <form action="#" method="get">
+            <input id="docs-search-input" class="search-input" type="text" size="16" alt="Search.">
+            <input id="search-docs" type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go.">
           </form>
         </div>
         <h3>文件下载 <small>Documents</small></h3>
       </div>
-      <div class="news-documents documents-list">
-        <table class="documents">
-          <colgroup>
-            <col width="5%" />
-            <col width="75%" />
-            <col width="15%" />
-          </colgroup>
-          <tbody>
-            {% for docs in docs_list %}
-            <tr>
-              <td>{{ docs.list_index }}.</td>
-              <td>
-                <a href="{{ docs.id }}/download_news_doc">{{ docs.document_name }}</a>
-              </td>
-              <td>
-                {{ docs.news_date|date:"[y-m-d]" }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <hr />
-      <div>
-        <span class="step-links">
-          {% if docs_page.has_previous %}
-          <a href="?page={{ docs_page.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            第{{ docs_page.number }}页，共{{ docs_page.paginator.num_pages }}页
-          </span>
-          {% if docs_page.has_next %}
-          <a href="?docs_page={{ docs_page.next_page_number }}">下一页</a>
-          {% endif %}
-        </span>
-      </div>
+      {% include "home/ajax/_docs_list.html" %}
     </div> <!-- news-list -->
   </div> <!-- news-main -->
 
+{% endblock %}
+{% block endjs %}
+  <script type="text/javascript" src="{{STATIC_URL}}/js/home/ajax_get_list.js"></script>
 {% endblock %}

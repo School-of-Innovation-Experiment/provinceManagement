@@ -22,7 +22,7 @@ def get_news(news_id = None):
         news_content = (News.objects.count() and News.objects.order_by('-news_date')[0]) or None
     return news_content
 
-PAGE_NEWS = 20
+PAGE_NEWS = 2
 def getContext(contentList, page, name, page_news=PAGE_NEWS):
     paginator = Paginator(contentList, page_news)
     try:
