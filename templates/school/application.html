@@ -2,7 +2,8 @@
 {% extends "school/base/report_base.html" %}
 
 {%block report-content%}
-  <form method="post" action=".">
+  <form method="post" action={% url school.views.application_report_view pid%}>
+    {% csrf_token %}
     <!--Basic Infomation-->
     <div class="page-header">
       <h3>基本信息</h3>  
