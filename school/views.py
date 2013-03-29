@@ -32,6 +32,13 @@ from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
+from const.models import SchoolDict, ProjectCategory, InsituteCategory
+from const.models import UserIdentity, ProjectGrade, ProjectStatus
+from const import AUTH_CHOICES, VISITOR_USER
+from const import PROJECT_CATE_CHOICES, CATE_UN
+from const import PROJECT_GRADE_CHOICES, GRADE_UN
+from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+
 from school.utility import check_limits, get_year
 from school.utility import save_application
 from backend.logging import logger
@@ -74,10 +81,11 @@ def application_report_view(request, pid):
         In: id, it is project id
     """
     project = get_object_or_404(ProjectSingle, project_id=pid)
+    pre = get_object_or_404(PreSubmit, project_id=pid)
 
     if request.method == "POST":
         info_form = InfoForm(request.POST, instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=)
+        application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
                 return HttpResponseRedirect(reverse('school.views.home_view'))
@@ -88,12 +96,7 @@ def application_report_view(request, pid):
             logger.info("--"*10)
 
     info_form = InfoForm(instance=project)
-    try:
-        pre_application = PreSubmit.objects.get(project_id=project.project_id)
-    except:
-        pre_application = None
-
-    application_form = ApplicationReportForm(instance=pre_application)
+    application_form = ApplicationReportForm(instance=pre)
 
     data = {'pid': pid,
             'info': info_form,
@@ -143,7 +146,22 @@ def new_report_view(request):
         project.adminuser = request.user
         project.school = SchoolProfile.objects.get(userid__userid=request.user).school
         project.year = get_year()
+        project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
+        project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
         project.save()
+
+        # create presubmit and final report
+        pre = PreSubmit()
+        pre.content_id = uuid.uuid4()
+        pre.project_id = project
+        pre.save()
+
+        #create final report
+        final = FinalSubmit()
+        final.content_id = uuid.uuid4()
+        final.project_id = project
+        final.save()
+
         return HttpResponseRedirect(reverse('school.views.application_report_view', args=(pid,)))
     else:
         return HttpResponseRedirect(reverse('school.views.home_view'))

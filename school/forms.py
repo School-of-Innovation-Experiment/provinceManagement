@@ -33,7 +33,7 @@ class InfoForm(ModelForm):
         #TODO: add css into widgets
         widgets = {}
         exclude = ('project_id', 'adminuser', 'school',
-                   'year')
+                   'year', 'project_grade', 'project_status')
 
     def get_absolute_url(self):
         return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
@@ -87,6 +87,7 @@ class FinalReportForm(ModelForm):
         model = FinalSubmit
         #TODO: add css into widgets
         widgets = {}
+        exclude = ('project_id', 'content_id', )
 
     def get_absolute_url(self):
         return reverse('school.views.final_report_view', args=(str(self.instance.project_id),))
