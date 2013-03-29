@@ -60,7 +60,7 @@ def get_year():
     return str(time.localtime()[0])
 
 
-def save_application(pid=None, info_form=None, application_form=None, user=None):
+def save_application(project=None, info_form=None, application_form=None, user=None):
     """
     Application Report Save
     Arguments:
@@ -71,10 +71,8 @@ def save_application(pid=None, info_form=None, application_form=None, user=None)
         Out:
             *True or False
     """
-    if pid is None or info_form is None or application_form is None:
+    if project is None or info_form is None or application_form is None:
         return False
-
-    project = get_object_or_404(ProjectSingle, project_id=pid)
 
     try:
         info = info_form.save(commit=False)
@@ -87,7 +85,7 @@ def save_application(pid=None, info_form=None, application_form=None, user=None)
 
         application = application_form.save(commit=False)
         application.content_id = uuid.uuid4()
-        application.project_id = project
+        application.project_id = ProjectSingle.objects.get(project_id=project)
         application.save()
 
         return True

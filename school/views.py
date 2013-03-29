@@ -73,7 +73,12 @@ def application_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-    info_form = InfoForm()
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    info_form = InfoForm(instance=project)
+    try:
+        pre_application = PreSubmit.objects.get(project_id=project.project_id)
+    except:
+        pre_application = None
     application_form = ApplicationReportForm()
 
     if request.method == "POST":
@@ -134,7 +139,7 @@ def new_report_view(request):
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
-        project.school = SchoolProfile.objects.get(userid__userid=user).school
+        project.school = SchoolProfile.objects.get(userid__userid=request.user).school
         project.year = get_year()
         project.save()
         return HttpResponseRedirect(reverse('school.views.application_report_view', args=(pid,)))
