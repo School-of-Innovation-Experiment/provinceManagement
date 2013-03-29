@@ -44,79 +44,33 @@
     <blockquote>
       <fieldset>
         <legend>实物（软件、图纸、报告等）</legend>
-        <div>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>名称</td>
-                <td>完成人</td>
-                <td>完成时间</td>
-                <td>备注</td>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody><!--achievements objects-->
-          </table><!--end achievement objects table-->
-        </div><!--end achievement objects div-->
+        {{final.achievement_objects}} 
       </fieldset><!--end achievements objects  fieldset-->
 
       <br/>
       <fieldset>
         <legend>学术论文</legend>
-        <div>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>题目</td>
-                <td>作者</td>
-                <td>期刊/期数</td>
-                <td>发表时间</td>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody><!--papers-->
-          </table><!--end papers table-->
-        </div><!--end papers div-->
+        {{final.papers}} 
       </fieldset><!--end papers fieldset-->
 
       <br/>
       <fieldset>
         <legend>发明专利</legend>
-        <div>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>专利题名</td>
-                <td>专利申请者</td>
-                <td>专利号</td>
-                <td>批准时间</td>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody><!--patents-->
-          </table><!--end patent table-->
-        </div><!--end patents div-->
+        {{final.patents}} 
       </fieldset><!--end patents fieldset-->
 
       <br/>
       <fieldset>
         <legend>科技竞赛</legend>
-        <div>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <td>竞赛作品名称</td>
-                <td>参加人</td>
-                <td>获奖名称</td>
-                <td>获奖等级</td>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody><!--tech competition-->
-          </table><!--end tech competition table-->
-        </div><!--end tech competition div-->
+        {{final.tech_competitions}} 
       </fieldset><!--end tech competition fieldset-->
     </blockquote><!--end achievement-->
+
+    <!--Project Achivements-->
+    <br/>
+    <div class="page-header">
+      <h3>成果上传</h3>
+    </div>
 
     <!--submit button-->
     <br/>

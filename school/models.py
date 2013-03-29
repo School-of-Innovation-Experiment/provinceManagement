@@ -87,6 +87,7 @@ class PreSubmit(models.Model):
     school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
 
+
     class Meta:
         verbose_name = "项目申请书"
         verbose_name_plural = "项目申请书"
@@ -112,6 +113,14 @@ class FinalSubmit(models.Model):
                                           verbose_name="指导教师推荐语")
     school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
+    tech_competitions = models.TextField(blank=True, null=True,
+                                         verbose_name="科技竞赛成果")
+    patents = models.TextField(blank=True, null=True,
+                               verbose_name="发明专利成果")
+    papers = models.TextField(blank=True, null=True,
+                              verbose_name="发表论文")
+    achievement_objects = models.TextField(blank=True, null=True,
+                                           verbose_name="实物成果")
 
     class Meta:
         verbose_name = "项目结题报告"
@@ -128,7 +137,7 @@ class TechCompetition(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="科技竞赛成果唯一ID")
-    project_id = models.ForeignKey(FinalSubmit)
+    #project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
                              verbose_name="竞赛作品名称")
     members = models.CharField(max_length=100, blank=False,
@@ -153,7 +162,7 @@ class Patents(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="发明专利唯一ID")
-    project_id = models.ForeignKey(FinalSubmit)
+    #project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
                              verbose_name="专利题名")
     members = models.CharField(max_length=100, blank=False,
@@ -178,7 +187,7 @@ class Papers(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="学术论文成果唯一ID")
-    project_id = models.ForeignKey(FinalSubmit)
+    #project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
                              verbose_name="名称")
     members = models.CharField(max_length=100, blank=False,
@@ -203,7 +212,7 @@ class AchievementObjects(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="实物成果唯一ID")
-    project_id = models.ForeignKey(FinalSubmit)
+    #project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
                              verbose_name="名称")
     members = models.CharField(max_length=100, blank=False,
