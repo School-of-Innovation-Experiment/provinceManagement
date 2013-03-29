@@ -33,6 +33,8 @@ from users.models import SchoolProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
 from school.utility import check_limits, get_year
+from school.utility import save_application
+from backend.logging import logger
 
 #TODO: for decorators, later I will add time control, authority control
 
@@ -58,7 +60,7 @@ def home_view(request):
 
     data = {"current_list": current_list,
             "info": {"applications_limits": total,
-                     "applications_remaining": remainings} 
+                     "applications_remaining": remainings}
             }
     return render(request, 'school/home.html', data)
 
@@ -71,22 +73,24 @@ def application_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-    project = get_object_or_404(ProjectSingle, project_id=pid)
+    info_form = InfoForm()
+    application_form = ApplicationReportForm()
 
     if request.method == "POST":
         info_form = InfoForm(request.POST)
         application_form = ApplicationReportForm(request.POST)
         if info_form.is_valid() and application_form.is_valid():
-            info_form.save()
-            application_form.save()
-            return HttpResponseRedirect(reverse('school.views.home_view'))
-    else:
-        info_form = InfoForm()
-        application_form = ApplicationReportForm()
+            if save_application(pid, info_form, application_form, request.user):
+                return HttpResponseRedirect(reverse('school.views.home_view'))
+        else:
+            logger.info("Form Valid Failed"+"**"*10)
+            logger.info(info_form.errors)
+            logger.info(application_form.errors)
+            logger.info("--"*10)
 
     data = {'pid': pid,
-            'info':info_form,
-            'application':application_form}
+            'info': info_form,
+            'application': application_form}
 
     return render(request, 'school/application.html', data)
 
@@ -130,7 +134,7 @@ def new_report_view(request):
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
-        project.school = SchoolProfile.objects.get(userid__userid=request.user).school
+        project.school = SchoolProfile.objects.get(userid__userid=user).school
         project.year = get_year()
         project.save()
         return HttpResponseRedirect(reverse('school.views.application_report_view', args=(pid,)))

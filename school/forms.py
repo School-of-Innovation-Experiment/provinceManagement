@@ -32,6 +32,8 @@ class InfoForm(ModelForm):
         model = ProjectSingle
         #TODO: add css into widgets
         widgets = {}
+        exclude = ('project_id', 'adminuser', 'school',
+                   'year')
 
     def get_absolute_url(self):
         return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
@@ -43,6 +45,8 @@ class ApplicationReportForm(ModelForm):
     """
     class Meta:
         model = PreSubmit
+        exclude = ('project_id', 'content_id', )
+
         #TODO: add css into widgets
         widgets = {"background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',

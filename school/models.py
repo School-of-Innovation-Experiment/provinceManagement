@@ -34,7 +34,8 @@ class ProjectSingle(models.Model):
     project_category = models.ForeignKey(ProjectCategory,
                                          blank=True, null=True, default=None)
     insitute = models.ForeignKey(InsituteCategory,
-                                 blank=True, null=True, default=None)
+                                 blank=True, null=True, default=None,
+                                 verbose_name="所属学院")
     project_grade = models.ForeignKey(ProjectGrade,
                                       blank=True, null=True, default=None)
     project_status = models.ForeignKey(ProjectStatus,
