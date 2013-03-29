@@ -177,3 +177,15 @@ def history_view(request):
     data = {}
 
     return render(request, 'school/history.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+def file_view(request, pid=None):
+    """
+    file management view
+    """
+
+    data = {'pid':pid}
+
+    return render(request, 'school/fileupload.html', data)
