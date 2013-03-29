@@ -10,10 +10,8 @@
     <h3>历史文件列表</h3>
   </div>
   <table class="table table-hover" >      
-    <thead>
-    </thead>
     <tbody>
-      {%for item in file.history_list%}
+      {%for item in files%}
       <tr>
         <td>{{item.name}}</td>
       </tr>

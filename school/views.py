@@ -204,8 +204,10 @@ def file_view(request, pid=None):
             return upload_response(request, pid)
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
 
     data = {'pid': pid,
-            'file': file_history}
+            'files': file_history}
 
     return render(request, 'school/fileupload.html', data)
