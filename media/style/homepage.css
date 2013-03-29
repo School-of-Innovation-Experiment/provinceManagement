@@ -261,6 +261,12 @@ table.documents td {
     overflow-y: auto;
     padding: 0 10px;
 }
+#news-list {
+    height: 100%;
+}
+#docs-list {
+    height: 100%;
+}
 /* .news-content div p { */
 /*     height: 100%; */
 /*     overflow-y: auto; */

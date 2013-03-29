@@ -13,6 +13,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #from gui import views as gui_views
 from users import views as users_views
 
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+dajaxice_autodiscover()
 
 admin.autodiscover()
 
@@ -62,3 +65,5 @@ urlpatterns = patterns('',
 )
 # urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
+urlpatterns += patterns('', url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),)
+urlpatterns += staticfiles_urlpatterns()
