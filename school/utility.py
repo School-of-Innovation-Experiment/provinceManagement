@@ -116,7 +116,7 @@ def upload_save_process(request, pid):
     """
     f = request.FILES["file"]
     wrapper_f = UploadedFile(f)
-
+    size = wrapper_f.file.size
     name, filetype = split_name(wrapper_f.name)
 
     obj = UploadedFiles()
@@ -124,6 +124,9 @@ def upload_save_process(request, pid):
     obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
     obj.file_obj = f
+    obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+    obj.file_type = filetype
+    obj.file_size = size
 
     #TODO: we will check file type
     obj.file_type = filetype if filetype != " " else "unknown"
@@ -138,6 +141,7 @@ def upload_response(request, pid):
     """
     wrapper_f = upload_save_process(request, pid)
     path = settings.MEDIA_URL + settings.PROCESS_FILE_PATH
+    
     data = [{'name': wrapper_f.name,
              'url': path + wrapper_f.name.replace(" ", "_"),
              }]
