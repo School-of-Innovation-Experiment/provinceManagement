@@ -72,7 +72,8 @@ class PreSubmit(models.Model):
     key_notes = models.TextField(blank=False,
                                  verbose_name="研究内容和拟解决的关键问题")
     innovation = models.TextField(blank=False, verbose_name="项目创新之处")
-    progress_plan = models.TextField(blank=False, verbose_name="项目经费预算")
+    progress_plan = models.TextField(blank=False, verbose_name="项目进度安排")
+    funds_plan = models.TextField(blank=False, verbose_name="项目经费预算")
     pre_results = models.TextField(blank=False, verbose_name="预期研究成果")
     inspector_comments = models.TextField(blank=False,
                                           verbose_name="指导教师推荐语")

@@ -56,11 +56,10 @@ def home_view(request):
         total = 0
         remainings = 0
 
-    data = {
-            "current_list": current_list,
+    data = {"current_list": current_list,
             "info": {"applications_limits": total,
-                     "applications_remaining": remainings,} 
-           }
+                     "applications_remaining": remainings} 
+            }
     return render(request, 'school/home.html', data)
 
 
@@ -73,9 +72,24 @@ def application_report_view(request, pid):
         In: id, it is project id
     """
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    data = {'pid': pid}
+
+    if request.method == "POST":
+        info_form = InfoForm(request.POST)
+        application_form = ApplicationReportForm(request.POST)
+        if info_form.is_valid() and application_form.is_valid():
+            info_form.save()
+            application_form.save()
+            return HttpResponseRedirect(reverse('school.views.home_view'))
+    else:
+        info_form = InfoForm()
+        application_form = ApplicationReportForm()
+
+    data = {'pid': pid,
+            'info':info_form,
+            'application':application_form}
 
     return render(request, 'school/application.html', data)
+
 
 @csrf.csrf_protect
 @login_required
