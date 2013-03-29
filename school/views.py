@@ -113,8 +113,22 @@ def final_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-    project = get_object_or_404(ProjectSingle, project_id=pid)
-    data = {'pid': pid}
+    final = get_object_or_404(FinalSubmit, project_id=pid)
+
+    if request.method == "POST":
+        final_form = FinalReportForm(request.POST, instance=final)
+        if final_form.is_valid():
+            final_form.save()
+            return HttpResponseRedirect(reverse('school.views.home_view'))
+        else:
+            logger.info("Final Form Valid Failed"+"**"*10)
+            logger.info(final_form.errors)
+            logger.info("--"*10)
+
+    final_form = FinalReportForm(instance=final)
+
+    data = {'pid': pid,
+            'final': final_form}
 
     return render(request, 'school/final.html', data)
 
