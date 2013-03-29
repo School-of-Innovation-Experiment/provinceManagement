@@ -29,11 +29,16 @@ class ProjectSingle(models.Model):
                              verbose_name="参赛题目")
 
     adminuser = models.ForeignKey(User)
-    school = models.ForeignKey(SchoolDict)
-    project_category = models.ForeignKey(ProjectCategory)
-    insitute = models.ForeignKey(InsituteCategory)
-    project_grade = models.ForeignKey(ProjectGrade)
-    project_status = models.ForeignKey(ProjectStatus)
+    school = models.ForeignKey(SchoolDict,
+                               blank=True, null=True, default=None)
+    project_category = models.ForeignKey(ProjectCategory,
+                                         blank=True, null=True, default=None)
+    insitute = models.ForeignKey(InsituteCategory,
+                                 blank=True, null=True, default=None)
+    project_grade = models.ForeignKey(ProjectGrade,
+                                      blank=True, null=True, default=None)
+    project_status = models.ForeignKey(ProjectStatus,
+                                       blank=True, null=True, default=None)
     email = models.EmailField(verbose_name="电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
                                  verbose_name="联系方式")

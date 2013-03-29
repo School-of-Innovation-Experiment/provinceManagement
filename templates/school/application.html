@@ -1,15 +1,95 @@
-<!-- new-task page -->
-{% extends "school/base/_content.html" %}
+<!-- pre application proposal page -->
+{% extends "school/base/report_base.html" %}
 
-{% block calculate-content%}
-<div class="container">
+{%block report-content%}
   <form method="post" action=".">
-    {% csrf_token %}
-    <!--TODO: we will load different page according by the proposal type-->
-    {% include "school/widgets/innovation_init.html" %}
-    <br/>
-    <br/>
-    {#% include "school/widgets/enterprise_init.html" %#}
+    <!--Basic Infomation-->
+    <div class="page-header">
+      <h3>基本信息</h3>  
+    </div> 
+    <div>
+      {{info.title}}
+      {{info.project_category}}
+      {{info.im}}
+      {{info.inspector}}
+      {{info.telphone}}
+      {{info.email}}
+      {{info.insitute}}
+      {{info.members}}
+    </div><!--Info Form-->
+
+    <!--Application Infomation-->
+    <div class="page-header">
+      <h3>项目内容</h3>  
+    </div>
+    
+    <blockquote>
+      <fieldset>
+        <legend>项目来源</legend>
+          <div class="form-inline">
+            <label class="radio project-choice"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">学生自选，学生的积累和兴趣</label>
+            <label class="radio project-choice"><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">学生自选，教师的科研项目</label>
+            <label class="radio project-choice"><input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">教师帮选，教师的科研项目</label>
+          </div><!--end form line, for choice-->
+      </fieldset><!--Project origin-->
+      
+      </br>
+      <fieldset>
+        <legend>项目背景及研究意义</legend>
+        <textarea class="fill-form" rows="8" cols="100" placeholder="同类研究工作国内外研究现状与存在的问题等..."></textarea>
+      </fieldset><!--end background-->
+      
+      </br>
+      <fieldset>
+        <legend>研究内容和拟解决的关键问题</legend>
+        <textarea class="fill-form" rows="8" placeholder="最关键的，最重要的，最核心的，最..."></textarea>
+      </fieldset><!--end key points-->
+      
+      </br>
+      <fieldset>
+        <legend>项目创新之处</legend>
+        <textarea class="fill-form" rows="8" placeholder="说点什么不同的..."></textarea>
+      </fieldset><!--end Innovation points-->
+
+      </br>
+      <fieldset>
+        <legend>项目进度安排</legend>
+        <textarea class="fill-form" rows="8" placeholder="查阅资料、选题、自主设计项目研究方案、开题报告、实验研究、数据统计、处理与分析、研制开发、填写结题表、撰写研究论文和总结报告、参加结题答辩和成果推广等"></textarea>
+      </fieldset><!--end plans-->
+
+      </br>
+      <fieldset>
+        <legend>项目经费预算</legend>
+        <textarea class="fill-form"  rows="8" placeholder="材料费、资料费、版面费、专利费、调研费等如项目鉴定、学术论文、申请专利、获奖、推广应用等..如项目鉴定、学术论文、申请专利、获奖、推广应用等...."></textarea>
+      </fieldset><!--end payments-->
+
+      </br>
+      <fieldset>
+        <legend>预期研究成果</legend>
+        <textarea class="fill-form" rows="8" placeholder="项目鉴定、学术论文、申请专利、获奖、推广应用等..."></textarea>
+      </fieldset>
+    </blockquote>
+
+    <!--school comments:-->
+    <div class="page-header">
+      <h3>推荐意见</h3>  
+    </div>
+    <blockquote>
+      <fieldset>
+        <legend>指导教师推荐语</legend>
+        <textarea class="fill-form" rows="8" placeholder="项目鉴定、学术论文、申请专利、获奖、推广应用等..."></textarea>
+      </fieldset>
+      <fieldset>
+        <legend>学校推荐语</legend>
+        <textarea class="fill-form" rows="8" placeholder="项目鉴定、学术论文、申请专利、获奖、推广应用等..."></textarea>
+      </fieldset> 
+
+    </blockquote>
+      <!--submit button-->
+    <div class="">
+      <button class="btn btn-large btn-block btn-success" type="submit">信息填写无误后，提交申请书</button>
+      </br>
+      <small class="pull-right">Tips: 截止日期前可以修改</small>
+    </div><!--submit button-->
   </form>
-</div>
-{% endblock %}
+{%endblock%}

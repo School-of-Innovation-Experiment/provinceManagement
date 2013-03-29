@@ -8,9 +8,9 @@ Desc: School's view, includes home(manage), final report,
       application report, statistics information.
 '''
 import datetime
-import logging
 import os
 import sys
+import uuid
 
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -31,6 +31,8 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
+from school.utility import check_limits, get_year
+
 #TODO: for decorators, later I will add time control, authority control
 
 
@@ -41,43 +43,50 @@ def home_view(request):
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user)
+    try:
+        limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
+    except:
+        limits = None
 
-    limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
-    remainings = int(limits.number) - len(current_list)
+    if limits is not None:
+        remainings = int(limits.number) - len(current_list)
+        total = limits.number
+    else:
+        total = 0
+        remainings = 0
 
     data = {
             "current_list": current_list,
-            "info": {"applications_limits": limits,
-                     "applications_remaining": remainings,}
-            
+            "info": {"applications_limits": total,
+                     "applications_remaining": remainings,} 
            }
     return render(request, 'school/home.html', data)
 
 
 @csrf.csrf_protect
 @login_required
-def application_report_view(request, pid=None):
+def application_report_view(request, pid):
     """
     school application report
     Arguments:
         In: id, it is project id
     """
 
-    data = {}
+    data = {'pid':pid}
 
     return render(request, 'school/application.html', data)
 
 
 @csrf.csrf_protect
 @login_required
-def final_report_view(request, pid=None):
+def final_report_view(request, pid):
     """
     school final report
     Arguments:
         In: id, it is project id
     """
 
-    data = {}
+    data = {'pid':pid}
 
     return render(request, 'school/final.html', data)
 
@@ -101,10 +110,18 @@ def new_report_view(request):
     school start a new application report, then it will
     jump the real project URL.
     """
-
-    data = {}
-
-    return render(request, 'school/application.html', data)
+    if check_limits(request.user):
+        # create a new project
+        pid = uuid.uuid4()
+        project = ProjectSingle()
+        project.project_id = pid
+        project.adminuser = request.user
+        project.school = SchoolProfile.objects.get(userid__userid=request.user).school
+        project.year = get_year()
+        project.save()
+        return HttpResponseRedirect(reverse('school.views.application_report_view', args=(pid,)))
+    else:
+        return HttpResponseRedirect(reverse('school.views.home_view'))
 
 
 @csrf.csrf_protect

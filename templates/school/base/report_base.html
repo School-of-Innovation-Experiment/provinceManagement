@@ -1,0 +1,25 @@
+<!--report base html-->
+{% extends "school/base/_content.html" %}
+
+{%block calculate-content%}
+<!--Project Choice-->
+<div class="row">
+  <div class="span6">
+    <div class="alert alert-info">
+      <h4><a herf={% url school.views.application_report_view pid%}>初期报告</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+   <div class="span6">
+    <div class="alert alert-info">
+      <h4><a herf={% url school.views.final_report_view pid%}>结题报告</a></h4>
+    </div><!--end alert-->
+</div><!--end right span--> 
+</div><!--end row-->
+
+<div class="container">
+  {%block report-content%}
+  {%endblock%}
+</div>
+
+
+{%endblock%}
