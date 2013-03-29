@@ -78,9 +78,9 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         info = info_form.save(commit=False)
         info.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         info.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
-        info.school = SchoolProfile.objects.get(userid__userid=user).school
-        info.adminuser = user
-        info.year = get_year()
+      #  info.school = SchoolProfile.objects.get(userid__userid=user).school
+      #  info.adminuser = user
+      #  info.year = get_year()
         info.save()
 
         application = application_form.save(commit=False)

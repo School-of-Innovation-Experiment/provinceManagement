@@ -74,24 +74,26 @@ def application_report_view(request, pid):
         In: id, it is project id
     """
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    info_form = InfoForm(instance=project)
-    try:
-        pre_application = PreSubmit.objects.get(project_id=project.project_id)
-    except:
-        pre_application = None
-    application_form = ApplicationReportForm()
 
     if request.method == "POST":
-        info_form = InfoForm(request.POST)
-        application_form = ApplicationReportForm(request.POST)
+        info_form = InfoForm(request.POST, instance=project)
+        application_form = ApplicationReportForm(request.POST, instance=)
         if info_form.is_valid() and application_form.is_valid():
-            if save_application(pid, info_form, application_form, request.user):
+            if save_application(project, info_form, application_form, request.user):
                 return HttpResponseRedirect(reverse('school.views.home_view'))
         else:
             logger.info("Form Valid Failed"+"**"*10)
             logger.info(info_form.errors)
             logger.info(application_form.errors)
             logger.info("--"*10)
+
+    info_form = InfoForm(instance=project)
+    try:
+        pre_application = PreSubmit.objects.get(project_id=project.project_id)
+    except:
+        pre_application = None
+
+    application_form = ApplicationReportForm(instance=pre_application)
 
     data = {'pid': pid,
             'info': info_form,

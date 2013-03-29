@@ -67,18 +67,18 @@ class PreSubmit(models.Model):
                                   verbose_name="初审报告唯一ID")
     project_id = models.OneToOneField(ProjectSingle)
 
-    original = models.CharField(max_length=200, blank=True,
+    original = models.CharField(max_length=200, blank=False, null=True,
                                 verbose_name="题目来源")
-    background = models.TextField(blank=False, verbose_name="项目背景及研究意义")
-    key_notes = models.TextField(blank=False,
+    background = models.TextField(blank=False, null=True, verbose_name="项目背景及研究意义")
+    key_notes = models.TextField(blank=False, null=True,
                                  verbose_name="研究内容和拟解决的关键问题")
-    innovation = models.TextField(blank=False, verbose_name="项目创新之处")
-    progress_plan = models.TextField(blank=False, verbose_name="项目进度安排")
-    funds_plan = models.TextField(blank=False, verbose_name="项目经费预算")
-    pre_results = models.TextField(blank=False, verbose_name="预期研究成果")
-    inspector_comments = models.TextField(blank=False,
+    innovation = models.TextField(blank=False, null=True, verbose_name="项目创新之处")
+    progress_plan = models.TextField(blank=False, null=True, verbose_name="项目进度安排")
+    funds_plan = models.TextField(blank=False, null=True, verbose_name="项目经费预算")
+    pre_results = models.TextField(blank=False, null=True, verbose_name="预期研究成果")
+    inspector_comments = models.TextField(blank=False, null=True,
                                           verbose_name="指导教师推荐语")
-    school_comments = models.TextField(blank=False,
+    school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
 
     class Meta:
@@ -98,13 +98,13 @@ class FinalSubmit(models.Model):
                                   verbose_name="结题报告唯一ID")
     project_id = models.OneToOneField(ProjectSingle)
 
-    achievement_fashion = models.CharField(max_length=200, blank=True,
+    achievement_fashion = models.CharField(max_length=200, blank=True, null=True,
                                            verbose_name="成果形式")
-    achievement_summary = models.TextField(blank=False,
+    achievement_summary = models.TextField(blank=False, null=True,
                                            verbose_name="研究成果概述")
-    inspector_comments = models.TextField(blank=False,
+    inspector_comments = models.TextField(blank=False, null=True,
                                           verbose_name="指导教师推荐语")
-    school_comments = models.TextField(blank=False,
+    school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
 
     class Meta:
