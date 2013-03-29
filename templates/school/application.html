@@ -8,14 +8,41 @@
       <h3>基本信息</h3>  
     </div> 
     <div>
-      {{info.title}}
-      {{info.project_category}}
-      {{info.im}}
-      {{info.inspector}}
-      {{info.telphone}}
-      {{info.email}}
-      {{info.insitute}}
-      {{info.members}}
+      <div>
+        <label>{{info.title.label}}</label>
+        {{info.title}}
+        <span class="form-error help-inline">{{info.title.errors}}</span>  
+      </div><!--end title-->
+      <div>
+        <label>{{info.title.project_category}}</label>
+        {{info.project_category}}
+        <span class="form-error help-inline">{{info.project_category.errors}}</span>  
+      </div><!--end project category-->
+      <div>
+        <label>{{info.inspector.label}}</label>
+        {{info.inspector}}
+        <span class="form-error help-inline">{{info.inspector.errors}}</span>  
+      </div><!--end inspector-->
+      <div>
+        <label>{{info.telephone.label}}</label>
+        {{info.telephone}}
+        <span class="form-error help-inline">{{info.telephone.errors}}</span>  
+      </div><!--end telephone-->
+      <div>
+        <label>{{info.email.label}}</label>
+        {{info.email}}
+        <span class="form-error help-inline">{{info.email.errors}}</span>  
+      </div><!--end email-->
+      <div>
+        <label>{{info.insitute.label}}</label>
+        {{info.insitute}}
+        <span class="form-error help-inline">{{info.insitute.errors}}</span>  
+      </div><!--end insitute-->
+      <div>
+        <label>{{info.members.label}}</label>
+        {{info.members}}
+        <span class="form-error help-inline">{{info.members.errors}}</span>  
+      </div><!--end members-->
     </div><!--Info Form-->
 
     <!--Application Infomation-->

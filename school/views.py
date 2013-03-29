@@ -30,6 +30,7 @@ from school.models import TechCompetition, Patents, Papers, AchievementObjects
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
 from school.utility import check_limits, get_year
 
@@ -71,11 +72,10 @@ def application_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-
-    data = {'pid':pid}
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    data = {'pid': pid}
 
     return render(request, 'school/application.html', data)
-
 
 @csrf.csrf_protect
 @login_required
@@ -85,8 +85,8 @@ def final_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-
-    data = {'pid':pid}
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    data = {'pid': pid}
 
     return render(request, 'school/final.html', data)
 
