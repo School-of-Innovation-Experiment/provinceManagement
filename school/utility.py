@@ -13,6 +13,10 @@ import sys
 import time
 
 from django.shortcuts import get_object_or_404
+from django.utils import simplejson
+from django.http import HttpResponse
+from django.conf import settings
+from django.core.files.uploadedfile import UploadedFile
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import TechCompetition, Patents, Papers, AchievementObjects
@@ -28,7 +32,6 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
 from backend.utility import search_tuple
-
 
 from backend.logging import logger
 
@@ -87,3 +90,74 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         logger.info(err)
         logger.info("--"*10)
         return False
+
+
+def response_minetype(request):
+    """
+    File upload mine type escape
+    """
+    if "application/json" in request.META["HTTP_ACCEPT"]:
+        return "application/json"
+    else:
+        return "text/plain"
+
+
+class JSONResponse(HttpResponse):
+    """Json response class"""
+    def __init__(self, obj='', json_opts={}, mimetype="application/json",
+                 *args, **kwargs):
+        content = simplejson.dumps(obj, **json_opts)
+        super(JSONResponse, self).__init__(content, mimetype, *args, **kwargs)
+
+
+def upload_save_process(request, pid):
+    """
+        save file into local storage
+    """
+    f = request.FILES["file"]
+    wrapper_f = UploadedFile(f)
+
+    name, filetype = split_name(wrapper_f.name)
+
+    obj = UploadedFiles()
+    obj.name = name
+    obj.project_id = pid
+    obj.file_id = uuid.uuid4()
+    obj.file_obj = f
+
+    #TODO: we will check file type
+    obj.file_type = filetype if filetype != " " else "unknown"
+    obj.save()
+
+    return wrapper_f
+
+
+def upload_response(request, pid):
+    """
+        use AJAX to process file upload
+    """
+    wrapper_f = upload_save_process(request, pid)
+    path = settings.MEDIA_URL + settings.PROCESS_FILE_PATH
+    data = [{'name': wrapper_f.name,
+             'url': path + wrapper_f.name.replace(" ", "_"),
+             }]
+
+    response = JSONResponse(data, {}, response_minetype(request))
+    response["Content-Dispostion"] = "inline; filename=files.json"
+
+    return response
+
+
+def split_name(name, sep="."):
+    """
+        split type and name in a filename
+    """
+    name = str(name)
+    if sep in name:
+        f = name.split(sep)[0]
+        t = name.split(sep)[1]
+    else:
+        f = name
+        t = " "
+
+    return (f, t)

@@ -39,8 +39,7 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
-from school.utility import check_limits, get_year
-from school.utility import save_application
+from school.utility import *
 from backend.logging import logger
 
 #TODO: for decorators, later I will add time control, authority control
@@ -200,6 +199,13 @@ def file_view(request, pid=None):
     file management view
     """
 
-    data = {'pid':pid}
+    if request.method == "POST":
+        if request.FILES is not None:
+            return upload_response(request, pid)
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+
+    data = {'pid': pid,
+            'file': file_history}
 
     return render(request, 'school/fileupload.html', data)
