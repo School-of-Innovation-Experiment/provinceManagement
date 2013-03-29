@@ -28,7 +28,7 @@
       {%for item in current_list%}
       <tr>
         <td><a href="{% url school.views.application_report_view item.project_id %}">{{item.title}}</a></td>
-        <td>{{item.project_category}}</td>
+        <td><a href="{% url school.views.application_report_view item.project_id %}">{{item.project_category}}</a></td>
         <td>{{item.inspector}}</td>
         <td>{{item.project_status}}</td>
         <td>{{item.project_grade}}</td>
