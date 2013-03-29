@@ -257,3 +257,13 @@ PROCESS_FILE_PATH = join("tmp", "process_file")
 #}
 
 FILE_UPLOAD_PERMISSIONS = 0644 #NOTICE: the prefix 0 is important
+
+"""
+FILE Upload
+"""
+FILE_UPLOAD_TEMP_DIR = os.path.join(os.path.dirname(__file__), PROCESS_FILE_PATH).replace("\\",'/')
+FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler',
+                        'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+                        )
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

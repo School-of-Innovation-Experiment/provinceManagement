@@ -39,8 +39,7 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
-from school.utility import check_limits, get_year
-from school.utility import save_application
+from school.utility import *
 from backend.logging import logger
 
 #TODO: for decorators, later I will add time control, authority control
@@ -113,8 +112,22 @@ def final_report_view(request, pid):
     Arguments:
         In: id, it is project id
     """
-    project = get_object_or_404(ProjectSingle, project_id=pid)
-    data = {'pid': pid}
+    final = get_object_or_404(FinalSubmit, project_id=pid)
+
+    if request.method == "POST":
+        final_form = FinalReportForm(request.POST, instance=final)
+        if final_form.is_valid():
+            final_form.save()
+            return HttpResponseRedirect(reverse('school.views.home_view'))
+        else:
+            logger.info("Final Form Valid Failed"+"**"*10)
+            logger.info(final_form.errors)
+            logger.info("--"*10)
+
+    final_form = FinalReportForm(instance=final)
+
+    data = {'pid': pid,
+            'final': final_form}
 
     return render(request, 'school/final.html', data)
 
@@ -177,3 +190,22 @@ def history_view(request):
     data = {}
 
     return render(request, 'school/history.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+def file_view(request, pid=None):
+    """
+    file management view
+    """
+
+    if request.method == "POST":
+        if request.FILES is not None:
+            return upload_response(request, pid)
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+
+    data = {'pid': pid,
+            'file': file_history}
+
+    return render(request, 'school/fileupload.html', data)

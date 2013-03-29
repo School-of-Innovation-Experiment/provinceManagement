@@ -11,7 +11,7 @@
     </div>
     <blockquote>
       {{final.achievement_summary}} 
-      <textarea class="fill-form" rows="8" placeholder="写200字左右就行..."></textarea>
+      <span class="form-error help-inline">{{final.achievement_summary.errors}}</span>  
     </blockquote><!--end project content-->
     
     <br/>
@@ -22,17 +22,19 @@
       <fieldset>
         <legend>成果形式</legend>
         {{final.achievement_fashion}} 
-        <textarea class="fill-form" rows="2" placeholder="一句话就行..."></textarea>
+        <span class="form-error help-inline">{{final.achievement_fashion.errors}}</span>  
       </fieldset>
+      <br/>
       <fieldset>
         <legend>指导教师推荐语</legend>
         {{final.inspector_comments}} 
-        <span class="form-error help-inline">{{application.inspector_comments.errors}}</span>  
+        <span class="form-error help-inline">{{final.inspector_comments.errors}}</span>  
       </fieldset>
+      <br/>
       <fieldset>
         <legend>学校推荐语</legend>
         {{final.school_comments}} 
-        <span class="form-error help-inline">{{application.school_comments.errors}}</span>  
+        <span class="form-error help-inline">{{final.school_comments.errors}}</span>  
       </fieldset> 
     </blockquote><!--end project evaluate-->
 
@@ -45,32 +47,30 @@
       <fieldset>
         <legend>实物（软件、图纸、报告等）</legend>
         {{final.achievement_objects}} 
+        <span class="form-error help-inline">{{final.achievement_objects.errors}}</span>  
       </fieldset><!--end achievements objects  fieldset-->
 
       <br/>
       <fieldset>
         <legend>学术论文</legend>
         {{final.papers}} 
+        <span class="form-error help-inline">{{final.papers.errors}}</span>  
       </fieldset><!--end papers fieldset-->
 
       <br/>
       <fieldset>
         <legend>发明专利</legend>
         {{final.patents}} 
+        <span class="form-error help-inline">{{final.patents.errors}}</span>  
       </fieldset><!--end patents fieldset-->
 
       <br/>
       <fieldset>
         <legend>科技竞赛</legend>
         {{final.tech_competitions}} 
+        <span class="form-error help-inline">{{final.tech_competitions.errors}}</span>  
       </fieldset><!--end tech competition fieldset-->
     </blockquote><!--end achievement-->
-
-    <!--Project Achivements-->
-    <br/>
-    <div class="page-header">
-      <h3>成果上传</h3>
-    </div>
 
     <!--submit button-->
     <br/>

@@ -86,8 +86,32 @@ class FinalReportForm(ModelForm):
     class Meta:
         model = FinalSubmit
         #TODO: add css into widgets
-        widgets = {}
         exclude = ('project_id', 'content_id', )
+        widgets = {"achievement_summary": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'项目完成情况，写200字就行...',
+                                                                'class': "fill-form"}),
+                   "achievement_fashion": forms.Textarea(attrs={'rows': 2, 'cols': 100,
+                                                                'placeholder': '一句话就行...',
+                                                                'class': "fill-form"}),
+                   "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'指导教师对项目评价...',
+                                                                'class': "fill-form"}),
+                   "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                       'placeholder':'学校对项目评价...',
+                                                       'class': "fill-form"}),
+                   "achievement_objects": forms.Textarea(attrs={'rows': 12, 'cols': 100,
+                                                                'placeholder':'名称、完成人、完成时间、详细信息等...',
+                                                                'class': "fill-form"}),
+                   "papers": forms.Textarea(attrs={'rows': 12, 'cols': 100,
+                                                   'placeholder':'题目、作者、期刊、发表时间、录用时间...',
+                                                   'class': "fill-form"}),
+                   "patents": forms.Textarea(attrs={'rows': 12, 'cols': 100,
+                                                    'placeholder':'专利名称、申请者、专利号、批准时间...',
+                                                    'class': "fill-form"}),
+                   "tech_competitions": forms.Textarea(attrs={'rows': 12, 'cols': 100,
+                                                              'placeholder':'竞赛名称、参加人、获奖名称、获奖等级...',
+                                                              'class': "fill-form"}),
+                   }
 
     def get_absolute_url(self):
         return reverse('school.views.final_report_view', args=(str(self.instance.project_id),))
