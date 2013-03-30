@@ -52,7 +52,8 @@ def home_view(request):
     """
     school home management page
     """
-    current_list = ProjectSingle.objects.filter(adminuser=request.user)
+    current_list = ProjectSingle.objects.filter(adminuser=request.user,
+                                                year=get_year())
     try:
         limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
     except:
