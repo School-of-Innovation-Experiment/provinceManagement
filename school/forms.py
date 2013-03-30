@@ -31,7 +31,6 @@ class InfoForm(ModelForm):
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
-        widgets = {}
         exclude = ('project_id', 'adminuser', 'school',
                    'year', 'project_grade', 'project_status')
 
@@ -89,7 +88,7 @@ class FinalReportForm(ModelForm):
         exclude = ('project_id', 'content_id', )
         widgets = {"achievement_summary": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                 'placeholder':'项目完成情况，写200字就行...',
-                                                                'class': "fill-form"}),
+                                                                'class':"fill-form"},),
                    "achievement_fashion": forms.Textarea(attrs={'rows': 2, 'cols': 100,
                                                                 'placeholder': '一句话就行...',
                                                                 'class': "fill-form"}),
