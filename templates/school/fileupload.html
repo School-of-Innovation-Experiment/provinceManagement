@@ -9,13 +9,22 @@
   <div class="page-header">
     <h3>历史文件列表</h3>
   </div>
-  <table class="table table-hover" >      
+  <table class="table table-hover table-striped" >      
     <thead>
+      <tr>
+        <td>名称</td>
+        <td>类型</td>
+        <td>大小</td>
+        <td>上传时间</td>
+      </tr>
     </thead>
     <tbody>
-      {%for item in file.history_list%}
+      {%for item in files%}
       <tr>
         <td>{{item.name}}</td>
+        <td>{{item.file_type}}</td>
+        <td>{{item.file_size}}</td>
+        <td>{{item.uploadtime}}</td>
       </tr>
       {%endfor%}
     </tbody>
@@ -32,20 +41,20 @@
             <div class="span12">
                 <span class="btn btn-primary fileinput-button" >
                     <i class="icon-plus icon-white"></i>
-                    <span>Add files...</span>
+                    <span>添加文件...</span>
                     <input type="file" name="file" multiple >
                 </span>
                 <button type="submit" class="btn btn-success start" rel="fileupload_operation">
                     <i class="icon-upload icon-white"></i>
-                    <span>Start upload</span>
+                    <span>批量上传</span>
                 </button>
                 <button type="reset" class="btn btn-warning cancel" rel="fileupload_operation">
                     <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel upload</span>
+                    <span>取消上传</span>
                 </button>
                 <button type="button" class="btn btn-danger delete" rel="fileupload_operation">
                     <i class="icon-trash icon-white"></i>
-                    <span>Delete files</span>
+                    <span>删除文件</span>
                 </button>
                 <input type="checkbox" class="toggle">
             </div>
@@ -60,39 +69,11 @@
         <table class="table table-striped"  id="files_table" >
           <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
         </table>
-
-  </form>
+    </form>
     <div class="fileupload-content">
         <table class="files"></table>
         <div class="fileupload-progressbar"></div>
     </div>
-
-  <!-- modal-gallery is the modal dialog used for the image gallery -->
-<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-        <a class="btn modal-download" target="_blank">
-            <i class="icon-download"></i>
-            <span>Download</span>
-        </a>
-        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
-            <i class="icon-play icon-white"></i>
-            <span>Slideshow</span>
-        </a>
-        <a class="btn btn-info modal-prev">
-            <i class="icon-arrow-left icon-white"></i>
-            <span>Previous</span>
-        </a>
-        <a class="btn btn-primary modal-next">
-            <span>Next</span>
-            <i class="icon-arrow-right icon-white"></i>
-        </a>
-    </div>
-</div>
 
 <!--files list-->
 {% upload_js %}

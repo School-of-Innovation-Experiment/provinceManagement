@@ -3,13 +3,34 @@
 
 {% block calculate-content%}
 <div class="container">
-  <form method="post" action=".">
-    {% csrf_token %}
-    <!--TODO: we will load different page according by the proposal type-->
-    {% include "school/widgets/innovation_init.html" %}
-    <br/>
-    <br/>
-    {#% include "school/widgets/enterprise_init.html" %#}
-  </form>
+  <div class="row">
+    <div class="span5">
+      <fieldset>
+        <legend>基本信息</legend>
+        <div>
+          basic 
+        </div><!--end basic data info-->
+      </fieldset>
+    </div><!--end left panel-->
+    <div class="span7">
+      <fieldset>
+        <legend>分类信息</legend>
+        <div>
+          pie
+        </div><!--end pie info-->
+      </fieldset>
+    </div><!--end right panel-->
+  </div><!--end row-->
+
+  <br/>
+  <br/>
+  <div>
+    <fieldset>
+      <legend>历史信息</legend>
+      <div>
+        lines
+      </div><!--end line object-->
+    </fieldset><!--end fieldset-->
+  </div><!--end line -->
 </div>
 {% endblock %}

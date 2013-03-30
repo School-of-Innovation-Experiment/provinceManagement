@@ -116,30 +116,36 @@ def upload_save_process(request, pid):
     """
     f = request.FILES["file"]
     wrapper_f = UploadedFile(f)
-
+    size = wrapper_f.file.size
     name, filetype = split_name(wrapper_f.name)
 
     obj = UploadedFiles()
     obj.name = name
-    obj.project_id = pid
+    obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
     obj.file_obj = f
+    obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+    obj.file_type = filetype
+    obj.file_size = size
 
     #TODO: we will check file type
     obj.file_type = filetype if filetype != " " else "unknown"
     obj.save()
 
-    return wrapper_f
+    return obj
 
 
 def upload_response(request, pid):
     """
         use AJAX to process file upload
     """
-    wrapper_f = upload_save_process(request, pid)
-    path = settings.MEDIA_URL + settings.PROCESS_FILE_PATH
-    data = [{'name': wrapper_f.name,
-             'url': path + wrapper_f.name.replace(" ", "_"),
+    obj = upload_save_process(request, pid)
+
+    data = [{'name': obj.name,
+             'size': obj.file_size,
+             'delete_url': settings.FILE_DELETE_URL + \
+                           str(pid) + "/" + str(obj.file_id),
+             'delete_type': "POST",
              }]
 
     response = JSONResponse(data, {}, response_minetype(request))

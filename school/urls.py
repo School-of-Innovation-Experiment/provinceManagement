@@ -44,6 +44,8 @@ urlpatterns = patterns('',
         r'^history/$',
         school_views.history_view,
     ),
-
-
+    url(
+        r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
+        school_views.file_delete_view,
+    ),
 )

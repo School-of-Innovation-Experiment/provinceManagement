@@ -18,7 +18,7 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.http import HttpResponseForbidden, Http404
+from django.http import HttpResponseForbidden, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators import csrf
@@ -43,6 +43,7 @@ from school.utility import *
 from backend.logging import logger
 
 #TODO: for decorators, later I will add time control, authority control
+#      check one user operation
 
 
 @csrf.csrf_protect
@@ -51,7 +52,8 @@ def home_view(request):
     """
     school home management page
     """
-    current_list = ProjectSingle.objects.filter(adminuser=request.user)
+    current_list = ProjectSingle.objects.filter(adminuser=request.user,
+                                                year=get_year())
     try:
         limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
     except:
@@ -204,8 +206,36 @@ def file_view(request, pid=None):
             return upload_response(request, pid)
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
 
     data = {'pid': pid,
-            'file': file_history}
+            'files': file_history}
 
     return render(request, 'school/fileupload.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+def file_delete_view(request, pid, fid):
+    """
+    file delete view
+    """
+    logger.info("delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(UploadedFiles, file_id=fid)
+    p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
+
+    if f.project_id.project_id != p.project_id:
+        raise HttpResponseForbidden("Authority Failed!")
+
+    # delete file
+    if request.method == "POST":
+        # delete record
+        f.delete()
+        return HttpResponse(str(fid))
+    else:
+        return HttpResponseBadRequest("Warning! Only POST accepted!")
