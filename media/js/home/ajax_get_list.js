@@ -1,3 +1,5 @@
+var docs_input = "";
+var news_input = "";
 function news_turn_page(page){$('#news-list').html(page.html); turn_page();};
 function docs_turn_page(page){$('#docs-list').html(page.html); turn_page();};
 function turn_page () {
@@ -6,17 +8,27 @@ function turn_page () {
     tagid = ids[tagid];
     if(tagid.indexOf('docs') >= 0)
       $(tagid).attr('onclick',
-                    "Dajaxice.news.docs_turn_page(docs_turn_page, {'docs_page': "
-                    + $(tagid).attr("arg") + "}); return false;");
+                    "Dajaxice.news.docs_turn_page(docs_turn_page, {'docs_page': '"
+                    + $(tagid).attr("arg") + "'," + "'docs_search': '" + docs_input
+                    + "'}); return false;");
     else
       $(tagid).attr('onclick',
-                    "Dajaxice.news.news_turn_page(news_turn_page, {'news_page': "
-                    + $(tagid).attr("arg") + "}); return false;");
+                    "Dajaxice.news.news_turn_page(news_turn_page, {'news_page': '"
+                    + $(tagid).attr("arg") + "'," + "'news_search': '" + news_input
+                    + "'}); return false;");
   };
 };
 function getinput (tag) {
-  return $(tag).attr('value');
-}
+  if(tag.indexOf('docs') >= 0) {
+    docs_input = $(tag).attr('value');
+    ret = docs_input;
+  }
+  else{
+    news_input = $(tag).attr('value');
+    ret = news_input;
+  };
+  return ret;
+};
 function search () {
   var ids = ["#search-news", "#search-docs"];
   for(var tagid in ids) {
