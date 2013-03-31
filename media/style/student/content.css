@@ -58,3 +58,8 @@ div.submit-btn{
 #grid-elements{
   display: inline;
 }
+
+#legend_id{
+  text-align: center;
+  float:center;
+}
