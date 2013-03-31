@@ -148,7 +148,6 @@ def statistics_view(request):
     """
     school statistics view
     """
-    category_pies = get_category_pies(request.user)
     trend_lines = get_trend_lines(request.user)
 
     data = {"innovation_numbers":0,
@@ -158,7 +157,6 @@ def statistics_view(request):
             "nation_numbers":20,
             "application_numbers":30,
             "passed_numbers":29,
-            "category_pies": category_pies,
             "trend_lines": trend_lines,
             }
 
