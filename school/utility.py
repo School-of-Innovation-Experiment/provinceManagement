@@ -18,6 +18,8 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 
+from chartit import DataPool, Chart
+
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import TechCompetition, Patents, Papers, AchievementObjects
 from school.models import UploadedFiles
@@ -54,7 +56,7 @@ def check_limits(user):
     return True if total > currents else False
 
 
-def get_year():
+def get_current_year():
     """
     Get current year
     Arguments:
@@ -167,3 +169,51 @@ def split_name(name, sep="."):
         t = " "
 
     return (f, t)
+
+
+def check_history_readonly(pid):
+    """
+    Check whether the project is real current year
+    Arguments:
+        In: pid, project_id
+            history, "current" or "history"
+        Out:a tuple
+            readonly, True or False
+    """
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    if project.year == get_current_year():
+        readonly = False
+    else:
+        readonly = True
+
+    return readonly
+
+
+def get_category_pies(user):
+    """
+    Get category datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: category_pies object
+    """
+    ds = DataPool(series=[{'options': {'source': None},
+                           'terms': ['', '', '']
+                          }]
+                  )
+    cht = Chart(datasource=ds,
+                series_options=[{'options':{'type':'pie', 'stacking':False},
+                                 'terms':{'',''}}],
+                chart_options={'title':{'text':'申请类别统计'},
+                               }
+                ) 
+    return cht
+
+
+def get_trend_lines(user):
+    """
+    Get trend lines datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: trend lines object
+    """
+    return None

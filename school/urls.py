@@ -32,6 +32,7 @@ urlpatterns = patterns('',
         r'^application/(?P<pid>.{36})$',
         school_views.application_report_view,
     ),
+    #statistics
     url(
         r'^statistics/$',
         school_views.statistics_view,

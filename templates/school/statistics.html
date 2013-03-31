@@ -1,6 +1,15 @@
 <!-- new-task page -->
 {% extends "school/base/_content.html" %}
 
+{% block forejs %}
+  <!--highchart chartit-->
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/default.js"></script>
+  {% load chartit %}
+  {{ category_pies|load_charts:"category_pies" }}
+  {{ trend_lines|load_charts:"trend_lines" }}
+{% endblock %}
+
 {% block calculate-content%}
 <div class="container">
   <div class="row">
@@ -8,14 +17,27 @@
       <fieldset>
         <legend>基本信息</legend>
         <div>
-          basic 
+            <h4>本年度信息统计</h4>
+            <div>
+              <span class="label label-inverse">创新实践 {{innovation_numbers}}</span>
+              <span class="label label-info">创业实践 {{enterprise_numbers}}</span>
+              <span class="label label-warning">创业训练 {{enterprie_ee_numbers}}</span>
+              <span class="label label-important">省级 {{province_numbers}}</span>
+              <span class="label label-success">国家级 {{nation_numbers}}</span>
+            </div>
+            <br/>
+            <h4>申请记录</h4>
+            <div>
+              <span class="label label-success">申请数量 {{application_numbers}}</span>
+              <span class="label label-inverse">通过数量 {{passed_numbers}}</span>
+            </div>
         </div><!--end basic data info-->
       </fieldset>
     </div><!--end left panel-->
     <div class="span7">
       <fieldset>
         <legend>分类信息</legend>
-        <div>
+        <div id="category_pies">
           pie
         </div><!--end pie info-->
       </fieldset>
@@ -27,7 +49,7 @@
   <div>
     <fieldset>
       <legend>历史信息</legend>
-      <div>
+      <div id="trend_lines">
         lines
       </div><!--end line object-->
     </fieldset><!--end fieldset-->

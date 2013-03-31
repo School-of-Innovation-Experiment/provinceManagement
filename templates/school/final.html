@@ -74,14 +74,14 @@
 
     <!--submit button-->
     <br/>
+
+    {% if not readonly %}
     <div class="">
       <button class="btn btn-large btn-block btn-success" type="submit">信息填写无误后，提交结题报告</button>
       </br>
       <small class="pull-right">Tips: 截止日期前可以修改</small>
     </div><!--submit button-->
-
-
-    
+    {% endif %}
 
   </form>
 {%endblock%}

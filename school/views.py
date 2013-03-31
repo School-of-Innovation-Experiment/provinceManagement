@@ -53,7 +53,7 @@ def home_view(request):
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
-                                                year=get_year())
+                                                year=get_current_year())
     try:
         limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
     except:
@@ -75,7 +75,7 @@ def home_view(request):
 
 @csrf.csrf_protect
 @login_required
-def application_report_view(request, pid):
+def application_report_view(request, pid=None):
     """
     school application report
     Arguments:
@@ -84,7 +84,9 @@ def application_report_view(request, pid):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
-    if request.method == "POST":
+    readonly = check_history_readonly(pid)
+
+    if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
         application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
@@ -101,7 +103,9 @@ def application_report_view(request, pid):
 
     data = {'pid': pid,
             'info': info_form,
-            'application': application_form}
+            'application': application_form,
+            'readonly': readonly,
+            }
 
     return render(request, 'school/application.html', data)
 
@@ -116,7 +120,9 @@ def final_report_view(request, pid):
     """
     final = get_object_or_404(FinalSubmit, project_id=pid)
 
-    if request.method == "POST":
+    readonly = check_history_readonly(pid)
+
+    if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
@@ -129,7 +135,9 @@ def final_report_view(request, pid):
     final_form = FinalReportForm(instance=final)
 
     data = {'pid': pid,
-            'final': final_form}
+            'final': final_form,
+            'readonly': readonly,
+            }
 
     return render(request, 'school/final.html', data)
 
@@ -140,8 +148,19 @@ def statistics_view(request):
     """
     school statistics view
     """
+    category_pies = get_category_pies(request.user)
+    trend_lines = get_trend_lines(request.user)
 
-    data = {}
+    data = {"innovation_numbers":0,
+            "enterprise_numbers":0,
+            "enterprie_ee_numbers":0,
+            "province_numbers":10,
+            "nation_numbers":20,
+            "application_numbers":30,
+            "passed_numbers":29,
+            "category_pies": category_pies,
+            "trend_lines": trend_lines,
+            }
 
     return render(request, 'school/statistics.html', data)
 
@@ -160,7 +179,7 @@ def new_report_view(request):
         project.project_id = pid
         project.adminuser = request.user
         project.school = SchoolProfile.objects.get(userid__userid=request.user).school
-        project.year = get_year()
+        project.year = get_current_year()
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
         project.save()
@@ -189,7 +208,9 @@ def history_view(request):
     school history report list
     """
 
-    data = {}
+    history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year())
+
+    data = {"history_list": history_list}
 
     return render(request, 'school/history.html', data)
 
@@ -200,8 +221,9 @@ def file_view(request, pid=None):
     """
     file management view
     """
+    readonly = check_history_readonly(pid)
 
-    if request.method == "POST":
+    if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
             return upload_response(request, pid)
 
@@ -210,7 +232,9 @@ def file_view(request, pid=None):
     logger.info(file_history)
 
     data = {'pid': pid,
-            'files': file_history}
+            'files': file_history,
+            'readonly': readonly,
+            }
 
     return render(request, 'school/fileupload.html', data)
 

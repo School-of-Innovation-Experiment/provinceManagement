@@ -20,10 +20,10 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in info.history_list%}
+      {%for item in history_list%}
       <tr>
         <td>{{item.year}}</td>
-        <td><a href={{item.link}}>{{item.title}}</a></td>
+        <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
         <td>{{item.type}}</td>
         <td>{{item.adviser}}</td>
         <td>{{item.level}}</td>
