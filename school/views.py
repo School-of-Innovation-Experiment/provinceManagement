@@ -71,6 +71,7 @@ def home_view(request):
 @csrf.csrf_protect
 @login_required
 @only_user_required
+@authority_required(SCHOOL_USER)
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None):
     """
@@ -110,6 +111,7 @@ def application_report_view(request, pid=None):
 @csrf.csrf_protect
 @login_required
 @only_user_required
+@authority_required(SCHOOL_USER)
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid):
     """
@@ -143,6 +145,7 @@ def final_report_view(request, pid):
 
 @csrf.csrf_protect
 @login_required
+@authority_required(SCHOOL_USER)
 def statistics_view(request):
     """
     school statistics view
@@ -165,6 +168,7 @@ def statistics_view(request):
 @csrf.csrf_protect
 @login_required
 @time_controller(phase=STATUS_PRESUBMIT)
+@authority_required(SCHOOL_USER)
 def new_report_view(request):
     """
     school start a new application report, then it will
@@ -201,6 +205,7 @@ def new_report_view(request):
 
 @csrf.csrf_protect
 @login_required
+@authority_required(SCHOOL_USER)
 def history_view(request):
     """
     school history report list
@@ -216,6 +221,7 @@ def history_view(request):
 @csrf.csrf_protect
 @login_required
 @only_user_required
+@authority_required(SCHOOL_USER)
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None):
     """
@@ -242,6 +248,7 @@ def file_view(request, pid=None):
 @csrf.csrf_protect
 @login_required
 @only_user_required
+@authority_required(SCHOOL_USER)
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid, fid):
     """
