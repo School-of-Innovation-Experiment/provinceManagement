@@ -9,9 +9,15 @@ function ExpertDispatch_callback(data){
 		}
 	else
 		{
-			id = data.id;
-			object = $('#'+id)
-			object.css("background","red");
+			$.each(data.field,function(i,item){
+				object = $('#'+item);
+				object.css("background","white");
+				});
+			//error field background turn into red
+			$.each(data.error_id,function(i,item){
+				object = $('#'+item);
+				object.css("background","red");
+				});
 			$("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
 		}
 	}
