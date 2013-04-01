@@ -164,7 +164,7 @@ class time_controller(object):
             is_passed = True
         else:
             is_passed = False
-        
+
         return is_passed
 
     def __call__(self, method):
