@@ -48,7 +48,7 @@ class ProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    school = models.OneToOneField(SchoolProfile, verbose_name="学校名称",
+    school = models.ForeignKey(SchoolDict, verbose_name="学校名称")
                                   unique=True)
     number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
@@ -59,24 +59,3 @@ class ProjectPerLimits(models.Model):
     def __unicode__(self):
         return self.school.school.schoolName + str(self.number)
 
-
-class ReviewTask(models.Model):
-    """
-    Review Task assign
-    """
-    review_id = models.CharField(max_length=50, blank=False, unique=True,
-                                 primary_key=True, default=str(uuid.uuid4()),
-                                 verbose_name="题目唯一ID")
-    project_id = models.ForeignKey(ProjectSingle)
-    experter = models.ForeignKey(ExpertProfile)
-    comments = models.TextField(blank=False, verbose_name="评价")
-    scores = models.IntegerField(blank=False, verbose_name="评分百分制")
-
-    #TODO: maybe we should extent scores field.
-
-    class Meta:
-        verbose_name = "评审任务"
-        verbose_name_plural = "评审任务"
-
-    def __unicode__(self):
-        return self.project_id.title

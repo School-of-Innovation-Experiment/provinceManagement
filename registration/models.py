@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import get_current_site
 from django.db import models
-
+from const.models import UserIdentity 
 from backend.logging import logger
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
@@ -38,7 +38,7 @@ class RegistrationManager(models.Manager):
         """
         if SHA1_RE.search(activation_key):
             try:
-                profile = self.get(activation_key=activation_key)
+                profile = RegistrationProfile.objects.get(activation_key=activation_key)
             except self.model.DoesNotExist:
                 return False
             if not profile.activation_key_expired():
@@ -52,8 +52,8 @@ class RegistrationManager(models.Manager):
         return False
     
     def create_inactive_user(self,request,
-                             username,password,email,machinecode,
-                             send_email=True, profile_callback=None):
+                             username,password,email,
+                             Identity,send_email=True, profile_callback=None):
         """
         Create a new, inactive ``User``, generates a
         ``RegistrationProfile`` and email its activation key to the
@@ -64,36 +64,35 @@ class RegistrationManager(models.Manager):
         """
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
+        new_authority = UserIdentity.objects.get(identity=Identity)
+        new_authority.user.add(new_user)
         new_user.save()
-        new_user.get_profile().machinecode = machinecode
-        new_user.get_profile().agentID = str(uuid.uuid4())  # create uuid for every user profile
-        new_user.get_profile().save()
-        
+
         registration_profile = self.create_profile(new_user)
-        
         if profile_callback is not None:
             profile_callback(user=new_user)
-        
+
         if send_email:
             from django.core.mail import send_mail
             subject = render_to_string('registration/activation_email_subject.txt',
-                                       {'site':get_current_site(request)})
+                                       {'site':get_current_site(request),
+                                        'username':username,
+                                        'password':password})
             
             # Email subject *must not* contain newlines
             subject = ''.join(subject.splitlines())
             message = render_to_string('registration/activation_email.txt',
                                        {'activation_key':registration_profile.activation_key,
                                         'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                        'site':get_current_site(request)})
+                                        'site':get_current_site(request)}
+                                       )
             logger.error(message)          
             send_mail(subject,
                       message,
                       settings.DEFAULT_FROM_EMAIL,
-                      [new_user.email],
-                      fail_sliently=False)
-      
+                      [new_user.email])
         return new_user
-    
+
     def create_profile(self,user):
         """
         Create a ``RegistrationProfile`` for a given 
@@ -102,8 +101,8 @@ class RegistrationManager(models.Manager):
         salt= sha.new(str(random.random())).hexdigest()[:5]
         activation_key = sha.new(salt+user.username).hexdigest()
         
-        return self.create(user=user,
-                           activation_key = activation_key)
+        return RegistrationProfile(user=user,
+                           activation_key=activation_key)
             
     def delete_expired_users(self):
         """

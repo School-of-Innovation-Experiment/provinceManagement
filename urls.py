@@ -9,7 +9,6 @@ from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
 #from gui import views as gui_views
 from users import views as users_views
 
@@ -17,12 +16,10 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 dajaxice_autodiscover()
 
-admin.autodiscover()
-
 handler500 = 'djangotoolbox.errorviews.server_error'
 
 urlpatterns = patterns('',
-                       url(
+    url(
         r'^',
         include('news.urls'),
         name="news"
@@ -63,6 +60,7 @@ urlpatterns = patterns('',
         direct_to_template, {'template': 'introduction/show.html'},
     ),
 )
+
 # urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
 urlpatterns += patterns('', url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),)
