@@ -1,0 +1,45 @@
+<!--report base html-->
+{% extends "school/base/_content.html" %}
+
+{%block calculate-content%}
+<!--Project Choice-->
+<div class="row">
+  <div class="span4">
+    <div class="alert alert-info">
+      <h4><a href={% url school.views.application_report_view pid%}>初期报告</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+  <div class="span4">
+    <div class="alert alert-important">
+      <h4><a href={% url school.views.final_report_view pid%}>结题报告</a></h4>
+    </div><!--end alert-->
+  </div><!--mid right span--> 
+  <div class="span4">
+    <div class="alert alert-success">
+      <h4><a href={% url school.views.file_view pid%}>成果上传</a></h4>
+    </div><!--end alert-->
+  </div><!--end right span--> 
+</div><!--end row-->
+
+<div class="container">
+  {%block report-content%}
+  {%endblock%}
+</div>
+
+
+{%endblock%}
+
+{% block endjs%}
+  <!--external scripts for files upload-->
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.ui.widget.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/tmpl.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/load-image.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/canvas-to-blob.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.iframe-transport.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload-fp.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload-ui.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/locale.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/main.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/csrf.js"></script>
+{% endblock %}

@@ -1,15 +1,137 @@
-<!-- new-task page -->
-{% extends "school/base/_content.html" %}
+<!-- pre application proposal page -->
+{% extends "school/base/report_base.html" %}
 
-{% block calculate-content%}
-<div class="container">
-  <form method="post" action=".">
+{%block report-content%}
+  <form method="post" action={% url school.views.application_report_view pid%}>
     {% csrf_token %}
-    <!--TODO: we will load different page according by the proposal type-->
-    {% include "school/widgets/innovation_init.html" %}
-    <br/>
-    <br/>
-    {#% include "school/widgets/enterprise_init.html" %#}
+    <!--Basic Infomation-->
+    <div class="page-header">
+      <h3>基本信息</h3>  
+    </div> 
+    <div>
+      <div>
+        <label>{{info.title.label}}</label>
+        {{info.title}}
+        <span class="form-errors help-inline">{{info.title.errors}}</span>  
+      </div><!--end title-->
+      <div>
+        <label>{{info.project_category.title}}</label>
+        {{info.project_category}}
+        <span class="form-errors help-inline">{{info.project_category.errors}}</span>  
+      </div><!--end project category-->
+      <div>
+        <label>{{info.inspector.label}}</label>
+        {{info.inspector}}
+        <span class="form-errors help-inline">{{info.inspector.errors}}</span>  
+      </div><!--end inspector-->
+      <div>
+        <label>{{info.telephone.label}}</label>
+        {{info.telephone}}
+        <span class="form-errors help-inline">{{info.telephone.errors}}</span>  
+      </div><!--end telephone-->
+      <div>
+        <label>{{info.email.label}}</label>
+        {{info.email}}
+        <span class="form-errors help-inline">{{info.email.errors}}</span>  
+      </div><!--end email-->
+      <div>
+        <label>{{info.im.label}}</label>
+        {{info.im}}
+        <span class="form-errors help-inline">{{info.im.errors}}</span>  
+      </div><!--end email-->
+      <div>
+        <label>{{info.insitute.label}}</label>
+        {{info.insitute}}
+        <span class="form-errors help-inline">{{info.insitute.errors}}</span>  
+      </div><!--end insitute-->
+      <div>
+        <label>{{info.members.label}}</label>
+        {{info.members}}
+        <span class="form-errors help-inline">{{info.members.errors}}</span>  
+      </div><!--end members-->
+    </div><!--Info Form-->
+
+    <!--Application Infomation-->
+    <div class="page-header">
+      <h3>项目内容</h3>  
+    </div>
+    
+    <blockquote>
+      <fieldset>
+        <legend>项目来源</legend>
+          <div class="form-inline">
+            {{application.original}}
+            <span class="form-errors help-inline">{{application.original.errors}}</span>  
+          </div><!--end form line, for choice-->
+      </fieldset><!--Project origin-->
+      
+      </br>
+      <fieldset>
+        <legend>项目背景及研究意义</legend>
+        {{application.background}} 
+        <span class="form-errors help-inline">{{application.background.errors}}</span>  
+      </fieldset><!--end background-->
+      
+      </br>
+      <fieldset>
+        <legend>研究内容和拟解决的关键问题</legend>
+        {{application.key_notes}} 
+        <span class="form-errors help-inline">{{application.key_notes.errors}}</span>  
+      </fieldset><!--end key points-->
+      
+      </br>
+      <fieldset>
+        <legend>项目创新之处</legend>
+        {{application.innovation}} 
+        <span class="form-errors help-inline">{{application.innovation.errors}}</span>  
+      </fieldset><!--end Innovation points-->
+
+      </br>
+      <fieldset>
+        <legend>项目进度安排</legend>
+        {{application.progress_plan}} 
+        <span class="form-errors help-inline">{{application.progress_plan.errors}}</span>  
+      </fieldset><!--end plans-->
+
+      </br>
+      <fieldset>
+        <legend>项目经费预算</legend>
+        {{application.funds_plan}} 
+        <span class="form-errors help-inline">{{application.funds_plan.errors}}</span>  
+      </fieldset><!--end payments-->
+
+      </br>
+      <fieldset>
+        <legend>预期研究成果</legend>
+        {{application.pre_results}} 
+        <span class="form-errors help-inline">{{application.pre_results.errors}}</span>  
+      </fieldset>
+    </blockquote>
+
+    <!--school comments:-->
+    <div class="page-header">
+      <h3>推荐意见</h3>  
+    </div>
+    <blockquote>
+      <fieldset>
+        <legend>指导教师推荐语</legend>
+        {{application.inspector_comments}} 
+        <span class="form-errors help-inline">{{application.inspector_comments.errors}}</span>  
+      </fieldset>
+      <fieldset>
+        <legend>学校推荐语</legend>
+        {{application.school_comments}} 
+        <span class="form-errors help-inline">{{application.school_comments.errors}}</span>  
+      </fieldset> 
+
+    </blockquote>
+      <!--submit button-->
+    {% if not readonly %}
+    <div class="">
+      <button class="btn btn-large btn-block btn-success" type="submit">信息填写无误后，提交申请书</button>
+      </br>
+      <small class="pull-right">Tips: 截止日期前可以修改</small>
+    </div><!--submit button-->
+    {% endif %}
   </form>
-</div>
-{% endblock %}
+{%endblock%}

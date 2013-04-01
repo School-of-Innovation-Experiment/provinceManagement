@@ -1,0 +1,36 @@
+<!-- school history list page -->
+<!-- tianwei @2013.3.28 -->
+{% extends "school/base/_content.html" %}
+
+{% block calculate-content%}
+<div class="container">
+  <div class="page-header">
+    <h3>
+      历史项目列表
+    </h3> 
+  </div><!--end page header-->
+  <table class="table table-hover">      
+    <thead>
+      <tr>
+        <th>年份</th>
+        <th>名称</th>
+        <th>项目类型</th>
+        <th>指导教师</th>
+        <th>评审级别</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in history_list%}
+      <tr>
+        <td>{{item.year}}</td>
+        <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
+        <td>{{item.project_category}}</td>
+        <td>{{item.inspector}}</td>
+        <td>{{item.project_grade}}</td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table><!--end current_list table-->
+</div><!--end current list content-->
+
+{% endblock %}

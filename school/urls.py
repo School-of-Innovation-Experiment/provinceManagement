@@ -1,58 +1,56 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
-Created on 2013-3-11
+Created on 2013-3-28
 
-@author: yaoyuan
+@author: tianwei
+
+Desc: School URL defination
 '''
 
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 
-urlpatterns = patterns('',
+from school import views as school_views
 
+
+urlpatterns = patterns('',
     url(
         r'^$',
-        direct_to_template, {'template': 'school/home.html'}
+        school_views.home_view,
     ),
     url(
-        r'^initial$',
-        direct_to_template, {'template': 'school/initial.html'}
-    ),
-        url(
-        r'^initial1$',
-        direct_to_template, {'template': 'school/initial1.html'}
+        r'^final/(?P<pid>.{36})$',
+        school_views.final_report_view,
     ),
     url(
-        r'^midterm$',
-        direct_to_template, {'template': 'school/midterm.html'}
+        r'^files/(?P<pid>.{36})$',
+        school_views.file_view,
+    ),
+
+    url(
+        r'^application/(?P<pid>.{36})$',
+        school_views.application_report_view,
+    ),
+    #statistics
+    url(
+        r'^statistics/$',
+        school_views.statistics_view,
     ),
     url(
-        r'^final$',
-        direct_to_template, {'template': 'school/final.html'}
+        r'^new/$',
+        school_views.new_report_view,
     ),
     url(
-        r'^progress$',
-        direct_to_template, {'template': 'school/progress.html'}
+        r'^history/$',
+        school_views.history_view,
     ),
     url(
-        r'^finance$',
-        direct_to_template, {'template': 'school/finance.html'}
+        r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
+        school_views.file_delete_view,
     ),
     url(
-        r'^studentcharge$',
-        direct_to_template, {'template': 'school/studentcharge.html'}
-    ),
-        url(
-        r'^modifyproject$',
-        direct_to_template, {'template': 'school/modifyproject.html'}
-    ),
-            url(
-        r'^projectapp$',
-        direct_to_template, {'template': 'school/projectapp.html'}
-    ),
-            url(
-        r'^application$',
-        direct_to_template, {'template': 'school/application.html'}
-    ),
+        r'non/$',
+        school_views.non_authority_view,
+    )
 )

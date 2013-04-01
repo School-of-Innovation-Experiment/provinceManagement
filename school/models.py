@@ -8,36 +8,46 @@ Desc: school's project model, which include pre-submit, final-submit,
       project
 '''
 
-from uuid import uuid4
+import uuid
 
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from const.models import *
 from users.models import ExpertProfile
+
+from const import AUTH_CHOICES, VISITOR_USER
+from const import PROJECT_CATE_CHOICES, CATE_UN
+from const import PROJECT_GRADE_CHOICES, GRADE_UN
+from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+
 
 class ProjectSingle(models.Model):
     """
     Every single projects, include basic infomation, it is the base table.
     """
-    project_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    project_id = models.CharField(max_length=50, primary_key=True,
+                                  default=str(uuid.uuid4()),
                                   verbose_name="题目唯一ID")
 
     title = models.CharField(max_length=400, blank=False,
                              verbose_name="参赛题目")
     
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
-    
-    school = models.ForeignKey(SchoolDict)
-    project_category = models.ForeignKey(ProjectCategory)
-    insitute = models.ForeignKey(InsituteCategory)
+    adminuser = models.ForeignKey(User)
+    school = models.ForeignKey(SchoolDict,
+                               blank=True, null=True, default=None)
+    project_category = models.ForeignKey(ProjectCategory,
+                                         blank=True, null=True, default=None)
+    insitute = models.ForeignKey(InsituteCategory,
+                                 blank=True, null=True, default=None,
+                                 verbose_name="所属学院")
     project_grade = models.ForeignKey(ProjectGrade,
                                       blank=True, null=True, default=None)
     project_status = models.ForeignKey(ProjectStatus,
                                        blank=True, null=True,
                                        default=None)
-    
     email = models.EmailField(verbose_name="电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
                                  verbose_name="联系方式")
@@ -46,6 +56,7 @@ class ProjectSingle(models.Model):
     members = models.CharField(max_length=400, blank=False,
                                verbose_name="团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name="社交")
+    year = models.CharField(max_length=10, blank=False, verbose_name="参加年份")
 
     class Meta:
         verbose_name = "参赛项目"
@@ -53,32 +64,36 @@ class ProjectSingle(models.Model):
 
     def __unicode__(self):
         return self.title
+
 class Re_Project_Expert(models.Model):
     project  = models.ForeignKey(ProjectSingle)
     expert   = models.ForeignKey(ExpertProfile)
     comments = models.TextField(blank=False, verbose_name="评价")
     scores = models.IntegerField(blank=False, verbose_name="评分百分制")
+
 class PreSubmit(models.Model):
     """
     inheribit table, which use ProjectSingle to show pre-submit content
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
-    original = models.CharField(max_length=200, blank=True,
+    original = models.CharField(max_length=200, blank=False, null=True,
                                 verbose_name="题目来源")
-    background = models.TextField(blank=False, verbose_name="项目背景及研究意义")
-    key_notes = models.TextField(blank=False,
+    background = models.TextField(blank=False, null=True, verbose_name="项目背景及研究意义")
+    key_notes = models.TextField(blank=False, null=True,
                                  verbose_name="研究内容和拟解决的关键问题")
-    innovation = models.TextField(blank=False, verbose_name="项目创新之处")
-    progress_plan = models.TextField(blank=False, verbose_name="项目经费预算")
-    pre_results = models.TextField(blank=False, verbose_name="预期研究成果")
-    inspector_comments = models.TextField(blank=False,
+    innovation = models.TextField(blank=False, null=True, verbose_name="项目创新之处")
+    progress_plan = models.TextField(blank=False, null=True, verbose_name="项目进度安排")
+    funds_plan = models.TextField(blank=False, null=True, verbose_name="项目经费预算")
+    pre_results = models.TextField(blank=False, null=True, verbose_name="预期研究成果")
+    inspector_comments = models.TextField(blank=False, null=True,
                                           verbose_name="指导教师推荐语")
-    school_comments = models.TextField(blank=False,
+    school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
+
     class Meta:
         verbose_name = "项目申请书"
         verbose_name_plural = "项目申请书"
@@ -91,19 +106,27 @@ class FinalSubmit(models.Model):
     """
     inheribit table, which use ProjectSingle to show final-submit content
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=uuid4(),
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="结题报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
-    achievement_fashion = models.CharField(max_length=200, blank=True,
+    achievement_fashion = models.CharField(max_length=200, blank=True, null=True,
                                            verbose_name="成果形式")
-    achievement_summary = models.TextField(blank=False,
+    achievement_summary = models.TextField(blank=False, null=True,
                                            verbose_name="研究成果概述")
-    inspector_comments = models.TextField(blank=False,
+    inspector_comments = models.TextField(blank=False, null=True,
                                           verbose_name="指导教师推荐语")
-    school_comments = models.TextField(blank=False,
+    school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
+    tech_competitions = models.TextField(blank=True, null=True,
+                                         verbose_name="科技竞赛成果")
+    patents = models.TextField(blank=True, null=True,
+                               verbose_name="发明专利成果")
+    papers = models.TextField(blank=True, null=True,
+                              verbose_name="发表论文")
+    achievement_objects = models.TextField(blank=True, null=True,
+                                           verbose_name="实物成果")
 
     class Meta:
         verbose_name = "项目结题报告"
@@ -116,13 +139,20 @@ class UploadedFiles(models.Model):
     """
     content files upload, which include images, and pdf
     """
-    file_id = models.CharField(max_length=50, blank=False, unique=True,
-                               primary_key=True, default=uuid4(),
+    file_id = models.CharField(max_length=50,
+                               primary_key=True, default=str(uuid.uuid4()),
                                verbose_name="文件上传唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,
                             verbose_name="文件名称")
-    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH + "/%Y/%m/%d")
+    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d", 
+                                verbose_name="文件对象")
+    uploadtime = models.DateTimeField(blank=True, null=True,
+                                      verbose_name="上传时间")
+    file_size = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name="文件大小")
+    file_type = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name="文件类型")
 
     class Meta:
         verbose_name = "文件上传"

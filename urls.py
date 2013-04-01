@@ -12,6 +12,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #from gui import views as gui_views
 from users import views as users_views
 
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+dajaxice_autodiscover()
 
 handler500 = 'djangotoolbox.errorviews.server_error'
 
@@ -29,12 +32,10 @@ urlpatterns = patterns('',
     url(
         r'^admin/',
         include(admin.site.urls),
-        name="admin"
     ),
     url(
         r'^accounts/',
         include('registration.urls'),
-        name="accounts"
     ),
     url(
         r'^school/',
@@ -44,12 +45,10 @@ urlpatterns = patterns('',
     url(
         r'^expert/',
         include('expert.urls'),
-        name="expert"
     ),
     url(
         r'^adminStaff/',
         include('adminStaff.urls'),
-        name="staff"
     ),
     url(
         r'^features/$',
@@ -59,8 +58,10 @@ urlpatterns = patterns('',
     url(
         r'^show/$',
         direct_to_template, {'template': 'introduction/show.html'},
-        name="show"
     ),
 )
 
+# urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
+urlpatterns += patterns('', url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),)
+urlpatterns += staticfiles_urlpatterns()

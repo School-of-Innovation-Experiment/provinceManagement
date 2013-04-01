@@ -22,7 +22,7 @@ def get_news(news_id = None):
         news_content = (News.objects.count() and News.objects.order_by('-news_date')[0]) or None
     return news_content
 
-PAGE_NEWS = 20
+PAGE_NEWS = 2
 def getContext(contentList, page, name, page_news=PAGE_NEWS):
     paginator = Paginator(contentList, page_news)
     try:
@@ -45,7 +45,10 @@ def index(request):
     context = {
             'the_latest_news': the_latest_news,
             }
-    context.update(getContext(News.objects.all()[:5], 1, 'homepage_docs'))
+    context.update(
+        getContext(
+            News.objects.exclude(news_document=u'')[:5], \
+                1, 'homepage_docs'))
     return render(request, 'home/index.html', context)
 
 def read_news(request, news_id):
@@ -58,7 +61,7 @@ def list_news(request):
     news_list = News.objects.order_by('-news_date')
     news_page = request.GET.get('news_page')
 
-    docs_list = news_list.filter(news_document__isnull=False)
+    docs_list = news_list.exclude(news_document=u'')
     docs_page = request.GET.get('docs_page')
 
     context = getContext(news_list, news_page, 'news')

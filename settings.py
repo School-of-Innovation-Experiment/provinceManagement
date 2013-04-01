@@ -27,11 +27,11 @@ DATABASES = {
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh_cn'
 
 SITE_ID = 1
 
@@ -59,7 +59,8 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = join(SETTINGS_ROOT, 'static/')
+STATIC_ROOT = join(SETTINGS_ROOT, 'collect/static/')
+COMMON_STITICFILES_DIR = join(SETTINGS_ROOT, 'static/')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -75,6 +76,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    COMMON_STITICFILES_DIR,
     MEDIA_ROOT,
 )
 
@@ -83,7 +85,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder', 
+    'dajaxice.finders.DajaxiceFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -135,8 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'dajaxice',
-    'dajax',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #Enhanced Admin
@@ -154,6 +154,9 @@ INSTALLED_APPS = (
     'debug_toolbar',
     #'tinymce',
     'south',
+    'dajaxice',
+    'dajax',
+    'chartit',
 )
 
 #Add support  to user profile
@@ -244,6 +247,7 @@ WEB_TITLE = "Province Management"
 
 # project original file
 PROCESS_FILE_PATH = join("tmp", "process_file")
+FILE_DELETE_URL = '/school/delete/'
 
 # TinyMCE settings
 #TINYMCE_JS_URL = os.path.join(STATIC_ROOT, "tiny_mce/tiny_mce.js")
@@ -253,4 +257,18 @@ PROCESS_FILE_PATH = join("tmp", "process_file")
 #        'cleanup_on_startup':True,
 #        'custom_undo_redo_levels': 10,
 #}
-FILE_UPLOAD_PERMISSIONS = 0777
+
+FILE_UPLOAD_PERMISSIONS = 0644 #NOTICE: the prefix 0 is important
+
+"""
+FILE Upload
+"""
+FILE_UPLOAD_TEMP_DIR = os.path.join(os.path.dirname(__file__), PROCESS_FILE_PATH).replace("\\",'/')
+FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler',
+                        'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+                        )
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+#chartit
+CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'

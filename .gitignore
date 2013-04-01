@@ -4,7 +4,8 @@ media/cms-media/*
 .ropeproject/*
 */.ropeproject/*
 media/showtime/imagesi/*
-
+media/news-documents/*
+media/tmp/*
 log/*
 # C extensions
 *.so

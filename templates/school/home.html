@@ -1,148 +1,45 @@
-<!-- new-task page -->
+<!-- school management page -->
+<!-- tianwei @2013.3.28 -->
 {% extends "school/base/_content.html" %}
 
 {% block calculate-content%}
 <div class="container">
-<h2>当前项目列表</h2>
-	<div class="btn-group pull-right">
-	
-	 <button type="button" class="btn"><a href="/school/application" >新增项目+</a></button>
-			
-	</div>
-
-
-      <table class="table table-hover">
-      
-         <thead>
-     <tr>
-    <th>编号</th>
-    <th>项目名称</th>
-    <th>项目类型</th>
-     <th>指导教师</th>
-     <th>审察专家</th>
-        <th>项目状态</th>
-<th>项目级别</th>
-    </tr>
-               </thead>
-       <tbody>
+  <div class="page-header">
+	  <div class="pull-right">	
+	    <a href="/school/new" class="btn btn-large btn-primary">新增项目</a>
+    </div><!--end new button-->
+    <h3>
+      本年度项目列表
+      <span class="label label-info">申请上限:{{info.applications_limits}}</span>
+      <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
+    </h3> 
+  </div><!--end page header-->
+  <table class="table table-hover">     
+    <thead>
       <tr>
-
-       <td>1</td>
-       <td><a href="/project/">新型家用应急逃生锁</a></td>
-       <td>创新训练</td>
-      <td>刘留</td>
-      <td><a href="/school#">冯林</a></td>
-      <td> <span class="label label-success">通过审查</span></td>
-      
-                   <td>
-            <span class="label label-important">国家级</span>
-            </td>
-    </tr>
-             <tr>
-
-       <td>2</td>
-       <td><a href="#">基于单片机和Zigbee的无线自助点餐笔</a></td>
-       <td>创新训练</td>
-          <td>逄凌滨</td>
-          <td><a href="/school#">冯林</a></td>  
-            <td> <span class="label label-success">通过审查</span></td>
-           <td>
-             <span class="label label-info">省级</span>
-            </td>
-       </tr>
-             <tr>
-     
-       <td>3</td>
-       <td><a href="#">自助导游系统</a></td>
-       <td>创新训练</td>
-       
-       <td>刘丹</td>
-       <td><a href="/school#">冯林</a></td>
-         <td> <span class="label label-success">通过审查</span></td>
-        <td>
-           <span class="label label">校级</span>
-            </td>
-        </td>
-       </tr>
-                    <tr>
-
-       <td>2</td>
-       <td><a href="#">基于ABC<a></td>
-       <td>创新训练</td>
-          <td>逄凌滨</td>
-          <td><a href="/school#">冯林</a></td>  
-            <td> <span class="label label-warning">等待审查</span></td>
-           <td>
-            
-          
-            </td>
-       </tr>
-       </tbody>
-
-    </table>
-</div>
-<div>
-
-
-</div>
-<div class="container">
-<h2>历史项目列表</h2>
-      <table class="table table-hover">
-       
-         <thead>
-     <tr>
-    <th>编号</th>
-    <th>项目名称</th>
-    <th>项目类型</th>
-     <th>指导教师</th>
-     <th>审察专家</th>
-        <th>年代</th>
-<th>项目级别</th>
-    </tr>
-               </thead>
-       <tbody>
+        <th>名称</th>
+        <th>项目类型</th>
+        <th>指导教师</th>
+        <th>当前状态</th>
+        <th>评审级别</th>
+        <th>详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in current_list%}
       <tr>
-
-       <td>1</td>
-       <td><a href="#">基于图像处理的投影键盘</a></td>
-       <td>创新训练</td>
-      <td>刘留</td>
-      <td><a href="/school">冯林</a></td> 
-       <td>2011</td>
-                   <td>
-            <span class="label label-important">国家级</span>
-          
-            </td>
-    </tr>
-             <tr>
-
-       <td>2</td>
-       <td><a href="#">基于单片机和Zigbee的无线自助点餐笔</a></td>
-       <td>创新训练</td>
-          <td>逄凌滨</td>  
-          <td><a href="/school">冯林</a></td> 
-            <td>2010</td>
-           <td>
-             <span class="label label-info">省级</span>
-          
-            </td>
-       </tr>
-             <tr>
-     
-       <td>3</td>
-       <td><a href="#">>自助导游系统</a></td>
-       <td>创新训练</td>
-       
-       <td>刘丹</td>
-       <td><a href="/school">冯林</a></td> 
-         <td>2009</td>
+        <td>{{item.title}}</td>
+        <td>{{item.project_category}}</td>
+        <td>{{item.inspector}}</td>
+        <td>{{item.project_status}}</td>
+        <td>{{item.project_grade}}</td>
         <td>
-           <span class="label label">校级</span>
-                      </td>
+          <span><a href="{% url school.views.application_report_view item.project_id%}" class='btn btn-primary'>申请</a></span>
+          <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span>
         </td>
-       </tr>
-       </tbody>
-
-    </table>
-</div>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table><!--end current_list table-->
+</div><!--end current list content-->
 {% endblock %}
