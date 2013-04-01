@@ -12,6 +12,7 @@ from django.utils import simplejson
 from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict
+from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 @dajaxice_register
@@ -82,17 +83,40 @@ def DeadlineSettings(request, form):
 @dajaxice_register
 def  ExpertDispatch(request, form):
     dajax = Dajax()
-    form =  ExpertDispatchForm(deserialize_form(form))
-    if form.is_valid():
-        pass
+    expert_form =  ExpertDispatchForm(deserialize_form(form))
+    if expert_form.is_valid():
+        password = expert_form.cleaned_data["expert_password"]
+        email = expert_form.cleaned_data["expert_email"]
+        name = email
+        if password == "":
+            password = email.split('@')[0]
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER)
+        if flag:
+            message = u"发送邮件成功"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+        else:
+            message = u"相同邮件已经发送，中断发送"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'field':form.data.keys(),'id':form.errors.keys(),'message':u"输入有误"})
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
 def SchoolDispatch(request, form):
     dajax = Dajax()
-    form = SchoolDispatchForm(deserialize_form(form))
-    if form.is_valid():
-        pass
+    school_form = SchoolDispatchForm(deserialize_form(form))
+    if school_form.is_valid():
+        password = school_form.cleaned_data["school_password"]
+        email = school_form.cleaned_data["school_email"]
+        name = email
+        school_name = school_form.cleaned_data["school_name"]
+        if password == "":
+            password = email.split('@')[0]
+        flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER)
+        if flag:
+            message = u"发送邮件成功"
+            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
+        else:
+            message = u"相同邮件已经发送，中断发送"
+            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
+        return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
     

@@ -46,7 +46,7 @@ class ProjectCategory(models.Model):
         verbose_name_plural = "项目类型"
 
     def __unicode__(self):
-        return self.category
+        return self.get_category_display()
 
 
 class InsituteCategory(models.Model):
@@ -71,14 +71,14 @@ class UserIdentity(models.Model):
     identity = models.CharField(max_length=50, blank=False, unique=True,
                                 choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
-    auth_user =  models.ManyToManyField(User)
+    auth_groups = models.ManyToManyField(User, related_name="identities")
 
     class Meta:
         verbose_name = "登录权限"
         verbose_name_plural = "登录权限"
 
     def __unicode__(self):
-        return self.identity
+        return self.get_identity_display()
 
 
 class ProjectGrade(models.Model):
@@ -94,7 +94,7 @@ class ProjectGrade(models.Model):
         verbose_name_plural = "项目级别"
 
     def __unicode__(self):
-        return self.grade
+        return self.get_grade_display()
 
 
 class ProjectStatus(models.Model):
@@ -111,4 +111,4 @@ class ProjectStatus(models.Model):
         verbose_name_plural = "项目状态"
 
     def __unicode__(self):
-        return self.status
+        return self.get_status_display()
