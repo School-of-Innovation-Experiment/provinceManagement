@@ -45,11 +45,11 @@ def check_limits(user):
         Out: True or False
     """
     try:
-        limits = ProjectPerLimits.objects.get(school__userid__userid=user)
+        limits = ProjectPerLimits.objects.get(school__userid=user)
     except:
         limits = None
 
-    currents = ProjectSingle.objects.filter(adminuser=user).count()
+    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year()).count()
     total = limits.number if limits is not None else 0
 
     return True if total > currents else False

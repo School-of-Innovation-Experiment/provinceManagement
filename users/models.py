@@ -40,7 +40,7 @@ class ExpertProfile(models.Model):
         verbose_name_plural = "评审专家"
 
     def __unicode__(self):
-        return '%s'(self.userid)
+        return '%s' % (self.userid)
 
 
 class AdminStaffProfile(models.Model):

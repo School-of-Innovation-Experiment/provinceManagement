@@ -35,7 +35,7 @@ from const.models import *
 from const import *
 
 from school.utility import *
-from backend.logging import logger
+from backend.logging import logger, loginfo
 from backend.decorators import *
 
 
@@ -48,8 +48,9 @@ def home_view(request):
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
                                                 year=get_current_year())
     try:
-        limits = ProjectPerLimits.objects.get(school__userid__userid=request.user)
-    except:
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    except Exception, err:
+        logger.info(err)
         limits = None
 
     if limits is not None:
@@ -174,7 +175,7 @@ def new_report_view(request):
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
-        project.school = SchoolProfile.objects.get(userid__userid=request.user).school
+        project.school = SchoolProfile.objects.get(userid=request.user).school
         project.year = get_current_year()
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
