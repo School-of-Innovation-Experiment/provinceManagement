@@ -21,9 +21,7 @@ from django.db.models import Count
 
 from chartit import PivotDataPool, PivotChart
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import TechCompetition, Patents, Papers, AchievementObjects
-from school.models import UploadedFiles
+from school.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits

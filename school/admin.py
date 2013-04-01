@@ -12,10 +12,6 @@ from school.models import *
 RegisterClass = (ProjectSingle,
                  PreSubmit,
                  FinalSubmit,
-#                 TechCompetition,
-#                 Patents,
-#                 Papers,
-#                 AchievementObjects,
                  UploadedFiles)
 
 for item in RegisterClass:
