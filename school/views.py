@@ -34,16 +34,11 @@ from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
-from const import AUTH_CHOICES, VISITOR_USER
-from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
-from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const import *
 
 from school.utility import *
 from backend.logging import logger
-
-#TODO: for decorators, later I will add time control, authority control
-#      check one user operation
+from backend.decorators import time_controller
 
 
 @csrf.csrf_protect
@@ -75,6 +70,7 @@ def home_view(request):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None):
     """
     school application report
@@ -112,6 +108,7 @@ def application_report_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid):
     """
     school final report
@@ -165,6 +162,7 @@ def statistics_view(request):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_PRESUBMIT)
 def new_report_view(request):
     """
     school start a new application report, then it will
@@ -215,6 +213,7 @@ def history_view(request):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None):
     """
     file management view
@@ -239,6 +238,7 @@ def file_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid, fid):
     """
     file delete view
@@ -261,3 +261,12 @@ def file_delete_view(request, pid, fid):
         return HttpResponse(str(fid))
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
+
+
+@login_required
+def non_authority_view(request):
+    """
+    cannot visit
+    """
+    #TODO: I will add more usefull information, such as control time
+    return render(request, 'school/non_authority.html')

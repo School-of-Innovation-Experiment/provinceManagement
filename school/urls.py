@@ -49,4 +49,8 @@ urlpatterns = patterns('',
         r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
         school_views.file_delete_view,
     ),
+    url(
+        r'non/$',
+        school_views.non_authority_view,
+    )
 )
