@@ -10,7 +10,6 @@ from adminStaff.models import *
 
 
 RegisterClass = (ProjectControl,
-                 ReviewTask,
                  ProjectPerLimits
                  )
 

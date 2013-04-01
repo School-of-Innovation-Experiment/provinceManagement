@@ -55,6 +55,16 @@ div.submit-btn{
 
 }
 
+input.school-display{
+  margin-left:0px;
+  padding-left:0px;
+  width:200px;
+}
+select.school-display{
+  margin-left:0px;
+  padding-left:0px;
+  width:208px;
+}
 #grid-elements{
   display: inline;
 }
