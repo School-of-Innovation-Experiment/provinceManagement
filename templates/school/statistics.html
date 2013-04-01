@@ -4,7 +4,7 @@
 {% block forejs %}
   <!--highchart chartit-->
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
-  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/default.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
   {% load chartit %}
   {{ trend_lines|load_charts:"trend_lines" }}
 {% endblock %}
