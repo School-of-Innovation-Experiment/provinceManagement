@@ -33,7 +33,7 @@ class ProjectSingle(models.Model):
 
     title = models.CharField(max_length=400, blank=False,
                              verbose_name="参赛题目")
-    
+
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
     school = models.ForeignKey(SchoolDict,
@@ -145,7 +145,7 @@ class UploadedFiles(models.Model):
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,
                             verbose_name="文件名称")
-    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d", 
+    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",
                                 verbose_name="文件对象")
     uploadtime = models.DateTimeField(blank=True, null=True,
                                       verbose_name="上传时间")
@@ -160,3 +160,5 @@ class UploadedFiles(models.Model):
 
     def __unicode__(self):
         return self.project_id.title
+    def file_name(self):
+        return os.path.basename(self.file_obj.name)

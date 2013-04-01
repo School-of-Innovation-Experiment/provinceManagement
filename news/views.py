@@ -11,13 +11,16 @@ from django.shortcuts import render, render_to_response
 
 from news.models import News
 from django.template import Context, loader
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 import datetime, os
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
-        news_content = News.objects.get(id = news_id)
+        try:
+            news_content = News.objects.get(id = news_id)
+        except:
+            raise Http404
     else: # get latest news
         news_content = (News.objects.count() and News.objects.order_by('-news_date')[0]) or None
     return news_content
@@ -41,7 +44,7 @@ def getContext(contentList, page, name, page_news=PAGE_NEWS):
 
 def index(request):
     the_latest_news = get_news()
-    the_latest_news = the_latest_news or News(id =  -1, news_title = 'haha', news_content = 'yeshi haha', news_date = datetime.datetime.today)
+    the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
     context = {
             'the_latest_news': the_latest_news,
             }
