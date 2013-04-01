@@ -24,13 +24,39 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
-
-
 from const import *
 from adminStaff.models import *
 from backend.logging import loginfo
 from school.utility import get_current_year
 from school.models import *
+
+
+class only_user_required(object):
+    """
+    This decorator will deal with project varify, when the logined user 
+    can control this project, he can continue.
+    """
+    def __init__(self, method):
+        self.method = method
+
+    def check_auth(self, pid, request):
+        if pid is None:
+            return False
+
+        user = ProjectSingle.objects.get(project_id=pid).adminuser
+        if user is request.user or request.user.is_superuser:
+            return True
+        else:
+            return False
+
+    def __call__(self, request, *args, **kwargs):
+        pid = kwargs.get("pid", None)
+        is_passed = self.check_auth(pid, request)
+        if is_passed:
+            response = self.method(request, *args, **kwargs)
+            return response
+        else:
+            return HttpResponseRedirect(reverse('school.views.non_authority_view'))
 
 
 class time_controller(object):

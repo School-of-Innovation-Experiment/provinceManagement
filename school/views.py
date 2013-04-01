@@ -31,13 +31,12 @@ from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
-from const.models import SchoolDict, ProjectCategory, InsituteCategory
-from const.models import UserIdentity, ProjectGrade, ProjectStatus
+from const.models import *
 from const import *
 
 from school.utility import *
 from backend.logging import logger
-from backend.decorators import time_controller
+from backend.decorators import *
 
 
 @csrf.csrf_protect
@@ -69,6 +68,7 @@ def home_view(request):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None):
     """
@@ -107,6 +107,7 @@ def application_report_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid):
     """
@@ -212,6 +213,7 @@ def history_view(request):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None):
     """
@@ -237,6 +239,7 @@ def file_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid, fid):
     """
