@@ -48,7 +48,7 @@ class ProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    school = models.ForeignKey(SchoolDict, verbose_name="学校名称", unique=True)
+    school = models.OneToOneField(SchoolProfile, verbose_name="学校名称", unique=True)
     number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
     class Meta:
@@ -56,5 +56,4 @@ class ProjectPerLimits(models.Model):
         verbose_name_plural = "申请数量限制"
 
     def __unicode__(self):
-        return self.school.schoolName + str(self.number)
-
+        return self.school.school.schoolName + str(self.number)

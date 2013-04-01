@@ -30,7 +30,7 @@ class SchoolDict(models.Model):
         verbose_name_plural = "学校列表"
 
     def __unicode__(self):
-        return "%s" % self.schoolName
+        return self.schoolName
 
 
 class ProjectCategory(models.Model):

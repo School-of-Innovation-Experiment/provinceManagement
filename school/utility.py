@@ -45,7 +45,7 @@ def check_limits(user):
         Out: True or False
     """
     try:
-        limits = ProjectPerLimits.objects.get(school__userid__userid=user)
+        limits = ProjectPerLimits.objects.get(school__userid=user)
     except:
         limits = None
 
