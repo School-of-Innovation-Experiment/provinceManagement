@@ -21,6 +21,11 @@ class ExpertDispatchForm(forms.Form):
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}
                            ))
 class SchoolDispatchForm(forms.Form):
+    SCHOOL_CHOICE_list = []
+    school_list        = SchoolDict.objects.all()
+    for object in school_list:
+        SCHOOL_CHOICE_list.append((object.id, object.schoolName))
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
                            ),
@@ -28,7 +33,7 @@ class SchoolDispatchForm(forms.Form):
     school_email    = forms.EmailField(required=True,
     widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_email'}
                            ))
-    school_name     = forms.ChoiceField(required=True,)    
+    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)    
 class TimeSettingForm(forms.Form):
     pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_start_date'})) 
     pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013",'class':'span2','id':'pre_end_date'}))

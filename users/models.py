@@ -9,6 +9,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from const.models import *
+from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER
+
 
 class SchoolProfile(models.Model):
     """
@@ -27,6 +29,11 @@ class SchoolProfile(models.Model):
     def __unicode__(self):
         return self.school.schoolName
 
+    def save(self, *args, **kwargs):
+        super(SchoolProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=SCHOOL_USER)
+        self.userid.identities.add(auth)
+
 
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
@@ -42,6 +49,11 @@ class ExpertProfile(models.Model):
     def __unicode__(self):
         return '%s' % (self.userid)
 
+    def save(self, *args, **kwargs):
+        super(ExpertProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=EXPERT_USER)
+        self.userid.identities.add(auth)
+
 
 class AdminStaffProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
@@ -54,3 +66,8 @@ class AdminStaffProfile(models.Model):
 
     def __unicode__(self):
         return '%s' % (self.userid)
+
+    def save(self, *args, **kwargs):
+        super(AdminStaffProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=ADMINSTAFF_USER)
+        self.userid.identities.add(auth)

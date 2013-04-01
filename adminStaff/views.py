@@ -22,10 +22,13 @@ from school.models import ProjectSingle
 from const.models import UserIdentity 
 class AdminStaffService(object):
     @staticmethod
-    def sendemail(request,username,password,email,identity):
+    def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.UserExist(email):
-            RegistrationManager().create_inactive_user(request,username,password,email,identity)
+            if kwargs.has_key('school_name'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
+            else:
+                RegistrationManager().create_inactive_user(request,username,password,email,identity)
             return True
         else:
             return False
