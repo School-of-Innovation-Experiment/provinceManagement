@@ -175,7 +175,7 @@ def new_report_view(request):
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
-        project.school = SchoolProfile.objects.get(userid__userid=request.user).school
+        project.school = SchoolProfile.objects.get(userid=request.user).school
         project.year = get_current_year()
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
