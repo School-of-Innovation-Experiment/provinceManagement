@@ -40,8 +40,8 @@ from backend.decorators import *
 
 
 @csrf.csrf_protect
-@authority_required(SCHOOL_USER, EXPERT_USER)
 @login_required
+@authority_required(SCHOOL_USER)
 def home_view(request):
     """
     school home management page

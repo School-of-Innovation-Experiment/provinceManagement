@@ -11,6 +11,7 @@ import os
 import sys
 import datetime
 
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import render_to_response
@@ -25,10 +26,39 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from const import *
+from const.models import * 
 from adminStaff.models import *
 from backend.logging import loginfo
 from school.utility import get_current_year
 from school.models import *
+
+
+def check_auth(user=None, authority=None):
+    """
+    if this user(a id object) has this authority, return True, else False
+        Arguments:
+            In: user, it is user model object
+                authority, it is a const string , which can show the
+                authorities
+            Out:True or False
+    """
+    if user is None or authority is None:
+        return False
+
+    auth_list = user.identities.all()
+    loginfo(auth_list)
+
+    try:
+        auth = UserIdentity.objects.get(identity=authority)
+    except Exception, err:
+        loginfo(err)
+        return False
+
+    for item in auth_list:
+        if item.identity == auth.identity:
+            return True
+
+    return False
 
 
 class authority_required(object):
@@ -44,8 +74,13 @@ class authority_required(object):
         self.auth is a tuple
         """
         loginfo(p=self.auth, label="authority")
+        for item in self.auth:
+            is_passed = check_auth(user=request.user, authority=item)
+            loginfo(is_passed)
+            if is_passed:
+                return True
 
-        return True
+        return False
 
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
@@ -145,9 +180,3 @@ class time_controller(object):
             else:
                 return HttpResponseRedirect(reverse('school.views.non_authority_view'))
         return wrappered_method
-
-
-def check_auth(user, authority):
-    """
-    if this user(a id object) has this authority, return True, else False
-    """
