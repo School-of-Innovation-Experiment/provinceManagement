@@ -16,6 +16,8 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 dajaxice_autodiscover()
 
+admin.autodiscover()
+
 handler500 = 'djangotoolbox.errorviews.server_error'
 
 urlpatterns = patterns('',

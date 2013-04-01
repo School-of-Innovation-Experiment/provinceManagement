@@ -48,8 +48,7 @@ class ProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    school = models.ForeignKey(SchoolDict, verbose_name="学校名称")
-                                  unique=True)
+    school = models.ForeignKey(SchoolDict, verbose_name="学校名称", unique=True)
     number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
     class Meta:

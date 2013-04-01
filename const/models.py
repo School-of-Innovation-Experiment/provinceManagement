@@ -8,6 +8,7 @@ Desc: dict table
 '''
 
 from django.db import models
+from django.contrib.auth.models import User
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -15,6 +16,7 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
+
 
 class SchoolDict(models.Model):
     """
@@ -30,7 +32,7 @@ class SchoolDict(models.Model):
     def __unicode__(self):
         return "%s" % self.schoolName
 
-from django.contrib.auth.models import User
+
 class ProjectCategory(models.Model):
     """
     Project category: Innovation, enterprise, ...
@@ -61,6 +63,7 @@ class InsituteCategory(models.Model):
     def __unicode__(self):
         return self.category
 
+
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
@@ -68,7 +71,7 @@ class UserIdentity(models.Model):
     identity = models.CharField(max_length=50, blank=False, unique=True,
                                 choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
-    user     = models.ManyToManyField(User)
+    auth_user =  models.ManyToManyField(User)
 
     class Meta:
         verbose_name = "登录权限"
@@ -76,6 +79,7 @@ class UserIdentity(models.Model):
 
     def __unicode__(self):
         return self.identity
+
 
 class ProjectGrade(models.Model):
     """
