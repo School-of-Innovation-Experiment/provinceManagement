@@ -15,7 +15,7 @@
         <span class="form-errors help-inline">{{info.title.errors}}</span>  
       </div><!--end title-->
       <div>
-        <label>{{info.project_category.title}}</label>
+        <label style="margin-bottom:15px;">项目类型</label>
         {{info.project_category}}
         <span class="form-errors help-inline">{{info.project_category.errors}}</span>  
       </div><!--end project category-->
@@ -128,9 +128,11 @@
       <!--submit button-->
     {% if not readonly %}
     <div class="">
-      <button class="btn btn-large btn-block btn-success" type="submit">信息填写无误后，提交申请书</button>
-      </br>
-      <small class="pull-right">Tips: 截止日期前可以修改</small>
+      <center>
+      	<button class="btn btn-large btn-block btn-success" style="width:30%;" type="submit">信息填写无误后，提交申请书</button>
+      	<br/>
+      	<small class="pull-center">Tips: 截止日期前可以修改</small>
+      </center>
     </div><!--submit button-->
     {% endif %}
   </form>

@@ -33,6 +33,16 @@ class InfoForm(ModelForm):
         #TODO: add css into widgets
         exclude = ('project_id', 'adminuser', 'school',
                    'year', 'project_grade', 'project_status')
+        widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
+                 'inspector':forms.TextInput(attrs={'class':"school-display"}),
+                 'telephone':forms.TextInput(attrs={'class':"school-display"}),
+                 'email':forms.TextInput(attrs={'class':"school-display"}),
+                 'im':forms.TextInput(attrs={'class':"school-display"}),
+                 'members':forms.TextInput(attrs={'class':"school-display"}),
+                 'original':forms.TextInput(attrs={'class':"school-display"}),
+                 'project_category':forms.Select(attrs={'class':"school-display"}),
+                 'insitute':forms.Select(attrs={'class':"school-display"}),             
+                 }
 
     def get_absolute_url(self):
         return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))

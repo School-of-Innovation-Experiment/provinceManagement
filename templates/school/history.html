@@ -24,9 +24,9 @@
       <tr>
         <td>{{item.year}}</td>
         <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
-        <td>{{item.type}}</td>
-        <td>{{item.adviser}}</td>
-        <td>{{item.level}}</td>
+        <td>{{item.project_category}}</td>
+        <td>{{item.inspector}}</td>
+        <td>{{item.project_grade}}</td>
       </tr>
       {%endfor%}
     </tbody>
