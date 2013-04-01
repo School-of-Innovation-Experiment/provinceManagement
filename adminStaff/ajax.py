@@ -110,7 +110,7 @@ def SchoolDispatch(request, form):
         school_name = school_form.cleaned_data["school_name"]
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER)
+        flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER, school_name=school_name)
         if flag:
             message = u"发送邮件成功"
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
