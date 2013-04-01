@@ -40,6 +40,7 @@ from backend.decorators import *
 
 
 @csrf.csrf_protect
+@authority_required(SCHOOL_USER, EXPERT_USER)
 @login_required
 def home_view(request):
     """

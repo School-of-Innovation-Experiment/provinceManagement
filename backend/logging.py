@@ -14,5 +14,5 @@ logger = getLogger('django')
 def loginfo(p="", label=""):
     logger.info("***"*10)
     logger.info(label)
-    logger.info(str(p))
+    logger.info(p)
     logger.info("---"*10)

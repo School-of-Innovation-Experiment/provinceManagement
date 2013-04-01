@@ -31,9 +31,37 @@ from school.utility import get_current_year
 from school.models import *
 
 
+class authority_required(object):
+    """
+    This decorator will check whether the user is adminstaff
+    """
+    def __init__(self, *args):
+        self.auth = args
+
+    def check_auth(self, request):
+        """
+        check auth, only pass is the whole pass,
+        self.auth is a tuple
+        """
+        loginfo(p=self.auth, label="authority")
+
+        return True
+
+    def __call__(self, method):
+        def wrappered_method(request, *args, **kwargs):
+            is_passed = self.check_auth(request)
+            if is_passed:
+                response = method(request, *args, **kwargs)
+                return response
+            else:
+                # TODO: add a custom 403 page
+                return HttpResponseForbidden("对不起，你没有访问权限!")
+        return wrappered_method
+
+
 class only_user_required(object):
     """
-    This decorator will deal with project varify, when the logined user 
+    This decorator will deal with project varify, when the logined user
     can control this project, he can continue.
     """
     def __init__(self, method):
@@ -117,3 +145,9 @@ class time_controller(object):
             else:
                 return HttpResponseRedirect(reverse('school.views.non_authority_view'))
         return wrappered_method
+
+
+def check_auth(user, authority):
+    """
+    if this user(a id object) has this authority, return True, else False
+    """
