@@ -4,7 +4,12 @@ function send_email_to_expert(){
 	}
 function ExpertDispatch_callback(data){
 	if (data.status == "1"){
-		$("#expert_mailbox").css("background","white");
+		// if success all field background turn into white
+		$.each(data.field,function(i,item){
+				object = $('#'+item);
+				object.css("background","white");
+				});
+		//$("#time_settings_form").css("background","white");
 		$("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
 		}
 	else
@@ -29,7 +34,12 @@ function send_email_to_school(){
 	}
 function SchoolDispatch_callback(data){
 	if (data.status == "1"){
-		$("#school_mailbox").css("background","white");
+		// if success all field background turn into white
+		$.each(data.field,function(i,item){
+				object = $('#'+item);
+				object.css("background","white");
+				});
+		//$("#time_settings_form").css("background","white");
 		$("#school_email_error_message").append("<strong>"+data.message+"</strong>")
 		}
 	else

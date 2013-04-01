@@ -1,7 +1,7 @@
 {% load i18n %}
 {% trans "Activate account at" %} {{ site.name }}:
 user:{{username}}
-password{{password}}
+password:{{password}}
 http://{{ site.domain }}{% url registration.views.active activation_key %}
 
 {% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}

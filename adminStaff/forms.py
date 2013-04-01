@@ -14,20 +14,21 @@ class ExpertDispatchForm(forms.Form):
                            ),
 )'''
     expert_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"密码（默认111111）",'id':'expert_password'}
+    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
                            ),
 )
     expert_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_mailbox'}
+    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}
                            ))
 class SchoolDispatchForm(forms.Form):
     school_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"密码（默认111111）",'id':'school_password'}
+    widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
                            ),
 )
     school_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_mailbox'}
-                           ))    
+    widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_email'}
+                           ))
+    school_name     = forms.ChoiceField(required=True,)    
 class TimeSettingForm(forms.Form):
     pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_start_date'})) 
     pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013",'class':'span2','id':'pre_end_date'}))
