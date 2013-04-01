@@ -83,6 +83,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder', 
 )
 
 # Make this unique, and don't share it with anybody.
@@ -92,6 +93,7 @@ SECRET_KEY = '((8!_-pdeoo5ewkh#hm2(f^0y=ncx2)$^=#t+a$k2^&amp;7dqun1='
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,10 +101,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
 )
 
 ROOT_URLCONF = 'urls'
@@ -134,6 +135,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'dajaxice',
+    'dajax',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #Enhanced Admin
@@ -159,7 +162,7 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
-EMAIL_SUBJECT_PREFIX = '[Chemistry]'
+EMAIL_SUBJECT_PREFIX = '[ProvinceInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'

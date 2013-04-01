@@ -6,33 +6,29 @@ Created on 2013-3-18
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from adminStaff.views import AdminStaffService
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+dajaxice_autodiscover()
 urlpatterns = patterns('',
-    url(
-        r'^expert_dispatch/$',
-        direct_to_template, {'template': 'adminStaff/expert_dispatch.html'}
-    ),
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),                     
     url(
         r'^basic_info/$',
         direct_to_template, {'template': 'adminStaff/basic_info.html'}
     ),
     url(
-        r'^teacher_dispatch/$',
-        direct_to_template, {'template': 'adminStaff/teacher_dispatch.html'}
-    ),
-    url(
-        r'^password_admin/$',
-        direct_to_template, {'template': 'adminStaff/password_admin.html'}
-    ),
-    url(
-        r'^subject_feedback/$',
-        direct_to_template, {'template': 'adminStaff/subject_feedback.html'}
-    ),
-    url(
         r'^$',
         direct_to_template, {'template': 'adminStaff/administrator.html'}
     ),
-    url(
-        r'^settings$',
-        direct_to_template, {'template': 'adminStaff/settings.html'}
-    ),
+                       
+    (r'^settings$',AdminStaffService.AdminSetting), 
+    
+    (r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
+    
+    (r'^dispatch/$',AdminStaffService.Dispatch),  
+    (r'^expert_dispatch/$',AdminStaffService.expertDispatch),
+    (r'^school_dispatch/$',AdminStaffService.schoolDispatch),    
+                   
+    (r'^create_inactive_user$',AdminStaffService.expertDispatch),
 )
+urlpatterns += staticfiles_urlpatterns()

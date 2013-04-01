@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load dajaxice_templatetags %}
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,15 +12,15 @@
     {% endblock %}
     <meta name="keywords" content="" />
     <meta name="author" content="sytmac" />
-
     <!-- CSS Config. -->
     {% block before_css %}{% endblock  %}
     {% include "meta/html_head_stylesheets.html" %}
-
     <!-- JavaScript Config. -->
     {% block forestyle %}{% endblock %}
     {% include "meta/html_head_javascript.html" %}
     {% block forejs %}{% endblock %}
+    <!--load Dajaxice Javascript -->
+    {% dajaxice_js_import %}
   </head>
 
   <body >

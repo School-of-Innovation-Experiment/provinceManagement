@@ -2,23 +2,34 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 <div>
-					<div class="well form-inline">
+					<form class="well form-inline" method="POST" action="/adminStaff/expert_dispatch/">
+						{% csrf_token %}
 							<div class="input-prepend">
-							<span class="add-on"><i class="icon-user"></i></span><input type="text" class="input-small" id="expert_name" placeholder="专家姓名">
+							<span class="add-on"><i class="icon-user"></i></span>{{form.expert_name}}
 						  </div>
+						  <span><strong style="color:red">{{form.expert_name.errors}}</strong></span>
+						  <br>
+						  <br>
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-envelope"></i></span><input class="span2" type="text" style="margin:0;" id="expert_mailbox" placeholder="邮箱">
+								<span class="add-on"><i class="icon-envelope"></i></span>{{form.expert_email}}
 							</div>
+							<span><strong  style="color:red">{{form.expert_email.errors}}</strong></span>
+							<br>
+						  <br>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-th-large"></i></span>{{form.expert_password}}
+							</div>
+							<!--
 							<select  id="checktime">
 							<option selected="true">初期评审</option>
 							<option>结题评审</option>
 					    </select>
-						  <span class=" pull-right"><button class="btn btn-primary" onclick="get_experts_info()">给评审专家发送邮件</button></span>
-          </div>
+					    -->
+						  <span class=" pull-right"><input type="submit" class="btn btn-primary" id="send_email" value="给专家发送邮件"/></span>
+          </form>
              
             <div class="well">
-                  <h3>授权专家列表</h3>                  
-                </a>
+                  <h3>授权专家列表</h3>
                 <div class="accordion-inner">
                 		<table id="expert_table" class="table  table-striped" >
 											<thead>
@@ -34,27 +45,6 @@
 										</table>
                 </div>
           </div>
-          <script type="text/javascript">
-          function get_experts_info()
-          {
-				expert_name  = document.getElementById("expert_name").value;
-				mail       = document.getElementById("expert_mailbox").value;
-  				x             = document.getElementById("expert_faculty") 
-  				y             = document.getElementById("checktime")
-  				checktime       = y.options[y.selectedIndex].text 				
-  				table               = document.getElementById("expert_table").insertRow(1)
-  				e_name              = table.insertCell(0)
-  				e_name.innerHTML    = expert_name
-  				e_mail              = table.insertCell(1)
-  				e_mail.innerHTML    = mail
-  				e_checktime         = table.insertCell(2)
-  				e_checktime.innerHTML    = checktime
-  				e_state             = table.insertCell(3)
-  				e_state.innerHTML   = "<span class='label label-success'>未激活</span>"
-  				
-          }
-	
-          </script>
     </div>
 </div>
 {%endblock%}

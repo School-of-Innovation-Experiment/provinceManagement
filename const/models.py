@@ -13,9 +13,8 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
-
 from backend.utility import search_tuple
-
+from django.contrib.auth.models import User
 
 class SchoolDict(models.Model):
     """
@@ -31,7 +30,7 @@ class SchoolDict(models.Model):
     def __unicode__(self):
         return "%s" % self.schoolName
 
-
+from django.contrib.auth.models import User
 class ProjectCategory(models.Model):
     """
     Project category: Innovation, enterprise, ...
@@ -45,7 +44,7 @@ class ProjectCategory(models.Model):
         verbose_name_plural = "项目类型"
 
     def __unicode__(self):
-        return search_tuple(PROJECT_CATE_CHOICES, self.category)
+        return self.category
 
 
 class InsituteCategory(models.Model):
@@ -62,7 +61,6 @@ class InsituteCategory(models.Model):
     def __unicode__(self):
         return self.category
 
-
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
@@ -70,14 +68,14 @@ class UserIdentity(models.Model):
     identity = models.CharField(max_length=50, blank=False, unique=True,
                                 choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
+    user     = models.ManyToManyField(User)
 
     class Meta:
         verbose_name = "登录权限"
         verbose_name_plural = "登录权限"
 
     def __unicode__(self):
-        return search_tuple(AUTH_CHOICES, self.identity)
-
+        return self.identity
 
 class ProjectGrade(models.Model):
     """
@@ -92,7 +90,7 @@ class ProjectGrade(models.Model):
         verbose_name_plural = "项目级别"
 
     def __unicode__(self):
-        return search_tuple(PROJECT_GRADE_CHOICES, self.grade)
+        return self.grade
 
 
 class ProjectStatus(models.Model):
@@ -109,4 +107,4 @@ class ProjectStatus(models.Model):
         verbose_name_plural = "项目状态"
 
     def __unicode__(self):
-        return search_tuple(PROJECT_STATUS_CHOICES, self.status)
+        return self.status
