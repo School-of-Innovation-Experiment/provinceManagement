@@ -26,7 +26,6 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import TechCompetition, Patents, Papers, AchievementObjects
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
