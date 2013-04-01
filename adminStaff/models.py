@@ -56,5 +56,5 @@ class ProjectPerLimits(models.Model):
         verbose_name_plural = "申请数量限制"
 
     def __unicode__(self):
-        return self.school.school.schoolName + str(self.number)
+        return self.school.schoolName + str(self.number)
 
