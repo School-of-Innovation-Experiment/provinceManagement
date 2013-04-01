@@ -5,6 +5,10 @@ Created on 2013-03-28
 @author: sytmac
 '''
 # Create your views here.
+import random
+import re,sha
+import uuid
+
 from django.http import HttpResponse
 from registration.models import * 
 from adminStaff import forms
@@ -15,14 +19,16 @@ from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from const import *
 from school.models import ProjectSingle
+from const.models import UserIdentity 
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.UserExist(email):
             RegistrationManager().create_inactive_user(request,username,password,email,identity)
+            return True
         else:
-            pass
+            return False
     @staticmethod
     def Dispatch(request):
         if request.method == "GET":
@@ -40,7 +46,7 @@ class AdminStaffService(object):
                 email = expert_form.cleaned_data["expert_email"]
                 name = email
                 if password == "":
-                    password = "111111"
+                    password = email.split('@')[0]
                 AdminStaffService.sendemail(request, name, password, email, EXPERT_USER)
                 expert_form = forms.ExpertDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
@@ -55,7 +61,7 @@ class AdminStaffService(object):
                 email = school_form.cleaned_data["school_email"]
                 name = email
                 if password == "":
-                    password = "111111"
+                    password = email.split('@')[0]
                 AdminStaffService.sendemail(request, name, password, email, SCHOOL_USER)
                 school_form = forms.SchoolDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
@@ -90,8 +96,7 @@ class AdminStaffService(object):
                 category =  subject_insitute_form.cleaned_data["insitute_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(category=category)    
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
-         
-                                                                          
+      
                                                                           
                                             
         

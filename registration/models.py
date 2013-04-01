@@ -32,7 +32,7 @@ class RegistrationManager(models.Manager):
     keys), and for cleaning out expired inactive accounts.    
     
     """
-    def activate_user(self,activation_key):
+    def activate_user(self, activation_key):
         """
         Validate an activation key and activation the corresponding User if vaild.
         """
@@ -65,9 +65,9 @@ class RegistrationManager(models.Manager):
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
         new_authority = UserIdentity.objects.get(identity=Identity)
-        new_authority.user.add(new_user)
+        new_authority.auth_user.add(new_user)
         new_user.save()
-
+        new_authority.save()
         registration_profile = self.create_profile(new_user)
         if profile_callback is not None:
             profile_callback(user=new_user)
@@ -84,7 +84,9 @@ class RegistrationManager(models.Manager):
             message = render_to_string('registration/activation_email.txt',
                                        {'activation_key':registration_profile.activation_key,
                                         'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                        'site':get_current_site(request)}
+                                        'site':get_current_site(request),
+                                       'username':username,
+                                       'password':password}
                                        )
             logger.error(message)          
             send_mail(subject,
