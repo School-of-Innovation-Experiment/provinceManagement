@@ -164,7 +164,7 @@ class time_controller(object):
             is_passed = True
         else:
             is_passed = False
-
+        
         return is_passed
 
     def __call__(self, method):
@@ -172,11 +172,11 @@ class time_controller(object):
             #check time control
             loginfo(kwargs)
             pid = kwargs.get("pid", None)
-            is_passed = self.check_day(pid)
-            loginfo(p=is_passed, label="time decorator")
-            if is_passed:
-                response = method(request, *args, **kwargs)
-                return response
-            else:
-                return HttpResponseRedirect(reverse('school.views.non_authority_view'))
+            is_expired = not self.check_day(pid)
+            loginfo(p=is_expired, label="time decorator")
+
+            #Here, we should use history view strategy to replace forbidden
+            kwargs["is_expired"] = is_expired
+            response = method(request, *args, **kwargs)
+            return response
         return wrappered_method

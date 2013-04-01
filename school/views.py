@@ -78,7 +78,7 @@ def home_view(request):
 @authority_required(SCHOOL_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
-def application_report_view(request, pid=None):
+def application_report_view(request, pid=None, is_expired=False):
     """
     school application report
     Arguments:
@@ -87,7 +87,7 @@ def application_report_view(request, pid=None):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
-    readonly = check_history_readonly(pid)
+    readonly = check_history_readonly(pid) or is_expired
 
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
@@ -118,7 +118,7 @@ def application_report_view(request, pid=None):
 @authority_required(SCHOOL_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def final_report_view(request, pid):
+def final_report_view(request, pid=None, is_expired=False):
     """
     school final report
     Arguments:
@@ -126,7 +126,7 @@ def final_report_view(request, pid):
     """
     final = get_object_or_404(FinalSubmit, project_id=pid)
 
-    readonly = check_history_readonly(pid)
+    readonly = check_history_readonly(pid) or is_expired
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
@@ -174,7 +174,7 @@ def statistics_view(request):
 @login_required
 @authority_required(SCHOOL_USER)
 @time_controller(phase=STATUS_PRESUBMIT)
-def new_report_view(request):
+def new_report_view(request, is_expired=False):
     """
     school start a new application report, then it will
     jump the real project URL.
@@ -228,11 +228,11 @@ def history_view(request):
 @authority_required(SCHOOL_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def file_view(request, pid=None):
+def file_view(request, pid=None, is_expired=False):
     """
     file management view
     """
-    readonly = check_history_readonly(pid)
+    readonly = check_history_readonly(pid) or is_expired
 
     if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
@@ -255,7 +255,7 @@ def file_view(request, pid=None):
 @authority_required(SCHOOL_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def file_delete_view(request, pid, fid):
+def file_delete_view(request, pid=None, fid=None, is_expired=False):
     """
     file delete view
     """
