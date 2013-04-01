@@ -12,7 +12,7 @@ from users.models import *
 RegisterClass = (SchoolProfile,
                  ExpertProfile,
                  AdminStaffProfile,
-                 AuthorityRelation)
+                 )
 
 for item in RegisterClass:
     admin.site.register(item)

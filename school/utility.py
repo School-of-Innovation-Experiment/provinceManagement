@@ -17,12 +17,11 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
+from django.db.models import Count
 
-from chartit import DataPool, Chart
+from chartit import PivotDataPool, PivotChart
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import TechCompetition, Patents, Papers, AchievementObjects
-from school.models import UploadedFiles
+from school.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
@@ -189,31 +188,41 @@ def check_history_readonly(pid):
     return readonly
 
 
-def get_category_pies(user):
+def get_real_category(category):
+    """
+        get real category
+    """
+    key = category[0] if category is not None else CATE_UN
+    name = search_tuple(PROJECT_CATE_CHOICES ,key)
+    logger.info("*"*10+name)
+    return (name,category[1])
+
+
+def get_trend_lines(user):
     """
     Get category datapool data fot datachartit
     Arguments:
         In: user
         Out: category_pies object
     """
-    ds = DataPool(series=[{'options': {'source': None},
-                           'terms': ['', '', '']
-                          }]
-                  )
-    cht = Chart(datasource=ds,
-                series_options=[{'options':{'type':'pie', 'stacking':False},
-                                 'terms':{'',''}}],
-                chart_options={'title':{'text':'申请类别统计'},
-                               }
-                ) 
+    data = ProjectSingle.objects.filter(adminuser=user)
+
+    ds = PivotDataPool(series=[{'options': {'source': data,
+                                            'categories': ['year'],
+                                            'legend_by':['project_category__category',]
+                                            },
+                                            'terms': {'number':Count('project_category'),
+                                                }},
+                            ],
+                       )
+    cht = PivotChart(datasource=ds,
+                series_options=[{'options': {'type': 'column', 'stacking': True},
+                                'terms': ['number']},
+                               ],
+                chart_options={'title': {'text': '历史数据统计'},
+                                'xAxis':{'title':{'text': '年份'}},
+                                'yAxis':{'title':{'text': '类别数量'}},
+                                }
+                )
     return cht
 
-
-def get_trend_lines(user):
-    """
-    Get trend lines datapool data fot datachartit
-    Arguments:
-        In: user
-        Out: trend lines object
-    """
-    return None

@@ -15,6 +15,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from const.models import *
+from users.models import ExpertProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -32,7 +33,8 @@ class ProjectSingle(models.Model):
 
     title = models.CharField(max_length=400, blank=False,
                              verbose_name="参赛题目")
-
+    
+    expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
     school = models.ForeignKey(SchoolDict,
                                blank=True, null=True, default=None)
@@ -63,6 +65,11 @@ class ProjectSingle(models.Model):
     def __unicode__(self):
         return self.title
 
+class Re_Project_Expert(models.Model):
+    project  = models.ForeignKey(ProjectSingle)
+    expert   = models.ForeignKey(ExpertProfile)
+    comments = models.TextField(blank=False, verbose_name="评价")
+    scores = models.IntegerField(blank=False, verbose_name="评分百分制")
 
 class PreSubmit(models.Model):
     """
@@ -71,7 +78,7 @@ class PreSubmit(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
-    project_id = models.OneToOneField(ProjectSingle)
+    project_id = models.ForeignKey(ProjectSingle)
 
     original = models.CharField(max_length=200, blank=False, null=True,
                                 verbose_name="题目来源")
@@ -86,7 +93,6 @@ class PreSubmit(models.Model):
                                           verbose_name="指导教师推荐语")
     school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
-
 
     class Meta:
         verbose_name = "项目申请书"
@@ -103,7 +109,7 @@ class FinalSubmit(models.Model):
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=str(uuid.uuid4()),
                                   verbose_name="结题报告唯一ID")
-    project_id = models.OneToOneField(ProjectSingle)
+    project_id = models.ForeignKey(ProjectSingle)
 
     achievement_fashion = models.CharField(max_length=200, blank=True, null=True,
                                            verbose_name="成果形式")
@@ -128,106 +134,6 @@ class FinalSubmit(models.Model):
 
     def __unicode__(self):
         return self.project_id.title
-
-
-class TechCompetition(models.Model):
-    """
-    Technology competition achievement, which follows FinalSubmit
-    """
-    content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
-                                  verbose_name="科技竞赛成果唯一ID")
-    #project_id = models.ForeignKey(FinalSubmit)
-    title = models.CharField(max_length=100, blank=False,
-                             verbose_name="竞赛作品名称")
-    members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
-    competition_name = models.CharField(max_length=100, blank=False,
-                                        verbose_name="获奖名称")
-    competition_grade = models.CharField(max_length=20, blank=False,
-                                         verbose_name="获奖等级")
-
-    class Meta:
-        verbose_name = "科技竞赛"
-        verbose_name_plural = "科技竞赛"
-
-    def __unicode__(self):
-        return self.project_id.project_id.title
-
-
-class Patents(models.Model):
-    """
-    Patent achievement, which follows FinalSubmit
-    """
-    content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
-                                  verbose_name="发明专利唯一ID")
-    #project_id = models.ForeignKey(FinalSubmit)
-    title = models.CharField(max_length=100, blank=False,
-                             verbose_name="专利题名")
-    members = models.CharField(max_length=100, blank=False,
-                               verbose_name="专利申请者")
-    number = models.CharField(max_length=100, blank=False,
-                              verbose_name="专利号")
-    finish_date = models.DateField(blank=False,
-                                   verbose_name="批准时间")
-
-    class Meta:
-        verbose_name = "发明专利"
-        verbose_name_plural = "发明专利"
-
-    def __unicode__(self):
-        return self.project_id.project_id.title
-
-
-class Papers(models.Model):
-    """
-    Papers achievement, which follows FinalSubmit
-    """
-    content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
-                                  verbose_name="学术论文成果唯一ID")
-    #project_id = models.ForeignKey(FinalSubmit)
-    title = models.CharField(max_length=100, blank=False,
-                             verbose_name="名称")
-    members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
-    publication = models.CharField(max_length=100, blank=False,
-                                   verbose_name="期刊期数")
-    finish_date = models.DateField(blank=False,
-                                   verbose_name="发表时间")
-
-    class Meta:
-        verbose_name = "学术论文"
-        verbose_name_plural = "学术论文"
-
-    def __unicode__(self):
-        return self.project_id.project_id.title
-
-
-class AchievementObjects(models.Model):
-    """
-    Achievement Objects, which follows FinalSubmit
-    """
-    content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
-                                  verbose_name="实物成果唯一ID")
-    #project_id = models.ForeignKey(FinalSubmit)
-    title = models.CharField(max_length=100, blank=False,
-                             verbose_name="名称")
-    members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
-    finish_date = models.DateField(blank=False,
-                                   verbose_name="完成时间")
-    comments = models.TextField(blank=True, verbose_name="备注")
-
-    class Meta:
-        verbose_name = "实物"
-        verbose_name_plural = "实物"
-
-    def __unicode__(self):
-        return self.project_id.project_id.title
-
 
 class UploadedFiles(models.Model):
     """

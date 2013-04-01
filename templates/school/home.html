@@ -22,16 +22,21 @@
         <th>指导教师</th>
         <th>当前状态</th>
         <th>评审级别</th>
+        <th>详情</th>
       </tr>
     </thead>
     <tbody>
       {%for item in current_list%}
       <tr>
-        <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
-        <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.project_category}}</a></td>
+        <td>{{item.title}}</td>
+        <td>{{item.project_category}}</td>
         <td>{{item.inspector}}</td>
         <td>{{item.project_status}}</td>
         <td>{{item.project_grade}}</td>
+        <td>
+          <span><a href="{% url school.views.application_report_view item.project_id%}" class='btn btn-primary'>申请</a></span>
+          <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span>
+        </td>
       </tr>
       {%endfor%}
     </tbody>

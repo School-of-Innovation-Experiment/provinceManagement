@@ -17,9 +17,7 @@ from django.forms.util import ErrorList
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import TechCompetition, Patents, Papers, AchievementObjects
-from school.models import UploadedFiles
+from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 

@@ -6,43 +6,43 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/default.js"></script>
   {% load chartit %}
-  {{ category_pies|load_charts:"category_pies" }}
   {{ trend_lines|load_charts:"trend_lines" }}
 {% endblock %}
 
 {% block calculate-content%}
 <div class="container">
   <div class="row">
-    <div class="span5">
+    <div class="span4">
       <fieldset>
-        <legend>基本信息</legend>
+        <legend>本年度类别信息</legend>
         <div>
-            <h4>本年度信息统计</h4>
             <div>
               <span class="label label-inverse">创新实践 {{innovation_numbers}}</span>
               <span class="label label-info">创业实践 {{enterprise_numbers}}</span>
               <span class="label label-warning">创业训练 {{enterprie_ee_numbers}}</span>
-              <span class="label label-important">省级 {{province_numbers}}</span>
-              <span class="label label-success">国家级 {{nation_numbers}}</span>
-            </div>
-            <br/>
-            <h4>申请记录</h4>
-            <div>
-              <span class="label label-success">申请数量 {{application_numbers}}</span>
-              <span class="label label-inverse">通过数量 {{passed_numbers}}</span>
             </div>
         </div><!--end basic data info-->
       </fieldset>
     </div><!--end left panel-->
-    <div class="span7">
+    <div class="span4">
       <fieldset>
-        <legend>分类信息</legend>
-        <div id="category_pies">
-          pie
-        </div><!--end pie info-->
+        <legend>本年度级别信息</legend>
+        <div>
+          <span class="label label-important">省级 {{province_numbers}}</span>
+          <span class="label label-success">国家级 {{nation_numbers}}</span>
+        </div>
       </fieldset>
-    </div><!--end right panel-->
-  </div><!--end row-->
+    </div><!--end mid panel-->
+    <div class="span4">
+      <fieldset>
+        <legend>历史申请记录</legend>
+        <div>
+          <span class="label label-success">申请数量 {{application_numbers}}</span>
+          <span class="label label-inverse">通过数量 {{passed_numbers}}</span>
+        </div>
+      </fieldset>
+    </div><!--end mid panel-->
+   </div><!--end row-->
 
   <br/>
   <br/>
@@ -50,9 +50,19 @@
     <fieldset>
       <legend>历史信息</legend>
       <div id="trend_lines">
-        lines
       </div><!--end line object-->
+      <br/>
+      <div class="alert alert-success" id="legend_id">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <span class="label label-info">enterprise_ee 创业训练</span>
+        <span class="label label-success">enterprise 创业实践</span>
+        <span class="label label-warning">innovation 创新实践</span>
+      </div>
     </fieldset><!--end fieldset-->
   </div><!--end line -->
 </div>
+{% endblock %}
+
+{% block endjs%}
+  <script type='text/javascript' src="{{STATIC_URL}}js/school/main.js"></script>
 {% endblock %}

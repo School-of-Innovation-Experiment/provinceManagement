@@ -11,7 +11,6 @@ Desc: news model
 from django.db import models
 import datetime, os
 from settings import MEDIA_ROOT
-
 DOCUMENTS_PATH = MEDIA_ROOT + "/news-documents/%Y/%m/%d"
 class News(models.Model):
     news_title = models.CharField(verbose_name = u"标题",

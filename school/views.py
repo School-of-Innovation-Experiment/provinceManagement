@@ -26,24 +26,17 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import TechCompetition, Patents, Papers, AchievementObjects
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
-from const.models import SchoolDict, ProjectCategory, InsituteCategory
-from const.models import UserIdentity, ProjectGrade, ProjectStatus
-from const import AUTH_CHOICES, VISITOR_USER
-from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
-from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const.models import *
+from const import *
 
 from school.utility import *
 from backend.logging import logger
-
-#TODO: for decorators, later I will add time control, authority control
-#      check one user operation
+from backend.decorators import *
 
 
 @csrf.csrf_protect
@@ -75,6 +68,8 @@ def home_view(request):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
+@time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None):
     """
     school application report
@@ -112,6 +107,8 @@ def application_report_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid):
     """
     school final report
@@ -148,7 +145,6 @@ def statistics_view(request):
     """
     school statistics view
     """
-    category_pies = get_category_pies(request.user)
     trend_lines = get_trend_lines(request.user)
 
     data = {"innovation_numbers":0,
@@ -158,7 +154,6 @@ def statistics_view(request):
             "nation_numbers":20,
             "application_numbers":30,
             "passed_numbers":29,
-            "category_pies": category_pies,
             "trend_lines": trend_lines,
             }
 
@@ -167,6 +162,7 @@ def statistics_view(request):
 
 @csrf.csrf_protect
 @login_required
+@time_controller(phase=STATUS_PRESUBMIT)
 def new_report_view(request):
     """
     school start a new application report, then it will
@@ -217,6 +213,8 @@ def history_view(request):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None):
     """
     file management view
@@ -241,6 +239,8 @@ def file_view(request, pid=None):
 
 @csrf.csrf_protect
 @login_required
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid, fid):
     """
     file delete view
@@ -263,3 +263,12 @@ def file_delete_view(request, pid, fid):
         return HttpResponse(str(fid))
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
+
+
+@login_required
+def non_authority_view(request):
+    """
+    cannot visit
+    """
+    #TODO: I will add more usefull information, such as control time
+    return render(request, 'school/non_authority.html')
