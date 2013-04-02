@@ -28,7 +28,7 @@ class ProjectSingle(models.Model):
     Every single projects, include basic infomation, it is the base table.
     """
     project_id = models.CharField(max_length=50, primary_key=True,
-                                  default=str(uuid.uuid4()),
+                                  default=str(uuid.uuid4),
                                   verbose_name="题目唯一ID")
 
     title = models.CharField(max_length=400, blank=False,
