@@ -72,3 +72,7 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
+
+
+# Paginator default Page elements
+PAGE_ELEMENTS = 10
