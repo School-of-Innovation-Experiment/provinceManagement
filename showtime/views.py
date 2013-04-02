@@ -1,14 +1,18 @@
 # Create your views here.
 #
 from school.models import *
+from const.models import ProjectGrade
 from django.db.models import Q
 from django.shortcuts import render
 from backend.utility import convert2media_url
-Q(question__startswith='What')
+from const import PROJECT_GRADE_CHOICES, GRADE_NATION
 
+GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 DEFAULT_IMG_URL = ""
 def show_index(request):
-    projects = ProjectSingle.objects.all()
+    nation_project = ProjectGrade.objects.get(grade=GRADE_NATION)
+    projects = ProjectSingle.objects.filter( \
+        project_grade=nation_project)
     for project in projects:
         imgs = project.uploadedfiles_set.filter( \
             Q(file_obj__iendswith="jpg") | \
