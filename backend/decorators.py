@@ -11,6 +11,7 @@ import os
 import sys
 import datetime
 
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import render_to_response
@@ -25,15 +26,77 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from const import *
+from const.models import * 
 from adminStaff.models import *
 from backend.logging import loginfo
 from school.utility import get_current_year
 from school.models import *
 
 
+def check_auth(user=None, authority=None):
+    """
+    if this user(a id object) has this authority, return True, else False
+        Arguments:
+            In: user, it is user model object
+                authority, it is a const string , which can show the
+                authorities
+            Out:True or False
+    """
+    if user is None or authority is None:
+        return False
+
+    auth_list = user.identities.all()
+    loginfo(auth_list)
+
+    try:
+        auth = UserIdentity.objects.get(identity=authority)
+    except Exception, err:
+        loginfo(err)
+        return False
+
+    for item in auth_list:
+        if item.identity == auth.identity:
+            return True
+
+    return False
+
+
+class authority_required(object):
+    """
+    This decorator will check whether the user is adminstaff
+    """
+    def __init__(self, *args):
+        self.auth = args
+
+    def check_auth(self, request):
+        """
+        check auth, only pass is the whole pass,
+        self.auth is a tuple
+        """
+        loginfo(p=self.auth, label="authority")
+        for item in self.auth:
+            is_passed = check_auth(user=request.user, authority=item)
+            loginfo(is_passed)
+            if is_passed:
+                return True
+
+        return False
+
+    def __call__(self, method):
+        def wrappered_method(request, *args, **kwargs):
+            is_passed = self.check_auth(request)
+            if is_passed:
+                response = method(request, *args, **kwargs)
+                return response
+            else:
+                # TODO: add a custom 403 page
+                return HttpResponseForbidden("对不起，你没有访问权限!")
+        return wrappered_method
+
+
 class only_user_required(object):
     """
-    This decorator will deal with project varify, when the logined user 
+    This decorator will deal with project varify, when the logined user
     can control this project, he can continue.
     """
     def __init__(self, method):
@@ -109,11 +172,11 @@ class time_controller(object):
             #check time control
             loginfo(kwargs)
             pid = kwargs.get("pid", None)
-            is_passed = self.check_day(pid)
-            loginfo(p=is_passed, label="time decorator")
-            if is_passed:
-                response = method(request, *args, **kwargs)
-                return response
-            else:
-                return HttpResponseRedirect(reverse('school.views.non_authority_view'))
+            is_expired = not self.check_day(pid)
+            loginfo(p=is_expired, label="time decorator")
+
+            #Here, we should use history view strategy to replace forbidden
+            kwargs["is_expired"] = is_expired
+            response = method(request, *args, **kwargs)
+            return response
         return wrappered_method

@@ -20,6 +20,14 @@
     </div><!--end alert-->
   </div><!--end right span--> 
 </div><!--end row-->
+<!--Notice Messager-->
+{% if readonly %}
+  <div class="alert alert-error">
+    <a class="close" data-dismiss="alert">x</a> 
+    <h4 class="alert-heading">系统提示！</h4>
+    <p>目前此文档编辑权限已被系统锁定，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+  </div><!--end alert block-->
+{%endif%}
 
 <div class="container">
   {%block report-content%}

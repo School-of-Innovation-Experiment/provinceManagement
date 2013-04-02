@@ -33,7 +33,7 @@ class ProjectSingle(models.Model):
 
     title = models.CharField(max_length=400, blank=False,
                              verbose_name="参赛题目")
-    
+
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
     school = models.ForeignKey(SchoolDict,
@@ -64,12 +64,16 @@ class ProjectSingle(models.Model):
 
     def __unicode__(self):
         return self.title
-
+class Project_Is_Assigned(models.Model):
+    insitute = models.ForeignKey(InsituteCategory,
+                                blank=True, null=True, default=None
+                                )
+    is_assigned = models.BooleanField(default=False)
 class Re_Project_Expert(models.Model):
     project  = models.ForeignKey(ProjectSingle)
     expert   = models.ForeignKey(ExpertProfile)
-    comments = models.TextField(blank=False, verbose_name="评价")
-    scores = models.IntegerField(blank=False, verbose_name="评分百分制")
+    comments = models.TextField(blank=True, verbose_name="评价")
+    scores = models.IntegerField(blank=False, verbose_name="评分百分制",default=0)
 
 class PreSubmit(models.Model):
     """
@@ -145,7 +149,7 @@ class UploadedFiles(models.Model):
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,
                             verbose_name="文件名称")
-    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d", 
+    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",
                                 verbose_name="文件对象")
     uploadtime = models.DateTimeField(blank=True, null=True,
                                       verbose_name="上传时间")
@@ -160,3 +164,5 @@ class UploadedFiles(models.Model):
 
     def __unicode__(self):
         return self.project_id.title
+    def file_name(self):
+        return os.path.basename(self.file_obj.name)

@@ -63,7 +63,6 @@ class InsituteCategory(models.Model):
     def __unicode__(self):
         return self.category
 
-
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
@@ -71,7 +70,7 @@ class UserIdentity(models.Model):
     identity = models.CharField(max_length=50, blank=False, unique=True,
                                 choices=AUTH_CHOICES, default=VISITOR_USER,
                                 verbose_name="身份级别")
-    auth_user =  models.ManyToManyField(User)
+    auth_groups = models.ManyToManyField(User, related_name="identities")
 
     class Meta:
         verbose_name = "登录权限"

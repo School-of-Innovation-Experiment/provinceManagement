@@ -11,7 +11,6 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #from gui import views as gui_views
 from users import views as users_views
-
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 dajaxice_autodiscover()
@@ -26,11 +25,6 @@ urlpatterns = patterns('',
         include('news.urls'),
         name="news"
     ),
-    # url(
-    #     r'^$',
-    #     direct_to_template, {'template': 'home/index.html'},
-    #     name='index'
-    # ),
     url(
         r'^admin/',
         include(admin.site.urls),
@@ -51,6 +45,7 @@ urlpatterns = patterns('',
     url(
         r'^adminStaff/',
         include('adminStaff.urls'),
+        name="adminstaff_home"
     ),
     url(
         r'^features/$',
@@ -59,7 +54,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^show/$',
-        direct_to_template, {'template': 'introduction/show.html'},
+        include('showtime.urls'),
     ),
 )
 

@@ -20,7 +20,8 @@ from django.contrib.sites.models import get_current_site
 from django.db import models
 from const.models import UserIdentity 
 from backend.logging import logger
-
+from users.models import SchoolProfile
+from const.models import SchoolDict
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -32,7 +33,7 @@ class RegistrationManager(models.Manager):
     keys), and for cleaning out expired inactive accounts.    
     
     """
-    def activate_user(self,activation_key):
+    def activate_user(self, activation_key):
         """
         Validate an activation key and activation the corresponding User if vaild.
         """
@@ -53,7 +54,7 @@ class RegistrationManager(models.Manager):
     
     def create_inactive_user(self,request,
                              username,password,email,
-                             Identity,send_email=True, profile_callback=None):
+                             Identity,send_email=True, profile_callback=None, **kwargs):
         """
         Create a new, inactive ``User``, generates a
         ``RegistrationProfile`` and email its activation key to the
@@ -61,14 +62,19 @@ class RegistrationManager(models.Manager):
         
         TODO: we will custom the USER
         
-        """
+        """ 
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
         new_authority = UserIdentity.objects.get(identity=Identity)
-        new_authority.user.add(new_user)
+        new_authority.auth_user.add(new_user)
         new_user.save()
-
+        new_authority.save()
         registration_profile = self.create_profile(new_user)
+        #如果是学校注册 添加学校注册姓名
+        if kwargs.has_key('school_name'):
+            schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
+            schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+            schoolProfileObj.save() 
         if profile_callback is not None:
             profile_callback(user=new_user)
 
@@ -84,7 +90,9 @@ class RegistrationManager(models.Manager):
             message = render_to_string('registration/activation_email.txt',
                                        {'activation_key':registration_profile.activation_key,
                                         'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                        'site':get_current_site(request)}
+                                        'site':get_current_site(request),
+                                       'username':username,
+                                       'password':password}
                                        )
             logger.error(message)          
             send_mail(subject,

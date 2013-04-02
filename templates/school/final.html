@@ -4,86 +4,10 @@
 {%block report-content%}
   <form method="post" action={% url school.views.final_report_view pid%}>
     {% csrf_token %}
-
     <!--Project Content-->
-    <div class="page-header">
-      <h3> 项目完成情况概述 </h3>
-    </div>
-    <blockquote>
-      {{final.achievement_summary}} 
-      <span class="form-error help-inline">{{final.achievement_summary.errors}}</span>  
-    </blockquote><!--end project content-->
-    
+    {% include "school/widgets/final.html" %}
     <br/>
-    <div class="page-header">
-      <h3>项目评价</h3> 
-    </div>
-    <blockquote>
-      <fieldset>
-        <legend>成果形式</legend>
-        {{final.achievement_fashion}} 
-        <span class="form-error errors help-inline">{{final.achievement_fashion.errors}}</span>  
-      </fieldset>
-      <br/>
-      <fieldset>
-        <legend>指导教师推荐语</legend>
-        {{final.inspector_comments}} 
-        <span class="form-error errors help-inline">{{final.inspector_comments.errors}}</span>  
-      </fieldset>
-      <br/>
-      <fieldset>
-        <legend>学校推荐语</legend>
-        {{final.school_comments}} 
-        <span class="form-error errors help-inline">{{final.school_comments.errors}}</span>  
-      </fieldset> 
-    </blockquote><!--end project evaluate-->
-
-    <!--Project Achivements-->
-    <br/>
-    <div class="page-header">
-      <h3>主要成果</h3>
-    </div>
-    <blockquote>
-      <fieldset>
-        <legend>实物（软件、图纸、报告等）</legend>
-        {{final.achievement_objects}} 
-        <span class="form-error errors help-inline">{{final.achievement_objects.errors}}</span>  
-      </fieldset><!--end achievements objects  fieldset-->
-
-      <br/>
-      <fieldset>
-        <legend>学术论文</legend>
-        {{final.papers}} 
-        <span class="form-error errors help-inline">{{final.papers.errors}}</span>  
-      </fieldset><!--end papers fieldset-->
-
-      <br/>
-      <fieldset>
-        <legend>发明专利</legend>
-        {{final.patents}} 
-        <span class="form-error errors help-inline">{{final.patents.errors}}</span>  
-      </fieldset><!--end patents fieldset-->
-
-      <br/>
-      <fieldset>
-        <legend>科技竞赛</legend>
-        {{final.tech_competitions}} 
-        <span class="form-error errors help-inline">{{final.tech_competitions.errors}}</span>  
-      </fieldset><!--end tech competition fieldset-->
-    </blockquote><!--end achievement-->
-
     <!--submit button-->
-    <br/>
-
-    {% if not readonly %}
-    <div class="">
-      <center>
-        <button class="btn btn-large btn-block btn-success" style="width:50%" type="submit">信息填写无误后，提交结题报告</button>
-        </br>
-        <small class="pull-center">Tips: 截止日期前可以修改</small>
-      </center>
-    </div><!--submit button-->
-    {% endif %}
-
+    {% include "school/widgets/commit_button.html" %}
   </form>
 {%endblock%}

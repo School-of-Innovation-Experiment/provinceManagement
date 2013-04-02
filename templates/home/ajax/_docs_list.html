@@ -6,6 +6,7 @@
         <col width="75%" />
         <col width="15%" />
       </colgroup>
+      {% if docs_list %}
       <tbody>
         {% for docs in docs_list %}
         <tr>
@@ -19,6 +20,7 @@
         </tr>
         {% endfor %}
       </tbody>
+      {% endif %}
     </table>
   </div>
   <hr />

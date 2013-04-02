@@ -6,42 +6,28 @@ Created on 2013-03-17
 
 Desc: news view with Tinymce
 '''
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, render_to_response
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render #, render_to_response
 
 from news.models import News
-from django.template import Context, loader
-from django.http import HttpResponse
-
+from django.template import Context #, loader
+from django.http import HttpResponse, Http404
+from backend.utility import getContext
 import datetime, os
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
-        news_content = News.objects.get(id = news_id)
+        try:
+            news_content = News.objects.get(id = news_id)
+        except:
+            raise Http404
     else: # get latest news
         news_content = (News.objects.count() and News.objects.order_by('-news_date')[0]) or None
     return news_content
 
-PAGE_NEWS = 2
-def getContext(contentList, page, name, page_news=PAGE_NEWS):
-    paginator = Paginator(contentList, page_news)
-    try:
-        _page = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        _page = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        _page = paginator.page(paginator.num_pages)
-    _list = list(_page.object_list)
-    for _index in xrange(len(_list)):
-        _list[_index].list_index = _index + 1 # .__dict__.update(dict)
-    return {'%s_page' % name: _page,
-            '%s_list' % name: _list}
-
 def index(request):
     the_latest_news = get_news()
-    the_latest_news = the_latest_news or News(id =  -1, news_title = 'haha', news_content = 'yeshi haha', news_date = datetime.datetime.today)
+    the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
     context = {
             'the_latest_news': the_latest_news,
             }
