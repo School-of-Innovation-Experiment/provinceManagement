@@ -187,6 +187,38 @@ def check_history_readonly(pid):
 
     return readonly
 
+def get_current_gradecount(user,des_type):
+    """
+        get the number of current_grade
+    """
+
+
+def get_categorycount(user,des_type,current):
+    """
+        if current is True
+            return current categorycount
+        else
+            return history categorycount
+    """
+    if current==True:
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year).count()
+    else:
+        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year).count()
+    return statistics_number
+
+def get_gradecount(user,des_type,current):
+    """
+        if current is True
+            return current gradecount
+        else
+            return history gradecount
+    """
+    if current==True:
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year).count()
+        return statistics_number
+    else:
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type).exclude(year=get_current_year()).count()
+        return statistics_number
 
 def get_real_category(category):
     """

@@ -147,12 +147,28 @@ def statistics_view(request):
     school statistics view
     """
     trend_lines = get_trend_lines(request.user)
+    user=request.user
+    current_numbers=len(ProjectSingle.objects.filter(adminuser=request.user,year=get_current_year()))
+    currentnation_numbers=get_gradecount(user,GRADE_NATION,True)
+    currentprovince_numbers=get_gradecount(user,GRADE_PROVINCE,True)
 
-    data = {"innovation_numbers":0,
-            "enterprise_numbers":0,
-            "enterprie_ee_numbers":0,
-            "province_numbers":10,
-            "nation_numbers":20,
+    history_numbers=len(ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year()))
+    historynation_numbers=get_gradecount(user,GRADE_NATION,False)
+    historyprovince_numbers=get_gradecount(user,GRADE_PROVINCE,False)
+
+    innovation_numbers=get_categorycount(user,CATE_INNOVATION,True)
+    enterprise_numbers=get_categorycount(user,CATE_ENTERPRISE,True)
+    enterprise_ee_numbers=get_categorycount(user,CATE_ENTERPRISE_EE,True)
+    
+    data = {"innovation_numbers":innovation_numbers,
+            "enterprise_numbers":enterprise_numbers,
+            "enterprie_ee_numbers":enterprise_ee_numbers,
+            "current_numbers":current_numbers,
+            "currentprovince_numbers":currentprovince_numbers,
+            "currentnation_numbers":currentnation_numbers,
+            "history_numbers":history_numbers,
+            "historynation_numbers":historynation_numbers,
+            "historyprovince_numbers":historyprovince_numbers,
             "application_numbers":30,
             "passed_numbers":29,
             "trend_lines": trend_lines,
