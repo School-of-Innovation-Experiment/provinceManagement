@@ -35,10 +35,10 @@ class SchoolDispatchForm(forms.Form):
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)    
 class TimeSettingForm(forms.Form):
-    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_start_date'})) 
+    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/26/2013", 'class':'span2','id':'pre_start_date'})) 
     pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013",'class':'span2','id':'pre_end_date'}))
-    final_start_date = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'final_start_date'}))
-    final_end_date = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'final_end_date'}))
+    final_start_date = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_start_date'}))
+    final_end_date = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_end_date'}))
     pre_start_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_start_date_review'}))
     pre_end_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_end_date_review'}))
     final_start_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'final_start_date_review'}))
@@ -102,4 +102,29 @@ class SubjectInsituteForm(forms.Form):
     for object in insitute_list:
         insitute_choice_list.append((object.id, object.category))
     insitute_tuple = tuple(insitute_choice_list)
-    insitute_choice = forms.ChoiceField(choices=insitute_tuple)           
+    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();","value":"---"}))  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+             

@@ -18,8 +18,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from const import *
-from school.models import ProjectSingle
-from const.models import UserIdentity 
+from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
+from const.models import UserIdentity, InsituteCategory
+from users.models import ExpertProfile
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -93,13 +94,45 @@ class AdminStaffService(object):
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
+            
         else:
             subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             if subject_insitute_form.is_valid():
-                category =  subject_insitute_form.cleaned_data["insitute_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(category=category)    
+                category = subject_insitute_form.cleaned_data["insitute_choice"]
+                subject_list =  AdminStaffService.GetSubject_list(category=category)
+                
+                expert_category = InsituteCategory.objects.get(id=category)
+                obj = Project_Is_Assigned.objects.get(insitute = expert_category)
+                #如果已经指派专家了直接返回列表即可
+                if obj.is_assigned == 1:
+                    pass
+                #没有指派专家，则进行专家指派
+                else:
+                    #筛选专家列表
+                    expert_list = ExpertProfile.objects.filter(subject=expert_category)
+                    re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
+                    #将返回数据进入Re_Project_Expert表中
+
+                    for subject in re_dict.keys():
+                        for expert in re_dict[subject]:
+                            #subject.expert.add(expert)
+                            Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                    #保存已分配标志，值为1  
+                    obj.is_assigned = 1
+                    obj.save()
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
-      
-                                                                          
-                                            
+    
+    @staticmethod
+    def Assign_Expert_For_Subject(subject_list, expert_list):
+
+        ret = {}
+        for i in xrange(len(subject_list)):
+            subject = subject_list[i]
+            num = min(len(expert_list), random.randint(3,5))
+            ret[subject] = []
+            for j in xrange(num):
+                ret[subject].append(expert_list[(i + j) % len(expert_list)])
+        return ret
+                                                                       
+                                         
         
