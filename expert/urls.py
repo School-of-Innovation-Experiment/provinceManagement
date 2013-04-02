@@ -9,18 +9,16 @@ Desc: urls for expert
 from django.conf.urls import patterns, url
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from expert import views as expert_views
+
 
 urlpatterns = patterns('',
-                       url(
+    url(
         r'^$',
-        direct_to_template,
-        {'template': 'expert/home.html'}),
-                       url(
-        r'^profile/$',
-        direct_to_template,
-        {'template': 'expert/profile.html'}),
-                       url(
-        r'^profile_edit/$',
-        direct_to_template,
-        {'template': 'expert/profile_edit.html'}),
-                       )
+        expert_views.home_view,
+    ),
+    url(
+        r'^review/(?P<pid>.{36})$',
+        expert_views.review_report_view,
+    ),
+)
