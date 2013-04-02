@@ -1,11 +1,16 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 	<div class="well form-inline">
-		<span><strong>按照学科进行显示</strong></span>
+		<b>
 		<form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
-		{% csrf_token %}
+		{% csrf_token %}	
+  		<div class="alert alert-info">
+			  	<a class="close" data-dismiss="alert">×</a>
+			  	<strong>注意:</strong>指定专家审阅是针对所选学科，一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
+			</div>
+			
 	  	{{subject_insitute_form.insitute_choice}}
-	  	<input type="submit" class="btn btn-primary" value="筛选"/>
+	  	<input type="submit" class="btn btn-primary" id="filter_button" value="筛选/指定专家进行审阅"/>
 	  </form><!--end category form -->
 	<table class="table table-condensed" id="subject_table">
 	<thead>
@@ -43,9 +48,9 @@
               <a href="#" class="btn" data-dismiss="modal">关闭</a>
             </div>
   </div>
-	<button data-toggle="modal" href="#myModal" class="btn btn-primary">指定专家进行审阅</button>
-	</div>
+	</div><!-- end the whole form -->
 	<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/is_assigned.js" onload="is_assigned();"></script>
 	<!-- ajax_csrf-->
 	<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

@@ -15,6 +15,7 @@ from const.models import SchoolDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
+from school.models import Project_Is_Assigned, InsituteCategory
 @dajaxice_register
 def NumLimit(request, form):
     dajax = Dajax()
@@ -119,4 +120,19 @@ def SchoolDispatch(request, form):
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+@dajaxice_register
+def judge_is_assigned(request,insitute):
+    '''
+    to judge if the projects that belong to the certain insitute has been assigned
+    '''
+    #query database
+    insobj = InsituteCategory.objects.get(category=insitute)
+    obj = Project_Is_Assigned.objects.get(insitute = insobj)
+    return simplejson.dumps({'flag':obj.is_assigned})
+
+
+
+
+
+
     

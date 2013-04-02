@@ -10,6 +10,7 @@ from django.contrib.auth import views as auth_views
 
 from registration.views import active
 from registration.views import register
+from registration.views import login_redirect
 
 urlpatterns = patterns('',
          # Activation keys get matched by \w+ instead of the more specific
@@ -26,6 +27,7 @@ urlpatterns = patterns('',
           url(r'^password/reset/complete/$',auth_views.password_reset_complete,name='auth_password_reset_complete'),
           url(r'^password/reset/done/$',auth_views.password_reset_done,name='auth_password_reset_done'),
           
-          url(r'register/$',register,name='registration_register'),
-          url(r'register/complete/$',direct_to_template, {'template': 'registration/registration_complete.html'},name = 'registration_complete'),
+          #url(r'register/$',register,name='registration_register'),
+          #url(r'register/complete/$',direct_to_template, {'template': 'registration/registration_complete.html'},name = 'registration_complete'),
+          url(r'^redirect/$', login_redirect, name="auth_login_redirect"),
         ) 

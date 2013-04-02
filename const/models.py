@@ -63,7 +63,6 @@ class InsituteCategory(models.Model):
     def __unicode__(self):
         return self.category
 
-
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
