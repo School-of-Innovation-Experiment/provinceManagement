@@ -1,0 +1,26 @@
+{% if project_list %}
+  {% for project in project_list %}
+  <div class="box photo col3">
+    <div class="github-fork-ribbon-wrapper left">
+      <div class="github-fork-ribbon">
+        <a href="/">{{ project.project_grade.get_grade_display }}</a>
+      </div>
+    </div>
+    <a href="?project_id={{ project.project_id }}" title="{{ project.title }}"><img src="{{ project.img }}"  /></a>
+    <h4 class="title">{{ project.title }}</h4>
+    <hr/>
+    <span class="label label-info pull-right">{{ project.school }}</span>
+    <p class="member-name">参赛团队: {{ project.members }}</p>
+    <br／>
+      <small class="pull-left">
+        {{ project.project_status }}
+      </small>
+  </div>
+  {% endfor %}
+  <!--content-->
+{% endif %}
+{% if not project_page.has_next %}
+  <div class="navbar-fixed-bottom alert alert-info" style="text-align: center;" id="load-entry-tip">
+  已是全部内容
+  </div>
+{% endif %}

@@ -76,3 +76,6 @@ PROJECT_STATUS_CHOICES = (
 
 # Paginator default Page elements
 PAGE_ELEMENTS = 10
+
+# Default img url while img not find
+DEFAULT_IMG_URL = ""

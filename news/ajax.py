@@ -5,11 +5,14 @@ from dajaxice.decorators import dajaxice_register
 from dajax.core import Dajax
 from django.shortcuts import render_to_response
 from news.models import News
-from news.views import getContext
+from backend.utility import getContext
 
 @dajaxice_register(method='GET')
 def news_turn_page(request, news_page, news_search):
-    news_page = (news_page.isdigit() and int(news_page)) or 1
+    try:
+        news_page = int(news_page)
+    except:
+        news_page = 1
     news_list = (news_search and \
                      News.objects.filter(news_title__icontains=news_search)) \
                      or News.objects.order_by('-news_date')
@@ -23,7 +26,10 @@ def news_turn_page(request, news_page, news_search):
 
 @dajaxice_register(method='GET')
 def docs_turn_page(request, docs_page, docs_search):
-    docs_page = (docs_page.isdigit() and int(docs_page)) or 1
+    try:
+        docs_page = int(docs_page)
+    except:
+        docs_page = 1
     docs_list = (docs_search and \
                      News.objects.filter(news_document__icontains=docs_search)) \
                      or News.objects.exclude(news_document=u'')

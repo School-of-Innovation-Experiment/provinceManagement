@@ -30,7 +30,7 @@ def convert2media_url(raw_url):
     """
     return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
 
-def getContext(contentList, page=1, name="context", page_eles=PAGE_ELEMENTS):
+def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
     """
     分页：
     contenList:分页内容,集合类型
@@ -39,7 +39,7 @@ def getContext(contentList, page=1, name="context", page_eles=PAGE_ELEMENTS):
         #{name}_page:Page对象,默认"context_page"
         #{name}_list:第page页元素集合,默认"context_list"
     """
-    paginator = Paginator(contentList, page_eles)
+    paginator = Paginator(contentList, page_elems)
     try:
         _page = paginator.page(page)
     except PageNotAnInteger:

@@ -103,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware', 
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'school',
     'adminStaff',
     'news',
+    'showtime',
     #Add-on
     'debug_toolbar',
     #'tinymce',
@@ -277,5 +278,5 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 
 #Fixtures
 FIXTURE_DIRS = (
-    '/const/fixtures/',        
+    '/const/fixtures/',
 )
