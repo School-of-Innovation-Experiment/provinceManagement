@@ -55,16 +55,33 @@ div.submit-btn{
 
 }
 
+label.school-display{
+  width: 300px;
+  font-size: 18px;
+}
+
 input.school-display{
   margin-left:0px;
   padding-left:0px;
-  width:200px;
+  width:292px;
+  text-align: center;
 }
 select.school-display{
   margin-left:0px;
-  padding-left:0px;
-  width:208px;
+  width:300px;
+  margin-top:10px;
+  padding-left:90px;
 }
+hr.school-display{
+  height: 2px;
+  width: 300px;
+}
+
+div.school-display{
+  width:250px;
+  margin: 0px;
+}
+
 #grid-elements{
   display: inline;
 }
