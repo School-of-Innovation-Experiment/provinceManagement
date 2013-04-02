@@ -43,6 +43,7 @@ About the decorators sequence, it will impact the the function squeneces,
 the top will be called first!
 """
 
+
 @csrf.csrf_protect
 @login_required
 @authority_required(EXPERT_USER)
