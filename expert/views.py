@@ -25,12 +25,9 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import UploadedFiles
-from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
-
+from school.models import *
+from adminStaff.models import *
+from users.models import *
 from const.models import *
 from const import *
 
@@ -51,7 +48,12 @@ def home_view(request):
     """
     expert home management page
     """
-    data = {}
+    expert = get_object_or_404(ExpertProfile, userid=request.user)
+    re_project = Re_Project_Expert.objects.filter(expert=expert)
+
+    loginfo(p=re_project, label="EXPERT HOME")
+
+    data = {'current_list': re_project}
     return render(request, 'expert/home.html', data)
 
 

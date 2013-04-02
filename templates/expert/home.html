@@ -23,13 +23,19 @@
     <tbody>
       {%for item in current_list%}
       <tr>
-        <td>{{item.title}}</td>
-        <td>{{item.project_category}}</td>
-        <td>{{item.school}}</td>
-        <td>未评审</td>
-        <td>0</td>
+        <td>{{item.project.title}}</td>
+        <td>{{item.project.project_category}}</td>
+        <td>{{item.project.school}}</td>
         <td>
-          <span><a href="{% url expert.views.review_report_view item.project_id%}" class='btn btn-primary'>审阅</a></span>
+          {%if item.scores == 0 or item.comments %}
+            未审核
+          {%else%}
+            已评审
+          {%endif%}
+        </td>
+        <td>{{item.scores}}</td>
+        <td>
+          <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
         </td>
       </tr>
       {%endfor%}
