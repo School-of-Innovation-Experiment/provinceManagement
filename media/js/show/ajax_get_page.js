@@ -1,45 +1,59 @@
-var from;
+var page;
 var stop;
 var mode;
 var scroll_lock;
 
 function init() {
-  from = 0;
+  page = 0;
   stop = false;
   mode = 'normal';
   scroll_lock = false;
   $('div#load-entry-tip').hide();
 
-  $('div#container').masonry('destroy').html('').masonry({
+  $('div#flow_container').masonry('destroy').html('').masonry({
     itemSelector: '.box',
     columnWidth : 326
   });
-  append_entries();
+  Dajaxice.showtime.project_turn_page(append_entries, {"project_page": page, "project_search": ""});
 };
 
-function append_entries(date) {
-  $('#load-entry-tip').hide();
-  if (data.length == 0) {
+function append_entries(html) {
+  $('#loading-entry-tip').hide();
+  if (html.length == 0) {
     stop = true;
-    $('#load-entry-tip').html('已是全部内容');
-    $('#load-entry-tip').show();
     return;
   }
-  $('div#container').append(html).masonry('appended', dboxes);
+  var $boxes = $(html.html);
+  $('div#flow_container').append($boxes).masonry('appended', $boxes);
   scroll_lock = false;
-  from = from + 1;
+  page = page + 1;
+  if($('#load-over-entry-tip'))
+    {
+      stop = true;
+    }
 };
 
 $(function(){
   init();
   $(window).bind("scroll",function(){
     if (mode != 'normal') return;
+    if (stop) return;
+    if (scroll_lock) return;
     if( $(document).scrollTop() + $(window).height() > $(document).height() - 10 ) {
-      if (stop) return;
-      if (scroll_lock) return;
       scroll_lock = true;
-      append_entries();
+      $('#loading-entry-tip').show();
+      Dajaxice.showtime.project_turn_page(append_entries, {"project_page": page, "project_search": ""});
     }
+  });
+  var $main= $('#flow_container');
+  $main.masonry({
+    itemSelector : '.box', //子类元素选择器
+    isAnimated:true, //使用jquery的布局变化，是否启用动画效果
+    animationOptions:{
+      queue: false, duration: 500
+    },
+    isResizableL:false,// 是否可调整大小
+    isRTL : false//使用从右到左的布局
   });
 });
 
