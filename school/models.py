@@ -64,12 +64,16 @@ class ProjectSingle(models.Model):
 
     def __unicode__(self):
         return self.title
-
+class Project_Is_Assigned(models.Model):
+    insitute = models.ForeignKey(InsituteCategory,
+                                blank=True, null=True, default=None
+                                )
+    is_assigned = models.BooleanField(default=False)
 class Re_Project_Expert(models.Model):
     project  = models.ForeignKey(ProjectSingle)
     expert   = models.ForeignKey(ExpertProfile)
-    comments = models.TextField(blank=False, verbose_name="评价")
-    scores = models.IntegerField(blank=False, verbose_name="评分百分制")
+    comments = models.TextField(blank=True, verbose_name="评价")
+    scores = models.IntegerField(blank=False, verbose_name="评分百分制",default=0)
 
 class PreSubmit(models.Model):
     """
