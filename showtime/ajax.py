@@ -24,7 +24,7 @@ def project_turn_page(request, project_page, project_search):
             Q(file_obj__iendswith="png") )
         project.img = (imgs.count() and convert2media_url(imgs[0].file_obj.url)) or \
             DEFAULT_IMG_URL
-    context = getContext(project_list, project_page, 'project')
+    context = getContext(project_list, project_page, 'project', 8)
     html = render_to_string('introduction/ajax/_show_list.html',
                             context,
                             context_instance=RequestContext(request))

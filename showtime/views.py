@@ -10,7 +10,7 @@ from const import PROJECT_GRADE_CHOICES, GRADE_NATION, DEFAULT_IMG_URL
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 def show_index(request):
     # nation_project = ProjectGrade.objects.get(grade=GRADE_NATION)
-    project_list = ProjectSingle.objects.all()[:5]
+    project_list = ProjectSingle.objects.all()[:8]
     #filter( \project_grade=nation_project)
     for project in project_list:
         imgs = project.uploadedfiles_set.filter( \
