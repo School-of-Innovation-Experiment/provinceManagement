@@ -1,22 +1,47 @@
-<!--Project Basic Infomation-->
-<div >
-  <div class="page-header">
-    <h3>基本信息</h3>  
-  </div>
-  <blockquote>
-  	<form class="form-horizontal">
-  	<fieldset>
-    <div class="control-group">
-    	<label class="control-label">项目名称</label>
-    	<div class="controls">
-    	<input class="input-small flexiblestyle" type="TEXT" >
-    	</div>
-    </div>
-    <div class="control-group">
-    	<label class="control-label">项目分类</label>
-    	<select class="span2" style="margin-left:10px"><option>创新实践</option><option>创业实践</option></select>
-    </div>
-  </fieldset>
-  </form>
-  </blockquote>
-</div>
+    <!--Project Basic Infomation-->
+    <!--Basic Infomation-->
+    <div class="page-header">
+      <h3>基本信息</h3>  
+    </div> 
+    <div>
+      <div>
+        <label>{{info.title.label}}</label>
+        {{info.title}}
+        <span class="form-errors help-inline">{{info.title.errors}}</span>  
+      </div><!--end title-->
+      <div>
+        <label style="margin-bottom:15px;">项目类型</label>
+        {{info.project_category}}
+        <span class="form-errors help-inline">{{info.project_category.errors}}</span>  
+      </div><!--end project category-->
+      <div>
+        <label>{{info.inspector.label}}</label>
+        {{info.inspector}}
+        <span class="form-errors help-inline">{{info.inspector.errors}}</span>  
+      </div><!--end inspector-->
+      <div>
+        <label>{{info.telephone.label}}</label>
+        {{info.telephone}}
+        <span class="form-errors help-inline">{{info.telephone.errors}}</span>  
+      </div><!--end telephone-->
+      <div>
+        <label>{{info.email.label}}</label>
+        {{info.email}}
+        <span class="form-errors help-inline">{{info.email.errors}}</span>  
+      </div><!--end email-->
+      <div>
+        <label>{{info.im.label}}</label>
+        {{info.im}}
+        <span class="form-errors help-inline">{{info.im.errors}}</span>  
+      </div><!--end email-->
+      <div>
+        <label>{{info.insitute.label}}</label>
+        {{info.insitute}}
+        <span class="form-errors help-inline">{{info.insitute.errors}}</span>  
+      </div><!--end insitute-->
+      <div>
+        <label>{{info.members.label}}</label>
+        {{info.members}}
+        <span class="form-errors help-inline">{{info.members.errors}}</span>  
+      </div><!--end members-->
+    </div><!--Info Form-->
