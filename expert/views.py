@@ -63,4 +63,4 @@ def review_report_view(request, pid=None):
     expert home management page
     """
     data = {}
-    return render(request, 'expert/profile.html', data)
+    return render(request, 'expert/review.html', data)

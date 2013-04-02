@@ -4,7 +4,7 @@
 {%block report-content%}
   <form method="post" action={% url school.views.application_report_view pid%}>
     {% csrf_token %}
-    <!--Application Infomation-->
+    <!--Basic Infomation-->
     {% include "school/widgets/project_infoform.html" %}
     <!--Application Infomation-->
     {% include "school/widgets/application.html" %}
