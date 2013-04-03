@@ -7,6 +7,29 @@
 
 <div class="flow-style">
   <!--header-->
+	<div class="well form-inline">
+		<form action="#" method="get">
+			<select id="school-search-input">
+				<option selected="true">学校名</option>
+				{% for school in schools %}
+					<option>{{ school }}</option>
+				{% endfor %}
+			</select> 
+			<select id="year-search-input">
+				<option selected="true">年份</option>
+				<option>2011</option>
+				<option>2012</option>
+				<option>2013</option>
+			</select>
+			<select id="grade-search-input">
+				<option selected="true">等级</option>
+				{% for grade in grades %}
+					<option>{{ grade }}</option>
+				{% endfor %}
+			</select>
+			<botton id="search-submit"  class="btn btn-primary">检索</input>
+		</form>
+	</div>
   <div class="clearfix" id="flow_container">
   {% include "introduction/ajax/_show_list.html" %}
   </div>
