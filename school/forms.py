@@ -55,7 +55,11 @@ class ApplicationReportForm(ModelForm):
         exclude = ('project_id', 'content_id', )
 
         #TODO: add css into widgets
-        widgets = {"background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+        widgets = {
+                   "original" :forms.Textarea(attrs={'rows': 2, 'cols': 100,
+                                                       'placeholder': '学生自选，学生的积累和兴趣   学生自选，教师的科研项目   教师帮选，教师的科研项目',
+                                                       'class': "fill-form"}),
+                   "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
                                                        'class': "fill-form"}),
                    "key_notes": forms.Textarea(attrs={'rows': 8, 'cols': 100,
