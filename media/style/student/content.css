@@ -79,7 +79,9 @@ hr.school-display{
 
 div.school-display{
   width:250px;
-  margin: 0px;
+  margin-top: 10px;
+  margin-left: 0px;
+  font-size: 16px;
 }
 
 #grid-elements{

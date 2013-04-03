@@ -5,14 +5,27 @@
     </div>
     <blockquote>
       <fieldset>
-        <legend>指导教师推荐语</legend>
-        {{application.inspector_comments}} 
-        <span class="form-errors help-inline">{{application.inspector_comments.errors}}</span>  
+        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+          <legend>指导教师推荐语</legend>
+          {{application.inspector_comments}} 
+          {% if application.inspector_comments.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.inspector_comments.errors }}
+          </div>
+          {% endif %}
+        </div>
       </fieldset>
       <fieldset>
-        <legend>学校推荐语</legend>
-        {{application.school_comments}} 
-        <span class="form-errors help-inline">{{application.school_comments.errors}}</span>  
+        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+          <legend>学校推荐语</legend>
+          {{application.school_comments}} 
+          {% if application.school_comments.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.school_comments.errors }}
+          </div>
+          {% endif %}
+        </div>
       </fieldset> 
-
     </blockquote>
