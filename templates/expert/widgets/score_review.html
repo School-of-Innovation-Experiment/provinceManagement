@@ -1,4 +1,4 @@
-<form method="post" id="expert-sco-adv" action="/expert/">
+<form method="post"  action={% url expert.views.review_report_view pid%}>
   {% csrf_token %}
   <div class="row">
     <div class="span4">
@@ -19,7 +19,7 @@
               创新性
             </td>
             <td>
-              <input type="text" class="input-small" placeholder="0-100分"/>
+              {{review.score_innovation}}
               <span>分</span>
             </td>
           </tr>
@@ -28,7 +28,7 @@
               实用性
             </td>
             <td>
-              <input type="text" class="input-small" placeholder="0-100分"/>
+              {{review.score_practice}}
               <span>分</span>
             </td>
           </tr>
@@ -37,7 +37,7 @@
               趣味性
             </td>
             <td>
-              <input type="text" class="input-small" placeholder="0-100分"/>
+              {{review.score_funny}}
               <span>分</span>
             </td>
           </tr>
@@ -61,7 +61,7 @@
         <small>就项目给出一些意见和建议</small>
       </h4>
     </legend>
-    <textarea name="exp-adv" id="expert-advice" rows="6" class="fill-form" placeholder="给这个项目提点意见或建议吧。。。"></textarea>
+    {{review.comments}}
   </fieldset>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">提交</button>

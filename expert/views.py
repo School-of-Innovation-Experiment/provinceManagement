@@ -30,6 +30,8 @@ from adminStaff.models import *
 from users.models import *
 from const.models import *
 from const import *
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+from expert.forms import *
 
 from school.utility import *
 from backend.logging import logger, loginfo
@@ -64,5 +66,27 @@ def review_report_view(request, pid=None):
     """
     expert home management page
     """
-    data = {}
+    expert = get_object_or_404(ExpertProfile, userid=request.user)
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    re_project = Re_Project_Expert.objects.get(expert=expert,
+                                               project=project)
+    application = get_object_or_404(PreSubmit, project_id=pid)
+
+    info_form = InfoForm(instance=re_project.project)
+    application_form = ApplicationReportForm(instance=application)
+
+    if request.method == "POST":
+        review_form = ReviewForm(request.POST, instance=re_project)
+        if review_form.is_valid():
+            review_form.save()
+            return HttpResponseRedirect(reverse('expert.views.home_view'))
+    else:
+        review_form = ReviewForm(instance=re_project)
+
+    data = {"pid": pid,
+            "info": info_form,
+            "application": application_form,
+            "review": review_form,
+            }
+
     return render(request, 'expert/review.html', data)

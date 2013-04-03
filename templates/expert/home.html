@@ -27,13 +27,13 @@
         <td>{{item.project.project_category}}</td>
         <td>{{item.project.school}}</td>
         <td>
-          {%if item.scores == 0 or item.comments %}
+          {%if item.score_funny == 0.0 or item.comments == None or item.score_innovation == 0.0 or item.score_practice == 0.0 %}
             未审核
           {%else%}
             已评审
           {%endif%}
         </td>
-        <td>{{item.scores}}</td>
+        <td>{{item.score_funny}} {{item.score_innovation}} {{item.score_practice}} </td>
         <td>
           <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
         </td>
