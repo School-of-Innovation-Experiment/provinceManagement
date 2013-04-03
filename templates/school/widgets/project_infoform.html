@@ -3,45 +3,98 @@
     <div class="page-header">
       <h3>基本信息</h3>  
     </div> 
-    <div>
-      <div>
-        <label>{{info.title.label}}</label>
-        {{info.title}}
-        <span class="form-errors help-inline">{{info.title.errors}}</span>  
-      </div><!--end title-->
-      <div>
-        <label style="margin-bottom:15px;">项目类型</label>
-        {{info.project_category}}
-        <span class="form-errors help-inline">{{info.project_category.errors}}</span>  
-      </div><!--end project category-->
-      <div>
-        <label>{{info.inspector.label}}</label>
-        {{info.inspector}}
-        <span class="form-errors help-inline">{{info.inspector.errors}}</span>  
-      </div><!--end inspector-->
-      <div>
-        <label>{{info.telephone.label}}</label>
-        {{info.telephone}}
-        <span class="form-errors help-inline">{{info.telephone.errors}}</span>  
-      </div><!--end telephone-->
-      <div>
-        <label>{{info.email.label}}</label>
-        {{info.email}}
-        <span class="form-errors help-inline">{{info.email.errors}}</span>  
-      </div><!--end email-->
-      <div>
-        <label>{{info.im.label}}</label>
-        {{info.im}}
-        <span class="form-errors help-inline">{{info.im.errors}}</span>  
-      </div><!--end email-->
-      <div>
-        <label>{{info.insitute.label}}</label>
-        {{info.insitute}}
-        <span class="form-errors help-inline">{{info.insitute.errors}}</span>  
-      </div><!--end insitute-->
-      <div>
-        <label>{{info.members.label}}</label>
-        {{info.members}}
-        <span class="form-errors help-inline">{{info.members.errors}}</span>  
-      </div><!--end members-->
+    <div class="row-fluid show-grid">
+      <div class="span4">
+            <div class="control-group {% if info.title.errors %}error{% endif %}">
+              <label class="school-display"><i class="icon-book"></i>{{info.title.label}}</span></label>
+              {{info.title}}
+              {% if info.title.errors %}
+              <div class="row alert alert-error school-display">
+                <button class="close" data-dismiss="alert">×</button>
+                {{ info.title.errors }}
+              </div>
+              {% endif %}
+            </div>        
+        <hr class="school-display"/>
+        <div class="control-group {% if info.members.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-user"></i>{{info.members.label}}</span></label>
+          {{info.members}}
+          {% if info.members.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+              {{ info.members.errors }}
+            </div>
+            {% endif %}
+        </div><!--end members-->
+        <hr class="school-display"/>
+        <div class="control-group {% if info.inspector.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-user"></i>{{info.inspector.label}}</span></label>
+          {{info.inspector}}
+          {% if info.inspector.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.inspector.errors }}
+          </div>
+          {% endif %} 
+        </div><!--end inspector-->
+      </div>
+      <div class="span4">
+        <div class="control-group {% if info.telephone.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-road"></i>{{info.telephone.label}}</span></label>
+          {{info.telephone}}
+          {% if info.telephone.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.telephone.errors }}
+          </div>
+          {% endif %}  
+        </div><!--end telephone-->
+        <hr class="school-display"/>
+        <div class="control-group {% if info.email.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-envelope"></i>{{info.email.label}}</span></label>
+          {{info.email}}
+          {% if info.email.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.email.errors }}
+          </div>
+          {% endif %}
+        </div><!--end email-->
+        <hr class="school-display"/>
+        <div class="control-group {% if info.im.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</span></label>
+          {{info.im}}
+          {% if info.im.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.im.errors }}
+          </div>
+          {% endif %}
+        </div><!--end im-->
+      </div>
+      <div class="span4">
+        <div class="control-group {% if info.info.project_category.errors.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-book"></i>{{info.insitute.label}}</span></label>
+          {{info.insitute}}
+          {% if info.insitute.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.insitute.errors }}
+          </div>
+          {% endif %}
+        </div><!--end insitute-->
+        <hr class="school-display"/>
+        <div class="control-group {% if info.project_category.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-th-large"></i>项目类型</span></label>
+          {{info.project_category}}
+          {% if info.project_category.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.project_category.errors }}
+          </div>
+          {% endif %}
+        </div><!--end project category-->
+        <div>
+        </div>
+      </div>
     </div><!--Info Form-->
