@@ -14,18 +14,19 @@ def project_turn_page(request, project_page, project_search):
     try:
         project_page = int(project_page)
     except:
-        project_page = 1
+        project_page = 0
     project_list = (project_search and \
                      ProjectSingle.objects.filter(title__icontains=project_search)) \
                      or ProjectSingle.objects.all()
-    for project in project_list:
+    context = getContext(project_list, project_page, 'project', 8)
+    for project in context["project_list"]:
         imgs = project.uploadedfiles_set.filter( \
             Q(file_obj__iendswith="jpg") | \
             Q(file_obj__iendswith="png") )
         project.img = (imgs.count() and convert2media_url(imgs[0].file_obj.url)) or \
             DEFAULT_IMG_URL
-    context = getContext(project_list, project_page, 'project', 8)
+
     html = render_to_string('introduction/ajax/_show_list.html',
-                            context,
-                            context_instance=RequestContext(request))
+                            context,)
+                            # context_instance=RequestContext(request))
     return simplejson.dumps({'html':html})

@@ -19,4 +19,7 @@ urlpatterns = patterns('',
                            showtime_views.show_index,
                            # direct_to_template, {'template': 'showtime/showtime.html'}
                            ),
+                       # url(r'projectlist/$',
+                       #     showtime_views.turn_page,
+                       #     ),
                        )

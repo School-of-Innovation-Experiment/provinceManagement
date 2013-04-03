@@ -42,7 +42,8 @@ def check_auth(user=None, authority=None):
                 authorities
             Out:True or False
     """
-    if user is None or authority is None:
+    loginfo(p=user, label="check auth")
+    if user is None or authority is None or user.is_anonymous() is True:
         return False
 
     auth_list = user.identities.all()
