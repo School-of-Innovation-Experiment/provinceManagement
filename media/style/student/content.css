@@ -15,12 +15,6 @@ div.oneline{
   margin-top:10px;
 }
 
-div.oneline > p,a,address
-{
-  display: inline-block;
-  margin-left: 20px;
-}
-
 div.oneline-packed{
   display: inline-block;
   margin-left: 5px;
