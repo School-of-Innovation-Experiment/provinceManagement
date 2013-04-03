@@ -15,6 +15,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from const.models import *
+from backend.utility import *
 from users.models import ExpertProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
@@ -28,7 +29,7 @@ class ProjectSingle(models.Model):
     Every single projects, include basic infomation, it is the base table.
     """
     project_id = models.CharField(max_length=50, primary_key=True,
-                                  default=str(uuid.uuid4),
+                                  default=make_uuid,
                                   verbose_name="题目唯一ID")
 
     title = models.CharField(max_length=400, blank=False,
@@ -83,8 +84,8 @@ class Re_Project_Expert(models.Model):
         #Here, we use together unique key, otherwise the one project will be
         #reviewed by one expert twice!
         unique_together=(('project', 'expert'), )
-        verbose_name = "项目审核"
-        verbose_name_plural = "项目审核"
+        verbose_name = "项目审核分配"
+        verbose_name_plural = "项目审核分配"
 
     def __unicode__(self):
         return "%s %s" % (self.project, self.expert)

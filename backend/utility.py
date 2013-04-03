@@ -6,6 +6,7 @@ Created on 2013-03-27
 
 Desc: some tool code snniper
 '''
+import uuid
 from settings import STATIC_URL, MEDIA_URL
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from const.__init__ import PAGE_ELEMENTS
@@ -53,3 +54,9 @@ def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
         _list[_index].list_index = _index + 1 # .__dict__.update(dict)
     return {'%s_page' % name: _page,
             '%s_list' % name: _list}
+
+def make_uuid():
+    """
+    make uuid
+    """
+    return str(uuid.uuid4())

@@ -277,6 +277,6 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 
 #Fixtures
-FIXTURE_DIRS = (
-    '/const/fixtures/',
-)
+#FIXTURE_DIRS = (
+#    '/const/fixtures/',
+#)

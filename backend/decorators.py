@@ -68,7 +68,7 @@ class authority_required(object):
     def __init__(self, *args):
         self.auth = args
 
-    def check_auth(self, request):
+    def check_auth_op(self, request):
         """
         check auth, only pass is the whole pass,
         self.auth is a tuple
@@ -84,7 +84,7 @@ class authority_required(object):
 
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
-            is_passed = self.check_auth(request)
+            is_passed = self.check_auth_op(request)
             if is_passed:
                 response = method(request, *args, **kwargs)
                 return response
@@ -102,11 +102,13 @@ class only_user_required(object):
     def __init__(self, method):
         self.method = method
 
-    def check_auth(self, pid, request):
+    def check_auth_op(self, pid, request):
         if pid is None:
             return False
 
         user = ProjectSingle.objects.get(project_id=pid).adminuser
+        loginfo(user)
+        loginfo(pid)
         if user is request.user or request.user.is_superuser:
             return True
         else:
@@ -114,7 +116,7 @@ class only_user_required(object):
 
     def __call__(self, request, *args, **kwargs):
         pid = kwargs.get("pid", None)
-        is_passed = self.check_auth(pid, request)
+        is_passed = self.check_auth_op(pid, request)
         if is_passed:
             response = self.method(request, *args, **kwargs)
             return response
