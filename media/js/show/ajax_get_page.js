@@ -1,59 +1,33 @@
-var page;
-var stop;
-var mode;
-var scroll_lock;
-
-function init() {
-  page = 0;
-  stop = false;
-  mode = 'normal';
-  scroll_lock = false;
-  $('div#load-entry-tip').hide();
-
-  // $('div#flow_container').masonry('destroy').html('').masonry({
-  //   itemSelector: '.box',
-  //   columnWidth : 326
-  // });
-  Dajaxice.showtime.project_turn_page(append_entries, {"project_page": page, "project_search": ""});
-};
-
-function append_entries(html) {
-  $('#loading-entry-tip').hide();
-  if (html.length == 0) {
-    stop = true;
-    return;
-  }
-  var $boxes = $(html.html);
-  $('div#flow_container').append($boxes).masonry('appended', $boxes);
-  scroll_lock = false;
-  page = page + 1;
-  // if($('#load-over-entry-tip'))
-  //   {
-  //     stop = true;
-  //   }
-};
-
 $(function(){
-  init();
-  $(window).bind("scroll",function(){
-    if (mode != 'normal') return;
-    if (stop) return;
-    if (scroll_lock) return;
-    if( $(document).scrollTop() + $(window).height() > $(document).height() - 10 ) {
-      scroll_lock = true;
-      $('#loading-entry-tip').show();
-      Dajaxice.showtime.project_turn_page(append_entries, {"project_page": page, "project_search": ""});
-    }
+  var $container = $('#flow_container');
+  $container.imagesLoaded(function(){
+    $container.masonry({
+      itemSelector: '.box',
+      isAnimatedFromBottom:true,
+      columnWidth: 100
+    });
   });
-  var $main= $('#flow_container');
-  $main.masonry({
-    itemSelector : '.box', //子类元素选择器
-    isAnimated:true, //使用jquery的布局变化，是否启用动画效果
-    animationOptions:{
-      queue: false, duration: 500
-    },
-    isResizableL:false,// 是否可调整大小
-    isRTL : false//使用从右到左的布局
+  $container.infinitescroll({
+    navSelector  : 'div#page-nav',    // selector for the paged navigation
+    nextSelector : 'div#page-nav a',  // selector for the NEXT link (to page 2)
+    itemSelector : '.box',     // selector for all items you'll retrieve
+    animate: true,
+    loading: {
+      msgText: "<em>正在载入...</em>",
+      finishedMsg: '已是全部内容',
+      // img: 'http://i.imgur.com/6RMhx.gif'
+      img: '/static/images/loading-black.gif'
+    } // trigger Masonry as a callback
+  }, function( newElements ) {
+    // hide new items while they are loading
+    var $newElems = $( newElements ).css({ opacity: 0 });
+    // ensure that images load before adding to masonry layout
+    // $("#page-nav").html($(newElements).find("#page-nav").html());
+    $newElems.imagesLoaded(function(){
+      // show elems now they're ready
+      $newElems.animate({ opacity: 1 });
+      $container.masonry( 'appended', $newElems, true );
+      // $container.masonry('reload');
+    });
   });
 });
-

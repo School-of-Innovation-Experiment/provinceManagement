@@ -165,7 +165,7 @@ class UploadedFiles(models.Model):
     content files upload, which include images, and pdf
     """
     file_id = models.CharField(max_length=50,
-                               primary_key=True, default=str(uuid.uuid4()),
+                               primary_key=True, default=lambda:str(uuid.uuid4()),
                                verbose_name="文件上传唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,

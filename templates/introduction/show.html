@@ -1,21 +1,22 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-
+<!-- index style -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
 <!-- index style -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/masonry.css" >
 
 <div class="flow-style">
   <!--header-->
-  <div class="clearfix" id="flow_container">
   {% include "introduction/ajax/_show_list.html" %}
-  </div>
-  <div class="navbar-fixed-bottom alert alert-info" style="text-align: center; display: none;" id="loading-entry-tip">
-  正在载入...
-  </div>
 </div>
 {% endblock %}
+{% block home-footer %}
+    {% endblock %}
 {% block bottom_js %}
   {{ block.super }}
+  <script type="text/javascript" src="{{STATIC_URL}}/js/infinitescroll/jquery.infinitescroll.min.js"></script>
   <script type="text/javascript" src="{{STATIC_URL}}/js/show/ajax_get_page.js"></script>
 {% endblock %}
