@@ -86,6 +86,7 @@ class authority_required(object):
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
             is_passed = self.check_auth_op(request)
+            loginfo(p=is_passed, label="authority_required decorator")
             if is_passed:
                 response = method(request, *args, **kwargs)
                 return response
@@ -109,7 +110,6 @@ class only_user_required(object):
 
         user = ProjectSingle.objects.get(project_id=pid).adminuser
         loginfo(user)
-        loginfo(pid)
         if user is request.user or request.user.is_superuser:
             return True
         else:
@@ -118,6 +118,7 @@ class only_user_required(object):
     def __call__(self, request, *args, **kwargs):
         pid = kwargs.get("pid", None)
         is_passed = self.check_auth_op(pid, request)
+        loginfo(p=is_passed, label="only_user_required decorator")
         if is_passed:
             response = self.method(request, *args, **kwargs)
             return response
@@ -176,7 +177,7 @@ class time_controller(object):
             loginfo(kwargs)
             pid = kwargs.get("pid", None)
             is_expired = not self.check_day(pid)
-            loginfo(p=is_expired, label="time decorator")
+            loginfo(p=is_expired, label="time_controller decorator")
 
             #Here, we should use history view strategy to replace forbidden
             kwargs["is_expired"] = is_expired
