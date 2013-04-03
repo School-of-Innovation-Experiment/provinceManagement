@@ -1,15 +1,34 @@
-<!--titile user information bar-->
-
+<!--User Infomation Basic Bar-->
 <div class="container">
-	<div class="btn-group pull-right">
-		<a href="/history" rel="tooltip" class="btn btn-info"><i class="icon-star"></i>Total</a>
-		<a href="/history" class="user-count">30<a>
-	</div>
-	<div class="btn-group">
-		<a href="/settings/profile" class="user-info">{{request.user.username}}</a>
-		<a href="/settings/profile" class="label label-important user-info-label">VIP</a>
-		<a href="/settings/profile" class="label user-info-label">Level 1</a>
-	</div>
-</div>
-
- 
+  <!--TODO: Add more authorities choice-->
+  <div class="pull-right">
+    {%if is_schooler %}
+      <a type="button" class="btn btn-primary"  href="/expert/" >参赛学校</a>
+    {%endif%}
+    {%if is_adminstaff %}
+      <a type="button" class="btn btn-success"  href="/expert/" >省级管理员</a>
+    {%endif%}
+    {%if is_experter %}
+      <a type="button" class="btn btn-info"  href="/expert/" >评审专家</a>
+    {%endif%}
+    {%if request.user.is_superuser%}
+      <a type="button" class="btn btn-danger"  href="/admin/" >超级用户</a>
+    {%endif%}
+  </div><!--Right choice Bar-->
+  <div class="pull-left">
+    <a href="/settings/profile" class="user-info">{{request.user.username}}</a>
+    {%if is_schooler %}
+		  <a href="/school" class="label label-success user-info-label">大连理工大学</a>
+    {%endif%}
+    {%if is_adminstaff %}
+		  <a href="/school" class="label label-info user-info-label">职务</a>
+    {%endif%}
+    {%if is_experter %}
+		  <a href="/school" class="label label-important user-info-label">评审专业</a>
+    {%endif%}
+    {%if request.user.is_superuser%}
+		  <a href="/school" class="label label-warning user-info-label">VIP</a>
+    {%endif%}
+  </div>
+</div><!--end container-->
+<br/>
