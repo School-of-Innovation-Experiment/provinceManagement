@@ -10,10 +10,10 @@ function init() {
   scroll_lock = false;
   $('div#load-entry-tip').hide();
 
-  $('div#flow_container').masonry('destroy').html('').masonry({
-    itemSelector: '.box',
-    columnWidth : 326
-  });
+  // $('div#flow_container').masonry('destroy').html('').masonry({
+  //   itemSelector: '.box',
+  //   columnWidth : 326
+  // });
   Dajaxice.showtime.project_turn_page(append_entries, {"project_page": page, "project_search": ""});
 };
 
@@ -27,10 +27,10 @@ function append_entries(html) {
   $('div#flow_container').append($boxes).masonry('appended', $boxes);
   scroll_lock = false;
   page = page + 1;
-  if($('#load-over-entry-tip'))
-    {
-      stop = true;
-    }
+  // if($('#load-over-entry-tip'))
+  //   {
+  //     stop = true;
+  //   }
 };
 
 $(function(){
