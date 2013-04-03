@@ -121,7 +121,7 @@ class only_user_required(object):
             response = self.method(request, *args, **kwargs)
             return response
         else:
-            return HttpResponseRedirect(reverse('school.views.non_authority_view'))
+            return HttpResponseRedirect(reverse('school.views.home_view'))
 
 
 class time_controller(object):

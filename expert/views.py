@@ -66,10 +66,10 @@ def review_report_view(request, pid=None):
     """
     expert home management page
     """
+    # get or check authorities 
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    re_project = Re_Project_Expert.objects.get(expert=expert,
-                                               project=project)
+    re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
     application = get_object_or_404(PreSubmit, project_id=pid)
 
     info_form = InfoForm(instance=re_project.project)
