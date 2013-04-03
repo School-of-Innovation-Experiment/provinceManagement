@@ -8,6 +8,8 @@
 from django.conf import settings
 from backend.decorators import check_auth
 from const import *
+from users.models import *
+
 
 all_required = ('WEB_TITLE',)
 
@@ -37,10 +39,13 @@ def userauth_settings(request):
 
     if check_auth(user=request.user, authority=SCHOOL_USER):
         userauth["is_schooler"] = True
+        userauth["school"] = SchoolProfile.objects.get(userid=request.user)
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
         userauth["is_adminstaff"] = True
+        userauth["adminstaff"] = AdminStaffProfile.objects.get(userid=request.user)
     if check_auth(user=request.user, authority=EXPERT_USER):
         userauth["is_experter"] = True
+        userauth["expert"] = ExpertProfile.objects.get(userid=request.user)
 
     context = {"userauth": userauth}
 
