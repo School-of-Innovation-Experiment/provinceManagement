@@ -32,10 +32,31 @@
             </ul>
             <br/>
             <ul>
-              {% if request.user.is_authenticated %}
-                <li>
+            {% if request.user.is_authenticated %}
+              <li>
                   <a href="settings/profile">用户信息: {{ request.user.username }}</a>
-                </li>
+              </li>
+              <li><a>角色选择</a></li>
+              {%if userauth.is_schooler %}
+              <li>
+                  <a  href={% url school.views.home_view %} >---参赛学校</a>
+              </li>
+              {%endif%}
+              {%if userauth.is_adminstaff %}
+              <li>
+                  <a href="/adminStaff/" >---省级管理员</a>
+              </li>
+              {%endif%}
+              {%if userauth.is_experter %}
+              <li>
+                  <a href={% url expert.views.home_view %} >---评审专家</a>
+              </li>
+              {%endif%}
+              {%if request.user.is_superuser%}
+              <li>
+                  <a href="/admin/"  >---超级用户</a>
+              </li>
+              {%endif%}
               <li>
                 <a href="accounts/logout">注销</a>
               </li>

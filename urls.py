@@ -9,15 +9,19 @@ from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-#from gui import views as gui_views
 from users import views as users_views
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 dajaxice_autodiscover()
 
+#display django admin page
 admin.autodiscover()
 
-handler500 = 'djangotoolbox.errorviews.server_error'
+#Custome error page
+handler500 = 'backend.errorviews.error500'
+handler403 = 'backend.errorviews.error403'
+handler404 = 'backend.errorviews.error404'
+
 
 urlpatterns = patterns('',
     url(
