@@ -9,7 +9,6 @@ from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from users import views as users_views
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 
 dajaxice_autodiscover()
@@ -59,6 +58,10 @@ urlpatterns = patterns('',
     url(
         r'^show/$',
         include('showtime.urls'),
+    ),
+    url(
+        r'^settings/',
+        include("users.urls")
     ),
 )
 

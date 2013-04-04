@@ -1,0 +1,59 @@
+{% extends "base/_settings.html" %}
+
+{% block active_profile_content %}  
+active
+{% endblock %}
+
+{% block settings_content %}
+<form method="post" action=".">
+  {% csrf_token %}
+  {%if userauth.is_schooler%}
+ 	<div class="modal modal-fixed">
+    <div class="modal-header">
+      <h3><b>参赛学校</b></h3>
+		</div>
+		<div class="modal-body">
+			<label class="settings-label">地址</label>
+      {{ school_form.address }} 
+      <span class="form-error help-inline">{{ school_form.address.errors}}</span>
+      <br/>
+    </div><!--end modal body-->
+  </div><!--end school profile modal-->
+  <br/>
+  {%endif%}
+
+  {%if userauth.is_experter%}
+ 	<div class="modal modal-fixed ">
+    <div class="modal-header">
+      <h3><b>评审专家</b></h3>
+		</div>
+		<div class="modal-body">
+			<label class="settings-label">工作</label>
+      {{ expert_form.jobs }} 
+      <span class="form-error help-inline">{{ expert_form.jobs.errors}}</span>
+      <br/>
+    </div><!--end modal body-->
+  </div><!--end expert profile modal-->
+  <br/>
+  {%endif%}
+
+  {%if userauth.is_adminstaff%}
+  <div class="modal modal-fixed ">
+    <div class="modal-header">
+      <h3><b>省级管理员</b></h3>
+		</div>
+		<div class="modal-body">
+			<label class="settings-label">职务</label>
+      {{ adminstaff_form.jobs }} 
+      <span class="form-error help-inline">{{ adminstaff_form.jobs.errors}}</span>
+      <br/>
+    </div><!--end modal body-->
+  </div><!--end adminstaff  profile modal-->
+  {%endif%}
+  
+  <br/>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">保存修改</button>
+  </div>
+</form>
+{% endblock %}

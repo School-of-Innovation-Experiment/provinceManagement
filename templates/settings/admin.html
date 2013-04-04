@@ -1,5 +1,4 @@
-
-{% extends "features/settings.html" %}
+{% extends "base/_settings.html" %}
 
 {% block active_admin_content %}  
 active
@@ -21,13 +20,13 @@ active
          {{ form.new_password }}
           <span class="form-error help-inline">{{form.new_password.errors}}</span>
     		 <br/>
-    		 <label class="settings-label">Confirm New Password</label>
+    		 <label class="settings-label">确认新密码</label>
          {{ form.new_password2 }}
           <span class="form-error help-inline">{{form.new_password2.errors}}</span>
 			 <br/>
 		  </div>
 		  <div class="modal-footer">
-			  <button type="submit" class="btn btn-primary">Update Password</button>
+			  <button type="submit" class="btn btn-primary">更新</button>
 		  </div>
     </form>
 	</div>
