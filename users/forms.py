@@ -57,11 +57,11 @@ class PasswordForm(forms.Form):
                                    max_length=255,
                                    widget=forms.PasswordInput(attrs={"class": "input-xlarge"}))
     new_password = forms.CharField(required=True,
-                                   min_length=6,
+                                   min_length=1,
                                    max_length=255,
                                    widget=forms.PasswordInput(attrs={"class": "input-xlarge"}))
     new_password2 = forms.CharField(required=True,
-                                    min_length=6,
+                                    min_length=1,
                                     max_length=255,
                                     widget=forms.PasswordInput(attrs={"class": "input-xlarge"}))
     user = None
@@ -79,7 +79,7 @@ class PasswordForm(forms.Form):
         new_password2 = self.cleaned_data.get("new_password2", "").strip()
 
         # check password from database
-        user = authenticate(username=self.user.user.username,
+        user = authenticate(username=self.user.username,
                             password=password)
 
         if user is None:
