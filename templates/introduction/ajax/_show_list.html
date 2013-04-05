@@ -24,7 +24,9 @@
 <div id="page-nav" style="display=none;">
   {% if project_page %}
     {% if project_page.has_next %}
-      <a href="?search_school={{ project.search_school }}&search_year={{ project.search_year }}&search_grade={{ project.search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
+      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
+    {% else %}
+      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page=-1">下一页</a>
     {% endif %}
   {% endif %}
 </div>

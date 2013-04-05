@@ -22,8 +22,9 @@ def show_index(request):
         project_page = int(project_page)
     except:
         project_page = 1
-
-    q1 = (search_year and Q(year=search_year)) or None
+    if project_page <= 0:
+        raise Http404
+    q1 = (search_year and Q(date__year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None
     qset = filter(lambda x: x != None, [q1, q2, q3])
@@ -43,9 +44,14 @@ def show_index(request):
         project.img = (imgs.count() and convert2media_url(imgs[0].file_obj.url)) or \
             DEFAULT_IMG_URL
 
+    yearset = set()
+    for project in ProjectSingle.objects.all():
+        yearset.add(project.date.year)
+    year_list = list(yearset)
     school_list = SchoolDict.objects.all()
     grade_list = ProjectGrade.objects.all()
 
+    context["years"] = year_list
     context["schools"] = school_list
     context["grades"] = grade_list
 

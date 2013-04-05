@@ -57,7 +57,8 @@ class ProjectSingle(models.Model):
     members = models.CharField(max_length=400, blank=False,
                                verbose_name="团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name="社交")
-    date = models.DateField(default=datetime.datetime.today, verbose_name=u"参加年份", blank = False)
+    # date = models.DateField(default=datetime.datetime.today, verbose_name=u"参加年份", blank = False)
+    year = models.IntegerField(blank=False, null=False, default=lambda: datetime.datetime.today().year)
     # year = models.CharField(max_length=10, blank=False, verbose_name="参加年份")
 
     class Meta:
