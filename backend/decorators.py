@@ -160,7 +160,7 @@ class time_controller(object):
         project = get_object_or_404(ProjectSingle, project_id=pid)
 
         #If the project year is not this year, it also means you cannot edit it
-        if project.date.year != get_current_year():
+        if project.year != get_current_year():
             return False
 
 
