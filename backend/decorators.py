@@ -149,7 +149,22 @@ class time_controller(object):
         else:
             return control[0]
 
-    def check_day(self, pid):
+    def check_year(self, pid):
+        """
+        Check year
+        """
+        #If the pid is None, it mains there is no pid imports;
+        if pid is None:
+            return True
+
+        project = get_object_or_404(ProjectSingle, project_id=pid)
+
+        #If the project year is not this year, it also means you cannot edit it
+        if project.year != get_current_year():
+            return False
+
+
+    def check_day(self, pid=None):
         """
         return True or False
         The return value represents the project whether in the established time
@@ -157,18 +172,18 @@ class time_controller(object):
             True: you can edit it!
             False: you cannot edit it!
         """
-        project = get_object_or_404(ProjectSingle, project_id=pid)
-
-        #If the pid is None, it mains the project is valid, so you cannot edit it;
-        #If the project year is not this year, it also means you cannot edit it
-        if pid is None or project.year != get_current_year():
-            return False
-
+        # check database table
         control = self.get_established_time()
         #If the database doesn't set anything, it means no time limits.
         if control is None:
+            loginfo(p="database check is None", label="time_controller checkday")
             return True
 
+        # check year
+        if self.check_year(pid) is False:
+            return False
+
+        # check day
         today = datetime.date.today()
 
         if self.phase == STATUS_PRESUBMIT:
