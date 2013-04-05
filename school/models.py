@@ -22,7 +22,7 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
-from const import YEAR_CHOICES
+# from const import YEAR_CHOICES
 import datetime
 
 class ProjectSingle(models.Model):
@@ -58,9 +58,9 @@ class ProjectSingle(models.Model):
     members = models.CharField(max_length=400, blank=False,
                                verbose_name="团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name="社交")
+    #choices=YEAR_CHOICES,
     year = models.IntegerField(blank=False, null=False, max_length=4,
-                               choices=YEAR_CHOICES, default=lambda:\
-                               datetime.datetime.today().year,
+                               default=lambda: datetime.datetime.today().year,
                                verbose_name="参加年份")
 
     class Meta:

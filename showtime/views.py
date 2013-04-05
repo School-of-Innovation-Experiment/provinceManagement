@@ -14,9 +14,9 @@ GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 def show_index(request):
     project_page = request.GET.get('project_page')
 
-    search_school = request.GET.get('search_school')
-    search_year = request.GET.get('search_year')
-    search_grade = request.GET.get('search_grade')
+    search_school = request.GET.get('search_school') or ""
+    search_year = request.GET.get('search_year') or ""
+    search_grade = request.GET.get('search_grade') or ""
 
     try:
         project_page = int(project_page)
@@ -24,7 +24,7 @@ def show_index(request):
         project_page = 1
     if project_page <= 0:
         raise Http404
-    q1 = (search_year and Q(date__year=search_year)) or None
+    q1 = (search_year and Q(year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None
     qset = filter(lambda x: x != None, [q1, q2, q3])
@@ -46,7 +46,7 @@ def show_index(request):
 
     yearset = set()
     for project in ProjectSingle.objects.all():
-        yearset.add(project.date.year)
+        yearset.add(project.year)
     year_list = list(yearset)
     school_list = SchoolDict.objects.all()
     grade_list = ProjectGrade.objects.all()
