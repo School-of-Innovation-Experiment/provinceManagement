@@ -42,17 +42,15 @@ def check_auth(user=None, authority=None):
                 authorities
             Out:True or False
     """
-    loginfo(p=user, label="check auth")
     if user is None or authority is None or user.is_anonymous() is True:
         return False
 
     auth_list = user.identities.all()
-    loginfo(auth_list)
 
     try:
         auth = UserIdentity.objects.get(identity=authority)
     except Exception, err:
-        loginfo(err)
+        loginfo(p=err, label="ERROR in check_auth function!!!")
         return False
 
     for item in auth_list:
@@ -74,10 +72,8 @@ class authority_required(object):
         check auth, only pass is the whole pass,
         self.auth is a tuple
         """
-        loginfo(p=self.auth, label="authority")
         for item in self.auth:
             is_passed = check_auth(user=request.user, authority=item)
-            loginfo(is_passed)
             if is_passed:
                 return True
 
@@ -108,14 +104,21 @@ class only_user_required(object):
         if pid is None:
             return False
 
-        user = ProjectSingle.objects.get(project_id=pid).adminuser
-        loginfo(user)
-        if user is request.user or request.user.is_superuser:
+        #ISSUE: we should check get operation!
+        try:
+            project = ProjectSingle.objects.get(project_id=pid)
+        except ProjectSingle.DoesNotExist, err:
+            loginfo(p=err,
+                    label="only_user_required -> get projectsingle")
+            project = None
+
+        if project is not None or request.user.is_superuser:
             return True
         else:
             return False
 
     def __call__(self, request, *args, **kwargs):
+        loginfo(p=kwargs, label="only_user_required args")
         pid = kwargs.get("pid", None)
         is_passed = self.check_auth_op(pid, request)
         loginfo(p=is_passed, label="only_user_required decorator")
