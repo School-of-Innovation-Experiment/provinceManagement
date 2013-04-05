@@ -79,3 +79,6 @@ PAGE_ELEMENTS = 10
 
 # Default img url while img not find
 DEFAULT_IMG_URL = ""
+
+#YEAR
+YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
