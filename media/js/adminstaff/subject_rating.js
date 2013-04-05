@@ -1,3 +1,7 @@
+var glo_project_id;
+function get_subject_id(project_id){
+	glo_project_id = project_id
+	}
 function get_review_list(project_id){
 	$("#review_table").empty()
 	var project_id = project_id
@@ -17,10 +21,10 @@ function review_list_callback(data){
 		});
 	}
 	
-function subject_grade(project_id){
+function subject_grade(){
 	var changed_grade = $('#id_subject_grade').find("option:selected").val()
 	
-	Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':project_id,"changed_grade":changed_grade});
+	Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
 	}	
 function change_grade_callback(data){
 	

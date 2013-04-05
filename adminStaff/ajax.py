@@ -16,22 +16,28 @@ from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 from school.models import Project_Is_Assigned, InsituteCategory
+from users.models import SchoolProfile
+
 @dajaxice_register
 def NumLimit(request, form):
-    #dajax = Dajax()
+    dajax = Dajax()
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
         school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
-        if ProjectPerLimits.objects.filter(school_id=school.id).count() == 0:
-            projectlimit = ProjectPerLimits(school_id=school.id,
-                                               number=limited_num)
-            projectlimit.save()
-        else:
-            object = ProjectPerLimits.objects.get(school_id=school.id)
-            object.number = limited_num
-            object.save()
-        return simplejson.dumps({'status':'1','message':u'更新成功'})
+        try:
+            school_obj = SchoolProfile.objects.get(school=school)
+            if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
+                projectlimit = ProjectPerLimits(school=school_obj,
+                                                   number=limited_num)
+                projectlimit.save()
+            else:
+                object = ProjectPerLimits.objects.get(school=school_obj)
+                object.number = limited_num
+                object.save()
+            return simplejson.dumps({'status':'1','message':u'更新成功'})
+        except SchoolProfile.DoesNotExist:
+            return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
     
@@ -127,8 +133,14 @@ def judge_is_assigned(request,insitute):
     '''
     #dajax = Dajax()
     #query database
-    insobj = InsituteCategory.objects.get(category=insitute)
-    obj = Project_Is_Assigned.objects.get(insitute = insobj)
+    try:
+        insobj = InsituteCategory.objects.get(id=insitute)
+    except InsituteCategory.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"InstituteCategory 数据不完全，请更新数据库"})
+    try:
+        obj = Project_Is_Assigned.objects.get(insitute = insobj)
+    except Project_Is_Assigned.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请更新数据库"})
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
