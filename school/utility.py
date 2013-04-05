@@ -11,6 +11,7 @@ import uuid
 import os
 import sys
 import time
+import datetime
 
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -49,7 +50,7 @@ def check_limits(user):
     except:
         limits = None
 
-    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year()).count()
+    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year).count()
     total = limits.number if limits is not None else 0
 
     return True if total > currents else False
@@ -61,7 +62,7 @@ def get_current_year():
     Arguments:
         Out: current year
     """
-    return str(time.localtime()[0])
+    return datetime.datetime.today().year
 
 
 def save_application(project=None, info_form=None, application_form=None, user=None):
@@ -259,4 +260,3 @@ def get_trend_lines(user):
                                 }
                 )
     return cht
-

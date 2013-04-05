@@ -16,10 +16,9 @@ __author__ = {"songyang":"songyang8464@foxmail.com"}
 
 urlpatterns = patterns('',
                        url(r'^$',
-                           showtime_views.show_index,
-                           # direct_to_template, {'template': 'showtime/showtime.html'}
-                           ),
-                       # url(r'projectlist/$',
-                       #     showtime_views.turn_page,
-                       #     ),
-                       )
+                       showtime_views.show_index,
+                       ),
+                       url(r'^(?P<project_id>.{36})$', 
+                       showtime_views.show_project,
+                       ),
+)

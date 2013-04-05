@@ -52,7 +52,7 @@ def home_view(request):
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
-                                                year=get_current_year())
+                                                year=get_current_year)
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
@@ -159,11 +159,11 @@ def statistics_view(request):
     """
     trend_lines = get_trend_lines(request.user)
     user=request.user
-    current_numbers=len(ProjectSingle.objects.filter(adminuser=request.user,year=get_current_year()))
+    current_numbers=len(ProjectSingle.objects.filter(adminuser=request.user,year=get_current_year))
     currentnation_numbers=get_gradecount(user,GRADE_NATION,True)
     currentprovince_numbers=get_gradecount(user,GRADE_PROVINCE,True)
 
-    history_numbers=len(ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year()))
+    history_numbers=len(ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year))
     historynation_numbers=get_gradecount(user,GRADE_NATION,False)
     historyprovince_numbers=get_gradecount(user,GRADE_PROVINCE,False)
 
@@ -234,7 +234,7 @@ def history_view(request):
     school history report list
     """
 
-    history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year())
+    history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year)
 
     data = {"history_list": history_list}
 

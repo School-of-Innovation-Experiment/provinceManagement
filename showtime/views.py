@@ -11,21 +11,43 @@ from const.models import SchoolDict, ProjectGrade
 
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 
+def show_project(request, project_id = ""):
+    project = ProjectSingle.objects.get(project_id = project_id)
+    imgs = project.uploadedfiles_set.filter(
+        Q(file_obj__iendswith="jpg") | \
+        Q(file_obj__iendswith="png")
+    )
+    presubmit = project.presubmit_set.all()
+    project.background = presubmit.count() and presubmit[0] or None
+
+    finalsubmit = project.finalsubmit_set.all()
+    finalsubmit = finalsubmit.count() and finalsubmit[0] or None
+    
+    imgs = map(lambda x: convert2media_url(x.file_obj.url), imgs)
+    
+    project.background = presubmit and presubmit.background or None
+    project.summary = finalsubmit and finalsubmit.achievement_summary or None
+    first_img = (len(imgs) and imgs[0]) or None
+    
+    context = {"project": project,
+               "imgs": imgs,
+               "first_img": first_img
+    }
+    return render(request, 'showtime/showtime.html', context)
+
 def show_index(request):
     project_page = request.GET.get('project_page')
 
-    search_school = request.GET.get('search_school')
-    search_year = request.GET.get('search_year')
-    search_grade = request.GET.get('search_grade')
-    
-    print "-" * 20
-    print search_grade, search_year, search_school
-    print "-" * 20
+    search_school = request.GET.get('search_school') or ""
+    search_year = request.GET.get('search_year') or ""
+    search_grade = request.GET.get('search_grade') or ""
+
     try:
         project_page = int(project_page)
     except:
         project_page = 1
-
+    if project_page <= 0:
+        raise Http404
     q1 = (search_year and Q(year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None
@@ -46,12 +68,16 @@ def show_index(request):
         project.img = (imgs.count() and convert2media_url(imgs[0].file_obj.url)) or \
             DEFAULT_IMG_URL
 
+    yearset = set()
+    for project in ProjectSingle.objects.all():
+        yearset.add(project.year)
+    year_list = list(yearset)
     school_list = SchoolDict.objects.all()
     grade_list = ProjectGrade.objects.all()
 
+    context["years"] = year_list
     context["schools"] = school_list
     context["grades"] = grade_list
-
     context["search_school"] = search_school
     context["search_year"] = search_year
     context["search_grade"] = search_grade

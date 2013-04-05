@@ -24,9 +24,10 @@
 			<td>{{subject.title}}</td>
 			<td>{{subject.school}}</td>
 			<td>{{subject.inspector}}</td>
-			<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list({{subject.project_id}});">察看专家评分</td>
-			<td><a data-toggle="modal" href="#grade_choice">{{subject.project_grade}}</td>
+			<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
+			<td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
 		</tr>
+	{%endfor%}
 	</tbody>
 	</table>
 	<div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
@@ -48,11 +49,11 @@
   	</div>
   	<div class="modal-footer">
     	<a class="btn" data-dismiss="modal">关闭</a>
-    	<a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade(1);">保存更新</a>
+    	<a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
   	</div>
 		</div>		
 	</div><!--end grade_choice-->
-	{%endfor%}
+
 	</div><!-- end the whole form -->
 	<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>

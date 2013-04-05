@@ -56,7 +56,7 @@ urlpatterns = patterns('',
         name="features"
     ),
     url(
-        r'^show/$',
+        r'^show/',
         include('showtime.urls'),
     ),
     url(
