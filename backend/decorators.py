@@ -49,7 +49,7 @@ def check_auth(user=None, authority=None):
 
     try:
         auth = UserIdentity.objects.get(identity=authority)
-    except Exception, err:
+    except UserIdentity.DoesNotExist, err:
         loginfo(p=err, label="ERROR in check_auth function!!!")
         return False
 
@@ -137,24 +137,38 @@ class time_controller(object):
     """
     def __init__(self, phase):
         self.phase = phase
+    
+    def get_established_time(self):
+        """
+        Get estabilshed time from database
+        """
+        control = ProjectControl.objects.all()
+        loginfo(p=control, label="get_established_time")
+        if len(control) == 0:
+            return None
+        else:
+            return control[0]
 
     def check_day(self, pid):
         """
         return True or False
+        The return value represents the project whether in the established time
+        control!
+            True: you can edit it!
+            False: you cannot edit it!
         """
-        if pid is None:
+        project = get_object_or_404(ProjectSingle, project_id=pid)
+
+        #If the pid is None, it mains the project is valid, so you cannot edit it;
+        #If the project year is not this year, it also means you cannot edit it
+        if pid is None or project.year != get_current_year():
+            return False
+
+        control = self.get_established_time()
+        #If the database doesn't set anything, it means no time limits.
+        if control is None:
             return True
 
-        year = ProjectSingle.objects.get(project_id=pid).year
-        if year != get_current_year():
-            return True
-
-        control = ProjectControl.objects.all()
-        loginfo(control)
-        if len(control) == 0:
-            return True
-
-        control = control[0]
         today = datetime.date.today()
 
         if self.phase == STATUS_PRESUBMIT:
@@ -177,10 +191,9 @@ class time_controller(object):
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
             #check time control
-            loginfo(kwargs)
             pid = kwargs.get("pid", None)
             is_expired = not self.check_day(pid)
-            loginfo(p=is_expired, label="time_controller decorator")
+            loginfo(p=is_expired, label="time_controller decorator, is_expired")
 
             #Here, we should use history view strategy to replace forbidden
             kwargs["is_expired"] = is_expired
