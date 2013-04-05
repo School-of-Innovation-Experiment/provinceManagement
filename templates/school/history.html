@@ -22,7 +22,7 @@
     <tbody>
       {%for item in history_list%}
       <tr>
-        <td>{{item.date.year}}</td>
+        <td>{{item.year}}</td>
         <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
         <td>{{item.project_category}}</td>
         <td>{{item.inspector}}</td>

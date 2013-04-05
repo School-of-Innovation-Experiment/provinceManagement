@@ -50,7 +50,7 @@ def check_limits(user):
     except:
         limits = None
 
-    currents = ProjectSingle.objects.filter(adminuser=user, date__year=get_current_year).count()
+    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year).count()
     total = limits.number if limits is not None else 0
 
     return True if total > currents else False
@@ -181,7 +181,7 @@ def check_history_readonly(pid):
             readonly, True or False
     """
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    if project.date.year == get_current_year():
+    if project.year == get_current_year():
         readonly = False
     else:
         readonly = True
@@ -202,9 +202,9 @@ def get_categorycount(user,des_type,current):
             return history categorycount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,date__year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year).count()
     else:
-        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(date__year=get_current_year).count()
+        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year).count()
     return statistics_number
 
 def get_gradecount(user,des_type,current):
@@ -215,10 +215,10 @@ def get_gradecount(user,des_type,current):
             return history gradecount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,date__year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year).count()
         return statistics_number
     else:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type).exclude(date__year=get_current_year()).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type).exclude(year=get_current_year()).count()
         return statistics_number
 
 def get_real_category(category):
@@ -260,4 +260,3 @@ def get_trend_lines(user):
                                 }
                 )
     return cht
-
