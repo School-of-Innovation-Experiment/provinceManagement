@@ -62,43 +62,59 @@ class RegistrationManager(models.Manager):
         
         TODO: we will custom the USER
         
-        """ 
-        new_user = User.objects.create_user(username, email, password)
-        new_user.is_active = False
+        """
+        #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
+        if User.objects.filter(email=email).count() == 0:
+            new_user = User.objects.create_user(username, email, password)
+            new_user.is_active = False
+        else:
+            new_user = User.objects.get(email=email)
+            
         new_authority = UserIdentity.objects.get(identity=Identity)
-        new_authority.auth_user.add(new_user)
+        new_authority.auth_groups.add(new_user)
         new_user.save()
         new_authority.save()
-        registration_profile = self.create_profile(new_user)
-        #如果是学校注册 添加学校注册姓名
-        if kwargs.has_key('school_name'):
-            schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
-            schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
-            schoolProfileObj.save() 
-        if profile_callback is not None:
-            profile_callback(user=new_user)
-
-        if send_email:
-            from django.core.mail import send_mail
-            subject = render_to_string('registration/activation_email_subject.txt',
-                                       {'site':get_current_site(request),
-                                        'username':username,
-                                        'password':password})
-            
-            # Email subject *must not* contain newlines
-            subject = ''.join(subject.splitlines())
-            message = render_to_string('registration/activation_email.txt',
-                                       {'activation_key':registration_profile.activation_key,
-                                        'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                        'site':get_current_site(request),
-                                       'username':username,
-                                       'password':password}
-                                       )
-            logger.error(message)          
-            send_mail(subject,
-                      message,
-                      settings.DEFAULT_FROM_EMAIL,
-                      [new_user.email])
+        #如果存在用户的话则跳过
+        if User.objects.filter(email=email).count():
+            pass
+        #否则则进行发送邮件激活码进行激活
+        else:
+            registration_profile = self.create_profile(new_user)
+            registration_profile.save()
+            #如果是学校注册 添加学校注册姓名
+            if kwargs.has_key('school_name'):
+                schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
+                if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
+                    schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                    schoolProfileObj.save()
+                else:  
+                    schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
+                    schoolProfileObj.userid = new_user
+                    schoolProfileObj.save()
+            if profile_callback is not None:
+                profile_callback(user=new_user)
+    
+            if send_email:
+                from django.core.mail import send_mail
+                subject = render_to_string('registration/activation_email_subject.txt',
+                                           {'site':get_current_site(request),
+                                            'username':username,
+                                            'password':password})
+                
+                # Email subject *must not* contain newlines
+                subject = ''.join(subject.splitlines())
+                message = render_to_string('registration/activation_email.txt',
+                                           {'activation_key':registration_profile.activation_key,
+                                            'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
+                                            'site':"http://127.0.0.1:9999",
+                                           'username':username,
+                                           'password':password}
+                                           )
+                logger.error(message)          
+                send_mail(subject,
+                          message,
+                          settings.DEFAULT_FROM_EMAIL,
+                          [new_user.email])
         return new_user
 
     def create_profile(self,user):
