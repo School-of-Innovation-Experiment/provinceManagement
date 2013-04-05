@@ -216,7 +216,7 @@ LOGGING = {
             'class': 'django.utils.log.NullHandler',
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',  #here can change the debug info!
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },

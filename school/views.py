@@ -84,6 +84,7 @@ def application_report_view(request, pid=None, is_expired=False):
     Arguments:
         In: id, it is project id
     """
+    loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
@@ -124,6 +125,7 @@ def final_report_view(request, pid=None, is_expired=False):
     Arguments:
         In: id, it is project id
     """
+    loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
 
     readonly = check_history_readonly(pid) or is_expired
