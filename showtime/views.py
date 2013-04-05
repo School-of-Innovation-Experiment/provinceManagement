@@ -19,7 +19,10 @@ def show_index(request):
     search_school = request.GET.get('search_school')
     search_year = request.GET.get('search_year')
     search_grade = request.GET.get('search_grade')
-
+    
+    print "-" * 20
+    print search_grade, search_year, search_school
+    print "-" * 20
     try:
         project_page = int(project_page)
     except:
