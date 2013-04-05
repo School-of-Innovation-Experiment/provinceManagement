@@ -25,7 +25,7 @@ class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
-        if not AdminStaffService.UserExist(email):
+        if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
             else:
@@ -70,9 +70,14 @@ class AdminStaffService(object):
                 school_form = forms.SchoolDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
     @staticmethod
-    def UserExist(email):
+    def AuthUserExist(email, identity):
         if User.objects.filter(email=email).count():
-            return True
+            user_obj = User.objects.get(email=email)
+            ui_obj = UserIdentity.objects.get(identity=identity)
+            if ui_obj.auth_groups.filter(id=user_obj.id).count():
+                return True
+            else:
+                return False
         else:
             return False
     @staticmethod
@@ -104,24 +109,27 @@ class AdminStaffService(object):
                 subject_list =  AdminStaffService.GetSubject_list(category=category)
                 
                 expert_category = InsituteCategory.objects.get(id=category)
-                obj = Project_Is_Assigned.objects.get(insitute = expert_category)
-                #如果已经指派专家了直接返回列表即可
-                if obj.is_assigned == 1:
-                    pass
-                #没有指派专家，则进行专家指派
-                else:
-                    #筛选专家列表
-                    expert_list = ExpertProfile.objects.filter(subject=expert_category)
-                    re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
-                    #将返回数据进入Re_Project_Expert表中
-
-                    for subject in re_dict.keys():
-                        for expert in re_dict[subject]:
-                            #subject.expert.add(expert)
-                            Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
-                    #保存已分配标志，值为1  
-                    obj.is_assigned = 1
-                    obj.save()
+                try:
+                    obj = Project_Is_Assigned.objects.get(insitute = expert_category)
+                    #如果已经指派专家了直接返回列表即可
+                    if obj.is_assigned == 1:
+                        pass
+                    #没有指派专家，则进行专家指派
+                    else:
+                        #筛选专家列表
+                        expert_list = ExpertProfile.objects.filter(subject=expert_category)
+                        re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
+                        #将返回数据进入Re_Project_Expert表中
+    
+                        for subject in re_dict.keys():
+                            for expert in re_dict[subject]:
+                                #subject.expert.add(expert)
+                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                        #保存已分配标志，值为1  
+                        obj.is_assigned = 1
+                        obj.save()
+                except Project_Is_Assigned.DoesNotExist:
+                    obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
     
     @staticmethod
