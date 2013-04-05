@@ -157,11 +157,14 @@ class time_controller(object):
             True: you can edit it!
             False: you cannot edit it!
         """
+        #If the pid is None, it mains there is no pid imports;
+        if pid is None:
+            return True
+
         project = get_object_or_404(ProjectSingle, project_id=pid)
 
-        #If the pid is None, it mains the project is valid, so you cannot edit it;
         #If the project year is not this year, it also means you cannot edit it
-        if pid is None or project.year != get_current_year():
+        if project.year != get_current_year():
             return False
 
         control = self.get_established_time()
