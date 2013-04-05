@@ -197,7 +197,7 @@ def new_report_view(request, is_expired=False):
     school start a new application report, then it will
     jump the real project URL.
     """
-    if check_limits(request.user):
+    if check_limits(request.user) and is_expired is False:
         # create a new project
         pid = uuid.uuid4()
         project = ProjectSingle()
