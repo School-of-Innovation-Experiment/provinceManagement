@@ -18,7 +18,7 @@ def show_project(request, project_id = ""):
         Q(file_obj__iendswith="png")
     )
     presubmit = project.presubmit_set.all()
-    project.background = presubmit.count() and presubmit[0] or None
+    presubmit = presubmit.count() and presubmit[0] or None
 
     finalsubmit = project.finalsubmit_set.all()
     finalsubmit = finalsubmit.count() and finalsubmit[0] or None
