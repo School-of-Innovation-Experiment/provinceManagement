@@ -1,0 +1,61 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+	<div class="well form-inline">
+		<b>
+		<form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
+		{% csrf_token %}	
+			
+	  	{{school_category_form.school_choice}}
+	  	<input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
+	  </form><!--end category form -->
+	<table class="table table-condensed" id="subject_table">
+	<thead>
+	<tr>
+		<th>发布题目名称</th>
+		<th>所属学校</th>
+		<th>指导教师</th>
+		<th>专家评分</th>
+		<th>修改等级</th>
+	</tr>
+	</thead>
+	<tbody id="subject_table_body">
+	{% for subject in subject_list%}
+		<tr>
+			<td>{{subject.title}}</td>
+			<td>{{subject.school}}</td>
+			<td>{{subject.inspector}}</td>
+			<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list({{subject.project_id}});">察看专家评分</td>
+			<td><a data-toggle="modal" href="#grade_choice">{{subject.project_grade}}</td>
+		</tr>
+	</tbody>
+	</table>
+	<div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
+		<div class="modal-header">
+    	<a class="close" data-dismiss="modal">×</a>
+    	<h3>专家得分/评价列表</h3>
+		</div>
+  	<div class="modal-body">
+    <table id="review_table"class="table table-condensed"></table>
+  	</div>
+	</div><!--end subject_review-->
+	<div class="modal hide fade" style="display: none;" id="grade_choice">
+		<div class="modal-header">
+    	<a class="close" data-dismiss="modal">×</a>
+    	<h3>选择项目级别</h3>
+    </div>
+  	<div class="modal-body">
+    {{subject_grade_form.subject_grade}}
+  	</div>
+  	<div class="modal-footer">
+    	<a class="btn" data-dismiss="modal">关闭</a>
+    	<a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade(1);">保存更新</a>
+  	</div>
+		</div>		
+	</div><!--end grade_choice-->
+	{%endfor%}
+	</div><!-- end the whole form -->
+	<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
+	<!-- ajax_csrf-->
+	<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+{%endblock%}

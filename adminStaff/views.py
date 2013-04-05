@@ -19,7 +19,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
-from const.models import UserIdentity, InsituteCategory
+from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 class AdminStaffService(object):
     @staticmethod
@@ -82,12 +82,14 @@ class AdminStaffService(object):
             num_limit_form = forms.NumLimitForm()
             return render_to_response("adminStaff/settings.html",{'time_form':timeform,'num_limit_form':num_limit_form},context_instance=RequestContext(request))
     @staticmethod
-    def GetSubject_list(category=None):
+    def GetSubject_list(category=None,school=None):
         subject_list = []
-        if category == None:
+        if category == None and school == None:
             subject_list = ProjectSingle.objects.all()
-        else:
+        elif not category == None:
             subject_list = ProjectSingle.objects.filter(project_category=category)
+        elif not school == None:
+            subject_list = ProjectSingle.objects.filter(school=school)           
         return subject_list
     @staticmethod
     def SubjectFeedback(request):
@@ -133,6 +135,31 @@ class AdminStaffService(object):
             for j in xrange(num):
                 ret[subject].append(expert_list[(i + j) % len(expert_list)])
         return ret
-                                                                       
-                                         
+    @staticmethod
+    def SubjectRating(request):
+        subject_grade_form = forms.SubjectGradeForm()                                   
+        if request.method == "GET":
+            school_category_form = forms.SchoolCategoryForm()
+            subject_list =  AdminStaffService.GetSubject_list()
+            
+        else:
+            school_category_form = forms.SchoolCategoryForm(request.POST)
+            if school_category_form.is_valid():
+                school_name = school_category_form.cleaned_data["school_choice"]
+                subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+                
+        return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
+    @staticmethod
+    def GetSubjectReviewList(project_id):
+        review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
+        review_list = []
+        for obj in review_obj_list:
+            obj_list = [obj.scores, obj.comments]
+            review_list.append(obj_list)
+        return review_list 
+    @staticmethod
+    def SubjectGradeChange(project_id, changed_grade):
+        subject_obj = ProjectSingle.objects.get(project_id = project_id)
+        subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
+        subject_obj.save()                                 
         

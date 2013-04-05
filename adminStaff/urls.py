@@ -24,6 +24,8 @@ urlpatterns = patterns('',
     (r'^settings$',AdminStaffService.AdminSetting), 
     
     (r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
+    (r'^subject_rating/$',AdminStaffService.SubjectRating),
+    #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
     
     (r'^dispatch/$',AdminStaffService.Dispatch),  
     (r'^expert_dispatch/$',AdminStaffService.expertDispatch),

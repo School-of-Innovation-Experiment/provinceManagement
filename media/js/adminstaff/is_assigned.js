@@ -1,5 +1,5 @@
 function is_assigned(){
-	Dajaxice.adminStaff.judge_is_assigned(is_assigned_callback,{'insitute':$('#id_insitute_choice').find("option:selected").text()});
+	Dajaxice.adminStaff.judge_is_assigned(is_assigned_callback,{'insitute':$('#id_insitute_choice').find("option:selected").val()});
 	}
 	
 function is_assigned_callback(data){

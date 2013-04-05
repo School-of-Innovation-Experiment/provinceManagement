@@ -6,6 +6,7 @@ Created on 2013-3-28
 '''
 from datetime import *
 from django import  forms
+from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
 class ExpertDispatchForm(forms.Form):
     '''
@@ -62,7 +63,7 @@ class TimeSettingForm(forms.Form):
             fsdr == None or \
             fedr == None):        
                 if psd > ped :
-                    msg = u"初期提交起止时间有误，请重新设置"
+                    msg = u"初期提交起止时间有误，请重新设置PROJECT_GRADE_CHOICES"
                     self._errors['pre_start_date'] = self.error_class([msg])
                     self._errors['pre_end_date'] = self.error_class([msg])
                 elif fsd > fed:
@@ -102,11 +103,19 @@ class SubjectInsituteForm(forms.Form):
     for object in insitute_list:
         insitute_choice_list.append((object.id, object.category))
     insitute_tuple = tuple(insitute_choice_list)
-    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();","value":"---"}))  
+    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))  
+
+class SchoolCategoryForm(forms.Form):
+    SCHOOL_CHOICE_list = []
+    school_list        = SchoolDict.objects.all()
+    for object in school_list:
+        SCHOOL_CHOICE_list.append((object.id, object.schoolName))
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)        
+    school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)    
     
-    
-    
-    
+class SubjectGradeForm(forms.Form):
+    subject_grade_choice =   PROJECT_GRADE_CHOICES
+    subject_grade   = forms.ChoiceField(choices=subject_grade_choice)  
     
     
     

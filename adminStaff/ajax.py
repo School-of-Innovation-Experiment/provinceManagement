@@ -18,7 +18,7 @@ from adminStaff.views import AdminStaffService
 from school.models import Project_Is_Assigned, InsituteCategory
 @dajaxice_register
 def NumLimit(request, form):
-    dajax = Dajax()
+    #dajax = Dajax()
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
         school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
@@ -37,7 +37,7 @@ def NumLimit(request, form):
     
 @dajaxice_register
 def DeadlineSettings(request, form):
-    dajax = Dajax()
+    #dajax = Dajax()
     form = TimeSettingForm(deserialize_form(form))
     if form.is_valid():
         # get cleaned_data
@@ -83,7 +83,7 @@ def DeadlineSettings(request, form):
     
 @dajaxice_register
 def  ExpertDispatch(request, form):
-    dajax = Dajax()
+    #dajax = Dajax()
     expert_form =  ExpertDispatchForm(deserialize_form(form))
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]
@@ -102,7 +102,7 @@ def  ExpertDispatch(request, form):
         return simplejson.dumps({'field':expert_form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
 def SchoolDispatch(request, form):
-    dajax = Dajax()
+    #dajax = Dajax()
     school_form = SchoolDispatchForm(deserialize_form(form))
     if school_form.is_valid():
         password = school_form.cleaned_data["school_password"]
@@ -125,14 +125,28 @@ def judge_is_assigned(request,insitute):
     '''
     to judge if the projects that belong to the certain insitute has been assigned
     '''
+    #dajax = Dajax()
     #query database
     insobj = InsituteCategory.objects.get(category=insitute)
     obj = Project_Is_Assigned.objects.get(insitute = insobj)
     return simplejson.dumps({'flag':obj.is_assigned})
 
+@dajaxice_register
+def get_subject_review_list(request, project_id):
+    '''
+    to get subject evaluate list through project_id 
+    '''
+    #dajax = Dajax()
+    review_list = AdminStaffService.GetSubjectReviewList(project_id)
 
+    return simplejson.dumps({'review_list':review_list})
 
-
-
+@dajaxice_register
+def change_subject_grade(request, project_id, changed_grade):
+    '''
+    change subject grade secretly
+    '''
+    AdminStaffService.SubjectGradeChange(project_id, changed_grade)
+    return simplejson.dumps({'status':'1'})
 
     
