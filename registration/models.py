@@ -67,33 +67,9 @@ class RegistrationManager(models.Manager):
         if User.objects.filter(email=email).count() == 0:
             new_user = User.objects.create_user(username, email, password)
             new_user.is_active = False
-        else:
-            new_user = User.objects.get(email=email)
-            
-        new_authority = UserIdentity.objects.get(identity=Identity)
-        new_authority.auth_groups.add(new_user)
-        new_user.save()
-        new_authority.save()
-        #如果存在用户的话则跳过
-        if User.objects.filter(email=email).count():
-            pass
-        #否则则进行发送邮件激活码进行激活
-        else:
+            new_user.save()
             registration_profile = self.create_profile(new_user)
             registration_profile.save()
-            #如果是学校注册 添加学校注册姓名
-            if kwargs.has_key('school_name'):
-                schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
-                if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
-                    schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
-                    schoolProfileObj.save()
-                else:  
-                    schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
-                    schoolProfileObj.userid = new_user
-                    schoolProfileObj.save()
-            if profile_callback is not None:
-                profile_callback(user=new_user)
-    
             if send_email:
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
@@ -106,7 +82,7 @@ class RegistrationManager(models.Manager):
                 message = render_to_string('registration/activation_email.txt',
                                            {'activation_key':registration_profile.activation_key,
                                             'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                            'site':"http://127.0.0.1:9999",
+                                            'site':"127.0.0.1:8000",
                                            'username':username,
                                            'password':password}
                                            )
@@ -115,6 +91,26 @@ class RegistrationManager(models.Manager):
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
+        else:
+            new_user = User.objects.get(email=email)
+        
+        #对用户权限写入数据库
+        new_authority = UserIdentity.objects.get(identity=Identity)
+        new_authority.auth_groups.add(new_user)
+        new_authority.save()
+
+        #如果是学校注册 添加学校注册姓名
+        if kwargs.has_key('school_name'):
+            schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
+            if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
+                schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                schoolProfileObj.save()
+            else:  
+                schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
+                schoolProfileObj.userid = new_user
+                schoolProfileObj.save()
+        if profile_callback is not None:
+            profile_callback(user=new_user)
         return new_user
 
     def create_profile(self,user):

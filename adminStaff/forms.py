@@ -6,6 +6,7 @@ Created on 2013-3-28
 '''
 from datetime import *
 from django import  forms
+from adminStaff.models import ProjectControl 
 from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
 class ExpertDispatchForm(forms.Form):
@@ -36,14 +37,14 @@ class SchoolDispatchForm(forms.Form):
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)    
 class TimeSettingForm(forms.Form):
-    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/26/2013", 'class':'span2','id':'pre_start_date'})) 
-    pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'value':"03/25/2013",'class':'span2','id':'pre_end_date'}))
-    final_start_date = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_start_date'}))
-    final_end_date = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_end_date'}))
-    pre_start_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_start_date_review'}))
-    pre_end_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'pre_end_date_review'}))
-    final_start_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'final_start_date_review'}))
-    final_end_date_review = forms.DateField(widget=forms.DateInput(attrs={'value':"03/25/2013", 'class':'span2','id':'final_end_date_review'}))
+    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date',"data-date-format":"yyyy-mm-dd"})) 
+    pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'class':'span2','id':'pre_end_date',"data-date-format":"yyyy-mm-dd"}))
+    final_start_date = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'final_start_date',"data-date-format":"yyyy-mm-dd"}))
+    final_end_date = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'final_end_date',"data-date-format":"yyyy-mm-dd"}))
+    pre_start_date_review = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date_review',"data-date-format":"yyyy-mm-dd"}))
+    pre_end_date_review = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_end_date_review',"data-date-format":"yyyy-mm-dd"}))
+    final_start_date_review = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_start_date_review',"data-date-format":"yyyy-mm-dd"}))
+    final_end_date_review = forms.DateField(widget=forms.DateInput(attrs={'class':'span2','id':'final_end_date_review',"data-date-format":"yyyy-mm-dd"}))
     def clean(self):
         cleaned_data = super(TimeSettingForm,self).clean()
         psd = cleaned_data.get("pre_start_date")

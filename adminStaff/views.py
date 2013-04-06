@@ -8,10 +8,11 @@ Created on 2013-03-28
 import random
 import re,sha
 import uuid
-
+from datetime import date 
 from django.http import HttpResponse
 from registration.models import * 
 from adminStaff import forms
+from adminStaff.models import ProjectPerLimits, ProjectControl
 from django.shortcuts import render_to_response
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
@@ -21,6 +22,7 @@ from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
+from registration.models import RegistrationProfile
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -34,11 +36,18 @@ class AdminStaffService(object):
         else:
             return False
     @staticmethod
+    def GetRegisterList():
+        res_list = []
+        for register in RegistrationProfile.objects.all():
+            res_list.append(register.user)
+        return res_list
+    @staticmethod
     def Dispatch(request):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDispatchForm()
-            return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
+            email_list  = AdminStaffService.GetRegisterList()
+            return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
         if request.method == "POST":
@@ -86,6 +95,57 @@ class AdminStaffService(object):
             timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()
             return render_to_response("adminStaff/settings.html",{'time_form':timeform,'num_limit_form':num_limit_form},context_instance=RequestContext(request))
+        
+    @staticmethod
+    def DeadlineSetting(request):
+        '''
+        提交时间节点限制
+        '''
+        
+        if request.method == "GET":
+            if ProjectControl.objects.count() == 0:
+                pc_obj =  ProjectControl(pre_start_day = date.today(),
+                       pre_end_day   = date.today(),
+                       pre_start_day_review = date.today(), 
+                       pre_end_day_review = date.today(),
+                       final_start_day = date.today(),
+                       final_end_day = date.today(),
+                       final_start_day_review = date.today(),
+                       final_end_day_review = date.today(),
+                       )
+                pc_obj.save()
+            else:
+                pc_obj = ProjectControl.objects.get()
+            data = {
+                    'pre_start_date' : pc_obj.pre_start_day,
+                    'pre_end_date' : pc_obj.pre_end_day,
+                    'pre_start_date_review' : pc_obj.pre_start_day_review,
+                    'pre_end_date_review' : pc_obj.pre_end_day_review,
+                    'final_start_date' : pc_obj.final_start_day,
+                    'final_end_date' : pc_obj.final_end_day,
+                    'final_start_date_review' : pc_obj.final_start_day_review,
+                    'final_end_date_review' : pc_obj.final_end_day_review,
+                    }
+            timeform = forms.TimeSettingForm(initial=data)
+            #num_limit_form = forms.NumLimitForm()
+            return render_to_response("adminStaff/deadlineSettings.html",{'time_form':timeform},context_instance=RequestContext(request))
+    @staticmethod
+    def ProjectLimitNumSetting(request):
+        '''
+        学校上传数量限制
+        '''
+        if request.method == "GET":
+            #timeform = forms.TimeSettingForm()
+            num_limit_form = forms.NumLimitForm()
+            school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+            return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))                        
+    @staticmethod
+    def SchoolLimitNumList():
+        '''
+        返回存在的每个学校限制数目列表
+        '''
+        limit_list = ProjectPerLimits.objects.all()
+        return limit_list
     @staticmethod
     def GetSubject_list(category=None,school=None):
         subject_list = []

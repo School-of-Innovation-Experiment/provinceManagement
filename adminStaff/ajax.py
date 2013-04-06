@@ -47,41 +47,27 @@ def DeadlineSettings(request, form):
     form = TimeSettingForm(deserialize_form(form))
     if form.is_valid():
         # get cleaned_data
-        psd = DateFormatTransfer(form.data["pre_start_date"])
-        ped = DateFormatTransfer(form.data["pre_end_date"])
-        fsd = DateFormatTransfer(form.data["final_start_date"])
-        fed = DateFormatTransfer(form.data["final_end_date"])
-        psdr = DateFormatTransfer(form.data["pre_start_date_review"])
-        pedr = DateFormatTransfer(form.data["pre_end_date_review"])
-        fsdr = DateFormatTransfer(form.data["final_start_date_review"])
-        fedr = DateFormatTransfer(form.data["final_end_date_review"])
-        # if object exists ,then obtain the object and update it
-        if ProjectControl.objects.count() == 0:
-            try:
-                ProjectControl(pre_start_day=psd,
-                               pre_end_day=ped,
-                               final_start_day=fsd,
-                               final_end_day=fed,
-                               pre_start_day_review=psdr,
-                               pre_end_day_review=pedr,
-                               final_start_day_review=fsdr,
-                               final_end_day_review=fedr).save()
-            except:
-                return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入数据有误格式为YYYY-MM-DD"})
-        else:
-            try:
-                object = ProjectControl.objects.get()
-                object.pre_start_day = psd
-                object.pre_end_day = ped
-                object.final_start_day = fsd
-                object.final_end_day = fed
-                object.pre_start_day_review = psdr
-                object.pre_end_day_review = pedr
-                object.final_start_day_review = fsdr
-                object.final_end_day_review = fedr
-                object.save()
-            except:
-                return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入数据有误格式为YYYY-MM-DD"})
+        psd = form.data["pre_start_date"]
+        ped = form.data["pre_end_date"]
+        fsd = form.data["final_start_date"]
+        fed = form.data["final_end_date"]
+        psdr = form.data["pre_start_date_review"]
+        pedr = form.data["pre_end_date_review"]
+        fsdr = form.data["final_start_date_review"]
+        fedr = form.data["final_end_date_review"]
+        try:
+            object = ProjectControl.objects.get()
+            object.pre_start_day = psd
+            object.pre_end_day = ped
+            object.final_start_day = fsd
+            object.final_end_day = fed
+            object.pre_start_day_review = psdr
+            object.pre_end_day_review = pedr
+            object.final_start_day_review = fsdr
+            object.final_end_day_review = fedr
+            object.save()
+        except:
+            return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入数据有误格式为YYYY-MM-DD"})
         return simplejson.dumps({'field':form.data.keys(),'status':'1','message':u'更新成功'})
         #return simplejson.dumps({'field':form.data["pre_start_date"],'id':form,'status':'1','message':u'更新成功'})
     else:
@@ -105,7 +91,7 @@ def  ExpertDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
 def SchoolDispatch(request, form):
     #dajax = Dajax()

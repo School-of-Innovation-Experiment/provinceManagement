@@ -22,6 +22,8 @@ urlpatterns = patterns('',
     ),
                        
     (r'^settings$',AdminStaffService.AdminSetting), 
+    (r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
+    (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),    
     
     (r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
     (r'^subject_rating/$',AdminStaffService.SubjectRating),
