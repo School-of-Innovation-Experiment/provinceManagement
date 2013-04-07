@@ -10,6 +10,8 @@ log/*
 # C extensions
 *.so
 
+static/*
+
 *.swp
 *.swo
 *.orig

@@ -63,6 +63,10 @@ urlpatterns = patterns('',
         r'^settings/',
         include("users.urls")
     ),
+    url(
+        r'^errors/',
+        include("backend.urls")
+    ),
 )
 
 # urlpatterns += staticfiles_urlpatterns()

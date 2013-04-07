@@ -1,10 +1,4 @@
-body{
-	background:#000;
-	margin:0 auto;	
-	font-size: 62.5%;
-	color:#3a3524;
-	font-family:Verdana, Geneva, arial,sans-serif;
-}
+
 
 h1 {
 	font-family:arial, serif;
@@ -43,20 +37,24 @@ div#links a {
 	text-decoration:none;
 }
 
-div.left {
+div.left-images {
 	float:left;
 	width:469px;	
 }
 
-div.right {
-	float:right;
+div.right-content {
+	float:left;
+  margin-left: 20px;
 	width:491px;
 	position:relative;
 }
 
 div#content {
+  margin-top: 120px;
+  text-align:left;
 	height:355px;
-	background:url(../image/rightbg.jpg) top repeat-x;	
+	background:url(/static/images/rightbg.jpg) top repeat-x;	
+  font-size: 80.5%;
 }
 
 ul.troubleshoot li {
@@ -65,7 +63,7 @@ ul.troubleshoot li {
    display: block;
    padding:5px 0 5px 14px;
    
-   background:url(../image/bullet.gif) left no-repeat;
+   background:url(/static/images/bullet.gif) left no-repeat;
    font-weight:bold;
    font-size:1.4em;
 }

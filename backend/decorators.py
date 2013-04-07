@@ -88,7 +88,7 @@ class authority_required(object):
                 return response
             else:
                 # TODO: add a custom 403 page
-                return HttpResponseForbidden("对不起，你没有访问权限!")
+                return HttpResponseRedirect(reverse('backend.errorviews.error403'))
         return wrappered_method
 
 
