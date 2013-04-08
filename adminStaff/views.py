@@ -23,6 +23,7 @@ from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 from registration.models import RegistrationProfile
+from django.db import transaction 
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -31,15 +32,29 @@ class AdminStaffService(object):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
             else:
-                RegistrationManager().create_inactive_user(request,username,password,email,identity)
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
             return True
         else:
             return False
     @staticmethod
     def GetRegisterList():
+        '''
+        获得登记用户列表
+        '''
         res_list = []
+        auth_name = []
         for register in RegistrationProfile.objects.all():
-            res_list.append(register.user)
+            dict = {}
+            #查询权限列表
+            ##########################################################################
+            auth_list = UserIdentity.objects.filter(auth_groups=register.user).all()
+            dict["auth"] = ''
+            dict["email"] = register.user.email
+            dict["is_active"] = register.user.is_active
+            for auth in auth_list: 
+                dict["auth"] += auth.__unicode__()+' '
+            ##########################################################################
+            res_list.append(dict)
         return res_list
     @staticmethod
     def Dispatch(request):
@@ -97,6 +112,7 @@ class AdminStaffService(object):
             return render_to_response("adminStaff/settings.html",{'time_form':timeform,'num_limit_form':num_limit_form},context_instance=RequestContext(request))
         
     @staticmethod
+    @transaction.commit_on_success
     def DeadlineSetting(request):
         '''
         提交时间节点限制
@@ -157,6 +173,7 @@ class AdminStaffService(object):
             subject_list = ProjectSingle.objects.filter(school=school)           
         return subject_list
     @staticmethod
+    @transaction.commit_on_success
     def SubjectFeedback(request):
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
@@ -222,7 +239,7 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.scores, obj.comments]
+            obj_list = [obj.comments, obj.score_innovation, obj.score_practice, obj.score_funny]
             review_list.append(obj_list)
         return review_list 
     @staticmethod

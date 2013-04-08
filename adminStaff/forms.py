@@ -10,11 +10,12 @@ from adminStaff.models import ProjectControl
 from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
 class ExpertDispatchForm(forms.Form):
-    '''
-    expert_name = forms.CharField(max_length=20, required=True,
-    widget=forms.TextInput(attrs={'class':'input-small','placeholder':u"专家姓名",'id':'expert_name'}
-                           ),
-)'''
+    insitute_choice_list = []
+    insitute_list = InsituteCategory.objects.all()
+    for object in insitute_list:
+        insitute_choice_list.append((object.id, object.category))
+    insitute_tuple = tuple(insitute_choice_list)
+    
     expert_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
                            ),
@@ -22,6 +23,8 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}
                            ))
+    expert_insitute = forms.ChoiceField(required=True,choices=insitute_tuple
+                                        )
 class SchoolDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()

@@ -2,11 +2,13 @@
   {% if project_list %}
     {% for project in project_list %}
       <div class="box photo col3">
+        {% ifequal project.project_grade.id 1 %}
         <div class="github-fork-ribbon-wrapper left">
           <div class="github-fork-ribbon">
-            <a href="/">{{ project.project_grade.get_grade_display }}</a>
+            <a href="{% url showtime.views.show_project project.project_id %}">{{ project.project_grade.get_grade_display }}</a>
           </div>
         </div>
+        {% endifequal %}
         <a href="{% url showtime.views.show_project project.project_id %}" title="{{ project.title }}"><img src="{{ project.img }}"  /></a>
         <h4 class="title">{{ project.title }}</h4>
         <hr/>

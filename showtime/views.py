@@ -27,7 +27,7 @@ def show_project(request, project_id = ""):
     
     project.background = presubmit and presubmit.background or None
     project.summary = finalsubmit and finalsubmit.achievement_summary or None
-    first_img = (len(imgs) and imgs[0]) or None
+    first_img = (len(imgs) and imgs[0]) or DEFAULT_IMG_URL
     
     context = {"project": project,
                "imgs": imgs,
