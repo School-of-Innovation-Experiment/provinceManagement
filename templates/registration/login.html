@@ -1,24 +1,15 @@
-{% extends "base/base.html" %}
-{% load i18n %}
+{% extends "registration/widgets/baseback.html" %}
 
-{% block content %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
-<div id='login'>
-	<div id='content'>
-		<div class='login-image'></div>
-		<div id="login-form-wrap">
-			<form class="form-signin" method="post" action="{% url auth_login %}?next={%url auth_login_redirect%}">
-				{% csrf_token %}
-				<h2 class="form-signin-heading">欢迎登录创新创业管理平台</h2>			
-				{% include 'base/_form.html' %}			
-				<button class="btn btn-large btn-primary" type="submit">登陆</button>	
-				<!--input type="hidden" name="next" value="{{ next }}" /-->	
-		    <!--input type="hidden" name="text" value="/show/"-->
-			  	<br/>
-			  	<br/>
-		    	<p>想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
-			</form>	
-		</div>
-	</div>
-</div><!--end login form-->
-{% endblock %}
+{%block form-content%}
+	<form class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={%url auth_login_redirect%}">
+		{% csrf_token %}
+		<h2 class="login">欢迎登录创新创业管理平台</h2>			
+		{% include 'base/_form.html' %}			
+		<button style="margin-top:30px;" class="btn btn-large btn-primary" type="submit">登录</button>	
+		<!--input type="hidden" name="next" value="{{ next }}" /-->	
+		<!--input type="hidden" name="text" value="/show/"-->
+		<br/>
+		<br/>
+		<p>想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
+		</form>	
+{%endblock%}

@@ -80,10 +80,11 @@ def  ExpertDispatch(request, form):
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
+        insitute = expert_form.cleaned_data["expert_insitute"]
         name = email
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER)
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_insitute=insitute)
         if flag:
             message = u"发送邮件成功"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})

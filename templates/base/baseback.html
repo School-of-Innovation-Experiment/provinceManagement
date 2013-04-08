@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+<div id='login'>
+	<div id='content'>
+		<div class='login-image'></div>
+		<div id="login-form-wrap">
+			{%block form-content%}
+  			{%endblock%}
+		</div>
+	</div>
+</div><!--end login form-->
+{% endblock %}

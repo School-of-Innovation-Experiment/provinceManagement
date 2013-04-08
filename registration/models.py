@@ -9,7 +9,7 @@ import datetime
 import random
 import re,sha
 import uuid
-
+from django.db import transaction 
 from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
@@ -20,8 +20,8 @@ from django.contrib.sites.models import get_current_site
 from django.db import models
 from const.models import UserIdentity 
 from backend.logging import logger
-from users.models import SchoolProfile
-from const.models import SchoolDict
+from users.models import SchoolProfile, ExpertProfile
+from const.models import SchoolDict, InsituteCategory
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -33,6 +33,7 @@ class RegistrationManager(models.Manager):
     keys), and for cleaning out expired inactive accounts.    
     
     """
+    @transaction.commit_on_success
     def activate_user(self, activation_key):
         """
         Validate an activation key and activation the corresponding User if vaild.
@@ -50,8 +51,8 @@ class RegistrationManager(models.Manager):
                 profile.save()
                 return user
         
-        return False
-    
+        return False 
+    @transaction.commit_on_success
     def create_inactive_user(self,request,
                              username,password,email,
                              Identity,send_email=True, profile_callback=None, **kwargs):
@@ -109,6 +110,10 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.save()
+        else:
+            insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
+            expertProfileObj = ExpertProfile(subject=insituteObj, userid =new_user)
+            expertProfileObj.save()
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user

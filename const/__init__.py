@@ -7,6 +7,8 @@ Created on 2013-03-27
 Desc: const defination
 '''
 
+from settings import STATIC_URL, MEDIA_URL
+
 UNDIFINED = "undifined"
 
 # For UserIdentity Table
@@ -78,7 +80,7 @@ PROJECT_STATUS_CHOICES = (
 PAGE_ELEMENTS = 10
 
 # Default img url while img not find
-DEFAULT_IMG_URL = ""
+DEFAULT_IMG_URL = STATIC_URL + "/images/no_pic.jpg"
 
 #YEAR
 YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
