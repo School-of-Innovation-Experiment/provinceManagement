@@ -38,9 +38,23 @@ class AdminStaffService(object):
             return False
     @staticmethod
     def GetRegisterList():
+        '''
+        获得登记用户列表
+        '''
         res_list = []
+        auth_name = []
         for register in RegistrationProfile.objects.all():
-            res_list.append(register.user)
+            dict = {}
+            #查询权限列表
+            ##########################################################################
+            auth_list = UserIdentity.objects.filter(auth_groups=register.user).all()
+            dict["auth"] = ''
+            dict["email"] = register.user.email
+            dict["is_active"] = register.user.is_active
+            for auth in auth_list: 
+                dict["auth"] += auth.__unicode__()+' '
+            ##########################################################################
+            res_list.append(dict)
         return res_list
     @staticmethod
     def Dispatch(request):
@@ -159,6 +173,7 @@ class AdminStaffService(object):
             subject_list = ProjectSingle.objects.filter(school=school)           
         return subject_list
     @staticmethod
+    @transaction.commit_on_success
     def SubjectFeedback(request):
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
