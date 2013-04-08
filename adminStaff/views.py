@@ -224,7 +224,7 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.scores, obj.comments]
+            obj_list = [obj.comments, obj.score_innovation, obj.score_practice, obj.score_funny]
             review_list.append(obj_list)
         return review_list 
     @staticmethod
