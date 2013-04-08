@@ -23,6 +23,7 @@ from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 from registration.models import RegistrationProfile
+from django.db import transaction 
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -31,7 +32,7 @@ class AdminStaffService(object):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
             else:
-                RegistrationManager().create_inactive_user(request,username,password,email,identity)
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
             return True
         else:
             return False
@@ -97,6 +98,7 @@ class AdminStaffService(object):
             return render_to_response("adminStaff/settings.html",{'time_form':timeform,'num_limit_form':num_limit_form},context_instance=RequestContext(request))
         
     @staticmethod
+    @transaction.commit_on_success
     def DeadlineSetting(request):
         '''
         提交时间节点限制
