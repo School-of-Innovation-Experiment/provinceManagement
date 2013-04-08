@@ -2,8 +2,9 @@
 	padding-top: 40px;
 	padding-bottom: 40px;
 	max-width: 400px;
-	padding: 19px 29px 29px;
-	margin: 10px;
+	padding: 0px 29px 29px;
+	margin-left: 10px;
+  text-align: left;
     -webkit-border-radius: 5px;
        -moz-border-radius: 5px;
             border-radius: 5px;
@@ -22,16 +23,37 @@
     height: auto;
     margin-bottom: 15px;
     padding: 7px 9px;
+    width: 350px;
+    margin-left: -120px;
   }   
-
 .form-container{
 	padding-top: 100px;
 	padding-bottom: 100px;
-}    
+}   
+
+.form-resetform{
+  margin-top: 40px;
+} 
+
+.form-password{
+  padding-top: 40px;
+  padding-bottom: 40px;
+  max-width: 400px;
+  padding: 0px 29px 29px;
+  margin-left: 10px;
+}
+.form-password input[type="text"],
+  .form-password input[type="password"] {
+    font-size: 18px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+    width: 350px;
+    margin-left: -80px;
+  }  
 
 #login{
   min-width:0;
-  background-color:#ededed;
   margin: 0px;
   color: #575757;
   font-size: 75%;
@@ -43,6 +65,10 @@
   font-style: inherit;
   display: block;
   height: 700px;
+}
+
+body{
+    background-color:#ededed;
 }
 
 #content{
@@ -65,10 +91,15 @@ height: 420px;
 margin-left: -50px;
 }
 
+
+h2.login{
+  margin-bottom: 40px;
+}
+
 #login-form-wrap{
   position: relative;
-  top: 55px;
+  top: 0px;
   left: 45%;
   width: 460px;
-  margin-left: 20px;
+  margin-top: 0px;
 }

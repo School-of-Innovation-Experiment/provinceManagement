@@ -7,12 +7,12 @@
 {% endif %}
 <fieldset>
   {% for field in form %}
-    <div class="control-group {% if field.errors %}error{% endif %}">
-      <label class="control-label" >
+    <div  style="text-align:left;" class="control-group {% if field.errors %}error{% endif %}">
+      <label style="text-align:left;font-size: 16px;width:100px;"  class="control-label login" >
         {% if field.field.required %}{{ field.label }} 
         {% else %} {{ field.label_tag }}  {% endif %}
       </label>
-      <div class="controls">
+      <div  class="controls ">
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>
         {% for error in field.errors %}
