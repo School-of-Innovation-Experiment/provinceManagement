@@ -170,7 +170,7 @@ def statistics_view(request):
     innovation_numbers=get_categorycount(user,CATE_INNOVATION,True)
     enterprise_numbers=get_categorycount(user,CATE_ENTERPRISE,True)
     enterprise_ee_numbers=get_categorycount(user,CATE_ENTERPRISE_EE,True)
-    
+
     data = {"innovation_numbers":innovation_numbers,
             "enterprise_numbers":enterprise_numbers,
             "enterprie_ee_numbers":enterprise_ee_numbers,

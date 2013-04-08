@@ -253,8 +253,8 @@ def get_trend_lines(user):
                                 'terms': ['number']},
                                ],
                 chart_options={'title': {'text': '历史数据统计'},
-                                'xAxis':{   
-                                            'title':{'text': '年份'},          
+                                'xAxis':{
+                                            'title':{'text': '年份'},
                                         },
                                 'yAxis':{'title':{'text': '类别数量'},'allowDecimals':False},
                                 }

@@ -8,9 +8,9 @@ Created on 2013-03-28
 import random
 import re,sha
 import uuid
-from datetime import date 
+from datetime import date
 from django.http import HttpResponse
-from registration.models import * 
+from registration.models import *
 from adminStaff import forms
 from adminStaff.models import ProjectPerLimits, ProjectControl
 from django.shortcuts import render_to_response
@@ -95,18 +95,18 @@ class AdminStaffService(object):
             timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()
             return render_to_response("adminStaff/settings.html",{'time_form':timeform,'num_limit_form':num_limit_form},context_instance=RequestContext(request))
-        
+
     @staticmethod
     def DeadlineSetting(request):
         '''
         提交时间节点限制
         '''
-        
+
         if request.method == "GET":
             if ProjectControl.objects.count() == 0:
                 pc_obj =  ProjectControl(pre_start_day = date.today(),
                        pre_end_day   = date.today(),
-                       pre_start_day_review = date.today(), 
+                       pre_start_day_review = date.today(),
                        pre_end_day_review = date.today(),
                        final_start_day = date.today(),
                        final_end_day = date.today(),
@@ -138,7 +138,7 @@ class AdminStaffService(object):
             #timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()
             school_limit_num_list = AdminStaffService.SchoolLimitNumList()
-            return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))                        
+            return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
     @staticmethod
     def SchoolLimitNumList():
         '''
@@ -154,20 +154,20 @@ class AdminStaffService(object):
         elif not category == None:
             subject_list = ProjectSingle.objects.filter(project_category=category)
         elif not school == None:
-            subject_list = ProjectSingle.objects.filter(school=school)           
+            subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
     @staticmethod
     def SubjectFeedback(request):
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
-            
+
         else:
             subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             if subject_insitute_form.is_valid():
                 category = subject_insitute_form.cleaned_data["insitute_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(category=category)
-                
+
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
@@ -180,18 +180,18 @@ class AdminStaffService(object):
                         expert_list = ExpertProfile.objects.filter(subject=expert_category)
                         re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
                         #将返回数据进入Re_Project_Expert表中
-    
+
                         for subject in re_dict.keys():
                             for expert in re_dict[subject]:
                                 #subject.expert.add(expert)
                                 Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
-                        #保存已分配标志，值为1  
+                        #保存已分配标志，值为1
                         obj.is_assigned = 1
                         obj.save()
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
-    
+
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list):
 
@@ -205,17 +205,17 @@ class AdminStaffService(object):
         return ret
     @staticmethod
     def SubjectRating(request):
-        subject_grade_form = forms.SubjectGradeForm()                                   
+        subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             subject_list =  AdminStaffService.GetSubject_list()
-            
+
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school_name)
-                
+
         return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
     @staticmethod
     def GetSubjectReviewList(project_id):
@@ -224,10 +224,9 @@ class AdminStaffService(object):
         for obj in review_obj_list:
             obj_list = [obj.scores, obj.comments]
             review_list.append(obj_list)
-        return review_list 
+        return review_list
     @staticmethod
     def SubjectGradeChange(project_id, changed_grade):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
         subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
-        subject_obj.save()                                 
-        
+        subject_obj.save()
