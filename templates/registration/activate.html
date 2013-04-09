@@ -1,20 +1,19 @@
-{% extends "base/base.html" %}
-{% load i18n %}
+{% extends "registration/widgets/baseback.html" %}
 
-{% block content %}
+{%block form-content%}
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
 
 <div class="container form-container">
   {% if account %}
 
-  <p>{% trans "Account successfully activated" %}</p>
+  <h3>恭喜您成功激活账户</h3>
 
-  <p><a href="{% url auth_login %}">{% trans "log in" %}</a></p>
+  <h3><a href="{% url auth_login %}">>登录</a></h3>
 
   {% else %}
 
-  <p>{% trans "Account activation failed" %}</p>
+  <h3>很抱歉！账户激活失败</h3>
 
   {% endif %}
 
