@@ -168,13 +168,14 @@ class AdminStaffService(object):
         if category == None and school == None:
             subject_list = ProjectSingle.objects.all()
         elif not category == None:
-            subject_list = ProjectSingle.objects.filter(project_category=category)
+            subject_list = ProjectSingle.objects.filter(insitute_id=category)
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
     @staticmethod
     @transaction.commit_on_success
     def SubjectFeedback(request):
+        exist_message = '' 
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
@@ -195,6 +196,7 @@ class AdminStaffService(object):
                     else:
                         #筛选专家列表
                         expert_list = ExpertProfile.objects.filter(subject=expert_category)
+<<<<<<< HEAD
                         re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
                         #将返回数据进入Re_Project_Expert表中
 
@@ -209,6 +211,30 @@ class AdminStaffService(object):
                     obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
 
+=======
+                        #如果所属学科专家不存在，则进行提示
+                        if len(expert_list) == 0 or len(subject_list) == 0:
+                            if not expert_list :
+                                exist_message = '所属专业的专家不存在,无法进行指派'
+                            else:
+                                exist_message = '没有专业指定的题目，无法进行指派'
+
+                        else:                           
+                            re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
+                            #将返回数据进入Re_Project_Expert表中
+        
+                            for subject in re_dict.keys():
+                                for expert in re_dict[subject]:
+                                    #subject.expert.add(expert)
+                                    Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                            #保存已分配标志，值为1  
+                            obj.is_assigned = 1
+                            obj.save()
+                except Project_Is_Assigned.DoesNotExist:
+                    obj = None
+        return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form,'exist_message':exist_message},context_instance=RequestContext(request))
+    
+>>>>>>> 99e7bc61f01205a22d351db8d459d251b14fb824
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list):
 

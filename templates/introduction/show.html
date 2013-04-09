@@ -4,10 +4,9 @@
   <!-- index style -->
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
-  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/masonry.css" >
   
-  <div class="flow-style">
+  <div  class="flow-style">
     <!--header-->
       <form class="form-inline" action="." method="GET">
 	    <select name="search_school">
@@ -36,7 +35,7 @@
 	    </select>
 	    <button id="search-submit" type="submit" class="btn">检索</button>
       </form>
-    <div class="clearfix" id="flow_container">
+    <div style="margin-left:0px;" class="clearfix" id="flow_container">
       {% include "introduction/ajax/_show_list.html" %}
     </div>
   {% endblock %}

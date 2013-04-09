@@ -96,8 +96,6 @@ class Re_Project_Expert(models.Model):
         verbose_name = "项目审核分配"
         verbose_name_plural = "项目审核分配"
 
-    def __unicode__(self):
-        return "%s %s" % (self.project, self.expert)
 
 
 class PreSubmit(models.Model):

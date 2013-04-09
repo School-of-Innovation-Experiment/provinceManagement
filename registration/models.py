@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import get_current_site
+from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity 
 from backend.logging import logger
@@ -71,6 +71,8 @@ class RegistrationManager(models.Manager):
             new_user.save()
             registration_profile = self.create_profile(new_user)
             registration_profile.save()
+            current_site = Site.objects.get_current()
+            site_domain=current_site.domain
             if send_email:
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
@@ -83,7 +85,7 @@ class RegistrationManager(models.Manager):
                 message = render_to_string('registration/activation_email.txt',
                                            {'activation_key':registration_profile.activation_key,
                                             'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                            'site':"127.0.0.1:8000",
+                                            'site':site_domain,
                                            'username':username,
                                            'password':password}
                                            )
