@@ -247,3 +247,8 @@ class AdminStaffService(object):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
         subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         subject_obj.save()
+
+    @staticmethod
+    def NoticeMessageSetting(request):
+        return render_to_response("adminStaff/noticeMessageSettings.html")
+        pass
