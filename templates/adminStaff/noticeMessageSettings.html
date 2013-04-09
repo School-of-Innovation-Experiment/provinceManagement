@@ -1,7 +1,7 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
   <div><!--FORM2 DIV-->
-    <form class="well form-inline" method="POST" id="num_limit_form">
+    <form class="well form-inline" method="POST" id="noticemessage_form">
       {% csrf_token %}
       <fieldset>
         <div class="alert alert-info control-group">
@@ -9,9 +9,12 @@
 	  <strong>说明:</strong>提示信息将在相应角色登录后显示
         </div>
         <div class="control-group">
-          <label class="control-label" for="select01">角色选择</label>
+          <label class="control-label" for="select_role">角色选择</label>
+          <div class="alert alert-info control-group" id="noticemessage_warning" style="display: none;">
+	    请选择角色
+          </div>
           <div class="controls">
-            <select id="select01" name="message_role">
+            <select id="select_role" name="message_role">
               <option>请选择</option>
               <option value="1">专家</option>
               <option value="2">学校</option>
@@ -35,7 +38,7 @@
       </fieldset>
     </form>
     </div><!--End FORM2-->
-      <script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
+      <script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery-1.9.1.js"></script>
       <!-- ajax_csrf-->
       <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
     {%endblock%}
