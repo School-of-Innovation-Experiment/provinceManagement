@@ -1,3 +1,4 @@
+# coding: UTF-8
 """
     Author:tianwei
     Email: liutianweidlut@gmail.com
@@ -10,7 +11,8 @@ from backend.decorators import check_auth
 from const import *
 from users.models import *
 from backend.logging import loginfo
-
+from adminStaff.models import NoticeMessage
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 
 all_required = ('WEB_TITLE',)
 
@@ -62,4 +64,17 @@ def userauth_settings(request):
 
     context = {"userauth": userauth}
 
+    return context
+
+def notice_message_settings(request):
+    #TODO: 计算动态时间
+    try:
+        expert_message = NoticeMessage.objects.order_by('-noticedatetime').filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD)[0]
+        school_message = NoticeMessage.objects.order_by('-noticedatetime').filter(noticemessage__startswith = MESSAGE_SCHOOL_HEAD)[0]
+        context = {"expert_notice_message":
+                       expert_message.noticemessage[len(MESSAGE_EXPERT_HEAD):-1],
+                   "school_notice_message":
+                       school_message.noticemessage[len(MESSAGE_SCHOOL_HEAD):-1]}
+    except:
+        context = {}
     return context

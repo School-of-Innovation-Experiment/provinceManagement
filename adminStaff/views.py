@@ -9,11 +9,11 @@ import random
 import re,sha
 import uuid
 from datetime import date
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from registration.models import *
 from adminStaff import forms
-from adminStaff.models import ProjectPerLimits, ProjectControl
-from django.shortcuts import render_to_response
+from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
+from django.shortcuts import render_to_response, render
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
@@ -23,7 +23,9 @@ from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 from registration.models import RegistrationProfile
-from django.db import transaction 
+from django.db import transaction
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -51,7 +53,7 @@ class AdminStaffService(object):
             dict["auth"] = ''
             dict["email"] = register.user.email
             dict["is_active"] = register.user.is_active
-            for auth in auth_list: 
+            for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
             ##########################################################################
             res_list.append(dict)
@@ -175,7 +177,7 @@ class AdminStaffService(object):
     @staticmethod
     @transaction.commit_on_success
     def SubjectFeedback(request):
-        exist_message = '' 
+        exist_message = ''
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
@@ -196,22 +198,6 @@ class AdminStaffService(object):
                     else:
                         #筛选专家列表
                         expert_list = ExpertProfile.objects.filter(subject=expert_category)
-<<<<<<< HEAD
-                        re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
-                        #将返回数据进入Re_Project_Expert表中
-
-                        for subject in re_dict.keys():
-                            for expert in re_dict[subject]:
-                                #subject.expert.add(expert)
-                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
-                        #保存已分配标志，值为1
-                        obj.is_assigned = 1
-                        obj.save()
-                except Project_Is_Assigned.DoesNotExist:
-                    obj = None
-        return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form},context_instance=RequestContext(request))
-
-=======
                         #如果所属学科专家不存在，则进行提示
                         if len(expert_list) == 0 or len(subject_list) == 0:
                             if not expert_list :
@@ -219,22 +205,21 @@ class AdminStaffService(object):
                             else:
                                 exist_message = '没有专业指定的题目，无法进行指派'
 
-                        else:                           
+                        else:
                             re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
                             #将返回数据进入Re_Project_Expert表中
-        
+
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
                                     #subject.expert.add(expert)
                                     Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
-                            #保存已分配标志，值为1  
+                            #保存已分配标志，值为1
                             obj.is_assigned = 1
                             obj.save()
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form,'exist_message':exist_message},context_instance=RequestContext(request))
-    
->>>>>>> 99e7bc61f01205a22d351db8d459d251b14fb824
+
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list):
 
@@ -274,7 +259,21 @@ class AdminStaffService(object):
         subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         subject_obj.save()
 
+
     @staticmethod
     def NoticeMessageSetting(request):
-        return render_to_response("adminStaff/noticeMessageSettings.html")
-        pass
+        if request.POST.get("message_content", False):
+            datemessage = ""
+            if request.POST.get('message_checkbox', False):
+                datemessage = "1"
+            else:
+                datemessage = "0"
+            # TODO: 前台控制角色选择验证
+            if request.POST["message_role"] == '1':
+                rolemessage = MESSAGE_EXPERT_HEAD
+            else:
+                rolemessage = MESSAGE_SCHOOL_HEAD
+            _message = rolemessage + request.POST["message_content"] + "  " + datemessage
+            message = NoticeMessage(noticemessage = _message)
+            message.save()
+        return render(request, "adminStaff/noticeMessageSettings.html")

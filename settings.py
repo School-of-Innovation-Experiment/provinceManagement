@@ -131,6 +131,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'context.userauth_settings',
     'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
+    'context.notice_message_settings',
 )
 
 INSTALLED_APPS = (

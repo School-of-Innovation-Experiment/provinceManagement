@@ -21,3 +21,15 @@
 </div>
 
 {% endblock %}
+{% if school_notice_message %}
+  {% block footer-alert-bar %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+        {% block footer-alert-content %}
+          {{ school_notice_message }}
+        {% endblock %}
+      </marquee>
+    </div>
+  {% endblock %}
+{% endif %}
+

@@ -57,3 +57,11 @@ class ProjectPerLimits(models.Model):
 
     def __unicode__(self):
         return self.school.school.schoolName + str(self.number)
+class NoticeMessage(models.Model):
+    '''
+    约定:
+    传给专家的信息以__expert__开头
+    传给学校的信息以__school__开头
+    '''
+    noticedatetime = models.DateTimeField(blank=True, default=datetime.datetime.now)
+    noticemessage = models.CharField(blank=True, max_length=600)
