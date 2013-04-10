@@ -4,6 +4,7 @@
 	max-width: 600px;
 	padding: 0px 0px 29px;
 	margin-left: 10px;
+  min-height: 500px;
   text-align: left;
     -webkit-border-radius: 5px;
        -moz-border-radius: 5px;
