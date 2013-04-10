@@ -11,6 +11,7 @@ import uuid
 
 from django.db import models
 
+from const import PROJECT_STATUS_CHOICES
 from const.models import *
 from school.models import *
 from users.models import *
@@ -38,6 +39,15 @@ class ProjectControl(models.Model):
                                               verbose_name="项目终审开始时间")
     final_end_day_review = models.DateField(blank=False,
                                             verbose_name="项目终审结束时间")
+    def now_status(self):
+        now = datetime.date.today()
+        statuss_list =  [(self.pre_end_day, PROJECT_STATUS_CHOICES[0]),
+                         (self.final_end_day, PROJECT_STATUS_CHOICES[2]),
+                         (self.final_end_day_review, PROJECT_STATUS_CHOICES[3]) ]
+        for i in range(len(statuss_list)):
+            if now < statuss_list[i][0]:
+                return statuss_list[i][1][1], (statuss_list[i][0] - now) .days
+            return "", 0
 
     class Meta:
         verbose_name = "时间节点控制"
