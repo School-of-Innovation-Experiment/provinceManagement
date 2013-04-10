@@ -1,4 +1,18 @@
 $(function(){
+  var showbar = $("#show-search-tools-bar");
+    showbar.click(function(){
+    $("#search-tools-bar").slideToggle("slow",function()
+                                       {
+                                         if(showbar.html() == "搜索")
+                                           {
+                                             showbar.html("隐藏");
+                                           }
+                                         else
+                                           {
+                                             showbar.html("搜索");
+                                           }
+                                       });
+  });
   var $container = $('#flow_container');
   $container.imagesLoaded(function(){
     $container.masonry({
