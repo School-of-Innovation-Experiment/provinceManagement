@@ -10,8 +10,9 @@
         </div>
         <div class="control-group">
           <label class="control-label" for="select_role">角色选择</label>
-          <div class="alert alert-info control-group" id="noticemessage_warning" style="display: none;">
-	    请选择角色
+          <div class="alert alert-error" id="noticemessage_warning" style="display: none;">
+            <a class="close" data-dismiss="alert">×</a>
+	    角色选择错误
           </div>
           <div class="controls">
             <select id="select_role" name="message_role">
@@ -28,7 +29,7 @@
         <div class="control-group">
           <label class="control-label" for="textarea">提醒信息</label>
           <div class="controls">
-            <textarea class="input-xlarge" id="textarea" rows="3" name="message_content"></textarea>
+            <textarea class="input-xlarge" id="textarea" rows="6" name="message_content"></textarea>
           </div>
         </div>
         <div class="form-actions">
@@ -41,4 +42,5 @@
       <script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery-1.9.1.js"></script>
       <!-- ajax_csrf-->
       <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+      <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/noticemessage.js"></script>
     {%endblock%}
