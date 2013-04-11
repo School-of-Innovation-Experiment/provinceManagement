@@ -5,7 +5,7 @@ from os.path import join
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (('416774905', '416774905@qq.com'),)
@@ -18,7 +18,7 @@ DATABASES = {
         'NAME': 'ProvinceManagement',             # Or path to database file if using sqlite3.
         'USER': 'root',                       # Not used with sqlite3.
         'PASSWORD': 'root',                   # Not used with sqlite3.
-        'HOST': '192.168.20.100',                           # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '192.168.2.90',                           # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                           # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -105,7 +105,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -182,9 +181,6 @@ PUBLIC_DOWNLOADS_URL_BASE = '/data/'
 
 TMP_FILE_PATH = join(SETTINGS_ROOT, 'tmp/')
 
-#APPEND_SLASH=False
-
-
 LOGGING_OUTPUT_ENABLED = True
 
 LOGGING = {
@@ -230,7 +226,7 @@ LOGGING = {
 }
 
 # Website settings
-WEB_TITLE = "Province Management Pro"
+WEB_TITLE = "Province Management"
 
 # project original file
 PROCESS_FILE_PATH = join("tmp", "process_file")
@@ -261,3 +257,8 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 #chartit
 CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
+
+#Fixtures
+#FIXTURE_DIRS = (
+#    '/const/fixtures/',
+#)

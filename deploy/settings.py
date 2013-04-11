@@ -5,10 +5,10 @@ from os.path import join
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (('939829151', '939829151@qq.com'),)
+ADMINS = (('416774905', '416774905@qq.com'),)
 
 MANAGERS = ADMINS
 
@@ -18,7 +18,7 @@ DATABASES = {
         'NAME': 'ProvinceManagement',             # Or path to database file if using sqlite3.
         'USER': 'root',                       # Not used with sqlite3.
         'PASSWORD': 'root',                   # Not used with sqlite3.
-        'HOST': '192.168.2.90',                           # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '192.168.20.100',                           # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                           # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -105,7 +105,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -154,8 +153,6 @@ INSTALLED_APPS = (
     'news',
     'showtime',
     #Add-on
-    'debug_toolbar',
-    #'tinymce',
     'south',
     'dajaxice',
     'dajax',
@@ -183,23 +180,6 @@ PUBLIC_DOWNLOAD_URL_BACKEND = 'filetransfers.backends.base_url.public_download_u
 PUBLIC_DOWNLOADS_URL_BASE = '/data/'
 
 TMP_FILE_PATH = join(SETTINGS_ROOT, 'tmp/')
-
-#APPEND_SLASH=False
-
-#Debug
-INTERNAL_IPS = ('192.168.2.218',)
-
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-)
 
 LOGGING_OUTPUT_ENABLED = True
 
@@ -246,7 +226,7 @@ LOGGING = {
 }
 
 # Website settings
-WEB_TITLE = "Province Management"
+WEB_TITLE = "Province Management Pro"
 
 # project original file
 PROCESS_FILE_PATH = join("tmp", "process_file")
@@ -277,8 +257,3 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 #chartit
 CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
-
-#Fixtures
-#FIXTURE_DIRS = (
-#    '/const/fixtures/',
-#)
