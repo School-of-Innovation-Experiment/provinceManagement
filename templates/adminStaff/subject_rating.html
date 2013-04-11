@@ -6,7 +6,16 @@
 		{% csrf_token %}	
 			
 	  	{{school_category_form.school_choice}}
+	  	{% if not readonly %}
 	  	<input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
+	  	{%endif%}
+	  	{% if readonly %}
+	  	<div class="alert alert-error">
+		    <a class="close" data-dismiss="alert">x</a> 
+		    <h4 class="alert-heading">系统提示！</h4>
+		    <p>目前不能按学校刷选，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+	  	</div><!--end alert block-->
+	  	{%endif%}
 	  </form><!--end category form -->
 	<table class="table table-condensed" id="subject_table">
 	<thead>

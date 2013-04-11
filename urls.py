@@ -56,6 +56,11 @@ urlpatterns = patterns('',
         name="features"
     ),
     url(
+        r'^feedback/$',
+        direct_to_template, {'template': 'base/feedback.html'},
+        name="features"
+    ),
+    url(
         r'^show/',
         include('showtime.urls'),
     ),
