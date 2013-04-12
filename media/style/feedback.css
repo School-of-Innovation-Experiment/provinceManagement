@@ -1,0 +1,13 @@
+div.header{	
+	height: 100px;
+	margin: 0px;
+	position: relative;
+}
+div.href{	
+	margin:30px; 
+	text-align: left;
+	margin-left: 0px;
+}
+span.mail{
+	font-size: 32px;
+}
