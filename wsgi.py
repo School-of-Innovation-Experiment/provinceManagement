@@ -20,7 +20,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 sys.path.append('/home/hadoop/mysites/')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'provinceManagement.deploy.production_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'provinceManagement.settings_production'
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
