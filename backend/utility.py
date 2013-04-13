@@ -22,6 +22,8 @@ def search_tuple(src, target):
             return item[1]
 
     return None
+
+
 def convert2media_url(raw_url):
     """
     convert filefield's default url-string to media url
@@ -29,7 +31,8 @@ def convert2media_url(raw_url):
     convert:http://127.0.0.1:8000/media/tmp/process_file/2013/04/01/bike.jpg
     to:/static/tmp/process_file/2013....
     """
-    return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
+    return raw_url
+    #return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
 
 def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
     """
