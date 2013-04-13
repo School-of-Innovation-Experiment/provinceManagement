@@ -41,7 +41,7 @@ elif [ $1 = 'deploy' ];then
     echo "*_* Deploy and copy scipts *_*"
 elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
-    cd ..
+    cd $(cd "$(dirname "$0")"; pwd)/../
     echo "check branch to master"
     git checkout master
     echo "update code repo"
