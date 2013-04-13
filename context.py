@@ -71,16 +71,17 @@ def notice_message_settings(request):
     school_message, expert_message = "", ""
     context = {}
     try:
-        expert_message = NoticeMessage.objects.order_by('-noticedatetime').filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD)[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]
+        expert_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]
     except:
         pass
     try:
-        school_message = NoticeMessage.objects.order_by('-noticedatetime').filter(noticemessage__startswith = MESSAGE_SCHOOL_HEAD)[0].noticemessage[len(MESSAGE_SCHOOL_HEAD):]
+        school_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_SCHOOL_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_SCHOOL_HEAD):]
+        school_message, school_check = school_message[:-1], school_message[-1]
     except:
         pass
     if ProjectControl.objects.all().count():
         projectctl_obj = ProjectControl.objects.all()[0]
-        if school_message[-1] == '1':
+        if school_message and school_check == '1':
             nowstatus = projectctl_obj.now_status()
             if nowstatus[0]:
                 school_message = school_message[:-1] + \
