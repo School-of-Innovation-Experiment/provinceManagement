@@ -30,9 +30,6 @@ from backend.decorators import *
 
 class AdminStaffService(object):
     @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
