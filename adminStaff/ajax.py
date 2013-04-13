@@ -92,7 +92,7 @@ def  ExpertDispatch(request, form):
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
         else:
             message = u"相同邮件已经发送，中断发送"
-            return simplejson.dumps({'field':expert_form.data.keys(), '.status':'1', 'message':message})
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
