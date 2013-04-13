@@ -20,14 +20,9 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 sys.path.append('/home/hadoop/mysites/')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'provinceManagement.deploy.settings'
-
+os.environ['DJANGO_SETTINGS_MODULE'] = 'provinceManagement.settings_production'
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()
-
-# Apply WSGI middleware here.
-# from helloworld.wsgi import HelloWorldApplication
-# application = HelloWorldApplication(application)

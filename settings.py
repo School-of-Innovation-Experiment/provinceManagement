@@ -1,27 +1,18 @@
-# Django settings for Rest project.
+"""
+    Author: tianwei
+    Email: liutianweidlut@gmail.com
+    Description: Django setting base template
+    Created: 2013-4-12
+"""
 
 import os
 from os.path import join
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (('416774905', '416774905@qq.com'),)
 
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'ProvinceManagement',             # Or path to database file if using sqlite3.
-        'USER': 'root',                       # Not used with sqlite3.
-        'PASSWORD': 'root',                   # Not used with sqlite3.
-        'HOST': '192.168.2.90',                           # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                           # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -63,12 +54,10 @@ STATIC_ROOT = join(SETTINGS_ROOT, 'static/')
 COMMON_STITICFILES_DIR = join(SETTINGS_ROOT, 'static/')
 
 # URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
@@ -98,6 +87,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.eggs.Loader',
 )
 
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,6 +101,7 @@ ROOT_URLCONF = 'urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'wsgi.application'
+
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -173,6 +164,7 @@ EMAIL_HOST_PASSWORD = '9683096830'
 DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
 EMAIL_USE_TLS = False
 
+
 #########################
 # File Transfer settings
 PREPARE_UPLOAD_BACKEND = 'filetransfers.backends.delegate.prepare_upload'
@@ -225,40 +217,22 @@ LOGGING = {
     }
 }
 
-# Website settings
-WEB_TITLE = "Province Management"
 
 # project original file
 PROCESS_FILE_PATH = join("tmp", "process_file")
 FILE_DELETE_URL = '/school/delete/'
+
 # news documents path
 NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
 
-# TinyMCE settings
-#TINYMCE_JS_URL = os.path.join(STATIC_ROOT, "tiny_mce/tiny_mce.js")
-#TINYMCE_JS_ROOT = os.path.join(STATIC_ROOT, "tiny_mce")
-#TINYMCE_DEFAULT_CONFIG = {
-#        'theme':'advanced',
-#        'cleanup_on_startup':True,
-#        'custom_undo_redo_levels': 10,
-#}
-
-FILE_UPLOAD_PERMISSIONS = 0644 #NOTICE: the prefix 0 is important
-
-"""
-FILE Upload
-"""
-FILE_UPLOAD_TEMP_DIR = os.path.join(os.path.dirname(__file__), PROCESS_FILE_PATH).replace("\\",'/')
+#FILE Upload
+#NOTICE: the prefix 0 is important
+FILE_UPLOAD_PERMISSIONS = 0644
+FILE_UPLOAD_TEMP_DIR = os.path.join(SETTINGS_ROOT, PROCESS_FILE_PATH).replace("\\",'/')
 FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler',
                         'django.core.files.uploadhandler.TemporaryFileUploadHandler',
                         )
-
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 #chartit
 CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
-
-#Fixtures
-#FIXTURE_DIRS = (
-#    '/const/fixtures/',
-#)

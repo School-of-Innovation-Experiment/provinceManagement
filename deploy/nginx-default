@@ -46,7 +46,7 @@ server {
 	}
 
     location /static {
-       alias /home/hadoop/provinceManagement/static/; 
+       alias /home/hadoop/mysites/provinceManagement/static/; 
        access_log off;  
     }
 
