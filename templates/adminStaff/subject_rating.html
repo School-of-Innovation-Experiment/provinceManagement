@@ -23,6 +23,7 @@
 		<th>发布题目名称</th>
 		<th>所属学校</th>
 		<th>指导教师</th>
+        <th>项目成员</th>
 		<th>专家评分</th>
 		<th>修改等级</th>
 	</tr>
@@ -33,6 +34,7 @@
 			<td>{{subject.title}}</td>
 			<td>{{subject.school}}</td>
 			<td>{{subject.inspector}}</td>
+            <td>{{subject.members}}</td>
 			<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
 			<td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
 		</tr>
