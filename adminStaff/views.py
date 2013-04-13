@@ -30,6 +30,9 @@ from backend.decorators import *
 
 class AdminStaffService(object):
     @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
@@ -71,9 +74,6 @@ class AdminStaffService(object):
             email_list  = AdminStaffService.GetRegisterList()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
     def expertDispatch(request):
         if request.method == "POST":
             school_form = forms.SchoolDispatchForm()
@@ -89,9 +89,6 @@ class AdminStaffService(object):
                 expert_form = forms.ExpertDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
     @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
     def schoolDispatch(request):
         if request.method == "POST":
             expert_form = forms.ExpertDispatchForm()
@@ -107,9 +104,6 @@ class AdminStaffService(object):
                 school_form = forms.SchoolDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
     @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
     def AuthUserExist(email, identity):
         if User.objects.filter(email=email).count():
             user_obj = User.objects.get(email=email)
