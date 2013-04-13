@@ -104,7 +104,7 @@ def SchoolDispatch(request, form):
         email = school_form.cleaned_data["school_email"]
         name = email
         school_name = school_form.cleaned_data["school_name"]
-        if password:
+        if password == "":
             password = email.split('@')[0]
         flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER, school_name=school_name)
         if flag:
