@@ -39,7 +39,7 @@ def index(request):
 
 def read_news(request, news_id):
     context = Context({
-            'news': get_news(news_id)
+            'news': get_news(news_id),
             })
     return render(request, 'home/news-content.html', context)
 

@@ -263,6 +263,7 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    @time_controller(phase=STATUS_FINSUBMIT)
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
