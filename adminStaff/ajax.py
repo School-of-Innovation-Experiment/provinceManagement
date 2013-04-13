@@ -17,6 +17,8 @@ from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 from school.models import Project_Is_Assigned, InsituteCategory
 from users.models import SchoolProfile
+from news.models import News
+import datetime
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -90,7 +92,7 @@ def  ExpertDispatch(request, form):
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
         else:
             message = u"相同邮件已经发送，中断发送"
-            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+            return simplejson.dumps({'field':expert_form.data.keys(), '.status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
@@ -147,5 +149,13 @@ def change_subject_grade(request, project_id, changed_grade):
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     return simplejson.dumps({'status':'1'})
+@dajaxice_register
+def Release_News(request, html):
+    '''
+    Release_News
+    '''
+    title=datetime.datetime.today().year
+    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
+    data.save();
 
     
