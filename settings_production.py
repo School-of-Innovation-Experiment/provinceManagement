@@ -22,3 +22,16 @@ DATABASES = {
 }
 
 WEB_TITLE = "Province Management Pro"
+
+#send 404 link to admin user
+SEND_BROKEN_LINK_EMAILS = True
+
+# Set your DSN value
+RAVEN_CONFIG = {
+        'dsn': 'http://e73fc4cdbe3243fd9cfe2160df1826a9:2e1cd656d69145e397c484bcdc9cc91a@192.168.2.7:19000/2',
+    }
+
+# Add raven to the list of installed apps
+INSTALLED_APPS = INSTALLED_APPS + (
+        'raven.contrib.django.raven_compat',
+        )
