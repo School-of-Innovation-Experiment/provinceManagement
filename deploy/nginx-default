@@ -55,6 +55,11 @@ server {
        expires 3d;
     }
 
+    location /media {
+        root  /home/hadoop/mysites/provinceManagement/media/; 
+        break;
+    }
+
     location ~.*\.(css|js)$ {
        expires 12h;
     }
