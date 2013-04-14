@@ -47,7 +47,8 @@ elif [ $1 = 'update' ];then
     echo "update code repo"
     git pull
     echo "update static folder"
-    python manage.py collectstatic -l
+    python manage.py collectstatic
+    sudo chmod -R 777 ./*
     cd -
     echo "*_* update codebase *_*"
 else
