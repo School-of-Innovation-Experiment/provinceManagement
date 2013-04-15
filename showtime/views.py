@@ -44,11 +44,11 @@ def show_index(request):
     if project_page <= 0:
         raise Http404
 
-    context = show_index_get_context(request)
+    context = show_index_get_context(request, project_page)
     return render(request, 'introduction/show.html', context)
 
-def show_index_get_context(request):
-    context = show_index_get_search_context
+def show_index_get_context(request, project_page):
+    context = show_index_get_search_context(request, project_page)
     if project_page != context["project_page"].number:
         raise Http404
     for project in context["project_list"]:
@@ -65,13 +65,10 @@ def show_index_get_context(request):
     context["years"] = list(yearset)
     context["schools"] = SchoolDict.objects.all()
     context["grades"] = ProjectGrade.objects.all()
-    context["search_school"] = search_school
-    context["search_year"] = search_year
-    context["search_grade"] = search_grade
 
     return context
 
-def show_index_get_search_context(request):
+def show_index_get_search_context(request, project_page):
     search_school = request.GET.get('search_school') or ""
     search_year = request.GET.get('search_year') or ""
     search_grade = request.GET.get('search_grade') or ""
@@ -87,4 +84,8 @@ def show_index_get_search_context(request):
         project_list = ProjectSingle.objects.all()
 
     context = getContext(project_list, project_page, 'project', 8)
+    context["search_school"] = search_school
+    context["search_year"] = search_year
+    context["search_grade"] = search_grade
+
     return context
