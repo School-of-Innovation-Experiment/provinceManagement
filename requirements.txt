@@ -3,3 +3,5 @@ django-tinymce
 djangocms-admin-style
 django-chartit
 south
+django-dajax
+django-dajaxice
