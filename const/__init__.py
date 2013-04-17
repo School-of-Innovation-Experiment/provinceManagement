@@ -12,7 +12,8 @@ from settings import STATIC_URL, MEDIA_URL
 UNDIFINED = "undifined"
 
 # For UserIdentity Table
-SCHOOL_USER = "student"
+SCHOOL_USER = "schoolstaff"
+STUDENT_USER = "student"
 EXPERT_USER = "expert"
 ADMINSTAFF_USER = "adminstaff"
 VISITOR_USER = "visitor"
