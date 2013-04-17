@@ -47,6 +47,13 @@ def userauth_settings(request):
         except SchoolProfile.DoesNotExist, err:
             loginfo(p=err, label="context SchoolProfile")
 
+    if check_auth(user=request.user, authority=STUDENT_USER):
+        userauth["is_student"] = True
+        try:
+            userauth["student"] = StudentProfile.objects.get(user=request.user)
+        except StudentProfile.DoesNotExist, err:
+            loginfo(p=err, label="context StudentProfile")
+
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
         userauth["is_adminstaff"] = True
         try:

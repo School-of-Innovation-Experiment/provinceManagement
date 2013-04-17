@@ -44,6 +44,12 @@
                   <i class="icon-camera icon-white"> </i></a>
                 </li>
                 {%endif%}
+                {%if request.user.is_student%}
+      		  		<li class="nav-li"><a href={% url school.views.student_view %}  rel="tooltip" data-placement="bottom" 
+      		  			data-original-title = "参赛团队页面">
+                  <i class="icon-tags icon-white"> </i></a>
+                </li>
+                {%endif%}
                 {%if request.user.is_superuser%}
                 <li class="nav-li"><a href="/admin/" rel="tooltip" data-placement="bottom" 
       		  			data-original-title = "超级用户登录页面">

@@ -22,6 +22,7 @@ AUTH_CHOICES = (
     (SCHOOL_USER, u"高校"),
     (EXPERT_USER, u"专家"),
     (ADMINSTAFF_USER, u"省级管理员"),
+    (STUDENT_USER, u"参赛团队"),
     (VISITOR_USER, u"游客"),
 )
 
