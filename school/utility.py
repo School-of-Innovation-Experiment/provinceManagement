@@ -28,10 +28,7 @@ from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
-from const import AUTH_CHOICES, VISITOR_USER
-from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
-from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const import *
 
 from backend.utility import search_tuple
 
@@ -260,3 +257,45 @@ def get_trend_lines(user):
                                 }
                 )
     return cht
+
+
+def get_statistics_from_user(user):
+    """
+    Get statistics infomation by user, the user it request.user
+
+    Args:
+        In: user, it is request user
+        Out: data, it is a dict for statistics
+    """
+    if user is None:
+        raise Http404
+
+    trend_lines = get_trend_lines(user)
+    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year))
+    currentnation_numbers = get_gradecount(user, GRADE_NATION, True)
+    currentprovince_numbers = get_gradecount(user, GRADE_PROVINCE, True)
+
+    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year))
+    historynation_numbers = get_gradecount(user, GRADE_NATION, False)
+    historyprovince_numbers = get_gradecount(user, GRADE_PROVINCE, False)
+
+    innovation_numbers = get_categorycount(user, CATE_INNOVATION, True)
+    enterprise_numbers = get_categorycount(user, CATE_ENTERPRISE, True)
+    enterprise_ee_numbers = get_categorycount(user, CATE_ENTERPRISE_EE, True)
+
+    school_name = SchoolProfile.objects.get(userid=user).school.schoolName
+
+    data = {"innovation_numbers": innovation_numbers,
+            "enterprise_numbers": enterprise_numbers,
+            "enterprie_ee_numbers": enterprise_ee_numbers,
+            "current_numbers": current_numbers,
+            "currentprovince_numbers": currentprovince_numbers,
+            "currentnation_numbers": currentnation_numbers,
+            "history_numbers": history_numbers,
+            "historynation_numbers": historynation_numbers,
+            "historyprovince_numbers": historyprovince_numbers,
+            "school_name": school_name,
+            "trend_lines": trend_lines,
+            }
+
+    return data
