@@ -1,0 +1,30 @@
+<div class="tab-content">
+
+  <div class="tab-pane fade active in" id="new-home">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#new-home-project-detail" data-toggle="tab">项目细节</a></li>
+      <li><a href="#new-home-project-score" data-toggle="tab">项目评价</a></li>
+      <!-- <li><a href="#new-home-project-result" data-toggle="tab">最终得分</a></li> -->
+    </ul>
+
+
+    <div class="tab-content">
+      <div class="tab-pane fade active in" id="new-home-project-detail">
+        {% include "expert/widgets/projects/_project_content_detail.html"%}
+      </div>   <!--Project Details-->
+      <div class="tab-pane fade" id="new-home-project-score">
+        {% include "teacher/widgets/comments.html" %}
+      </div>
+    </div>  <!-- tab-content -->
+
+  </div> <!-- tab-pane new-home -->
+
+  <div class="tab-pane fade" id="help">
+    <h3>请指导教师对左侧列表中的项目申请信息进行审核</h3>
+         <dl>
+          <dt>注意事项：</dt>
+          <dd class="text-error">1. 每个项目在提交之前必须进行指导教师审核。</dd>
+          <dd class="text-error">2. 每个项目提交审核后不能再对其修改。</dd>  
+        </dl>  
+  </div>
+</div>

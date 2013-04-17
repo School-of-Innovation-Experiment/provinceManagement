@@ -1,0 +1,63 @@
+<!-- project-history page -->
+{% extends "teacher/base/_content.html" %}
+{% block calculate-content%}
+
+<div class="container">
+	<div class="page-header">
+	<h3>历史项目列表</h3>
+	</div>
+      <table class="table table-hover">
+       
+         <thead>
+     <tr>
+    <th>年份</th>
+    <th>项目名称</th>
+    <th>项目类型</th>
+     <th>学生负责人</th>
+        <th>年代</th>
+<th>项目级别</th>
+    </tr>
+               </thead>
+       <tbody>
+      <tr>
+
+       <td>2012</td>
+       <td>基于图像处理的投影键盘</td>
+       <td>创新训练</td>
+      <td>刘留</td>
+       <td>2011</td>
+                   <td>
+            <span class="label label-important">国家级</span>
+          
+            </td>
+    </tr>
+             <tr>
+
+       <td>2012</td>
+       <td>基于单片机和Zigbee的无线自助点餐笔</td>
+       <td>创新训练</td>
+          <td>逄凌滨</td>  
+            <td>2010</td>
+           <td>
+             <span class="label label-info">省级</span>
+          
+            </td>
+       </tr>
+             <tr>
+     
+       <td>2012</td>
+       <td>自助导游系统</td>
+       <td>创新训练</td>
+       
+       <td>刘丹</td>
+         <td>2009</td>
+        <td>
+           <span class="label label">校级</span>
+                      </td>
+        </td>
+       </tr>
+       </tbody>
+
+    </table>
+</div>
+{% endblock %}
