@@ -10,7 +10,7 @@ from os.path import join
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
-ADMINS = (('416774905', '416774905@qq.com'),)
+ADMINS = (('tianwei', '416774905@qq.com'),)
 
 MANAGERS = ADMINS
 
