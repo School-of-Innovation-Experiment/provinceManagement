@@ -51,5 +51,9 @@ urlpatterns = patterns('',
     url(
         r'non/$',
         school_views.non_authority_view,
-    )
+    ),
+    url(
+        r'^dispatch/$',
+        school_views.StudentDispatch,
+    ),
 )

@@ -10,7 +10,6 @@ import re,sha
 import uuid
 from datetime import date
 from django.http import HttpResponse, Http404
-from registration.models import *
 from adminStaff import forms
 from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
 from django.shortcuts import render_to_response, render, get_object_or_404
@@ -23,8 +22,12 @@ from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
+
+from registration.models import *
 from registration.models import RegistrationProfile
+
 from django.db import transaction
+ 
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 from backend.decorators import *
 
