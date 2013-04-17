@@ -1,6 +1,24 @@
 <!--province analysis-->
 {% extends "analysis/base.html" %}
 
+{% block forejs %}
+  <!--highchart chartit-->
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
+  {% load chartit %}
+  
+  {{ trend_lines|load_charts:"trend_lines" }}
+
+{% endblock %}
+
 {%block calculate-content%}
-  <p>province analysis</p>
+<fieldset>
+  <legend>本年度学校申请比例</legend>
+  <div id="trend_lines">
+  </div><!--end line object-->
+  <br/>
+</fieldset><!--end fieldset-->
+
+<br/>
+<br/>
 {% endblock %}

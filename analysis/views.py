@@ -77,4 +77,5 @@ def province_statistics_view(request):
     """
     province statistics view
     """
-    return render(request, 'analysis/province_statistics.html')
+    trend_lines = get_province_trend_lines()
+    return render(request, 'analysis/province_statistics.html', {"trend_lines":trend_lines})

@@ -32,7 +32,7 @@ from const import *
 
 from backend.utility import search_tuple
 
-from backend.logging import logger
+from backend.logging import logger, loginfo
 
 
 def check_limits(user):
@@ -331,3 +331,42 @@ def get_statistics_from_user(user):
             }
 
     return data
+
+
+def map_school_name(school_id):
+
+    name = SchoolDict.objects.get(id=school_id[0]).schoolName
+    
+    return (name,)
+
+
+def get_province_trend_lines():
+    """
+    Get category datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: school numbers object
+    """
+    data = ProjectSingle.objects.all()
+
+    ds = PivotDataPool(series=[{'options': {'source': data,
+                                            'categories': ['school__id'],
+                                            'legend_by':['project_grade__grade',]
+                                            },
+                                            'terms': {'number': Count('project_grade'),
+                                                }},
+                            ],
+                        sortf_mapf_mts=(None, map_school_name, True)
+                       )
+    cht = PivotChart(datasource=ds,
+            series_options=[{'options': {'type': 'column', 'stacking':True},
+                                'terms': ['number']},
+                               ],
+                chart_options={'title': {'text': '历史数据统计'},
+                                'xAxis':{
+                                            'title':{'text': '参赛学校'},
+                                        },
+                                'yAxis':{'title':{'text': '评级'},'allowDecimals':False},
+                                }
+                )
+    return cht
