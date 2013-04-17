@@ -48,6 +48,7 @@ def userauth_settings(request):
             loginfo(p=err, label="context SchoolProfile")
 
     if check_auth(user=request.user, authority=STUDENT_USER):
+        loginfo(p="*"*20)
         userauth["is_student"] = True
         try:
             userauth["student"] = StudentProfile.objects.get(user=request.user)

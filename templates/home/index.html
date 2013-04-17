@@ -55,7 +55,7 @@
                   <a href={% url expert.views.home_view %} >---评审专家</a>
               </li>
               {%endif%}
-              {%if request.user.is_student%}
+              {%if userauth.is_student%}
               <li>
                 <a href={% url school.views.student_view %}  >---参赛学生</a>
               </li>
