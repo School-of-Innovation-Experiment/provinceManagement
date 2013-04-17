@@ -27,5 +27,31 @@ function subject_grade(){
 	Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
 	}	
 function change_grade_callback(data){
-	
+		window.location.reload();
 	}
+
+function release_news(){
+	release=true;
+	$("#subject_table_body tr").each(function(){
+		for (var i = 0; i < 5; ++i){
+			if ($(this).find("td").eq(i).text()=="未指定")
+				release=false;
+		}
+	});
+	if (release)
+	{
+		html_str = $("#subject_table")[0].outerHTML;
+		Dajaxice.adminStaff.Release_News(release_news_callback, {html: html_str});
+		$('#myrelease').modal('show');
+	}
+		
+	else
+	{
+		$('#myunrelease').modal('show');
+		
+	}
+
+}
+function release_news_callback(data){
+
+}

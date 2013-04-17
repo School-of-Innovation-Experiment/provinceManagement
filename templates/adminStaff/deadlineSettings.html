@@ -1,63 +1,62 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 
-<div class="row">
-			<!--FORM1 div-->
-			<div class="offset4 span5">
-						<form class="well center" id="time_settings_form" method="POST" action="">
-							{% csrf_token %}
-							<label>初期提交起止时间</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_start_date}}
-							</div>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_end_date}}
-							</div>
-							<label>结题报告起止时间</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.final_start_date}}
-							</div>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>>{{time_form.final_end_date}}
-							</div>
-							<label>项目初审起止时间</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_start_date_review}}
-							</div>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_end_date_review}}
-							</div>
-							<label>项目终审起止时间</label>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.final_start_date_review}}
-							</div>
-							<div class="input-prepend">
-								<span class="add-on"><i class="icon-time"></i></span>{{time_form.final_end_date_review}}
-							</div>
-							<input type="button" class="btn btn-primary" onclick="time_settings();"value="保存更改">
-							<span id="time_settings_error_message"></span>
-						</form>
-			</div><!-- END FORM1-->
-</div>
-<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
-<!-- datepicker -->
-<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<!--adminstaff -->
-<script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/send_num_limit.js"></script>
-<script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/time_settings.js"></script>
-<!-- ajax_csrf-->
-<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
-<script>
-	$(function(){
-		window.prettyPrint && prettyPrint();
-			$('#pre_start_date').datepicker();
-			$('#pre_end_date').datepicker();
-			$('#final_start_date').datepicker();
-			$('#final_end_date').datepicker();
-			$('#pre_start_date_review').datepicker();
-			$('#pre_end_date_review').datepicker();
-			$('#final_start_date_review').datepicker();
-			$('#final_end_date_review').datepicker();
-	});	
-	</script>
+  <div class="row">
+    <!--FORM1 div-->
+    <div class="offset4 span5">
+      <form class="well center" id="time_settings_form" method="POST" action="">
+	{% csrf_token %}
+	<label>初期提交起止时间</label>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_start_date}}
+	</div>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_end_date}}
+	</div>
+	<label>结题报告起止时间</label>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.final_start_date}}
+	</div>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>>{{time_form.final_end_date}}
+	</div>
+	<label>项目初审起止时间</label>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_start_date_review}}
+	</div>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.pre_end_date_review}}
+	</div>
+	<label>项目终审起止时间</label>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.final_start_date_review}}
+	</div>
+	<div class="input-prepend">
+	  <span class="add-on"><i class="icon-time"></i></span>{{time_form.final_end_date_review}}
+	</div>
+	<input type="button" class="btn btn-primary" onclick="time_settings();"value="保存更改">
+	<span id="time_settings_error_message"></span>
+      </form>
+    </div><!-- END FORM1-->
+  </div>
+  <!-- datepicker -->
+  <script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <!--adminstaff -->
+  <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/send_num_limit.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/time_settings.js"></script>
+  <!-- ajax_csrf-->
+  <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+  <script>
+  $(function(){
+    window.prettyPrint && prettyPrint();
+    $('#pre_start_date').datepicker();
+    $('#pre_end_date').datepicker();
+    $('#final_start_date').datepicker();
+    $('#final_end_date').datepicker();
+    $('#pre_start_date_review').datepicker();
+    $('#pre_end_date_review').datepicker();
+    $('#final_start_date_review').datepicker();
+    $('#final_end_date_review').datepicker();
+  });	
+  </script>
 {%endblock%}

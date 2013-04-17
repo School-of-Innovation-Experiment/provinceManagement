@@ -9,9 +9,17 @@
 			  	<strong>注意:</strong>指定专家审阅是针对所选学科，一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
 			</div>
 	  	{{subject_insitute_form.insitute_choice}}
-	  	
+	  	{% if not readonly %}
 	  	<input type="submit" class="btn btn-primary" id="filter_button" value=""/>
-	  	<span id="warning">{{exist_message}}</span>
+	  	{%endif%}
+	  	{% if readonly %}
+	  	<div class="alert alert-error" style="margin-top:20px;">
+		    <a class="close" data-dismiss="alert">x</a> 
+		    <h4 class="alert-heading">系统提示！</h4>
+		    <p>目前不能给专家指派项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+	  	</div><!--end alert block-->
+	  	{%endif%}
+	  	{{exist_message}}
 	  </form><!--end category form -->
 	<table class="table table-condensed" id="subject_table">
 	<thead>
@@ -36,7 +44,6 @@
 	</tbody>
 	</table>
 	</div><!-- end the whole form -->
-	<script type="text/javascript" src="{{STATIC_URL}}bootstrap/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/is_assigned.js" onload="is_assigned();"></script>
 	<!-- ajax_csrf-->
 	<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>

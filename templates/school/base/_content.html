@@ -16,8 +16,17 @@
 	<!-- important features nav-bar -->
 	{% include "school/widgets/features_item_navbar.html" %}
 	<!-- calculate content details -->
-	{%block calculate-content%} 
+	{%block calculate-content%}
   {% endblock %}
 </div>
 
+{% endblock %}
+{% block footer-alert-bar %}
+  {% if school_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ school_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
 {% endblock %}

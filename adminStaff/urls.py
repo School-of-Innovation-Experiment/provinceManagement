@@ -11,28 +11,21 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 dajaxice_autodiscover()
 urlpatterns = patterns('',
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),                     
-    url(
-        r'^basic_info/$',
-        direct_to_template, {'template': 'adminStaff/basic_info.html'}
-    ),
-    url(
-        r'^$',
-        direct_to_template, {'template': 'adminStaff/administrator.html'}
-    ),
-                       
-    (r'^settings$',AdminStaffService.AdminSetting), 
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'^$',AdminStaffService.Dispatch),
+    (r'^settings$',AdminStaffService.AdminSetting),
     (r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
-    (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),    
-    
+    (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
+
     (r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
     (r'^subject_rating/$',AdminStaffService.SubjectRating),
     #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
-    
-    (r'^dispatch/$',AdminStaffService.Dispatch),  
+
+    (r'^dispatch/$',AdminStaffService.Dispatch),
     (r'^expert_dispatch/$',AdminStaffService.expertDispatch),
-    (r'^school_dispatch/$',AdminStaffService.schoolDispatch),    
-                   
+    (r'^school_dispatch/$',AdminStaffService.schoolDispatch),
     (r'^create_inactive_user$',AdminStaffService.expertDispatch),
+                       (r'^NoticeMessageSettings$',
+                        AdminStaffService.NoticeMessageSetting),
 )
 urlpatterns += staticfiles_urlpatterns()

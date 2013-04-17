@@ -10,7 +10,7 @@
         <div class="news-content">
           <div>
             {% autoescape off %}
-            {{ news.news_content }}
+            {{ news.news_content|safe }}
             {% endautoescape %}
             <br/>
             <br />

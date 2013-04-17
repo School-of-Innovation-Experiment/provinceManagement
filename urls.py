@@ -9,6 +9,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 
 dajaxice_autodiscover()
@@ -56,6 +57,11 @@ urlpatterns = patterns('',
         name="features"
     ),
     url(
+        r'^feedback/$',
+        direct_to_template, {'template': 'base/feedback.html'},
+        name="features"
+    ),
+    url(
         r'^show/',
         include('showtime.urls'),
     ),
@@ -69,7 +75,14 @@ urlpatterns = patterns('',
     ),
 )
 
-# urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
 urlpatterns += patterns('', url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),)
 urlpatterns += staticfiles_urlpatterns()
+
+# for develop to serve user-upload content in MEDIA_ROOT
+if settings.DEBUG:
+    urlpatterns += patterns('',
+            url(r'media/(?P<path>.*)$',
+                'django.views.static.serve',
+                {'document_root': settings.MEDIA_ROOT}),
+                )

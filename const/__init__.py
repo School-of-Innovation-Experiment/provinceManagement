@@ -84,3 +84,7 @@ DEFAULT_IMG_URL = STATIC_URL + "/images/no_pic.jpg"
 
 #YEAR
 YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
+
+# adminStaff noticeMessage settings
+MESSAGE_EXPERT_HEAD = '__expert__'
+MESSAGE_SCHOOL_HEAD = '__school__'

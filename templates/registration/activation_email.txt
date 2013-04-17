@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans %}激活账户 {{ site_name }}{% endblocktrans %}:
+{% blocktrans %}激活账户{% endblocktrans %}:
 您好！欢迎您使用大学生创新创业训练计划项目管理平台，请您点击下面的链接激活账户:
 用户名:{{username}}
 密码:{{password}}
