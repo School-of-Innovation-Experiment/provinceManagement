@@ -24,11 +24,11 @@ from django.utils import simplejson
 from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth import *
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
+from users.models import SchoolProfile, StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
 
 from const.models import *
@@ -307,3 +307,18 @@ def non_authority_view(request):
     """
     #TODO: I will add more usefull information, such as control time
     return render(request, 'school/non_authority.html')
+
+
+def AuthStudentExist(request, email):
+    '''直接判断学生的邮箱存不存在即可
+    '''
+    if User.objects.filter(email=email).count():
+        return True
+    else:
+        return False
+@login_required
+def Send_email_to_student(request, username, password, email):
+    #判断用户名是否存在，存在的话直接返回
+    if not AuthStudentExist(email):
+        RegistrationManager().create_inactive_user(request,username,password,email,identity)
+    
