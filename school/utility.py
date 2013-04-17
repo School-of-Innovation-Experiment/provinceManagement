@@ -259,6 +259,37 @@ def get_trend_lines(user):
     return cht
 
 
+def get_grade_lines(user):
+    """
+    Get category datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: grade_pies object
+    """
+    data = ProjectSingle.objects.filter(adminuser=user)
+
+    ds = PivotDataPool(series=[{'options': {'source': data,
+                                            'categories': ['year'],
+                                            'legend_by':['project_grade__grade',]
+                                            },
+                                            'terms': {'number':Count('project_grade'),
+                                                }},
+                            ],
+                       )
+    cht = PivotChart(datasource=ds,
+                series_options=[{'options': {'type': 'column', 'stacking':False},
+                                'terms': ['number']},
+                               ],
+                chart_options={'title': {'text': '历史数据统计'},
+                                'xAxis':{
+                                            'title':{'text': '年份'},
+                                        },
+                                'yAxis':{'title':{'text': '获奖评级'},'allowDecimals':False},
+                                }
+                )
+    return cht
+
+
 def get_statistics_from_user(user):
     """
     Get statistics infomation by user, the user it request.user
@@ -271,6 +302,7 @@ def get_statistics_from_user(user):
         raise Http404
 
     trend_lines = get_trend_lines(user)
+    grade_lines = get_grade_lines(user)
     current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year))
     currentnation_numbers = get_gradecount(user, GRADE_NATION, True)
     currentprovince_numbers = get_gradecount(user, GRADE_PROVINCE, True)
@@ -295,7 +327,7 @@ def get_statistics_from_user(user):
             "historynation_numbers": historynation_numbers,
             "historyprovince_numbers": historyprovince_numbers,
             "school_name": school_name,
-            "trend_lines": trend_lines,
+            "charts": [trend_lines, grade_lines]
             }
 
     return data

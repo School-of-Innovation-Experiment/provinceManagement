@@ -7,7 +7,7 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
   {% load chartit %}
-  {{ trend_lines|load_charts:"trend_lines" }}
+  {{ charts|load_charts:"trend_lines, grade_lines" }}
 {% endblock %}
 
 {% block calculate-content%}
@@ -60,6 +60,23 @@
         <span class="label label-info">enterprise_ee 创业训练</span>
         <span class="label label-success">enterprise 创业实践</span>
         <span class="label label-warning">innovation 创新实践</span>
+      </div>
+    </fieldset><!--end fieldset-->
+  </div><!--end line -->
+
+  <br/>
+  <br/>
+  <div>
+    <fieldset>
+      <legend>历史信息:评奖级别</legend>
+      <div id="grade_lines">
+      </div><!--end line object-->
+      <br/>
+      <div class="alert alert-success" id="legend_id">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <span class="label label-info">province 省级项目</span>
+        <span class="label label-success">nation 国家级项目</span>
+        <span class="label label-warning">undifined 未指定</span>
       </div>
     </fieldset><!--end fieldset-->
   </div><!--end line -->
