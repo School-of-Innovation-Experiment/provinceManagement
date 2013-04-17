@@ -1,0 +1,54 @@
+<!-- new-task page -->
+{% extends "teacher/base/_content.html" %}
+
+{% block calculate-content%}
+ 
+ 
+ 
+ 
+ <div class="container">
+  
+<div>
+
+<dl>
+  <dt>注意事项：</dt>
+  <dd class="text-error">在项目通过院系审核前，无法提交学生负责人相关信息。</dd>
+   
+</dl>
+
+</div>
+ <form class="form-inline">
+ 
+     
+      <div class="control-group">
+      
+    <label class="control-label" for="inputProjectName">项目名称：</label>
+     <input class="span8" type="text" id="inputProjectName" placeholder="项目名称">
+        <label class="control-label" for="inputProjectID">项目类别：</label>
+        <select>
+  <option>创新训练项目</option>
+  <option>创业训练项目</option>
+  <option>创业实践项目</option>
+  
+</select>
+  <p>     </p>  
+  <label class="control-label" for="inputProjectName">项目简介：</label>
+
+   <textarea rows="3" style="margin: 0px; width: 1050px; height: 328px;" placeholder="项目内容介绍（不少于500字）"></textarea>   
+     </div>
+     <label class="control-label" for="inputStudentEmail"><strong>学生姓名：</strong></label>
+     <input class="span2" type="text" id="inputStudentEmail" placeholder="学生姓名"> 
+        <label class="control-label" for="inputStudentEmail"><strong>学生负责人邮箱：</strong></label>
+     <input class="span8" type="text" id="inputStudentEmail" placeholder="学生负责人邮箱（重要）:student@mail.dlut.edu.cn"> 
+ 
+ </form>
+ 
+ <div align="center">
+  <button type="submit" class="btn btn-large"><a href="initial">返回</a></button>
+     <button type="submit" class="btn btn-large"><a href="initial">提交</a></button>
+</div>
+
+
+</div>
+ 
+{% endblock %}

@@ -1,0 +1,167 @@
+  <!--Project Basic Infomation-->
+  {% include "student/widgets/project_info.html" %}
+  
+  <br/>
+
+  <div>
+    <div class="page-header">
+      <h3> 项目完成情况概述 </h3>
+    </div>
+    <blockquote>
+      <textarea class="fill-form" rows="8" placeholder="写200字左右就行..."></textarea>
+      <br/>
+      <label class="checkbox"><input type="checkbox">所借用的房间、仪器设备、工具、资料等是否归还</label>
+    </blockquote>
+  </div>
+  </br>
+  <div>
+    <div class="page-header">
+      <h3>主要成果 </h3>
+    </div>
+    <blockquote>
+      <fieldset>
+        <legend>实物（软件、图纸、报告等）</legend>
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>名称</td>
+                <td>完成人</td>
+                <td>完成时间</td>
+                <td>备注</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><p id="final-object-name1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-members1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-date1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-comments1" class="editable editable-click grid-elements"></p></td>
+              </tr>
+              <tr>
+                <td><p id="final-object-name2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-members2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-date2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-object-comments2" class="editable editable-click grid-elements"></p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+      <br/>
+      <fieldset>
+        <legend>学术论文</legend>
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>题目</td>
+                <td>作者</td>
+                <td>期刊/期数</td>
+                <td>发表时间</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><p id="final-paper-name1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-members1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-comments1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-date1" class="editable editable-click grid-elements"></p></td>
+              </tr>
+              <tr>
+                <td><p id="final-paper-name2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-members2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-comments2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-paper-date2" class="editable editable-click grid-elements"></p></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </fieldset>
+      <br/>
+      <fieldset>
+        <legend>发明专利</legend>
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>专利题名</td>
+                <td>专利申请者</td>
+                <td>专利号</td>
+                <td>批准时间</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><p id="final-patent-name1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-members1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-id1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-date1" class="editable editable-click grid-elements"></p></td>
+              </tr>
+              <tr>
+                <td><p id="final-patent-name2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-members2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-id2" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-patent-date2" class="editable editable-click grid-elements"></p></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </fieldset>
+      <br/>
+      <fieldset>
+        <legend>科技竞赛</legend>
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td>竞赛作品名称</td>
+                <td>参加人</td>
+                <td>获奖名称</td>
+                <td>获奖等级</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><p id="final-competition-workname1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-competition-members1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-competition-name1" class="editable editable-click grid-elements"></p></td>
+                <td><p id="final-competition-grade1" class="editable editable-click grid-elements"></p></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </fieldset>
+      <br/>
+    </blockquote>
+  </div>
+
+  <!--academic credit-->
+  <div>
+    <div class="page-header">
+      <h3>创新学分认定</h3>
+    </div>
+    <blockquote>
+      <div class="oneline">
+        <p>章文涛 21009306 
+          <span class="label label-success">认定</span>
+        </p>
+        <p>章文涛 21009306
+          <span class="label label-success">认定</span>
+        </p>
+        <p>章文涛 21009306
+          <span class="label label-success">认定</span>
+        </p>
+      </div>
+    </blockquote>
+  </div>
+
+  
+  {% include "student/widgets/comments_info.html" %}
+
+  {% include "student/widgets/commit_button.html" %}
+</div>
+
