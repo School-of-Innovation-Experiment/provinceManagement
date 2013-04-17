@@ -20,11 +20,11 @@ function turn_page () {
 };
 function getinput (tag) {
   if(tag.indexOf('docs') >= 0) {
-    docs_input = $(tag).attr('value');
+    docs_input = $(tag).val();
     ret = docs_input;
   }
   else{
-    news_input = $(tag).attr('value');
+    news_input = $(tag).val();
     ret = news_input;
   };
   return ret;

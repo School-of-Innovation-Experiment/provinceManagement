@@ -4,7 +4,7 @@
     <div class="row">
       <div class="span6" >
 	<div class="introShow">
-	  <div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" ><img id="midImg" src="{{ first_img }}" class="Picture220"/></a>
+	  <div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" title="project-photo"><img title="project-img" id="midImg" src="{{ first_img }}" class="Picture220"/></a>
 	  </div>
 	  <div class="scroll" id="scroll">
 	    <a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
@@ -19,10 +19,10 @@
 </div>
 <div class="span4 well" style="margin-top:10px">
   <div><h4>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4>
-<div><a href="/showtime/#content">{{ project.title }}</a></div>
-<div><label><h4>高校名称</h4><a href="http://www.dlut.edu.cn">{{ project.school }}</a></label></div>
-<div><label><h4>指导教师</h4><a href="/showtime">{{ project.inspector }}</a></label></div>
-<div><label><h4>团队负责人</h4><a href="/showtime">{{ project.members }}</a></label></div>
+<div><a href="#content">{{ project.title }}</a></div>
+<div><label><h4>高校名称</h4><a href="#">{{ project.school }}</a></label></div>
+<div><label><h4>指导教师</h4><a href="#">{{ project.inspector }}</a></label></div>
+<div><label><h4>团队负责人</h4><a href="#">{{ project.members }}</a></label></div>
 </div>
 </div>
 </div>
@@ -54,19 +54,16 @@
     Biz.Common.TableCtrl.odd();
     Biz.Product.Product.InitSpecialTable();
     Biz.Product.Product.InitAlsoBuy();
-
     //Click out event!
     $("#backgroundPopup").click(function(){
       Biz.Common.PopCtrl.disablePopup();
     });
-
     //Press Escape event!
     $(document).keypress(function(e){
       if(e.keyCode==27 && popupStatus==1){
-	Biz.Common.PopCtrl.disablePopup();
+        Biz.Common.PopCtrl.disablePopup();
       }
     });
-
     var options = {
       zoomWidth: 300,
       zoomHeight: 250,
