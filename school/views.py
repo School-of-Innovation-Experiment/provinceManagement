@@ -47,12 +47,14 @@ the top will be called first!
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def home_view(request):
+@time_controller(phase=STATUS_PRESUBMIT)
+def home_view(request,is_expired=False):
     """
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
                                                 year=get_current_year)
+    readonly=is_expired
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
@@ -67,6 +69,7 @@ def home_view(request):
         remainings = 0
 
     data = {"current_list": current_list,
+            "readonly":readonly,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings}
             }
