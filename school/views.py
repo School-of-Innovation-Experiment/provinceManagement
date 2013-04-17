@@ -309,9 +309,17 @@ def Send_email_to_student(request, username, password, email, identity):
     else:
         return False
 
+def Count_email_already_exist(request):
+    school_staff = request.user
+    school_profile = SchoolProfile.objects.get(userid = school_staff)
+    num = StudentProfile.objects.filter(school = school_profile).count()
+    return num
+def school_limit_num(request):
+    limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    limit_num = limits.number
+    return limit_num
 def GetStudentRegisterList(request):
-    school_staff_name = request.user.username
-    school_staff = User.objects.get(username=school_staff_name)
+    school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
     students_list = [each.user for each in StudentProfile.objects.filter(school = school_profile)]
     return students_list
@@ -320,4 +328,7 @@ def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
         email_list  = GetStudentRegisterList(request)
-        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list},context_instance=RequestContext(request))
+        email_num = Count_email_already_exist(request)
+        limited_num = school_limit_num(request)
+        remaining_activation_times = limited_num-email_num
+        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))

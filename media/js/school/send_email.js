@@ -9,8 +9,10 @@ function StudentDispatch_callback(data){
                 object = $('#'+item);
                 object.css("background","white");
                 });
-        //$("#time_settings_form").css("background","white");
         $("#student_email_error_message").append("<strong>"+data.message+"</strong>")
+         
+        $("#remaining_activation_times").empty();
+        $("#remaining_activation_times").append("<strong>"+''+data.remaining_activation_times+''+"</strong>")
         }
     else
         {
@@ -24,5 +26,6 @@ function StudentDispatch_callback(data){
                 object.css("background","red");
                 });
             $("#student_email_error_message").append("<strong>"+data.message+"</strong>")
+            
         }
     }
