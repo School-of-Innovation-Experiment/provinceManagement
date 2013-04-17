@@ -18,14 +18,12 @@ from django.forms import ModelForm
 from django.core.urlresolvers import reverse
 
 from const.models import *
+from users.models import *
 
 
-class SearchForm(ModelForm):
+class SearchForm(forms.Form):
     """
         Search form for school statistics
     """
-    class Meta:
-        model = SchoolDict
-        #TODO: add css into widgets
-        exclude = ('id', )
-        widgets = {'schoolName': forms.Select(attrs={'class': "school-display"}), }
+    SCHOOL_CHOICE = tuple([(o.school.id, o.school.schoolName) for o in SchoolProfile.objects.all()])
+    schoolName = forms.ChoiceField(choices=SCHOOL_CHOICE)

@@ -33,6 +33,7 @@ class SchoolProfile(models.Model):
         auth, created = UserIdentity.objects.get_or_create(identity=SCHOOL_USER)
         self.userid.identities.add(auth)
   
+
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")

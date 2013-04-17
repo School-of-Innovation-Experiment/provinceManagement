@@ -56,15 +56,20 @@ def school_statistics_view(request):
     if default_users is None:
         return HttpResponseRedirect("/")
 
-    data = get_statistics_from_user(user=default_users[0])
-
+    data = get_statistics_from_user(user=default_users[0].userid)
     # search post
     if request.method == "POST":
         search_form = SearchForm(request.POST)
         if search_form.is_valid():
-            schoolName = search_form.cleaned["schoolname"]
-            user = get_object_or_404(SchoolProfile, school__schoolName=schoolName)
-            data = get_statistics_from_user(user=user)
+            school_id = search_form.cleaned_data["schoolName"]
+            loginfo(p=school_id, label="school statistics")
+            user = get_object_or_404(SchoolProfile, school=school_id)
+            loginfo(p=user, label="school statistics")
+            data = get_statistics_from_user(user=user.userid)
+    else:
+        search_form = SearchForm()
+
+    data["form"] = search_form
 
     return render(request, 'analysis/school_statistics.html', data)
 

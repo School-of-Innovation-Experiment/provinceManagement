@@ -1,3 +1,75 @@
 <!--school analysis-->
 {% extends "analysis/base.html" %}
-<p>school analysis</p>
+
+<!-- new-task page -->
+{% block forejs %}
+  <!--highchart chartit-->
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
+  {% load chartit %}
+  {{ trend_lines|load_charts:"trend_lines" }}
+{% endblock %}
+
+{% block calculate-content%}
+
+<!--search form-->
+<form class="form-inline" action="." method="post">
+  {% csrf_token %}
+  {{form.schoolName}} 
+  <button type="submit" class="btn btn-primary">搜索</button>
+</form><!--end search form-->
+
+<div class="container">
+  <div class="row">
+    <div class="span4">
+      <fieldset>
+        <legend>本年度类别信息</legend>
+        <div>
+            <div>
+              <span class="label label-inverse span1">创新训练:{{innovation_numbers}}</span>
+              <span class="label label-info span1">创业实践 :{{enterprise_numbers}}</span>
+              <span class="label label-warning span1">创业训练: {{enterprie_ee_numbers}}</span>
+            </div>
+        </div><!--end basic data info-->
+      </fieldset>
+    </div><!--end left panel-->
+    <div class="span4">
+      <fieldset>
+        <legend>本年度级别信息</legend>
+        <div>
+          <span class="label label-important span1">项目总数:{{current_numbers}}</span>
+          <span class="label label-success span1">国家级:{{currentnation_numbers}}</span>
+          <span class="label label-info span1">省级:{{currentprovince_numbers}}</span>
+        </div>
+      </fieldset>
+    </div><!--end mid panel-->
+    <div class="span4">
+      <fieldset>
+        <legend>历史申请记录</legend>
+        <div>
+          <span class="label label-important span1">历史项目:{{history_numbers}}</span>
+          <span class="label label-success span1">国家级:{{historynation_numbers}}</span>
+          <span class="label label-info span1">省级:{{historyprovince_numbers}}</span>
+        </div>
+      </fieldset>
+    </div><!--end mid panel-->
+   </div><!--end row-->
+
+  <br/>
+  <br/>
+  <div>
+    <fieldset>
+      <legend>历史信息</legend>
+      <div id="trend_lines">
+      </div><!--end line object-->
+      <br/>
+      <div class="alert alert-success" id="legend_id">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <span class="label label-info">enterprise_ee 创业训练</span>
+        <span class="label label-success">enterprise 创业实践</span>
+        <span class="label label-warning">innovation 创新实践</span>
+      </div>
+    </fieldset><!--end fieldset-->
+  </div><!--end line -->
+</div>
+{% endblock %}
