@@ -269,11 +269,11 @@ table.documents td {
 }
 
 /* table css: for newslist page only */
-#subject_table thead>tr th:nth-child(4)
+#subject_table thead>tr th:nth-child(5)
 {
     display: none;
 }
-#subject_table tbody tr td:nth-child(4)
+#subject_table tbody tr td:nth-child(5)
 {
     display: none;
 }

@@ -5,9 +5,18 @@
 {% block calculate-content%}
 <div class="container">
   <div class="page-header">
+    {% if not readonly %}
 	  <div class="pull-right">	
 	    <a href="/school/new" class="btn btn-large btn-warning">新增项目++</a>
     </div><!--end new button-->
+    {%endif%}
+    {% if readonly %}
+    <div class="alert alert-error" style="margin-top:20px;">
+      <a class="close" data-dismiss="alert">x</a> 
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>目前不能增加项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+    </div><!--end alert block-->
+    {%endif%}
     <h3>
       本年度项目列表
       <span class="label label-info">申请上限:{{info.applications_limits}}</span>

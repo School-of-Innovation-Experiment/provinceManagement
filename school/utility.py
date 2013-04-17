@@ -28,14 +28,11 @@ from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
-from const import AUTH_CHOICES, VISITOR_USER
-from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
-from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const import *
 
 from backend.utility import search_tuple
 
-from backend.logging import logger
+from backend.logging import logger, loginfo
 
 
 def check_limits(user):
@@ -257,6 +254,119 @@ def get_trend_lines(user):
                                             'title':{'text': '年份'},
                                         },
                                 'yAxis':{'title':{'text': '类别数量'},'allowDecimals':False},
+                                }
+                )
+    return cht
+
+
+def get_grade_lines(user):
+    """
+    Get category datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: grade_pies object
+    """
+    data = ProjectSingle.objects.filter(adminuser=user)
+
+    ds = PivotDataPool(series=[{'options': {'source': data,
+                                            'categories': ['year'],
+                                            'legend_by':['project_grade__grade',]
+                                            },
+                                            'terms': {'number':Count('project_grade'),
+                                                }},
+                            ],
+                       )
+    cht = PivotChart(datasource=ds,
+                series_options=[{'options': {'type': 'column', 'stacking':False},
+                                'terms': ['number']},
+                               ],
+                chart_options={'title': {'text': '历史数据统计'},
+                                'xAxis':{
+                                            'title':{'text': '年份'},
+                                        },
+                                'yAxis':{'title':{'text': '获奖评级'},'allowDecimals':False},
+                                }
+                )
+    return cht
+
+
+def get_statistics_from_user(user):
+    """
+    Get statistics infomation by user, the user it request.user
+
+    Args:
+        In: user, it is request user
+        Out: data, it is a dict for statistics
+    """
+    if user is None:
+        raise Http404
+
+    trend_lines = get_trend_lines(user)
+    grade_lines = get_grade_lines(user)
+    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year))
+    currentnation_numbers = get_gradecount(user, GRADE_NATION, True)
+    currentprovince_numbers = get_gradecount(user, GRADE_PROVINCE, True)
+
+    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year))
+    historynation_numbers = get_gradecount(user, GRADE_NATION, False)
+    historyprovince_numbers = get_gradecount(user, GRADE_PROVINCE, False)
+
+    innovation_numbers = get_categorycount(user, CATE_INNOVATION, True)
+    enterprise_numbers = get_categorycount(user, CATE_ENTERPRISE, True)
+    enterprise_ee_numbers = get_categorycount(user, CATE_ENTERPRISE_EE, True)
+
+    school_name = SchoolProfile.objects.get(userid=user).school.schoolName
+
+    data = {"innovation_numbers": innovation_numbers,
+            "enterprise_numbers": enterprise_numbers,
+            "enterprie_ee_numbers": enterprise_ee_numbers,
+            "current_numbers": current_numbers,
+            "currentprovince_numbers": currentprovince_numbers,
+            "currentnation_numbers": currentnation_numbers,
+            "history_numbers": history_numbers,
+            "historynation_numbers": historynation_numbers,
+            "historyprovince_numbers": historyprovince_numbers,
+            "school_name": school_name,
+            "charts": [trend_lines, grade_lines]
+            }
+
+    return data
+
+
+def map_school_name(school_id):
+
+    name = SchoolDict.objects.get(id=school_id[0]).schoolName
+    
+    return (name,)
+
+
+def get_province_trend_lines():
+    """
+    Get category datapool data fot datachartit
+    Arguments:
+        In: user
+        Out: school numbers object
+    """
+    data = ProjectSingle.objects.all()
+
+    ds = PivotDataPool(series=[{'options': {'source': data,
+                                            'categories': ['school__id'],
+                                            'legend_by':['project_grade__grade',]
+                                            },
+                                            'terms': {'number': Count('project_grade'),
+                                                }},
+                            ],
+                        sortf_mapf_mts=(None, map_school_name, True)
+                       )
+    cht = PivotChart(datasource=ds,
+            series_options=[{'options': {'type': 'column', 'stacking':True},
+                                'terms': ['number']},
+                               ],
+                chart_options={'title': {'text': '学校-评级数据统计'},
+                                'xAxis':{
+                                            'title':{'text': '参赛学校'},
+                                        },
+                                'yAxis':{'title':{'text': '评级数量'},'allowDecimals':False},
                                 }
                 )
     return cht

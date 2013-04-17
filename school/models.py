@@ -70,7 +70,7 @@ class ProjectSingle(models.Model):
     def __unicode__(self):
         return self.title
 
-
+    
 class Project_Is_Assigned(models.Model):
     insitute = models.ForeignKey(InsituteCategory,
                                 blank=True, null=True, default=None

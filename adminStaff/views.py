@@ -10,7 +10,6 @@ import re,sha
 import uuid
 from datetime import date
 from django.http import HttpResponse, Http404
-from registration.models import *
 from adminStaff import forms
 from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
 from django.shortcuts import render_to_response, render, get_object_or_404
@@ -23,16 +22,17 @@ from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
+
+from registration.models import *
 from registration.models import RegistrationProfile
+
 from django.db import transaction
+ 
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 from backend.decorators import *
 
 class AdminStaffService(object):
     @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
@@ -195,11 +195,11 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    @transaction.commit_on_success
     @time_controller(phase=STATUS_FINSUBMIT)
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
+
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()

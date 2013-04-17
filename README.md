@@ -1,7 +1,7 @@
 InnovationManagement
 ====================
 
-A website for College students Innovation  Entrepreneurial  in Liaoning Province, it is Province Version 
+A website for College students Innovation  Entrepreneurial  in Liaoning Province, it is School Version 
 
 # Environment 
  * Please, execute this cmd: **sudo pip install -r requirements.txt**

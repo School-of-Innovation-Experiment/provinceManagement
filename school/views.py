@@ -24,12 +24,22 @@ from django.utils import simplejson
 from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import *
+from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
+
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+
+
+from users.models import SchoolProfile, StudentProfile
+
+from registration.models import RegistrationProfile
+from registration.models import *
+
+from django.db import transaction
 
 from const.models import *
 from const import *
@@ -47,12 +57,14 @@ the top will be called first!
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def home_view(request):
+@time_controller(phase=STATUS_PRESUBMIT)
+def home_view(request, is_expired=False):
     """
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
                                                 year=get_current_year)
+    readonly=is_expired
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
@@ -67,6 +79,7 @@ def home_view(request):
         remainings = 0
 
     data = {"current_list": current_list,
+            "readonly":readonly,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings}
             }
@@ -157,33 +170,7 @@ def statistics_view(request):
     """
     school statistics view
     """
-    trend_lines = get_trend_lines(request.user)
-    user=request.user
-    current_numbers=len(ProjectSingle.objects.filter(adminuser=request.user,year=get_current_year))
-    currentnation_numbers=get_gradecount(user,GRADE_NATION,True)
-    currentprovince_numbers=get_gradecount(user,GRADE_PROVINCE,True)
-
-    history_numbers=len(ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year))
-    historynation_numbers=get_gradecount(user,GRADE_NATION,False)
-    historyprovince_numbers=get_gradecount(user,GRADE_PROVINCE,False)
-
-    innovation_numbers=get_categorycount(user,CATE_INNOVATION,True)
-    enterprise_numbers=get_categorycount(user,CATE_ENTERPRISE,True)
-    enterprise_ee_numbers=get_categorycount(user,CATE_ENTERPRISE_EE,True)
-
-    data = {"innovation_numbers":innovation_numbers,
-            "enterprise_numbers":enterprise_numbers,
-            "enterprie_ee_numbers":enterprise_ee_numbers,
-            "current_numbers":current_numbers,
-            "currentprovince_numbers":currentprovince_numbers,
-            "currentnation_numbers":currentnation_numbers,
-            "history_numbers":history_numbers,
-            "historynation_numbers":historynation_numbers,
-            "historyprovince_numbers":historyprovince_numbers,
-            "application_numbers":30,
-            "passed_numbers":29,
-            "trend_lines": trend_lines,
-            }
+    data = get_statistics_from_user(request.user)
 
     return render(request, 'school/statistics.html', data)
 
@@ -304,3 +291,44 @@ def non_authority_view(request):
     """
     #TODO: I will add more usefull information, such as control time
     return render(request, 'school/non_authority.html')
+
+
+def AuthStudentExist(request, email):
+    '''直接判断学生的邮箱存不存在即可
+    '''
+    if User.objects.filter(email=email).count():
+        return True
+    else:
+        return False
+@login_required
+def Send_email_to_student(request, username, password, email, identity):
+    #判断用户名是否存在，存在的话直接返回
+    if not AuthStudentExist(request, email):
+        RegistrationManager().create_inactive_user(request,username,password,email,identity)
+        return  True
+    else:
+        return False
+
+def Count_email_already_exist(request):
+    school_staff = request.user
+    school_profile = SchoolProfile.objects.get(userid = school_staff)
+    num = StudentProfile.objects.filter(school = school_profile).count()
+    return num
+def school_limit_num(request):
+    limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    limit_num = limits.number
+    return limit_num
+def GetStudentRegisterList(request):
+    school_staff = request.user
+    school_profile = SchoolProfile.objects.get(userid = school_staff)
+    students_list = [each.user for each in StudentProfile.objects.filter(school = school_profile)]
+    return students_list
+@login_required
+def StudentDispatch(request):
+    if request.method == "GET":
+        student_form = StudentDispatchForm()
+        email_list  = GetStudentRegisterList(request)
+        email_num = Count_email_already_exist(request)
+        limited_num = school_limit_num(request)
+        remaining_activation_times = limited_num-email_num
+        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))
