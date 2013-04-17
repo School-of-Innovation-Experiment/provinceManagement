@@ -119,8 +119,10 @@ class RegistrationManager(models.Manager):
             expertProfileObj.save()
         #学生注册的话直接填写校对应的管理员即可
         else:
-            school_staff = request.user
-            student_obj = StudentProfile(user = new_user,school= school_staff)
+            school_staff_name = request.user.username
+            school_staff = User.objects.get(username=school_staff_name)
+            school_profile = SchoolProfile.objects.get(userid = school_staff)
+            student_obj = StudentProfile(user = new_user,school = school_profile)
             student_obj.save() 
         if profile_callback is not None:
             profile_callback(user=new_user)

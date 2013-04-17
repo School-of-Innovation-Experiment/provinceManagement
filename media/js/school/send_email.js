@@ -1,6 +1,6 @@
 function send_email_to_student(){
     $("#student_email_error_message").empty();
-    Dajaxice.adminStaff.ExpertDispatch(ExpertDispatch_callback,{'form':$('#student_email_send_form').serialize(true)});
+    Dajaxice.school.StudentDispatch(StudentDispatch_callback,{'form':$('#student_email_send_form').serialize(true)});
     }
 function StudentDispatch_callback(data){
     if (data.status == "1"){

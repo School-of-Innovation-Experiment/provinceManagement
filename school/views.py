@@ -25,11 +25,21 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import *
+from django.contrib.auth.models import User
+
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
+
 from adminStaff.models import ProjectPerLimits
+
+
 from users.models import SchoolProfile, StudentProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+
+from registration.models import RegistrationProfile
+from registration.models import *
+
+from django.db import transaction
 
 from const.models import *
 from const import *
@@ -291,8 +301,23 @@ def AuthStudentExist(request, email):
     else:
         return False
 @login_required
-def Send_email_to_student(request, username, password, email):
+def Send_email_to_student(request, username, password, email, identity):
     #判断用户名是否存在，存在的话直接返回
-    if not AuthStudentExist(email):
+    if not AuthStudentExist(request, email):
         RegistrationManager().create_inactive_user(request,username,password,email,identity)
-    
+        return  True
+    else:
+        return False
+
+def GetStudentRegisterList(request):
+    school_staff_name = request.user.username
+    school_staff = User.objects.get(username=school_staff_name)
+    school_profile = SchoolProfile.objects.get(userid = school_staff)
+    students_list = [each.user for each in StudentProfile.objects.filter(school = school_profile)]
+    return students_list
+@login_required
+def StudentDispatch(request):
+    if request.method == "GET":
+        student_form = StudentDispatchForm()
+        email_list  = GetStudentRegisterList(request)
+        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list},context_instance=RequestContext(request))
