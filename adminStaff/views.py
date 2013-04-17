@@ -175,7 +175,7 @@ class AdminStaffService(object):
     @staticmethod
     @transaction.commit_on_success
     def SubjectFeedback(request):
-        exist_message = '' 
+        exist_message = ''
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
