@@ -12,9 +12,11 @@ from settings import STATIC_URL, MEDIA_URL
 UNDIFINED = "undifined"
 
 # For UserIdentity Table
-SCHOOL_USER = "student"
+SCHOOL_USER = "school" # original: student
 EXPERT_USER = "expert"
 ADMINSTAFF_USER = "adminstaff"
+TEACHER_USER = "teacher"
+STUDENT_USER = "student"
 VISITOR_USER = "visitor"
 
 AUTH_CHOICES = (

@@ -23,11 +23,11 @@ class SchoolDict(models.Model):
     Schoold name dict
     """
     schoolName = models.CharField(max_length=200, blank=False, unique=True,
-                                  verbose_name="学校名称")
+                                  verbose_name="学院名称")
 
     class Meta:
-        verbose_name = "学校列表"
-        verbose_name_plural = "学校列表"
+        verbose_name = "学院列表"
+        verbose_name_plural = "学院列表"
 
     def __unicode__(self):
         return self.schoolName

@@ -1,0 +1,26 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/index.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/content.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/accounts_form.css" type="text/css" media="screen" />
+
+  <!-- customize css -->
+  <link rel="stylesheet" href="{{ STATIC_URL}}style/expert/content.css" type="text/css" media="screen" />
+  <div class="container form-container">
+	  {% include "widgets/userinfo_basicbar.html" %}
+    {% include "teacher/widgets/features_item_navbar.html" %}
+    {% block calculate-content %}
+
+    {% endblock %}
+
+  </div>
+  {% block footer-content %}
+  {% endblock %}
+{% endblock %}
+{% block footer-alert-bar %}
+{% endblock %}
+
