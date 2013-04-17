@@ -78,6 +78,11 @@ urlpatterns = patterns('',
         include('teacher.urls'),
         name="teacher",
     ),
+    url(
+        r'^student/',
+        include('student.urls'),
+        name="student",
+    ),
 
 )
 
