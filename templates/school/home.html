@@ -1,54 +1,17 @@
-<!-- school management page -->
-<!-- tianwei @2013.3.28 -->
-{% extends "school/base/_content.html" %}
-
-{% block calculate-content%}
-<div class="container">
-  <div class="page-header">
-    {% if not readonly %}
-	  <div class="pull-right">	
-	    <a href="/school/new" class="btn btn-large btn-warning">新增项目++</a>
-    </div><!--end new button-->
-    {%endif%}
-    {% if readonly %}
-    <div class="alert alert-error" style="margin-top:20px;">
-      <a class="close" data-dismiss="alert">x</a> 
-      <h4 class="alert-heading">系统提示！</h4>
-      <p>目前不能增加项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
-    </div><!--end alert block-->
-    {%endif%}
-    <h3>
-      本年度项目列表
-      <span class="label label-info">申请上限:{{info.applications_limits}}</span>
-      <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
-    </h3> 
-  </div><!--end page header-->
-  <table class="table table-hover">     
-    <thead>
-      <tr>
-        <th>名称</th>
-        <th>项目类型</th>
-        <th>指导教师</th>
-        <th>当前状态</th>
-        <th>评审级别</th>
-        <th>详情</th>
-      </tr>
-    </thead>
-    <tbody>
-      {%for item in current_list%}
-      <tr>
-        <td>{{item.title}}</td>
-        <td>{{item.project_category}}</td>
-        <td>{{item.inspector}}</td>
-        <td>{{item.project_status}}</td>
-        <td>{{item.project_grade}}</td>
-        <td>
-          <span><a href="{% url school.views.application_report_view item.project_id%}" class='btn btn-primary'>申请</a></span>
-          <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span>
-        </td>
-      </tr>
-      {%endfor%}
-    </tbody>
-  </table><!--end current_list table-->
-</div><!--end current list content-->
-{% endblock %}
+{% extends "adminStaff/base/_content.html" %}
+{% block staffadmin_content %}
+  <div class="container">
+    <div class="navbar ">
+      <div class="navbar-inner">
+        <ul class="nav">
+          <li><a href="dispatch">邮件激活</a></li>
+          <li class="divider-vertical"></li>
+          <li><a href="project_alloc">项目分配</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container">
+      {%block nav_admin_content%}{%endblock%}
+    </div>
+  </div>
+{%endblock%}

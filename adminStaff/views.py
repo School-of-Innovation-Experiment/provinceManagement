@@ -35,8 +35,10 @@ class AdminStaffService(object):
         if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
-            else:
+            elif kwargs.has_key('expert_insitute'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
+            elif kwargs.has_key('teacher_insitute'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, teacher_insitute=kwargs['teacher_insitute'])
             return True
         else:
             return False
@@ -60,6 +62,7 @@ class AdminStaffService(object):
             ##########################################################################
             res_list.append(dict)
         return res_list
+
     @staticmethod
     @csrf.csrf_protect
     @login_required

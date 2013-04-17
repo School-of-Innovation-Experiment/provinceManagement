@@ -21,6 +21,29 @@ from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
+# coding: UTF-8
+'''
+Created on 2013-03-28
+
+@author: tianwei
+
+Desc: Application Form and final report form.
+'''
+import os
+import sys
+import time
+
+from django import forms
+from django.core.exceptions import PermissionDenied
+from django.db import models
+from django.forms.util import ErrorList
+from django.forms import ModelForm
+from django.core.urlresolvers import reverse
+
+from school.models import *
+from adminStaff.models import ProjectPerLimits
+from users.models import SchoolProfile
+
 
 class InfoForm(ModelForm):
     """
@@ -39,7 +62,7 @@ class InfoForm(ModelForm):
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
                  'project_category':forms.Select(attrs={'class':"school-display"}),
-                 'insitute':forms.Select(attrs={'class':"school-display"}),             
+                 'insitute':forms.Select(attrs={'class':"school-display"}),
                  }
 
     def get_absolute_url(self):
@@ -126,3 +149,28 @@ class FinalReportForm(ModelForm):
 
     def get_absolute_url(self):
         return reverse('school.views.final_report_view', args=(str(self.instance.project_id),))
+
+class StudentDispatchForm(forms.Form):
+    student_password = forms.CharField(max_length=20, required=False,
+    widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
+                           ),
+)
+    student_email    = forms.EmailField(required=True,
+    widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
+                           ))
+
+class TeacherDispatchForm(forms.Form):
+    insitute_choice_list = []
+    insitute_list = InsituteCategory.objects.all()
+    for object in insitute_list:
+        insitute_choice_list.append((object.id, object.category))
+    insitute_tuple = tuple(insitute_choice_list)
+
+    teacher_password = forms.CharField(max_length=20, required=False,
+                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}
+                           ),
+)
+    teacher_email    = forms.EmailField(required=True,
+                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}
+                           ))
+    teacher_insitute = forms.ChoiceField(required=True,choices=insitute_tuple)

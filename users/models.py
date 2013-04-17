@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
 Created on 2012-11-10
 
@@ -11,6 +11,28 @@ from django.contrib.auth.models import User
 from const.models import *
 from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER
 
+class TeacherProfile(models.Model):
+    """
+    User Profile Extend
+    The Administrator can modified them in admin.page
+    """
+    userid = models.ForeignKey(User, unique=True,
+                               verbose_name="权限对应ID")
+    jobs = models.CharField(max_length=100, blank=True,
+                            verbose_name="工作单位")
+
+    class Meta:
+        verbose_name = "指导教师"
+        verbose_name_plural = "指导教师"
+
+    def __unicode__(self):
+        return '%s' % (self.userid)
+
+    def save(self, *args, **kwargs):
+        super(TeacherProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=TEACHER_USER)
+        self.userid.identities.add(auth)
+
 
 class SchoolProfile(models.Model):
     """
@@ -18,13 +40,13 @@ class SchoolProfile(models.Model):
     The Administrator can modified them in admin.page
     """
     address = models.CharField(max_length=100, blank=True, verbose_name="地址")
-    school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学校名称")
+    school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")
 
     class Meta:
-        verbose_name = "参赛学校"
-        verbose_name_plural = "参赛学校"
+        verbose_name = "参赛学院"
+        verbose_name_plural = "参赛学院"
 
     def __unicode__(self):
         return self.school.schoolName

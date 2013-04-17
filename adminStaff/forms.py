@@ -6,7 +6,7 @@ Created on 2013-3-28
 '''
 from datetime import *
 from django import  forms
-from adminStaff.models import ProjectControl 
+from adminStaff.models import ProjectControl
 from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
 class ExpertDispatchForm(forms.Form):
@@ -15,7 +15,7 @@ class ExpertDispatchForm(forms.Form):
     for object in insitute_list:
         insitute_choice_list.append((object.id, object.category))
     insitute_tuple = tuple(insitute_choice_list)
-    
+
     expert_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
                            ),
@@ -32,15 +32,16 @@ class SchoolDispatchForm(forms.Form):
         SCHOOL_CHOICE_list.append((object.id, object.schoolName))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
+                                      widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
                            ),
 )
     school_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_email'}
+                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_email'}
                            ))
-    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)    
+    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
+
 class TimeSettingForm(forms.Form):
-    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date',"data-date-format":"yyyy-mm-dd"})) 
+    pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date',"data-date-format":"yyyy-mm-dd"}))
     pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'class':'span2','id':'pre_end_date',"data-date-format":"yyyy-mm-dd"}))
     final_start_date = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'final_start_date',"data-date-format":"yyyy-mm-dd"}))
     final_end_date = forms.DateField(widget=forms.DateInput(attrs={ 'class':'span2','id':'final_end_date',"data-date-format":"yyyy-mm-dd"}))
@@ -65,7 +66,7 @@ class TimeSettingForm(forms.Form):
             psdr == None or \
             pedr == None or \
             fsdr == None or \
-            fedr == None):        
+            fedr == None):
                 if psd > ped :
                     msg = u"初期提交起止时间有误，请重新设置PROJECT_GRADE_CHOICES"
                     self._errors['pre_start_date'] = self.error_class([msg])
@@ -92,7 +93,7 @@ class NumLimitForm(forms.Form):
     limited_num   = forms.IntegerField(required=True,
                                        widget=forms.TextInput(attrs={'id':"limited_num"}
                            ) )
-          
+
 class SubjectCategoryForm(forms.Form):
     category_choice_list = []
     category_list = ProjectCategory.objects.all()
@@ -100,44 +101,23 @@ class SubjectCategoryForm(forms.Form):
         category_choice_list.append((object.id, object.category))
     category_tuple =  tuple(category_choice_list)
     category_choice = forms.ChoiceField(choices=category_tuple)
-                                                    
+
 class SubjectInsituteForm(forms.Form):
     insitute_choice_list = []
     insitute_list = InsituteCategory.objects.all()
     for object in insitute_list:
         insitute_choice_list.append((object.id, object.category))
     insitute_tuple = tuple(insitute_choice_list)
-    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))  
+    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))
 
 class SchoolCategoryForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()
     for object in school_list:
         SCHOOL_CHOICE_list.append((object.id, object.schoolName))
-    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)        
-    school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)    
-    
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+    school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
+
 class SubjectGradeForm(forms.Form):
     subject_grade_choice =   PROJECT_GRADE_CHOICES
-    subject_grade   = forms.ChoiceField(choices=subject_grade_choice)  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-             
+    subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
