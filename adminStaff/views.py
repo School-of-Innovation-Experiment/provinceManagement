@@ -195,11 +195,11 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    @transaction.commit_on_success
     @time_controller(phase=STATUS_FINSUBMIT)
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
+
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()

@@ -14,6 +14,8 @@ from school.views import Send_email_to_student, Count_email_already_exist, schoo
 from const.models import SchoolDict
 from const import *
 import datetime
+
+
 @dajaxice_register
 def  StudentDispatch(request, form):
     #dajax = Dajax()
