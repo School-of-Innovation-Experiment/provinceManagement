@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'adminStaff',
     'news',
     'showtime',
+    'analysis',
     #Add-on
     'south',
     'dajaxice',

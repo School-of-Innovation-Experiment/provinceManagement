@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from const.models import *
 from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER
 
-
 class SchoolProfile(models.Model):
     """
     User Profile Extend
@@ -33,7 +32,7 @@ class SchoolProfile(models.Model):
         super(SchoolProfile, self).save()
         auth, created = UserIdentity.objects.get_or_create(identity=SCHOOL_USER)
         self.userid.identities.add(auth)
-
+  
 
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
@@ -54,7 +53,17 @@ class ExpertProfile(models.Model):
         auth, created = UserIdentity.objects.get_or_create(identity=EXPERT_USER)
         self.userid.identities.add(auth)
 
-
+class StudentProfile(models.Model):
+    """
+    school student profile
+    """
+    user = models.ForeignKey(User, unique=True)
+    school = models.ForeignKey(SchoolProfile)
+    class Meta:
+        verbose_name = "参赛学生"
+        verbose_name_plural = "参赛学生"
+    def __unicode__(self):
+        return '%s'%(self.user)
 class AdminStaffProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")

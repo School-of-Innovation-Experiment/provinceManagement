@@ -20,7 +20,7 @@ from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity 
 from backend.logging import logger
-from users.models import SchoolProfile, ExpertProfile
+from users.models import SchoolProfile, ExpertProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
@@ -112,10 +112,18 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.save()
-        else:
+        #如果是专家的话加上专家的所属学科
+        elif kwargs.has_key('expert_insitute'):
             insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
             expertProfileObj = ExpertProfile(subject=insituteObj, userid =new_user)
             expertProfileObj.save()
+        #学生注册的话直接填写校对应的管理员即可
+        else:
+            school_staff_name = request.user.username
+            school_staff = User.objects.get(username=school_staff_name)
+            school_profile = SchoolProfile.objects.get(userid = school_staff)
+            student_obj = StudentProfile(user = new_user,school = school_profile)
+            student_obj.save() 
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user

@@ -1,5 +1,5 @@
-<!-- new-task page -->
-{% extends "school/base/_content.html" %}
+<!--school analysis-->
+{% extends "analysis/base.html" %}
 
 <!-- new-task page -->
 {% block forejs %}
@@ -7,10 +7,20 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
   {% load chartit %}
+  
   {{ charts|load_charts:"trend_lines, grade_lines" }}
+
 {% endblock %}
 
 {% block calculate-content%}
+
+<!--search form-->
+<form class="form-inline" action="." method="post">
+  {% csrf_token %}
+  {{form.schoolName}} 
+  <button type="submit" class="btn btn-primary">搜索</button>
+</form><!--end search form-->
+
 <div class="container">
   <div class="row">
     <div class="span4">
@@ -49,9 +59,11 @@
 
   <br/>
   <br/>
+
+
   <div>
     <fieldset>
-      <legend>历史信息</legend>
+      <legend>历史信息:参赛种类</legend>
       <div id="trend_lines">
       </div><!--end line object-->
       <br/>

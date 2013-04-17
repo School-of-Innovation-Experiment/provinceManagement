@@ -73,6 +73,10 @@ urlpatterns = patterns('',
         r'^errors/',
         include("backend.urls")
     ),
+    url(
+        r'^analysis/',
+        include("analysis.urls")
+    ),
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
