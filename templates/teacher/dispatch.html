@@ -1,0 +1,44 @@
+{% extends "school/base/_content.html" %}
+{% block calculate-content%}
+<div class="alert fade in">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+           <strong>警告！您还剩下<span id="remaining_activation_times">{{remaining_activation_times}}</span>次发送激活邮件的机会</strong> 
+</div>
+<div>
+					<form class="well form-inline" id="student_email_send_form" method="POST" action="">
+						{% csrf_token %}
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-envelope"></i></span>{{student_form.student_email}}
+							</div>
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-th-large"></i></span>{{student_form.student_password}}
+							</div>
+							<span id="student_email_error_message"></span>
+							<span class=" pull-right"><input type="button" class="btn btn-primary" id="email_to_student" onclick="send_email_to_student();"value="给学生发送邮件"/></span>
+          </form>
+          <table class="well table">
+          	<thead>
+          		<tr>
+          			<td><strong>已发送学生用户邮箱</strong></td>
+          			<td><strong>用户状态</strong></td>
+          		</tr>
+          	</thead>
+          	<tbody>
+          		{%for user in email_list%}
+          		<tr>
+          			<td>{{user.email}}</td>
+          			{%if user.is_active %}
+          				<td><button class="btn btn-success">已经激活</button></td>
+          			{%else%}
+          				<td><button class="btn btn-warning">已发送，尚未激活</button></td>
+          			{%endif%}
+          		</tr>
+          		{%endfor%}
+          	</tbody>
+          </table>
+</div>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+<!-- dajax-->
+<script type='text/javascript' src="{{STATIC_URL}}js/school/send_email.js"></script>
+{%endblock%}
