@@ -11,7 +11,7 @@ function limitednum_callback(data){
   {
     id = data.id;
     object = $('#'+id);
-    object.css("background","red");
+    object.css("border-color","red");
     $("#num_limit_error_message").append("<strong>"+data.message+"</strong>");
   }
 }
