@@ -1,0 +1,11 @@
+<!--school page navigator bar-->
+<div class="navbar ">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><a href="{% url school.views.student_view%}">项目管理</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="{% url school.views.application_report_view item.project_id%}">项目申请</a></li>
+      <li class="divider-vertical"></li>
+    </ul>
+  </div><!--end navbar inner -->
+</div><!--end navbar-->	

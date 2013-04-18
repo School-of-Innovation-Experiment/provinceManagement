@@ -1,0 +1,32 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/jquery.fileupload-ui.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/student/content.css" >
+
+<div class="container form-container">
+	<!-- user information bar -->
+	{% include "widgets/userinfo_basicbar.html" %}
+	<!-- important features nav-bar -->
+	{% include "school/widgets/features_item_navbar_student.html" %}
+	<!-- calculate content details -->
+	{%block calculate-content%}
+  {% endblock %}
+</div>
+
+{% endblock %}
+{% block footer-alert-bar %}
+  {% if school_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ school_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
+{% endblock %}
