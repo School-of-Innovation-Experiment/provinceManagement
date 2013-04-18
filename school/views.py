@@ -126,7 +126,7 @@ def application_report_view(request, pid=None, is_expired=False):
         application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
-                return HttpResponseRedirect(reverse('school.views.home_view'))
+                return HttpResponseRedirect(request.session.get("previous_url", "/"))
         else:
             logger.info("Form Valid Failed"+"**"*10)
             logger.info(info_form.errors)
@@ -165,7 +165,7 @@ def final_report_view(request, pid=None, is_expired=False):
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            return HttpResponseRedirect(reverse('school.views.home_view'))
+            return HttpResponseRedirect(request.session.get("previous_url", "/"))
         else:
             logger.info("Final Form Valid Failed"+"**"*10)
             logger.info(final_form.errors)
