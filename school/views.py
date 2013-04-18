@@ -56,15 +56,17 @@ the top will be called first!
 
 @csrf.csrf_protect
 @login_required
+@authority_required(STUDENT_USER)
 def student_view(request):
 
     try:
         student = get_object_or_404(StudentProfile, user=request.user)
-        project = student.ProjectSingle
+        project = student.projectsingle
     except Exception, err:
         loginfo(p=err, label="student home view")
         raise Http404
 
+    loginfo(p=project.project_id)
     data = {"project": project}
 
     return render(request, "school/student.html", data)
@@ -104,7 +106,7 @@ def home_view(request, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None, is_expired=False):
@@ -145,7 +147,7 @@ def application_report_view(request, pid=None, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None, is_expired=False):
@@ -246,7 +248,7 @@ def history_view(request):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None, is_expired=False):
@@ -273,7 +275,7 @@ def file_view(request, pid=None, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):

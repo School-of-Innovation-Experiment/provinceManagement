@@ -111,8 +111,11 @@ class only_user_required(object):
             loginfo(p=err,
                     label="only_user_required -> get projectsingle")
             project = None
+            return False
 
-        if project is not None or request.user.is_superuser:
+        if request.user.is_superuser or \
+           request.user.id == project.adminuser.id or\
+           request.user.id == project.student.user.id:
             return True
         else:
             return False
