@@ -1,4 +1,5 @@
 <!--school page navigator bar-->
+{%if userauth.is_schooler %}
 <div class="navbar ">
   <div class="navbar-inner">
     <ul class="nav">
@@ -12,3 +13,19 @@
     </ul>
   </div><!--end navbar inner -->
 </div><!--end navbar-->	
+{%endif%}
+
+{%if userauth.is_student %}
+<!--school page navigator bar-->
+<div class="navbar ">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><a href="{% url school.views.student_view%}">项目管理</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="{% url school.views.application_report_view project.project_id%}">项目申请</a></li>
+      <li class="divider-vertical"></li>
+    </ul>
+  </div><!--end navbar inner -->
+</div><!--end navbar-->	
+{%endif%}
+
