@@ -75,7 +75,17 @@ class AdminStaffService(object):
         获得登记用户列表
         '''
         src = RegistrationProfile.objects.all()
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = []
+        for register in src:
+            dict = {}
+            #查询权限列表
+            auth_list = UserIdentity.objects.filter(auth_groups=register.user).all()
+            dict["auth"] = ''
+            dict["email"] = register.user.email
+            dict["is_active"] = register.user.is_active
+            for auth in auth_list:
+                dict["auth"] += auth.__unicode__()+' '
+            res_list.append(dict)
         return res_list
 
     @staticmethod
