@@ -49,7 +49,7 @@ def home_view(request):
 
 @csrf.csrf_protect
 @login_required
-# @authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER)
 def dispatch(request):
     teacher_form = forms.TeacherDispatchForm()
     school = SchoolProfile.objects.get(userid=request.user)
@@ -61,14 +61,37 @@ def dispatch(request):
 
 @csrf.csrf_protect
 @login_required
-# @authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER)
 def project_alloc(request):
     num_limit_form = forms.TeacherNumLimitForm(request=request)
     teacher_limit_num_list = teacherLimitNumList()
-    return render_to_response("school/projectlimitnumSettings.html", \
-                              {'num_limit_form': num_limit_form,
-                               'teacher_limit_num_list': teacher_limit_num_list}, \
+    context = {'num_limit_form': num_limit_form,
+               'teacher_limit_num_list': teacher_limit_num_list}
+    context.update(get_project_num_and_remaining(request))
+    return render_to_response("school/projectlimitnumSettings.html",
+                              context,
                               context_instance=RequestContext(request))
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def get_project_num_and_remaining(request):
+    teacher_list = TeacherProfile.objects.filter(school__userid=request.user)
+    used_proj_num = sum([p.teacherprojectperlimits.number
+                        for p in teacher_list \
+                        if hasattr(p, 'teacherprojectperlimits')])
+
+    try:
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    except Exception, err:
+        logger.info(err)
+        limits = None
+
+    total = (limits and int(limits.number)) or 0
+    remainings = (limits and (total - used_proj_num)) or 0
+    context = dict((('projects_limit', total),
+                    ('projects_remaining', remainings)))
+    return context
 
 def teacherLimitNumList():
     return TeacherProjectPerLimits.objects.all()

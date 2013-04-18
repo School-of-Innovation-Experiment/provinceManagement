@@ -13,7 +13,8 @@ RegisterClass = (ProjectSingle,
                  Re_Project_Expert,
                  PreSubmit,
                  FinalSubmit,
-                 UploadedFiles)
+                 UploadedFiles,
+                 TeacherProjectPerLimits)
 
 for item in RegisterClass:
     admin.site.register(item)

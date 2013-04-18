@@ -26,7 +26,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 from const import *
-from const.models import * 
+from const.models import *
 from adminStaff.models import *
 from backend.logging import loginfo
 from school.utility import get_current_year
@@ -137,7 +137,7 @@ class time_controller(object):
     """
     def __init__(self, phase):
         self.phase = phase
-    
+
     def get_established_time(self):
         """
         Get estabilshed time from database
