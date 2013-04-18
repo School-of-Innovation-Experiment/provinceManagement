@@ -1,6 +1,6 @@
 function send_num_limit(){
   $("#num_limit_error_message").empty();
-  Dajaxice.adminStaff.NumLimit(limitednum_callback,{'form':$('#num_limit_form').serialize(true)});
+  Dajaxice.school.NumLimit(limitednum_callback,{'form':$('#num_limit_form').serialize(true)});
 }
 function limitednum_callback(data){
   if (data.status == "1"){

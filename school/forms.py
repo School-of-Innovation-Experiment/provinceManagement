@@ -16,7 +16,9 @@ from django.db import models
 from django.forms.util import ErrorList
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
+from const.models import *
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
@@ -42,7 +44,7 @@ from django.core.urlresolvers import reverse
 
 from school.models import *
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
+from users.models import SchoolProfile, TeacherProfile
 
 
 class InfoForm(ModelForm):
@@ -152,19 +154,19 @@ class FinalReportForm(ModelForm):
 
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
+                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
                            ),
 )
     student_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
+                                        widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
                            ))
 
 class TeacherDispatchForm(forms.Form):
-    insitute_choice_list = []
-    insitute_list = InsituteCategory.objects.all()
-    for object in insitute_list:
-        insitute_choice_list.append((object.id, object.category))
-    insitute_tuple = tuple(insitute_choice_list)
+    school_choice_list = []
+    school_list = SchoolProfile.objects.all()
+    for object in school_list:
+        school_choice_list.append((object.id, str(object)))
+    school_tuple = tuple(school_choice_list)
 
     teacher_password = forms.CharField(max_length=20, required=False,
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}
@@ -173,4 +175,24 @@ class TeacherDispatchForm(forms.Form):
     teacher_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}
                            ))
-    teacher_insitute = forms.ChoiceField(required=True,choices=insitute_tuple)
+    teacher_school = forms.ChoiceField(required=True,choices=school_tuple)
+
+class TeacherNumLimitForm(forms.Form):
+    limited_num   = forms.IntegerField(required=True,
+                                       widget=forms.TextInput(attrs={'id':"limited_num"}))
+    teacher_name   = forms.ChoiceField(choices=[],
+                                       widget=forms.Select(attrs={'id': "teacher_name"}))
+
+    # user is a User object
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super(TeacherNumLimitForm, self).__init__(*args, **kwargs)
+        if not request:
+            return
+        school = SchoolProfile.objects.get(userid=request.user)
+        TEACHER_CHOICE_list = []
+        teacher_list        = TeacherProfile.objects.filter(school=school)
+        for obj in teacher_list:
+            TEACHER_CHOICE_list.append((obj.id, obj.userid.email))
+        TEACHER_CHOICE = tuple(TEACHER_CHOICE_list)
+        self.fields["teacher_name"].choices = TEACHER_CHOICE

@@ -11,29 +11,6 @@ from django.contrib.auth.models import User
 from const.models import *
 from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER
 
-class TeacherProfile(models.Model):
-    """
-    User Profile Extend
-    The Administrator can modified them in admin.page
-    """
-    userid = models.ForeignKey(User, unique=True,
-                               verbose_name="权限对应ID")
-    jobs = models.CharField(max_length=100, blank=True,
-                            verbose_name="工作单位")
-
-    class Meta:
-        verbose_name = "指导教师"
-        verbose_name_plural = "指导教师"
-
-    def __unicode__(self):
-        return '%s' % (self.userid)
-
-    def save(self, *args, **kwargs):
-        super(TeacherProfile, self).save()
-        auth, created = UserIdentity.objects.get_or_create(identity=TEACHER_USER)
-        self.userid.identities.add(auth)
-
-
 class SchoolProfile(models.Model):
     """
     User Profile Extend
@@ -41,7 +18,7 @@ class SchoolProfile(models.Model):
     """
     address = models.CharField(max_length=100, blank=True, verbose_name="地址")
     school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
-    userid = models.ForeignKey(User, unique=True,
+    userid = models.ForeignKey(User, unique=True, \
                                verbose_name="权限对应ID")
 
     class Meta:
@@ -74,6 +51,31 @@ class ExpertProfile(models.Model):
     def save(self, *args, **kwargs):
         super(ExpertProfile, self).save()
         auth, created = UserIdentity.objects.get_or_create(identity=EXPERT_USER)
+        self.userid.identities.add(auth)
+
+class TeacherProfile(models.Model):
+    """
+    User Profile Extend
+    The Administrator can modified them in admin.page
+    """
+    userid = models.ForeignKey(User, unique=True,
+                               verbose_name="权限对应ID")
+    # school is a foreignkey to school `user`
+    school = models.ForeignKey(SchoolProfile, unique=True,
+                               verbose_name="所属学校")
+    jobs = models.CharField(max_length=100, blank=True,
+                            verbose_name="工作单位")
+
+    class Meta:
+        verbose_name = "指导教师"
+        verbose_name_plural = "指导教师"
+
+    def __unicode__(self):
+        return '%s' % (self.userid)
+
+    def save(self, *args, **kwargs):
+        super(TeacherProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=TEACHER_USER)
         self.userid.identities.add(auth)
 
 

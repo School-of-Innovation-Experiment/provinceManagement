@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 
 from const.models import *
 from backend.utility import *
-from users.models import ExpertProfile
+from users.models import ExpertProfile, TeacherProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -189,3 +189,18 @@ class UploadedFiles(models.Model):
         return self.project_id.title
     def file_name(self):
         return os.path.basename(self.file_obj.name)
+
+
+class TeacherProjectPerLimits(models.Model):
+    """
+    Project apply number limits
+    """
+    teacher = models.OneToOneField(TeacherProfile, verbose_name="指导教师", unique=True)
+    number = models.IntegerField(blank=False, verbose_name="申请数量上限")
+
+    class Meta:
+        verbose_name = "指导教师申请数量限制"
+        verbose_name_plural = "指导教师申请数量限制"
+
+    def __unicode__(self):
+        return self.teacher.userid.email + ":" +  str(self.number)

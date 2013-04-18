@@ -66,6 +66,7 @@ class InsituteCategory(models.Model):
 class UserIdentity(models.Model):
     """
     Login User identity: AdminStaff, AdminSystem, Expert, SchoolTeam, visitor,
+    Teacher, Student
     """
     identity = models.CharField(max_length=50, blank=False, unique=True,
                                 choices=AUTH_CHOICES, default=VISITOR_USER,

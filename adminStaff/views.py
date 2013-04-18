@@ -37,11 +37,32 @@ class AdminStaffService(object):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
             elif kwargs.has_key('expert_insitute'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
-            elif kwargs.has_key('teacher_insitute'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, teacher_insitute=kwargs['teacher_insitute'])
+            elif kwargs.has_key('teacher_school'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             return True
         else:
             return False
+
+    @staticmethod
+    def GetRegisterListBySchool(school):
+        '''
+        获得登记对应`学院`的用户列表
+        '''
+        res_list = []
+        for register in TeacherProfile.objects.filter(school = school):
+            dict = {}
+            #查询权限列表
+            ##########################################################################
+            auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            dict["auth"] = ''
+            dict["email"] = register.userid.email
+            dict["is_active"] = register.userid.is_active
+            for auth in auth_list:
+                dict["auth"] += auth.__unicode__()+' '
+            ##########################################################################
+            res_list.append(dict)
+        return res_list
+
     @staticmethod
     def GetRegisterList():
         '''

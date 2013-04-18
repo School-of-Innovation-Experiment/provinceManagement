@@ -37,7 +37,10 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
+from adminStaff.views import AdminStaffService
 
+
+# TODO: Uncomment the authority_reguired decoritor
 @csrf.csrf_protect
 @login_required
 # @authority_required(SCHOOL_USER)
@@ -49,12 +52,24 @@ def home_view(request):
 # @authority_required(SCHOOL_USER)
 def dispatch(request):
     teacher_form = forms.TeacherDispatchForm()
-    # email_list  = AdminStaffService.GetRegisterList()
+    email_list  = AdminStaffService.GetRegisterListBySchool( \
+        SchoolProfile.objects.get(userid=request.user))
+    school = SchoolProfile.objects.get(userid=request.user)
+    if not school:
+        raise Http404
     email_list = {}
-    return render_to_response("school/dispatch.html",{'teacher_form':teacher_form,'teacher_form':teacher_form,'email_list':email_list},context_instance=RequestContext(request))
+    return render_to_response("school/dispatch.html",{'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect
 @login_required
 # @authority_required(SCHOOL_USER)
 def project_alloc(request):
-    return render_to_response("school/projectlimitnumSettings.html", {})
+    num_limit_form = forms.TeacherNumLimitForm(request=request)
+    teacher_limit_num_list = teacherLimitNumList()
+    return render_to_response("school/projectlimitnumSettings.html", \
+                              {'num_limit_form': num_limit_form,
+                               'teacher_limit_num_list': teacher_limit_num_list}, \
+                              context_instance=RequestContext(request))
+
+def teacherLimitNumList():
+    return TeacherProjectPerLimits.objects.all()

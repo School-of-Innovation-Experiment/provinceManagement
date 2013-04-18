@@ -20,7 +20,7 @@ from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity
 from backend.logging import logger
-from users.models import SchoolProfile, ExpertProfile
+from users.models import SchoolProfile, ExpertProfile, TeacherProfile
 from const.models import SchoolDict, InsituteCategory
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
@@ -113,11 +113,11 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.save()
 
-        elif kwargs.has_key('teacher_name'):
-            teacherProfileObj = TeacherProfile(userid =new_user)
+        elif kwargs.get('teacher_school', False):
+            teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user)
             teacherProfileObj.save()
 
-        else:
+        elif kwargs.get("expert_insitute", False):
             insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
             expertProfileObj = ExpertProfile(subject=insituteObj, userid =new_user)
             expertProfileObj.save()
