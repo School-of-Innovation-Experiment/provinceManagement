@@ -9,7 +9,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from const.models import *
-from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER
+from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER, TEACHER_USER
 
 class SchoolProfile(models.Model):
     """
@@ -22,8 +22,8 @@ class SchoolProfile(models.Model):
                                verbose_name="权限对应ID")
 
     class Meta:
-        verbose_name = "参赛学院"
-        verbose_name_plural = "参赛学院"
+        verbose_name = "院级管理员"
+        verbose_name_plural = "学院管理员"
 
     def __unicode__(self):
         return self.school.schoolName
@@ -61,8 +61,8 @@ class TeacherProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")
     # school is a foreignkey to school `user`
-    school = models.ForeignKey(SchoolProfile, unique=True,
-                               verbose_name="所属学校")
+    school = models.ForeignKey(SchoolProfile,
+                               verbose_name="所属学院")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
 
@@ -104,8 +104,8 @@ class AdminStaffProfile(models.Model):
     jobs = models.CharField(max_length=50, blank=True, verbose_name="职务")
 
     class Meta:
-        verbose_name = "省级管理员"
-        verbose_name_plural = "省级管理员"
+        verbose_name = "校级管理员"
+        verbose_name_plural = "校级管理员"
 
     def __unicode__(self):
         return '%s' % (self.userid)

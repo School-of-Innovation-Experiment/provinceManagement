@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
 Created on 2012-11-5
 
@@ -12,6 +12,8 @@ from users.models import *
 RegisterClass = (SchoolProfile,
                  ExpertProfile,
                  AdminStaffProfile,
+                 TeacherProfile,
+                 StudentProfile,
                  )
 
 for item in RegisterClass:
