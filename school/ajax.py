@@ -15,7 +15,7 @@ from school.forms import TeacherDispatchForm, TeacherNumLimitForm
 
 @dajaxice_register
 def NumLimit(request, form):
-    dajax = Dajax()
+    # dajax = Dajax()
     form = TeacherNumLimitForm(deserialize_form(form))
     if form.is_valid():
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
