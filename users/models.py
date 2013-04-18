@@ -9,7 +9,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from const.models import *
-from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER
+from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER
 
 class TeacherProfile(models.Model):
     """
@@ -31,6 +31,25 @@ class TeacherProfile(models.Model):
     def save(self, *args, **kwargs):
         super(TeacherProfile, self).save()
         auth, created = UserIdentity.objects.get_or_create(identity=TEACHER_USER)
+        self.userid.identities.add(auth)
+
+class StudentProfile(models.Model):
+    """
+    User Profile Extend
+    The Administrator can modified them in admin.page
+    """
+    userid = models.ForeignKey(User, unique=True,
+                                verbose_name="权限对应ID")
+    teacher = models.ForeignKey(TeacherProfile, verbose_name="指导教师")
+
+    class Meta:
+        verbose_name = "参赛学生"
+        verbose_name_plural = "参赛学生"
+    def __unicode__(self):
+        return '%s' % (self.userid)
+    def save(self, *args, **kwargs):
+        super(StudentProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=STUDENT_USER)
         self.userid.identities.add(auth)
 
 
