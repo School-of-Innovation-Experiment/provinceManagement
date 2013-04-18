@@ -53,10 +53,21 @@ About the decorators sequence, it will impact the the function squeneces,
 the top will be called first!
 """
 
+
 @csrf.csrf_protect
 @login_required
 def student_view(request):
-    return render(request, "school/student.html")
+
+    try:
+        student = get_object_or_404(StudentProfile, user=request.user)
+        project = student.ProjectSingle
+    except Exception, err:
+        loginfo(p=err, label="student home view")
+        raise Http404
+
+    data = {"project": project}
+
+    return render(request, "school/student.html", data)
 
 
 @csrf.csrf_protect
@@ -305,29 +316,39 @@ def AuthStudentExist(request, email):
         return True
     else:
         return False
+
+
 @login_required
 def Send_email_to_student(request, username, password, email, identity):
     #判断用户名是否存在，存在的话直接返回
     if not AuthStudentExist(request, email):
-        RegistrationManager().create_inactive_user(request,username,password,email,identity)
-        return  True
+        user = RegistrationManager().create_inactive_user(request,username,password,email,identity)
+        result = create_newproject(request=request, new_user=user)
+        return True and result
     else:
         return False
+
 
 def Count_email_already_exist(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
     num = StudentProfile.objects.filter(school = school_profile).count()
     return num
+
+
 def school_limit_num(request):
     limits = ProjectPerLimits.objects.get(school__userid=request.user)
     limit_num = limits.number
     return limit_num
+
+
 def GetStudentRegisterList(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
     students_list = [each.user for each in StudentProfile.objects.filter(school = school_profile)]
     return students_list
+
+
 @login_required
 def StudentDispatch(request):
     if request.method == "GET":

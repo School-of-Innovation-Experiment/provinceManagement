@@ -29,6 +29,7 @@ from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
 from const import *
+from const.models import *
 
 from backend.utility import search_tuple
 
@@ -370,3 +371,42 @@ def get_province_trend_lines():
                                 }
                 )
     return cht
+
+
+
+def create_newproject(request, new_user):
+    """
+    create a new project for this usr, it is student profile
+    """
+    #TODO: add some necessary decorators
+
+    student = get_object_or_404(StudentProfile, user=new_user)
+
+    try:
+        pid = uuid.uuid4()
+        project = ProjectSingle()
+        project.project_id = pid
+        project.adminuser = request.user
+        project.student = student
+        project.school = student.school.school
+        project.year = get_current_year()
+        project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
+        project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
+        project.save()
+
+        # create presubmit and final report
+        pre = PreSubmit()
+        pre.content_id = uuid.uuid4()
+        pre.project_id = project
+        pre.save()
+
+        #create final report
+        final = FinalSubmit()
+        final.content_id = uuid.uuid4()
+        final.project_id = project
+        final.save()
+    except Exception, err:
+        loginfo(p=err, label="creat a project for the user")
+        return False
+
+    return True
