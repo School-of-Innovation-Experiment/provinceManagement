@@ -1,6 +1,6 @@
 function send_email_to_teacher(){
   $("#teacher_email_error_message").empty();
-  Dajaxice.school.TeacherDispatch(teacherDispatch_callback,{'form':$('#Teacher_email_send_form').serialize(true)});
+  Dajaxice.school.TeacherDispatch(teacherDispatch_callback,{'form':$('#teacher_email_send_form').serialize(true)});
 }
 function teacherDispatch_callback(data){
   if (data.status == "1"){

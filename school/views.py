@@ -39,11 +39,9 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from adminStaff.views import AdminStaffService
 
-
-# TODO: Uncomment the authority_reguired decoritor
 @csrf.csrf_protect
 @login_required
-# @authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER)
 def home_view(request):
     return render(request, "school/home.html", {})
 

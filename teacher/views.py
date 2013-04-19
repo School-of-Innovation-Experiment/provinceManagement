@@ -16,7 +16,7 @@ from teacher.utility import create_newproject
 
 @csrf.csrf_protect
 @login_required
-# @authority_required(TEACHER_USER)
+@authority_required(TEACHER_USER)
 def home_view(request):
     return render(request, "teacher/teacher_home.html", {})
 
@@ -26,7 +26,7 @@ def Send_email_to_student(request, username, password, email, identity):
     check the existence of user
     """
     if User.objects.filter(email = email).count() == 0:
-        user = RegistrationManager().create_inactive_user(request, username, password, email, 
+        user = RegistrationManager().create_inactive_user(request, username, password, email,
                 identity)
         result = create_newproject(request=request, new_user=user)
         return True and result
@@ -56,4 +56,3 @@ def StudentDispatch(request):
             'remaining_activation_times': remaining_activation_times
             }
         return render(request, 'teacher/dispatch.html', data)
-

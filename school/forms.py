@@ -162,13 +162,6 @@ class StudentDispatchForm(forms.Form):
                            ))
 
 class TeacherDispatchForm(forms.Form):
-    # school_choice_list = []
-    # school_list = SchoolProfile.objects.all()
-    # for object in school_list:
-    #     school_choice_list.append((object.id, str(object)))
-    # school_tuple = tuple(school_choice_list)
-    # teacher_school = forms.ChoiceField(required=True,choices=school_tuple)
-
     teacher_password = forms.CharField(max_length=20, required=False,
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))
     teacher_email    = forms.EmailField(required=True,
@@ -181,8 +174,8 @@ class TeacherNumLimitForm(forms.Form):
         TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
     TEACHER_CHOICE = tuple(TEACHER_CHOICE_list)
 
-    teacher_name   = forms.ChoiceField(choices=TEACHER_CHOICE,
-                                       widget=forms.Select(attrs={'id': "teacher_name"}))
+    teacher_name   = forms.ChoiceField(choices=TEACHER_CHOICE,)
+                                       # widget=forms.Select(attrs={'id': "teacher_name"}))
     limited_num   = forms.IntegerField(required=True,
                                        widget=forms.TextInput(attrs={'id':"limited_num"}))
     # user is a User object
