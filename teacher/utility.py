@@ -21,6 +21,7 @@ def create_newproject(request, new_user):
         pid = uuid.uuid4()
         project = ProjectSingle()
         project.project_id = pid
+        project.title = u"未命名"
         project.adminuser = request.user 
         project.student = student 
         project.school = teacher.school.school

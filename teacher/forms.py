@@ -8,7 +8,7 @@ class StudentDispatchForm(forms.Form):
            widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'})
            )
     student_email    = forms.EmailField(required=True,
-           widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'})
+          widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'})
            )
 
 

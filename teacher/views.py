@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from backend.decorators import *
 from const import *
 from users.models import TeacherProfile, StudentProfile
-from school.models import TeacherProjectPerLimits
+from school.models import TeacherProjectPerLimits, ProjectSingle
 from teacher.forms import StudentDispatchForm
 from registration.models import *
 from teacher.utility import create_newproject
@@ -21,8 +21,12 @@ def home_view(request):
     email_list  = GetStudentRegisterList(request)
     email_num = len(email_list) 
     limited_num = TeacherLimitNumber(request) 
-    remaining_activation_times = limited_num - email_num 
+    remaining_activation_times = limited_num - email_num
+
+    project_list = ProjectSingle.objects.filter(adminuser = request.user)
+    
     data = {
+        "project_list": project_list,
         "limited_num": limited_num,
         "remaining_activation_times": remaining_activation_times,
         }

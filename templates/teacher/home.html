@@ -17,72 +17,30 @@
          <thead>
      <tr>
     <th>项目名称</th>
+		<th>管理员</th>
     <th>项目类型</th>
-     <th>学生负责人</th>
         <th>项目状态</th>
 <th>项目级别</th>
     </tr>
                </thead>
        <tbody>
-      <tr>
-
-       <td>基于图像处理的投影键盘</td>
-       <td>创新训练</td>
-      <td>刘留</td>
-      <td> <span class="label label-success">通过审查</span></td>
-      
-                   <td>
-            <span class="label label-important">国家级</span>
-           <button type="button" class="btn btn-mini"><a href="projectapp">指派学生负责人</a></button>
-            </td>
-    </tr>
-             <tr>
-
-       <td>基于单片机和Zigbee的无线自助点餐笔</td>
-       <td>创新训练</td>
-          <td>逄凌滨</td>  
-            <td> <span class="label label-success">通过审查</span></td>
-           <td>
-             <span class="label label-info">省级</span>
-           <button type="button" class="btn btn-mini">指派学生负责人</button>
-            </td>
-       </tr>
-             <tr>
-     
-       <td>自助导游系统</td>
-       <td>创新训练</td>
-       
-       <td>刘丹</td>
-         <td> <span class="label label-success">通过审查</span></td>
-        <td>
-           <span class="label label">校级</span>
-           <button type="button" class="btn btn-mini">指派学生负责人</button>
-            </td>
-        </td>
-       </tr>
-                    <tr>
-
-       <td>基于ABC</td>
-       <td>创新训练</td>
-          <td>逄凌滨</td>  
-            <td> <span class="label label-warning">等待审查</span></td>
-           <td>
-            
-          
-            </td>
-       </tr>
+					{% for project in project_list %}
+						<tr>
+							<td>{{ project.title }}</td>
+							<td>{{ project.adminuser }} </td>
+							<td>{{ project.project_category }}</td>
+							<td>
+								<span class="label label-warning">{{ project.project_status }}</span>
+							</td>
+							<td>
+								<span class="label label-important">{{ project.project_grade }}</span>
+							</td>
+							
+						</tr>
+					{% endfor %}
        </tbody>
 
     </table>
-</div>
-<div>
-
-<dl>
-  <dt>注意事项：</dt>
-  <dd class="text-error">若项目通过审查后，请指导教师首先指派项目学生负责人，点击上面列表中右侧指派学生负责人按钮。</dd>
-   
-</dl>
-
 </div>
 
 {% endblock %}
