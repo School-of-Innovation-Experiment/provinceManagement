@@ -7,31 +7,38 @@ from const.models import SchoolDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory
-from users.models import SchoolProfile
+from users.models import SchoolProfile, TeacherProfile
 from news.models import News
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
+from school.views import get_project_num_and_remaining
 
 @dajaxice_register
-def NumLimit(request, form):
+def teacherProjNumLimit(request, form):
     # dajax = Dajax()
     form = TeacherNumLimitForm(deserialize_form(form))
     if form.is_valid():
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
+        num_and_remaining = get_project_num_and_remaining(request)
+        if num_and_remaining['projects_remaining'] < limited_num:
+            return simplejson.dumps({'id':"limited_num" ,'message':u'分配数量不能大于剩余数量'})
         try:
-            if  TeacherProjectPerLimits.objects.filter(teacher=teacher_obj).count() == 0 :
-                projectlimit = TeacherProjectPerLimits(teacher=teacher_obj,
+            if  TeacherProjectPerLimits.objects.filter(teacher=teacher_obj).count() == 0:
+                projLimit_obj = TeacherProjectPerLimits(teacher=teacher_obj,
                                                        number=limited_num)
-                projectlimit.save()
+                projLimit_obj.save()
             else:
-                object = ProjectPerLimits.objects.get(teacher=teacher_obj)
-                object.number = limited_num
-                object.save()
-            return simplejson.dumps({'status':'1','message':u'更新成功'})
+                projLimit_obj = TeacherProjectPerLimits.objects.get(teacher=teacher_obj)
+                projLimit_obj.number += limited_num
+                projLimit_obj.save()
+                # return simplejson.dumps({'id':"teacher_name" ,'message':u'已分配项目给该指导老师，不可重复分配'})
+            ret = {'status':'1','message':u'更新成功'}
+            ret['projects_remaining'] = get_project_num_and_remaining(request)['projects_remaining']
+            return simplejson.dumps(ret)
         except TeacherProfile.DoesNotExist:
-            return simplejson.dumps({'status':'1','message':u'更新失败，选定的指导老师没有进行注册'})
+            return simplejson.dumps({'id':'teacer_name', 'message':u'更新失败，选定的指导老师没有进行注册'})
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
 

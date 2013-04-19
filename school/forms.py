@@ -178,11 +178,16 @@ class TeacherDispatchForm(forms.Form):
     teacher_school = forms.ChoiceField(required=True,choices=school_tuple)
 
 class TeacherNumLimitForm(forms.Form):
+    TEACHER_CHOICE_list = []
+    teacher_list        = TeacherProfile.objects.all()
+    for obj in teacher_list:
+        TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
+    TEACHER_CHOICE = tuple(TEACHER_CHOICE_list)
+
+    teacher_name   = forms.ChoiceField(choices=TEACHER_CHOICE,
+                                       widget=forms.Select(attrs={'id': "teacher_name"}))
     limited_num   = forms.IntegerField(required=True,
                                        widget=forms.TextInput(attrs={'id':"limited_num"}))
-    teacher_name   = forms.ChoiceField(choices=[],
-                                       widget=forms.Select(attrs={'id': "teacher_name"}))
-
     # user is a User object
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request', None)
@@ -193,6 +198,6 @@ class TeacherNumLimitForm(forms.Form):
         TEACHER_CHOICE_list = []
         teacher_list        = TeacherProfile.objects.filter(school=school)
         for obj in teacher_list:
-            TEACHER_CHOICE_list.append((obj.id, obj.userid.email))
+            TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
         TEACHER_CHOICE = tuple(TEACHER_CHOICE_list)
         self.fields["teacher_name"].choices = TEACHER_CHOICE

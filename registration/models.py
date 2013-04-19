@@ -22,6 +22,7 @@ from const.models import UserIdentity
 from backend.logging import logger
 from users.models import SchoolProfile, ExpertProfile, TeacherProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
+from school.models import TeacherProjectPerLimits
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -115,6 +116,9 @@ class RegistrationManager(models.Manager):
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user)
             teacherProfileObj.save()
+            teacherProjLimit = TeacherProjectPerLimits(teacher=teacherProfileObj,
+                                                       number=0)
+            teacherProjLimit.save()
 
         elif kwargs.get("expert_insitute", False):
             insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])

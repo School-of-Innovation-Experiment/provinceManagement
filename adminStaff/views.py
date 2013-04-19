@@ -44,18 +44,15 @@ class AdminStaffService(object):
             return False
 
     @staticmethod
-    def GetRegisterListBySchool(school):
-        '''
-        获得登记对应`学院`的用户列表
-        '''
+    def getUserInfoList(src):
         res_list = []
-        for register in TeacherProfile.objects.filter(school = school):
+        for register in src:
             dict = {}
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
             dict["auth"] = ''
-            dict["email"] = register.userid.email
+            dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
@@ -64,23 +61,30 @@ class AdminStaffService(object):
         return res_list
 
     @staticmethod
+    def GetRegisterListBySchool(school):
+        '''
+        获得对应`学院`的指导教师用户列表
+        '''
+        src=TeacherProfile.objects.filter(school = school.id)
+        res_list = AdminStaffService.getUserInfoList(src)
+        return res_list
+
+    @staticmethod
     def GetRegisterList():
         '''
         获得登记用户列表
         '''
+        src = RegistrationProfile.objects.all()
         res_list = []
-        auth_name = []
-        for register in RegistrationProfile.objects.all():
+        for register in src:
             dict = {}
             #查询权限列表
-            ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.user).all()
             dict["auth"] = ''
             dict["email"] = register.user.email
             dict["is_active"] = register.user.is_active
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
-            ##########################################################################
             res_list.append(dict)
         return res_list
 
