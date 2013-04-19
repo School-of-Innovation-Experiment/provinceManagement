@@ -86,7 +86,8 @@ class StudentProfile(models.Model):
     """
     userid = models.ForeignKey(User, unique=True,
                                 verbose_name="权限对应ID")
-    teacher = models.ForeignKey(TeacherProfile, verbose_name="指导教师")
+    teacher = models.ForeignKey(TeacherProfile,
+                                verbose_name="指导教师")
 
     class Meta:
         verbose_name = "参赛学生"

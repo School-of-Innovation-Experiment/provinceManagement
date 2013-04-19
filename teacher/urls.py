@@ -8,9 +8,14 @@ Created on 2013-3-11
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from teacher import views as teacher_views
 
 urlpatterns = patterns('',
-
+    
+    url(
+        r'^dispatch',
+        teacher_views.StudentDispatch,
+    ),
     url(
         r'^$',
         direct_to_template, {'template': 'teacher/home.html'}

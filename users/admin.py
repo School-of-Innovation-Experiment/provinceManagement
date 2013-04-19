@@ -12,6 +12,8 @@ from users.models import *
 RegisterClass = (SchoolProfile,
                  ExpertProfile,
                  AdminStaffProfile,
+                 TeacherProfile,
+                 StudentProfile,
                  )
 
 for item in RegisterClass:

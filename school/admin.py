@@ -11,6 +11,7 @@ from school.models import *
 
 RegisterClass = (ProjectSingle,
                  Re_Project_Expert,
+                 TeacherProjectPerLimits,
                  PreSubmit,
                  FinalSubmit,
                  UploadedFiles)

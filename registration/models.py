@@ -20,7 +20,7 @@ from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity
 from backend.logging import logger
-from users.models import SchoolProfile, ExpertProfile, TeacherProfile
+from users.models import SchoolProfile, ExpertProfile, TeacherProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
@@ -112,7 +112,6 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.save()
-
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user)
             teacherProfileObj.save()
@@ -121,6 +120,14 @@ class RegistrationManager(models.Manager):
             insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
             expertProfileObj = ExpertProfile(subject=insituteObj, userid =new_user)
             expertProfileObj.save()
+
+        else:
+            teacher_name = request.user.username 
+            teacher = User.objects.get(username=teacher_name) 
+            teacher_profile = TeacherProfile.objects.get(userid = teacher)
+            student_obj = StudentProfile(userid = new_user,teacher = teacher_profile)
+            student_obj.save()
+
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user
