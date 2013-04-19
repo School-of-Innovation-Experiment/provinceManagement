@@ -51,7 +51,7 @@ def  TeacherDispatch(request, form):
         password = teacher_form.cleaned_data["teacher_password"]
         email = teacher_form.cleaned_data["teacher_email"]
         # school = teacher_form.cleaned_data["teacher_school"]
-        school = request.user.schoolprofile_set.get()
+        school = SchoolProfile.objects.get(userid=request.user)
         name = email
         if password == "":
             password = email.split('@')[0]
