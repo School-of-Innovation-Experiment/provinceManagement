@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 
 from const.models import *
 from backend.utility import *
-from users.models import ExpertProfile, TeacherProfile
+from users.models import ExpertProfile, TeacherProfile, StudentProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -38,6 +38,7 @@ class ProjectSingle(models.Model):
 
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
+    student = models.OneToOneField(StudentProfile)
     school = models.ForeignKey(SchoolDict,
                                blank=True, null=True, default=None)
     project_category = models.ForeignKey(ProjectCategory,
