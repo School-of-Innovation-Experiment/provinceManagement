@@ -18,7 +18,15 @@ from teacher.utility import create_newproject
 @login_required
 # @authority_required(TEACHER_USER)
 def home_view(request):
-    return render(request, "teacher/teacher_home.html", {})
+    email_list  = GetStudentRegisterList(request)
+    email_num = len(email_list) 
+    limited_num = TeacherLimitNumber(request) 
+    remaining_activation_times = limited_num - email_num 
+    data = {
+        "limited_num": limited_num,
+        "remaining_activation_times": remaining_activation_times,
+        }
+    return render(request, "teacher/home.html", data)
 
 
 def Send_email_to_student(request, username, password, email, identity):
@@ -47,7 +55,7 @@ def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
         email_list  = GetStudentRegisterList(request)
-        email_num = email_list and len(email_list) or 0
+        email_num = len(email_list)
         limited_num = TeacherLimitNumber(request)
         remaining_activation_times = limited_num - email_num
         data = {

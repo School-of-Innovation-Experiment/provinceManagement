@@ -4,13 +4,10 @@
 {% block calculate-content%}
 <div class="container">
   <div class="page-header">
-    <div class="pull-right">
-      <a href="/teacher/projectapp" class="btn btn-large btn-warning">新增项目++</a>
-    </div>
     <h3>
       本年度项目列表
-      <span class="label label-info">申请上限:22</span>
-      <span class="label label-important">剩余数量:16</span>
+      <span class="label label-info">申请上限:{{ limited_num }}</span>
+      <span class="label label-important">剩余数量:{{ remaining_activation_times }}</span>
     </h3>
   </div>	
 

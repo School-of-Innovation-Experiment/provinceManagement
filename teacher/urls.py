@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     ),
     url(
         r'^$',
-        direct_to_template, {'template': 'teacher/home.html'}
+        teacher_views.home_view,
     ),
     url(
         r'^history$',
