@@ -10,7 +10,7 @@ from student import views as student_views
 urlpatterns = patterns('',
     # Examples:
     url(
-        r'^$', 
+        r'^$',
         student_views.home_view,
     ),
     url(
