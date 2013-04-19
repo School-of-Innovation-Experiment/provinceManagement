@@ -162,20 +162,17 @@ class StudentDispatchForm(forms.Form):
                            ))
 
 class TeacherDispatchForm(forms.Form):
-    school_choice_list = []
-    school_list = SchoolProfile.objects.all()
-    for object in school_list:
-        school_choice_list.append((object.id, str(object)))
-    school_tuple = tuple(school_choice_list)
+    # school_choice_list = []
+    # school_list = SchoolProfile.objects.all()
+    # for object in school_list:
+    #     school_choice_list.append((object.id, str(object)))
+    # school_tuple = tuple(school_choice_list)
+    # teacher_school = forms.ChoiceField(required=True,choices=school_tuple)
 
     teacher_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}
-                           ),
-)
+                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))
     teacher_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}
-                           ))
-    teacher_school = forms.ChoiceField(required=True,choices=school_tuple)
+                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
 
 class TeacherNumLimitForm(forms.Form):
     TEACHER_CHOICE_list = []
