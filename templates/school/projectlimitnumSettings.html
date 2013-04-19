@@ -13,12 +13,15 @@
     <form class="well form-inline" method="POST" id="num_limit_form" action="">
       {% csrf_token %}
       <h3>
-        <span class="label label-info">申请上限:{{ projects_limit }}</span>
-        <span class="label label-important">剩余数量:{{ projects_remaining }}</span>
+        <span class="label label-info" id="projects_limit">申请上限:{{ projects_limit }}</span>
+        <span class="label label-important" id="projects_remaining">剩余数量:{{ projects_remaining }}</span>
       </h3>
       <div class="alert alert-info">
 	<a class="close" data-dismiss="alert">×</a>
-	<strong>注意:</strong>针对不同指导老师可以有不同的上传数量限制，如果没有限制可以不用填写或者更改以前的限制数量为0即可
+	<strong>注意:</strong><ol>
+          <li>针对不同指导老师可以有不同的上传数量限制，未设置的指导老师项目上传数量为零</li>
+          <li>对已设置的指导老师进行的数量更改，视为项目数量追加</li>
+        </ol>
       </div>
       <div>
 	<label>指导教师选择</label>
