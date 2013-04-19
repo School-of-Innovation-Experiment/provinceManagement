@@ -37,7 +37,9 @@ def userauth_settings(request):
     """
     userauth = {"is_schooler": False,
                 "is_adminstaff": False,
-                "is_experter": False
+                "is_experter": False,
+                "is_teacher": False,
+                "is_student": False,
                 }
 
     if check_auth(user=request.user, authority=SCHOOL_USER):
@@ -51,7 +53,7 @@ def userauth_settings(request):
         userauth["is_adminstaff"] = True
         try:
             userauth["adminstaff"] = AdminStaffProfile.objects.get(userid=request.user)
-        except AdminStaffProfile.DoesNotExist:
+        except AdminStaffProfile.DoesNotExist, err:
             loginfo(p=err, label="context AdminStaffProfile")
 
     if check_auth(user=request.user, authority=EXPERT_USER):
@@ -61,6 +63,19 @@ def userauth_settings(request):
         except ExpertProfile.DoesNotExist, err:
             loginfo(p=err, label="context ExpertProfile")
 
+    if check_auth(user=request.user, authority=TEACHER_USER):
+        userauth["is_teacher"] = True
+        try:
+            userauth["teacher"] = TeacherProfile.objects.get(userid=request.user)
+        except TeacherProfile.DoesNotExist, err:
+            loginfo(p=err, label="context TeacherProfile")
+
+    if check_auth(user=request.user, authority=STUDENT_USER):
+        userauth["is_student"] = True
+        try:
+            userauth["student"] = StudentProfile.objects.get(userid=request.user)
+        except StudentProfile.DoesNotExist, err:
+            loginfo(p=err, label="context StudentProfile")
 
     context = {"userauth": userauth}
 

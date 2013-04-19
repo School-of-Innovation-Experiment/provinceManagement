@@ -38,6 +38,7 @@ class ProjectSingle(models.Model):
 
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
+    student = models.OneToOneField(StudentProfile)
     school = models.ForeignKey(SchoolDict,
                                   blank=True, null=True, default=None)
     
