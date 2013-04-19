@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 
 from const.models import *
 from backend.utility import *
-from users.models import ExpertProfile, TeacherProfile, StudentProfile
+from users.models import ExpertProfile, TeacherProfile, StudentProfile, SchoolProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -31,38 +31,32 @@ class ProjectSingle(models.Model):
     """
     project_id = models.CharField(max_length=50, primary_key=True,
                                   default=make_uuid,
-                                  verbose_name="题目唯一ID")
+                                  verbose_name=u"题目唯一ID")
 
     title = models.CharField(max_length=400, blank=False,
-                             verbose_name="参赛题目")
+                             verbose_name=u"参赛题目")
 
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
-    adminuser = models.ForeignKey(User)
-    student = models.OneToOneField(StudentProfile)
-    school = models.ForeignKey(SchoolDict,
-                               blank=True, null=True, default=None)
-    project_category = models.ForeignKey(ProjectCategory,
+    adminuser = models.ForeignKey(TeacherProfile, blank=False, null=False, verbose_name=u"指导教师")
+    student = models.OneToOneField(StudentProfile, verbose_name=u"参赛学生")
+    school = models.ForeignKey(SchoolProfile, blank=False, null=False, verbose_name=u"所属学院")
+
+    project_category = models.ForeignKey(ProjectCategory, verbose_name=u"项目类型",
                                          blank=True, null=True, default=None)
-    insitute = models.ForeignKey(InsituteCategory,
-                                 blank=True, null=True, default=None,
-                                 verbose_name="所属学院")
-    project_grade = models.ForeignKey(ProjectGrade,
+    project_grade = models.ForeignKey(ProjectGrade, verbose_name=u"项目级别",
                                       blank=True, null=True, default=None)
-    project_status = models.ForeignKey(ProjectStatus,
+    project_status = models.ForeignKey(ProjectStatus, verbose_name=u"项目状态",
                                        blank=True, null=True,
                                        default=None)
-    email = models.EmailField(verbose_name="电子邮件")
+    email = models.EmailField(verbose_name=u"电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
-                                 verbose_name="联系方式")
-    inspector = models.CharField(max_length=200, blank=False,
-                                 verbose_name="指导教师")
+                                 verbose_name=u"联系方式")
     members = models.CharField(max_length=400, blank=False,
-                               verbose_name="团队成员")
-    im = models.CharField(max_length=50, blank=False, verbose_name="社交")
-    #choices=YEAR_CHOICES,
+                               verbose_name=u"团队成员")
+    im = models.CharField(max_length=50, blank=False, verbose_name=u"社交")
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
-                               verbose_name="参加年份")
+                               verbose_name=u"参加年份")
 
     class Meta:
         verbose_name = "参赛项目"
