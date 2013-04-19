@@ -22,9 +22,9 @@ def create_newproject(request, new_user):
         project = ProjectSingle()
         project.project_id = pid
         project.title = u"未命名"
-        project.adminuser = request.user 
+        project.adminuser = teacher
         project.student = student 
-        project.school = teacher.school.school
+        project.school = teacher.school
         project.year = get_current_year() 
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN) 
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST) 

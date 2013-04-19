@@ -39,12 +39,12 @@
               <li><a>角色选择</a></li>
               {%if userauth.is_schooler %}
               <li>
-                  <a  href={% url school.views.home_view %} >---参赛学校</a>
+                  <a  href={% url school.views.home_view %} >---参赛学院</a>
               </li>
               {%endif%}
               {%if userauth.is_adminstaff %}
               <li>
-                  <a href="/adminStaff/" >---省级管理员</a>
+                  <a href="/adminStaff/" >---校级管理员</a>
               </li>
               {%endif%}
               {%if userauth.is_experter %}
