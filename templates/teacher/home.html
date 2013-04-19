@@ -17,7 +17,6 @@
          <thead>
      <tr>
     <th>项目名称</th>
-		<th>管理员</th>
     <th>项目类型</th>
         <th>项目状态</th>
 <th>项目级别</th>
@@ -27,7 +26,6 @@
 					{% for project in project_list %}
 						<tr>
 							<td>{{ project.title }}</td>
-							<td>{{ project.adminuser }} </td>
 							<td>{{ project.project_category }}</td>
 							<td>
 								<span class="label label-warning">{{ project.project_status }}</span>
@@ -35,7 +33,7 @@
 							<td>
 								<span class="label label-important">{{ project.project_grade }}</span>
 							</td>
-							
+							<a href="#"><td><button class="btn btn-primary">编辑</button></td></a>
 						</tr>
 					{% endfor %}
        </tbody>
