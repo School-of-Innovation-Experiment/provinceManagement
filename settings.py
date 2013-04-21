@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'news',
     'showtime',
     'teacher',
+    'student',
     #Add-on
     'south',
     'dajaxice',
@@ -221,7 +222,7 @@ LOGGING = {
 
 # project original file
 PROCESS_FILE_PATH = join("tmp", "process_file")
-FILE_DELETE_URL = '/school/delete/'
+FILE_DELETE_URL = '/student/delete/'
 
 # news documents path
 NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")

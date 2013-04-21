@@ -2,6 +2,9 @@
 <div class="container">
   <!--TODO: Add more authorities choice-->
   <div class="pull-right">
+    {%if userauth.is_student %}
+    <a type="button" class="btn btn-success"  href={% url student.views.home_view %}  >参赛学生</a>
+    {%endif%}
     {%if userauth.is_schooler %}
     <a type="button" class="btn btn-primary"  href={% url school.views.home_view %}  >参赛学校</a>
     {%endif%}

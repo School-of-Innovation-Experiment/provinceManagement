@@ -2,7 +2,7 @@
 {% extends "student/base/report_base.html" %}
 
 {%block report-content%}
-  <form method="post" action={}>
+  <form method="post" action={% url student.views.final_report_view pid %}>
     {% csrf_token %}
     <!--Project Content-->
     {% include "student/widgets/final.html" %}

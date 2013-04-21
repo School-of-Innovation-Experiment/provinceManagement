@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url,include
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 from student import views as student_views
+
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -14,15 +15,19 @@ urlpatterns = patterns('',
         student_views.home_view,
     ),
     url(
-        r'^application$',
+        r'^application/(?P<pid>.{36})$',
         student_views.application_report_view,
     ),
     url(
-        r'^final$',
+        r'^final/(?P<pid>.{36})$',
         student_views.final_report_view,
     ),
     url(
-        r'^files$',
+        r'^files/(?P<pid>.{36})$',
         student_views.file_view,
+    ),
+    url(
+        r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
+        student_views.file_delete_view,
     ),
 )

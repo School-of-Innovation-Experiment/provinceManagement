@@ -36,7 +36,7 @@
     <h3>文件上传操作</h3>
   </div>
   <!--File upload operator-->
-  <form id="fileupload" method="post" action={}>
+  <form id="fileupload" method="post" action={% url student.views.file_view pid%}>
     {% csrf_token %}
         <div class="row fileupload-buttonbar" id="addinput">
             <div class="span12">

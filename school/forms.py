@@ -44,7 +44,7 @@ from django.core.urlresolvers import reverse
 
 from school.models import *
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile, TeacherProfile
+from users.models import SchoolProfile, TeacherProfile,StudentProfile
 
 
 class InfoForm(ModelForm):
@@ -54,17 +54,16 @@ class InfoForm(ModelForm):
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
-        exclude = ('project_id', 'adminuser', 'school',
+        exclude = ('project_id','school',
                    'year', 'project_grade', 'project_status', 'expert')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
-                 'inspector':forms.TextInput(attrs={'class':"school-display"}),
+                 'adminuser':forms.TextInput(attrs={'class':"school-display"}),
                  'telephone':forms.TextInput(attrs={'class':"school-display"}),
                  'email':forms.TextInput(attrs={'class':"school-display"}),
                  'im':forms.TextInput(attrs={'class':"school-display"}),
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
                  'project_category':forms.Select(attrs={'class':"school-display"}),
-                 'insitute':forms.Select(attrs={'class':"school-display"}),
                  }
 
     def get_absolute_url(self):
