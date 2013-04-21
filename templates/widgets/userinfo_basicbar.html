@@ -15,7 +15,7 @@
     {%if request.user.is_superuser%}
       <a type="button" class="btn btn-danger"  href="/admin/" >超级用户</a>
     {%endif%}
-    {%if request.user.is_student%}
+    {%if userauth.is_student%}
       <a type="button" class="btn btn-danger" href={% url school.views.student_view %}  >参赛学生</a>
     {%endif%}
   </div><!--Right choice Bar-->

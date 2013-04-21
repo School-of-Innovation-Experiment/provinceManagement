@@ -53,10 +53,23 @@ About the decorators sequence, it will impact the the function squeneces,
 the top will be called first!
 """
 
+
 @csrf.csrf_protect
 @login_required
+@authority_required(STUDENT_USER)
 def student_view(request):
-    return render(request, "school/student.html")
+
+    try:
+        student = get_object_or_404(StudentProfile, user=request.user)
+        project = student.projectsingle
+    except Exception, err:
+        loginfo(p=err, label="student home view")
+        raise Http404
+
+    loginfo(p=project.project_id)
+    data = {"project": project}
+
+    return render(request, "school/student.html", data)
 
 
 @csrf.csrf_protect
@@ -93,7 +106,7 @@ def home_view(request, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid=None, is_expired=False):
@@ -113,7 +126,7 @@ def application_report_view(request, pid=None, is_expired=False):
         application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
-                return HttpResponseRedirect(reverse('school.views.home_view'))
+                return HttpResponseRedirect(request.session.get("previous_url", "/"))
         else:
             logger.info("Form Valid Failed"+"**"*10)
             logger.info(info_form.errors)
@@ -134,7 +147,7 @@ def application_report_view(request, pid=None, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None, is_expired=False):
@@ -152,7 +165,7 @@ def final_report_view(request, pid=None, is_expired=False):
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            return HttpResponseRedirect(reverse('school.views.home_view'))
+            return HttpResponseRedirect(request.session.get("previous_url", "/"))
         else:
             logger.info("Final Form Valid Failed"+"**"*10)
             logger.info(final_form.errors)
@@ -235,7 +248,7 @@ def history_view(request):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None, is_expired=False):
@@ -262,7 +275,7 @@ def file_view(request, pid=None, is_expired=False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(SCHOOL_USER)
+@authority_required(SCHOOL_USER, STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):
@@ -305,29 +318,39 @@ def AuthStudentExist(request, email):
         return True
     else:
         return False
+
+
 @login_required
 def Send_email_to_student(request, username, password, email, identity):
     #判断用户名是否存在，存在的话直接返回
     if not AuthStudentExist(request, email):
-        RegistrationManager().create_inactive_user(request,username,password,email,identity)
-        return  True
+        user = RegistrationManager().create_inactive_user(request,username,password,email,identity)
+        result = create_newproject(request=request, new_user=user)
+        return True and result
     else:
         return False
+
 
 def Count_email_already_exist(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
     num = StudentProfile.objects.filter(school = school_profile).count()
     return num
+
+
 def school_limit_num(request):
     limits = ProjectPerLimits.objects.get(school__userid=request.user)
     limit_num = limits.number
     return limit_num
+
+
 def GetStudentRegisterList(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
     students_list = [each.user for each in StudentProfile.objects.filter(school = school_profile)]
     return students_list
+
+
 @login_required
 def StudentDispatch(request):
     if request.method == "GET":

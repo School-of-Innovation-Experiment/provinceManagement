@@ -40,7 +40,7 @@ def  StudentDispatch(request, form):
                 remaining_activation_times -= 1
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
             else:
-                message = u"相同邮件已经发送，中断发送"
+                message = u"相同邮件已经发送，中断发送或发生内部错误"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
         return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})

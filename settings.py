@@ -90,6 +90,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'backend.custom_middlewares.PreviousURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -144,6 +145,7 @@ INSTALLED_APPS = (
     'news',
     'showtime',
     'analysis',
+    'backend',
     #Add-on
     'south',
     'dajaxice',

@@ -33,3 +33,12 @@ from school.utility import get_current_year
 from school.models import *
 
 
+class PreviousURLMiddleware(object):
+    def process_response(self, request, response):
+        if response.status_code == 200:
+            try:
+                request.session["previous_url"] = request.session["current_visiting"]
+            except:
+                pass
+            request.session["current_visiting"] = request.get_full_path()
+        return response
