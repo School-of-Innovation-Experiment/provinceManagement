@@ -212,7 +212,8 @@ class AdminStaffService(object):
         if category == None and school == None:
             subject_list = ProjectSingle.objects.all()
         elif not category == None:
-            subject_list = ProjectSingle.objects.filter(insitute_id=category)
+            # subject_list = ProjectSingle.objects.filter(insitute_id=category)
+            subject_list = ProjectSingle.objects.all()
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
