@@ -10,7 +10,7 @@ from adminStaff.views import AdminStaffService
 from users.models import SchoolProfile, TeacherProfile
 from news.models import News
 import datetime
-from school.forms import TeacherDispatchForm, TeacherNumLimitForm
+from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
 from school.views import get_project_num_and_remaining
 
@@ -42,6 +42,26 @@ def teacherProjNumLimit(request, form):
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
 
+@dajaxice_register
+def  ExpertDispatch(request, form):
+    #dajax = Dajax()
+    expert_form =  ExpertDispatchForm(deserialize_form(form))
+    if expert_form.is_valid():
+        password = expert_form.cleaned_data["expert_password"]
+        email = expert_form.cleaned_data["expert_email"]
+ #       school = expert_form.cleaned_data["expert_school"]
+        name = email
+        if password == "":
+            password = email.split('@')[0]
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER)#, expert_school=school)
+        if flag:
+            message = u"发送邮件成功"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+        else:
+            message = u"相同邮件已经发送，中断发送"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+    else:
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 
 @dajaxice_register
 def  TeacherDispatch(request, form):
