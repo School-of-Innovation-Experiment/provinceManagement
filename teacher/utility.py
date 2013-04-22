@@ -11,9 +11,6 @@ from const.models import *
 
 from backend.logging import logger, loginfo
 
-def get_current_year():
-    return datetime.datetime.today().year
-
 def create_newproject(request, new_user):
     student = get_object_or_404(StudentProfile, userid = new_user)
     teacher = get_object_or_404(TeacherProfile, userid = request.user)

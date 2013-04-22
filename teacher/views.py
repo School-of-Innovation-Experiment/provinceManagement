@@ -15,12 +15,14 @@ from django.template import RequestContext
 
 from backend.decorators import *
 from const import *
+from const.models import *
 from users.models import TeacherProfile, StudentProfile
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
 from registration.models import *
 from teacher.utility import *
+from school.utility import *
 
 @csrf.csrf_protect
 @login_required
@@ -47,6 +49,7 @@ def home_view(request, is_expired = False):
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid = None, is_expired = False):
+    print "-----$$" * 20
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -186,7 +189,10 @@ def TeacherLimitNumber(request):
     limit = TeacherProjectPerLimits.objects.get(teacher__userid = request.user)
     return limit.number
 
+@csrf.csrf_protect
 @login_required
+@authority_required(TEACHER_USER)
+@only_user_required
 def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
