@@ -192,7 +192,6 @@ def TeacherLimitNumber(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
-@only_user_required
 def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
