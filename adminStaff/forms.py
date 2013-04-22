@@ -8,13 +8,14 @@ from datetime import *
 from django import  forms
 from adminStaff.models import ProjectControl
 from const import PROJECT_GRADE_CHOICES
-from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
+from users.models import *
+from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
-    insitute_choice_list = []
-    insitute_list = InsituteCategory.objects.all()
-    for object in insitute_list:
-        insitute_choice_list.append((object.id, object.category))
-    insitute_tuple = tuple(insitute_choice_list)
+    school_choice_list = []
+    school_list = SchoolProfile.objects.all()
+    for object in school_list:
+        school_choice_list.append((object.id, object.school))
+    school_tuple = tuple(school_choice_list)
 
     expert_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
@@ -23,13 +24,13 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}
                            ))
-    expert_insitute = forms.ChoiceField(required=True,choices=insitute_tuple
-                                        )
+    expert_school = forms.ChoiceField(required=True,choices=school_tuple)
+
 class SchoolDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
-    school_list        = SchoolDict.objects.all()
+    school_list        = SchoolProfile.objects.all()
     for object in school_list:
-        SCHOOL_CHOICE_list.append((object.id, object.schoolName))
+        SCHOOL_CHOICE_list.append((object.id, object.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_password = forms.CharField(max_length=20, required=False,
                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
@@ -85,9 +86,9 @@ class TimeSettingForm(forms.Form):
                     self._errors['final_end_date_review'] = self.error_class([msg])
 class NumLimitForm(forms.Form):
     SCHOOL_CHOICE_list = []
-    school_list        = SchoolDict.objects.all()
+    school_list        = SchoolProfile.objects.all()
     for object in school_list:
-        SCHOOL_CHOICE_list.append((object.id, object.schoolName))
+        SCHOOL_CHOICE_list.append((object.id, object.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
     limited_num   = forms.IntegerField(required=True,
@@ -103,18 +104,18 @@ class SubjectCategoryForm(forms.Form):
     category_choice = forms.ChoiceField(choices=category_tuple)
 
 class SubjectInsituteForm(forms.Form):
-    insitute_choice_list = []
-    insitute_list = InsituteCategory.objects.all()
-    for object in insitute_list:
-        insitute_choice_list.append((object.id, object.category))
-    insitute_tuple = tuple(insitute_choice_list)
-    insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))
+    school_choice_list = []
+    school_list = SchoolProfile.objects.all()
+    for object in school_list:
+        school_choice_list.append((object.id, object.school))
+    school_tuple = tuple(school_choice_list)
+    school_choice = forms.ChoiceField(choices=school_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))
 
 class SchoolCategoryForm(forms.Form):
     SCHOOL_CHOICE_list = []
-    school_list        = SchoolDict.objects.all()
+    school_list        = SchoolProfile.objects.all()
     for object in school_list:
-        SCHOOL_CHOICE_list.append((object.id, object.schoolName))
+        SCHOOL_CHOICE_list.append((object.id, object.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
 

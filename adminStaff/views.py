@@ -35,8 +35,8 @@ class AdminStaffService(object):
         if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
-            elif kwargs.has_key('expert_insitute'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
+            elif kwargs.has_key('expert_school'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_school=kwargs['expert_school'])
             elif kwargs.has_key('teacher_school'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             return True
@@ -207,12 +207,10 @@ class AdminStaffService(object):
         limit_list = ProjectPerLimits.objects.all()
         return limit_list
     @staticmethod
-    def GetSubject_list(category=None,school=None):
+    def GetSubject_list(school=None):
         subject_list = []
-        if category == None and school == None:
+        if school == None:
             subject_list = ProjectSingle.objects.all()
-        elif not category == None:
-            subject_list = ProjectSingle.objects.filter(insitute_id=category)
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
@@ -225,30 +223,29 @@ class AdminStaffService(object):
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
+        subject_list =  AdminStaffService.GetSubject_list()
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
-            subject_list =  AdminStaffService.GetSubject_list()
-
         else:
             subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             if subject_insitute_form.is_valid():
-                category = subject_insitute_form.cleaned_data["insitute_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(category=category)
+                school = subject_insitute_form.cleaned_data["school_choice"]
+                subject_list =  AdminStaffService.GetSubject_list(school=school)
 
-                expert_category = InsituteCategory.objects.get(id=category)
+                expert_school = SchoolProfile.objects.get(id=school)
                 try:
-                    obj = Project_Is_Assigned.objects.get(insitute = expert_category)
+                    obj = Project_Is_Assigned.objects.get(school = expert_school)
                     #如果已经指派专家了直接返回列表即可
                     if obj.is_assigned == 1:
                         pass
                     #没有指派专家，则进行专家指派
                     else:
                         #筛选专家列表
-                        expert_list = ExpertProfile.objects.filter(subject=expert_category)
+                        expert_list = ExpertProfile.objects.filter(school=expert_school)
                         #如果所属学科专家不存在，则进行提示
                         if len(expert_list) == 0 or len(subject_list) == 0:
                             if not expert_list :
-                                exist_message = '所属专业的专家不存在,无法进行指派'
+                                exist_message = '所属学院的专家不存在,无法进行指派'
                             else:
                                 exist_message = '没有专业指定的题目，无法进行指派'
 
