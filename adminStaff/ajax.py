@@ -116,18 +116,18 @@ def SchoolDispatch(request, form):
     else:
         return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 @dajaxice_register
-def judge_is_assigned(request,insitute):
+def judge_is_assigned(request, school):
     '''
     to judge if the projects that belong to the certain insitute has been assigned
     '''
     try:
-        insobj = InsituteCategory.objects.get(id=insitute)
-    except InsituteCategory.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"InstituteCategory 数据不完全，请更新数据库"})
+        schoolObj = SchoolProfile.objects.get(id=school)
+    except SchoolProfile.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     try:
-        obj = Project_Is_Assigned.objects.get(insitute = insobj)
+        obj = Project_Is_Assigned.objects.get(school = schoolObj)
     except Project_Is_Assigned.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请更新数据库"})
+        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请联系管理员更新数据库"})
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register

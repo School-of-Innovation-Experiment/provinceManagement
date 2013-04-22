@@ -10,6 +10,7 @@ from school.models import *
 
 
 RegisterClass = (ProjectSingle,
+                 Project_Is_Assigned,
                  Re_Project_Expert,
                  PreSubmit,
                  FinalSubmit,

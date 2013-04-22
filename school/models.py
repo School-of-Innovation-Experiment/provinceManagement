@@ -74,6 +74,10 @@ class Project_Is_Assigned(models.Model):
                                blank = True, null=True, default=None)
     is_assigned = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = "项目分配判断"
+        verbose_name_plural = "项目分配判断"
+
 
 class Re_Project_Expert(models.Model):
     project = models.ForeignKey(ProjectSingle)
