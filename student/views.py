@@ -39,6 +39,7 @@ def home_view(request):
     """
     item = ProjectSingle.objects.get(student__userid=request.user,year=get_current_year)
     return render(request, "student/student_home.html", {"item": item})
+
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)

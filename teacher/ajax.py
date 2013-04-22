@@ -4,7 +4,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from teacher.forms import StudentDispatchForm
+from school.forms import StudentDispatchForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
 from const.models import SchoolDict
 from const import *
