@@ -25,14 +25,14 @@
                 
                 {%if userauth.is_schooler %}
       		  		<li class="nav-li"><a href={% url school.views.home_view %} rel="tooltip" data-placement="bottom" 
-      		  			data-original-title = "参赛学校管理页面">
+      		  			data-original-title = "参赛学院管理页面">
                   <i class="icon-plus-sign icon-white"> </i></a>
                 </li>
                 {%endif%}
                  
                 {%if userauth.is_adminstaff %}
       		  		<li class="nav-li"><a href="/adminStaff/" rel="tooltip" data-placement="bottom" 
-      		  			data-original-title = "省级管理员管理界面">
+      		  			data-original-title = "校级管理员管理界面">
                   <i class="icon-th-list icon-white"> </i></a>
                 </li>
                 {%endif%}

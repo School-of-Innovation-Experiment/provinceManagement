@@ -21,7 +21,7 @@ DATABASES = {
     }
 }
 
-WEB_TITLE = "Province Management Pro"
+WEB_TITLE = "School Management Pro"
 
 #send 404 link to admin user
 SEND_BROKEN_LINK_EMAILS = True

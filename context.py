@@ -12,7 +12,7 @@ from const import *
 from users.models import *
 from backend.logging import loginfo
 from adminStaff.models import NoticeMessage, ProjectControl
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 
 all_required = ('WEB_TITLE',)
 
@@ -83,7 +83,7 @@ def userauth_settings(request):
 
 def notice_message_settings(request):
     #TODO: 计算动态时间
-    school_message, expert_message = "", ""
+    school_message, expert_message, student_message = "", "" ,""
     context = {}
     try:
         expert_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]
@@ -92,6 +92,11 @@ def notice_message_settings(request):
     try:
         school_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_SCHOOL_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_SCHOOL_HEAD):]
         school_message, school_check = school_message[:-1], school_message[-1]
+    except:
+        pass
+    try:
+        student_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_STUDENT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_STUDENT_HEAD):]
+        student_message, student_check = student_message[:-1], student_message[-1]
     except:
         pass
     if ProjectControl.objects.all().count():

@@ -25,7 +25,7 @@ from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 
 class AdminStaffService(object):

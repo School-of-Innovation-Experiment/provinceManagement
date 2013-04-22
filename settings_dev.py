@@ -21,4 +21,4 @@ DATABASES = {
 }
 
 # Website settings
-WEB_TITLE = "Province Management Dev"
+WEB_TITLE = "School Management Dev"

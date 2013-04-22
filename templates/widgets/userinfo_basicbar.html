@@ -6,11 +6,11 @@
     <a type="button" class="btn btn-success"  href={% url student.views.home_view %}  >参赛学生</a>
     {%endif%}
     {%if userauth.is_schooler %}
-    <a type="button" class="btn btn-primary"  href={% url school.views.home_view %}  >参赛学校</a>
+    <a type="button" class="btn btn-primary"  href={% url school.views.home_view %}  >参赛学院</a>
     {%endif%}
     {%if userauth.is_adminstaff %}
       <!--TODO, I will use url tag to replace hard code-->
-      <a type="button" class="btn btn-success"  href="/adminStaff/"  >省级管理员</a>
+      <a type="button" class="btn btn-success"  href="/adminStaff/"  >校级管理员</a>
     {%endif%}
     {%if userauth.is_experter %}
       <a type="button" class="btn btn-info"  href={% url expert.views.home_view %}  >评审专家</a>

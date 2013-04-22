@@ -189,13 +189,13 @@ class time_controller(object):
         if self.phase == STATUS_PRESUBMIT:
             is_passed = True if today >= control.pre_start_day and today <= control.pre_end_day else False
         elif self.phase == STATUS_PREREVIEW:
-            is_passed = True if today >= control.pre_start_review_day and today <= control.pre_end_review_day else False
+            is_passed = True if today >= control.pre_start_day_review and today <= control.pre_end_day_review else False
         elif self.phase == STATUS_ONGOING:
-            is_passed = True if today >= control.pre_end_review_day and today <= control.final_start_day else False
+            is_passed = True if today >= control.pre_end_day_review and today <= control.final_start_day else False
         elif self.phase == STATUS_FINSUBMIT:
             is_passed = True if today >= control.final_start_day and today <= control.final_end_day else False
         elif self.phase == STATUS_FINREVIEW:
-            is_passed = True if today >= control.final_start_review_day and today <= control.final_end_review_day else False
+            is_passed = True if today >= control.final_start_day_review and today <= control.final_end_day_review else False
         elif self.phase == STATUS_FIRST:
             is_passed = True
         else:
