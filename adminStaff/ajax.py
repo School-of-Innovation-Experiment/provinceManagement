@@ -82,11 +82,11 @@ def  ExpertDispatch(request, form):
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
-        insitute = expert_form.cleaned_data["expert_insitute"]
+        school = expert_form.cleaned_data["expert_school"]
         name = email
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_insitute=insitute)
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_school=school)
         if flag:
             message = u"发送邮件成功"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
@@ -120,8 +120,6 @@ def judge_is_assigned(request,insitute):
     '''
     to judge if the projects that belong to the certain insitute has been assigned
     '''
-    #dajax = Dajax()
-    #query database
     try:
         insobj = InsituteCategory.objects.get(id=insitute)
     except InsituteCategory.DoesNotExist:

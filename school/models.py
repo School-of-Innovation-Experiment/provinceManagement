@@ -67,9 +67,11 @@ class ProjectSingle(models.Model):
 
 
 class Project_Is_Assigned(models.Model):
-    insitute = models.ForeignKey(InsituteCategory,
-                                blank=True, null=True, default=None
-                                )
+    # insitute = models.ForeignKey(InsituteCategory,
+    #                             blank=True, null=True, default=None
+    #                             )
+    school = models.ForeignKey(SchoolProfile,
+                               blank = True, null=True, default=None)
     is_assigned = models.BooleanField(default=False)
 
 

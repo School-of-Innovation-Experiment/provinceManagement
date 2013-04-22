@@ -120,14 +120,15 @@ class RegistrationManager(models.Manager):
                                                        number=0)
             teacherProjLimit.save()
 
-        elif kwargs.get("expert_insitute", False):
-            insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
-            expertProfileObj = ExpertProfile(subject=insituteObj, userid =new_user)
+        elif kwargs.get("expert_school", False):
+            # insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
+            schoolObj = SchoolProfile.objects.get(id=kwargs["expert_school"])
+            expertProfileObj = ExpertProfile(school=schoolObj, userid =new_user)
             expertProfileObj.save()
 
         else:
-            teacher_name = request.user.username 
-            teacher = User.objects.get(username=teacher_name) 
+            teacher_name = request.user.username
+            teacher = User.objects.get(username=teacher_name)
             teacher_profile = TeacherProfile.objects.get(userid = teacher)
             student_obj = StudentProfile(userid = new_user,teacher = teacher_profile)
             student_obj.save()

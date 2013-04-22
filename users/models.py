@@ -37,7 +37,8 @@ class SchoolProfile(models.Model):
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")
-    subject = models.ForeignKey(InsituteCategory, verbose_name="相关学科")
+    school = models.ForeignKey(SchoolProfile,
+                               verbose_name="所属学院")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
 
