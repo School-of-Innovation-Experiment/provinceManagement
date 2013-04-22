@@ -66,7 +66,7 @@ def review_report_view(request, pid=None):
     """
     expert home management page
     """
-    # get or check authorities 
+    # get or check authorities
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
