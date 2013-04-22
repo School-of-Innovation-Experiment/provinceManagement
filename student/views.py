@@ -39,7 +39,6 @@ def home_view(request):
     """
     item = ProjectSingle.objects.get(student__userid=request.user,year=get_current_year)
     return render(request, "student/student_home.html", {"item": item})
-
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -57,7 +56,7 @@ def application_report_view(request,pid=None,is_expired=False):
             if save_application(project, info_form, application_form, request.user):
                 project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                 project.save()
-                return HttpResponseRedirect(reverse('student.views.home_view'))
+            return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
             logger.info("Form Valid Failed"+"**"*10)
             logger.info(info_form.errors)
