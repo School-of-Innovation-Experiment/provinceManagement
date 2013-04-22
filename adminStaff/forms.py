@@ -11,20 +11,12 @@ from const import PROJECT_GRADE_CHOICES
 from users.models import *
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
-    school_choice_list = []
-    school_list = SchoolProfile.objects.all()
-    for object in school_list:
-        school_choice_list.append((object.id, object.school))
-    school_tuple = tuple(school_choice_list)
-
     expert_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
                            ),
 )
     expert_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}
-                           ))
-    expert_school = forms.ChoiceField(required=True,choices=school_tuple)
+    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
 
 class SchoolDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []

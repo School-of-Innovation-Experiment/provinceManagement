@@ -35,8 +35,8 @@ class AdminStaffService(object):
         if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
-            elif kwargs.has_key('expert_school'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_school=kwargs['expert_school'])
+            elif kwargs.has_key('expert_user'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_user=kwargs['expert_user'])
             elif kwargs.has_key('teacher_school'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             return True
@@ -110,9 +110,9 @@ class AdminStaffService(object):
                 name = email
                 if password == "":
                     password = email.split('@')[0]
-                AdminStaffService.sendemail(request, name, password, email, EXPERT_USER)
+                AdminStaffService.sendemail(request, name, password, email, EXPERT_USER, expert_user=True)
                 expert_form = forms.ExpertDispatchForm()
-            return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
+            return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form, 'school_form':school_form},context_instance=RequestContext(request))
     @staticmethod
     def schoolDispatch(request):
         if request.method == "POST":
@@ -231,7 +231,6 @@ class AdminStaffService(object):
             if subject_insitute_form.is_valid():
                 school = subject_insitute_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school)
-
                 expert_school = SchoolProfile.objects.get(id=school)
                 try:
                     obj = Project_Is_Assigned.objects.get(school = expert_school)
@@ -241,13 +240,13 @@ class AdminStaffService(object):
                     #没有指派专家，则进行专家指派
                     else:
                         #筛选专家列表
-                        expert_list = ExpertProfile.objects.filter(school=expert_school)
+                        expert_list = ExpertProfile.objects.all()
                         #如果所属学科专家不存在，则进行提示
                         if len(expert_list) == 0 or len(subject_list) == 0:
                             if not expert_list :
-                                exist_message = '所属学院的专家不存在,无法进行指派'
+                                exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
                             else:
-                                exist_message = '没有专业指定的题目，无法进行指派'
+                                exist_message = '没有可分配的项目，无法进行指派'
 
                         else:
                             re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)

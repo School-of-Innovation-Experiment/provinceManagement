@@ -37,7 +37,7 @@ class ExpertProfileForm(ModelForm):
     """
     class Meta:
         model = ExpertProfile
-        exclude = ("userid", "subject")
+        exclude = ("userid")
 
 
 class AdminStaffProfileForm(ModelForm):
