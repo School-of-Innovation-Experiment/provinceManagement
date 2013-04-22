@@ -20,6 +20,7 @@
     <th>项目类型</th>
         <th>项目状态</th>
 <th>项目级别</th>
+<th>详情</th>
     </tr>
                </thead>
        <tbody>
@@ -33,8 +34,12 @@
 							<td>
 								<span class="label label-important">{{ project.project_grade }}</span>
 							</td>
-							<a href="#"><td><button class="btn btn-primary">编辑</button></td></a>
-						</tr>
+							<td>
+						    <span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>初期报告</a></span>
+						    <span><a href="{% url teacher.views.final_report_view project.project_id%}" class='btn btn-primary'>结题报告</a></span>
+						    <span><a href="{% url teacher.views.file_view project.project_id%}" class='btn btn-primary'>文件上传</a></span>
+		      		</td>
+							</tr>
 					{% endfor %}
        </tbody>
 

@@ -1,9 +1,4 @@
 # coding: UTF-8
-'''
-Created on 2013-3-11
-
-@author: yaoyuan
-'''
 
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
@@ -20,39 +15,19 @@ urlpatterns = patterns('',
         teacher_views.home_view,
     ),
     url(
-        r'^history$',
-        direct_to_template, {'template': 'teacher/history.html'}
+        r'^application/(?P<pid>.{36})$',
+        teacher_views.application_report_view,
     ),
     url(
-        r'^initial$',
-        direct_to_template, {'template': 'teacher/initial.html'}
+        r'^final/(?P<pid>.{36})$',
+        teacher_views.final_report_view,
     ),
     url(
-        r'^midterm$',
-        direct_to_template, {'template': 'teacher/initial.html'}
+        r'^files/(?P<pid>.{36})$',
+        teacher_views.file_view,
     ),
     url(
-        r'^final$',
-        direct_to_template, {'template': 'teacher/initial.html'}
-    ),
-    url(
-        r'^progress$',
-        direct_to_template, {'template': 'teacher/progress.html'}
-    ),
-    url(
-        r'^finance$',
-        direct_to_template, {'template': 'teacher/finance.html'}
-    ),
-    url(
-        r'^studentcharge$',
-        direct_to_template, {'template': 'teacher/studentcharge.html'}
-    ),
-        url(
-        r'^modifyproject$',
-        direct_to_template, {'template': 'teacher/modifyproject.html'}
-    ),
-            url(
-        r'^projectapp$',
-        direct_to_template, {'template': 'teacher/projectapp.html'}
+        r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
+        teacher_views.file_delete_view,
     ),
 )
