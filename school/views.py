@@ -50,12 +50,14 @@ def home_view(request):
 @authority_required(SCHOOL_USER)
 def dispatch(request):
     teacher_form = forms.TeacherDispatchForm()
+    expert_form = forms.ExpertDispatchForm()
+
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
-    return render_to_response("school/dispatch.html",{'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
+    return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect
 @login_required
