@@ -82,11 +82,10 @@ def  ExpertDispatch(request, form):
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
-        school = expert_form.cleaned_data["expert_school"]
         name = email
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_school=school)
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True)
         if flag:
             message = u"发送邮件成功"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
@@ -95,7 +94,6 @@ def  ExpertDispatch(request, form):
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
-
 @dajaxice_register
 def SchoolDispatch(request, form):
     #dajax = Dajax()

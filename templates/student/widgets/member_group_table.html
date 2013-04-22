@@ -1,0 +1,20 @@
+<table class="well table">
+  <thead>
+    <tr>
+      <td><strong>学号</strong></td>
+      <td><strong>姓名</strong></td>
+      <td><strong>是否更改</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    {% if student_group %}
+      {%for student in student_group%}
+        <tr>
+          <td>{{student.studentID}}</td>
+          <td>{{user.auth}}</td>
+          <td><button class="btn btn-success">更改</button></td>
+        </tr>
+      {%endfor%}
+{% endif %}
+  </tbody>
+</table>

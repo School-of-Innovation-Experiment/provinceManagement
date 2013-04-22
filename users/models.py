@@ -9,7 +9,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from const.models import *
-from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER, TEACHER_USER
+from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER, TEACHER_USER, EXPERT_GRADE_CHOICES
 
 class SchoolProfile(models.Model):
     """
@@ -39,6 +39,10 @@ class ExpertProfile(models.Model):
                                verbose_name="权限对应ID")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
+    # assigned_by = models.ForeignKey(User, blank=False, null=False)
+    grade = models.CharField(blank=False, max_length=30,
+                             choices=EXPERT_GRADE_CHOICES,
+                             verbose_name=u"评审项目级别")
 
     class Meta:
         verbose_name = "评审专家"
@@ -89,8 +93,8 @@ class StudentProfile(models.Model):
                                 verbose_name="指导教师")
 
     class Meta:
-        verbose_name = "参赛学生"
-        verbose_name_plural = "参赛学生"
+        verbose_name = "参赛学生账户"
+        verbose_name_plural = "参赛学生账户"
     def __unicode__(self):
         return '%s' % (self.userid)
     def save(self, *args, **kwargs):

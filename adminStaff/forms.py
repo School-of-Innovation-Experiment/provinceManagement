@@ -12,9 +12,7 @@ from users.models import *
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
     expert_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
-                           ),
-)
+                                      widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}),)
     expert_email    = forms.EmailField(required=True,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
 

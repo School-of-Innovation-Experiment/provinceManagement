@@ -15,6 +15,10 @@ urlpatterns = patterns('',
         student_views.home_view,
     ),
     url(
+        r'^memberchange$',
+        student_views.member_change,
+    ),
+    url(
         r'^application/(?P<pid>.{36})$',
         student_views.application_report_view,
     ),

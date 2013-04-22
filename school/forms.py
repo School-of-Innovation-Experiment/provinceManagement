@@ -164,13 +164,6 @@ class TeacherDispatchForm(forms.Form):
     teacher_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
 
-class ExpertDispatchForm(forms.Form):
-    expert_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
-                           ))
-    expert_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
-
 class TeacherNumLimitForm(forms.Form):
     TEACHER_CHOICE_list = []
     teacher_list        = TeacherProfile.objects.all()

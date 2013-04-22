@@ -29,6 +29,8 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
+from student.models import Student_Group
+from student.forms import StudentGroupForm
 
 @csrf.csrf_protect
 @login_required
@@ -39,6 +41,23 @@ def home_view(request):
     """
     item = ProjectSingle.objects.get(student__userid=request.user,year=get_current_year)
     return render(request, "student/student_home.html", {"item": item})
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def member_change(request):
+    """
+    project group member change
+    """
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project = ProjectSingle.objects.get(student=student_account)
+    student_group = Student_Group.objects.filter(project = project)
+
+    student_group_form = StudentGroupForm()
+    return render(request, "student/member_change.html",
+                  {"student_group": student_group,
+                   "student_group_form": student_group_form})
+
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)

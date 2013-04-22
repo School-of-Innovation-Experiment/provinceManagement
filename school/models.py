@@ -51,8 +51,8 @@ class ProjectSingle(models.Model):
     email = models.EmailField(verbose_name=u"电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
                                  verbose_name=u"联系方式")
-    members = models.CharField(max_length=400, blank=False,
-                               verbose_name=u"团队成员")
+    # members = models.CharField(max_length=400, blank=False,
+    #                            verbose_name=u"团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name=u"社交")
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
@@ -66,17 +66,15 @@ class ProjectSingle(models.Model):
         return self.title
 
 
+
 class Project_Is_Assigned(models.Model):
-    # insitute = models.ForeignKey(InsituteCategory,
-    #                             blank=True, null=True, default=None
-    #                             )
     school = models.ForeignKey(SchoolProfile,
                                blank = True, null=True, default=None)
     is_assigned = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "项目分配判断"
-        verbose_name_plural = "项目分配判断"
+        verbose_name = u"项目分配判断"
+        verbose_name_plural = u"项目分配判断"
 
 
 class Re_Project_Expert(models.Model):
