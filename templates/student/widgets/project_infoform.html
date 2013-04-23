@@ -6,7 +6,7 @@
     <div class="row-fluid show-grid">
       <div class="span4">
             <div class="control-group {% if info.title.errors %}error{% endif %}">
-              <label class="school-display"><i class="icon-book"></i>{{info.title.label}}</span></label>
+              <label class="school-display"><i class="icon-book"></i>{{info.title.label}}</label>
               {{info.title}}
               {% if info.title.errors %}
               <div class="row alert alert-error school-display">
@@ -16,16 +16,16 @@
               {% endif %}
             </div>        
         <hr class="school-display"/>
-        <div class="control-group {% if info.members.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-user"></i>{{info.members.label}}</span></label>
-          {{info.members}}
-          {% if info.members.errors %}
+        <div class="control-group {% if info.email.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-envelope"></i>{{info.email.label}}</label>
+          {{info.email}}
+          {% if info.email.errors %}
           <div class="row alert alert-error school-display">
-            <button class="close" data-dismiss="alert">×</button>
-              {{ info.members.errors }}
-            </div>
-            {% endif %}
-        </div><!--end members-->
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.email.errors }}
+          </div>
+          {% endif %}
+        </div><!--end email-->
 <!--         <hr class="school-display"/>
         <div class="control-group {% if info.adminuser.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-user"></i>{{info.adminuser.label}}</span></label>
@@ -40,7 +40,7 @@
       </div>
       <div class="span4">
         <div class="control-group {% if info.telephone.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-road"></i>{{info.telephone.label}}</span></label>
+          <label class="school-display"><i class="icon-road"></i>{{info.telephone.label}}</label>
           {{info.telephone}}
           {% if info.telephone.errors %}
           <div class="row alert alert-error school-display">
@@ -50,20 +50,14 @@
           {% endif %}  
         </div><!--end telephone-->
         <hr class="school-display"/>
-        <div class="control-group {% if info.email.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-envelope"></i>{{info.email.label}}</span></label>
-          {{info.email}}
-          {% if info.email.errors %}
-          <div class="row alert alert-error school-display">
-              <button class="close" data-dismiss="alert">×</button>
-              {{ info.email.errors }}
-          </div>
-          {% endif %}
-        </div><!--end email-->
+        <div class="control-group">
+          <label class="school-display"><i class="icon-user"></i>团队成员</label>
+          <input value="{{memberlist}} "  class="school-display" maxlength="400" type="text"></input>
+        </div><!--end members-->
       </div>
       <div class="span4">
         <div class="control-group {% if info.project_category.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-th-large"></i>项目类型</span></label>
+          <label class="school-display"><i class="icon-th-large"></i>项目类型</label>
           {{info.project_category}}
           {% if info.project_category.errors %}
           <div class="row alert alert-error school-display">
@@ -74,7 +68,7 @@
         </div><!--end project category-->
         <hr class="school-display"/>
         <div class="control-group {% if info.im.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</span></label>
+          <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</label>
           {{info.im}}
           {% if info.im.errors %}
           <div class="row alert alert-error school-display">
