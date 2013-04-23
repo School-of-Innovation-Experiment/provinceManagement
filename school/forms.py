@@ -35,7 +35,6 @@ class InfoForm(ModelForm):
                  'telephone':forms.TextInput(attrs={'class':"school-display"}),
                  'email':forms.TextInput(attrs={'class':"school-display"}),
                  'im':forms.TextInput(attrs={'class':"school-display"}),
-                 'members':forms.TextInput(attrs={'class':"school-display"}),
                  'project_category':forms.Select(attrs={'class':"school-display"}),
                  }
 
