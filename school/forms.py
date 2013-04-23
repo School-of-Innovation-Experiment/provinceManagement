@@ -1,6 +1,6 @@
-# coding: UTF-8
+# coding: UTF8
 '''
-Created on 2013-03-28
+Created on 20130328
 
 @author: tianwei
 
@@ -23,9 +23,9 @@ from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 
-# coding: UTF-8
+# coding: UTF8
 '''
-Created on 2013-03-28
+Created on 20130328
 
 @author: tianwei
 
@@ -56,12 +56,12 @@ class InfoForm(ModelForm):
         #TODO: add css into widgets
         exclude = ('project_id','school','adminuser','student',
                    'year', 'project_grade', 'project_status', 'expert')
-        widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
-                 'telephone':forms.TextInput(attrs={'class':"school-display"}),
-                 'email':forms.TextInput(attrs={'class':"school-display"}),
-                 'im':forms.TextInput(attrs={'class':"school-display"}),
-                 'members':forms.TextInput(attrs={'class':"school-display"}),
-                 'project_category':forms.Select(attrs={'class':"school-display"}),
+        widgets={'title':forms.TextInput(attrs={'class':"schooldisplay"}),
+                 'telephone':forms.TextInput(attrs={'class':"schooldisplay"}),
+                 'email':forms.TextInput(attrs={'class':"schooldisplay"}),
+                 'im':forms.TextInput(attrs={'class':"schooldisplay"}),
+                 'members':forms.TextInput(attrs={'class':"schooldisplay"}),
+                 'project_category':forms.Select(attrs={'class':"schooldisplay"}),
                  }
 
     def get_absolute_url(self):
@@ -80,32 +80,32 @@ class ApplicationReportForm(ModelForm):
         widgets = {
                    "original" :forms.Textarea(attrs={'rows': 2, 'cols': 100,
                                                        'placeholder': '学生自选，学生的积累和兴趣   学生自选，教师的科研项目   教师帮选，教师的科研项目',
-                                                       'class': "fill-form"}),
+                                                       'class': "fillform"}),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
-                                                       'class': "fill-form"}),
+                                                       'class': "fillform"}),
                    "key_notes": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                       'placeholder': '最关键的，最重要的，最核心的，最...',
-                                                      'class': "fill-form"}),
+                                                      'class': "fillform"}),
                    "innovation": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '说点什么不同的...',
-                                                       'class': "fill-form"}),
+                                                       'class': "fillform"}),
                    "funds_plan": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '材料费、资料费、版面费、专利费、调研费等如项目鉴定、学术论文、申请专利、获奖、推广应用等..如项目鉴定、学术论文、申请专利、获奖、推广应用等....',
-                                                       'class': "fill-form"}),
+                                                       'class': "fillform"}),
                    "pre_results": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                         'placeholder': '项目鉴定、学术论文、申请专利、获奖、推广应用等...',
-                                                        'class': "fill-form"}),
+                                                        'class': "fillform"}),
                    "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                'placeholder': '指导教师推荐语',
-                                                               'class': "fill-form"}),
+                                                               'class': "fillform"}),
                    "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                             'placeholder': '学校推荐语',
-                                                            'class': "fill-form"}),
+                                                            'class': "fillform"}),
                    "progress_plan": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                           'placeholder':
                                                           '查阅资料、选题、自主设计项目研究方案、开题报告、实验研究、数据统计、处理与分析、研制开发、填写结题表、撰写研究论文和总结报告、参加结题答辩和成果推广等',
-                                                          'class': "fill-form"}),
+                                                          'class': "fillform"}),
                    }
 
     def get_absolute_url(self):
@@ -122,28 +122,28 @@ class FinalReportForm(ModelForm):
         exclude = ('project_id', 'content_id', )
         widgets = {"achievement_summary": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                 'placeholder':'项目完成情况，写200字就行...',
-                                                                'class':"fill-form"},),
+                                                                'class':"fillform"},),
                    "achievement_fashion": forms.Textarea(attrs={'rows': 2, 'cols': 100,
                                                                 'placeholder': '一句话就行...',
-                                                                'class': "fill-form"}),
+                                                                'class': "fillform"}),
                    "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                 'placeholder':'指导教师对项目评价...',
-                                                                'class': "fill-form"}),
+                                                                'class': "fillform"}),
                    "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder':'学校对项目评价...',
-                                                       'class': "fill-form"}),
+                                                       'class': "fillform"}),
                    "achievement_objects": forms.Textarea(attrs={'rows': 12, 'cols': 100,
                                                                 'placeholder':'名称、完成人、完成时间、详细信息等...',
-                                                                'class': "fill-form"}),
+                                                                'class': "fillform"}),
                    "papers": forms.Textarea(attrs={'rows': 12, 'cols': 100,
                                                    'placeholder':'题目、作者、期刊、发表时间、录用时间...',
-                                                   'class': "fill-form"}),
+                                                   'class': "fillform"}),
                    "patents": forms.Textarea(attrs={'rows': 12, 'cols': 100,
                                                     'placeholder':'专利名称、申请者、专利号、批准时间...',
-                                                    'class': "fill-form"}),
+                                                    'class': "fillform"}),
                    "tech_competitions": forms.Textarea(attrs={'rows': 12, 'cols': 100,
                                                               'placeholder':'竞赛名称、参加人、获奖名称、获奖等级...',
-                                                              'class': "fill-form"}),
+                                                              'class': "fillform"}),
                    }
 
     def get_absolute_url(self):
@@ -163,6 +163,12 @@ class TeacherDispatchForm(forms.Form):
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))
     teacher_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
+class ExpertDispatchForm(forms.Form):
+    expert_password = forms.CharField(max_length=20, required=False,
+    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
+                           ))
+    expert_email    = forms.EmailField(required=True,
+    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
 
 class TeacherNumLimitForm(forms.Form):
     TEACHER_CHOICE_list = []
