@@ -24,7 +24,7 @@
       		  		<li class="nav-li-username"><a href="/settings/profile">{{ request.user.username }}</a></li>
                 
                 {%if userauth.is_schooler %}
-      		  		<li class="nav-li"><a href={% url school.views.home_view %} rel="tooltip" data-placement="bottom" 
+      		  		<li class="nav-li"><a href="/school/" rel="tooltip" data-placement="bottom" 
       		  			data-original-title = "参赛学院管理页面">
                   <i class="icon-plus-sign icon-white"> </i></a>
                 </li>
