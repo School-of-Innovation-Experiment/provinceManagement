@@ -11,6 +11,24 @@ from django.contrib.auth.models import User
 from const.models import *
 from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER, TEACHER_USER, EXPERT_GRADE_CHOICES
 
+class AdminStaffProfile(models.Model):
+    userid = models.ForeignKey(User, unique=True,
+                               verbose_name="权限对应ID")
+    jobs = models.CharField(max_length=50, blank=True, verbose_name="职务")
+
+    class Meta:
+        verbose_name = "校级管理员"
+        verbose_name_plural = "校级管理员"
+
+    def __unicode__(self):
+        return '%s' % (self.userid)
+
+    def save(self, *args, **kwargs):
+        super(AdminStaffProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=ADMINSTAFF_USER)
+        self.userid.identities.add(auth)
+
+
 class SchoolProfile(models.Model):
     """
     User Profile Extend
@@ -39,7 +57,8 @@ class ExpertProfile(models.Model):
                                verbose_name="权限对应ID")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
-    # assigned_by = models.ForeignKey(User, blank=False, null=False)
+    assigned_by_school = models.ForeignKey(SchoolProfile, blank=True, null=True)
+    assigned_by_adminstaff = models.ForeignKey(AdminStaffProfile, blank=True, null=True)
     grade = models.CharField(blank=False, max_length=30,
                              choices=EXPERT_GRADE_CHOICES,
                              verbose_name=u"评审项目级别")
@@ -102,19 +121,3 @@ class StudentProfile(models.Model):
         auth, created = UserIdentity.objects.get_or_create(identity=STUDENT_USER)
         self.userid.identities.add(auth)
 
-class AdminStaffProfile(models.Model):
-    userid = models.ForeignKey(User, unique=True,
-                               verbose_name="权限对应ID")
-    jobs = models.CharField(max_length=50, blank=True, verbose_name="职务")
-
-    class Meta:
-        verbose_name = "校级管理员"
-        verbose_name_plural = "校级管理员"
-
-    def __unicode__(self):
-        return '%s' % (self.userid)
-
-    def save(self, *args, **kwargs):
-        super(AdminStaffProfile, self).save()
-        auth, created = UserIdentity.objects.get_or_create(identity=ADMINSTAFF_USER)
-        self.userid.identities.add(auth)

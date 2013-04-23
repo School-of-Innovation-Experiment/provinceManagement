@@ -96,3 +96,12 @@ YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
 MESSAGE_EXPERT_HEAD = '__expert__'
 MESSAGE_SCHOOL_HEAD = '__school__'
 MESSAGE_STUDENT_HEAD = '__student__'
+
+# APP student
+# 项目类型团队人员限制
+MEMBER_NUM_LIMIT = {
+    CATE_INNOVATION: 3,
+    CATE_ENTERPRISE: 5,
+    CATE_ENTERPRISE_EE: 5,
+    }
+
