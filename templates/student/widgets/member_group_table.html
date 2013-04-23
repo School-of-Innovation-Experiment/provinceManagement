@@ -10,8 +10,8 @@
     {% if student_group %}
       {%for student in student_group%}
         <tr>
-          <td>{{student.studentID}}</td>
-          <td>{{user.auth}}</td>
+          <td>{{student.studentId}}</td>
+          <td>{{student.studentName}}</td>
           <td><button class="btn btn-success">更改</button></td>
         </tr>
       {%endfor%}
