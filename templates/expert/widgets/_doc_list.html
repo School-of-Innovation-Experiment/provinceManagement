@@ -1,0 +1,24 @@
+<div id="doc_list">
+  <div class="news-documents documents-list" id="docs-list">  
+    <table class="documents"> 
+      <colgroup>
+        <col width="5%" />
+        <col width="75%" />
+        <col width="15%" />
+      </colgroup>    
+      {% if doc_list %}
+      <tbody>
+        {% for doc in doc_list %}
+        <tr>
+          <td>{{ doc.index }}.</td>
+          <td>
+            <a href="{{ doc.file_id }}/download">{{ doc.name }}</a>
+          </td>
+          <td>{{ doc.uploadtime|date:"[y-m-d]" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% endif %}
+    </table>
+  </div>
+</div>
