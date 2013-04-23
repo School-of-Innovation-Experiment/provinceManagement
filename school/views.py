@@ -43,7 +43,7 @@ from adminStaff.views import AdminStaffService
 @login_required
 @authority_required(SCHOOL_USER)
 def home_view(request):
-    return render(request, "school/home.html", {})
+    return HttpResponseRedirect(reverse('school.views.dispatch'))
 
 @csrf.csrf_protect
 @login_required

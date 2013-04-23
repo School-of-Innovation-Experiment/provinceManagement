@@ -18,7 +18,7 @@ urlpatterns = patterns(
     '',
     url(
         r'^$',
-        school_views.dispatch,
+        school_views.home_view,
     ),
     url(
         r'^dispatch$',
