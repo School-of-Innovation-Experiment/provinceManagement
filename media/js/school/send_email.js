@@ -10,7 +10,7 @@ function ExpertDispatch_callback(data){
                 object.css("background","white");
                 });
         //$("#time_settings_form").css("background","white");
-        $("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
+        $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
         }
     else
         {
