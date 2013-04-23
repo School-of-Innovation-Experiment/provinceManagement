@@ -1,7 +1,7 @@
 function send_email_to_expert(){
     $("#expert_email_error_message").empty();
     Dajaxice.school.ExpertDispatch(ExpertDispatch_callback,{'form':$('#expert_email_send_form').serialize(true)});
-    }
+}
 function ExpertDispatch_callback(data){
     if (data.status == "1"){
         // if success all field background turn into white
@@ -23,7 +23,7 @@ function ExpertDispatch_callback(data){
                 object = $('#'+item);
                 object.css("background","red");
                 });
-            $("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
+            $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
         }
     }
 function send_email_to_teacher(){
