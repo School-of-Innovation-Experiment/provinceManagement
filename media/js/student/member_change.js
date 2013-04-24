@@ -1,16 +1,28 @@
-function member_change() {
-  $("#teacher_meail_error_message").empty();
-  Dajaxice.student.MemberChange(memberChange_callback,
+var change_id = "";
+function add_or_update_member() {
+  $("#teacher_email_error_message").empty();
+  Dajaxice.student.MemberChange(add_or_update_member_callback,
                                 {'form': $('#member_change_form').serialize(true),
-                                 'form2': ''});
+                                 'origin': change_id});
 };
 
-function memberChange_callback(data) {
+function add_or_update_member_callback(data) {
+  change_id = "";
   if(data.status == "2") {
     $.each(data.error_id, function (i, item){
       object = $('#'+item);
       object.css("border-color", 'red');
     });
   }
+  else if(data.status == "0") {
+    $("#member_group_table").html(data.table);
+  }
   $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
 };
+
+function change_member(caller)
+{
+  $("#teacher_email_error_message").empty();
+  change_id = $(caller).parent().parent().children("td").first("td").html();
+  $("#teacher_email_error_message").append("<strong>"+"更换队员：" +change_id+"</strong>");
+}
