@@ -1,14 +1,49 @@
-<!--titile user information bar-->
+<!--User Infomation Basic Bar-->
 <div class="container">
-<div class="pull-right">
-<a type="button" class="btn btn-info"  href="/teacher/" >指导教师</a>
-<a type="button" class="btn btn-danger"  href="/expert/" >评审专家</a>
-</div>
-<div class="pull-left">
-<a href="/settings/profile" class="user-info">{{request.user.username}}</a>
-<a href="/settings/profile" class="label label-important user-info-label">指导教师</a>
-</div>
-
-</div>
+  <!--TODO: Add more authorities choice-->
+  <div class="pull-right">
+    {%if userauth.is_student %}
+    <a type="button" class="btn btn-success"  href={% url student.views.home_view %}  >参赛学生</a>
+    {%endif%}
+    {%if userauth.is_teacher %}
+    <a type="button" class="btn btn-info"  href={% url teacher.views.home_view %}  >指导老师</a>
+    {%endif%}
+    {%if userauth.is_schooler %}
+    <a type="button" class="btn btn-primary"  href="{% url school.views.home_view %}"  >参赛学院</a>
+    {%endif%}
+    {%if userauth.is_adminstaff %}
+      <!--TODO, I will use url tag to replace hard code-->
+      <a type="button" class="btn btn-success"  href="/adminStaff/"  >校级管理员</a>
+    {%endif%}
+    {%if userauth.is_experter %}
+      <a type="button" class="btn btn-info"  href={% url expert.views.home_view %}  >评审专家</a>
+    {%endif%}
+    {%if request.user.is_superuser%}
+      <a type="button" class="btn btn-danger"  href="/admin/" >超级用户</a>
+    {%endif%}
+  </div><!--Right choice Bar-->
+  <div class="pull-left">
+    <a href="/settings/profile" class="user-info">{{request.user.username}}</a>
+    {%if userauth.is_schooler %}
+      <a href="#" class="label label-success user-info-label">
+        {{userauth.school.school}}
+      </a>
+    {%endif%}
+    {%if userauth.is_adminstaff %}
+      <a href="/school" class="label label-info user-info-label">
+        职务
+        {{userauth.adminstaff.jobs}}
+      </a>
+    {%endif%}
+    {%if userauth.is_experter %}
+      <a href="/school" class="label label-important user-info-label">
+        评审专业
+        {{userauth.expert.subject}}
+      </a>
+    {%endif%}
+    {%if request.user.is_superuser%}
+		  <a href="/school" class="label label-warning user-info-label">VIP</a>
+    {%endif%}
+  </div>
+</div><!--end container-->
 <br/>
- 
