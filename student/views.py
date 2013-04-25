@@ -68,19 +68,15 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
-    student_group = Student_Group.objects.filter(project = project)
-    member = []
-    for temp_student in student_group:
-        member.append(temp_student.studentName)
-    memberlist=','.join(member)
     readonly= is_expired
     if request.method == "POST" and readonly is not True:
-        info_form = InfoForm(request.POST, instance=project)
+        info_form = InfoForm(request.POST,user=request.user,instance=project)
         application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
                 project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                 project.save()
+
             return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
             logger.info("Form Valid Failed"+"**"*10)
@@ -88,11 +84,10 @@ def application_report_view(request,pid=None,is_expired=False):
             logger.info(application_form.errors)
             logger.info("--"*10)
     else:
-        info_form = InfoForm(instance=project)
+        info_form = InfoForm(instance=project,user=request.user)
         application_form = ApplicationReportForm(instance=pre)
 
     data = {'pid': pid,
-            'memberlist':memberlist,
             'info': info_form,
             'application': application_form,
             'readonly': readonly,

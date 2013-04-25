@@ -20,12 +20,31 @@ from django.core.urlresolvers import reverse
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile, TeacherProfile,StudentProfile
-
+from student.models import Student_Group
+from backend.logging import loginfo
 
 class InfoForm(ModelForm):
     """
         Project Basic info
     """
+    def __init__(self, *args, **kwargs):
+        loginfo(p=kwargs,label="kwargs")
+        user = kwargs.pop('user', None)
+        loginfo(p=user,label="kwargs")
+        if not user:
+            return
+        student_account = StudentProfile.objects.get(userid = user )
+        project = ProjectSingle.objects.get(student=student_account)
+        student_group = Student_Group.objects.filter(project = project)
+        member = []
+        for temp_student in student_group:
+             member.append(temp_student.studentName)
+        memberlist=','.join(member)
+        super(InfoForm, self).__init__(*args, **kwargs)
+        self.fields['memberlist'].widget.attrs["value"] = memberlist
+    
+    memberlist = forms.CharField(
+                           widget=forms.TextInput(attrs={'class':"school-display"}))
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
