@@ -54,9 +54,9 @@ class SchoolProfile(models.Model):
 
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
-                               verbose_name="权限对应ID")
+                               verbose_name=u"权限对应ID")
     jobs = models.CharField(max_length=100, blank=True,
-                            verbose_name="工作单位")
+                            verbose_name=u"工作单位")
     assigned_by_school = models.ForeignKey(SchoolProfile, blank=True, null=True)
     assigned_by_adminstaff = models.ForeignKey(AdminStaffProfile, blank=True, null=True)
     grade = models.CharField(blank=False, max_length=30,
@@ -85,6 +85,12 @@ class TeacherProfile(models.Model):
     # school is a foreignkey to school `user`
     school = models.ForeignKey(SchoolProfile,
                                verbose_name="所属学院")
+    name = models.CharField(blank=True, max_length=100,
+                            verbose_name=u"姓名")
+    telephone = models.CharField(blank=True, max_length=20,
+                                 verbose_name=u"联系电话")
+    titles = models.CharField(blank=True, max_length=20,
+                              verbose_name=u"职称")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
 

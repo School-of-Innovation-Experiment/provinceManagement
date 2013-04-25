@@ -45,6 +45,33 @@ PROJECT_CATE_CHOICES = (
     (CATE_UN, u"未指定"),
 )
 
+#Project_Origin
+PROJECT_INNOVATION_ORIGIN_CHOICES = (
+    (0, u"学生自选，学生的积累和兴趣"),
+    (1, u"学生自选，教师的科研项目"),
+    (2, u"教师帮选，教师的科研项目")
+)
+
+PROJECT_ENTERPRISE_ORIGIN_CHOICES = (
+    (0, u"前期创新项目成果"),
+    (1, u"导师的科研项目"),
+    (2, u"创新性的课题"),
+    (3, u"已有产品的继续研发"),
+    (4, u"企业的需求"),
+    (5, u"竞赛获奖作品"),
+    (6, u"科技计划资助"),
+    (7, u"其他"),
+)
+PROJECT_ENTERPRISE_MATURITY_CHOICES = (
+    (0, u"发明专利"),
+    (1, u"实用新型（设计）专利"),
+    (2, u"著作权利"),
+    (3, u"科技成果鉴定"),
+    (4, u"成熟的设想"),
+    (5, u"初步测试成功"),
+    (6, u"其他"),
+)
+
 #Project Grade
 GRADE_NATION = "nation"
 GRADE_PROVINCE = "province"
