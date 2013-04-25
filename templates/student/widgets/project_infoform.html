@@ -50,10 +50,20 @@
           {% endif %}  
         </div><!--end telephone-->
         <hr class="school-display"/>
-        <div class="control-group">
-          <label class="school-display"><i class="icon-user"></i>团队成员</label>
-          <input value="{{memberlist}} "  class="school-display" maxlength="400" type="text"></input>
+        <div class="control-group {% if info.memberlist.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-th-large"></i>团队成员</label>
+          {{info.memberlist}}
+          {% if info.memberlist.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.memberlist.errors }}
+          </div>
+          {% endif %}
         </div><!--end members-->
+<!--         <div class="control-group">
+          <label class="school-display"><i class="icon-user"></i>团队成员</label>
+          <input value="{{info.memberlist}} "  class="school-display" maxlength="400" type="text"></input>
+        </div> -->
       </div>
       <div class="span4">
         <div class="control-group {% if info.project_category.errors %}error{% endif %}">
