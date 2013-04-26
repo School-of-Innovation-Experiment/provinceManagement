@@ -30,13 +30,13 @@ from school.utility import *
 @authority_required(TEACHER_USER)
 def home_view(request, is_expired = False):
     email_list  = GetStudentRegisterList(request)
-    email_num = len(email_list) 
-    limited_num = TeacherLimitNumber(request) 
+    email_num = len(email_list)
+    limited_num = TeacherLimitNumber(request)
     remaining_activation_times = limited_num - email_num
 
-    project_list = ProjectSingle.objects.filter(adminuser = request.user, 
+    project_list = ProjectSingle.objects.filter(adminuser = request.user,
                                                 year = get_current_year)
-    
+
     data = {
         "project_list": project_list,
         "limited_num": limited_num,

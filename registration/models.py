@@ -23,7 +23,7 @@ from const import *
 from backend.logging import logger
 from users.models import *
 from const.models import SchoolDict, InsituteCategory
-from school.models import TeacherProjectPerLimits
+from school.models import TeacherProjectPerLimits, Project_Is_Assigned
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -109,6 +109,8 @@ class RegistrationManager(models.Manager):
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
                 schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                project_is_assigned = Project_Is_Assigned(school=schoolProfileObj)
+                project_is_assigned.save()
                 schoolProfileObj.save()
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
