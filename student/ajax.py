@@ -15,6 +15,22 @@ from users.models import StudentProfile
 from const import MEMBER_NUM_LIMIT
 
 @dajaxice_register
+def MemberDelete(request, deleteId):
+    try:
+        project = ProjectSingle.objects.get(student__userid=request.user)
+    except:
+        raise Http404
+    group = project.student_group_set
+    for student in group.all():
+        if student.studentId == deleteId:
+            student.delete()
+            table = refresh_member_table(request)
+            ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
+            break
+    else:
+        ret = {'status': '1', 'message': u"待删除成员不存在，请刷新页面"}
+    return simplejson.dumps(ret)
+@dajaxice_register
 def MemberChange(request, form, origin):
     stugroup_form = StudentGroupForm(deserialize_form(form))
     if not stugroup_form.is_valid():
@@ -35,6 +51,8 @@ def change_member(request, stugroup_form, origin):
     except:
         raise Http404
     group = project.student_group_set
+    if filter(lambda x:x==student_id, [student.studentId for student in group.all()]):
+        return {'status': '1', 'message': u"替换成员已存在队伍中，请选择删除"}
     for student in group.all():
         if student.studentId == origin:
             student.studentName = student_name
