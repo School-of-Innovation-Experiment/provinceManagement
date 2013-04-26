@@ -5,9 +5,9 @@
   <form method="post" action={% url teacher.views.final_report_view pid %}>
     {% csrf_token %}
     <!--Project Content-->
-    {% include "teacher/widgets/final.html" %}
+    {% include "student/widgets/final.html" %}
     <br/>
     <!--submit button-->
-    {% include "teacher/widgets/commit_button.html" %}
+    {% include "student/widgets/commit_button.html" %}
   </form>
 {%endblock%}
