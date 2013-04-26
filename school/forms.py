@@ -28,9 +28,7 @@ class InfoForm(ModelForm):
         Project Basic info
     """
     def __init__(self, *args, **kwargs):
-        loginfo(p=kwargs,label="kwargs")
         user = kwargs.pop('user', None)
-        loginfo(p=user,label="kwargs")
         if not user:
             return
         student_account = StudentProfile.objects.get(userid = user )
@@ -48,13 +46,9 @@ class InfoForm(ModelForm):
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
-        exclude = ('project_id','school','adminuser','student',
+        exclude = ('project_id','school','adminuser','student','project_category',
                    'year', 'project_grade', 'project_status', 'expert')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
-                 'telephone':forms.TextInput(attrs={'class':"school-display"}),
-                 'email':forms.TextInput(attrs={'class':"school-display"}),
-                 'im':forms.TextInput(attrs={'class':"school-display"}),
-                 'project_category':forms.Select(attrs={'class':"school-display"}),
                  }
 
     def get_absolute_url(self):
@@ -71,9 +65,7 @@ class ApplicationReportForm(ModelForm):
 
         #TODO: add css into widgets
         widgets = {
-                   "original" :forms.Textarea(attrs={'rows': 2, 'cols': 100,
-                                                       'placeholder': '学生自选，学生的积累和兴趣   学生自选，教师的科研项目   教师帮选，教师的科研项目',
-                                                       'class': "fill-form"}),
+                   'original':forms.Select(attrs={'class':'studentchange' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
                                                        'class': "fill-form"}),
@@ -92,6 +84,9 @@ class ApplicationReportForm(ModelForm):
                    "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                'placeholder': '指导教师推荐语',
                                                                'class': "fill-form"}),
+                   "instutite_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                            'placeholder': '学院推荐语',
+                                                            'class': "fill-form"}),
                    "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                             'placeholder': '学校推荐语',
                                                             'class': "fill-form"}),

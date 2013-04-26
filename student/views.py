@@ -68,6 +68,9 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
+    projectcategory=project.project_category
+    print projectcategory.__str__()
+
     readonly= is_expired
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,user=request.user,instance=project)
