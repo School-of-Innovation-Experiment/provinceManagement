@@ -13,7 +13,7 @@ RegisterClass = (SchoolDict,
                  ProjectCategory,
                  ProjectGrade,
                  ProjectStatus,
-                 InsituteCategory,
+                 # InsituteCategory,
                  UserIdentity,
                 )
 

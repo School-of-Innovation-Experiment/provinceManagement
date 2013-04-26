@@ -9,7 +9,9 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
+from django.template.loader import render_to_string
+
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict
 from const import *
@@ -20,15 +22,19 @@ from users.models import SchoolProfile
 from news.models import News
 import datetime
 
+def refresh_mail_table(request):
+    email_list  = AdminStaffService.GetRegisterList()
+    return render_to_string("adminStaff/widgets/table.html",
+                            {"email_list": email_list})
+
 @dajaxice_register
 def NumLimit(request, form):
-    dajax = Dajax()
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
-        school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
+        #school = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
         try:
-            school_obj = SchoolProfile.objects.get(school=school)
+            school_obj = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
                 projectlimit = ProjectPerLimits(school=school_obj,
                                                    number=limited_num)
@@ -38,7 +44,7 @@ def NumLimit(request, form):
                 object.number = limited_num
                 object.save()
             return simplejson.dumps({'status':'1','message':u'更新成功'})
-        except SchoolProfile.DoesNotExist:
+        except SchoolDict.DoesNotExist:
             return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
@@ -88,7 +94,8 @@ def  ExpertDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True)
         if flag:
             message = u"发送邮件成功"
-            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+            table = refresh_mail_table(request)
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table':table})
         else:
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
@@ -97,7 +104,7 @@ def  ExpertDispatch(request, form):
 @dajaxice_register
 def SchoolDispatch(request, form):
     #dajax = Dajax()
-    school_form = SchoolDispatchForm(deserialize_form(form))
+    school_form = SchoolDictDispatchForm(deserialize_form(form))
     if school_form.is_valid():
         password = school_form.cleaned_data["school_password"]
         email = school_form.cleaned_data["school_email"]
@@ -108,7 +115,8 @@ def SchoolDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER, school_name=school_name)
         if flag:
             message = u"发送邮件成功"
-            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
+            table = refresh_mail_table(request)
+            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
@@ -120,7 +128,7 @@ def judge_is_assigned(request, school):
     to judge if the projects that belong to the certain insitute has been assigned
     '''
     try:
-        schoolObj = SchoolProfile.objects.get(id=school)
+        schoolObj = SchoolProfile.objects.get(id=int(school))
     except SchoolProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     try:

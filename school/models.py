@@ -61,7 +61,7 @@ class ProjectSingle(models.Model):
 
 
 class Project_Is_Assigned(models.Model):
-    school = models.ForeignKey(SchoolProfile,
+    school = models.OneToOneField(SchoolProfile,
                                blank = True, null=True, default=None)
     is_assigned = models.BooleanField(default=False)
     is_assigned_in_presubmit = models.BooleanField(default=False)

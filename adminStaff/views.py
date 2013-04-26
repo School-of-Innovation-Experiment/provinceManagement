@@ -39,6 +39,8 @@ class AdminStaffService(object):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_user=kwargs['expert_user'])
             elif kwargs.has_key('teacher_school'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
+            elif kwargs.has_key('student_user'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
             return True
         else:
             return False
@@ -68,7 +70,7 @@ class AdminStaffService(object):
         src=TeacherProfile.objects.filter(school = school.id)
         res_list = AdminStaffService.getUserInfoList(src)
         return res_list
-    
+
     @staticmethod
     def GetRegisterExpertListBySchool(school):
         src = ExpertProfile.objects.filter(assigned_by_school = school)
@@ -101,7 +103,7 @@ class AdminStaffService(object):
     def Dispatch(request):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
-            school_form = forms.SchoolDispatchForm()
+            school_form = forms.SchoolDictDispatchForm()
             email_list  = AdminStaffService.GetRegisterList()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod

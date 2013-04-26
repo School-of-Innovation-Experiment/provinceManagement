@@ -16,18 +16,33 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
     widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
 
-class SchoolDispatchForm(forms.Form):
+class SchoolDictDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
-    school_list        = SchoolProfile.objects.all()
-    for object in school_list:
-        SCHOOL_CHOICE_list.append((object.id, object.school))
+    school_list        = SchoolDict.objects.all()
+    for obj in school_list:
+        SCHOOL_CHOICE_list.append((obj.id, obj.schoolName))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_password = forms.CharField(max_length=20, required=False,
                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
                            ),
 )
     school_email    = forms.EmailField(required=True,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_mailbox",'placeholder':u"邮箱",'id':'school_email'}
+                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
+                           ))
+    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
+
+class SchoolDispatchForm(forms.Form):
+    SCHOOL_CHOICE_list = []
+    school_list        = SchoolProfile.objects.all()
+    for obj in school_list:
+        SCHOOL_CHOICE_list.append((obj.id, obj.school))
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+    school_password = forms.CharField(max_length=20, required=False,
+                                      widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
+                           ),
+)
+    school_email    = forms.EmailField(required=True,
+                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
 

@@ -3,6 +3,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
+from django.template.loader import render_to_string
 from const.models import SchoolDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
@@ -13,6 +14,17 @@ import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
 from school.views import get_project_num_and_remaining
+
+def refresh_table(request):
+    school = SchoolProfile.objects.get(userid=request.user)
+    if not school:
+        raise Http404
+    email_list  = AdminStaffService.GetRegisterListBySchool(school)
+    email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+
+    return render_to_string("school/widgets/table.html",
+                            {"email_list": email_list})
+
 @dajaxice_register
 def  ExpertDispatch(request, form):
     expert_form =  ExpertDispatchForm(deserialize_form(form))
@@ -25,7 +37,8 @@ def  ExpertDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school")
         if flag:
             message = u"发送邮件成功"
-            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+            table = refresh_table(request)
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
@@ -76,7 +89,8 @@ def  TeacherDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school)
         if flag:
             message = u"发送邮件成功"
-            return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message})
+            table = refresh_table(request)
+            return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message})

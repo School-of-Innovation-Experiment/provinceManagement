@@ -5,12 +5,12 @@
   <form method="post" action={% url teacher.views.application_report_view pid %}>
     {% csrf_token %}
     <!--Basic Infomation-->
-    {% include "teacher/widgets/project_infoform.html" %}
+    {% include "student/widgets/project_infoform.html" %}
     <!--Application Infomation-->
-    {% include "teacher/widgets/application.html" %}
+    {% include "student/widgets/application.html" %}
     <!--Comments info-->
-    {% include "teacher/widgets/comments_info.html" %}
+    {% include "student/widgets/comments_info.html" %}
     <!--submit button-->
-    {% include "teacher/widgets/commit_button.html" %}
+    {% include "student/widgets/commit_button.html" %}
   </form>
 {%endblock%}

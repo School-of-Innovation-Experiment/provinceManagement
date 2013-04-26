@@ -23,7 +23,7 @@ from const import *
 from backend.logging import logger
 from users.models import *
 from const.models import SchoolDict, InsituteCategory
-from school.models import TeacherProjectPerLimits
+from school.models import TeacherProjectPerLimits, Project_Is_Assigned
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -109,6 +109,8 @@ class RegistrationManager(models.Manager):
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
                 schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                project_is_assigned = Project_Is_Assigned(school=schoolProfileObj)
+                project_is_assigned.save()
                 schoolProfileObj.save()
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
@@ -132,13 +134,14 @@ class RegistrationManager(models.Manager):
                 expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
 
-        else:
+        elif kwargs.get("student_user", False):
             teacher_name = request.user.username
             teacher = User.objects.get(username=teacher_name)
             teacher_profile = TeacherProfile.objects.get(userid = teacher)
             student_obj = StudentProfile(userid = new_user,teacher = teacher_profile)
             student_obj.save()
-
+        else:
+            raise Http404 
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user
