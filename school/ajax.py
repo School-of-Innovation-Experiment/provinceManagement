@@ -22,7 +22,7 @@ def  ExpertDispatch(request, form):
         name = email
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True)
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school")
         if flag:
             message = u"发送邮件成功"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})

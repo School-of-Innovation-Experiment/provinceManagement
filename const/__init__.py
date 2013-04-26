@@ -26,8 +26,8 @@ AUTH_CHOICES = (
     (VISITOR_USER, u"游客"),
 )
 
-INSTITUTE_GRADE = 0
-SCHOOL_GRADE = 1
+INSTITUTE_GRADE = "0"
+SCHOOL_GRADE = "1"
 EXPERT_GRADE_CHOICES = (
     (INSTITUTE_GRADE, u"院系内项目初审专家"),
     (SCHOOL_GRADE, u"校级以上项目评审专家"),

@@ -19,8 +19,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity
+from const import *
 from backend.logging import logger
-from users.models import SchoolProfile, ExpertProfile, TeacherProfile, StudentProfile
+from users.models import *
 from const.models import SchoolDict, InsituteCategory
 from school.models import TeacherProjectPerLimits
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
@@ -123,6 +124,12 @@ class RegistrationManager(models.Manager):
         elif kwargs.get("expert_user", False):
             # insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
             expertProfileObj = ExpertProfile(userid =new_user)
+            if kwargs["expert_user"] == "assigned_by_school":
+                expertProfileObj.grade = "0"
+                expertProfileObj.assigned_by_school = SchoolProfile.objects.get(userid = request.user)
+            else:
+                expertProfileObj.grade = "1"
+                expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
 
         else:

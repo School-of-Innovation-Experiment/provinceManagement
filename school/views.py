@@ -56,6 +56,7 @@ def dispatch(request):
         raise Http404
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
+    email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect
