@@ -160,7 +160,7 @@ def split_name(name, sep="."):
     """
         split type and name in a filename
     """
-    name = str(name)
+    #name = str(name)
     if sep in name:
         f = name.split(sep)[0]
         t = name.split(sep)[1]

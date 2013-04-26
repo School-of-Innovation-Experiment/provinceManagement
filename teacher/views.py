@@ -49,28 +49,31 @@ def home_view(request, is_expired = False):
 @authority_required(TEACHER_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
-def application_report_view(request, pid = None, is_expired = False):
+def application_report_view(request,pid=None,is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
+
+    projectcategory=project.project_category
+
     readonly= is_expired
     if request.method == "POST" and readonly is not True:
-        info_form = InfoForm(request.POST, instance=project)
+        info_form = InfoForm(request.POST,pid=pid,instance=project)
         application_form = ApplicationReportForm(request.POST, instance=pre)
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
                 project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                 project.save()
-                return HttpResponseRedirect(reverse('teacher.views.home_view'))
+
+            return HttpResponseRedirect(reverse('teacher.views.home_view'))
         else:
             logger.info("Form Valid Failed"+"**"*10)
             logger.info(info_form.errors)
             logger.info(application_form.errors)
             logger.info("--"*10)
     else:
-        info_form = InfoForm(instance=project)
+        info_form = InfoForm(instance=project,pid=pid)
         application_form = ApplicationReportForm(instance=pre)
-
     data = {'pid': pid,
             'info': info_form,
             'application': application_form,
