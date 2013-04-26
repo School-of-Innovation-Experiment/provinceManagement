@@ -2,6 +2,7 @@
 
 import os, sys, time
 from django import forms
+from const import *
 
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
@@ -9,6 +10,8 @@ class StudentDispatchForm(forms.Form):
            )
     student_email    = forms.EmailField(required=True,
           widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'})
+           )
+    category            = forms.ChoiceField(choices = PROJECT_CATE_CHOICES, 
            )
 
 

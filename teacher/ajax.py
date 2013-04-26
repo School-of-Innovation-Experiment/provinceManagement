@@ -4,7 +4,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from school.forms import StudentDispatchForm
+from teacher.forms import StudentDispatchForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
 from const.models import SchoolDict
 from const import *
@@ -17,6 +17,7 @@ def StudentDispatch(request, form):
     if student_form.is_valid():
         password = student_form.cleaned_data["student_password"]
         email = student_form.cleaned_data["student_email"]
+        category = student_form.cleaned_data["category"]
         name = email
         if password == "":
             password = email.split('@')[0]
@@ -29,7 +30,7 @@ def StudentDispatch(request, form):
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
-            flag = Send_email_to_student(request, name, password, email, STUDENT_USER)
+            flag = Send_email_to_student(request, name, password, email, category, STUDENT_USER)
             if flag:
                 message = u"发送邮件成功"
                 remaining_activation_times -= 1

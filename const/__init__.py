@@ -42,7 +42,7 @@ PROJECT_CATE_CHOICES = (
     (CATE_INNOVATION, u"创新训练"),
     (CATE_ENTERPRISE, u"创业训练"),
     (CATE_ENTERPRISE_EE, u"创业实践"),
-    (CATE_UN, u"未指定"),
+  #  (CATE_UN, u"未指定"),
 )
 
 #Project_Origin
