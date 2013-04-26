@@ -21,7 +21,7 @@ from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm
 
 from const.models import *
 from const import *
@@ -68,13 +68,16 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
 
-    projectcategory=project.project_category
-    print projectcategory.__str__()
+    projectcategory=project.project_category.category
+    is_innovation = True
 
     readonly= is_expired
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre)
+        application_form = ApplicationReportForm(request.POST, instance=pre) 
+        if projectcategory != CATE_INNOVATION:
+            application_form = EnterpriseApplicationReportForm(instance=pre)
+            is_innovation = False        
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
                 project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
@@ -89,11 +92,16 @@ def application_report_view(request,pid=None,is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = ApplicationReportForm(instance=pre)
+        if projectcategory != CATE_INNOVATION:
+            application_form = EnterpriseApplicationReportForm(instance=pre)
+            is_innovation = False
+            loginfo(p=is_innovation, label="in application")
 
     data = {'pid': pid,
             'info': info_form,
             'application': application_form,
             'readonly': readonly,
+            'is_innovation':is_innovation
             }
     return render(request, 'student/application.html', data)
 
@@ -117,6 +125,7 @@ def final_report_view(request, pid=None,is_expired=False):
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
+        # techcompetition_form = 
         if final_form.is_valid():
             final_form.save()
             project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
