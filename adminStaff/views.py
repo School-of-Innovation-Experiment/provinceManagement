@@ -68,7 +68,7 @@ class AdminStaffService(object):
         src=TeacherProfile.objects.filter(school = school.id)
         res_list = AdminStaffService.getUserInfoList(src)
         return res_list
-    
+
     @staticmethod
     def GetRegisterExpertListBySchool(school):
         src = ExpertProfile.objects.filter(assigned_by_school = school)
