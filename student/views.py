@@ -87,7 +87,7 @@ def application_report_view(request,pid=None,is_expired=False):
             logger.info(application_form.errors)
             logger.info("--"*10)
     else:
-        info_form = InfoForm(instance=project,user=request.user)
+        info_form = InfoForm(instance=project,pid=pid)
         application_form = ApplicationReportForm(instance=pre)
 
     data = {'pid': pid,

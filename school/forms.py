@@ -28,11 +28,10 @@ class InfoForm(ModelForm):
         Project Basic info
     """
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        if not user:
+        pid = kwargs.pop('pid', None)
+        if not pid:
             return
-        student_account = StudentProfile.objects.get(userid = user )
-        project = ProjectSingle.objects.get(student=student_account)
+        project = ProjectSingle.objects.get(project_id=pid)
         student_group = Student_Group.objects.filter(project = project)
         member = []
         for temp_student in student_group:
