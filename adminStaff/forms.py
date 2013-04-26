@@ -18,9 +18,9 @@ class ExpertDispatchForm(forms.Form):
 
 class SchoolDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
-    school_list        = SchoolDict.objects.all()
+    school_list        = SchoolProfile.objects.all()
     for obj in school_list:
-        SCHOOL_CHOICE_list.append((obj.id, obj.schoolName))
+        SCHOOL_CHOICE_list.append((obj.id, obj.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_password = forms.CharField(max_length=20, required=False,
                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}

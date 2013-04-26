@@ -39,6 +39,8 @@ class AdminStaffService(object):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_user=kwargs['expert_user'])
             elif kwargs.has_key('teacher_school'):
                 RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
+            elif kwargs.has_key('student_user'):
+                RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
             return True
         else:
             return False

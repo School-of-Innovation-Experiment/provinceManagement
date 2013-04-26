@@ -134,13 +134,14 @@ class RegistrationManager(models.Manager):
                 expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
 
-        else:
+        elif kwargs.get("student_user", False):
             teacher_name = request.user.username
             teacher = User.objects.get(username=teacher_name)
             teacher_profile = TeacherProfile.objects.get(userid = teacher)
             student_obj = StudentProfile(userid = new_user,teacher = teacher_profile)
             student_obj.save()
-
+        else:
+            raise Http404 
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user

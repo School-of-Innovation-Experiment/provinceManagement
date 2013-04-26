@@ -24,6 +24,7 @@ from teacher.forms import StudentDispatchForm
 from registration.models import *
 from teacher.utility import *
 from school.utility import *
+from adminStaff.views import AdminStaffService
 
 @csrf.csrf_protect
 @login_required
@@ -175,9 +176,8 @@ def Send_email_to_student(request, username, password, email, category, identity
     """
     check the existence of user
     """
-    if User.objects.filter(email = email).count() == 0:
-        user = RegistrationManager().create_inactive_user(request, username, password, email,
-                identity)
+    flag = AdminStaffService.sendemail(request, username, password, email, identity, student_user = True)
+    if flag:
         result = create_newproject(request=request, new_user=user, category=category)
         return True and result
     else:

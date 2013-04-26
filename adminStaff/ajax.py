@@ -31,10 +31,10 @@ def refresh_mail_table(request):
 def NumLimit(request, form):
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
-        school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
+        #school = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
         try:
-            school_obj = SchoolProfile.objects.get(school=school)
+            school_obj = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
                 projectlimit = ProjectPerLimits(school=school_obj,
                                                    number=limited_num)
@@ -44,7 +44,7 @@ def NumLimit(request, form):
                 object.number = limited_num
                 object.save()
             return simplejson.dumps({'status':'1','message':u'更新成功'})
-        except SchoolProfile.DoesNotExist:
+        except SchoolDict.DoesNotExist:
             return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
@@ -128,7 +128,7 @@ def judge_is_assigned(request, school):
     to judge if the projects that belong to the certain insitute has been assigned
     '''
     try:
-        schoolObj = SchoolProfile.objects.get(id=school)
+        schoolObj = SchoolProfile.objects.get(id=int(school))
     except SchoolProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     try:
