@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict
 from const import *
@@ -104,7 +104,7 @@ def  ExpertDispatch(request, form):
 @dajaxice_register
 def SchoolDispatch(request, form):
     #dajax = Dajax()
-    school_form = SchoolDispatchForm(deserialize_form(form))
+    school_form = SchoolDictDispatchForm(deserialize_form(form))
     if school_form.is_valid():
         password = school_form.cleaned_data["school_password"]
         email = school_form.cleaned_data["school_email"]
