@@ -22,8 +22,7 @@ def create_newproject(request, new_user, category):
         project.adminuser = teacher
         project.student = student 
         project.school = teacher.school
-        project.category = ProjectCategory.objects.get(category = category)
-        loginfo(p = category, label = "assign category for project")
+        project.project_category = ProjectCategory.objects.get(category = category)
         project.year = get_current_year() 
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN) 
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST) 
