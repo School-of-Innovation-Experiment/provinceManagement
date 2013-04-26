@@ -20,9 +20,11 @@ STUDENT_USER = "student"
 VISITOR_USER = "visitor"
 
 AUTH_CHOICES = (
-    (SCHOOL_USER, u"高校"),
+    (SCHOOL_USER, u"学院"),
     (EXPERT_USER, u"专家"),
     (ADMINSTAFF_USER, u"省级管理员"),
+    (TEACHER_USER, u"指导老师"),
+    (STUDENT_USER, u"参赛学生"),
     (VISITOR_USER, u"游客"),
 )
 
