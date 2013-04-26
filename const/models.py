@@ -119,9 +119,9 @@ class ProjectOrigin(models.Model):
     """
     Project Origin for innovation
     """
-    origin = models.IntegerField(blank=False, null=False, unique=True,
-                                 choices=PROJECT_INNOVATION_ORIGIN_CHOICES,
-                                 default = 0,
+    origin = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                 choices=PROJECT_INNOVATION_ORIGIN_CHOICES, \
+                                 default = "0",
                                  verbose_name="项目来源")
     class Meta:
         verbose_name = "项目来源"
@@ -134,9 +134,9 @@ class ProjectEnterpriseOrigin(models.Model):
     """
     Project Origin for innovation
     """
-    origin = models.IntegerField(blank=False, null=False, unique=True,
-                                 choices=PROJECT_ENTERPRISE_ORIGIN_CHOICES,
-                                 default = 0,
+    origin = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                 choices=PROJECT_ENTERPRISE_ORIGIN_CHOICES, \
+                                 default = "0",
                                  verbose_name="项目来源")
     class Meta:
         verbose_name = "项目来源"
@@ -149,10 +149,10 @@ class ProjectEnterpriseMaturity(models.Model):
     """
     Project Origin for innovation
     """
-    maturity = models.IntegerField(blank=False, null=False, unique=True,
-                                 choices=PROJECT_ENTERPRISE_MATURITY_CHOICES,
-                                 default = 0,
-                                 verbose_name="项目技术成熟度")
+    maturity = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                choices=PROJECT_ENTERPRISE_MATURITY_CHOICES, \
+                                default = "0",
+                                verbose_name="项目技术成熟度")
     class Meta:
         verbose_name = "项目技术成熟度"
         verbose_name_plural = "项目技术成熟度"

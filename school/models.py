@@ -75,12 +75,18 @@ class Re_Project_Expert(models.Model):
     project = models.ForeignKey(ProjectSingle)
     expert = models.ForeignKey(ExpertProfile)
     comments = models.TextField(blank=True, verbose_name="评价")
-    score_innovation = models.FloatField(blank=False, verbose_name="创新性",
-                                           default=0)
-    score_practice = models.FloatField(blank=False, verbose_name="实用性",
+    score_significant = models.FloatField(blank=False, verbose_name=u"项目选题意义",
+                                          default=0)
+    score_value = models.FloatField(blank=False, verbose_name=u"科技研究价值",
+                                    default=0)
+    score_innovation = models.FloatField(blank=False, verbose_name="项目创新之处",
                                          default=0)
-    score_funny = models.FloatField(blank=False, verbose_name="趣味性",
-                                      default=0)
+    score_practice = models.FloatField(blank=False, verbose_name="项目可行性",
+                                       default=0)
+    score_achievement = models.FloatField(blank=False, verbose_name=u"预期成果",
+                                          default=0)
+    score_capacity = models.FloatField(blank=False, verbose_name=u"指导教师科研能力",
+                                       default=0)
 
     class Meta:
         #Here, we use together unique key, otherwise the one project will be
