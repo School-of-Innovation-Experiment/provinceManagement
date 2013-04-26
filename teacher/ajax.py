@@ -4,12 +4,17 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
+from django.template.loader import render_to_string
 from teacher.forms import StudentDispatchForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
 from const.models import SchoolDict
 from const import *
 import datetime
 
+def refresh_project_table(request):
+    email_list  = GetStudentRegisterList(request)
+    return render_to_string("teacher/widgets/project_table.html",
+                            {"email_list": email_list})
 
 @dajaxice_register
 def StudentDispatch(request, form):
@@ -34,11 +39,14 @@ def StudentDispatch(request, form):
             if flag:
                 message = u"发送邮件成功"
                 remaining_activation_times -= 1
-                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
+                table = refresh_project_table(request)
+                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times, 'table':table})
             else:
                 message = u"相同邮件已经发送，中断发送或发生内部错误"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
         return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 
-    
+
+
+

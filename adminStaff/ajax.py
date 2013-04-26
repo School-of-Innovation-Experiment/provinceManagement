@@ -22,7 +22,7 @@ from users.models import SchoolProfile
 from news.models import News
 import datetime
 
-def refresh_member_table(request):
+def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList()
     return render_to_string("adminStaff/widgets/table.html",
                             {"email_list": email_list})
@@ -94,7 +94,7 @@ def  ExpertDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True)
         if flag:
             message = u"发送邮件成功"
-            table = refresh_member_table(request)
+            table = refresh_mail_table(request)
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table':table})
         else:
             message = u"相同邮件已经发送，中断发送"
@@ -115,7 +115,7 @@ def SchoolDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER, school_name=school_name)
         if flag:
             message = u"发送邮件成功"
-            table = refresh_member_table(request)
+            table = refresh_mail_table(request)
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"
