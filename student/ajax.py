@@ -26,6 +26,7 @@ def MemberDelete(request, deleteId):
             student.delete()
             table = refresh_member_table(request)
             ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
+            break
     else:
         ret = {'status': '1', 'message': u"待删除成员不存在，请刷新页面"}
     return simplejson.dumps(ret)

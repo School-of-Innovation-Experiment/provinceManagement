@@ -19,7 +19,8 @@ from const.models import *
 from users.models import TeacherProfile, StudentProfile
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+from teacher.forms import StudentDispatchForm
 from registration.models import *
 from teacher.utility import *
 from school.utility import *
@@ -49,7 +50,6 @@ def home_view(request, is_expired = False):
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request, pid = None, is_expired = False):
-    print "-----$$" * 20
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -168,14 +168,14 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
-def Send_email_to_student(request, username, password, email, identity):
+def Send_email_to_student(request, username, password, email, category, identity):
     """
     check the existence of user
     """
     if User.objects.filter(email = email).count() == 0:
         user = RegistrationManager().create_inactive_user(request, username, password, email,
                 identity)
-        result = create_newproject(request=request, new_user=user)
+        result = create_newproject(request=request, new_user=user, category=category)
         return True and result
     else:
         return False
