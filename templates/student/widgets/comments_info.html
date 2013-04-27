@@ -5,7 +5,7 @@
     </div>
     <blockquote>
       <fieldset>
-        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+        <div class="control-group form-inline {% if application.inspector_comments.errors %}error{% endif %}">
           <legend>指导教师推荐语</legend>
           {{application.inspector_comments}} 
           {% if application.inspector_comments.errors %}
@@ -17,19 +17,19 @@
         </div>
       </fieldset>
       <fieldset>
-        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
-          <legend>指导教师推荐语</legend>
-          {{application.inspector_comments}} 
-          {% if application.inspector_comments.errors %}
+        <div class="control-group form-inline {% if application.instutite_comments.errors %}error{% endif %}">
+          <legend>学院推荐语</legend>
+          {{application.instutite_comments}} 
+          {% if application.instutite_comments.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
-            {{ application.inspector_comments.errors }}
+            {{ application.instutite_comments.errors }}
           </div>
           {% endif %}
         </div>
       </fieldset>
       <fieldset>
-        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+        <div class="control-group form-inline {% if application.school_comments.errors %}error{% endif %}">
           <legend>学校推荐语</legend>
           {{application.school_comments}} 
           {% if application.school_comments.errors %}

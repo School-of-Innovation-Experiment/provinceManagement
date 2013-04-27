@@ -1,5 +1,3 @@
-# coding: UTF-8
-
 import datetime, os, sys, uuid
 
 from django.contrib.auth.models import User
@@ -34,10 +32,7 @@ def home_view(request, is_expired = False):
     email_num = len(email_list)
     limited_num = TeacherLimitNumber(request)
     remaining_activation_times = limited_num - email_num
-
-    project_list = ProjectSingle.objects.filter(adminuser = request.user,
-                                                year = get_current_year)
-
+    project_list = ProjectSingle.objects.filter(adminuser__userid = request.user)
     data = {
         "project_list": project_list,
         "limited_num": limited_num,
@@ -176,8 +171,8 @@ def Send_email_to_student(request, username, password, email, category, identity
     """
     check the existence of user
     """
-    flag = AdminStaffService.sendemail(request, username, password, email, identity, student_user = True)
-    if flag:
+    if User.objects.filter(email = email).count() == 0:
+        user = RegistrationManager().create_inactive_user(request, username, password, email, identity, student_user = True)
         result = create_newproject(request=request, new_user=user, category=category)
         return True and result
     else:
