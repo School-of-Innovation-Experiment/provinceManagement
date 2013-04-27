@@ -15,6 +15,8 @@ RegisterClass = (ProjectSingle,
                  PreSubmit,
                  FinalSubmit,
                  UploadedFiles,
+                 PreSubmitEnterprise,
+                 Teacher_Enterprise,
                  TeacherProjectPerLimits)
 
 for item in RegisterClass:

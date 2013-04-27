@@ -179,8 +179,8 @@ class PreSubmitEnterprise(models.Model):
                                        verbose_name="学校评审意见")
 
     class Meta:
-        verbose_name = "项目申请书"
-        verbose_name_plural = "项目申请书"
+        verbose_name = "创业项目申请书"
+        verbose_name_plural = "创业项目申请书"
 
     def __unicode__(self):
         return self.project_id.title
