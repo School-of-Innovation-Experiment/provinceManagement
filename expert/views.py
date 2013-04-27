@@ -30,9 +30,9 @@ from adminStaff.models import *
 from users.models import *
 from const.models import *
 from const import *
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, EnterpriseApplicationReportForm
 from expert.forms import *
-
+from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
@@ -73,8 +73,13 @@ def review_report_view(request, pid=None):
     application = get_object_or_404(PreSubmit, project_id=pid)
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
-    info_form = InfoForm(instance=re_project.project)
-    application_form = ApplicationReportForm(instance=application)
+    info_form = InfoForm(instance=re_project.project, pid=pid)
+    if project.project_category.category == CATE_INNOVATION:
+        is_innovation = True
+        application_form = ApplicationReportForm(instance=application)
+    else:
+        is_innovation = False
+        application_form = EnterpriseApplicationReportForm(instance=application)
 
     if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=re_project)
@@ -85,7 +90,9 @@ def review_report_view(request, pid=None):
         review_form = ReviewForm(instance=re_project)
     for i, doc in enumerate(doc_list):
         doc.index = i + 1
-    data = {"pid": pid,
+    data = {
+            "is_innovation": is_innovation,
+            "pid": pid,
             "info": info_form,
             "application": application_form,
             "review": review_form,
