@@ -19,6 +19,10 @@ urlpatterns = patterns('',
         student_views.member_change,
     ),
     url(
+    r'^techcompetition$',
+        student_views.techcompetition,
+    ),
+    url(
         r'^application/(?P<pid>.{36})$',
         student_views.application_report_view,
     ),
@@ -33,5 +37,9 @@ urlpatterns = patterns('',
     url(
         r'delete/(?P<pid>.{36})/(?P<fid>.{36})$',
         student_views.file_delete_view,
+    ),
+    url(
+        r'^newtechcompetition/$',
+        student_views.new_techcompetition,
     ),
 )

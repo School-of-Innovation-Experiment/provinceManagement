@@ -149,6 +149,24 @@ class EnterpriseApplicationReportForm(ModelForm):
     def get_absolute_url(self):
         return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
 
+class Teacher_EnterpriseForm(ModelForm):
+    """
+        Teacher_EnterpriseForm in ApplicationReportForm
+    """
+    class Meta:
+        model = Teacher_Enterprise
+        #TODO: add css into widgets
+        exclude=('id')
+        widgets={
+                  'name':forms.TextInput(attrs={'class':"school-display"}),
+                  'telephone':forms.TextInput(attrs={'class':"school-display"}),
+                  'titles':forms.TextInput(attrs={'class':"school-display"}),
+                  'jobs':forms.TextInput(attrs={'class':"school-display"}),
+                 }
+
+    def get_absolute_url(self):
+        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
+
 class FinalReportForm(ModelForm):
     """
         Final Form
@@ -186,7 +204,7 @@ class FinalReportForm(ModelForm):
     def get_absolute_url(self):
         return reverse('student.views.final_report_view', args=(str(self.instance.project_id),))
 
-class TechCompetitionForm(ModelForm):
+class TechCompetitionForm(forms.Form):
     """
         TechCompetitionForm in FinalReportForm
     """
@@ -199,6 +217,7 @@ class TechCompetitionForm(ModelForm):
                   'competition_name':forms.TextInput(attrs={'class':"school-display"}),
                   'competition_grade':forms.TextInput(attrs={'class':"school-display"}),
                  }
+
 
     def get_absolute_url(self):
         return reverse('student.views.final_report_view', args=(str(self.instance.project_id),))

@@ -120,7 +120,7 @@ class PreSubmit(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
@@ -152,7 +152,7 @@ class PreSubmitEnterprise(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content for Enterprise project
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
@@ -178,8 +178,8 @@ class PreSubmitEnterprise(models.Model):
                                        verbose_name="学校评审意见")
 
     class Meta:
-        verbose_name = "项目申请书"
-        verbose_name_plural = "项目申请书"
+        verbose_name = "创业项目申请书"
+        verbose_name_plural = "创业项目申请书"
 
     def __unicode__(self):
         return self.project_id.title
