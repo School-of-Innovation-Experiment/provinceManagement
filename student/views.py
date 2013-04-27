@@ -162,7 +162,6 @@ def application_report_view(request,pid=None,is_expired=False):
                 logger.info(application_form.errors)
                 logger.info(teacher_enterpriseform.errors)
                 logger.info("--"*10)
->>>>>>> a3a9afa0db418c5eac408b8f36d0c654202249c5
 
     else:
         info_form = InfoForm(instance=project,pid=pid)
