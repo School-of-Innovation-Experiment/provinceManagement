@@ -5,7 +5,7 @@ import os, sys, datetime, uuid
 from django.shortcuts import get_object_or_404
 
 from users.models import StudentProfile, TeacherProfile
-from school.models import ProjectSingle, PreSubmit, FinalSubmit, PreSubmitEnterprise
+from school.models import ProjectSingle, PreSubmit, FinalSubmit, PreSubmitEnterprise, Teacher_Enterprise
 from const import *
 from const.models import *
 from school.utility import get_current_year
@@ -38,6 +38,11 @@ def create_newproject(request, new_user, category):
             pre_interprise = PreSubmitEnterprise()
             pre_interprise.content_id = uuid.uuid4()
             pre_interprise.project_id = project
+
+            teacher_enterprise = Teacher_Enterprise()
+            teacher_enterprise.save()
+
+            pre_interprise.enterpriseTeacher = teacher_enterprise
             pre_interprise.save()
 
         final = FinalSubmit()
