@@ -34,3 +34,21 @@ function delete_member(caller)
   Dajaxice.student.MemberDelete(add_or_update_member_callback,
                                 {'deleteId': delete_id});
 }
+
+function get_student_info(studentId)
+{
+  $("#change_info_student_id").html(studentId);
+  change_id = studentId;
+}
+
+function cancel_change() {
+  change_id = "";
+}
+
+function change_member_info()
+{
+  $("#teacher_email_error_message").empty();
+  Dajaxice.student.MemberChangeInfo(add_or_update_member_callback,
+                                {'form': $('#member_change_info_form').serialize(true),
+                                 'origin': change_id});
+}

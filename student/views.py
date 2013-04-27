@@ -30,7 +30,7 @@ from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group
-from student.forms import StudentGroupForm
+from student.forms import StudentGroupForm, StudentGroupInfoForm
 
 @csrf.csrf_protect
 @login_required
@@ -54,9 +54,11 @@ def member_change(request):
     student_group = Student_Group.objects.filter(project = project)
 
     student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"student_group": student_group,
-                   "student_group_form": student_group_form})
+                   "student_group_form": student_group_form,
+                   "student_group_info_form": student_group_info_form})
 
 @csrf.csrf_protect
 @login_required
@@ -74,10 +76,10 @@ def application_report_view(request,pid=None,is_expired=False):
     readonly= is_expired
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre) 
+        application_form = ApplicationReportForm(request.POST, instance=pre)
         if projectcategory != CATE_INNOVATION:
             application_form = EnterpriseApplicationReportForm(instance=pre)
-            is_innovation = False        
+            is_innovation = False
         if info_form.is_valid() and application_form.is_valid():
             if save_application(project, info_form, application_form, request.user):
                 project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
@@ -125,7 +127,7 @@ def final_report_view(request, pid=None,is_expired=False):
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
-        # techcompetition_form = 
+        # techcompetition_form =
         if final_form.is_valid():
             final_form.save()
             project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
