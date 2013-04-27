@@ -5,7 +5,7 @@ import os, sys, datetime, uuid
 from django.shortcuts import get_object_or_404
 
 from users.models import StudentProfile, TeacherProfile
-from school.models import ProjectSingle, PreSubmit, FinalSubmit
+from school.models import ProjectSingle, PreSubmit, FinalSubmit, PreSubmitEnterprise
 from const import *
 from const.models import *
 from school.utility import get_current_year
@@ -27,11 +27,18 @@ def create_newproject(request, new_user, category):
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN) 
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST) 
         project.save()
-
-        pre = PreSubmit()
-        pre.content_id = uuid.uuid4() 
-        pre.project_id = project 
-        pre.save()
+        
+        
+        if category == CATE_INNOVATION:
+            pre = PreSubmit()
+            pre.content_id = uuid.uuid4() 
+            pre.project_id = project 
+            pre.save()
+        else:
+            pre_interprise = PreSubmitEnterprise()
+            pre_interprise.content_id = uuid.uuid4()
+            pre_interprise.project_id = project
+            pre_interprise.save()
 
         final = FinalSubmit()
         final.content_id = uuid.uuid4() 
