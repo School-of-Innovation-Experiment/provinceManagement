@@ -96,3 +96,7 @@ def  TeacherDispatch(request, form):
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':teacher_form.data.keys(),'error_id':teacher_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+
+
+
+

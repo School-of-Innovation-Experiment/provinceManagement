@@ -39,7 +39,7 @@ class InfoForm(ModelForm):
         memberlist=','.join(member)
         super(InfoForm, self).__init__(*args, **kwargs)
         self.fields['memberlist'].widget.attrs["value"] = memberlist
-    
+
     memberlist = forms.CharField(
                            widget=forms.TextInput(attrs={'class':"school-display"}))
     class Meta:
@@ -122,19 +122,19 @@ class EnterpriseApplicationReportForm(ModelForm):
                                                        'class': "fill-form"}),
                    "product": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '生产方式，生产材料，劳动力需求，设备需求，质量保证，生产成本...',
-                                                       'class': "fill-form"}),  
+                                                       'class': "fill-form"}),
                    "funds_plan": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '资金需求量、用途、使用计划，融资途径....',
                                                        'class': "fill-form"}),
                    "operating_mode": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '合作计划，实施方案，机构设置，人员管理，销售策略等....',
-                                                       'class': "fill-form"}),                 
+                                                       'class': "fill-form"}),
                    "risk_management": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '项目实施可能出现的风险及拟采取的控制措施....',
                                                        'class': "fill-form"}),
                    "financial_pred": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '未来三年或五年的销售收入、利润、资产回报率等....',
-                                                       'class': "fill-form"}),                  
+                                                       'class': "fill-form"}),
                    "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                'placeholder': '指导教师推荐语',
                                                                'class': "fill-form"}),
@@ -221,7 +221,7 @@ class TechCompetitionForm(forms.Form):
 
     def get_absolute_url(self):
         return reverse('student.views.final_report_view', args=(str(self.instance.project_id),))
-        
+
 
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
@@ -229,7 +229,7 @@ class StudentDispatchForm(forms.Form):
                            ),
 )
     student_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
+                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'}
                            ))
 
 class TeacherDispatchForm(forms.Form):
