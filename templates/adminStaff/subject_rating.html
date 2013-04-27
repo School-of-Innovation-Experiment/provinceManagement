@@ -33,7 +33,7 @@
 	    <tr>
 	      <td>{{subject.title}}</td>
 	      <td>{{subject.school}}</td>
-	      <td>{{subject.inspector}}</td>
+	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
 	      <td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
@@ -47,7 +47,8 @@
     	  <h3>专家得分/评价列表</h3>
 	</div>
   	<div class="modal-body">
-          <table id="review_table"class="table table-condensed"></table>
+          <table id="review_table"class="table table-condensed">
+          </table>
   	</div>
       </div><!--end subject_review-->
       <div class="modal hide fade" style="display: none;" id="grade_choice">
