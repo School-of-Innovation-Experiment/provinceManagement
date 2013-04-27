@@ -7,7 +7,7 @@ Created on 2013-3-28
 from datetime import *
 from django import  forms
 from adminStaff.models import ProjectControl
-from const import PROJECT_GRADE_CHOICES
+from const import *
 from users.models import *
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
@@ -125,5 +125,6 @@ class SchoolCategoryForm(forms.Form):
     school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
 
 class SubjectGradeForm(forms.Form):
-    subject_grade_choice =   PROJECT_GRADE_CHOICES
+    subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_INSITUTE and grade[0] != GRADE_UN]
+    subject_grade_choice = tuple(subject_grade_choice)
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
