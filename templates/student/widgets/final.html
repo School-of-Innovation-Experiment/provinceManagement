@@ -65,19 +65,6 @@
     </div>
     <blockquote>
       <fieldset>
-        <legend>实物（软件、图纸、报告等）</legend>
-        <div class="control-group form-inline {% if final.achievement_objects.errors %}error{% endif %}">
-          {{final.achievement_objects}} 
-          {% if final.achievement_objects.errors %}
-          <div class="row alert alert-error school-display">
-            <button class="close" data-dismiss="alert">×</button>
-            {{ final.achievement_objects.errors }}
-          </div>
-          {% endif %}  
-      </fieldset><!--end achievements objects  fieldset-->
-
-      <br/>
-      <fieldset>
         <legend>学术论文</legend>
         <div class="control-group form-inline {% if final.papers.errors %}error{% endif %}"> 
           {{final.papers}} 
@@ -105,16 +92,4 @@
       </fieldset><!--end patents fieldset-->
 
       <br/>
-      <fieldset>
-        <legend>科技竞赛</legend>
-        <div class="control-group form-inline {% if final.tech_competitions.errors %}error{% endif %}">
-          {{final.tech_competitions}} 
-          {% if final.tech_competitions.errors %}
-          <div class="row alert alert-error school-display">
-            <button class="close" data-dismiss="alert">×</button>
-            {{ final.tech_competitions.errors }}
-          </div>
-          {% endif %}             
-        </div>
-      </fieldset><!--end tech competition fieldset-->
     </blockquote><!--end achievement-->
