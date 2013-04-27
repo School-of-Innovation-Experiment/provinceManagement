@@ -22,6 +22,12 @@ from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile, TeacherProfile,StudentProfile
 from student.models import Student_Group
 from backend.logging import loginfo
+from const import *
+
+class SubjectGradeForm(forms.Form):
+    subject_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_INSITUTE or grade[0] == GRADE_SCHOOL]
+    subject_grade_choice = tuple(subject_grade_choice)
+    subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
 
 class InfoForm(ModelForm):
     """

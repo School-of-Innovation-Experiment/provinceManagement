@@ -19,13 +19,17 @@ urlpatterns = patterns(
     url(
         r'^$',
         school_views.home_view,
-    ),
+  	    ),
     url(
         r'^dispatch$',
         school_views.dispatch,
         ),
     url(
-        r'^project_alloc',
+        r'^project_alloc$',
         school_views.project_alloc,
         ),
+	url(
+		r'^subject_rating$',
+		school_views.SubjectRating,
+		),
 )
