@@ -16,7 +16,25 @@
         <tbody>
           <tr>
             <td>
-              创新性
+              项目选题意义
+            </td>
+            <td>
+              {{review.score_significant}}
+              <span>分</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              科技研究价值
+            </td>
+            <td>
+              {{review.score_value}}
+              <span>分</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              项目创新之处
             </td>
             <td>
               {{review.score_innovation}}
@@ -25,7 +43,7 @@
           </tr>
           <tr>
             <td>
-              实用性
+              项目可行性
             </td>
             <td>
               {{review.score_practice}}
@@ -34,24 +52,40 @@
           </tr>
           <tr>
             <td>
-              趣味性
+              预期成果
             </td>
             <td>
-              {{review.score_funny}}
+              {{review.score_achievement}}
               <span>分</span>
             </td>
           </tr>
+          <tr>
+            <td>
+              指导教师科研能力
+            </td>
+            <td>
+              {{review.score_capacity}}
+              <span>分</span>
+            </td>
+          </tr>
+
         </tbody>
       </table>
 
     </div>  <!-- span4 -->
 
     <div class="span4">
-      <h5>打分依据</h5>
+      <h5>打分须知</h5>
       <hr />
-      <p>专家根据创新性、实用性、趣味性等方面打分，总得分计算公式为：
+        专家根据各分项分别打分，各部分分数上限：
         <br />
-        最终得分 = 创新分X0.4 + 实用分X0.4 + 趣味分X0.2</p>
+        项目选题意义：    15分<br />
+        科技研究价值：    20分<br />
+        项目创新之处：    25分<br />
+        项目可行性：      20分<br />
+        预期成果：        10分<br />
+        指导教师科研能力：10分<br />
+        总分：100分
     </div>
   </div> <!-- row -->
 
