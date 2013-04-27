@@ -95,18 +95,19 @@ class Re_Project_Expert(models.Model):
         verbose_name = "项目审核分配"
         verbose_name_plural = "项目审核分配"
 
+
 class Teacher_Enterprise(models.Model):
     """
     Enterprise teacher for Enterprise Project
     """
-    name = models.CharField(blank=True, max_length=100,
+    name = models.CharField(blank=True, null=True, max_length=100,
                             verbose_name=u"姓名")
-    telephone = models.CharField(blank=True, max_length=20,
+    telephone = models.CharField(blank=True, null=True, max_length=20,
                                  verbose_name=u"联系电话")
-    titles = models.CharField(blank=True, max_length=20,
+    titles = models.CharField(blank=True, null=True, max_length=20,
                               verbose_name=u"职称")
-    jobs = models.CharField(max_length=100, blank=True,
-                            verbose_name="工作单位")
+    jobs = models.CharField(max_length=100, blank=True, null=True,
+                            verbose_name=u"工作单位")
 
     class Meta:
         verbose_name = "企业导师"
@@ -120,7 +121,7 @@ class PreSubmit(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
@@ -152,7 +153,7 @@ class PreSubmitEnterprise(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content for Enterprise project
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
                                   verbose_name="初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
@@ -160,7 +161,7 @@ class PreSubmitEnterprise(models.Model):
                                  verbose_name=u"项目来源")
     maturity = models.ForeignKey(ProjectEnterpriseMaturity, blank=False, null=True,
                                  verbose_name=u"项目技术成熟度")
-    enterpriseTeacher = models.ForeignKey(Teacher_Enterprise, blank=True, null=True,
+    enterpriseTeacher = models.OneToOneField(Teacher_Enterprise, blank=False, null=False,
                                           verbose_name=u"企业导师")
     background = models.TextField(blank=False, null=True, verbose_name=u"创业团队介绍")
     innovation = models.TextField(blank=False, null=True, verbose_name=u"项目的基本情况及创新内容")
@@ -184,12 +185,14 @@ class PreSubmitEnterprise(models.Model):
     def __unicode__(self):
         return self.project_id.title
 
+
+
 class FinalSubmit(models.Model):
     """
     inheribit table, which use ProjectSingle to show final-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
                                   verbose_name="结题报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
@@ -345,7 +348,7 @@ class TeacherProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    teacher = models.OneToOneField(TeacherProfile, verbose_name="指导教师", unique=True)
+    teacher = models.OneToOneField(TeacherProfile, verbose_name="指导教师")
     number = models.IntegerField(blank=False, verbose_name="申请数量上限")
 
     class Meta:

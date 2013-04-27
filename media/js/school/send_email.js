@@ -46,13 +46,13 @@ function teacherDispatch_callback(data){
   {
     $.each(data.field,function(i,item){
       object = $('#'+item);
-      object.css("background","white");
+      object.css("border-color","red");
     });
     //error field background turn into red
     $.each(data.error_id,function(i,item){
       alert(item);
       object = $('#'+item);
-      object.css("bordercolor","red");
+      object.css("border-color","red");
     });
     $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
   }
