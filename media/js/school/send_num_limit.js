@@ -8,6 +8,7 @@ function limitednum_callback(data){
     $("#limited_num").css("background","white");
     $("#num_limit_error_message").append("<strong>"+data.message+"</strong>");
     $("#projects_remaining").text('剩余数量:'+data["projects_remaining"]);
+    $("#numlimit_table").html(data.table);
   }
   else
   {

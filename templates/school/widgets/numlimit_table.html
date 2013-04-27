@@ -1,0 +1,20 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>
+	<strong>指导老师</strong>
+      </td>
+      <td>
+	<strong>上传数目限制</strong>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    {%for limitnum in teacher_limit_num_list%}
+      <tr>
+	<td>{{limitnum.teacher}}</td>
+	<td>{{limitnum.number}}</td>
+      </tr>
+    {%endfor%}
+  </tbody>
+</table>

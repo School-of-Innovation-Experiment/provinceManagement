@@ -64,7 +64,7 @@ def dispatch(request):
 @authority_required(SCHOOL_USER)
 def project_alloc(request):
     num_limit_form = forms.TeacherNumLimitForm(request=request)
-    teacher_limit_num_list = teacherLimitNumList()
+    teacher_limit_num_list = teacherLimitNumList(request)
     context = {'num_limit_form': num_limit_form,
                'teacher_limit_num_list': teacher_limit_num_list}
     context.update(get_project_num_and_remaining(request))
@@ -93,5 +93,5 @@ def get_project_num_and_remaining(request):
                     ('projects_remaining', remainings)))
     return context
 
-def teacherLimitNumList():
-    return TeacherProjectPerLimits.objects.all()
+def teacherLimitNumList(request):
+    return TeacherProjectPerLimits.objects.filter(teacher__school__userid=request.user)

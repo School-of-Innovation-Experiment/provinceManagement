@@ -24,8 +24,12 @@ import datetime
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList()
-    return render_to_string("adminStaff/widgets/table.html",
+    return render_to_string("adminStaff/widgets/mail_table.html",
                             {"email_list": email_list})
+def refresh_numlimit_table(request):
+    school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+    return render_to_string("adminStaff/widgets/numlimit_table.html",
+                            {'school_limit_list':school_limit_num_list})
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -37,13 +41,16 @@ def NumLimit(request, form):
             school_obj = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
                 projectlimit = ProjectPerLimits(school=school_obj,
-                                                   number=limited_num)
+                                                number=limited_num)
                 projectlimit.save()
             else:
                 object = ProjectPerLimits.objects.get(school=school_obj)
                 object.number = limited_num
                 object.save()
-            return simplejson.dumps({'status':'1','message':u'更新成功'})
+            table = refresh_numlimit_table(request)
+            return simplejson.dumps({'status':'1',
+                                     'message':u'更新成功',
+                                     'table':table})
         except SchoolDict.DoesNotExist:
             return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
     else:
