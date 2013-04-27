@@ -8,6 +8,8 @@ class StudentGroupForm(forms.Form):
     student_name = forms.CharField(max_length=100,
                                  required=True,
                                  widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_name",'placeholder':u"姓名"}),)
+
+class StudentGroupInfoForm(forms.Form):
     email = forms.EmailField(required=False,
                              widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'email'}))
     telephone = forms.CharField(max_length=20,

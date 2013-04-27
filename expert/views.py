@@ -70,15 +70,16 @@ def review_report_view(request, pid=None):
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
-    application = get_object_or_404(PreSubmit, project_id=pid)
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
     info_form = InfoForm(instance=re_project.project, pid=pid)
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
+        application = get_object_or_404(PreSubmit, preject_id = pid)
         application_form = ApplicationReportForm(instance=application)
     else:
         is_innovation = False
+        application = get_object_or_404(PreSubmitEnterprise, project_id = pid)
         application_form = EnterpriseApplicationReportForm(instance=application)
 
     if request.method == "POST":

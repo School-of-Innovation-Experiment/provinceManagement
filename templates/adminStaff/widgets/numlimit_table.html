@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>
+	<strong>学校名称</strong>
+      </td>
+      <td>
+	<strong>上传数目限制</strong>
+      </td>
+
+    </tr>
+  </thead>
+  <tbody>
+    {%for limitnum in school_limit_list%}
+      <tr>
+	<td>{{limitnum.school}}</td>
+	<td>{{limitnum.number}}</td>
+      </tr>
+    {%endfor%}
+  </tbody>
+</table>

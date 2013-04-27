@@ -13,17 +13,22 @@ from news.models import News
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
-from school.views import get_project_num_and_remaining
+from school.views import get_project_num_and_remaining, teacherLimitNumList
 
-def refresh_table(request):
+def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
     email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
 
-    return render_to_string("school/widgets/table.html",
+    return render_to_string("school/widgets/mail_table.html",
                             {"email_list": email_list})
+
+def refresh_numlimit_table(request):
+    teacher_limit_num_list = teacherLimitNumList(request)
+    return render_to_string("school/widgets/numlimit_table.html",
+                            {'teacher_limit_num_list': teacher_limit_num_list})
 
 @dajaxice_register
 def  ExpertDispatch(request, form):
@@ -37,7 +42,7 @@ def  ExpertDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school")
         if flag:
             message = u"发送邮件成功"
-            table = refresh_table(request)
+            table = refresh_mail_table(request)
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"
@@ -67,6 +72,7 @@ def teacherProjNumLimit(request, form):
                 # return simplejson.dumps({'id':"teacher_name" ,'message':u'已分配项目给该指导老师，不可重复分配'})
             ret = {'status':'1','message':u'更新成功'}
             ret['projects_remaining'] = get_project_num_and_remaining(request)['projects_remaining']
+            ret["table"] = refresh_numlimit_table(request)
             return simplejson.dumps(ret)
         except TeacherProfile.DoesNotExist:
             return simplejson.dumps({'id':'teacer_name', 'message':u'更新失败，选定的指导老师没有进行注册'})
@@ -89,7 +95,7 @@ def  TeacherDispatch(request, form):
         flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school)
         if flag:
             message = u"发送邮件成功"
-            table = refresh_table(request)
+            table = refresh_mail_table(request)
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
             message = u"相同邮件已经发送，中断发送"

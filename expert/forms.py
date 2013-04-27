@@ -32,7 +32,38 @@ class ReviewForm(ModelForm):
         exclude = ('project', 'expert', )
         widgets = {'comments': forms.Textarea(attrs={'class': "fill-form", 'rows': "6", 
                                                       'placeholder': "给这个项目提点意见或建议吧。。。"}),
+                   'score_significant': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
+                   'score_value': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
                    'score_innovation': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
                    'score_practice': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_funny': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
+                   'score_achievement': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
+                   'score_capacity': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
                    }
+    def clean(self):
+        #TODO still have several bug
+        pass
+        clean_data = super(ReviewForm, self).clean()
+        msg = u"得分输入有误(为负数或超过上限)，请重新输入"
+        if 0 > clean_data.get('score_significant') or clean_data.get('score_significant') > 15:
+            self._errors["score_significant"] = self.error_class([msg])
+
+        if 0 > clean_data.get('score_value') or clean_data.get('score_value') > 20:
+            self._errors["score_value"] = self.error_class([msg])
+
+        if 0 > clean_data.get('score_innovation') or clean_data.get('score_innovation') > 25:
+            self._errors["score_innovation"] = self.error_class([msg])
+
+        if 0 > clean_data.get('score_practice') or clean_data.get('score_practice') > 20:
+            self._errors["score_practice"] = self.error_class([msg])
+
+        if 0 > clean_data.get('score_achievement') or clean_data.get('score_achievement') > 10:
+            self._errors["score_achievement"] = self.error_class([msg])
+
+        if 0 > clean_data.get('score_capacity') or clean_data.get('score_capacity') > 10:
+            self._errors["score_capacity"] = self.error_class([msg])
+
+
+
+
+
+
