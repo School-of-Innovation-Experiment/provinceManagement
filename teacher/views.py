@@ -53,7 +53,6 @@ def application_report_view(request,pid=None,is_expired=False):
         is_show = False
     else:
         is_show = True
-    loginfo(p=is_show, label="is_show")
 
 
     if project.project_category.category == CATE_INNOVATION:

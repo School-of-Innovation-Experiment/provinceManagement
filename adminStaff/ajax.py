@@ -24,7 +24,7 @@ import datetime
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList()
-    return render_to_string("adminStaff/widgets/mail_table.html",
+    return render_to_string("adminStaff/widgets/email_table.html",
                             {"email_list": email_list})
 def refresh_numlimit_table(request):
     school_limit_num_list = AdminStaffService.SchoolLimitNumList()

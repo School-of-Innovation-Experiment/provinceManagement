@@ -121,7 +121,6 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)    
     readonly= is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-    loginfo(p=is_show, label="is_show")
 
 
     if project.project_category.category == CATE_INNOVATION:
