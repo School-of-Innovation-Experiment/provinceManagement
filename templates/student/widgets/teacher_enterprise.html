@@ -16,7 +16,7 @@
       </div>
       {% endif %}
     </div>   
-    <div class="control-group span4 {% if teacher_enterpriseform.telephone.errors %}error{% endif %}">
+    <div class="control-group {% if teacher_enterpriseform.telephone.errors %}error{% endif %}">
       <label class="school-display"><i class="icon-th-large"></i>联系电话</label>
       {{teacher_enterpriseform.telephone}}
       {% if teacher_enterpriseform.telephone.errors %}

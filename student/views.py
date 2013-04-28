@@ -32,6 +32,7 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm
+from student.utility import checkidentity
 
 @csrf.csrf_protect
 @login_required
@@ -111,9 +112,17 @@ def techcompetition_detail(request,pid=None):
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
+    """
+        readonly determined by time
+        is_show determined by identity 
+        is_innovation determined by project_category
+    """
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid)
+    project = get_object_or_404(ProjectSingle, project_id=pid)    
     readonly= is_expired
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    loginfo(p=is_show, label="is_show")
+
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -165,7 +174,8 @@ def application_report_view(request,pid=None,is_expired=False):
             'application': application_form,
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
-            'is_innovation':is_innovation
+            'is_innovation':is_innovation,
+            'is_show':is_show
             }
     return render(request, 'student/application.html', data)
 

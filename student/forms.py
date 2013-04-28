@@ -11,7 +11,7 @@ class StudentGroupForm(forms.Form):
 
 class StudentGroupInfoForm(forms.Form):
     email = forms.EmailField(required=False,
-                             widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'email'}))
+                             widget=forms.TextInput(attrs={'class':'span2 studentchange', 'placeholder':u"邮箱",'id':'email'}))
     telephone = forms.CharField(max_length=20,
                                 required=False,
                                 widget=forms.TextInput(attrs={'class':'studentchange span2','id':"telephone",'placeholder':u"电话"}),)
