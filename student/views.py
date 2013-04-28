@@ -32,6 +32,7 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm
+from student.utility import checkidentity
 
 @csrf.csrf_protect
 @login_required
@@ -105,16 +106,23 @@ def techcompetition_detail(request,pid=None):
                   {"techcompetition": techcompetition,
                    "techcompetition_form": techcompetition_form})
 
-
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
+    """
+        readonly determined by time
+        is_show determined by identity 
+        is_innovation determined by project_category
+    """
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid)
+    project = get_object_or_404(ProjectSingle, project_id=pid)    
     readonly= is_expired
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    loginfo(p=is_show, label="is_show")
+
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -127,16 +135,9 @@ def application_report_view(request,pid=None,is_expired=False):
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
 
+
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre)
-        if projectcategory != CATE_INNOVATION:
-            application_form = EnterpriseApplicationReportForm(instance=pre)
-            is_innovation = False
-        if info_form.is_valid() and application_form.is_valid():
-            if save_application(project, info_form, application_form, request.user):
-                project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                project.save()
         application_form = iform(request.POST, instance=pre)
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
@@ -173,9 +174,11 @@ def application_report_view(request,pid=None,is_expired=False):
             'application': application_form,
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
-            'is_innovation':is_innovation
+            'is_innovation':is_innovation,
+            'is_show':is_show
             }
     return render(request, 'student/application.html', data)
+
 
 @csrf.csrf_protect
 @login_required

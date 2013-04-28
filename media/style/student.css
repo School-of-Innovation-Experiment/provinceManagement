@@ -11,6 +11,11 @@ input.studentchange{
 }
 
 select.studentchange{
-    width: 350px;
+    width: 300px;
     padding-left:80px;
+    margin-left: 0px;
+}
+
+div.memberchange{
+    margin-left:30px; 
 }

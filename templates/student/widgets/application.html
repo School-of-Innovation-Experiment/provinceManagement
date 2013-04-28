@@ -2,8 +2,6 @@
     <div class="page-header">
       <h3>项目内容</h3>  
     </div>
-    
-    <blockquote>
       {% if is_innovation %}
       <fieldset>
         <legend>项目来源</legend>
@@ -104,9 +102,10 @@
       </br>
       {% endif %}
       {% if not is_innovation %}
-      <fieldset>
-        <legend>项目来源</legend>
-          <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+      <div class="row-fluid show-grid">
+        <div class="span4">
+          <div class="control-group {% if application.original.errors %}error{% endif %}">
+            <legend>项目来源</legend>
             {{application.original}}
             {% if application.original.errors %}
             <div class="row alert alert-error school-display">
@@ -115,11 +114,10 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
-      </br>
-      <fieldset>
-        <legend>项目技术成熟程度</legend>
-          <div class="control-group form-inline {% if application.maturity.errors %}error{% endif %}">
+        </div>
+        <div class="span4">
+          <div class="control-group  {% if application.maturity.errors %}error{% endif %}">
+            <legend>项目技术成熟程度</legend>
             {{application.maturity}}
             {% if application.maturity.errors %}
             <div class="row alert alert-error school-display">
@@ -127,9 +125,9 @@
                 {{ application.maturity.errors }}
             </div>
             {% endif %}
-          </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
-      </br>
+          </div><!--end form line, for choice-->  
+        </div>     
+      </div>
       <fieldset>
         <legend>创业团队介绍</legend>
           <div class="control-group form-inline {% if application.background.errors %}error{% endif %}">
@@ -235,4 +233,4 @@
       </fieldset><!--Project origin--> 
       </br>    
       {% endif %}
-    </blockquote>
+
