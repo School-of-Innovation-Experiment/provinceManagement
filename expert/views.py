@@ -75,7 +75,7 @@ def review_report_view(request, pid=None):
     info_form = InfoForm(instance=re_project.project, pid=pid)
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
-        application = get_object_or_404(PreSubmit, preject_id = pid)
+        application = get_object_or_404(PreSubmit, project_id = pid)
         application_form = ApplicationReportForm(instance=application)
     else:
         is_innovation = False

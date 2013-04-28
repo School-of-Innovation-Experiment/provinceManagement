@@ -32,7 +32,7 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm
-from student.utility import checkidentity
+#from student.utility import checkidentity
 
 @csrf.csrf_protect
 @login_required
