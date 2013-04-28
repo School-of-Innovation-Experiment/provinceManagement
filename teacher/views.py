@@ -17,7 +17,7 @@ from const.models import *
 from users.models import TeacherProfile, StudentProfile
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm
+from school.forms import *
 from teacher.forms import StudentDispatchForm
 from registration.models import *
 from teacher.utility import *
@@ -47,43 +47,67 @@ def home_view(request, is_expired = False):
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid)
-    pre = get_object_or_404(PreSubmit, project_id=pid)
-
-    projectcategory=project.project_category.category
-    is_innovation = True
-
+    project = get_object_or_404(ProjectSingle, project_id=pid)    
     readonly= is_expired
+    if check_auth(user=request.user,authority=TEACHER_USER):
+        is_show = False
+    else:
+        is_show = True
+    loginfo(p=is_show, label="is_show")
+
+
+    if project.project_category.category == CATE_INNOVATION:
+        iform = ApplicationReportForm
+        pre = get_object_or_404(PreSubmit, project_id=pid)
+        teacher_enterprise=None
+        is_innovation = True
+    else:
+        iform = EnterpriseApplicationReportForm
+        pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
+        is_innovation = False
+
+
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre) 
-        if projectcategory != CATE_INNOVATION:
-            application_form = EnterpriseApplicationReportForm(instance=pre)
-            is_innovation = False        
-        if info_form.is_valid() and application_form.is_valid():
-            if save_application(project, info_form, application_form, request.user):
-                project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                project.save()
+        application_form = iform(request.POST, instance=pre)
+        if is_innovation == True:
+            if info_form.is_valid() and application_form.is_valid():
+                if save_application(project, info_form, application_form, request.user):
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                    project.save()
+                    return HttpResponseRedirect(reverse('teacher.views.home_view'))
+            else:
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info("--"*10)
+        else :
+            teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
+            if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
+                if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                    project.save()
+                    return HttpResponseRedirect(reverse('teacher.views.home_view'))
+            else:
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info(teacher_enterpriseform.errors)
+                logger.info("--"*10)
 
-            return HttpResponseRedirect(reverse('teacher.views.home_view'))
-        else:
-            logger.info("Form Valid Failed"+"**"*10)
-            logger.info(info_form.errors)
-            logger.info(application_form.errors)
-            logger.info("--"*10)
     else:
         info_form = InfoForm(instance=project,pid=pid)
-        application_form = ApplicationReportForm(instance=pre)
-        if projectcategory != CATE_INNOVATION:
-            application_form = EnterpriseApplicationReportForm(instance=pre)
-            is_innovation = False
-            loginfo(p=is_innovation, label="in application")
+        application_form = iform(instance=pre)
+        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
 
     data = {'pid': pid,
             'info': info_form,
             'application': application_form,
+            'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
-            'is_innovation':is_innovation
+            'is_innovation':is_innovation,
+            'is_show':is_show
             }
     return render(request, 'teacher/application.html', data)
 
