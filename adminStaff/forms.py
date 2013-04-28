@@ -30,6 +30,14 @@ class SchoolDictDispatchForm(forms.Form):
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
+    def __init__(self, *args, **kwargs):
+        super(SchoolDictDispatchForm, self).__init__(*args, **kwargs)
+        SCHOOL_CHOICE_list = []
+        school_list        = SchoolDict.objects.all()
+        for obj in school_list:
+            SCHOOL_CHOICE_list.append((obj.id, obj.schoolName))
+        SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+        self.fields["school_name"].choices = SCHOOL_CHOICE
 
 class SchoolDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
@@ -92,13 +100,22 @@ class TimeSettingForm(forms.Form):
 class NumLimitForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolProfile.objects.all()
-    for object in school_list:
-        SCHOOL_CHOICE_list.append((object.id, object.school))
+    for obj in school_list:
+        SCHOOL_CHOICE_list.append((obj.id, obj.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
     limited_num   = forms.IntegerField(required=True,
                                        widget=forms.TextInput(attrs={'id':"limited_num"}
                            ) )
+    def __init__(self, *args, **kwargs):
+        super(NumLimitForm, self).__init__(*args, **kwargs)
+        SCHOOL_CHOICE_list = []
+        school_list        = SchoolProfile.objects.all()
+        for obj in school_list:
+            SCHOOL_CHOICE_list.append((obj.id, obj.school))
+        SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+        school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
+        self.fields["school_name"].choices = SCHOOL_CHOICE
 
 class SubjectCategoryForm(forms.Form):
     category_choice_list = []

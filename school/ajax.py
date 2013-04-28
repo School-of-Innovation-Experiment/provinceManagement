@@ -14,6 +14,7 @@ import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
 from school.views import get_project_num_and_remaining, teacherLimitNumList
+from backend.logging import logger, loginfo
 
 def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
@@ -53,7 +54,7 @@ def  ExpertDispatch(request, form):
 @dajaxice_register
 def teacherProjNumLimit(request, form):
     # dajax = Dajax()
-    form = TeacherNumLimitForm(deserialize_form(form))
+    form = TeacherNumLimitForm(deserialize_form(form), request = request)
     if form.is_valid():
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
@@ -77,6 +78,9 @@ def teacherProjNumLimit(request, form):
         except TeacherProfile.DoesNotExist:
             return simplejson.dumps({'id':'teacer_name', 'message':u'更新失败，选定的指导老师没有进行注册'})
     else:
+        loginfo(form.fields["teacher_name"].choices)
+        loginfo(p=form.errors.keys(),label="keys")
+        loginfo(form.errors)
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
 
 

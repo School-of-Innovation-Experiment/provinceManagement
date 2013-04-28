@@ -77,15 +77,14 @@ def login_redirect(request):
     authorities, the system will jump randomly
     """
     #TODO: I will use reverse function to redirect, like school and expert
-    if check_auth(request.user, SCHOOL_USER):
-        return HttpResponseRedirect(reverse('school.views.home_view'))
-    elif check_auth(request.user, EXPERT_USER):
-        return HttpResponseRedirect(reverse('expert.views.home_view'))
-    elif check_auth(request.user, ADMINSTAFF_USER):
-        return HttpResponseRedirect('/adminStaff/')
-    elif check_auth(request.user, STUDENT_USER):
-        return HttpResponseRedirect('/student/')
-    else:
-        return HttpResponseRedirect('/')
-
-
+    # if check_auth(request.user, SCHOOL_USER):
+    #     return HttpResponseRedirect(reverse('school.views.home_view'))
+    # elif check_auth(request.user, EXPERT_USER):
+    #     return HttpResponseRedirect(reverse('expert.views.home_view'))
+    # elif check_auth(request.user, ADMINSTAFF_USER):
+    #     return HttpResponseRedirect('/adminStaff/')
+    # elif check_auth(request.user, STUDENT_USER):
+    #     return HttpResponseRedirect('/student/')
+    # else:
+    #     return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/')

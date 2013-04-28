@@ -109,9 +109,9 @@ class RegistrationManager(models.Manager):
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
                 schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                schoolProfileObj.save()
                 project_is_assigned = Project_Is_Assigned(school=schoolProfileObj)
                 project_is_assigned.save()
-                schoolProfileObj.save()
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
