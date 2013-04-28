@@ -105,7 +105,6 @@ def techcompetition_detail(request,pid=None):
                   {"techcompetition": techcompetition,
                    "techcompetition_form": techcompetition_form})
 
-
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -130,14 +129,6 @@ def application_report_view(request,pid=None,is_expired=False):
 
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre)
-        if projectcategory != CATE_INNOVATION:
-            application_form = EnterpriseApplicationReportForm(instance=pre)
-            is_innovation = False
-        if info_form.is_valid() and application_form.is_valid():
-            if save_application(project, info_form, application_form, request.user):
-                project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                project.save()
         application_form = iform(request.POST, instance=pre)
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
@@ -177,6 +168,7 @@ def application_report_view(request,pid=None,is_expired=False):
             'is_innovation':is_innovation
             }
     return render(request, 'student/application.html', data)
+
 
 @csrf.csrf_protect
 @login_required
