@@ -103,6 +103,16 @@ def  TeacherDispatch(request, form):
     else:
         return simplejson.dumps({'field':teacher_form.data.keys(),'error_id':teacher_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 
-
+@dajaxice_register
+def judge_is_assigned(request):
+    try:
+        schoolObj = SchoolProfile.objects.get(userid = request.user)
+    except SchoolProfile.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+    try:
+        obj = Project_Is_Assigned.objects.get(school = schoolObj)
+    except Project_Is_Assigned.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请联系管理员更新数据库"}) 
+    return simplejson.dumps({'flag': obj.is_assigned_in_presubmit})
 
 

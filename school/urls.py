@@ -25,11 +25,15 @@ urlpatterns = patterns(
         school_views.dispatch,
         ),
     url(
-        r'^project_alloc$',
-        school_views.project_alloc,
+        r'^project_limitnumSettings$',
+        school_views.project_limitnumSettings,
         ),
 	url(
 		r'^subject_rating$',
 		school_views.SubjectRating,
 		),
+    url(
+        r'^subject_alloc$',
+        school_views.SubjectAlloc,
+        ),
 )
