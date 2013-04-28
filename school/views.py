@@ -104,4 +104,4 @@ def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
     subject_list =  AdminStaffService.GetSubject_list()
-    return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+    return render_to_response("school/subject_rating.html",{'subject_list':subject_list, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
