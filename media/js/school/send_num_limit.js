@@ -1,5 +1,9 @@
 function send_num_limit(){
   $("#num_limit_error_message").empty();
+    if ($("#limited_num").val() < 0){
+      $("#num_limit_error_message").append("<strong>"+"不可输入负数"+"</strong>");
+      return;
+  }
   Dajaxice.school.teacherProjNumLimit(limitednum_callback,
                                       {'form':$('#num_limit_form').serialize(true)});
 }
