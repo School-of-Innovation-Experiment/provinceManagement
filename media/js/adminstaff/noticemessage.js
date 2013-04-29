@@ -23,7 +23,7 @@ $(function(){
       else
       {
         select.css("border-color", "#cccccc");
-        if(select.get(0).selectedIndex == 1)
+        if(select.get(0).selectedIndex == 1 || select.get(0).selectedIndex == 3)
           check.css("display", "none");
         else check.css("display", "");
       }

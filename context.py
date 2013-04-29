@@ -110,6 +110,8 @@ def notice_message_settings(request):
         context["expert_notice_message"] = expert_message
     if school_message:
         context["school_notice_message"] = school_message
+    if student_message:
+        context["student_notice_message"] = student_message
     return context
 
 

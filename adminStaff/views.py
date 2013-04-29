@@ -337,9 +337,12 @@ class AdminStaffService(object):
             # TODO: 前台控制角色选择验证
             if request.POST["message_role"] == '1':
                 rolemessage = MESSAGE_EXPERT_HEAD
-            else:
+            elif request.POST["message_role"] == '2':
                 rolemessage = MESSAGE_SCHOOL_HEAD
-            _message = rolemessage + request.POST["message_content"] + "  " + datemessage
-            message = NoticeMessage(noticemessage = _message)
-            message.save()
+            elif request.POST["message_role"] == '3':
+                rolemessage = MESSAGE_STUDENT_HEAD
+            if rolemessage:
+                _message = rolemessage + request.POST["message_content"] + "  " + datemessage
+                message = NoticeMessage(noticemessage = _message)
+                message.save()
         return render(request, "adminStaff/noticeMessageSettings.html")

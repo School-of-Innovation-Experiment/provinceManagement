@@ -51,3 +51,13 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/main.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/csrf.js"></script>
 {% endblock %}
+
+{% block footer-alert-bar %}
+  {% if student_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ student_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
+{% endblock %}
