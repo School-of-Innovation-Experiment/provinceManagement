@@ -30,7 +30,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school import forms
-
+from student.models import Student_Group
 from const.models import *
 from const import *
 
@@ -104,6 +104,9 @@ def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
     subject_list =  AdminStaffService.GetSubject_list()
+    for subject in subject_list:
+        student_group = Student_Group.objects.filter(project = subject) 
+        subject.members = ','.join([student.studentName for student in student_group]) 
     return render_to_response("school/subject_rating.html",{'subject_list':subject_list, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
 
 @csrf.csrf_protect

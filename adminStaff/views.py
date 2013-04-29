@@ -28,6 +28,7 @@ from django.db import transaction
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
+from student.models import Student_Group
 
 class AdminStaffService(object):
     @staticmethod
@@ -303,6 +304,10 @@ class AdminStaffService(object):
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+        
+        for subject in subject_list:
+            student_group = Student_Group.objects.filter(project = subject)
+            subject.members = ','.join([student.studentName for student in student_group])  
 
         return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
     @staticmethod
