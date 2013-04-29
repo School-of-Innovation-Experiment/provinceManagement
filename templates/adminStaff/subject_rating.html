@@ -6,7 +6,7 @@
 	{% csrf_token %}
 	{% if not readonly %}
 	  {{school_category_form.school_choice}}
-	  <input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
+	  <input type="submit" class="btn btn-primary" id="filter_button" value="按照学院进行筛选"/>
 	{%endif%}
 	{% if readonly %}
 	  <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/><span class="help-inline">项目级别分配完以后可以发布新闻</span>
@@ -21,7 +21,7 @@
 	<thead>
 	  <tr>
 	    <th>发布题目名称</th>
-	    <th>所属学校</th>
+	    <th>所属学院</th>
 	    <th>指导教师</th>
             <th>项目成员</th>
 	    <th>专家评分</th>

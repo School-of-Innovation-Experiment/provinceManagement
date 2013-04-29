@@ -27,6 +27,7 @@ from registration.models import RegistrationProfile
 from django.db import transaction
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
+from backend.logging import loginfo
 
 class AdminStaffService(object):
     @staticmethod
@@ -228,14 +229,16 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     @transaction.commit_on_success
     @time_controller(phase=STATUS_FINSUBMIT)
-    def SubjectFeedback(request,is_expired=False):
+    def SubjectFeedback(request, is_expired=False):
         exist_message = ''
         readonly=is_expired
         subject_list =  AdminStaffService.GetSubject_list()
         if request.method == "GET":
-            subject_insitute_form = forms.SubjectInsituteForm()
+            #subject_insitute_form = forms.SubjectInsituteForm()
+            subject_insitute_form = forms.SchoolCategoryForm()
         else:
-            subject_insitute_form = forms.SubjectInsituteForm(request.POST)
+            #subject_insitute_form = forms.SubjectInsituteForm(request.POST)
+            subject_insitute_form = forms.SchoolCategoryForm(request.POST)
             if subject_insitute_form.is_valid():
                 school = subject_insitute_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school)
@@ -262,10 +265,11 @@ class AdminStaffService(object):
 
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
+                                    loginfo(p = subject.project_id, label="subject.project_id: ")
                                     #subject.expert.add(expert)
                                     Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
                             #保存已分配标志，值为1
-                            obj.is_assigned = 1
+                            obj.is_assigned = True
                             obj.save()
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None

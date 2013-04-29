@@ -114,7 +114,7 @@ class NumLimitForm(forms.Form):
         for obj in school_list:
             SCHOOL_CHOICE_list.append((obj.id, obj.school))
         SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-        school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
+        # school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
         self.fields["school_name"].choices = SCHOOL_CHOICE
 
 class SubjectCategoryForm(forms.Form):
@@ -140,6 +140,14 @@ class SchoolCategoryForm(forms.Form):
         SCHOOL_CHOICE_list.append((object.id, object.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
+    def __init__(self, *args, **kwargs):
+        super(SchoolCategoryForm, self).__init__(*args, **kwargs)
+        SCHOOL_CHOICE_list = []
+        school_list        = SchoolProfile.objects.all()
+        for object in school_list:
+            SCHOOL_CHOICE_list.append((object.id, object.school))
+        SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+        self.fields["school_choice"].choices = SCHOOL_CHOICE
 
 class SubjectGradeForm(forms.Form):
     subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_INSITUTE and grade[0] != GRADE_UN]

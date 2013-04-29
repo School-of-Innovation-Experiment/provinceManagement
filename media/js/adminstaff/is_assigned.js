@@ -18,3 +18,7 @@ function is_assigned_callback(data){
     alert(data.message);
   }
 }
+
+$(function () {
+  $('#id_school_choice').change(is_assigned);
+})
