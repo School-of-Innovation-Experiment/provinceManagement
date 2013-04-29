@@ -268,7 +268,14 @@ class AdminStaffService(object):
                                 for expert in re_dict[subject]:
                                     loginfo(p = subject.project_id, label="subject.project_id: ")
                                     #subject.expert.add(expert)
-                                    Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                                    try:
+                                        re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
+                                            expert_id=expert.id)
+                                        re_project_expert.delete()
+                                    except:
+                                        pass
+                                    finally:
+                                        Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
                             #保存已分配标志，值为1
                             obj.is_assigned = True
                             obj.save()

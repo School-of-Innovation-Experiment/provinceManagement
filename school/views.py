@@ -137,7 +137,14 @@ def SubjectAlloc(request, is_expired = False):
 
                     for subject in re_dict.keys():
                         for expert in re_dict[subject]:
-                            Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
+                            try:
+                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
+                                    expert_id=expert.id)
+                                re_project_expert.delete()
+                            except:
+                                pass
+                            finally:
+                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
                     obj.is_assigned_in_presubmit = True
                     obj.save()
         except Project_Is_Assigned.DoesNotExist:
