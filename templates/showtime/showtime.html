@@ -20,9 +20,8 @@
 <div class="span4 well" style="margin-top:10px">
   <div><h4>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4>
 <div><a href="#content">{{ project.title }}</a></div>
-<div><label><h4>高校名称</h4><a href="#">{{ project.school }}</a></label></div>
-<div><label><h4>指导教师</h4><a href="#">{{ project.inspector }}</a></label></div>
-<div><label><h4>团队负责人</h4><a href="#">{{ project.members }}</a></label></div>
+<div><label><h4>高校名称</h4>{{ project.school }}</label></div>
+<div><label><h4>团队成员</h4>{{ project.members }}</label></div>
 </div>
 </div>
 </div>

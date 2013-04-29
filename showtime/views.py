@@ -8,6 +8,7 @@ from django.shortcuts import render
 from backend.utility import convert2media_url, getContext
 from const import PROJECT_GRADE_CHOICES, GRADE_NATION, DEFAULT_IMG_URL
 from const.models import SchoolDict, ProjectGrade
+from student.models import Student_Group
 
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 
@@ -28,6 +29,9 @@ def show_project(request, project_id = ""):
     project.background = presubmit and presubmit.background or None
     project.summary = finalsubmit and finalsubmit.achievement_summary or None
     first_img = (len(imgs) and imgs[0]) or DEFAULT_IMG_URL
+    
+    student_group = Student_Group.objects.filter(project = project)  
+    project.members = ','.join([student.studentName for student in student_group])
 
     context = {"project": project,
                "imgs": imgs,
