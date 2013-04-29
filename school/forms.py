@@ -47,7 +47,7 @@ class InfoForm(ModelForm):
         self.fields['memberlist'].widget.attrs["value"] = memberlist
 
     memberlist = forms.CharField(
-                           widget=forms.TextInput(attrs={'class':"school-display"}))
+                           widget=forms.TextInput(attrs={'class':"school-display",'placeholder': '请在“队员变更”标签中添加组员'}))
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets

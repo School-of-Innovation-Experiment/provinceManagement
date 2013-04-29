@@ -15,6 +15,9 @@ RegisterClass = (SchoolDict,
                  ProjectStatus,
                  # InsituteCategory,
                  UserIdentity,
+                 ProjectOrigin,
+                 ProjectEnterpriseOrigin,
+                 ProjectEnterpriseMaturity,
                 )
 
 for item in RegisterClass:

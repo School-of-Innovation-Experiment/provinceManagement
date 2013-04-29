@@ -2,7 +2,7 @@
 {%block nav_admin_content%}
   <div class="well form-inline">
     <b>
-      <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
+      <form id="subject_insitute_form" method="POST" action="/school/subject_alloc"><!-- begin category form-->
 	{% csrf_token %}
 	{% if not readonly %}
 	  <input type="submit" class="btn btn-primary" id="filter_button" value=""/>

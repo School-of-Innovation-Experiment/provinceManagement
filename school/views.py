@@ -123,6 +123,7 @@ def SubjectAlloc(request, is_expired = False):
                 pass
             else:
                 expert_list = ExpertProfile.objects.all()
+                loginfo(p = expert_list, label = "hujun")
                 if len(expert_list) == 0 or len(subject_list) == 0:
                     if not expert_list:
                         exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'

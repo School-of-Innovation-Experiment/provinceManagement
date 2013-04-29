@@ -124,8 +124,8 @@ class ProjectOrigin(models.Model):
                                  default = "0",
                                  verbose_name="项目来源")
     class Meta:
-        verbose_name = "项目来源"
-        verbose_name_plural = "项目来源"
+        verbose_name = "创新项目来源"
+        verbose_name_plural = "创新项目来源"
 
     def __unicode__(self):
         return self.get_origin_display()
@@ -139,8 +139,8 @@ class ProjectEnterpriseOrigin(models.Model):
                                  default = "0",
                                  verbose_name="项目来源")
     class Meta:
-        verbose_name = "项目来源"
-        verbose_name_plural = "项目来源"
+        verbose_name = "创业类项目来源"
+        verbose_name_plural = "创业类项目来源"
 
     def __unicode__(self):
         return self.get_origin_display()

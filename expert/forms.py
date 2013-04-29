@@ -41,8 +41,8 @@ class ReviewForm(ModelForm):
                    }
     def clean(self):
         #TODO still have several bug
-        pass
         clean_data = super(ReviewForm, self).clean()
+        
         msg = u"得分输入有误(为负数或超过上限)，请重新输入"
         if 0 > clean_data.get('score_significant') or clean_data.get('score_significant') > 15:
             self._errors["score_significant"] = self.error_class([msg])
@@ -62,7 +62,7 @@ class ReviewForm(ModelForm):
         if 0 > clean_data.get('score_capacity') or clean_data.get('score_capacity') > 10:
             self._errors["score_capacity"] = self.error_class([msg])
 
-
+        return clean_data
 
 
 

@@ -87,6 +87,9 @@ def review_report_view(request, pid=None):
         if review_form.is_valid():
             review_form.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
+        else:
+            loginfo(p = review_form.errors)
+            return HttpResponseRedirect(reverse('expert.views.home_view'))
     else:
         review_form = ReviewForm(instance=re_project)
     for i, doc in enumerate(doc_list):
