@@ -3,6 +3,7 @@
 #start scripts for provincemanagement
 echo "************************************"
 echo "welcome to use server deploy scripts"
+echo "For Dalian university of technology"
 echo "************************************"
 
 if [ $1 = 'start' ];then
@@ -13,7 +14,7 @@ if [ $1 = 'start' ];then
         echo "uwsgi is running now!"
     else
         echo "execute uwsgi command..."
-        sudo uwsgi --ini www.ini
+        sudo uwsgi --ini /etc/uwsgi/*.ini
     fi
 
     psid=$(ps aux|grep "nginx"|grep -v "grep"|wc -l)
@@ -32,19 +33,21 @@ elif [ $1 = 'stop' ];then
 elif [ $1 = 'restart' ];then
     sudo killall -9 uwsgi 
     sudo killall -9 nginx 
-    sudo uwsgi --ini www.ini
+    sudo uwsgi --ini /etc/uwsgi/*.ini
     sudo /etc/init.d/nginx restart
     echo "*_* Restart uwsgi and nginx [OK] *_* "
 elif [ $1 = 'deploy' ];then
-    sudo cp nginx-default /etc/nginx/sites-available/default
+    sudo cp school_server /etc/nginx/sites-available/
+    sudo cp school_server.ini /etc/uwsgi/apps-available/
     sudo chmod 777 /var/run/nginx.pid
     echo "*_* Deploy and copy scipts *_*"
 elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
     cd $(cd "$(dirname "$0")"; pwd)/../
-    echo "check branch to master"
-    git checkout master
+    echo "check branch to school"
+    git checkout school
     echo "update code repo"
+    git pull origin school
     git pull
     echo "update static folder"
     python manage.py collectstatic
