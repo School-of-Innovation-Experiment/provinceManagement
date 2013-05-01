@@ -1,0 +1,42 @@
+server {
+	listen   10000; ## listen for ipv4; this line is default and implied
+	listen   [::]:10000 default ipv6only=on; ## listen for ipv6
+
+    root /home/hadoop/mysites/schoolManagement;
+
+	server_name 192.168.20.100;
+
+	location / {
+        root /home/hadoop/mysites/schoolManagement;
+        uwsgi_pass 192.168.20.100:9090;
+        include uwsgi_params;
+        access_log off;
+	}
+
+	location /doc/ {
+		alias /usr/share/doc/;
+		autoindex on;
+		allow 127.0.0.1;
+		deny all;
+	}
+
+    location /static {
+       alias /home/hadoop/mysites/schoolManagement/static/; 
+       access_log off;  
+    }
+
+
+    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf)$ {
+       expires 3d;
+    }
+
+    location /media {
+        root  /home/hadoop/mysites/schoolManagement/media/; 
+        break;
+    }
+
+    location ~.*\.(css|js)$ {
+       expires 12h;
+    }
+}
+
