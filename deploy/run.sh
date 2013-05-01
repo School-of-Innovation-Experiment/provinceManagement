@@ -14,7 +14,7 @@ if [ $1 = 'start' ];then
         echo "uwsgi is running now!"
     else
         echo "execute uwsgi command..."
-        sudo uwsgi --ini /etc/uwsgi/*.ini
+        sudo service uwsgi start
     fi
 
     psid=$(ps aux|grep "nginx"|grep -v "grep"|wc -l)
@@ -33,12 +33,14 @@ elif [ $1 = 'stop' ];then
 elif [ $1 = 'restart' ];then
     sudo killall -9 uwsgi 
     sudo killall -9 nginx 
-    sudo uwsgi --ini /etc/uwsgi/*.ini
+    sudo service uwsgi restart
     sudo /etc/init.d/nginx restart
     echo "*_* Restart uwsgi and nginx [OK] *_* "
 elif [ $1 = 'deploy' ];then
-    sudo cp school_server /etc/nginx/sites-available/
+    sudo cp school_server /etc/nginx/sites-available/school_server
+    sudo ln -s /etc/nginx/sites-available/school_server /etc/nginx/sites-enabled/school_server
     sudo cp school_server.ini /etc/uwsgi/apps-available/
+    sudo ln -s /etc/uwsgi/apps-available/school_server.ini /etc/uwsgi/apps-enabled/school_server.ini 
     sudo chmod 777 /var/run/nginx.pid
     echo "*_* Deploy and copy scipts *_*"
 elif [ $1 = 'update' ];then
