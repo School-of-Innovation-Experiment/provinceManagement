@@ -134,7 +134,7 @@ def application_report_view(request,pid=None,is_expired=False):
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
 
-
+    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
         application_form = iform(request.POST, instance=pre)
@@ -166,7 +166,7 @@ def application_report_view(request,pid=None,is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
-        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+        # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
 
     data = {'pid': pid,
             'info': info_form,
