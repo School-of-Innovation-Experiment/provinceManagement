@@ -252,7 +252,7 @@ class AdminStaffService(object):
                     #没有指派专家，则进行专家指派
                     else:
                         #筛选专家列表
-                        expert_list = ExpertProfile.objects.all()
+                        expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
                         #如果所属学科专家不存在，则进行提示
                         if len(expert_list) == 0 or len(subject_list) == 0:
                             if not expert_list :

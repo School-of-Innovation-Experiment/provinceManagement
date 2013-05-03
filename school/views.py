@@ -103,7 +103,8 @@ def teacherLimitNumList(request):
 def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
-    subject_list =  AdminStaffService.GetSubject_list()
+    school = SchoolProfile.objects.get(userid = request.user)
+    subject_list =  AdminStaffService.GetSubject_list(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
         subject.members = ','.join([student.studentName for student in student_group]) 
@@ -125,7 +126,7 @@ def SubjectAlloc(request, is_expired = False):
             if obj.is_assigned_in_presubmit:
                 pass
             else:
-                expert_list = ExpertProfile.objects.all()
+                expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
                 loginfo(p = expert_list, label = "hujun")
                 if len(expert_list) == 0 or len(subject_list) == 0:
                     if not expert_list:
