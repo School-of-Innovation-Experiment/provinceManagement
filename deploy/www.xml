@@ -4,13 +4,13 @@
  <master>true</master>
  <pidfile>/var/run/nginx.pid</pidfile>
  <processes>6</processes>
- <pythonpath>/home/hadoop/mysites/provinceManagement/</pythonpath>
- <pythonpath>/home/hadoop/mysites/</pythonpath>
+ <pythonpath>/home/sie/mysites/provinceManagement/</pythonpath>
+ <pythonpath>/home/sie/mysites/</pythonpath>
  <module>wsgi</module>
  <profiler>true</profiler>
  <memory-report>true</memory-report>
  <enable-threads>true</enable-threads>
  <logdate>true</logdate>
  <limit-as>6048</limit-as>
- <daemonize>/home/hadoop/mysites/log/provinceManagement.log</daemonize>
+ <daemonize>/home/sie/mysites/log/provinceManagement.log</daemonize>
 </uwsgi>
