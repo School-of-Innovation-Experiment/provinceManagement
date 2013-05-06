@@ -13,7 +13,7 @@ import sys
 import time
 import datetime
 
-from django.shortcuts import get_object_or_404         
+from django.shortcuts import get_object_or_404
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
@@ -337,7 +337,7 @@ def get_statistics_from_user(user):
 def map_school_name(school_id):
 
     name = SchoolDict.objects.get(id=school_id[0]).schoolName
-    
+
     return (name,)
 
 
@@ -392,10 +392,17 @@ def create_newproject(request, new_user):
         project.year = get_current_year()
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
+        project.project_category = ProjectCategory.objects.all()[0]
         project.save()
 
         # create presubmit and final report
         pre = PreSubmit()
+        pre.content_id = uuid.uuid4()
+        pre.project_id = project
+        pre.save()
+
+        # create presubmit and final report
+        pre = PreSubmitEnterprise()
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()

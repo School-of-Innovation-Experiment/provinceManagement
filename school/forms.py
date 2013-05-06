@@ -41,7 +41,7 @@ class InfoForm(ModelForm):
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
                  'project_category':forms.Select(attrs={'class':"school-display"}),
-                 'insitute':forms.Select(attrs={'class':"school-display"}),             
+                 'insitute':forms.Select(attrs={'class':"school-display"}),
                  }
 
     def get_absolute_url(self):
@@ -197,7 +197,7 @@ class FinalReportForm(ModelForm):
 
     def get_absolute_url(self):
         return reverse('school.views.final_report_view', args=(str(self.instance.project_id),))
-    
+
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
     widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}

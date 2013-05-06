@@ -3,7 +3,8 @@
   <!--TODO: Add more authorities choice-->
   <div class="pull-right">
     {%if userauth.is_schooler %}
-    <a type="button" class="btn btn-primary"  href={% url school.views.home_view %}  >参赛学校</a>
+    <!-- url school.views.home_view %} -->
+    <a type="button" class="btn btn-primary"  href="/school/"  >参赛学校</a>
     {%endif%}
     {%if userauth.is_adminstaff %}
       <!--TODO, I will use url tag to replace hard code-->
@@ -16,7 +17,8 @@
       <a type="button" class="btn btn-danger"  href="/admin/" >超级用户</a>
     {%endif%}
     {%if userauth.is_student%}
-      <a type="button" class="btn btn-danger" href={% url school.views.student_view %}  >参赛学生</a>
+      <!-- url school.views.student_view %} -->
+      <a type="button" class="btn btn-danger" href="/school/student/"  >参赛学生</a>
     {%endif%}
   </div><!--Right choice Bar-->
   <div class="pull-left">
