@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm,EnterpriseApplicationReportForm,Teacher_EnterpriseForm
 
 from adminStaff.models import ProjectPerLimits
 
@@ -122,6 +122,18 @@ def application_report_view(request, pid=None, is_expired=False):
 
     readonly = check_history_readonly(pid) or is_expired
 
+    if project.project_category.category == CATE_INNOVATION:
+        iform = ApplicationReportForm
+        pre = get_object_or_404(PreSubmit, project_id=pid)
+        teacher_enterprise=None
+        is_innovation = True
+    else:
+        iform = EnterpriseApplicationReportForm
+        pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
+        is_innovation = False
+
+    loginfo(p=is_innovation, label="in is_innovation")
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
         application_form = ApplicationReportForm(request.POST, instance=pre)
