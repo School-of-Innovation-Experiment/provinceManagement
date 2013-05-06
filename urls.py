@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     url(
         r'^school/',
         include('school.urls'),
-        name="school"
+        # name="school"
     ),
     url(
         r'^expert/',
