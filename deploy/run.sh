@@ -20,7 +20,7 @@ echo "************************************"
 if [ $1 = 'start' ];then
     echo "prepare for start uwsgi"
     psid=$(ps aux|grep "uwsgi"|grep -v "grep"|wc -l)
-    echo "[debug]current process is":$psid
+    echo "[debug]ps":$psid
     if [ "$psid" -gt "2" ];then
         echo "uwsgi is running now!"
     else
