@@ -11,6 +11,8 @@ log/*
 # C extensions
 *.so
 
+tmp/process_file/*
+
 static/*
 
 *.swp
