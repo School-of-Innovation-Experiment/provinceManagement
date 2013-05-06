@@ -400,6 +400,12 @@ def create_newproject(request, new_user):
         pre.project_id = project
         pre.save()
 
+        # create presubmit and final report
+        pre = PreSubmitEnterprise()
+        pre.content_id = uuid.uuid4()
+        pre.project_id = project
+        pre.save()
+
         #create final report
         final = FinalSubmit()
         final.content_id = uuid.uuid4()
