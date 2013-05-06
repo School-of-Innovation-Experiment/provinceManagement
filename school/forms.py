@@ -20,8 +20,6 @@ from django.core.urlresolvers import reverse
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
-from backend.logging import loginfo
-from const import *
 
 
 class InfoForm(ModelForm):
@@ -31,7 +29,7 @@ class InfoForm(ModelForm):
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
-        exclude = ('project_id', 'adminuser', 'school', 'student',
+        exclude = ('project_id', 'adminuser', 'school', 'student','project_category',
                    'year', 'project_grade', 'project_status', 'expert')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector':forms.TextInput(attrs={'class':"school-display"}),
@@ -40,7 +38,6 @@ class InfoForm(ModelForm):
                  'im':forms.TextInput(attrs={'class':"school-display"}),
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
-                 'project_category':forms.Select(attrs={'class':"school-display"}),
                  'insitute':forms.Select(attrs={'class':"school-display"}),
                  }
 
@@ -58,9 +55,7 @@ class ApplicationReportForm(ModelForm):
 
         #TODO: add css into widgets
         widgets = {
-                   "original" :forms.Textarea(attrs={'rows': 2, 'cols': 100,
-                                                       'placeholder': '学生自选，学生的积累和兴趣   学生自选，教师的科研项目   教师帮选，教师的科研项目',
-                                                       'class': "fill-form"}),
+                   'original':forms.Select(attrs={'class':'student' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
                                                        'class': "fill-form"}),
@@ -102,8 +97,8 @@ class EnterpriseApplicationReportForm(ModelForm):
 
         #TODO: add css into widgets
         widgets = {
-                   'original':forms.Select(attrs={'class':'studentchange' }),
-                   'maturity':forms.Select(attrs={'class':'studentchange' }),
+                   'original':forms.Select(attrs={'class':'student' }),
+                   'maturity':forms.Select(attrs={'class':'student' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '团队各成员的知识背景，分工，指导教师，企业导师情况...',
                                                        'class': "fill-form"}),
@@ -140,7 +135,7 @@ class EnterpriseApplicationReportForm(ModelForm):
                    }
 
     def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
+        return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
 
 class Teacher_EnterpriseForm(ModelForm):
     """
@@ -158,76 +153,7 @@ class Teacher_EnterpriseForm(ModelForm):
                  }
 
     def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
-
-class EnterpriseApplicationReportForm(ModelForm):
-    """
-        EnterpriseApplicationReportForm Report Form
-    """
-    class Meta:
-        model = PreSubmitEnterprise
-
-        exclude = ('project_id', 'content_id','enterpriseTeacher' )
-
-        #TODO: add css into widgets
-        widgets = {
-                   'original':forms.Select(attrs={'class':'studentchange' }),
-                   'maturity':forms.Select(attrs={'class':'studentchange' }),
-                   "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '团队各成员的知识背景，分工，指导教师，企业导师情况...',
-                                                       'class': "fill-form"}),
-                   "innovation": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                      'placeholder': '产品介绍，产品技术水平，产品的新颖性、先进性和独特性，产品的竞争优势...',
-                                                      'class': "fill-form"}),
-                   "industry": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '行业历史与前景，市场规模及增长趋势，行业竞争对手，未来市场销售预测...',
-                                                       'class': "fill-form"}),
-                   "product": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '生产方式，生产材料，劳动力需求，设备需求，质量保证，生产成本...',
-                                                       'class': "fill-form"}),
-                   "funds_plan": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '资金需求量、用途、使用计划，融资途径....',
-                                                       'class': "fill-form"}),
-                   "operating_mode": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '合作计划，实施方案，机构设置，人员管理，销售策略等....',
-                                                       'class': "fill-form"}),
-                   "risk_management": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '项目实施可能出现的风险及拟采取的控制措施....',
-                                                       'class': "fill-form"}),
-                   "financial_pred": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                       'placeholder': '未来三年或五年的销售收入、利润、资产回报率等....',
-                                                       'class': "fill-form"}),
-                   "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                               'placeholder': '指导教师推荐语',
-                                                               'class': "fill-form"}),
-                   "instutite_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                            'placeholder': '学院推荐语',
-                                                            'class': "fill-form"}),
-                   "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
-                                                            'placeholder': '学校推荐语',
-                                                            'class': "fill-form"}),
-                   }
-
-    def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
-
-class Teacher_EnterpriseForm(ModelForm):
-    """
-        Teacher_EnterpriseForm in ApplicationReportForm
-    """
-    class Meta:
-        model = Teacher_Enterprise
-        #TODO: add css into widgets
-        exclude=('id')
-        widgets={
-                  'name':forms.TextInput(attrs={'class':"school-display"}),
-                  'telephone':forms.TextInput(attrs={'class':"school-display"}),
-                  'titles':forms.TextInput(attrs={'class':"school-display"}),
-                  'jobs':forms.TextInput(attrs={'class':"school-display"}),
-                 }
-
-    def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
+        return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
 
 class FinalReportForm(ModelForm):
     """
