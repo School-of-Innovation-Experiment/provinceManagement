@@ -18,7 +18,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-sys.path.append('/home/hadoop/mysites/')
+sys.path.append('/home/sie/mysites/')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'schoolManagement.settings_production'
 # This application object is used by any WSGI server configured to use this

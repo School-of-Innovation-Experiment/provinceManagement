@@ -10,6 +10,7 @@ debug_toolbar/*
 log/*
 # C extensions
 *.so
+./settings_dev.py
 
 static/*
 
