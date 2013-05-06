@@ -14,6 +14,8 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const import PROJECT_INNOVATION_ORIGIN_CHOICES
+from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
@@ -111,3 +113,48 @@ class ProjectStatus(models.Model):
 
     def __unicode__(self):
         return self.get_status_display()
+
+class ProjectOrigin(models.Model):
+    """
+    Project Origin for innovation
+    """
+    origin = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                 choices=PROJECT_INNOVATION_ORIGIN_CHOICES, \
+                                 default = "0",
+                                 verbose_name="项目来源")
+    class Meta:
+        verbose_name = "创新项目来源"
+        verbose_name_plural = "创新项目来源"
+
+    def __unicode__(self):
+        return self.get_origin_display()
+
+class ProjectEnterpriseOrigin(models.Model):
+    """
+    Project Origin for innovation
+    """
+    origin = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                 choices=PROJECT_ENTERPRISE_ORIGIN_CHOICES, \
+                                 default = "0",
+                                 verbose_name="项目来源")
+    class Meta:
+        verbose_name = "创业类项目来源"
+        verbose_name_plural = "创业类项目来源"
+
+    def __unicode__(self):
+        return self.get_origin_display()
+
+class ProjectEnterpriseMaturity(models.Model):
+    """
+    Project Origin for innovation
+    """
+    maturity = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                choices=PROJECT_ENTERPRISE_MATURITY_CHOICES, \
+                                default = "0",
+                                verbose_name="项目技术成熟度")
+    class Meta:
+        verbose_name = "项目技术成熟度"
+        verbose_name_plural = "项目技术成熟度"
+
+    def __unicode__(self):
+        return self.get_maturity_display()
