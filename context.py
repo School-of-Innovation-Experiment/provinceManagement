@@ -59,7 +59,7 @@ def userauth_settings(request):
         userauth["is_adminstaff"] = True
         try:
             userauth["adminstaff"] = AdminStaffProfile.objects.get(userid=request.user)
-        except AdminStaffProfile.DoesNotExist:
+        except AdminStaffProfile.DoesNotExist, err:
             loginfo(p=err, label="context AdminStaffProfile")
 
     if check_auth(user=request.user, authority=EXPERT_USER):
