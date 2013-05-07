@@ -11,6 +11,7 @@ from const.models import *
 
 RegisterClass = (SchoolDict,
                  ProjectCategory,
+                 FinancialCategory,
                  ProjectGrade,
                  ProjectStatus,
                  InsituteCategory,

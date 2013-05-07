@@ -20,7 +20,7 @@ from django.core.urlresolvers import reverse
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
-
+from const import *
 
 class InfoForm(ModelForm):
     """
@@ -194,9 +194,10 @@ class FinalReportForm(ModelForm):
 
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
+                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
                            ),
 )
     student_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
+                                        widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
                            ))
+    proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_UN)

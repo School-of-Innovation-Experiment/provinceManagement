@@ -42,7 +42,7 @@ def NumLimit(request, form):
             return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
     else:
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
-    
+
 @dajaxice_register
 def DeadlineSettings(request, form):
     #dajax = Dajax()
@@ -74,7 +74,7 @@ def DeadlineSettings(request, form):
         #return simplejson.dumps({'field':form.data["pre_start_date"],'id':form,'status':'1','message':u'更新成功'})
     else:
         return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误"})
-    
+
 @dajaxice_register
 def  ExpertDispatch(request, form):
     #dajax = Dajax()
@@ -135,7 +135,7 @@ def judge_is_assigned(request,insitute):
 @dajaxice_register
 def get_subject_review_list(request, project_id):
     '''
-    to get subject evaluate list through project_id 
+    to get subject evaluate list through project_id
     '''
     #dajax = Dajax()
     review_list = AdminStaffService.GetSubjectReviewList(project_id)
@@ -157,5 +157,3 @@ def Release_News(request, html):
     title=datetime.datetime.today().year
     data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
     data.save();
-
-    

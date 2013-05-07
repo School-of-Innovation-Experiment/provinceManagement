@@ -39,6 +39,7 @@ class ProjectSingle(models.Model):
     student = models.OneToOneField(StudentProfile)
     school = models.ForeignKey(SchoolDict, blank=True, null=True, default=None)
     project_category = models.ForeignKey(ProjectCategory, blank=True, null=True, default=None)
+    financial_category = models.ForeignKey(FinancialCategory, blank=True, null=True, default=None)
     insitute = models.ForeignKey(InsituteCategory,
                                  blank=True, null=True, default=None,
                                  verbose_name="所属学院")
