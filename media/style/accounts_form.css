@@ -95,11 +95,25 @@ margin-left: -50px;
 
 h2.login{
   margin-bottom: 40px;
+  text-align:center;
 }
 
+
 #login-form-wrap{
-  position: relative;
-  top: 0px;
-  left: 45%;
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+  top: 20px;
   width: 460px;
+}
+
+
+#login-button{
+  text-align:center;
+  margin-right: 20px;
+  width: 200px;
+}
+
+p.forget-text{
+  margin-top:30px;
 }
