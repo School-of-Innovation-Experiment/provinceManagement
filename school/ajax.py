@@ -9,9 +9,11 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
+from django.http import Http404
+from school.models import ProjectSingle
 from school.forms import StudentDispatchForm
 from school.views import Send_email_to_student, Count_email_already_exist, school_limit_num
-from const.models import SchoolDict
+from const.models import SchoolDict, ProjectCategory
 from const import *
 import datetime
 
@@ -45,4 +47,14 @@ def  StudentDispatch(request, form):
     else:
         return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 
-    
+@dajaxice_register
+def ProjCateChange(request, cate):
+    #dajax = Dajax()
+    try:
+        project = ProjectSingle.objects.get(student__user=request.user)
+        new_cate = ProjectCategory.objects.get(category=cate)
+    except:
+        raise Http404
+    project.project_category = new_cate
+    project.save()
+    return simplejson.dumps({"message": u"更新成功: %s" % new_cate})

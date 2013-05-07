@@ -15,7 +15,7 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import PROJECT_INNOVATION_ORIGIN_CHOICES
-from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES
+from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES, INSITUTE_CATEGORY_CHOICES
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
@@ -56,6 +56,7 @@ class InsituteCategory(models.Model):
     Insitute Category: software, math, ...
     """
     category = models.CharField(max_length=200, blank=False, unique=True,
+                                choices=INSITUTE_CATEGORY_CHOICES, default=INSITUTE_CATEGORY_CHOICES[0][0],
                                 verbose_name="所属学科学院")
 
     class Meta:

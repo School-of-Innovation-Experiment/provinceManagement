@@ -65,10 +65,10 @@ def student_view(request):
     except Exception, err:
         loginfo(p=err, label="student home view")
         raise Http404
-    # proj_cate_forms = forms.ChoiceField(required=True, choices= PROJECT_CATE_CHOICES)
     loginfo(p=project.project_id)
-    data = {"project": project,}
-            # "proj_cate_forms": proj_cate_forms}
+    data = {"project": project,
+            "project_cate": project.project_category.category,
+            "proj_cate_choice": PROJECT_CATE_CHOICES}
 
     return render(request, "school/student.html", data)
 

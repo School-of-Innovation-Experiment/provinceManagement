@@ -22,6 +22,13 @@
     <tr>
       <td>{{project.title}}</td>
       <!-- <td>{{project.project_category}}</td> -->
+      <td>
+        <select id="proj_cate_select">
+          {% for choice in proj_cate_choice %}
+          <option {%if choice.0 == project_cate %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+          {% endfor %}
+        </select><span id="error_message"></span>
+      </td>
       <td>{{proj_cate_forms}}</td>
       <td>{{project.inspector}}</td>
       <td>{{project.project_status}}</td>
@@ -33,4 +40,5 @@
     </tr>
   </tbody>
 </table><!--end current_list table-->
+<script type='text/javascript' src="{{STATIC_URL}}js/school/student_home.js"></script>
 {%endblock%}

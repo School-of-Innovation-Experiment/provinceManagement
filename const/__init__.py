@@ -84,6 +84,18 @@ PROJECT_GRADE_CHOICES = (
     # (GRADE_UN, u"未指定"),
 )
 
+#InsituteCategory
+INSITUTE_CATEGORY_CHOICES = (
+    ("0", u"文"),
+    ("1", u"理"),
+    ("2", u"工"),
+    ("3", u"商"),
+    ("4", u"法"),
+    ("5", u"医"),
+    ("6", u"农"),
+    ("7", u"其它"),
+)
+
 #Project Review
 STATUS_PRESUBMIT = "presubmit"
 STATUS_PREREVIEW = "prereview"
