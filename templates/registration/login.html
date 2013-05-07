@@ -1,17 +1,14 @@
 {% extends "registration/widgets/baseback.html" %}
 
 {%block form-content%}
-<script type='text/javascript' src="{{STATIC_URL}}js/home/checkbrowser.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/home/checkbrowser.js"></script>
 	<form  class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={%url auth_login_redirect%}">
 		{% csrf_token %}
-		<h2 class="login">欢迎登录创新创业管理平台</h2>			
+		<h2 class="login">欢迎登录创新创业训练管理平台</h2>			
+    <br/>
 		{% include 'base/_form.html' %}			
-		<button style="margin-top:30px;" class="btn btn-large btn-primary" type="submit">登录</button>	
-		<!--input type="hidden" name="next" value="{{ next }}" /-->	
-		<!--input type="hidden" name="text" value="/show/"-->
-		<br/>
-		<br/>
-		<p>想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
+    <button class="btn btn-large btn-success pull-right" id="login-button" type="submit">登陆</button>
+		<p class="forget-text">想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
 	</form>	
     {% include "base/checkbrowser.html" %}
 {%endblock%}

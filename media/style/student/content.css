@@ -63,8 +63,12 @@ input.school-display{
 select.school-display{
   margin-left:0px;
   width:300px;
-  margin-top:10px;
   padding-left:90px;
+}
+select.student{
+  width: 300px;
+  padding-left:60px;
+  margin-left: 0px;
 }
 hr.school-display{
   height: 2px;

@@ -27,16 +27,16 @@
             {% endif %}
         </div><!--end members-->
         <hr class="school-display"/>
-        <div class="control-group {% if info.inspector.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-user"></i>{{info.inspector.label}}</span></label>
-          {{info.inspector}}
-          {% if info.inspector.errors %}
+        <div class="control-group {% if info.im.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</span></label>
+          {{info.im}}
+          {% if info.im.errors %}
           <div class="row alert alert-error school-display">
               <button class="close" data-dismiss="alert">×</button>
-              {{ info.inspector.errors }}
+              {{ info.im.errors }}
           </div>
-          {% endif %} 
-        </div><!--end inspector-->
+          {% endif %}
+        </div><!--end im-->
       </div>
       <div class="span4">
         <div class="control-group {% if info.telephone.errors %}error{% endif %}">
@@ -60,17 +60,6 @@
           </div>
           {% endif %}
         </div><!--end email-->
-        <hr class="school-display"/>
-        <div class="control-group {% if info.im.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</span></label>
-          {{info.im}}
-          {% if info.im.errors %}
-          <div class="row alert alert-error school-display">
-              <button class="close" data-dismiss="alert">×</button>
-              {{ info.im.errors }}
-          </div>
-          {% endif %}
-        </div><!--end im-->
       </div>
       <div class="span4">
         <div class="control-group {% if info.info.project_category.errors.errors %}error{% endif %}">
@@ -84,17 +73,15 @@
           {% endif %}
         </div><!--end insitute-->
         <hr class="school-display"/>
-        <div class="control-group {% if info.project_category.errors %}error{% endif %}">
-          <label class="school-display"><i class="icon-th-large"></i>项目类型</span></label>
-          {{info.project_category}}
-          {% if info.project_category.errors %}
+        <div class="control-group {% if info.inspector.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-user"></i>{{info.inspector.label}}</span></label>
+          {{info.inspector}}
+          {% if info.inspector.errors %}
           <div class="row alert alert-error school-display">
               <button class="close" data-dismiss="alert">×</button>
-              {{ info.project_category.errors }}
+              {{ info.inspector.errors }}
           </div>
-          {% endif %}
-        </div><!--end project category-->
-        <div>
-        </div>
+          {% endif %} 
+        </div><!--end inspector-->
       </div>
     </div><!--Info Form-->

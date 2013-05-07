@@ -20,8 +20,6 @@ from django.core.urlresolvers import reverse
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
-from backend.logging import loginfo
-from const import *
 
 
 class InfoForm(ModelForm):
@@ -31,7 +29,7 @@ class InfoForm(ModelForm):
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
-        exclude = ('project_id', 'adminuser', 'school', 'student',
+        exclude = ('project_id', 'adminuser', 'school', 'student','project_category',
                    'year', 'project_grade', 'project_status', 'expert')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector':forms.TextInput(attrs={'class':"school-display"}),
@@ -40,7 +38,6 @@ class InfoForm(ModelForm):
                  'im':forms.TextInput(attrs={'class':"school-display"}),
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
-                 'project_category':forms.Select(attrs={'class':"school-display"}),
                  'insitute':forms.Select(attrs={'class':"school-display"}),
                  }
 
@@ -58,9 +55,7 @@ class ApplicationReportForm(ModelForm):
 
         #TODO: add css into widgets
         widgets = {
-                   "original" :forms.Textarea(attrs={'rows': 2, 'cols': 100,
-                                                       'placeholder': '学生自选，学生的积累和兴趣   学生自选，教师的科研项目   教师帮选，教师的科研项目',
-                                                       'class': "fill-form"}),
+                   'original':forms.Select(attrs={'class':'student' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
                                                        'class': "fill-form"}),
@@ -91,7 +86,6 @@ class ApplicationReportForm(ModelForm):
     def get_absolute_url(self):
         return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
 
-
 class EnterpriseApplicationReportForm(ModelForm):
     """
         EnterpriseApplicationReportForm Report Form
@@ -103,8 +97,8 @@ class EnterpriseApplicationReportForm(ModelForm):
 
         #TODO: add css into widgets
         widgets = {
-                   'original':forms.Select(attrs={'class':'studentchange' }),
-                   'maturity':forms.Select(attrs={'class':'studentchange' }),
+                   'original':forms.Select(attrs={'class':'student' }),
+                   'maturity':forms.Select(attrs={'class':'student' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'placeholder': '团队各成员的知识背景，分工，指导教师，企业导师情况...',
                                                        'class': "fill-form"}),
@@ -141,7 +135,7 @@ class EnterpriseApplicationReportForm(ModelForm):
                    }
 
     def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
+        return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
 
 class Teacher_EnterpriseForm(ModelForm):
     """
@@ -159,7 +153,7 @@ class Teacher_EnterpriseForm(ModelForm):
                  }
 
     def get_absolute_url(self):
-        return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
+        return reverse('school.views.application_report_view', args=(str(self.instance.project_id),))
 
 class FinalReportForm(ModelForm):
     """

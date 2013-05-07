@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm,EnterpriseApplicationReportForm,Teacher_EnterpriseForm
 
 from adminStaff.models import ProjectPerLimits
 
@@ -118,29 +118,58 @@ def application_report_view(request, pid=None, is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    pre = get_object_or_404(PreSubmit, project_id=pid)
 
     readonly = check_history_readonly(pid) or is_expired
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+  
+    if project.project_category.category == CATE_INNOVATION:
+        iform = ApplicationReportForm
+        pre = get_object_or_404(PreSubmit, project_id=pid)
+        teacher_enterprise=None
+        is_innovation = True
+    else:
+        iform = EnterpriseApplicationReportForm
+        pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
+        is_innovation = False
 
+    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)    
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
-        application_form = ApplicationReportForm(request.POST, instance=pre)
-        if info_form.is_valid() and application_form.is_valid():
-            if save_application(project, info_form, application_form, request.user):
-                return HttpResponseRedirect(request.session.get("previous_url", "/"))
+        application_form = iform(request.POST, instance=pre)
+        if is_innovation==True:
+            if info_form.is_valid() and application_form.is_valid():
+                if save_application(project, info_form, application_form, request.user):
+                        return HttpResponseRedirect(request.session.get("previous_url", "/"))
+                else:
+                    logger.info("Form Valid Failed"+"**"*10)
+                    logger.info(info_form.errors)
+                    logger.info(application_form.errors)
+                    logger.info("--"*10)
         else:
-            logger.info("Form Valid Failed"+"**"*10)
-            logger.info(info_form.errors)
-            logger.info(application_form.errors)
-            logger.info("--"*10)
+            teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
+            if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
+                if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                    project.save()
+                    return HttpResponseRedirect(request.session.get("previous_url", "/"))
+            else:
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info(teacher_enterpriseform.errors)
+                logger.info("--"*10)
     else:
         info_form = InfoForm(instance=project)
-        application_form = ApplicationReportForm(instance=pre)
+        application_form = iform(instance=pre)           
 
     data = {'pid': pid,
             'info': info_form,
             'application': application_form,
+            'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
+            'is_innovation':is_innovation,
+            'is_show':is_show
             }
 
     return render(request, 'school/application.html', data)

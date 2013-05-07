@@ -13,6 +13,8 @@ RegisterClass = (ProjectSingle,
                  Re_Project_Expert,
                  PreSubmit,
                  FinalSubmit,
+                 Teacher_Enterprise,
+                 PreSubmitEnterprise,
                  UploadedFiles)
 
 for item in RegisterClass:

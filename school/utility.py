@@ -84,6 +84,7 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         application = application_form.save(commit=False)
         application.save()
 
+        logger.info("save succes")
         return True
     except Exception, err:
         logger.info("save process"+"**"*10)
@@ -91,6 +92,36 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         logger.info("--"*10)
         return False
 
+def save_enterpriseapplication(project=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
+    """
+    Application Report Save
+    Arguments:
+        In:
+            *pid, project id
+            *info_form, ProjectSingle form
+            *application_form, PreSubmit form
+        Out:
+            *True or False
+    """
+    if project is None or info_form is None or application_form is None or teacher_enterpriseform is None :
+        return False
+
+    try:
+        info = info_form.save(commit=False)
+        info.save()
+
+        application = application_form.save(commit=False)
+        application.save()
+
+        teacher_enterprise=teacher_enterpriseform.save(commit=False)
+        teacher_enterprise.save()
+        logger.info("save succes")
+        return True
+    except Exception, err:
+        logger.info("save process"+"**"*10)
+        logger.info(err)
+        logger.info("--"*10)
+        return False
 
 def response_minetype(request):
     """
