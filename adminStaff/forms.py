@@ -105,7 +105,7 @@ class SubjectInsituteForm(forms.Form):
     insitute_choice_list = []
     insitute_list = InsituteCategory.objects.all()
     for object in insitute_list:
-        insitute_choice_list.append((object.id, object.category))
+        insitute_choice_list.append((object.id, object.get_category_display()))
     insitute_tuple = tuple(insitute_choice_list)
     insitute_choice = forms.ChoiceField(choices=insitute_tuple, widget=forms.Select(attrs={"onchange":"is_assigned();"}))
 

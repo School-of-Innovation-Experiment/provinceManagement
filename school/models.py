@@ -142,9 +142,9 @@ class PreSubmit(models.Model):
     progress_plan = models.TextField(blank=False, null=True, verbose_name=u"项目进度安排")
     funds_plan = models.TextField(blank=False, null=True, verbose_name=u"项目经费预算")
     pre_results = models.TextField(blank=False, null=True, verbose_name=u"预期研究成果")
-    inspector_comments = models.TextField(blank=False, null=True,
+    inspector_comments = models.TextField(blank=True, null=True,
                                           verbose_name=u"指导教师推荐语")
-    school_comments = models.TextField(blank=False, null=True,
+    school_comments = models.TextField(blank=True, null=True,
                                        verbose_name=u"学校推荐语")
 
     class Meta:

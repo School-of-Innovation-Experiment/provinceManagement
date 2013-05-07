@@ -137,25 +137,29 @@ def application_report_view(request, pid=None, is_expired=False):
         is_innovation = False
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+    if check_auth(user=request.user, authority=SCHOOL_USER):
+        role = "home"
+    else:
+        role = "student"
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
         application_form = iform(request.POST, instance=pre)
         if is_innovation==True:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
-                        return HttpResponseRedirect(request.session.get("previous_url", "/"))
-                else:
-                    logger.info("Form Valid Failed"+"**"*10)
-                    logger.info(info_form.errors)
-                    logger.info(application_form.errors)
-                    logger.info("--"*10)
+                    return HttpResponseRedirect(reverse('school.views.%s_view' % role))
+            else:
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info("--"*10)
         else:
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
                 if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
-                    return HttpResponseRedirect(request.session.get("previous_url", "/"))
+                    return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)

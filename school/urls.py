@@ -61,3 +61,4 @@ urlpatterns = patterns('',
         school_views.student_view,
     ),
 )
+
