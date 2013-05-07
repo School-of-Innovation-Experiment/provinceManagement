@@ -46,21 +46,32 @@ class AdminStaffService(object):
     @staticmethod
     def GetRegisterList():
         '''
-        获得登记用户列表
+        获得学校及评委用户列表
         '''
         res_list = []
         auth_name = []
-        for register in RegistrationProfile.objects.all():
+        # 添加所有的学校用户
+        for register in SchoolProfile.objects.all():
             dict = {}
             #查询权限列表
             ##########################################################################
-            auth_list = UserIdentity.objects.filter(auth_groups=register.user).all()
+            auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
             dict["auth"] = ''
-            dict["email"] = register.user.email
-            dict["is_active"] = register.user.is_active
+            dict["email"] = register.userid.email
+            dict["is_active"] = register.userid.is_active
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
             ##########################################################################
+            res_list.append(dict)
+        # 添加所有的评委用户
+        for register in ExpertProfile.objects.all():
+            dict = {}
+            auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            dict["auth"] = ''
+            dict["email"] = register.userid.email
+            dict["is_active"] = register.userid.is_active
+            for auth in auth_list:
+                dict["auth"] += auth.__unicode__()+' '
             res_list.append(dict)
         return res_list
     @staticmethod
