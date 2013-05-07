@@ -19,3 +19,10 @@ select.studentchange{
 div.memberchange{
     margin-left:30px; 
 }
+
+input.studentdisplay{
+  margin-left:0px;
+  padding-left:0px;
+  width:292px;
+  text-align: center;
+}
