@@ -77,7 +77,7 @@ class InsituteCategory(models.Model):
         verbose_name_plural = "学院学科"
 
     def __unicode__(self):
-        return self.category
+        return self.get_category_display()
 
 class UserIdentity(models.Model):
     """

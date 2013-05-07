@@ -1,6 +1,6 @@
     <!--Application Infomation-->
     <div class="page-header">
-      <h3>项目内容</h3>  
+      <h3>项目内容</h3>
     </div>
       {% if is_innovation %}
       <fieldset>
@@ -15,12 +15,12 @@
             {% endif %}
           </div><!--end form line, for choice-->
       </fieldset><!--Project origin-->
-      
+
       </br>
       <fieldset>
         <div class="control-group {% if application.background.errors %}error{% endif %}">
           <legend>项目背景及研究意义</legend>
-          {{application.background}} 
+          {{application.background}}
           {% if application.background.errors %}
           <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
             <button class="close" data-dismiss="alert">×</button>
@@ -29,12 +29,12 @@
           {% endif %}
         </div>
       </fieldset><!--end background-->
-      
+
       </br>
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>研究内容和拟解决的关键问题</legend>
-          {{application.key_notes}} 
+          {{application.key_notes}}
           {% if application.key_notes.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
@@ -43,12 +43,12 @@
           {% endif %}
         </div>
       </fieldset><!--end key points-->
-      
+
       </br>
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>项目创新之处</legend>
-          {{application.innovation}} 
+          {{application.innovation}}
           {% if application.innovation.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
@@ -62,13 +62,13 @@
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>项目进度安排</legend>
-          {{application.progress_plan}} 
+          {{application.progress_plan}}
           {% if application.progress_plan.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
             {{ application.progress_plan.errors }}
           </div>
-          {% endif %} 
+          {% endif %}
         </div>
       </fieldset><!--end plans-->
 
@@ -76,13 +76,13 @@
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>项目经费预算</legend>
-          {{application.funds_plan}} 
+          {{application.funds_plan}}
           {% if application.funds_plan.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
             {{ application.funds_plan.errors }}
           </div>
-          {% endif %} 
+          {% endif %}
         </div>
       </fieldset><!--end payments-->
 
@@ -90,7 +90,7 @@
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>预期研究成果</legend>
-          {{application.pre_results}} 
+          {{application.pre_results}}
           {% if application.pre_results.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>
@@ -125,8 +125,8 @@
                 {{ application.maturity.errors }}
             </div>
             {% endif %}
-          </div><!--end form line, for choice-->  
-        </div>     
+          </div><!--end form line, for choice-->
+        </div>
       </div>
       <fieldset>
         <legend>创业团队介绍</legend>
@@ -139,7 +139,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>项目的基本情况及创新内容</legend>
@@ -152,7 +152,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>行业及市场前景</legend>
@@ -165,7 +165,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>产品制造</legend>
@@ -178,7 +178,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>项目投资预算及融资计划</legend>
@@ -191,7 +191,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>项目运营模式</legend>
@@ -204,7 +204,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>项目风险预测及应对措施</legend>
@@ -217,7 +217,7 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin-->     
+      </fieldset><!--Project origin-->
       </br>
       <fieldset>
         <legend>财务预测</legend>
@@ -230,7 +230,6 @@
             </div>
             {% endif %}
           </div><!--end form line, for choice-->
-      </fieldset><!--Project origin--> 
-      </br>    
+      </fieldset><!--Project origin-->
+      </br>
       {% endif %}
-

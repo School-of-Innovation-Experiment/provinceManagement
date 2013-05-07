@@ -424,6 +424,7 @@ def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
         project.project_category = ProjectCategory.objects.all()[0]
+        project.insitute = InsituteCategory.objects.all()[0]
         project.financial_category= FinancialCategory.objects.get(category=financial_cate)
         project.save()
 

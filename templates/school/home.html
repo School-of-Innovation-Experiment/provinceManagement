@@ -6,13 +6,13 @@
 <div class="container">
   <div class="page-header">
     {% if not readonly %}
-	  <div class="pull-right">	
+	  <div class="pull-right">
 	    <!--a href="/school/new" class="btn btn-large btn-warning">新增项目++</a-->
     </div><!--end new button-->
     {%endif%}
     {% if readonly %}
     <div class="alert alert-error" style="margin-top:20px;">
-      <a class="close" data-dismiss="alert">x</a> 
+      <a class="close" data-dismiss="alert">x</a>
       <h4 class="alert-heading">系统提示！</h4>
       <p>目前不能增加项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
     </div><!--end alert block-->
@@ -21,13 +21,14 @@
       本年度项目列表
       <span class="label label-info">申请上限:{{info.applications_limits}}</span>
       <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
-    </h3> 
+    </h3>
   </div><!--end page header-->
-  <table class="table table-hover">     
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>名称</th>
         <th>项目类型</th>
+        <th>类型(A/B类)</th>
         <th>指导教师</th>
         <th>当前状态</th>
         <th>评审级别</th>
@@ -39,6 +40,13 @@
       <tr>
         <td>{{item.title}}</td>
         <td>{{item.project_category}}</td>
+        <td>
+          <select id="financial_cate_select">
+            {% for choice in financial_cate_choice %}
+            <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+            {% endfor %}
+          </select><span id="error_message"></span>
+        </td>
         <td>{{item.inspector}}</td>
         <td>{{item.project_status}}</td>
         <td>{{item.project_grade}}</td>
@@ -51,4 +59,5 @@
     </tbody>
   </table><!--end current_list table-->
 </div><!--end current list content-->
+<script type='text/javascript' src="{{STATIC_URL}}js/school/school_home.js"></script>
 {% endblock %}

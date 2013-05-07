@@ -68,6 +68,8 @@ def student_view(request):
     loginfo(p=project.project_id)
     data = {"project": project,
             "project_cate": project.project_category.category,
+            "proj_insitute_choice": INSITUTE_CATEGORY_CHOICES,
+            "project_insitute": project.insitute.category,
             "proj_cate_choice": PROJECT_CATE_CHOICES}
 
     return render(request, "school/student.html", data)
@@ -98,6 +100,7 @@ def home_view(request, is_expired=False):
         remainings = 0
 
     data = {"current_list": current_list,
+            "financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings}

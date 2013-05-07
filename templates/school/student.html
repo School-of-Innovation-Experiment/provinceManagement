@@ -12,6 +12,7 @@
     <tr>
       <th>名称</th>
       <th>项目类型</th>
+      <th>学科类型</th>
       <th>指导教师</th>
       <th>当前状态</th>
       <th>评审级别</th>
@@ -28,6 +29,13 @@
           <option {%if choice.0 == project_cate %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
           {% endfor %}
         </select><span id="error_message"></span>
+      </td>
+      <td>
+        <select id="proj_insitute_select">
+          {% for choice in proj_insitute_choice %}
+          <option {%if choice.0 == project_insitute %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+          {% endfor %}
+        </select><span id="insitute_error_message"></span>
       </td>
       <td>{{project.inspector}}</td>
       <td>{{project.project_status}}</td>

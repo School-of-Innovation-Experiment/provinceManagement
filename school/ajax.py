@@ -13,10 +13,10 @@ from django.http import Http404
 from school.models import ProjectSingle
 from school.forms import StudentDispatchForm
 from school.views import Send_email_to_student, Count_email_already_exist, school_limit_num
-from const.models import SchoolDict, ProjectCategory
+from const.models import SchoolDict, ProjectCategory, FinancialCategory, InsituteCategory
 from const import *
 import datetime
-
+from backend.logging import logger, loginfo
 
 @dajaxice_register
 def  StudentDispatch(request, form):
@@ -54,8 +54,34 @@ def ProjCateChange(request, cate):
     try:
         project = ProjectSingle.objects.get(student__user=request.user)
         new_cate = ProjectCategory.objects.get(category=cate)
-    except:
+    except Exception, err:
+        loginfo(p=err, label="change project cate")
         raise Http404
     project.project_category = new_cate
+    project.save()
+    return simplejson.dumps({"message": u"更新成功: %s" % new_cate})
+
+@dajaxice_register
+def ProjInsituteChange(request, cate):
+    try:
+        project = ProjectSingle.objects.get(student__user=request.user)
+        new_cate = InsituteCategory.objects.get(category=cate)
+    except Exception, err:
+        loginfo(p=err, label="change project insitute")
+        raise Http404
+    project.insitute = new_cate
+    project.save()
+    return simplejson.dumps({"message": u"更新成功: %s" % new_cate})
+
+@dajaxice_register
+def FinancialCateChange(request, cate):
+    #dajax = Dajax()
+    try:
+        project = ProjectSingle.objects.get(adminuser=request.user)
+        new_cate = FinancialCategory.objects.get(category=cate)
+    except Exception, err:
+        loginfo(p=err, label="change financial cate")
+        raise Http404
+    project.financial_category = new_cate
     project.save()
     return simplejson.dumps({"message": u"更新成功: %s" % new_cate})

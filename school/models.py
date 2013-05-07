@@ -42,7 +42,7 @@ class ProjectSingle(models.Model):
     financial_category = models.ForeignKey(FinancialCategory, blank=True, null=True, default=None)
     insitute = models.ForeignKey(InsituteCategory,
                                  blank=True, null=True, default=None,
-                                 verbose_name="所属学院")
+                                 verbose_name="学院学科")
     project_grade = models.ForeignKey(ProjectGrade,
                                       blank=True, null=True, default=None)
     project_status = models.ForeignKey(ProjectStatus,
