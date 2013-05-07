@@ -405,7 +405,7 @@ def get_province_trend_lines():
 
 
 
-def create_newproject(request, new_user):
+def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
     """
     create a new project for this usr, it is student profile
     """
@@ -424,6 +424,7 @@ def create_newproject(request, new_user):
         project.project_grade = ProjectGrade.objects.get(grade=GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status=STATUS_FIRST)
         project.project_category = ProjectCategory.objects.all()[0]
+        project.financial_category= FinancialCategory.objects.get(category=financial_cate)
         project.save()
 
         # create presubmit and final report
@@ -433,7 +434,10 @@ def create_newproject(request, new_user):
         pre.save()
 
         # create presubmit and final report
+        enterpriseTeacher = Teacher_Enterprise()
+        enterpriseTeacher.save()
         pre = PreSubmitEnterprise()
+        pre.enterpriseTeacher = enterpriseTeacher
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()

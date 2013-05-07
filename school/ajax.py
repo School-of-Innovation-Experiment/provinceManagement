@@ -25,6 +25,7 @@ def  StudentDispatch(request, form):
     if student_form.is_valid():
         password = student_form.cleaned_data["student_password"]
         email = student_form.cleaned_data["student_email"]
+        financial_cate = student_form.cleaned_data["proj_cate"]
         name = email
         if password == "":
             password = email.split('@')[0]
@@ -36,7 +37,7 @@ def  StudentDispatch(request, form):
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
-            flag = Send_email_to_student(request, name, password, email,STUDENT_USER)
+            flag = Send_email_to_student(request, name, password, email,STUDENT_USER, financial_cate=financial_cate)
             if flag:
                 message = u"发送邮件成功"
                 remaining_activation_times -= 1

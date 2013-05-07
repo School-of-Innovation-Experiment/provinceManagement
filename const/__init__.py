@@ -40,6 +40,16 @@ PROJECT_CATE_CHOICES = (
     # (CATE_UN, u"未指定"),
 )
 
+#FinancialCategory
+FINANCIAL_CATE_A = 'a'
+FINANCIAL_CATE_B = 'b'
+FINANCIAL_CATE_UN = 'un'
+
+FINANCIAL_CATE_CHOICES = (
+    (FINANCIAL_CATE_A, u"A类"),
+    (FINANCIAL_CATE_B, u"B类"),
+    (FINANCIAL_CATE_UN, u"未指定"),
+)
 #Project_Origin
 PROJECT_INNOVATION_ORIGIN_CHOICES = (
     ("0", u"学生自选，学生的积累和兴趣"),
@@ -81,7 +91,7 @@ PROJECT_GRADE_CHOICES = (
     # (GRADE_CITY, u"市级"),
     # (GRADE_SCHOOL, u"校级"),
     # (GRADE_INSITUTE, u"学院级"),
-    # (GRADE_UN, u"未指定"),
+    (GRADE_UN, u"未指定"),
 )
 
 #InsituteCategory

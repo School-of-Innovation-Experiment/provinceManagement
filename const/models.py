@@ -15,7 +15,7 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import PROJECT_INNOVATION_ORIGIN_CHOICES
-from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES, INSITUTE_CATEGORY_CHOICES
+from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES, INSITUTE_CATEGORY_CHOICES, FINANCIAL_CATE_UN, FINANCIAL_CATE_CHOICES
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
@@ -34,6 +34,19 @@ class SchoolDict(models.Model):
     def __unicode__(self):
         return self.schoolName
 
+class FinancialCategory(models.Model):
+    """
+    """
+    category = models.CharField(max_length=30, blank=False, unique=True,
+                                choices=FINANCIAL_CATE_CHOICES, default=FINANCIAL_CATE_UN,
+                                verbose_name=u"项目类型(A/B类)")
+
+    class Meta:
+        verbose_name = u"项目类型(A/B类)"
+        verbose_name_plural = u"项目类型(A/B类)"
+
+    def __unicode__(self):
+        return self.get_category_display()
 
 class ProjectCategory(models.Model):
     """

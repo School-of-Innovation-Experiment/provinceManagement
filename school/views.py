@@ -121,7 +121,7 @@ def application_report_view(request, pid=None, is_expired=False):
 
     readonly = check_history_readonly(pid) or is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-  
+
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -133,7 +133,7 @@ def application_report_view(request, pid=None, is_expired=False):
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
 
-    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)    
+    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST, instance=project)
         application_form = iform(request.POST, instance=pre)
@@ -161,7 +161,7 @@ def application_report_view(request, pid=None, is_expired=False):
                 logger.info("--"*10)
     else:
         info_form = InfoForm(instance=project)
-        application_form = iform(instance=pre)           
+        application_form = iform(instance=pre)
 
     data = {'pid': pid,
             'info': info_form,
@@ -351,11 +351,11 @@ def AuthStudentExist(request, email):
 
 
 @login_required
-def Send_email_to_student(request, username, password, email, identity):
+def Send_email_to_student(request, username, password, email, identity, financial_cate=FINANCIAL_CATE_UN):
     #判断用户名是否存在，存在的话直接返回
     if not AuthStudentExist(request, email):
         user = RegistrationManager().create_inactive_user(request,username,password,email,identity)
-        result = create_newproject(request=request, new_user=user)
+        result = create_newproject(request=request, new_user=user, financial_cate=financial_cate)
         return True and result
     else:
         return False
