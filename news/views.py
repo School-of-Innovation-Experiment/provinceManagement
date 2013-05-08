@@ -37,6 +37,12 @@ def index(request):
                 1, 'homepage_docs'))
     return render(request, 'home/index.html', context)
 
+
+def index_new(request):
+    context = {}
+    return render(request, "home/new-homepage.html", context)
+
+
 def read_news(request, news_id):
     context = Context({
             'news': get_news(news_id),
