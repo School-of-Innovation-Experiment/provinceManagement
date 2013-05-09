@@ -1,6 +1,8 @@
 # coding: UTF-8
+
 from django.db import models
 from school.models import ProjectSingle
+import datetime
 
 class Student_Group(models.Model):
     email = models.EmailField(verbose_name=u"电子邮件")
@@ -20,3 +22,9 @@ class Student_Group(models.Model):
 
     def __unicode__(self):
         return self.studentName
+
+class StudentWeeklySummary(models.Model):
+    project = models.ForeignKey(ProjectSingle, verbose_name=u"项目")
+    summary = models.CharField(blank=True, max_length=500,
+                               verbose_name=u"项目周报")
+    date = models.DateField(default=datetime.datetime.today)
