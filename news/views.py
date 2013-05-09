@@ -12,7 +12,7 @@ from django.shortcuts import render #, render_to_response
 from news.models import News
 from django.template import Context #, loader
 from django.http import HttpResponse, Http404
-from backend.utility import getContext
+from backend.utility import getContext, getSchoolsPic
 import datetime, os
 
 def get_news(news_id = None):
@@ -36,6 +36,13 @@ def index(request):
             News.objects.exclude(news_document=u'')[:5], \
                 1, 'homepage_docs'))
     return render(request, 'home/index.html', context)
+
+
+def index_new(request):
+    names = getSchoolsPic()
+    context = {"schools_name_list": names}
+    return render(request, "home/new-homepage.html", context)
+
 
 def read_news(request, news_id):
     context = Context({

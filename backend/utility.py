@@ -6,8 +6,10 @@ Created on 2013-03-27
 
 Desc: some tool code snniper
 '''
+import os
 import uuid
 from settings import STATIC_URL, MEDIA_URL
+from settings import SCHOOLS_ROOT, SCHOOLS_AB
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from const.__init__ import PAGE_ELEMENTS
 def search_tuple(src, target):
@@ -58,8 +60,17 @@ def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
     return {'%s_page' % name: _page,
             '%s_list' % name: _list}
 
+
 def make_uuid():
     """
     make uuid
     """
     return str(uuid.uuid4())
+
+
+def getSchoolsPic():
+    """
+    get schools pictures name
+    """
+    files = os.listdir(SCHOOLS_ROOT)
+    return [SCHOOLS_AB+item for item in files]

@@ -1,0 +1,30 @@
+<!--news base template-->
+<div class="">
+  <div class="front-wrap">
+    <div class="home-news">
+      <h3>{%block title%}{%endblock%}
+        <small>
+          {%block title-sub%}{%endblock%}
+        </small>
+      </h3>
+      {% block news-list %}
+<div class="news-list">
+  <div class="news-documents documents-list">
+    <table class="news">
+      <colgroup>
+        <col width="5%">
+        <col width="95%">
+      </colgroup>
+      <tbody>
+        {%block news-list-items%}
+        {%endblock%}
+      </tbody>
+    </table>
+  </div><!--end news-documents-->
+</div><!--end news-list-->
+      {% endblock %}
+      <hr>
+      <strong><a href="newslist/">更多»</a></strong>
+    </div><!--home-news-->
+  </div><!--front wrap-->
+</div>

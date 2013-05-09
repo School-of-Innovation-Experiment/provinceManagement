@@ -1,0 +1,35 @@
+{% extends "base/base_home.html" %}
+
+{% block home_content %}
+<!--pictures and import news-->
+<div class="row-fluid news_frame">
+  <div class="span6">
+    {% include "home/widgets/pictures.html" %}
+  </div><!--end pictures-->
+  <div class="span6">
+    {% include "home/widgets/import_info.html" %}
+  </div>
+</div>
+<br/>
+<!--other news item -->
+<div class="row-fluid news_frame">
+  <div class="span4">
+    {% include "home/widgets/files.html" %}
+  </div>
+  <div class="span4">
+    {% include "home/widgets/articles.html" %}
+  </div>
+  <div class="span4">
+    {% include "home/widgets/others.html" %}
+  </div>
+</div>
+<br/>
+<!--school shows-->
+<div>
+  {% include "home/widgets/school_show.html" %}
+</div>
+<!--links-->
+<div>
+  {% include "home/widgets/links.html" %}
+</div>
+{% endblock %}
