@@ -321,3 +321,10 @@ class AdminStaffService(object):
             message = NoticeMessage(noticemessage = _message)
             message.save()
         return render(request, "adminStaff/noticeMessageSettings.html")
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def NewsRelease(request):
+        return render(request, "adminStaff/news_release.html")

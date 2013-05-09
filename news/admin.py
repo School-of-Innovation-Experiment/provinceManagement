@@ -22,9 +22,12 @@ class NewsAdmin(admin.ModelAdmin):
     # fields = list_display
     class Media:
         js = [
+            STATIC_URL + '/bootstrap/assets/js/jquery-1.9.1.min.js',
             # STATIC_URL + '/tiny_mce/tiny_mce_src.js',
             STATIC_URL + '/tiny_mce/tiny_mce.js',
             STATIC_URL + '/tiny_mce/tiny_textarea.js',
+            STATIC_URL + '/js/news/bootstrap-wysiwyg.js',
+            STATIC_URL + '/js/news/wysiwyg-config.js',
             ]
 
 admin.site.register(News, NewsAdmin)

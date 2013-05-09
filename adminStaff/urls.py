@@ -27,5 +27,6 @@ urlpatterns = patterns('',
     (r'^create_inactive_user$',AdminStaffService.expertDispatch),
                        (r'^NoticeMessageSettings$',
                         AdminStaffService.NoticeMessageSetting),
+    (r'^news_release$',AdminStaffService.NewsRelease),
 )
 urlpatterns += staticfiles_urlpatterns()
