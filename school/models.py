@@ -31,8 +31,8 @@ class ProjectSingle(models.Model):
     """
     project_id = models.CharField(max_length=50, primary_key=True,
                                   default=make_uuid,
-                                  verbose_name="题目唯一ID")
-    title = models.CharField(max_length=400, blank=False, verbose_name="参赛题目")
+                                  verbose_name=u"题目唯一ID")
+    title = models.CharField(max_length=400, blank=False, verbose_name=u"参赛题目")
 
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(User)
@@ -42,28 +42,30 @@ class ProjectSingle(models.Model):
     financial_category = models.ForeignKey(FinancialCategory, blank=True, null=True, default=None)
     insitute = models.ForeignKey(InsituteCategory,
                                  blank=True, null=True, default=None,
-                                 verbose_name="学院学科")
+                                 verbose_name=u"学院学科")
     project_grade = models.ForeignKey(ProjectGrade,
                                       blank=True, null=True, default=None)
     project_status = models.ForeignKey(ProjectStatus,
                                        blank=True, null=True,
                                        default=None)
-    email = models.EmailField(verbose_name="电子邮件")
+    email = models.EmailField(verbose_name=u"电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
-                                 verbose_name="联系方式")
+                                 verbose_name=u"联系方式")
     inspector = models.CharField(max_length=200, blank=False,
-                                 verbose_name="指导教师")
+                                 verbose_name=u"指导教师")
     members = models.CharField(max_length=400, blank=False,
-                               verbose_name="团队成员")
-    im = models.CharField(max_length=50, blank=False, verbose_name="社交")
+                               verbose_name=u"团队成员")
+    im = models.CharField(max_length=50, blank=False, verbose_name=u"社交")
     #choices=YEAR_CHOICES,
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
-                               verbose_name="参加年份")
+                               verbose_name=u"参加年份")
+    keywords = models.CharField(blank=True, max_length=300,
+                                verbose_name=u"关键字")
 
     class Meta:
-        verbose_name = "参赛项目"
-        verbose_name_plural = "参赛项目"
+        verbose_name = u"参赛项目"
+        verbose_name_plural = u"参赛项目"
 
     def __unicode__(self):
         return self.title
@@ -100,8 +102,8 @@ class Re_Project_Expert(models.Model):
         #Here, we use together unique key, otherwise the one project will be
         #reviewed by one expert twice!
         unique_together=(('project', 'expert'), )
-        verbose_name = "项目审核分配"
-        verbose_name_plural = "项目审核分配"
+        verbose_name = u"项目审核分配"
+        verbose_name_plural = u"项目审核分配"
 
 class Teacher_Enterprise(models.Model):
     """
@@ -117,8 +119,8 @@ class Teacher_Enterprise(models.Model):
                             verbose_name=u"工作单位")
 
     class Meta:
-        verbose_name = "企业导师"
-        verbose_name_plural = "企业导师"
+        verbose_name = u"企业导师"
+        verbose_name_plural = u"企业导师"
 
     def __unicode__(self):
         return self.name
@@ -146,6 +148,7 @@ class PreSubmit(models.Model):
                                           verbose_name=u"指导教师推荐语")
     school_comments = models.TextField(blank=True, null=True,
                                        verbose_name=u"学校推荐语")
+    is_audited = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = u"项目申请书"
@@ -181,6 +184,7 @@ class PreSubmitEnterprise(models.Model):
                                           verbose_name="指导教师意见")
     school_comments = models.TextField(blank=True, null=True,
                                        verbose_name="学校评审意见")
+    is_audited = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "创业项目申请书"
@@ -208,6 +212,7 @@ class FinalSubmit(models.Model):
                                           verbose_name="指导教师推荐语")
     school_comments = models.TextField(blank=False, null=True,
                                        verbose_name="学校推荐语")
+    is_audited = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "项目结题报告"

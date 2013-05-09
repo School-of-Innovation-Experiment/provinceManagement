@@ -39,11 +39,11 @@ class FinancialCategory(models.Model):
     """
     category = models.CharField(max_length=30, blank=False, unique=True,
                                 choices=FINANCIAL_CATE_CHOICES, default=FINANCIAL_CATE_UN,
-                                verbose_name=u"项目类型(A/B类)")
+                                verbose_name=u"项目类型(甲/乙类)")
 
     class Meta:
-        verbose_name = u"项目类型(A/B类)"
-        verbose_name_plural = u"项目类型(A/B类)"
+        verbose_name = u"项目类型(甲/乙类)"
+        verbose_name_plural = u"项目类型(甲/乙类)"
 
     def __unicode__(self):
         return self.get_category_display()
