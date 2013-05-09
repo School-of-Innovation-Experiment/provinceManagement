@@ -1,0 +1,27 @@
+<!--news base template-->
+<div class="hero-unit">
+  <div class="front-wrap">
+    <div class="home-news">
+      <h3>{%block title%}{%endblock%}
+        <small>
+          {%block title-sub%}{%endblock%}
+        </small>
+      </h3>
+      <div class="news-list">
+        <div class="news-documents documents-list">
+          <table class="documents">
+            <colgroup>
+              <col width="5%">
+              <col width="80%">
+              <col width="15%">
+            </colgroup>
+            <tbody>
+              {%block news-list%}
+              {%endblock%}
+            </tbody>
+          </table>
+        </div><!--end news-documents-->
+      </div><!--end news-list-->
+    </div><!--home-news-->
+  </div><!--front wrap-->
+</div>
