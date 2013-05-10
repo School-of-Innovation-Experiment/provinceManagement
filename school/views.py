@@ -124,7 +124,6 @@ def application_report_view(request, pid=None, is_expired=False):
 
     readonly = check_history_readonly(pid) or is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -135,13 +134,9 @@ def application_report_view(request, pid=None, is_expired=False):
         pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
-
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-    if check_auth(user=request.user, authority=SCHOOL_USER):
-        role = "home"
-    else:
-        role = "student"
     if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         info_form = InfoForm(request.POST, instance=project)
         application_form = iform(request.POST, instance=pre)
         if is_innovation==True:
@@ -197,12 +192,12 @@ def final_report_view(request, pid=None, is_expired=False):
     final = get_object_or_404(FinalSubmit, project_id=pid)
 
     readonly = check_history_readonly(pid) or is_expired
-
     if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=final,checkuser=SCHOOL_USER)
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            return HttpResponseRedirect(request.session.get("previous_url", "/"))
+            return HttpResponseRedirect(reverse('school.views.%s_view' % role))
         else:
             logger.info("Final Form Valid Failed"+"**"*10)
             logger.info(final_form.errors)
@@ -397,3 +392,13 @@ def StudentDispatch(request):
         limited_num = school_limit_num(request)
         remaining_activation_times = limited_num-email_num
         return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))
+
+def check_is_audited(user,presubmit,checkuser):
+    if check_auth(user=user, authority=checkuser):
+        role = "home"
+        presubmit.is_audited=True
+    else:
+        role = "student"
+        presubmit.is_audited=False
+    presubmit.save()
+    return role
