@@ -17,6 +17,11 @@
       <p>目前不能增加项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
     </div><!--end alert block-->
     {%endif%}
+    <div class="alert alert-error" style="margin-top:20px;">
+      <a class="close" data-dismiss="alert">x</a>
+      <h4 class="alert-heading">敬爱的校级管理员</h4>
+      <p>请您仔细审阅每个创新创业项目的初期报告、结题报告以及成果上传的内容，避免出现违反法律法规以及相关规定的内容!</p>
+    </div>
     <h3>
       本年度项目列表
       <span class="label label-info">申请上限:{{info.applications_limits}}</span>
@@ -29,6 +34,8 @@
         <th>名称</th>
         <th>项目类型</th>
         <th>类型(A/B类)</th>
+        <th>初期报告审核</th>
+        <th>结题报告审核</th>
         <th>指导教师</th>
         <th>当前状态</th>
         <th>评审级别</th>
@@ -46,6 +53,14 @@
             <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
             {% endfor %}
           </select><span id="error_message"></span>
+        </td>
+        <td>
+          {% if item.pre_isaudited %}<span class="span label label-info">已审核</span>{% endif %}
+          {% if not item.pre_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
+        </td>
+        <td>
+          {% if item.final_isaudited %}<span class="span label label-info">已审核</span>{% endif %}
+          {% if not item.final_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
         </td>
         <td>{{item.inspector}}</td>
         <td>{{item.project_status}}</td>

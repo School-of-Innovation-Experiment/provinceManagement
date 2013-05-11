@@ -2,10 +2,18 @@
 {% if not readonly %}
 <div class="">
   <center>
-    <button class="btn btn-large btn-block btn-success" style="width:40%;" type="submit">信息填写无误后，提交申请书</button>
+    <button class="btn btn-large btn-block btn-success" style="width:40%;" type="submit">
+        {% if is_show %}
+        信息填写无误后，提交申请书
+        {% endif %}
+        {% if not is_show %}
+        审核无误，提交申请书
+        {% endif %}
+    </button>
     <br/>
     <small class="pull-center">Tips: 截止日期前可以修改</small>
   </center>
 </div><!--submit button-->
+
 {% endif %}
 
