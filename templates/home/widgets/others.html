@@ -9,28 +9,12 @@
 {%endblock%}
 
 {%block news-list-items%}
-<tr>        
-  <td>1.</td>
-  <td>创新与实践同行</td>
-</tr>
+{% for news in news_others_list %}
 <tr>
-  <td>2.</td>
-  <td>手指的舞蹈，是梦想在闪耀</td>
+  <td>{{ news.list_index }}.</td>
+  <td>
+    <a href="{{ news.id }}">{{ news.news_title }}</a>
+  </td>
 </tr>
-<tr>
-  <td>3.</td>
-  <td>兢业奉献育人岗位 踏实创新教学管理</td>
-</tr>
-<tr>
-  <td>4.</td>
-  <td>春风化雨 润物无声</td>
-</tr>
-<tr>
-  <td>5.</td>
-  <td>师爱涓涓似春雨，滋润满园桃李香</td>
-</tr>
-<tr>
-  <td>6.</td>
-  <td>做全面发展的正能量女孩</td>
-</tr>
+{% endfor %}
 {%endblock%}

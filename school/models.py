@@ -84,14 +84,14 @@ class Project_Is_Assigned(models.Model):
 class Re_Project_Expert(models.Model):
     project = models.ForeignKey(ProjectSingle)
     expert = models.ForeignKey(ExpertProfile)
-    comments = models.TextField(blank=True, verbose_name="评价")
+    comments = models.TextField(blank=True, verbose_name=u"评价")
     score_significant = models.FloatField(blank=False, verbose_name=u"项目选题意义",
                                           default=0)
     score_value = models.FloatField(blank=False, verbose_name=u"科技研究价值",
                                     default=0)
-    score_innovation = models.FloatField(blank=False, verbose_name="项目创新之处",
+    score_innovation = models.FloatField(blank=False, verbose_name=u"项目创新之处",
                                          default=0)
-    score_practice = models.FloatField(blank=False, verbose_name="项目可行性",
+    score_practice = models.FloatField(blank=False, verbose_name=u"项目可行性",
                                        default=0)
     score_achievement = models.FloatField(blank=False, verbose_name=u"预期成果",
                                           default=0)
@@ -181,14 +181,14 @@ class PreSubmitEnterprise(models.Model):
     risk_management = models.TextField(blank=False, null=True, verbose_name=u"项目风险预测及应对措施")
     financial_pred = models.TextField(blank=False, null=True, verbose_name=u"财务预测")
     inspector_comments = models.TextField(blank=True, null=True,
-                                          verbose_name="指导教师意见")
+                                          verbose_name=u"指导教师意见")
     school_comments = models.TextField(blank=True, null=True,
-                                       verbose_name="学校评审意见")
+                                       verbose_name=u"学校评审意见")
     is_audited = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "创业项目申请书"
-        verbose_name_plural = "创业项目申请书"
+        verbose_name = u"创业项目申请书"
+        verbose_name_plural = u"创业项目申请书"
 
     def __unicode__(self):
         return self.project_id.title
@@ -201,22 +201,22 @@ class FinalSubmit(models.Model):
     """
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="结题报告唯一ID")
+                                  verbose_name=u"结题报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
     achievement_fashion = models.CharField(max_length=200, blank=True, null=True,
-                                           verbose_name="成果形式")
+                                           verbose_name=u"成果形式")
     achievement_summary = models.TextField(blank=False, null=True,
-                                           verbose_name="研究成果概述")
+                                           verbose_name=u"研究成果概述")
     inspector_comments = models.TextField(blank=False, null=True,
-                                          verbose_name="指导教师推荐语")
+                                          verbose_name=u"指导教师推荐语")
     school_comments = models.TextField(blank=False, null=True,
-                                       verbose_name="学校推荐语")
+                                       verbose_name=u"学校推荐语")
     is_audited = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "项目结题报告"
-        verbose_name_plural = "项目结题报告"
+        verbose_name = u"项目结题报告"
+        verbose_name_plural = u"项目结题报告"
 
     def __unicode__(self):
         return self.project_id.title
@@ -227,20 +227,20 @@ class TechCompetition(models.Model):
     """
     content_id = models.CharField(max_length=50, blank=False, unique=True,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="科技竞赛成果唯一ID")
+                                  verbose_name=u"科技竞赛成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
-                             verbose_name="竞赛作品名称")
+                             verbose_name=u"竞赛作品名称")
     members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
+                               verbose_name=u"参加人")
     competition_name = models.CharField(max_length=100, blank=False,
-                                        verbose_name="获奖名称")
+                                        verbose_name=u"获奖名称")
     competition_grade = models.CharField(max_length=20, blank=False,
-                                         verbose_name="获奖等级")
+                                         verbose_name=u"获奖等级")
 
     class Meta:
-        verbose_name = "科技竞赛"
-        verbose_name_plural = "科技竞赛"
+        verbose_name = u"科技竞赛"
+        verbose_name_plural = u"科技竞赛"
 
     def __unicode__(self):
         return self.project_id.project_id.title
@@ -252,20 +252,20 @@ class Patents(models.Model):
     """
     content_id = models.CharField(max_length=50, blank=False, unique=True,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="发明专利唯一ID")
+                                  verbose_name=u"发明专利唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
-                             verbose_name="专利题名")
+                             verbose_name=u"专利题名")
     members = models.CharField(max_length=100, blank=False,
-                               verbose_name="专利申请者")
+                               verbose_name=u"专利申请者")
     number = models.CharField(max_length=100, blank=False,
-                              verbose_name="专利号")
+                              verbose_name=u"专利号")
     finish_date = models.DateField(blank=False,
-                                   verbose_name="批准时间")
+                                   verbose_name=u"批准时间")
 
     class Meta:
-        verbose_name = "发明专利"
-        verbose_name_plural = "发明专利"
+        verbose_name = u"发明专利"
+        verbose_name_plural = u"发明专利"
 
     def __unicode__(self):
         return self.project_id.project_id.title
@@ -277,20 +277,20 @@ class Papers(models.Model):
     """
     content_id = models.CharField(max_length=50, blank=False, unique=True,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="学术论文成果唯一ID")
+                                  verbose_name=u"学术论文成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
-                             verbose_name="名称")
+                             verbose_name=u"名称")
     members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
+                               verbose_name=u"参加人")
     publication = models.CharField(max_length=100, blank=False,
-                                   verbose_name="期刊期数")
+                                   verbose_name=u"期刊期数")
     finish_date = models.DateField(blank=False,
-                                   verbose_name="发表时间")
+                                   verbose_name=u"发表时间")
 
     class Meta:
-        verbose_name = "学术论文"
-        verbose_name_plural = "学术论文"
+        verbose_name = u"学术论文"
+        verbose_name_plural = u"学术论文"
 
     def __unicode__(self):
         return self.project_id.project_id.title
@@ -302,19 +302,19 @@ class AchievementObjects(models.Model):
     """
     content_id = models.CharField(max_length=50, blank=False, unique=True,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="实物成果唯一ID")
+                                  verbose_name=u"实物成果唯一ID")
     project_id = models.ForeignKey(FinalSubmit)
     title = models.CharField(max_length=100, blank=False,
-                             verbose_name="名称")
+                             verbose_name=u"名称")
     members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
+                               verbose_name=u"参加人")
     finish_date = models.DateField(blank=False,
-                                   verbose_name="完成时间")
-    comments = models.TextField(blank=True, verbose_name="备注")
+                                   verbose_name=u"完成时间")
+    comments = models.TextField(blank=True, verbose_name=u"备注")
 
     class Meta:
-        verbose_name = "实物"
-        verbose_name_plural = "实物"
+        verbose_name = u"实物"
+        verbose_name_plural = u"实物"
 
     def __unicode__(self):
         return self.project_id.project_id.title
@@ -325,22 +325,22 @@ class UploadedFiles(models.Model):
     """
     file_id = models.CharField(max_length=50,
                                primary_key=True, default=lambda:str(uuid.uuid4()),
-                               verbose_name="文件上传唯一ID")
+                               verbose_name=u"文件上传唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     name = models.CharField(max_length=100, blank=False,
-                            verbose_name="文件名称")
+                            verbose_name=u"文件名称")
     file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",
-                                verbose_name="文件对象")
+                                verbose_name=u"文件对象")
     uploadtime = models.DateTimeField(blank=True, null=True,
-                                      verbose_name="上传时间")
+                                      verbose_name=u"上传时间")
     file_size = models.CharField(max_length=50, blank=True, null=True,
-                                 default=None, verbose_name="文件大小")
+                                 default=None, verbose_name=u"文件大小")
     file_type = models.CharField(max_length=50, blank=True, null=True,
-                                 default=None, verbose_name="文件类型")
+                                 default=None, verbose_name=u"文件类型")
 
     class Meta:
-        verbose_name = "文件上传"
-        verbose_name_plural = "文件上传"
+        verbose_name = u"文件上传"
+        verbose_name_plural = u"文件上传"
 
     def __unicode__(self):
         return self.project_id.title

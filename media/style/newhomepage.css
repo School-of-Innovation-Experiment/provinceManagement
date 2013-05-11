@@ -170,7 +170,7 @@ table.documents td {
     margin: 0;
     float: left;
     height: 100%;
-    border-right: 1px solid #0064b9;
+    /* border-right: 1px solid #0064b9; */
     padding: 0 15px;
     display: inline;
 }

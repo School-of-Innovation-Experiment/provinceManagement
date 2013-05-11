@@ -125,7 +125,16 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
-
+NEWS_CATEGORY_ANNOUNCEMENT = "announcement"
+NEWS_CATEGORY_POLICY = "policy"
+NEWS_CATEGORY_OUTSTANDING = "outstanding"
+NEWS_CATEGORY_OTHERS = "others"
+NEWS_CATEGORY_CHOICES = (
+    (NEWS_CATEGORY_ANNOUNCEMENT, u"通知公告"),
+    (NEWS_CATEGORY_POLICY, u"政策规章"),
+    (NEWS_CATEGORY_OUTSTANDING, u"优秀项目"),
+    (NEWS_CATEGORY_OTHERS, u"他山之石"),
+)
 
 # Paginator default Page elements
 PAGE_ELEMENTS = 10

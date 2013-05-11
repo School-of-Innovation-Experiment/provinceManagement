@@ -14,6 +14,7 @@ from django.template import Context #, loader
 from django.http import HttpResponse, Http404
 from backend.utility import getContext, getSchoolsPic
 import datetime, os
+from const import *
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
@@ -26,15 +27,14 @@ def get_news(news_id = None):
     return news_content
 
 def index(request):
-    the_latest_news = get_news()
-    the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
-    context = {
-            'the_latest_news': the_latest_news,
-            }
-    context.update(
-        getContext(
-            News.objects.exclude(news_document=u'')[:5], \
-                1, 'homepage_docs'))
+    news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT)
+    news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY)
+    news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING)
+    news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS)
+    context = getContext(news_announcement, 1, "news_announcement")
+    context.update(getContext(news_policy, 1, "news_policy"))
+    context.update(getContext(news_outstanding, 1, "news_outstanding"))
+    context.update(getContext(news_others, 1, "news_others"))
     return render(request, 'home/index.html', context)
 
 
