@@ -55,11 +55,11 @@
           </select><span id="error_message"></span>
         </td>
         <td>
-          {% if item.pre_isaudited %}<span class="span label label-info">已审核</span>{% endif %}
+          {% if item.pre_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
           {% if not item.pre_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
         </td>
         <td>
-          {% if item.final_isaudited %}<span class="span label label-info">已审核</span>{% endif %}
+          {% if item.final_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
           {% if not item.final_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
         </td>
         <td>{{item.inspector}}</td>
