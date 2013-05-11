@@ -35,12 +35,14 @@ def index(request):
     context.update(getContext(news_policy, 1, "news_policy"))
     context.update(getContext(news_outstanding, 1, "news_outstanding"))
     context.update(getContext(news_others, 1, "news_others"))
-    return render(request, 'home/index.html', context)
+    return context
+    # return render(request, 'home/index.html', context)
 
 
 def index_new(request):
     names = getSchoolsPic()
     context = {"schools_name_list": names}
+    context.update(index(request))
     return render(request, "home/new-homepage.html", context)
 
 
