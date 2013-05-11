@@ -28,3 +28,5 @@ class StudentWeeklySummary(models.Model):
     summary = models.CharField(blank=True, max_length=500,
                                verbose_name=u"项目周报")
     date = models.DateField(default=datetime.datetime.today)
+    recorder = models.CharField(blank=True, max_length=100,
+                                verbose_name=u"记录人")
