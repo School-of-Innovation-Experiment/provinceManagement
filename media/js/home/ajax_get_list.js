@@ -15,6 +15,7 @@ function turn_page () {
       $(tagid).attr('onclick',
                     "Dajaxice.news.news_turn_page(news_turn_page, {'news_page': '"
                     + $(tagid).attr("arg") + "'," + "'news_search': '" + news_input
+                    + "'," + "'news_cate': '" + $(tagid).attr("cate")
                     + "'}); return false;");
   };
 };

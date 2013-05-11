@@ -25,7 +25,7 @@
   <div>
     <span class="step-links">
       {% if news_page.has_previous %}
-      <a href="?news_page={{ news_page.previous_page_number }}" id="news-previous-page" arg="{{news_page.previous_page_number}}">上一页</a>
+      <a href="?news_page={{ news_page.previous_page_number }}" id="news-previous-page" arg="{{news_page.previous_page_number}}" cate="{{ news_cate.category }}">上一页</a>
       {% endif %}
 
       <span class="current">
@@ -33,7 +33,7 @@
       </span>
 
       {% if news_page.has_next %}
-      <a href="?news_page={{ news_page.next_page_number }}" id="news-next-page" arg="{{news_page.next_page_number}}">下一页</a>
+      <a href="?news_page={{ news_page.next_page_number }}" id="news-next-page" arg="{{news_page.next_page_number}}" cate="{{ news_cate.category }}">下一页</a>
       {% endif %}
     </span>
   </div>
