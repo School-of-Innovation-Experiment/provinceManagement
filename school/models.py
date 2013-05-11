@@ -208,9 +208,9 @@ class FinalSubmit(models.Model):
                                            verbose_name=u"成果形式")
     achievement_summary = models.TextField(blank=False, null=True,
                                            verbose_name=u"研究成果概述")
-    inspector_comments = models.TextField(blank=False, null=True,
+    inspector_comments = models.TextField(blank=True, null=True,
                                           verbose_name=u"指导教师推荐语")
-    school_comments = models.TextField(blank=False, null=True,
+    school_comments = models.TextField(blank=True, null=True,
                                        verbose_name=u"学校推荐语")
     is_audited = models.BooleanField(default=False)
 

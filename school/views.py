@@ -84,7 +84,7 @@ def home_view(request, is_expired=False):
     school home management page
     """
     current_list = ProjectSingle.objects.filter(adminuser=request.user,
-                                                year=get_current_year)
+                                               year=get_current_year)
     readonly=is_expired
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
@@ -98,8 +98,9 @@ def home_view(request, is_expired=False):
     else:
         total = 0
         remainings = 0
-
-    data = {"current_list": current_list,
+    add_current_list = current_list_add(list=current_list)
+    # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
+    data = {"current_list": add_current_list,
             "financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
             "info": {"applications_limits": total,
@@ -124,7 +125,6 @@ def application_report_view(request, pid=None, is_expired=False):
 
     readonly = check_history_readonly(pid) or is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -137,11 +137,8 @@ def application_report_view(request, pid=None, is_expired=False):
         is_innovation = False
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-    if check_auth(user=request.user, authority=SCHOOL_USER):
-        role = "home"
-    else:
-        role = "student"
     if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         info_form = InfoForm(request.POST, instance=project)
         application_form = iform(request.POST, instance=pre)
         if is_innovation==True:
@@ -195,14 +192,14 @@ def final_report_view(request, pid=None, is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
-
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     readonly = check_history_readonly(pid) or is_expired
-
     if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=final,checkuser=SCHOOL_USER)
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            return HttpResponseRedirect(request.session.get("previous_url", "/"))
+            return HttpResponseRedirect(reverse('school.views.%s_view' % role))
         else:
             logger.info("Final Form Valid Failed"+"**"*10)
             logger.info(final_form.errors)
@@ -213,6 +210,7 @@ def final_report_view(request, pid=None, is_expired=False):
     data = {'pid': pid,
             'final': final_form,
             'readonly': readonly,
+            'is_show':is_show,
             }
 
     return render(request, 'school/final.html', data)
@@ -293,7 +291,7 @@ def file_view(request, pid=None, is_expired=False):
     file management view
     """
     readonly = check_history_readonly(pid) or is_expired
-
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
             return upload_response(request, pid)
@@ -305,6 +303,7 @@ def file_view(request, pid=None, is_expired=False):
     data = {'pid': pid,
             'files': file_history,
             'readonly': readonly,
+            'is_show':is_show,
             }
 
     return render(request, 'school/fileupload.html', data)
@@ -397,3 +396,25 @@ def StudentDispatch(request):
         limited_num = school_limit_num(request)
         remaining_activation_times = limited_num-email_num
         return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))
+
+def check_is_audited(user,presubmit,checkuser):
+    if check_auth(user=user, authority=checkuser):
+        role = "home"
+        presubmit.is_audited=True
+    else:
+        role = "student"
+        presubmit.is_audited=False
+    presubmit.save()
+    return role
+
+def current_list_add(list=None):
+    for item in list:
+        pid = item.project_id
+        if item.project_category.category == CATE_INNOVATION:
+            pre = get_object_or_404(PreSubmit, project_id=pid)
+        else :
+            pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        final = get_object_or_404(FinalSubmit, project_id=pid)
+        item.pre_isaudited = pre.is_audited
+        item.final_isaudited = final.is_audited
+    return list    
