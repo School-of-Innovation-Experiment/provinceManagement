@@ -1,7 +1,8 @@
 InnovationManagement
 ====================
 
-A website for College students Innovation  Entrepreneurial  in Liaoning Province, it is School Version 
+A website for College students Innovation  Entrepreneurial  in Liaoning Province, it is School Version.
+In other branch , we also develop province version.
 
 # Environment 
  * Please, execute this cmd: **sudo pip install -r requirements.txt**
@@ -30,3 +31,8 @@ A website for College students Innovation  Entrepreneurial  in Liaoning Province
    * sudo pip install uwsgi
    * cd deploy -> sudo sh run.sh start|restart|stop|deploy|update
  2. Config your mysql server
+
+# Lincenses
+ This software uses GPLv3 lincense, SIE developer team own the copyright.
+
+More information, you can visit our wiki pages.
