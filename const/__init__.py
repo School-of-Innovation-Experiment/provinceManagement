@@ -131,6 +131,8 @@ NEWS_CATEGORY_CHOICES = (
     (NEWS_CATEGORY_OUTSTANDING, u"优秀项目"),
     (NEWS_CATEGORY_OTHERS, u"他山之石"),
 )
+# the max length of news_content
+NEWS_MAX_LENGTH = 5000
 
 # Paginator default Page elements
 PAGE_ELEMENTS = 10
