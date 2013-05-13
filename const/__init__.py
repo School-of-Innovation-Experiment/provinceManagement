@@ -80,17 +80,11 @@ PROJECT_ENTERPRISE_MATURITY_CHOICES = (
 #Project Grade
 GRADE_NATION = "nation"
 GRADE_PROVINCE = "province"
-GRADE_CITY = "city"
-GRADE_SCHOOL = "school"
-GRADE_INSITUTE = "insitute"
 GRADE_UN = "undifined"
 
 PROJECT_GRADE_CHOICES = (
     (GRADE_NATION, u"国家级"),
     (GRADE_PROVINCE, u"省级"),
-    # (GRADE_CITY, u"市级"),
-    # (GRADE_SCHOOL, u"校级"),
-    # (GRADE_INSITUTE, u"学院级"),
     (GRADE_UN, u"未指定"),
 )
 
