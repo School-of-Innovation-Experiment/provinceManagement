@@ -53,9 +53,10 @@ def docs_search_page(request, docs_input):
     return simplejson.dumps({'html':html})
 
 @dajaxice_register(method='GET')
-def news_search_page(request, news_input):
+def news_search_page(request, news_input, news_cate):
     news_list = News.objects. \
         filter(news_date__gte=datetime.date.today()-datetime.timedelta(365)). \
+        filter(news_category__category=news_cate). \
         filter(Q(news_title__icontains=news_input) |
                Q(news_content__icontains=news_input))
     context = getContext(news_list, 1, 'news')

@@ -36,10 +36,11 @@ function search () {
     tagid = ids[tagid];
     if(tagid.indexOf('docs') >= 0)
       $(tagid).attr('onclick',
-                    "Dajaxice.news.docs_search_page(docs_turn_page, {'docs_input': getinput('#docs-search-input')}); return false;");
+                    "Dajaxice.news.docs_search_page(docs_turn_page, {'docs_input': getinput('#docs-search-input'),}); return false;");
     else
       $(tagid).attr('onclick',
-                    "Dajaxice.news.news_search_page(news_turn_page, {'news_input': getinput('#news-search-input')}); return false;");
+                    "Dajaxice.news.news_search_page(news_turn_page, {'news_input': getinput('#news-search-input'), "
+                    + "'news_cate': '" + $(tagid).attr("cate") + "'}); return false;");
   };
 };
 window.onload= function () {

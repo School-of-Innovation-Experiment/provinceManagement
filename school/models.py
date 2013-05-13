@@ -59,7 +59,7 @@ class ProjectSingle(models.Model):
     #choices=YEAR_CHOICES,
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
-                               verbose_name=u"参加年份")
+                               )
     keywords = models.CharField(blank=True, max_length=300,
                                 verbose_name=u"关键字")
 
