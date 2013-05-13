@@ -183,8 +183,8 @@ class NewsCategory(models.Model):
                                 default=NEWS_CATEGORY_ANNOUNCEMENT ,
                                 verbose_name=u"新闻类型")
     class Meta:
-        verbose_name = u"新闻类型"
-        verbose_name_plural = u"新闻类型"
+        verbose_name = "新闻类型"
+        verbose_name_plural = "新闻类型"
 
     def __unicode__(self):
         return self.get_category_display()

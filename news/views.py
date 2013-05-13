@@ -28,10 +28,10 @@ def get_news(news_id = None):
     return news_content
 
 def index(request):
-    news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT)
-    news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY)
-    news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING)
-    news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS)
+    news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT).order_by('-news_date')
+    news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
+    news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING).order_by('-news_date')
+    news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS).order_by('-news_date')
     context = getContext(news_announcement, 1, "news_announcement")
     context.update(getContext(news_policy, 1, "news_policy"))
     context.update(getContext(news_outstanding, 1, "news_outstanding"))

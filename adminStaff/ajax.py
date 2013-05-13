@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
-from const.models import SchoolDict
+from const.models import SchoolDict, NewsCategory
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -155,5 +155,7 @@ def Release_News(request, html):
     Release_News
     '''
     title=datetime.datetime.today().year
-    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
-    data.save();
+    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html,
+                news_category=NewsCategory.objects.get(category=NEWS_CATEGORY_ANNOUNCEMENT))
+    data.save()
+

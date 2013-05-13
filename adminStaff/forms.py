@@ -7,9 +7,9 @@ Created on 2013-3-28
 from datetime import *
 from django import  forms
 from adminStaff.models import ProjectControl
-from const import PROJECT_GRADE_CHOICES, NEWS_MAX_LENGTH
+from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
-from django.contrib.admin import widgets
+
 
 class ExpertDispatchForm(forms.Form):
     insitute_choice_list = []
@@ -123,8 +123,3 @@ class SubjectGradeForm(forms.Form):
     subject_grade_choice =   PROJECT_GRADE_CHOICES
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
 
-class NewsForm(forms.Form):
-    news_title = forms.CharField(max_length=20, required=True,
-                                 widget=forms.TextInput(attrs={'class':'span2','id':"news_title",'placeholder':u"新闻标题"}),)
-    news_content = forms.CharField(max_length=NEWS_MAX_LENGTH, required=True)
-    news_date = forms.DateTimeField(widget=widgets.AdminDateWidget())

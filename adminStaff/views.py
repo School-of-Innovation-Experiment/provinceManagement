@@ -12,7 +12,7 @@ from datetime import date
 from django.http import HttpResponse, Http404
 from adminStaff import forms
 from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
-from django.shortcuts import render_to_response, render, get_object_or_404
+from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
@@ -30,6 +30,9 @@ from django.db import transaction
 
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 from backend.decorators import *
+from backend.logging import logger, loginfo
+from news.models import News
+from news.forms import NewsForm
 
 class AdminStaffService(object):
     @staticmethod
@@ -327,5 +330,18 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
-        context = {"news": forms.NewsForm}
-        return render(request, "adminStaff/news_release.html", context)
+        if request.method == 'POST':
+            newsform = NewsForm(request.POST, request.FILES)
+            if newsform.is_valid():
+                new_news = News(news_title = newsform.cleaned_data["news_title"],
+                                news_content = newsform.cleaned_data["news_content"],
+                                news_date = newsform.cleaned_data["news_date"],
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
+                                # news_document = request.FILES["news_document"],)
+                new_news.save()
+            else:
+                loginfo(p=newsform.errors.keys(), label="news form error")
+            return redirect('/')
+        else:
+            context = {"newsform": NewsForm}
+            return render(request, "adminStaff/news_release.html", context)
