@@ -27,7 +27,7 @@ from registration.models import *
 from registration.models import RegistrationProfile
 
 from django.db import transaction
- 
+
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 from backend.decorators import *
 
@@ -288,8 +288,8 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.comments, obj.score_significant, 
-                        obj.score_value, obj.score_innovation, 
+            obj_list = [obj.comments, obj.score_significant,
+                        obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
             review_list.append(obj_list)
@@ -327,4 +327,5 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
-        return render(request, "adminStaff/news_release.html")
+        context = {"news": forms.NewsForm}
+        return render(request, "adminStaff/news_release.html", context)
