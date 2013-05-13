@@ -54,9 +54,12 @@ def index_new(request):
 
 
 def read_news(request, news_id):
+    news = get_news(news_id)
+    news_cate = news.news_category
     context = Context({
-            'news': get_news(news_id),
-            })
+        'news': news,
+        'news_cate':news_cate,
+    })
     return render(request, 'home/news-content.html', context)
 
 def list_news_by_cate(request, news_cate):

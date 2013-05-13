@@ -119,6 +119,8 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
+# the following 4 variables are used in foreground,
+# so use some meaning words
 NEWS_CATEGORY_ANNOUNCEMENT = "announcement"
 NEWS_CATEGORY_POLICY = "policy"
 NEWS_CATEGORY_OUTSTANDING = "outstanding"
