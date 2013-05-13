@@ -31,6 +31,7 @@
         </div>
       </fieldset>
       <br/>
+      {% if not is_show %}
       <fieldset>
         <legend>指导教师推荐语</legend>
         <div  class="control-group form-inline {% if final.inspector_comments.errors %}error{% endif %}">
@@ -55,7 +56,8 @@
           </div>
           {% endif %}  
         </div>
-      </fieldset> 
+      </fieldset>
+      {% endif %} 
     </blockquote><!--end project evaluate-->
 
     <!--Project Achivements-->

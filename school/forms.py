@@ -51,7 +51,7 @@ class ApplicationReportForm(ModelForm):
     """
     class Meta:
         model = PreSubmit
-        exclude = ('project_id', 'content_id', )
+        exclude = ('project_id', 'content_id','is_audited', )
 
         #TODO: add css into widgets
         widgets = {
@@ -93,7 +93,7 @@ class EnterpriseApplicationReportForm(ModelForm):
     class Meta:
         model = PreSubmitEnterprise
 
-        exclude = ('project_id', 'content_id','enterpriseTeacher' )
+        exclude = ('project_id', 'content_id','enterpriseTeacher','is_audited',)
 
         #TODO: add css into widgets
         widgets = {
@@ -162,7 +162,7 @@ class FinalReportForm(ModelForm):
     class Meta:
         model = FinalSubmit
         #TODO: add css into widgets
-        exclude = ('project_id', 'content_id', )
+        exclude = ('project_id', 'content_id','is_audited' )
         widgets = {"achievement_summary": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                                 'placeholder':'项目完成情况，写200字就行...',
                                                                 'class':"fill-form"},),

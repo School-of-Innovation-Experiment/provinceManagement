@@ -53,7 +53,7 @@ def school_statistics_view(request):
     """
     # check users
     default_users = SchoolProfile.objects.all()
-    if default_users is None:
+    if default_users:
         return HttpResponseRedirect("/")
 
     data = get_statistics_from_user(user=default_users[0].userid)

@@ -16,7 +16,8 @@ from django.views.generic.simple import direct_to_template
 
 urlpatterns = patterns('',
                        url(r'^$',
-                           news_views.index,
+                           news_views.index_new,
+                           #news_views.index,
                            name='homepage',
                            ),
                        url(r'^newslist/(?P<news_id>\d+)$',

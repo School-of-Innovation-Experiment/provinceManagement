@@ -9,6 +9,8 @@ from backend.utility import convert2media_url, getContext
 from const import PROJECT_GRADE_CHOICES, GRADE_NATION, DEFAULT_IMG_URL
 from const.models import SchoolDict, ProjectGrade
 
+from backend.logging import logger, loginfo
+
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 
 def show_project(request, project_id = ""):
@@ -72,14 +74,21 @@ def show_index_get_search_context(request, project_page):
     search_school = request.GET.get('search_school') or ""
     search_year = request.GET.get('search_year') or ""
     search_grade = request.GET.get('search_grade') or ""
+    search_keywords=request.GET.get('search_keywords') or ""
 
     q1 = (search_year and Q(year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None
+    q4 = search_keywords or None
     qset = filter(lambda x: x != None, [q1, q2, q3])
-    if qset :
-        qset = reduce(lambda x, y: x & y, qset)
-        project_list = ProjectSingle.objects.filter(qset)
+    loginfo(p=q4, label="in q4")
+    loginfo(p=qset, label="in qset")
+    if qset or q4:
+        if qset:
+            qset = reduce(lambda x, y: x & y, qset)
+            project_list = ProjectSingle.objects.filter(qset,keywords__icontains=q4)
+        else:
+            project_list = ProjectSingle.objects.filter(keywords__icontains=q4)
     else:
         project_list = ProjectSingle.objects.all()
 
