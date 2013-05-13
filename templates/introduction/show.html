@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="{{STATIC_URL}}showtime/css/showtime.css" type="text/css" media="screen" />
   <div  class="flow-style">
     <!--header-->
-    <a href="#" id="show-search-tools-bar">搜索</a>
-    <form class="form-inline" action="." method="GET" id="search-tools-bar" style="display:none;">
+    <a href="#" id="show-search-tools-bar">隐藏</a>
+    <form class="form-inline" action="." method="GET" id="search-tools-bar" >
       <select name="search_school">
 	      <option selected="true" value="">学校名</option>
 	      {% for school in schools %}
