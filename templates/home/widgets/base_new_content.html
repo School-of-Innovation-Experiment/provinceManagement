@@ -2,30 +2,25 @@
 <div class="">
   <div class="front-wrap">
     <div class="home-news">
-      <h3>{%block title%}{%endblock%}
-        <small>
-          {%block title-sub%}{%endblock%}
-        </small>
-      </h3>
+      <div class="usoft-listview-header">
+        <h3>{%block title%}{%endblock%}
+          <small>
+            {%block title-sub%}{%endblock%}
+          </small>
+        </h3>
+        <span class="usoft-listview-more">
+          {% block more %}
+          <a href="newslist/">更多»</a>          
+          {% endblock %}
+        </span>
+      </div>
       {% block news-list %}
       <div class="news-list">
-        <div class="news-documents documents-list">
-          <table class="news">
-            <colgroup>
-              <col width="5%">
-              <col width="95%">
-            </colgroup>
-            <tbody>
-              {%block news-list-items%}
-              {%endblock%}
-            </tbody>
-          </table>
+        <div class="news-documents documents-list ">
+          {%block news-list-items%}
+          {%endblock%}
         </div><!--end news-documents-->
       </div><!--end news-list-->
-      {% endblock %}
-      <hr>
-      {% block more %}
-      <strong><a href="newslist/">更多»</a></strong>
       {% endblock %}
     </div><!--home-news-->
   </div><!--front wrap-->
