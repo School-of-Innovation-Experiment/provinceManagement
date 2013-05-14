@@ -264,7 +264,8 @@ class AdminStaffService(object):
         ret = {}
         for i in xrange(len(subject_list)):
             subject = subject_list[i]
-            num = min(len(expert_list), random.randint(3,5))
+            #num = min(len(expert_list), random.randint(3,5))
+            num = min(len(expert_list), 3)
             ret[subject] = []
             for j in xrange(num):
                 ret[subject].append(expert_list[(i + j) % len(expert_list)])
