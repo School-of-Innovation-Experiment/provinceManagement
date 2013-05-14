@@ -26,16 +26,19 @@ def NumLimit(request, form):
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
         school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
-        limited_num = form.cleaned_data["limited_num"]
+        a_limited_num = form.cleaned_data["a_limited_num"]
+        b_limited_num = form.cleaned_data["b_limited_num"]
         try:
             school_obj = SchoolProfile.objects.get(school=school)
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
                 projectlimit = ProjectPerLimits(school=school_obj,
-                                                   number=limited_num)
+                                                number=a_limited_num + b_limited_num,
+                                                a_cate_number=a_limited_num)
                 projectlimit.save()
             else:
                 object = ProjectPerLimits.objects.get(school=school_obj)
-                object.number = limited_num
+                object.number = a_limited_num + b_limited_num
+                object.a_cate_number = a_limited_num
                 object.save()
             return simplejson.dumps({'status':'1','message':u'更新成功'})
         except SchoolProfile.DoesNotExist:
@@ -77,7 +80,6 @@ def DeadlineSettings(request, form):
 
 @dajaxice_register
 def  ExpertDispatch(request, form):
-    #dajax = Dajax()
     expert_form =  ExpertDispatchForm(deserialize_form(form))
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]

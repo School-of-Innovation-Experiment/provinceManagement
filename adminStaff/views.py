@@ -194,6 +194,8 @@ class AdminStaffService(object):
         返回存在的每个学校限制数目列表
         '''
         limit_list = ProjectPerLimits.objects.all()
+        for obj in limit_list:
+            obj.b_cate_number = obj.number - obj.a_cate_number
         return limit_list
     @staticmethod
     def GetSubject_list(category=None,school=None):
@@ -341,7 +343,7 @@ class AdminStaffService(object):
                 new_news.save()
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-            return redirect('/')
+            return redirect('/newslist/%d' % new_news.id)
         else:
             context = {"newsform": NewsForm}
             return render(request, "adminStaff/news_release.html", context)

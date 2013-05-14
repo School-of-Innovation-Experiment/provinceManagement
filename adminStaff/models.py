@@ -58,8 +58,9 @@ class ProjectPerLimits(models.Model):
     """
     Project apply number limits
     """
-    school = models.OneToOneField(SchoolProfile, verbose_name="学校名称", unique=True)
-    number = models.IntegerField(blank=False, verbose_name="申请数量上限")
+    school = models.OneToOneField(SchoolProfile, verbose_name=u"学校名称", unique=True)
+    number = models.IntegerField(blank=False, verbose_name=u"总申请数量上限")
+    a_cate_number = models.IntegerField(blank=False, verbose_name=u"甲类项目数量上限")
 
     class Meta:
         verbose_name = "申请数量限制"
