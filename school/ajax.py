@@ -17,6 +17,7 @@ from const.models import SchoolDict, ProjectCategory, FinancialCategory, Insitut
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+from school.utility import *
 
 @dajaxice_register
 def  StudentDispatch(request, form):
@@ -37,6 +38,14 @@ def  StudentDispatch(request, form):
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
+            if financial_cate == FINANCIAL_CATE_A:
+                current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+                limits = ProjectPerLimits.objects.get(school__userid=request.user)
+                a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
+                if a_remainings <= 0:
+                    message = u"甲类项目达到最大限度，无权发送"
+                    return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
+
             flag = Send_email_to_student(request, name, password, email,STUDENT_USER, financial_cate=financial_cate)
             if flag:
                 message = u"发送邮件成功"
@@ -74,10 +83,16 @@ def ProjInsituteChange(request, cate):
     return simplejson.dumps({"message": u"更新成功: %s" % new_cate})
 
 @dajaxice_register
-def FinancialCateChange(request, cate):
+def FinancialCateChange(request, cate, pid):
     #dajax = Dajax()
+    if cate == FINANCIAL_CATE_A:
+        current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+        a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
+        if a_remainings <= 0:
+            return simplejson.dumps({"message":u"甲类项目数量超额"})
     try:
-        project = ProjectSingle.objects.get(adminuser=request.user)
+        project = ProjectSingle.objects.get(project_id=pid)
         new_cate = FinancialCategory.objects.get(category=cate)
     except Exception, err:
         loginfo(p=err, label="change financial cate")

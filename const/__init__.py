@@ -46,8 +46,8 @@ FINANCIAL_CATE_B = 'b'
 FINANCIAL_CATE_UN = 'un'
 
 FINANCIAL_CATE_CHOICES = (
-    (FINANCIAL_CATE_A, u"A类"),
-    (FINANCIAL_CATE_B, u"B类"),
+    (FINANCIAL_CATE_A, u"甲类"),
+    (FINANCIAL_CATE_B, u"乙类"),
     (FINANCIAL_CATE_UN, u"未指定"),
 )
 #Project_Origin
