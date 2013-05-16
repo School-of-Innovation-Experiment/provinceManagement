@@ -91,20 +91,23 @@ def home_view(request, is_expired=False):
     except Exception, err:
         logger.info(err)
         limits = None
-
     if limits is not None:
         remainings = int(limits.number) - len(current_list)
         total = limits.number
+        a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A]) 
     else:
         total = 0
         remainings = 0
+        a_remainings = 0
     add_current_list = current_list_add(list=current_list)
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
     data = {"current_list": add_current_list,
             "financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
             "info": {"applications_limits": total,
-                     "applications_remaining": remainings}
+                     "applications_remaining": remainings,
+                     "applications_a_remaining": a_remainings,
+                     }
             }
     return render(request, 'school/home.html', data)
 

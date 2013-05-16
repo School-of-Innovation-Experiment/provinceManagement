@@ -5,40 +5,22 @@
 {%endblock%}
 
 {%block title-sub%}
-  HOT
+  outstanding
 {%endblock%}
 
 {%block news-list-items%}
-<tr>        
-  <td>1.</td>
-  <td>新型球形飞行器 东北大学</td>
-</tr>
-<tr>
-  <td>2.</td>
-  <td>无足仿生机器人 东北大学</td>
-</tr>
-<tr>        
-  <td>3.</td>
-  <td>新型紫外探测材料cBN的研究 大连海事大学</td>
-</tr>
-<tr>
-  <td>4.</td>
-  <td>感恩——艺术歌曲汇 东北财经大学</td>
-</tr>
-<tr>        
-  <td>5.</td>
-  <td>ITEM游戏教学软件公司 大连理工大学</td>
-</tr>
-<tr>
-  <td>6.</td>
-  <td>水性硬脂酸盐 大连理工大学</td>
-</tr>
-<tr>        
-  <td>7.</td>
-  <td>重光照系统 大连理工大学</td>
-</tr>
-<tr>
-  <td>8.</td>
-  <td>旅游产业中机械手群的研究 辽宁大学</td>
-</tr>
+{% for news in news_outstanding_list %}
+<div class="usoft-listview-basic">
+    <ul>
+        <li>
+            <span class="usoft-listview-item-date" >{{news.news_date|date:"y-m-d"}}</span>
+            <span><a href="newslist/{{ news.id }}">{{ news.news_title }}</a></span>
+        </li>
+    </ul>
+</div>
+{% endfor %}
+{%endblock%}
+
+{%block more%}
+<strong><a href="newslist/news_cate={{ news_category_outstanding }}">更多»</a></strong>
 {%endblock%}

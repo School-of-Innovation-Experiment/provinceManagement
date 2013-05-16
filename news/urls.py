@@ -31,4 +31,8 @@ urlpatterns = patterns('',
                            news_views.list_news,
                            name='newslist',
                            ),
+                       url(r'^newslist/news_cate=(?P<news_cate>\S+)$',
+                           news_views.list_news_by_cate,
+                           name='newslist_cate'
+                           ),
                        )

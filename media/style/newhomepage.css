@@ -89,14 +89,19 @@
       }
 
 .front-wrap {
-    height: 40%;
+    height: 290px;
     overflow: hidden;
+    padding: 0 15px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #eaeaea;
 }
 
 .home-news {
     margin: 0;
     float: left;
-    height: 100%;
+    height: 90%%;
+    width: 100%;
     padding: 0 1.5%;
     display: inline;
 }
@@ -170,9 +175,49 @@ table.documents td {
     margin: 0;
     float: left;
     height: 100%;
-    border-right: 1px solid #0064b9;
-    padding: 0 15px;
-    display: inline;
+    width: 90%;
+    /* border-right: 1px solid #0064b9; */
+}
+
+.usoft-listview-header
+{
+    background: url(../images/bg0.png) 0px 0px no-repeat; 
+    margin: 0px;
+    line-height: 35px;
+    height: 35px;
+}
+
+.usoft-listview-item-date
+{
+    color: #999999;
+    font-weight: normal;
+    font-size: 12px;
+    float: right;
+    text-align: right;
+    padding-right: 0px;
+}
+
+.usoft-listview-basic
+{
+    margin: 0px 15px;
+    line-height: 2em;
+}
+.front-wrap ul
+{
+    list-style: url(../images/arrow.gif);
+}
+
+.usoft-listview-header h3 {
+float: left;
+}
+
+.usoft-listview-more a {
+float: right;
+color: #999999;
+font-weight: normal;
+font-size: 13px;
+margin: 0px 15px 0px 0px;
+text-align: right;
 }
 
 .news-list-important {
@@ -220,6 +265,10 @@ table.documents td {
 	box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
 }
 
+.usoft-container-section ul
+{
+    list-style: url(../images/arrow.gif);
+}
 
 /*keyframe animations*/
 .first {

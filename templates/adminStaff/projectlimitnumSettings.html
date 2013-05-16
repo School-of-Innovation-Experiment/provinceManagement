@@ -10,8 +10,10 @@
       <div>
 	<label>学校选择</label>
 	{{num_limit_form.school_name}}
-	<label>可供上传项目数量</label>
-	{{num_limit_form.limited_num}}
+	<label>甲类项目数量上限</label>
+	{{num_limit_form.a_limited_num}}
+        <label>乙类项目数量上限</label>
+	{{num_limit_form.b_limited_num}}
 	<input type="button" class="btn btn-primary" value="保存更改" onclick="send_num_limit();">
 	<span id="num_limit_error_message"><span>
       </div>
@@ -25,16 +27,19 @@
 		<strong>学校名称</strong>
 	      </td>
 	      <td>
-		<strong>上传数目限制</strong>
+		<strong>甲类项目数目上限</strong>
 	      </td>
-
+              <td>
+		<strong>乙类项目数目上限</strong>
+	      </td>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    {%for limitnum in school_limit_list%}
 	      <tr>
 		<td>{{limitnum.school}}</td>
-		<td>{{limitnum.number}}</td>
+		<td>{{limitnum.a_cate_number}}</td>
+                <td>{{limitnum.b_cate_number}}</td>
 	      </tr>
 	    {%endfor%}
 	  </tbody>

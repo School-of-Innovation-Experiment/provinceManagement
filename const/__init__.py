@@ -46,8 +46,8 @@ FINANCIAL_CATE_B = 'b'
 FINANCIAL_CATE_UN = 'un'
 
 FINANCIAL_CATE_CHOICES = (
-    (FINANCIAL_CATE_A, u"A类"),
-    (FINANCIAL_CATE_B, u"B类"),
+    (FINANCIAL_CATE_A, u"甲类"),
+    (FINANCIAL_CATE_B, u"乙类"),
     (FINANCIAL_CATE_UN, u"未指定"),
 )
 #Project_Origin
@@ -80,17 +80,11 @@ PROJECT_ENTERPRISE_MATURITY_CHOICES = (
 #Project Grade
 GRADE_NATION = "nation"
 GRADE_PROVINCE = "province"
-GRADE_CITY = "city"
-GRADE_SCHOOL = "school"
-GRADE_INSITUTE = "insitute"
 GRADE_UN = "undifined"
 
 PROJECT_GRADE_CHOICES = (
     (GRADE_NATION, u"国家级"),
     (GRADE_PROVINCE, u"省级"),
-    # (GRADE_CITY, u"市级"),
-    # (GRADE_SCHOOL, u"校级"),
-    # (GRADE_INSITUTE, u"学院级"),
     (GRADE_UN, u"未指定"),
 )
 
@@ -125,7 +119,20 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
-
+# the following 4 variables are used in foreground,
+# so use some meaning words
+NEWS_CATEGORY_ANNOUNCEMENT = "announcement"
+NEWS_CATEGORY_POLICY = "policy"
+NEWS_CATEGORY_OUTSTANDING = "outstanding"
+NEWS_CATEGORY_OTHERS = "others"
+NEWS_CATEGORY_CHOICES = (
+    (NEWS_CATEGORY_ANNOUNCEMENT, u"通知公告"),
+    (NEWS_CATEGORY_POLICY, u"政策规章"),
+    (NEWS_CATEGORY_OUTSTANDING, u"优秀项目"),
+    (NEWS_CATEGORY_OTHERS, u"他山之石"),
+)
+# the max length of news_content
+NEWS_MAX_LENGTH = 10000000
 
 # Paginator default Page elements
 PAGE_ELEMENTS = 10

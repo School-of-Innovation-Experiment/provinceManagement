@@ -12,6 +12,8 @@ from django.db import models
 import datetime, os
 from settings import MEDIA_ROOT
 from settings import NEWS_DOCUMENTS_PATH
+from const.models import NewsCategory
+
 class News(models.Model):
     news_title = models.CharField(verbose_name = u"标题",
                                   blank=True, max_length=200)
@@ -20,7 +22,9 @@ class News(models.Model):
     news_date = models.DateField(verbose_name = u"发表时间",
                                  default=datetime.datetime.today,
                                  blank=True)
-    news_document = models.FileField(upload_to=NEWS_DOCUMENTS_PATH, null=True, blank=True)
+    news_category = models.ForeignKey(NewsCategory, verbose_name = u"新闻类型")
+    news_document = models.FileField(upload_to=NEWS_DOCUMENTS_PATH, null=True, blank=True,
+                                     verbose_name = u"新闻附件")
 
     def document_name(self):
         return os.path.basename(self.news_document.name)

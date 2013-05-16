@@ -281,11 +281,11 @@ def get_trend_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':True},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': '历史数据统计'},
+                chart_options={'title': {'text': u'历史数据统计'},
                                 'xAxis':{
-                                            'title':{'text': '年份'},
+                                            'title':{'text': u'年份'},
                                         },
-                                'yAxis':{'title':{'text': '类别数量'},'allowDecimals':False},
+                                'yAxis':{'title':{'text': u'类别数量'},'allowDecimals':False},
                                 }
                 )
     return cht
@@ -312,11 +312,11 @@ def get_grade_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':False},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': '历史数据统计'},
+                chart_options={'title': {'text': u'历史数据统计'},
                                 'xAxis':{
-                                            'title':{'text': '年份'},
+                                            'title':{'text': u'年份'},
                                         },
-                                'yAxis':{'title':{'text': '获奖评级'},'allowDecimals':False},
+                                'yAxis':{'title':{'text': u'获奖评级'},'allowDecimals':False},
                                 }
                 )
     return cht

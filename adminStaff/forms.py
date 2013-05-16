@@ -9,6 +9,8 @@ from django import  forms
 from adminStaff.models import ProjectControl
 from const import PROJECT_GRADE_CHOICES
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory, InsituteCategory
+
+
 class ExpertDispatchForm(forms.Form):
     insitute_choice_list = []
     insitute_list = InsituteCategory.objects.all()
@@ -89,9 +91,12 @@ class NumLimitForm(forms.Form):
         SCHOOL_CHOICE_list.append((object.id, object.schoolName))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
-    limited_num   = forms.IntegerField(required=True,
-                                       widget=forms.TextInput(attrs={'id':"limited_num"}
-                           ) )
+    a_limited_num   = forms.IntegerField(required=True,
+                                         widget=forms.TextInput(attrs={'id':"a_limited_num"}
+                           ))
+    b_limited_num   = forms.IntegerField(required=True,
+                                         widget=forms.TextInput(attrs={'id':"b_limited_num"}
+                                                          ))
 
 class SubjectCategoryForm(forms.Form):
     category_choice_list = []
@@ -120,3 +125,4 @@ class SchoolCategoryForm(forms.Form):
 class SubjectGradeForm(forms.Form):
     subject_grade_choice =   PROJECT_GRADE_CHOICES
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
+

@@ -7,10 +7,10 @@
         <div class="search">
           <form action="#" method="get">
             <input id="news-search-input" class="search-input" type="text" size="16" alt="Search.">
-            <input id="search-news" type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go.">
+            <input id="search-news" type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go." cate="{{news_cate.category}}">
           </form>
         </div>
-        <h3>焦点新闻 <small>Hot</small></h3>
+        <h3>{{news_cate}} <small>{{news_cate.category}}</small></h3>
       </div>
       {% include "home/ajax/_news_list.html" %}
     </div> <!-- news-list -->

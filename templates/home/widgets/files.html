@@ -1,11 +1,11 @@
 <!--files news-->
 {% extends "home/widgets/base_new_content.html" %}
 {%block title%}
- 政策规章
+政策规章
 {%endblock%}
 
 {%block title-sub%}
-  New
+<small>policy</small>
 {%endblock%}
 
 {%block new-list-style%}
@@ -13,29 +13,19 @@ news-list
 {%endblock%}
 
 {%block news-list-items%}
-<tr>        
-  <td>1.</td>
-  <td>教育部高等教育司2013年工作要点</td>
-</tr>
-<tr>
-  <td>2.</td>
-  <td>教育部2013年工作要点</td>
-</tr>
-<tr>        
-  <td>3.</td>
-  <td>辽宁省教育厅2012年工作要点</td>
-</tr>
-<tr>
-  <td>4.</td>
-  <td>教育部关于印发《高等教育专题规划》的通知</td>
-</tr>
-<tr>        
-  <td>5.</td>
-  <td>教育部高等教育司2013年工作要点</td>
-</tr>
-<tr>
-  <td>6.</td>
-  <td>国务院关于加强教师队伍建设的意见</td>
-</tr>
+{% for news in news_policy_list %}
+<div class="usoft-listview-basic">
+    <ul>
+        <li>
+            <span class="usoft-listview-item-date" >{{news.news_date|date:"y-m-d"}}</span>
+            <span><a href="newslist/{{ news.id }}">{{ news.news_title }}</a></span>
+        </li>
+    </ul>
+</div>
+{% endfor %}
+
 {%endblock%}
 
+{%block more%}
+<strong><a href="newslist/news_cate={{ news_category_policy }}">更多»</a></strong>
+{%endblock%}
