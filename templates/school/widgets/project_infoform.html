@@ -60,6 +60,17 @@
           </div>
           {% endif %}
         </div><!--end email-->
+        <hr class="school-display"/>
+        <div class="control-group {% if info.keywords.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-star"></i>{{info.keywords.label}}</span></label>
+          {{info.keywords}}
+          {% if info.keywords.errors %}
+          <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ info.keywords.errors }}
+          </div>
+          {% endif %}
+        </div><!--end im-->
       </div>
       <div class="span4">
         <div class="control-group {% if info.info.project_category.errors.errors %}error{% endif %}">

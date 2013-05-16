@@ -39,6 +39,7 @@ class InfoForm(ModelForm):
                  'members':forms.TextInput(attrs={'class':"school-display"}),
                  'original':forms.TextInput(attrs={'class':"school-display"}),
                  'insitute':forms.Select(attrs={'class':"school-display"}),
+                 'keywords':forms.TextInput(attrs={'class':"school-display"}),
                  }
 
     def get_absolute_url(self):
