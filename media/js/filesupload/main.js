@@ -20,8 +20,8 @@ $(function () {
 
     // Enable iframe cross-domain access via redirect option:
     $('#fileupload').fileupload('option', {
-          maxFileSize: 5000000,
-          acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf)$/i,
+          maxFileSize: 50000000,
+          acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc)$/i,
           process: [
             {
               action: 'save'
