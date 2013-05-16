@@ -12,7 +12,7 @@ from datetime import date
 from django.http import HttpResponse, Http404
 from adminStaff import forms
 from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
-from django.shortcuts import render_to_response, render, get_object_or_404
+from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
@@ -27,9 +27,12 @@ from registration.models import *
 from registration.models import RegistrationProfile
 
 from django.db import transaction
- 
+
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD
 from backend.decorators import *
+from backend.logging import logger, loginfo
+from news.models import News
+from news.forms import NewsForm
 
 class AdminStaffService(object):
     @staticmethod
@@ -191,6 +194,8 @@ class AdminStaffService(object):
         返回存在的每个学校限制数目列表
         '''
         limit_list = ProjectPerLimits.objects.all()
+        for obj in limit_list:
+            obj.b_cate_number = obj.number - obj.a_cate_number
         return limit_list
     @staticmethod
     def GetSubject_list(category=None,school=None):
@@ -259,7 +264,8 @@ class AdminStaffService(object):
         ret = {}
         for i in xrange(len(subject_list)):
             subject = subject_list[i]
-            num = min(len(expert_list), random.randint(3,5))
+            #num = min(len(expert_list), random.randint(3,5))
+            num = min(len(expert_list), 3)
             ret[subject] = []
             for j in xrange(num):
                 ret[subject].append(expert_list[(i + j) % len(expert_list)])
@@ -288,8 +294,8 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.comments, obj.score_significant, 
-                        obj.score_value, obj.score_innovation, 
+            obj_list = [obj.comments, obj.score_significant,
+                        obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
             review_list.append(obj_list)
@@ -327,4 +333,18 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
-        return render(request, "adminStaff/news_release.html")
+        if request.method == 'POST':
+            newsform = NewsForm(request.POST, request.FILES)
+            if newsform.is_valid():
+                new_news = News(news_title = newsform.cleaned_data["news_title"],
+                                news_content = newsform.cleaned_data["news_content"],
+                                news_date = newsform.cleaned_data["news_date"],
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
+                                # news_document = request.FILES["news_document"],)
+                new_news.save()
+            else:
+                loginfo(p=newsform.errors.keys(), label="news form error")
+            return redirect('/newslist/%d' % new_news.id)
+        else:
+            context = {"newsform": NewsForm}
+            return render(request, "adminStaff/news_release.html", context)

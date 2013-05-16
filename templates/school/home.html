@@ -26,6 +26,7 @@
       本年度项目列表
       <span class="label label-info">申请上限:{{info.applications_limits}}</span>
       <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
+			<span class="label label-info">甲类剩余数量:{{info.applications_a_remaining}}</span>		
     </h3>
   </div><!--end page header-->
   <table class="table table-hover">
@@ -33,7 +34,7 @@
       <tr>
         <th>名称</th>
         <th>项目类型</th>
-        <th>类型(A/B类)</th>
+        <th>类型(甲/乙类)</th>
         <th>初期报告审核</th>
         <th>结题报告审核</th>
         <th>指导教师</th>
@@ -48,11 +49,11 @@
         <td>{{item.title}}</td>
         <td>{{item.project_category}}</td>
         <td>
-          <select id="financial_cate_select">
+          <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">
             {% for choice in financial_cate_choice %}
             <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
             {% endfor %}
-          </select><span id="error_message"></span>
+          </select><span id="error_message{{item.project_id}}"></span>
         </td>
         <td>
           {% if item.pre_isaudited %}<span class="span label label-success">已审核</span>{% endif %}

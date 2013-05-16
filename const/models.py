@@ -44,8 +44,8 @@ class FinancialCategory(models.Model):
                                 verbose_name=u"项目类型(甲/乙类)")
 
     class Meta:
-        verbose_name = u"项目类型(甲/乙类)"
-        verbose_name_plural = u"项目类型(甲/乙类)"
+        verbose_name = "项目类型(甲/乙类)"
+        verbose_name_plural = "项目类型(甲/乙类)"
 
     def __unicode__(self):
         return self.get_category_display()
@@ -183,8 +183,8 @@ class NewsCategory(models.Model):
                                 default=NEWS_CATEGORY_ANNOUNCEMENT ,
                                 verbose_name=u"新闻类型")
     class Meta:
-        verbose_name = u"新闻类型"
-        verbose_name_plural = u"新闻类型"
+        verbose_name = "新闻类型"
+        verbose_name_plural = "新闻类型"
 
     def __unicode__(self):
         return self.get_category_display()

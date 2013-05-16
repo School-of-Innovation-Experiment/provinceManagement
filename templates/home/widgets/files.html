@@ -1,11 +1,11 @@
 <!--files news-->
 {% extends "home/widgets/base_new_content.html" %}
 {%block title%}
- 政策规章
+政策规章
 {%endblock%}
 
 {%block title-sub%}
-  New
+<small>policy</small>
 {%endblock%}
 
 {%block new-list-style%}
@@ -14,13 +14,16 @@ news-list
 
 {%block news-list-items%}
 {% for news in news_policy_list %}
-<tr>
-  <td>{{ news.list_index }}.</td>
-  <td>
-    <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
-  </td>
-</tr>
+<div class="usoft-listview-basic">
+    <ul>
+        <li>
+            <span class="usoft-listview-item-date" >{{news.news_date|date:"y-m-d"}}</span>
+            <span><a href="newslist/{{ news.id }}">{{ news.news_title }}</a></span>
+        </li>
+    </ul>
+</div>
 {% endfor %}
+
 {%endblock%}
 
 {%block more%}

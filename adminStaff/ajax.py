@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
-from const.models import SchoolDict
+from const.models import SchoolDict, NewsCategory
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -26,16 +26,19 @@ def NumLimit(request, form):
     form = NumLimitForm(deserialize_form(form))
     if form.is_valid():
         school = SchoolDict.objects.get(id=form.cleaned_data["school_name"])
-        limited_num = form.cleaned_data["limited_num"]
+        a_limited_num = form.cleaned_data["a_limited_num"]
+        b_limited_num = form.cleaned_data["b_limited_num"]
         try:
             school_obj = SchoolProfile.objects.get(school=school)
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
                 projectlimit = ProjectPerLimits(school=school_obj,
-                                                   number=limited_num)
+                                                number=a_limited_num + b_limited_num,
+                                                a_cate_number=a_limited_num)
                 projectlimit.save()
             else:
                 object = ProjectPerLimits.objects.get(school=school_obj)
-                object.number = limited_num
+                object.number = a_limited_num + b_limited_num
+                object.a_cate_number = a_limited_num
                 object.save()
             return simplejson.dumps({'status':'1','message':u'更新成功'})
         except SchoolProfile.DoesNotExist:
@@ -77,7 +80,6 @@ def DeadlineSettings(request, form):
 
 @dajaxice_register
 def  ExpertDispatch(request, form):
-    #dajax = Dajax()
     expert_form =  ExpertDispatchForm(deserialize_form(form))
     if expert_form.is_valid():
         password = expert_form.cleaned_data["expert_password"]
@@ -155,5 +157,7 @@ def Release_News(request, html):
     Release_News
     '''
     title=datetime.datetime.today().year
-    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
-    data.save();
+    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html,
+                news_category=NewsCategory.objects.get(category=NEWS_CATEGORY_ANNOUNCEMENT))
+    data.save()
+

@@ -9,7 +9,7 @@ import datetime
 import random
 import re,sha
 import uuid
-from django.db import transaction 
+from django.db import transaction
 from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import get_current_site,Site
 from django.db import models
-from const.models import UserIdentity 
+from const.models import UserIdentity
 from backend.logging import logger
 from users.models import SchoolProfile, ExpertProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
@@ -27,11 +27,11 @@ SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 class RegistrationManager(models.Manager):
     """
     Custom manager for ``RegistrationProfile`` model.
-    
+
     The methods defined here provide shortcuts for account creation
     and activation (including generation and emailing of activation
-    keys), and for cleaning out expired inactive accounts.    
-    
+    keys), and for cleaning out expired inactive accounts.
+
     """
     @transaction.commit_on_success
     def activate_user(self, activation_key):
@@ -50,8 +50,8 @@ class RegistrationManager(models.Manager):
                 profile.activation_key = "ALREADY_ACTIVATED"
                 profile.save()
                 return user
-        
-        return False 
+
+        return False
     @transaction.commit_on_success
     def create_inactive_user(self,request,
                              username,password,email,
@@ -60,9 +60,9 @@ class RegistrationManager(models.Manager):
         Create a new, inactive ``User``, generates a
         ``RegistrationProfile`` and email its activation key to the
         ``User``, returning the new ``User``.
-        
+
         TODO: we will custom the USER
-        
+
         """
         #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
         if User.objects.filter(email=email).count() == 0:
@@ -79,7 +79,7 @@ class RegistrationManager(models.Manager):
                                            {'site':get_current_site(request),
                                             'username':username,
                                             'password':password})
-                
+
                 # Email subject *must not* contain newlines
                 subject = ''.join(subject.splitlines())
                 message = render_to_string('registration/activation_email.txt',
@@ -89,14 +89,14 @@ class RegistrationManager(models.Manager):
                                            'username':username,
                                            'password':password}
                                            )
-                logger.error(message)          
+                logger.error(message)
                 send_mail(subject,
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
         else:
             new_user = User.objects.get(email=email)
-        
+
         #对用户权限写入数据库
         new_authority = UserIdentity.objects.get(identity=Identity)
         new_authority.auth_groups.add(new_user)
@@ -108,7 +108,11 @@ class RegistrationManager(models.Manager):
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
                 schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
                 schoolProfileObj.save()
-            else:  
+                projectperlimits = ProjectPerLimits(school=schoolProfileObj,
+                                                    number=0,
+                                                    a_cate_number=0)
+                projectperlimits.save()
+            else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.save()
@@ -123,22 +127,22 @@ class RegistrationManager(models.Manager):
             school_staff = User.objects.get(username=school_staff_name)
             school_profile = SchoolProfile.objects.get(userid = school_staff)
             student_obj = StudentProfile(user = new_user,school = school_profile)
-            student_obj.save() 
+            student_obj.save()
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user
 
     def create_profile(self,user):
         """
-        Create a ``RegistrationProfile`` for a given 
+        Create a ``RegistrationProfile`` for a given
         ``User``, and return the ``RegistrationProfile``.
         """
         salt= sha.new(str(random.random())).hexdigest()[:5]
         activation_key = sha.new(salt+user.username).hexdigest()
-        
+
         return RegistrationProfile(user=user,
                            activation_key=activation_key)
-            
+
     def delete_expired_users(self):
         """
         Remove expired instances of ``RegistrationProfile`` and their associated ``User``s.
@@ -158,19 +162,19 @@ class RegistrationManager(models.Manager):
 class RegistrationProfile(models.Model):
     """
     A simple profile which stores an activation key for use during user account registration
-    """   
+    """
     user = models.ForeignKey(User,unique=True,verbose_name=_('user'))
     activation_key = models.CharField(_('activation key'), max_length=40)
-    
+
     objects = RegistrationManager()
-    
+
     class Meta:
         verbose_name = '激活码管理'
         verbose_name_plural = '激活码管理'
-        
+
     def __unicode__(self):
         return u"Registration information for %s" % self.user
-        
+
     def activation_key_expired(self):
         """
         Determine whether this ``RegistrationProfile``'s activation
@@ -180,5 +184,5 @@ class RegistrationProfile(models.Model):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         return self.activation_key == "ALREADY_ACTIVATED" or \
                (self.user.date_joined + expiration_date <= datetime.datetime.now())
-               
-    activation_key_expired.boolean = True 
+
+    activation_key_expired.boolean = True
