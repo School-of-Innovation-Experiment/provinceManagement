@@ -83,12 +83,15 @@ def show_index_get_search_context(request, project_page):
     qset = filter(lambda x: x != None, [q1, q2, q3])
     loginfo(p=q4, label="in q4")
     loginfo(p=qset, label="in qset")
-    if qset or q4:
-        if qset:
-            qset = reduce(lambda x, y: x & y, qset)
-            project_list = ProjectSingle.objects.filter(qset,keywords__icontains=q4)
-        else:
-            project_list = ProjectSingle.objects.filter(keywords__icontains=q4)
+    if qset and q4:
+        qset = reduce(lambda x, y: x & y, qset)
+        project_list = ProjectSingle.objects.filter(qset,keywords__icontains=q4)
+
+    elif qset:
+        qset = reduce(lambda x, y: x & y, qset)
+        project_list = ProjectSingle.objects.filter(qset)
+    elif q4:
+        project_list = ProjectSingle.objects.filter(keywords__icontains=q4)
     else:
         project_list = ProjectSingle.objects.all()
 
