@@ -22,6 +22,7 @@ from const.models import UserIdentity
 from backend.logging import logger
 from users.models import SchoolProfile, ExpertProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
+from adminStaff.models import  ProjectPerLimits
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
