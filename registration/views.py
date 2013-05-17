@@ -79,6 +79,8 @@ def login_redirect(request):
     #TODO: I will use reverse function to redirect, like school and expert
     if check_auth(request.user, SCHOOL_USER):
         return HttpResponseRedirect(reverse('school.views.home_view'))
+    elif check_auth(request.user, STUDENT_USER):
+        return HttpResponseRedirect(reverse('school.views.student_view'))
     elif check_auth(request.user, EXPERT_USER):
         return HttpResponseRedirect(reverse('expert.views.home_view'))
     elif check_auth(request.user, ADMINSTAFF_USER):
