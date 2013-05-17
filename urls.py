@@ -24,6 +24,10 @@ handler404 = 'backend.errorviews.error404'
 
 
 urlpatterns = patterns('',
+    # Add this to get widgets.AdminDateWidget() working for non is_staff, is_superuser
+    # This must be placed before (r'^admin/(.*)', admin.site.root), as that gobals up everything
+    url(r'^admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
+
     url(
         r'^',
         include('news.urls'),
