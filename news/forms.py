@@ -11,7 +11,7 @@ from const.models import NewsCategory
 from django.contrib.admin import widgets
 
 class NewsForm(forms.Form):
-    news_title = forms.CharField(max_length=20, required=True,
+    news_title = forms.CharField(max_length=200, required=True,
                                  widget=forms.TextInput(attrs={'class':'span6','id':"news_title",'placeholder':u"新闻标题"}),)
     news_content = forms.CharField(max_length=NEWS_MAX_LENGTH, required=True)
     news_date = forms.DateTimeField(widget=widgets.AdminDateWidget())
