@@ -175,7 +175,7 @@ table.documents td {
     margin: 0;
     float: left;
     height: 100%;
-    width: 90%;
+    width: 95%;
     /* border-right: 1px solid #0064b9; */
 }
 
@@ -199,12 +199,13 @@ table.documents td {
 
 .usoft-listview-basic
 {
-    margin: 0px 15px;
+    margin: 0px;
     line-height: 2em;
 }
 .front-wrap ul
 {
     list-style: url(../images/arrow.gif);
+    margin-left: 5px;
 }
 
 .usoft-listview-header h3 {

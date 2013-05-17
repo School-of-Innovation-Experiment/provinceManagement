@@ -18,7 +18,7 @@ news-list
     <ul>
         <li>
             <span class="usoft-listview-item-date" >{{news.news_date|date:"m-d"}}</span>
-            <span><a href="newslist/{{ news.id }}" title="{{news.news_title}}">{{ news.news_title|truncatechars:22 }}</a></span>
+            <span><a href="newslist/{{ news.id }}" title="{{news.news_title}}">{{ news.news_title|truncatechars:30 }}</a></span>
         </li>
     </ul>
 </div>
