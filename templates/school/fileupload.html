@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       {%for item in files%}
-      <tr>
+      <tr id="{{item.file_id}}">
         <td>{{item.name}}</td>
         <td>{{item.file_type}}</td>
         <td>{{item.file_size}}</td>
@@ -37,6 +37,12 @@
       {%endfor%}
     </tbody>
   </table><!--end history list table-->
+  <div class="alert fade in" id="delete-error-panel">
+    <a class="close" data-dismiss="alert" href="#">x</a>
+    <strong>
+      <p id="delete-message"></p>
+    </strong>
+  </div>
 
   <br/>
   {%if not readonly %}
