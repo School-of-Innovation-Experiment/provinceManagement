@@ -46,7 +46,7 @@
     <tbody>
       {%for item in current_list%}
       <tr>
-        <td>{{item.title}}</td>
+        <td title="{{project.title}}">{{project.title|truncatechars:20}}</td>
         <td>{{item.project_category}}</td>
         <td>
           <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">

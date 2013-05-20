@@ -90,3 +90,7 @@ div.school-display{
   text-align: center;
   float:center;
 }
+
+.studenttable select{
+  width: 120px !important;
+}
