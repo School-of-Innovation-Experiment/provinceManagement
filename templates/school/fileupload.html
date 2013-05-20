@@ -16,6 +16,7 @@
         <td>类型</td>
         <td>大小</td>
         <td>上传时间</td>
+        <td>文件操作</td>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,13 @@
         <td>{{item.file_type}}</td>
         <td>{{item.file_size}}</td>
         <td>{{item.uploadtime}}</td>
+        <td>
+          <span><a href="{{item.file_obj.url}}" class='btn btn-primary'>下载</a></span>
+          <button class="btn btn-danger" data-type="POST" data-url="{%url school.views.file_delete_view pid,item.file_id %}" rel="fileupload_operation">
+                <i class="icon-trash icon-white"></i>
+                <span>删除</span>
+          </button>
+        </td>
       </tr>
       {%endfor%}
     </tbody>
