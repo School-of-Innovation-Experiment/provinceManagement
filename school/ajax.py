@@ -100,3 +100,30 @@ def FinancialCateChange(request, cate, pid):
     project.financial_category = new_cate
     project.save()
     return simplejson.dumps({"message": u"更新成功: %s" % new_cate})
+
+
+@dajaxice_register
+def FileDeleteConsistence(request, pid, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(UploadedFiles, file_id=fid)
+    p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
+
+    if f.project_id.project_id != p.project_id:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Authority Failed!!!"})
+
+    if request.method == "POST":
+        f.delete()
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
