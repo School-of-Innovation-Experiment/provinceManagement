@@ -27,7 +27,7 @@
         <td>{{item.file_size}}</td>
         <td>{{item.uploadtime}}</td>
         <td>
-          <span><a href="{%url expert.views.download_view item.file_id%}" class='btn btn-primary'>下载</a></span>
+          <span><a href="{{item.file_obj.url}}" class='btn btn-primary'>下载</a></span>
           <button class="btn btn-danger" rel="file_delete" pid="{{pid}}" fid="{{item.file_id}}">
                 <i class="icon-trash icon-white"></i>
                 <span>删除</span>
