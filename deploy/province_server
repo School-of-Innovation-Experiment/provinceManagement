@@ -53,7 +53,7 @@ server {
     }
 
 
-    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf)$ {
+    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf|doc|pdf|docx)$ {
        expires 3d;
     }
 
