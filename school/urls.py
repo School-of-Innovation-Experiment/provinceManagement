@@ -60,5 +60,9 @@ urlpatterns = patterns('',
         r'student/$',
         school_views.student_view,
     ),
+    url(
+        r'get_xls/$',
+        school_views.get_xls,
+    ), 
 )
 
