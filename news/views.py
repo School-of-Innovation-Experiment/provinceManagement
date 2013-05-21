@@ -86,10 +86,10 @@ def list_news(request):
     return render(request, 'home/news-list.html', \
                   Context(context))
 
-BUF_SIZE = 262144
+
 def download_news_doc(request, news_id):
     news_doc_name = get_news(news_id).news_document.path
-    def readFile(fn, buf_size=BUF_SIZE):
+    def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
         f = open(fn, "rb")
         while True:
             _c = f.read(buf_size)
