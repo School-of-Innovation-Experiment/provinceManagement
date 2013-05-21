@@ -11,7 +11,7 @@ function is_assigned_callback(data){
   {
     //警告样式，只可筛选
     $('#filter_button').attr("class","btn btn-warning");
-    $('#filter_button').val("已经指派专家,只可进行筛选");
+    $('#filter_button').val("已经指派专家,对新添加项目追加分配");
   }
   else
   {

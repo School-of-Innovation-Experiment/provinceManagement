@@ -12,6 +12,7 @@ import os
 import sys
 import time
 import datetime
+import xlwt
 
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -23,6 +24,7 @@ from django.db.models import Count
 from chartit import PivotDataPool, PivotChart
 
 from school.models import *
+from users.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
@@ -34,7 +36,7 @@ from const.models import *
 from backend.utility import search_tuple
 
 from backend.logging import logger, loginfo
-
+from settings import TMP_FILES_PATH
 
 def check_limits(user):
     """
@@ -453,3 +455,75 @@ def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
         return False
 
     return True
+
+def info_xls_school_gen(school):
+    workbook = xlwt.Workbook()
+    worksheet = workbook.add_sheet('sheet1')
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 1, '高校名称: %s' school.school)
+    worksheet.write_merge(0, 0, 3, 4, '联系人:')
+    worksheet.write_merge(0, 0, 6, 7, '联系电话:')
+    worksheet.write_merge(0, 0, 9, 10, '电子邮箱:')
+
+    # generate body
+    worksheet.write_merge(1, 4, 0, 0, '项目编号')
+    worksheet.write_merge(1, 4, 1, 1, '项目名称')
+    worksheet.write_merge(1, 4, 2, 2, '项目类别（甲类、乙类）')
+    worksheet.col(2).width = len(u'项目类别（甲类、乙类）') * 256
+    worksheet.write_merge(1, 4, 3, 3, '项目类型')
+    worksheet.write_merge(1, 2, 4, 5, '项目负责人')
+    worksheet.write_merge(3, 4, 4, 4, '姓名')
+    worksheet.write_merge(3, 4, 5, 5, '学号')
+    worksheet.write_merge(1, 4, 6, 6, '参与学生人数')
+    worksheet.col(6).width = len(u'参与学生人数') * 256
+    worksheet.write_merge(1, 4, 7, 7, '项目其他成员信息')
+    worksheet.col(7).width = len(u'项目其他成员信息') * 256
+    worksheet.write_merge(1, 2, 8, 9, '指导教师姓名')
+    worksheet.write_merge(3, 4, 8, 8, '姓名')
+    worksheet.write_merge(3, 4, 9, 9, '职称')
+    worksheet.write_merge(1, 2, 10, 12, '项目经费（元）')
+    worksheet.write_merge(3, 4, 10, 10, '总经费')
+    worksheet.write_merge(3, 4, 11, 11, '财政拨款')
+    worksheet.write_merge(3, 4, 12, 12, '校拨')
+    worksheet.write_merge(1, 4, 13, 13, '项目所属一级学科')
+    worksheet.col(13).width = len(u'项目所属一级学科') * 256
+    worksheet.write_merge(1, 4, 14, 17, '项目简介（100字以内）')
+
+    return worksheet
+
+def info_xls(request):
+    """
+    """
+    def _format_index(i):
+        i = str(i)
+        i = '0' * (3-len(i)) + i
+
+    name_code = '2013' + request.user.username
+    school_prof = SchoolProfile.objects.get(userid=request.user)
+    proj_set = ProjectSingle.objects.filter(school=school_prof.school)
+    xls_obj = info_xls_school_gen(school_prof)
+
+    _index = 0
+    for proj_obj in proj_set:
+        xls_obj.write(5, 0, "%s%s" % (name_code, _format_index(_index)))
+        xls_obj.write(5, 1, str(proj_obj.title))
+        xls_obj.write(5, 2, str(proj_obj.financial_category))
+        xls_obj.write(5, 3, str(proj_obj.project_category))
+        xls_obj.write(5, 4, "") # 负责人
+        xls_obj.write(5, 5, "") # 学号
+        xls_obj.write(5, 6, "") # 学生人数
+        xls_obj.write(5, 7, "") # 项目其他成员
+        xls_obj.write(5, 8, str(proj_obj.inspector))
+        xls_obj.write(5, 9, "") # 指导老师职称
+        xls_obj.write(5, 10, "") # 经费
+        xls_obj.write(5, 11, "") # 经费
+        xls_obj.write(5, 12, "") # 经费
+        xls_obj.write(5, 13, str(proj_obj.insitute))
+
+        _index += 1
+
+    # write xls file
+    save_path = TMP_FILES_PATH + "/info.xls"
+    xls_obj.save(save_path)
+    return save_path

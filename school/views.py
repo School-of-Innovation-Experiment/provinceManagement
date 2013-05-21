@@ -421,3 +421,22 @@ def current_list_add(list=None):
         item.pre_isaudited = pre.is_audited
         item.final_isaudited = final.is_audited
     return list    
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+@time_controller(phase=STATUS_PRESUBMIT)
+def get_xls(request):
+    file_path = info_xls
+    def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
+        f = open(fn, "rb")
+        while True:
+            _c = f.read(buf_size)
+            if _c:
+                yield _c
+            else:
+                break
+        f.close()
+    response = HttpResponse(readFile(news_doc_name), content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(news_doc_name).encode("UTF-8") #NOTICE: the file must be unicode
+    return response
