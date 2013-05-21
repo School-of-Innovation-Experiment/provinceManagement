@@ -461,7 +461,7 @@ def info_xls_school_gen(school):
     worksheet = workbook.add_sheet('sheet1')
 
     # generate header
-    worksheet.write_merge(0, 0, 0, 1, '高校名称: %s' school.school)
+    worksheet.write_merge(0, 0, 0, 1, '高校名称: %s' % school.school)
     worksheet.write_merge(0, 0, 3, 4, '联系人:')
     worksheet.write_merge(0, 0, 6, 7, '联系电话:')
     worksheet.write_merge(0, 0, 9, 10, '电子邮箱:')
