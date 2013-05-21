@@ -100,6 +100,7 @@ def home_view(request, is_expired=False):
         remainings = 0
         a_remainings = 0
     add_current_list = current_list_add(list=current_list)
+
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
     data = {"current_list": add_current_list,
             "financial_cate_choice": FINANCIAL_CATE_CHOICES,
@@ -412,6 +413,7 @@ def check_is_audited(user,presubmit,checkuser):
 
 def current_list_add(list=None):
     for item in list:
+        item.reg_email = item.student.user.username
         pid = item.project_id
         if item.project_category.category == CATE_INNOVATION:
             pre = get_object_or_404(PreSubmit, project_id=pid)
