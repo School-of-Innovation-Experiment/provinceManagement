@@ -100,6 +100,7 @@ def home_view(request, is_expired=False):
         remainings = 0
         a_remainings = 0
     add_current_list = current_list_add(list=current_list)
+
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
     data = {"current_list": add_current_list,
             "financial_cate_choice": FINANCIAL_CATE_CHOICES,
@@ -412,6 +413,7 @@ def check_is_audited(user,presubmit,checkuser):
 
 def current_list_add(list=None):
     for item in list:
+        item.reg_email = item.student.user.username
         pid = item.project_id
         if item.project_category.category == CATE_INNOVATION:
             pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -421,3 +423,21 @@ def current_list_add(list=None):
         item.pre_isaudited = pre.is_audited
         item.final_isaudited = final.is_audited
     return list    
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def get_xls(request):
+    file_path = info_xls(request)
+    def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
+        f = open(fn, "rb")
+        while True:
+            _c = f.read(buf_size)
+            if _c:
+                yield _c
+            else:
+                break
+        f.close()
+    response = HttpResponse(readFile(file_path), content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(file_path).encode("UTF-8") #NOTICE: the file must be unicode
+    return response

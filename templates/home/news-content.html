@@ -15,7 +15,8 @@
             <br/>
             <br />
             {% if news.news_document %}
-            <p>附件：<a href="{{request.path}}/download_news_doc">{{ news.document_name }}</a></p>
+            <!--p>附件：<a href="{{request.path}}/download_news_doc">{{ news.document_name }}</a></p-->
+            <p>附件：<a href="{{news.news_document.url}}" target="_blank" >{{ news.document_name }}</a></p>
             <br />
             {% endif %}
           </div>

@@ -29,10 +29,11 @@
 			<span class="label label-info">甲类剩余数量:{{info.applications_a_remaining}}</span>		
     </h3>
   </div><!--end page header-->
-  <table class="table table-hover">
+  <table class="table table-hover studenttable">
     <thead>
       <tr>
         <th>名称</th>
+        <th>注册邮箱</th>
         <th>项目类型</th>
         <th>类型(甲/乙类)</th>
         <th>初期报告审核</th>
@@ -46,7 +47,8 @@
     <tbody>
       {%for item in current_list%}
       <tr>
-        <td>{{item.title}}</td>
+        <td title="{{item.title}}">{{item.title|truncatechars:15}}</td>
+        <td>{{item.reg_email}}</td>
         <td>{{item.project_category}}</td>
         <td>
           <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">

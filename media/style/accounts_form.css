@@ -30,6 +30,7 @@
 .form-container{
 	padding-top: 100px;
 	padding-bottom: 100px;
+  min-width: 1170px;
 }   
 
 .form-resetform{

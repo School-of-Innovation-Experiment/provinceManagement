@@ -215,7 +215,7 @@ class AdminStaffService(object):
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
-
+        print request.method
         if request.method == "GET":
             subject_insitute_form = forms.SubjectInsituteForm()
             subject_list =  AdminStaffService.GetSubject_list()
@@ -229,9 +229,25 @@ class AdminStaffService(object):
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
-                    #如果已经指派专家了直接返回列表即可
+                    #如果已经指派专家了则对新项目进行追加
                     if obj.is_assigned == 1:
-                        pass
+                        expert_list = ExpertProfile.objects.filter(subject = expert_category)
+                        extra_subject_list = [subject for subject in subject_list if len(subject.expert.all()) == 0]
+                        print subject_list[1].expert.all()
+                        if len(extra_subject_list) == 0 or len(expert_list) == 0:
+                            if not extra_subject_list:
+                                exist_message = "没有需要分配的新项目存在，无法进行指派"
+                            else:
+                                exist_message = "所属专业的专家不存在,无法进行指派"
+                        else:
+                            done_num = len(subject_list) - len(extra_subject_list)
+                            
+                            re_dict = AdminStaffService.Assign_Expert_For_Subject(extra_subject_list, expert_list, done_num)
+                            for subject in re_dict.keys():
+                                for expert in re_dict[subject]:
+                                    print subject, expert
+                                    Re_Project_Expert(project=subject, expert=expert).save()
+                        
                     #没有指派专家，则进行专家指派
                     else:
                         #筛选专家列表
@@ -250,16 +266,16 @@ class AdminStaffService(object):
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
                                     #subject.expert.add(expert)
-                                    Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                                    Re_Project_Expert(project=subject, expert_id=expert.id).save()
                             #保存已分配标志，值为1
                             obj.is_assigned = 1
                             obj.save()
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
-
+    
     @staticmethod
-    def Assign_Expert_For_Subject(subject_list, expert_list):
+    def Assign_Expert_For_Subject(subject_list, expert_list, done_num = 0):
 
         ret = {}
         for i in xrange(len(subject_list)):
@@ -268,7 +284,7 @@ class AdminStaffService(object):
             num = min(len(expert_list), 3)
             ret[subject] = []
             for j in xrange(num):
-                ret[subject].append(expert_list[(i + j) % len(expert_list)])
+                ret[subject].append(expert_list[(done_num + i + j) % len(expert_list)])
         return ret
     @staticmethod
     @csrf.csrf_protect
