@@ -228,7 +228,7 @@ PROCESS_FILE_PATH = join("tmp", "process_file")
 FILE_DELETE_URL = '/school/delete/'
 
 # news documents path
-NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
+NEWS_DOCUMENTS_PATH = join("news-documents/%Y/%m/%d")
 
 # tmp files path
 TMP_FILES_PATH = join(MEDIA_ROOT, "tmp")

@@ -16,6 +16,9 @@
     <div class="input-prepend">
       <span class="add-on"><i class="icon-th-large"></i></span>{{student_form.proj_cate}}
     </div>
+    <div class="input-prepend">
+      <span class="add-on"><i class="icon-th-large"></i></span>{{student_form.person_firstname}}
+    </div>
     <span id="student_email_error_message"></span>
     <span class=" pull-right"><input type="button" class="btn btn-primary" id="email_to_student" onclick="send_email_to_student();"value="给学生发送邮件"/></span>
   </form>
@@ -23,25 +26,41 @@
     <thead>
       <tr>
         <td><strong>已发送学生用户邮箱</strong></td>
+        <td><strong>负责人</strong></td>
         <td><strong>用户状态</strong></td>
+        <td><strong>操作</strong></td>
       </tr>
     </thead>
     <tbody>
       {%for user in email_list%}
-      <tr>
+      <tr id="{{user.id}}">
         <td>{{user.email}}</td>
+        <td>{{user.first_name}}</td>
         {%if user.is_active %}
         <td><button class="btn btn-success">已经激活</button></td>
         {%else%}
         <td><button class="btn btn-warning">已发送，尚未激活</button></td>
         {%endif%}
+        <td>
+          <button class="btn btn-danger" rel="student_delete" uid="{{user.id}}">
+                <i class="icon-trash icon-white"></i>
+                <span>删除</span>
+          </button>
+        </td>
       </tr>
       {%endfor%}
     </tbody>
   </table>
+  <div class="alert fade in" id="delete-error-panel">
+    <a class="close" data-dismiss="alert" href="#">x</a>
+    <strong>
+      <p id="delete-message"></p>
+    </strong>
+  </div>
 </div>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 <!-- dajax-->
 <script type='text/javascript' src="{{STATIC_URL}}js/school/send_email.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/school/delete.js"></script>
 {%endblock%}

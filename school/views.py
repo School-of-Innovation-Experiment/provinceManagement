@@ -13,7 +13,7 @@ import sys
 import uuid
 
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -361,10 +361,11 @@ def AuthStudentExist(request, email):
 
 
 @login_required
-def Send_email_to_student(request, username, password, email, identity, financial_cate=FINANCIAL_CATE_UN):
+def Send_email_to_student(request, username, person_firstname,password, email, identity, financial_cate=FINANCIAL_CATE_UN):
     #判断用户名是否存在，存在的话直接返回
+    loginfo(p=person_firstname, label="person_firstname")
     if not AuthStudentExist(request, email):
-        user = RegistrationManager().create_inactive_user(request,username,password,email,identity)
+        user = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate)
         return True and result
     else:
@@ -429,15 +430,16 @@ def current_list_add(list=None):
 @authority_required(SCHOOL_USER)
 def get_xls(request):
     file_path = info_xls(request)
-    def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
-        f = open(fn, "rb")
-        while True:
-            _c = f.read(buf_size)
-            if _c:
-                yield _c
-            else:
-                break
-        f.close()
-    response = HttpResponse(readFile(file_path), content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(file_path).encode("UTF-8") #NOTICE: the file must be unicode
-    return response
+    return redirect(MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):])
+    # def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
+    #     f = open(fn, "rb")
+    #     while True:
+    #         _c = f.read(buf_size)
+    #         if _c:
+    #             yield _c
+    #         else:
+    #             break
+    #     f.close()
+    # response = HttpResponse(readFile(file_path), content_type='application/vnd.ms-excel')
+    # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(file_path).encode("UTF-8") #NOTICE: the file must be unicode
+    # return response

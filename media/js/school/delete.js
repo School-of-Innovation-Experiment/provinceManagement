@@ -28,3 +28,26 @@ function file_delete_callback(data){
 
   }
 }
+
+$('[rel="student_delete"]').click(function(){
+  
+  var uid = $(this).attr("uid");
+  Dajaxice.school.StudentDeleteConsistence(student_delete_callback,
+                                         {'uid':uid});
+});
+
+function student_delete_callback(data){
+  if(data.is_deleted == true){
+      var uid = "tr[id=" + data.uid +"]";
+      console.log("successs!");
+      console.log(data.message);
+      console.log(uid);
+      $(uid).remove();
+    }
+  else{
+      console.log("Failed!");
+      console.log(data.message);
+      $("div#delete-error-panel").show();
+      $("p#delete-message").text(data.message);
+  }
+}
