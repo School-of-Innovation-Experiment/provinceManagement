@@ -457,7 +457,7 @@ def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
     return True
 
 def info_xls_school_gen(school):
-    workbook = xlwt.Workbook()
+    workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
 
     # generate header
@@ -470,15 +470,15 @@ def info_xls_school_gen(school):
     worksheet.write_merge(1, 4, 0, 0, '项目编号')
     worksheet.write_merge(1, 4, 1, 1, '项目名称')
     worksheet.write_merge(1, 4, 2, 2, '项目类别（甲类、乙类）')
-    worksheet.col(2).width = len(u'项目类别（甲类、乙类）') * 256
+    worksheet.col(2).width = len('项目类别（甲类、乙类）') * 256
     worksheet.write_merge(1, 4, 3, 3, '项目类型')
     worksheet.write_merge(1, 2, 4, 5, '项目负责人')
     worksheet.write_merge(3, 4, 4, 4, '姓名')
     worksheet.write_merge(3, 4, 5, 5, '学号')
     worksheet.write_merge(1, 4, 6, 6, '参与学生人数')
-    worksheet.col(6).width = len(u'参与学生人数') * 256
+    worksheet.col(6).width = len('参与学生人数') * 256
     worksheet.write_merge(1, 4, 7, 7, '项目其他成员信息')
-    worksheet.col(7).width = len(u'项目其他成员信息') * 256
+    worksheet.col(7).width = len('项目其他成员信息') * 256
     worksheet.write_merge(1, 2, 8, 9, '指导教师姓名')
     worksheet.write_merge(3, 4, 8, 8, '姓名')
     worksheet.write_merge(3, 4, 9, 9, '职称')
@@ -487,10 +487,10 @@ def info_xls_school_gen(school):
     worksheet.write_merge(3, 4, 11, 11, '财政拨款')
     worksheet.write_merge(3, 4, 12, 12, '校拨')
     worksheet.write_merge(1, 4, 13, 13, '项目所属一级学科')
-    worksheet.col(13).width = len(u'项目所属一级学科') * 256
+    worksheet.col(13).width = len('项目所属一级学科') * 256
     worksheet.write_merge(1, 4, 14, 17, '项目简介（100字以内）')
 
-    return worksheet
+    return worksheet, workbook
 
 def info_xls(request):
     """
@@ -498,32 +498,42 @@ def info_xls(request):
     def _format_index(i):
         i = str(i)
         i = '0' * (3-len(i)) + i
+        return i
 
     name_code = '2013' + request.user.username
     school_prof = SchoolProfile.objects.get(userid=request.user)
     proj_set = ProjectSingle.objects.filter(school=school_prof.school)
-    xls_obj = info_xls_school_gen(school_prof)
+    xls_obj, workbook = info_xls_school_gen(school_prof)
 
     _index = 0
-    for proj_obj in proj_set:
-        xls_obj.write(5, 0, "%s%s" % (name_code, _format_index(_index)))
-        xls_obj.write(5, 1, str(proj_obj.title))
-        xls_obj.write(5, 2, str(proj_obj.financial_category))
-        xls_obj.write(5, 3, str(proj_obj.project_category))
-        xls_obj.write(5, 4, "") # 负责人
-        xls_obj.write(5, 5, "") # 学号
-        xls_obj.write(5, 6, "") # 学生人数
-        xls_obj.write(5, 7, "") # 项目其他成员
-        xls_obj.write(5, 8, str(proj_obj.inspector))
-        xls_obj.write(5, 9, "") # 指导老师职称
-        xls_obj.write(5, 10, "") # 经费
-        xls_obj.write(5, 11, "") # 经费
-        xls_obj.write(5, 12, "") # 经费
-        xls_obj.write(5, 13, str(proj_obj.insitute))
+    for proj_obj in proj_set:   
+        pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
+
+        row = 5 + _index
+        xls_obj.write(row, 0, "%s%s" % (name_code, _format_index(_index)))
+        xls_obj.write(row, 1, unicode(proj_obj.title))
+        xls_obj.write(row, 2, unicode(proj_obj.financial_category))
+        xls_obj.write(row, 3, unicode(proj_obj.project_category))
+        xls_obj.write(row, 4, "") # 负责人
+        xls_obj.write(row, 5, "") # 学号
+        xls_obj.write(row, 6, "") # 学生人数
+        xls_obj.write(row, 7, "") # 项目其他成员
+        xls_obj.write(row, 8, unicode(proj_obj.inspector))
+        xls_obj.write(row, 9, "") # 指导老师职称
+        xls_obj.write(row, 10, "") # 经费
+        xls_obj.write(row, 11, "") # 经费
+        xls_obj.write(row, 12, "") # 经费
+        xls_obj.write(row, 13, unicode(proj_obj.insitute))
+        xls_obj.write_merge(row, row, 14, 17, "") # both enterprise and innovation has innovation attr
 
         _index += 1
 
     # write xls file
-    save_path = TMP_FILES_PATH + "/info.xls"
-    xls_obj.save(save_path)
+    save_path = os.path.join(TMP_FILES_PATH, "info-%s-%s.xls" % (str(datetime.date.today()), request.user.username))
+    workbook.save(save_path)
     return save_path
