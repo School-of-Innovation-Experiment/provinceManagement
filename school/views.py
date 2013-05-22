@@ -361,10 +361,11 @@ def AuthStudentExist(request, email):
 
 
 @login_required
-def Send_email_to_student(request, username, password, email, identity, financial_cate=FINANCIAL_CATE_UN):
+def Send_email_to_student(request, username, person_firstname,password, email, identity, financial_cate=FINANCIAL_CATE_UN):
     #判断用户名是否存在，存在的话直接返回
+    loginfo(p=person_firstname, label="person_firstname")
     if not AuthStudentExist(request, email):
-        user = RegistrationManager().create_inactive_user(request,username,password,email,identity)
+        user = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate)
         return True and result
     else:

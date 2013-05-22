@@ -36,13 +36,13 @@ from news.forms import NewsForm
 
 class AdminStaffService(object):
     @staticmethod
-    def sendemail(request,username,password,email,identity, **kwargs):
+    def sendemail(request,username,person_firstname,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
+                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity, school_name=kwargs['school_name'])
             else:
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_insitute=kwargs['expert_insitute'])
+                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity, expert_insitute=kwargs['expert_insitute'])
             return True
         else:
             return False
@@ -62,6 +62,7 @@ class AdminStaffService(object):
             dict["auth"] = ''
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
+            dict["first_name"] = register.userid.first_name
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
             ##########################################################################
@@ -73,6 +74,7 @@ class AdminStaffService(object):
             dict["auth"] = ''
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
+            dict["first_name"] = register.userid.first_name
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
             res_list.append(dict)
@@ -86,6 +88,8 @@ class AdminStaffService(object):
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDispatchForm()
             email_list  = AdminStaffService.GetRegisterList()
+            loginfo(p=email_list, label="news email_list ")
+
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):

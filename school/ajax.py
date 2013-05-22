@@ -6,11 +6,12 @@ Created on 2013-4-17
 '''
 
 from dajax.core import Dajax
+from django.contrib.auth.models import User
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.http import Http404
-from school.models import ProjectSingle
+from school.models import ProjectSingle,Teacher_Enterprise,PreSubmitEnterprise
 from school.forms import StudentDispatchForm
 from school.views import Send_email_to_student, Count_email_already_exist, school_limit_num
 from const.models import SchoolDict, ProjectCategory, FinancialCategory, InsituteCategory
@@ -18,6 +19,7 @@ from const import *
 import datetime
 from backend.logging import logger, loginfo
 from school.utility import *
+from users.models import SchoolProfile, StudentProfile
 
 @dajaxice_register
 def  StudentDispatch(request, form):
@@ -27,6 +29,7 @@ def  StudentDispatch(request, form):
         password = student_form.cleaned_data["student_password"]
         email = student_form.cleaned_data["student_email"]
         financial_cate = student_form.cleaned_data["proj_cate"]
+        person_firstname = student_form.cleaned_data["person_firstname"]
         name = email
         if password == "":
             password = email.split('@')[0]
@@ -46,7 +49,7 @@ def  StudentDispatch(request, form):
                     message = u"甲类项目达到最大限度，无权发送"
                     return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
 
-            flag = Send_email_to_student(request, name, password, email,STUDENT_USER, financial_cate=financial_cate)
+            flag = Send_email_to_student(request, name, person_firstname,password, email,STUDENT_USER, financial_cate=financial_cate)
             if flag:
                 message = u"发送邮件成功"
                 remaining_activation_times -= 1
@@ -55,6 +58,9 @@ def  StudentDispatch(request, form):
                 message = u"相同邮件已经发送，中断发送或发生内部错误"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
+        logger.info("Form Valid Failed"+"**"*10)
+        logger.info(student_form.errors)
+        logger.info("--"*10)
         return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
 
 @dajaxice_register
@@ -127,3 +133,40 @@ def FileDeleteConsistence(request, pid, fid):
     else:
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
+
+@dajaxice_register
+def StudentDeleteConsistence(request, uid):
+    """
+    Delete student in history file list
+    """
+    logger.info("sep delete student"+"**"*10)
+    # check mapping relation
+    try:
+        delstudent=User.objects.get(id=uid)
+        studentpro=StudentProfile.objects.get(user_id=uid)
+        project=ProjectSingle.objects.get(student_id=studentpro.id)
+        presubmitenterprise = PreSubmitEnterprise.objects.get(project_id_id=project.project_id)
+        delteacher_enterprise=Teacher_Enterprise.objects.get(id=presubmitenterprise.enterpriseTeacher_id)
+        logger.info(delstudent)
+        logger.info(delteacher_enterprise.id)
+        logger.info(request.user)
+        if request.method == "POST":
+            schooluser=request.user
+            school=User.objects.get(username=schooluser)
+            schoolpro=SchoolProfile.objects.filter(userid_id=school.id)
+            if schoolpro:
+                logger.info(studentpro.school_id)
+                logger.info(schoolpro[0].id)               
+                if studentpro.school_id==schoolpro[0].id:
+                    delstudent.delete()
+                    delteacher_enterprise.delete()
+                    logger.info("successfully")
+                    return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "uid": str(uid)})
+        else:
+            return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
+    except Exception, err:
+        logger.info(err)
+
