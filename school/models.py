@@ -55,7 +55,7 @@ class ProjectSingle(models.Model):
                                  verbose_name=u"指导教师")
     members = models.CharField(max_length=400, blank=False,
                                verbose_name=u"团队成员")
-    im = models.CharField(max_length=50, blank=False, verbose_name=u"社交")
+    im = models.CharField(max_length=50, blank=False, verbose_name=u"QQ")
     #choices=YEAR_CHOICES,
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,

@@ -537,3 +537,20 @@ def info_xls(request):
     save_path = os.path.join(TMP_FILES_PATH, "info-%s-%s.xls" % (str(datetime.date.today()), request.user.username))
     workbook.save(save_path)
     return save_path
+
+
+def set_unique_telphone(request, info_form, teacher_enterpriseform):
+    """
+    Set telephones, which are the same name in one form
+    """
+    telephones = request.POST.getlist("telephone")
+    loginfo(p=telephones, label="Telphones")
+
+    info = info_form.save(commit=False)
+    info.telephone = telephones[0]
+    info_form.save()
+
+    teacher = teacher_enterpriseform.save(commit=False)
+    teacher.telephone = telephones[1]
+    teacher_enterpriseform.save()
+
