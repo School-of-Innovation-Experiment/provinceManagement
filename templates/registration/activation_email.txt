@@ -3,6 +3,7 @@
 您好！欢迎您使用大学生创新创业训练计划项目管理平台，请您点击下面的链接激活账户:
 用户名:{{username}}
 密码:{{password}}
-http://{{ site }}{% url registration.views.active activation_key %}
-
-{% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
+点击链接完成激活：http://{{ site }}{% url registration.views.active activation_key %}
+激活链接只需点击一次，激活码无效或是超过一次点击会提示激活失败，此时可以尝试从下面的网址登录系统
+网址登录：http://{{site}}/accounts/login/
+{% blocktrans %}激活码有效期 {{ expiration_days }} days.{% endblocktrans %}
