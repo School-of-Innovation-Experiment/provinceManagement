@@ -6,17 +6,26 @@
 #   $ 0 0 * * 0 /path/to/this/script # run this script every sunday(maybe)
 #   $ service cron start  # or `/etc/init.d/cron start` or `start cron`
 #   An alternative is to start the cron in bootup (e.g. add `/etc/init.d/cron start` to /etc/rc.local, using absolute path is IMPORTANT)
+
+#   Notice: this script use `scp` to backup django media dir, make sure you can use scp without entering password
+
+#   Configure following variable
+#==================================================================================================
+DATABASE_NAME     = 'ProvinceManagement'
+DATABASE_USER     = 'root'
+DATABASE_PASSWORD = 'root'
+# for remote dump
+DATABASE_HOST     = '192.168.20.100'
+HOST_NAME         = 'sie'
+MEDIA_PATH        = '/home/sie/mysites/provinceManagement/media/'
+#==================================================================================================
+
 import sys
 import os.path
 import os
 import logging
 from datetime import datetime
-from settings_production import DATABASES #DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD
-DATABASE_NAME     = DATABASES["default"]["NAME"]
-DATABASE_USER     = DATABASES["default"]["USER"]
-DATABASE_PASSWORD = DATABASES["default"]["PASSWORD"]
-# for remote dump
-DATABASE_HOST     = DATABASES["default"]["HOST"]
+
 
 BACKUP_DIR = "%s/db_backups" % os.path.dirname(os.path.abspath(__file__))
 MYSQL_CMD = 'mysqldump'
@@ -70,6 +79,16 @@ def _run_backup(file_name):
     logging.debug("Backing up with command %s " % cmd)
     return os.system(cmd)
 
+def _run_backup_media(file_name):
+     cmd = "scp -r %(host_name)s@%(host)s:%(media_path) %(log_dir)s/%(file)s" % {
+         'host': DATABASE_HOST,
+         'host_name' : HOST_NAME,
+         'log_dir' : BACKUP_DIR,
+         'file': 'media_%s' % dir(datetime.date.today()),
+         'media_path': MEDIA_PATH}
+    logging.debug("Backing up with command %s " % cmd)
+    return os.system(cmd)
+
 def _zip_backup(file_name):
     backup = "%s/%s" % (BACKUP_DIR, file_name)
     zipfile_name = "%s.zip" % (backup)
@@ -96,6 +115,7 @@ def main(*args):
     _setup()
     file_name = _backup_name()
     _run_backup(file_name)
+    _run_backup_media()
     return True
     # need `zip` depandence
     # return(_zip_backup(file_name))
