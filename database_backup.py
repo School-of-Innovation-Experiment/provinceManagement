@@ -80,12 +80,12 @@ def _run_backup(file_name):
     return os.system(cmd)
 
 def _run_backup_media(file_name):
-     cmd = "scp -r %(host_name)s@%(host)s:%(media_path) %(log_dir)s/%(file)s" % {
-         'host': DATABASE_HOST,
-         'host_name' : HOST_NAME,
-         'log_dir' : BACKUP_DIR,
-         'file': 'media_%s' % dir(datetime.date.today()),
-         'media_path': MEDIA_PATH}
+    cmd = "scp -r %(host_name)s@%(host)s:%(media_path) %(log_dir)s/%(file)s" % {
+        'host': DATABASE_HOST,
+        'host_name' : HOST_NAME,
+        'log_dir' : BACKUP_DIR,
+        'file': 'media_%s' % dir(datetime.date.today()),
+        'media_path': MEDIA_PATH}
     logging.debug("Backing up with command %s " % cmd)
     return os.system(cmd)
 
