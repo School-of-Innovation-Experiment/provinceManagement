@@ -24,7 +24,7 @@ import sys
 import os.path
 import os
 import logging
-from datetime import datetime
+from datetime import datetime, date
 
 
 BACKUP_DIR = "%s/db_backups" % os.path.dirname(os.path.abspath(__file__))
@@ -79,12 +79,12 @@ def _run_backup(file_name):
     logging.debug("Backing up with command %s " % cmd)
     return os.system(cmd)
 
-def _run_backup_media(file_name):
-    cmd = "scp -r %(host_name)s@%(host)s:%(media_path) %(log_dir)s/%(file)s" % {
+def _run_backup_media():
+    cmd = "scp -r %(host_name)s@%(host)s:%(media_path)s %(log_dir)s/%(file)s" % {
         'host': DATABASE_HOST,
         'host_name' : HOST_NAME,
         'log_dir' : BACKUP_DIR,
-        'file': 'media_%s' % dir(datetime.date.today()),
+        'file': 'media_%s' % str(date.today()),
         'media_path': MEDIA_PATH}
     logging.debug("Backing up with command %s " % cmd)
     return os.system(cmd)
