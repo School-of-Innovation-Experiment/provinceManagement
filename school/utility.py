@@ -518,8 +518,9 @@ def info_xls(request):
 
 
     _index = 1
-    for proj_obj in proj_set:   
+    for proj_obj in proj_set:
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+        fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
         try:
             innovation = pro_type.objects.get(project_id=proj_obj.project_id)
         except Exception, err:
@@ -537,9 +538,9 @@ def info_xls(request):
         xls_obj.write(row, 7, unicode(teammember)) # 项目其他成员
         xls_obj.write(row, 8, unicode(proj_obj.inspector))
         xls_obj.write(row, 9, "") # 指导老师职称
-        xls_obj.write(row, 10, "") # 经费
-        xls_obj.write(row, 11, "") # 经费
-        xls_obj.write(row, 12, "") # 经费
+        xls_obj.write(row, 10, fin_type[0]) # 经费
+        xls_obj.write(row, 11, fin_type[1]) # 经费
+        xls_obj.write(row, 12, fin_type[2]) # 经费
         xls_obj.write(row, 13, unicode(proj_obj.insitute))
         xls_obj.write_merge(row, row, 14, 17, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
@@ -584,7 +585,7 @@ def get_memberlist(members):
     elif u"。" in members :
         memberlist = members.strip(u"。").split(u"。")
     elif u"、" in members :
-        memberlist = members.strip(u"、").split(u"、")    
+        memberlist = members.strip(u"、").split(u"、")
     elif "+" in members :
         memberlist = members.strip("+").split("+")
     elif "-" in members :
