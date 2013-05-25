@@ -13,6 +13,7 @@ import sys
 import time
 import datetime
 import xlwt
+import types
 
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -28,7 +29,7 @@ from users.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
+from users.models import SchoolProfile,StudentProfile
 
 from const import *
 from const.models import *
@@ -37,6 +38,8 @@ from backend.utility import search_tuple
 
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
+
+from django.contrib.auth.models import User
 
 def check_limits(user):
     """
@@ -501,11 +504,20 @@ def info_xls(request):
         return i
 
     name_code = '2013' + request.user.username
+    # loginfo(p=teammanager.first_name, label="get first_name")
     school_prof = SchoolProfile.objects.get(userid=request.user)
     proj_set = ProjectSingle.objects.filter(school=school_prof.school)
     xls_obj, workbook = info_xls_school_gen(school_prof)
 
-    _index = 0
+    for project in proj_set:
+        managerid=StudentProfile.objects.get(id=project.student_id)
+        teammanager = User.objects.get(id=managerid.user_id)
+        memberlist=get_memberlist(project.members)
+        teammember,membercount = get_teammember(teammanager.first_name,memberlist)
+
+
+
+    _index = 1
     for proj_obj in proj_set:   
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         try:
@@ -514,22 +526,22 @@ def info_xls(request):
             loginfo(p=err, label="get innovation")
             loginfo(p=proj_obj.project_category.category, label="project category")
 
-        row = 5 + _index
+        row = 4 + _index
         xls_obj.write(row, 0, "%s%s" % (name_code, _format_index(_index)))
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
-        xls_obj.write(row, 4, "") # 负责人
+        xls_obj.write(row, 4, unicode(teammanager.first_name))# 负责人
         xls_obj.write(row, 5, "") # 学号
-        xls_obj.write(row, 6, "") # 学生人数
-        xls_obj.write(row, 7, "") # 项目其他成员
+        xls_obj.write(row, 6, unicode(membercount)) # 学生人数
+        xls_obj.write(row, 7, unicode(teammember)) # 项目其他成员
         xls_obj.write(row, 8, unicode(proj_obj.inspector))
         xls_obj.write(row, 9, "") # 指导老师职称
         xls_obj.write(row, 10, "") # 经费
         xls_obj.write(row, 11, "") # 经费
         xls_obj.write(row, 12, "") # 经费
         xls_obj.write(row, 13, unicode(proj_obj.insitute))
-        xls_obj.write_merge(row, row, 14, 17, "") # both enterprise and innovation has innovation attr
+        xls_obj.write_merge(row, row, 14, 17, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
         _index += 1
 
@@ -544,7 +556,6 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
     Set telephones, which are the same name in one form
     """
     telephones = request.POST.getlist("telephone")
-    loginfo(p=telephones, label="Telphones")
 
     info = info_form.save(commit=False)
     info.telephone = telephones[0]
@@ -554,3 +565,57 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
     teacher.telephone = telephones[1]
     teacher_enterpriseform.save()
 
+def get_memberlist(members):
+    """
+        get all members in project
+    """
+    if ";" in members :
+        memberlist = members.strip(";").split(";")
+    elif u"；" in members :
+        memberlist = members.strip(u"；").split(u"；")
+    elif "," in members :
+        memberlist = members.strip(",").split(",")
+    elif u"，" in members :
+        memberlist = members.strip(u"，").split(u"，")
+    elif " " in members :
+        memberlist = members.strip(" ").split(" ")
+    elif "." in members :
+        memberlist = members.strip(".").split(".")
+    elif u"。" in members :
+        memberlist = members.strip(u"。").split(u"。")
+    elif u"、" in members :
+        memberlist = members.strip(u"、").split(u"、")    
+    elif "+" in members :
+        memberlist = members.strip("+").split("+")
+    elif "-" in members :
+        memberlist = members.strip("-").split("-")
+    elif ":" in members :
+        logger.info(members+":")
+        memberlist = members.strip(":").split(":")
+    elif u"：" in members :
+        logger.info(members+u"：")
+        memberlist = members.strip(u"：").split(u"：")
+    else:
+        memberlist=members
+
+    return memberlist
+
+def get_teammember(manager,memberlist):
+    """
+        get member expect manager
+    """
+    teammember = memberlist
+    count=1
+    if manager == memberlist:
+        return teammember,count
+    else :
+        if manager in memberlist and manager!=memberlist:
+            count=len(teammember)
+            teammember.remove(manager)
+            teammember=",".join(teammember)
+        elif type(teammember) != types.UnicodeType : #其他成员超过一个时时
+            count=len(teammember)+1
+            teammember=",".join(teammember)
+        else :
+            count+=1
+        return teammember,count

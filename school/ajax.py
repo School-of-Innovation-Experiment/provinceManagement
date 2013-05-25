@@ -147,20 +147,14 @@ def StudentDeleteConsistence(request, uid):
         project=ProjectSingle.objects.get(student_id=studentpro.id)
         presubmitenterprise = PreSubmitEnterprise.objects.get(project_id_id=project.project_id)
         delteacher_enterprise=Teacher_Enterprise.objects.get(id=presubmitenterprise.enterpriseTeacher_id)
-        logger.info(delstudent)
-        logger.info(delteacher_enterprise.id)
-        logger.info(request.user)
         if request.method == "POST":
             schooluser=request.user
             school=User.objects.get(username=schooluser)
             schoolpro=SchoolProfile.objects.filter(userid_id=school.id)
-            if schoolpro:
-                logger.info(studentpro.school_id)
-                logger.info(schoolpro[0].id)               
+            if schoolpro:              
                 if studentpro.school_id==schoolpro[0].id:
                     delstudent.delete()
                     delteacher_enterprise.delete()
-                    logger.info("successfully")
                     return simplejson.dumps({"is_deleted": True,
                                  "message": "delete it successfully!",
                                  "uid": str(uid)})
