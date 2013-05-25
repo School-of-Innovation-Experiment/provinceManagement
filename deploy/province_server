@@ -24,8 +24,8 @@ server {
     root /home/sie/mysites/provinceManagement;
 
 	# Make site accessible from http://localhost/
-	server_name 192.168.20.100;
-    client_max_body_size 50m;
+	server_name 20130520.project.upln.cn;
+    client_max_body_size 120m;
     client_body_temp_path /home/sie/mysites/tmp;
 
 	location / {
@@ -53,8 +53,8 @@ server {
     }
 
 
-    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf|doc|pdf|docx)$ {
-       expires 3d;
+    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf|doc|pdf|docx|xls|xlsx)$ {
+       expires 7d;
     }
 
     location /media {
