@@ -509,16 +509,12 @@ def info_xls(request):
     proj_set = ProjectSingle.objects.filter(school=school_prof.school)
     xls_obj, workbook = info_xls_school_gen(school_prof)
 
-    for project in proj_set:
-        managerid=StudentProfile.objects.get(id=project.student_id)
-        teammanager = User.objects.get(id=managerid.user_id)
-        memberlist=get_memberlist(project.members)
-        teammember,membercount = get_teammember(teammanager.first_name,memberlist)
-
-
-
     _index = 1
     for proj_obj in proj_set:
+        managerid=StudentProfile.objects.get(id=proj_obj.student_id)
+        teammanager = User.objects.get(id=managerid.user_id)
+        memberlist=get_memberlist(proj_obj.members)
+        teammember,membercount = get_teammember(teammanager.first_name,memberlist)
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
         try:
