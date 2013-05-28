@@ -65,10 +65,14 @@ def student_view(request):
         loginfo(p=err, label="student home view")
         raise Http404
     loginfo(p=project.project_id)
+    try:
+        insitute = project.insitute.category
+    except:
+        insitute = u"未选择"
     data = {"project": project,
             "project_cate": project.project_category.category,
             "proj_insitute_choice": INSITUTE_CATEGORY_CHOICES,
-            "project_insitute": project.insitute.category,
+            "project_insitute": insitute,
             "proj_cate_choice": PROJECT_CATE_CHOICES}
 
     return render(request, "school/student.html", data)
