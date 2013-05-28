@@ -514,7 +514,7 @@ def info_xls(request):
         managerid=StudentProfile.objects.get(id=proj_obj.student_id)
         teammanager = User.objects.get(id=managerid.user_id)
         memberlist=get_memberlist(proj_obj.members)
-        teammember, membercount = get_teammember(teammanager.first_name,memberlist)
+        teammember,membercount,manager = get_teammember(teammanager.first_name,memberlist)
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
         try:
