@@ -528,7 +528,7 @@ def info_xls(request):
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
-        xls_obj.write(row, 4, unicode(teammanager.first_name))# 负责人
+        xls_obj.write(row, 4, unicode(manager))# 负责人
         xls_obj.write(row, 5, "") # 学号
         xls_obj.write(row, 6, unicode(membercount)) # 学生人数
         xls_obj.write(row, 7, unicode(teammember)) # 项目其他成员
@@ -597,22 +597,32 @@ def get_memberlist(members):
 
     return memberlist
 
-def get_teammember(manager,memberlist):
+def get_teammember(managername,memberlist):
     """
         get member expect manager
     """
     teammember = memberlist
     count=1
-    if manager == memberlist:
-        return teammember,count
+    loginfo(p=managername, label="in managername")
+    loginfo(p=memberlist, label="in memberlist")
+    if managername == ""  :#if no manager
+        if type(memberlist) != types.UnicodeType:
+            manager = memberlist[0]
+        else :
+             manager = memberlist  # type is unicodetype用户First_name没有填写时
+    else:
+        manager = managername
+
+    if manager == teammember:
+        return teammember,count,manager
     else :
-        if manager in memberlist and manager!=memberlist:
+        if manager in memberlist and manager!=memberlist and type(teammember) != types.UnicodeType:
             count=len(teammember)
             teammember.remove(manager)
             teammember=",".join(teammember)
         elif type(teammember) != types.UnicodeType : #其他成员超过一个时时
             count=len(teammember)+1
             teammember=",".join(teammember)
-        else :
+        else :  #如果只输入一个且不是负责人时
             count+=1
-        return teammember,count
+    return teammember,count,manager
