@@ -52,7 +52,8 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
-
+    for item in re_project:
+        item.pass_p = u"通过" if item.pass_p else u"未通过"
     loginfo(p=re_project, label="EXPERT HOME")
 
     data = {'current_list': re_project}
@@ -104,6 +105,28 @@ def review_report_view(request, pid=None):
             }
 
     return render(request, 'expert/review.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(EXPERT_USER)
+def review_report_pass_p(request, pid, pass_p):
+    proj = Re_Project_Expert.objects.get(project=pid)
+    proj.comments = u"已审核"
+    # projsingle = ProjectSingle.objects.get(project_id=pid)
+    # if projsingle.project_category.category == CATE_INNOVATION:
+    #     audited_o = PreSubmit.objects.get(project_id=pid)
+    # else:
+    #     audited_o = PreSubmitEnterprise.objects.get(project_id=pid)
+    # audited_o.is_audited=True
+    # audited_o.save()
+
+    try:
+        pass_p = int(pass_p)
+    except:
+        pass_p = 0
+    proj.pass_p = True if pass_p else False
+    proj.save()
+    return HttpResponseRedirect(reverse('expert.views.home_view'))
 
 BUF_SIZE = 262144
 def download_view(request, file_id=None):

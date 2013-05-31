@@ -317,9 +317,19 @@ class AdminStaffService(object):
             obj_list = [obj.comments, obj.score_significant,
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
-                        obj.score_capacity,]
+                        obj.score_capacity, obj.pass_p]
             review_list.append(obj_list)
         return review_list
+
+    @staticmethod
+    def GetSubjectReviewPassPList(project_id):
+        review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
+        review_list = []
+        for obj in review_obj_list:
+            obj_list = [u"通过" if obj.pass_p else u"未通过"]
+            review_list.append(obj_list)
+        return review_list
+
     @staticmethod
     def SubjectGradeChange(project_id, changed_grade):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
