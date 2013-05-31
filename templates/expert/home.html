@@ -7,16 +7,17 @@
   <div class="page-header">
     <h3>
       本年度评审列表
-    </h3> 
+    </h3>
   </div><!--end page header-->
-  <table class="table table-hover">     
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>名称</th>
         <th>项目类型</th>
         <th>参赛学校</th>
         <th>评审状态</th>
-        <th>评分</th>
+        <th>审核结果</th>
+        <!-- <th>评分</th> -->
         <th>详情</th>
       </tr>
     </thead>
@@ -27,13 +28,14 @@
         <td>{{item.project.project_category}}</td>
         <td>{{item.project.school}}</td>
         <td>
-          {%if item.comments == None or item.score_innovation == 0.0 or item.score_practice == 0.0 %}
+          {%if item.comments == None and item.score_innovation == 0.0 and item.score_practice == 0.0 %}
             未审核
           {%else%}
             已评审
           {%endif%}
         </td>
-        <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td>
+        <td>{{item.pass_p}}</td>
+        <!-- <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td> -->
         <td>
           <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
         </td>

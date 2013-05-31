@@ -97,7 +97,7 @@ class Re_Project_Expert(models.Model):
                                           default=0)
     score_capacity = models.FloatField(blank=False, verbose_name=u"指导教师科研能力",
                                        default=0)
-
+    pass_p = models.BooleanField(default=False, verbose_name=u"是否通过")
     class Meta:
         #Here, we use together unique key, otherwise the one project will be
         #reviewed by one expert twice!

@@ -25,4 +25,8 @@ urlpatterns = patterns('',
         r'^review/(?P<file_id>.{36})/download$',
         expert_views.download_view,
     ),
+    url(
+        r'^review/(?P<pid>.{36})/(?P<pass_p>.{1})$',
+        expert_views.review_report_pass_p,
+    ),
 )

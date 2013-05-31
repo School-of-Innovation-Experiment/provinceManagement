@@ -1,85 +1,84 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-	<div class="well form-inline">
-		<b>
-		<form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
-		{% csrf_token %}	
-	    {% if not readonly %}		
-	  	{{school_category_form.school_choice}}
-	  	<input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
-	  	{%endif%}
-	  	{% if readonly %}
-	  	<input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/><span class="help-inline">项目级别分配完以后可以发布新闻</span>
-	  	<div class="alert alert-error" style="margin-top:20px;">
-		    <a class="close" data-dismiss="alert">x</a> 
-		    <h4 class="alert-heading">系统提示！</h4>
-		    <p>目前不能按学校筛选，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
-	  	</div><!--end alert block-->
-	  	{%endif%}
-	  </form><!--end category form -->
-	<table class="table table-condensed" id="subject_table">
-	<thead>
+<div class="well form-inline">
+  <b>
+    <form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
+      {% csrf_token %}
+      {% if not readonly %}
+      {{school_category_form.school_choice}}
+      <input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
+      {%endif%}
+      {% if readonly %}
+      <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/><span class="help-inline">项目级别分配完以后可以发布新闻</span>
+      <div class="alert alert-error" style="margin-top:20px;">
+	<a class="close" data-dismiss="alert">x</a>
+	<h4 class="alert-heading">系统提示！</h4>
+	<p>目前不能按学校筛选，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+      </div><!--end alert block-->
+      {%endif%}
+    </form><!--end category form -->
+    <table class="table table-condensed" id="subject_table">
+      <thead>
 	<tr>
-		<th>发布题目名称</th>
-		<th>所属学校</th>
-		<th>指导教师</th>
-        <th>项目成员</th>
-		<th>专家评分</th>
-		<th>修改等级</th>
+	  <th>发布题目名称</th>
+	  <th>所属学校</th>
+	  <th>指导教师</th>
+	  <th>专家评分</th>
+	  <th>修改等级</th>
 	</tr>
-	</thead>
-	<tbody id="subject_table_body">
+      </thead>
+      <tbody id="subject_table_body">
 	{% for subject in subject_list%}
-		<tr>
-			<td>{{subject.title}}</td>
-			<td>{{subject.school}}</td>
-			<td>{{subject.inspector}}</td>
-            <td>{{subject.members}}</td>
-			<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-			<td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
-		</tr>
+	<tr>
+	  <td>{{subject.title}}</td>
+	  <td>{{subject.school}}</td>
+	  <td>{{subject.inspector}}</td>
+	  <!-- <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td> -->
+          <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家审核结果</td>
+	  <td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
+	</tr>
 	{%endfor%}
-	</tbody>
-	</table>
-	<div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
-		<div class="modal-header">
+      </tbody>
+    </table>
+    <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
+      <div class="modal-header">
     	<a class="close" data-dismiss="modal">×</a>
     	<h3>专家得分/评价列表</h3>
-		</div>
-  	<div class="modal-body">
-    <table id="review_table"class="table table-condensed"></table>
-  	</div>
-	</div><!--end subject_review-->
-	<div class="modal hide fade" style="display: none;" id="grade_choice">
-		<div class="modal-header">
+      </div>
+      <div class="modal-body">
+        <table id="review_table"class="table table-condensed"></table>
+      </div>
+    </div><!--end subject_review-->
+    <div class="modal hide fade" style="display: none;" id="grade_choice">
+      <div class="modal-header">
     	<a class="close" data-dismiss="modal">×</a>
     	<h3>选择项目级别</h3>
-    </div>
-  	<div class="modal-body">
-    {{subject_grade_form.subject_grade}}
-  	</div>
-  	<div class="modal-footer">
+      </div>
+      <div class="modal-body">
+        {{subject_grade_form.subject_grade}}
+      </div>
+      <div class="modal-footer">
     	<a class="btn" data-dismiss="modal">关闭</a>
     	<a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
-  	</div>
-		</div>		
-	</div><!--end grade_choice-->
+      </div>
+    </div>
+</div><!--end grade_choice-->
 
-	</div><!-- end the whole form -->
-    <div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div style="border: 1px solid #fc6;text-align:center;">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>发布新闻成功</h3>
-        </div>
-    </div>
-    <div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myunrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div style="border: 1px solid #fc6;text-align:center;">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>发布新闻失败,有未指派级别的项目</h3>
-        </div>
+</div><!-- end the whole form -->
+<div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div style="border: 1px solid #fc6;text-align:center;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>发布新闻成功</h3>
   </div>
-    </div>
-	<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
-	<!-- ajax_csrf-->
-	<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+</div>
+<div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myunrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div style="border: 1px solid #fc6;text-align:center;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>发布新闻失败,有未指派级别的项目</h3>
+  </div>
+</div>
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

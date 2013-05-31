@@ -137,6 +137,16 @@ def judge_is_assigned(request,insitute):
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
+def get_subject_review_pass_p_list(request, project_id):
+    '''
+    to get subject evaluate list through project_id
+    '''
+    #dajax = Dajax()
+    review_list = AdminStaffService.GetSubjectReviewPassPList(project_id)
+
+    return simplejson.dumps({'review_list':review_list})
+
+@dajaxice_register
 def get_subject_review_list(request, project_id):
     '''
     to get subject evaluate list through project_id

@@ -35,8 +35,8 @@ function score_submit_check(){
         $("#id_score_capacity").css("background","red");
     }
     if (flag){
-        $("#id_alert").attr("class", "alert alert-error")
-        $("#id_alert").html("<strong>分数输入有误，请阅读“打分须知”后，重新填写</strong>")
+        $("#id_alert").attr("class", "alert alert-error");
+        $("#id_alert").html("<strong>分数输入有误，请阅读“打分须知”后，重新填写</strong>");
     }
     return !flag;
 }
