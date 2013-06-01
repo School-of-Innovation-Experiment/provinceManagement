@@ -52,11 +52,19 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
+
+    limitnum = expert.numlimit
+    really = re_project.filter(pass_p=True).count()
+    remaining = limitnum - really
+
     for item in re_project:
         item.pass_p = u"通过" if item.pass_p else u"未通过"
     loginfo(p=re_project, label="EXPERT HOME")
 
-    data = {'current_list': re_project}
+    data = {'current_list': re_project,
+            'limitnum': limitnum,
+            'really': really,
+            'remaining': remaining}
     return render(request, 'expert/home.html', data)
 
 
@@ -112,19 +120,18 @@ def review_report_view(request, pid=None):
 def review_report_pass_p(request, pid, pass_p):
     proj = Re_Project_Expert.objects.get(project=pid)
     proj.comments = u"已审核"
-    # projsingle = ProjectSingle.objects.get(project_id=pid)
-    # if projsingle.project_category.category == CATE_INNOVATION:
-    #     audited_o = PreSubmit.objects.get(project_id=pid)
-    # else:
-    #     audited_o = PreSubmitEnterprise.objects.get(project_id=pid)
-    # audited_o.is_audited=True
-    # audited_o.save()
-
     try:
         pass_p = int(pass_p)
     except:
         pass_p = 0
-    proj.pass_p = True if pass_p else False
+    expert = get_object_or_404(ExpertProfile, userid=request.user)
+    limitnum = expert.numlimit
+    re_project = Re_Project_Expert.objects.filter(expert=expert)
+    really = re_project.filter(pass_p=True).count()
+    if pass_p and (limitnum > really):
+        proj.pass_p = True
+    else:
+        proj.pass_p = False
     proj.save()
     return HttpResponseRedirect(reverse('expert.views.home_view'))
 
