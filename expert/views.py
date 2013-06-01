@@ -118,7 +118,7 @@ def review_report_view(request, pid=None):
 @login_required
 @authority_required(EXPERT_USER)
 def review_report_pass_p(request, pid, pass_p):
-    proj = Re_Project_Expert.objects.get(project=pid)
+    proj = Re_Project_Expert.objects.filter(project=pid)[0]
     proj.comments = u"已审核"
     try:
         pass_p = int(pass_p)
