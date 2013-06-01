@@ -28,10 +28,10 @@
         <td>{{item.project.project_category}}</td>
         <td>{{item.project.school}}</td>
         <td>
-          {%if item.comments == None and item.score_innovation == 0.0 and item.score_practice == 0.0 %}
-            未审核
+          {% if item.comments != None %}
+            已审核
           {%else%}
-            已评审
+            未评审
           {%endif%}
         </td>
         <td>{{item.pass_p}}</td>
