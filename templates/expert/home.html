@@ -28,7 +28,7 @@
         <td>{{item.project.project_category}}</td>
         <td>{{item.project.school}}</td>
         <td>
-          {% if item.comments != None %}
+          {% if item.comments != None and item.comments != "" %}
             已审核
           {%else%}
             未评审

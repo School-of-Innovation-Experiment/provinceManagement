@@ -237,7 +237,7 @@ class AdminStaffService(object):
                     if obj.is_assigned == 1:
                         expert_list = ExpertProfile.objects.filter(subject = expert_category)
                         extra_subject_list = [subject for subject in subject_list if len(subject.expert.all()) == 0]
-                        print subject_list[1].expert.all()
+                        # print subject_list[1].expert.all()
                         if len(extra_subject_list) == 0 or len(expert_list) == 0:
                             if not extra_subject_list:
                                 exist_message = "没有需要分配的新项目存在，无法进行指派"
@@ -245,13 +245,13 @@ class AdminStaffService(object):
                                 exist_message = "所属专业的专家不存在,无法进行指派"
                         else:
                             done_num = len(subject_list) - len(extra_subject_list)
-                            
+
                             re_dict = AdminStaffService.Assign_Expert_For_Subject(extra_subject_list, expert_list, done_num)
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
                                     print subject, expert
                                     Re_Project_Expert(project=subject, expert=expert).save()
-                        
+
                     #没有指派专家，则进行专家指派
                     else:
                         #筛选专家列表
@@ -277,7 +277,7 @@ class AdminStaffService(object):
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         return render_to_response("adminStaff/subject_feedback.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
-    
+
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list, done_num = 0):
 
