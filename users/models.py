@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
 Created on 2012-11-10
 
@@ -40,7 +40,8 @@ class ExpertProfile(models.Model):
     subject = models.ForeignKey(InsituteCategory, verbose_name="相关学科")
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
-
+    numlimit = models.IntegerField(blank=True, null=True, default=0,
+                                   verbose_name="国家级项目上限")
     class Meta:
         verbose_name = "评审专家"
         verbose_name_plural = "评审专家"
