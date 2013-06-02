@@ -62,7 +62,7 @@ def home_view(request):
     remaining_b = limitnum_b - really_b
 
     for item in re_project:
-        item.pass_p = u"通过" if item.pass_p else u"未通过"
+        item.pass_p = u"国家级" if item.pass_p else u"省级"
         item.financial_category = item.project.financial_category
     loginfo(p=re_project, label="EXPERT HOME")
 
