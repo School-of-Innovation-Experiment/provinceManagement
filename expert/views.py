@@ -54,17 +54,25 @@ def home_view(request):
     re_project = Re_Project_Expert.objects.filter(expert=expert)
 
     limitnum = expert.numlimit
-    really = re_project.filter(pass_p=True).count()
+    really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A).filter(pass_p=True).count()
     remaining = limitnum - really
+
+    limitnum_b = expert.numlimit_b
+    really_b = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
+    remaining_b = limitnum_b - really_b
 
     for item in re_project:
         item.pass_p = u"通过" if item.pass_p else u"未通过"
+        item.financial_category = item.project.financial_category
     loginfo(p=re_project, label="EXPERT HOME")
 
     data = {'current_list': re_project,
             'limitnum': limitnum,
             'really': really,
-            'remaining': remaining}
+            'remaining': remaining,
+            'limitnum_b': limitnum_b,
+            'really_b': really_b,
+            'remaining_b': remaining_b}
     return render(request, 'expert/home.html', data)
 
 
@@ -125,9 +133,16 @@ def review_report_pass_p(request, pid, pass_p):
     except:
         pass_p = 0
     expert = get_object_or_404(ExpertProfile, userid=request.user)
-    limitnum = expert.numlimit
     re_project = Re_Project_Expert.objects.filter(expert=expert)
-    really = re_project.filter(pass_p=True).count()
+
+    proj_single = ProjectSingle.objects.get(project_id = pid)
+    if proj_single.financial_category.category == FINANCIAL_CATE_A:
+        limitnum = expert.numlimit
+        really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A).filter(pass_p=True).count()
+    else:
+        limitnum = expert.numlimit_b
+        really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
+
     if pass_p and (limitnum > really):
         proj.pass_p = True
     else:

@@ -41,7 +41,9 @@ class ExpertProfile(models.Model):
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name="工作单位")
     numlimit = models.IntegerField(blank=True, null=True, default=0,
-                                   verbose_name="国家级项目上限")
+                                   verbose_name="甲类国家级项目上限")
+    numlimit_b = models.IntegerField(blank=True, null=True, default=0,
+                                   verbose_name="乙类国家级项目上限")
     class Meta:
         verbose_name = "评审专家"
         verbose_name_plural = "评审专家"
