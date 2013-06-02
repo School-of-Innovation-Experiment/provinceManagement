@@ -94,10 +94,22 @@ def check():
         loginfo(p=current_cnt, label="Test, Experts Name")
         #check school
         for school_str in exclude_schools_const:
-            check_projects = assigned_projects.filter(project__school__schoolName=school_str)
-            loginfo(p=len(check_projects), label=school_str)
+            check_projects_cnt = assigned_projects.filter(project__school__schoolName=school_str).count()
+            if check_projects_cnt != 0:
+                loginfo(p=check_projects_cnt, label=school_str)
 
     loginfo(p=count, label="Test, Experts Name")
+
+    projects = ProjectSingle.objects.filter()
+    loginfo(p=len(projects), label="The Total Projects Number")
+    cnt = 0
+    for school_str in exclude_schools_const:
+        check_projects_cnt = projects.filter(school__schoolName=school_str).count()
+        loginfo(p=check_projects_cnt, label=school_str)
+        cnt = cnt + check_projects_cnt
+
+    loginfo(p=cnt, label="The Exclude School numbers")
+    loginfo(p=cnt + count, label="The Exclude School numbers")
 
 
 def delete_records():
