@@ -66,17 +66,38 @@ def assigned_by_category(category, experts):
         save_record(expert, projects[i + j * assigned_cnt])
 
 
+def assigned_by_category_all(category, experts):
+    """
+    """
+    projects = ProjectSingle.objects.filter(financial_category__category=category)
+
+    loginfo(p=len(projects), label="Stage1:category")
+    for school_str in exclude_schools_const:
+        projects = projects.exclude(school__schoolName=school_str)
+
+    loginfo(p=len(projects), label="Stage2:School exclude")
+
+    expert_count = len(experts)
+    loginfo(p=expert_count, label="expert sum")
+
+    for expert in experts:
+        for project in projects:
+            save_record(expert, project)
+        loginfo(p="save record finish")
+
+
 def expert_assigned():
     """
     project assigned
     """
-    experts = ExpertProfile.objects.filter()
+    experts = ExpertProfile.objects.filter(numlimit=600)
 
-    loginfo(p="A", label="Start")
-    assigned_by_category(project_category_const[0], experts)
+    loginfo(p="A 600", label="Start")
+    assigned_by_category_all(project_category_const[0], experts)
 
-    loginfo(p="B", label="Start")
-    assigned_by_category(project_category_const[1], experts)
+    experts = ExpertProfile.objects.filter(numlimit_b=80)
+    loginfo(p="B 60", label="Start")
+    assigned_by_category_all(project_category_const[1], experts)
 
 
 def check():
