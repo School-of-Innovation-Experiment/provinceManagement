@@ -326,8 +326,19 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [u"通过" if obj.pass_p else u"未通过"]
+            obj_list = u"通过" if obj.pass_p else u"未通过"
             review_list.append(obj_list)
+        return review_list
+
+    @staticmethod
+    def GetSubjectReviewPassPStatistic(project_id):
+        review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
+        review_list = [0, 0]
+        for obj in review_obj_list:
+            if obj.pass_p:
+                review_list[0] += 1
+            else:
+                review_list[1] += 1
         return review_list
 
     @staticmethod

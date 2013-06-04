@@ -62,9 +62,9 @@ def home_view(request):
     remaining_b = limitnum_b - really_b
 
     for item in re_project:
-        item.pass_p = u"通过" if item.pass_p else u"未通过"
+        item.pass_p = u"国家级" if item.pass_p else u"省级"
         item.financial_category = item.project.financial_category
-    loginfo(p=re_project, label="EXPERT HOME")
+    # loginfo(p=re_project, label="EXPERT HOME")
 
     data = {'current_list': re_project,
             'limitnum': limitnum,
@@ -105,7 +105,7 @@ def review_report_view(request, pid=None):
             review_form.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
         else:
-            loginfo(p = review_form.errors)
+            #loginfo(p = review_form.errors)
             return HttpResponseRedirect(reverse('expert.views.home_view'))
     else:
         review_form = ReviewForm(instance=re_project)
@@ -126,7 +126,7 @@ def review_report_view(request, pid=None):
 @login_required
 @authority_required(EXPERT_USER)
 def review_report_pass_p(request, pid, pass_p):
-    proj = Re_Project_Expert.objects.filter(project=pid)[0]
+    proj = Re_Project_Expert.objects.filter(project=pid).get(expert__userid=request.user)
     proj.comments = u"已审核"
     try:
         pass_p = int(pass_p)
