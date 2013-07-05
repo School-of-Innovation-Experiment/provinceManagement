@@ -79,6 +79,30 @@ def DeadlineSettings(request, form):
         return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误"})
 
 @dajaxice_register
+def ExpertImport(request, form):
+    """
+	Import Expert Profile directly without email
+	"""
+    expert_form = ExpertDispatchForm(deserialize_form(form))
+    if expert_form.is_valid():
+        password = expert_form.cleaned_data["expert_password"]
+        email = expert_form.cleaned_data["expert_email"]
+        insitute = expert_form.cleaned_data["expert_insitute"]
+        name = email
+        person_firstname = expert_form.cleaned_data["person_firstname"]
+        if password == "":
+            password = email.split('@')[0]
+        flag = AdminStaffService.sendemail(request, name, person_firstname,password, email,EXPERT_USER, False, expert_insitute=insitute)
+        if flag:
+            message = u"导入成功"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+        else:
+            message = u"相同权限用户已经存在，中断导入"
+            return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+    else:
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+
+@dajaxice_register
 def  ExpertDispatch(request, form):
     expert_form =  ExpertDispatchForm(deserialize_form(form))
     if expert_form.is_valid():

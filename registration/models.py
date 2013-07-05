@@ -68,7 +68,9 @@ class RegistrationManager(models.Manager):
         #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
         if User.objects.filter(email=email).count() == 0:
             new_user = User.objects.create_user(username, email, password)
-            new_user.is_active = False
+            #new_user.is_active = False
+            new_user.is_active = (not send_email) #special treat for expert_import
+
             new_user.first_name = person_firstname
             new_user.save()
             registration_profile = self.create_profile(new_user)

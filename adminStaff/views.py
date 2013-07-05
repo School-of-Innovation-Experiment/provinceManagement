@@ -36,16 +36,50 @@ from news.forms import NewsForm
 
 class AdminStaffService(object):
     @staticmethod
-    def sendemail(request,username,person_firstname,password,email,identity, **kwargs):
+    def sendemail(request,username,person_firstname,password,email,identity,send_email=True, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
             if kwargs.has_key('school_name'):
-                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity, school_name=kwargs['school_name'])
+                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity,send_email, school_name=kwargs['school_name'])
             else:
-                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity, expert_insitute=kwargs['expert_insitute'])
+                RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity,send_email, expert_insitute=kwargs['expert_insitute'])
             return True
         else:
             return False
+    
+    @staticmethod
+    def GetRegisterSchoolList():
+        res_list = []
+        auth_name = []
+        for register in SchoolProfile.objects.all():
+            dict = {}
+            auth_list = UserIdentity.objects.filter(auth_groups = register.userid).all()
+            dict["auth"] = ''
+            dict["email"] = register.userid.email
+            dict["is_active"] = register.userid.is_active
+            dict["first_name"] = register.userid.first_name
+            for auth in auth_list:
+                dict["auth"] += auth.__unicode__() + ' '
+            res_list.append(dict)
+        return res_list
+
+
+    @staticmethod
+    def GetRegisterExpertList():
+        res_list = []
+        auth_name = []
+        for register in ExpertProfile.objects.all():
+            dict = {}
+            auth_list = UserIdentity.objects.filter(auth_groups = register.userid).all()
+            dict["auth"] = ''
+            dict["email"] = register.userid.email
+            dict["is_active"] = register.userid.is_active
+            dict["first_name"] = register.userid.first_name
+            for auth in auth_list:
+                dict["auth"] += auth.__unicode__() + ' '
+            res_list.append(dict)
+        return res_list
+
     @staticmethod
     def GetRegisterList():
         '''
@@ -85,12 +119,11 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def Dispatch(request):
         if request.method == "GET":
-            expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDispatchForm()
-            email_list  = AdminStaffService.GetRegisterList()
+            email_list  = AdminStaffService.GetRegisterSchoolList()
             loginfo(p=email_list, label="news email_list ")
 
-            return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
+            return render_to_response("adminStaff/dispatch.html",{'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
         if request.method == "POST":
@@ -106,6 +139,19 @@ class AdminStaffService(object):
                 AdminStaffService.sendemail(request, name, password, email, EXPERT_USER)
                 expert_form = forms.ExpertDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
+
+    @staticmethod
+    def ImportExpert(request):
+        """
+        """
+        if request.method == "GET":
+            expert_form = forms.ExpertDispatchForm()
+            email_list = AdminStaffService.GetRegisterExpertList()
+            data = {'expert_form': expert_form,
+                    'email_list':email_list,}
+            return render(request, "adminStaff/ImportExpert.html", data)
+
+
     @staticmethod
     def schoolDispatch(request):
         if request.method == "POST":

@@ -28,5 +28,6 @@ urlpatterns = patterns('',
                        (r'^NoticeMessageSettings$',
                         AdminStaffService.NoticeMessageSetting),
     (r'^news_release$',AdminStaffService.NewsRelease),
+    (r'^ImportExpert$',AdminStaffService.ImportExpert),
 )
 urlpatterns += staticfiles_urlpatterns()
