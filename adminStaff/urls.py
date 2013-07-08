@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
 
     (r'^dispatch/$',AdminStaffService.Dispatch),
+    (r'^dispatch/(?P<page>\d+)$',AdminStaffService.Dispatch),
     (r'^expert_dispatch/$',AdminStaffService.expertDispatch),
     (r'^school_dispatch/$',AdminStaffService.schoolDispatch),
     (r'^create_inactive_user$',AdminStaffService.expertDispatch),

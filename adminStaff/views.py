@@ -33,6 +33,7 @@ from backend.decorators import *
 from backend.logging import logger, loginfo
 from news.models import News
 from news.forms import NewsForm
+from backend.utility import getContext
 
 class AdminStaffService(object):
     @staticmethod
@@ -121,9 +122,13 @@ class AdminStaffService(object):
         if request.method == "GET":
             school_form = forms.SchoolDispatchForm()
             email_list  = AdminStaffService.GetRegisterSchoolList()
-            loginfo(p=email_list, label="news email_list ")
+            page = request.GET.get('page')
+            loginfo(p=page, label="current page num")
+            context = getContext(email_list, page, 'email', 0)
+            context['school_form'] = school_form
 
-            return render_to_response("adminStaff/dispatch.html",{'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
+            #loginfo(p=email_list, label="news email_list ")
+            return render(request, "adminStaff/dispatch.html", context)
     @staticmethod
     def expertDispatch(request):
         if request.method == "POST":
