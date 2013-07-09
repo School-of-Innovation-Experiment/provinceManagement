@@ -136,7 +136,9 @@ class PreSubmit(models.Model):
     project_id = models.ForeignKey(ProjectSingle)
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,
                                 verbose_name=u"题目来源")
-
+    
+    proj_introduction = models.TextField(blank=False, null=True, 
+                                         verbose_name=u"项目简介")
     background = models.TextField(blank=False, null=True, verbose_name=u"项目背景及研究意义")
     key_notes = models.TextField(blank=False, null=True,
                                  verbose_name=u"研究内容和拟解决的关键问题")
@@ -168,6 +170,9 @@ class PreSubmitEnterprise(models.Model):
 
     original = models.ForeignKey(ProjectEnterpriseOrigin, blank=False, null=True,
                                  verbose_name=u"项目来源")
+
+    proj_introduction = models.TextField(blank=False, null=True, 
+                                         verbose_name=u"项目简介")
     maturity = models.ForeignKey(ProjectEnterpriseMaturity, blank=False, null=True,
                                  verbose_name=u"项目技术成熟度")
     enterpriseTeacher = models.OneToOneField(Teacher_Enterprise, blank=False, null=False,
