@@ -56,7 +56,6 @@ def school_statistics_view(request):
     if not default_users:
         return HttpResponseRedirect("/")
 
-    data = get_statistics_from_user(user=default_users[0].userid)
     # search post
     if request.method == "POST":
         search_form = SearchForm(request.POST)
@@ -65,6 +64,7 @@ def school_statistics_view(request):
             user = get_object_or_404(SchoolProfile, school=school_id)
             data = get_statistics_from_user(user=user.userid)
     else:
+        data = get_statistics_from_user(user=default_users[0].userid)
         search_form = SearchForm()
 
     data["form"] = search_form

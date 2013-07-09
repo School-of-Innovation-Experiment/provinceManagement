@@ -286,7 +286,7 @@ def get_trend_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':True},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目类型数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },
@@ -317,7 +317,7 @@ def get_grade_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':False},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目级别数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },

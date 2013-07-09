@@ -7,7 +7,7 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/highcharts.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/chartit-highchart/js/highcharts/themes/gray.js"></script>
   {% load chartit %}
-  
+
   {{ charts|load_charts:"trend_lines, grade_lines" }}
 
 {% endblock %}
@@ -17,7 +17,7 @@
 <!--search form-->
 <form class="form-inline" action="." method="post">
   {% csrf_token %}
-  {{form.schoolName}} 
+  {{form.schoolName}}
   <button type="submit" class="btn btn-primary">搜索</button>
 </form><!--end search form-->
 
