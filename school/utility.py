@@ -401,9 +401,16 @@ def get_province_trend_lines():
                                ],
                 chart_options={'title': {'text': '学校-评级数据统计'},
                                 'xAxis':{
-                                            'title':{'text': '参赛学校'},
+                                    'title':{'text': '参赛学校'},
+                                    'labels':{
+                                        'step': 1,
+                                        'rotation': 45,
+                                        'align': 'bottom'
+                                    },
                                         },
-                                'yAxis':{'title':{'text': '评级数量'},'allowDecimals':False},
+                                'yAxis':{
+                                    'title':{'text': '评级数量'},
+                                    'allowDecimals':False},
                                 }
                 )
     return cht
