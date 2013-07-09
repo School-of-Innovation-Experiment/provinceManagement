@@ -160,14 +160,14 @@ ACCOUNT_ACTIVATION_DAYS = 30
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
+SERVER_EMAIL = "dut200921049@gmail.com"
 EMAIL_SUBJECT_PREFIX = '[ProvinceInnovationManagement]'
-EMAIL_HOST = 'mail.dlut.edu.cn'
-EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_HOST_PASSWORD = '9683096830'
-DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dut200921049@gmail.com'
+EMAIL_HOST_PASSWORD = '09031632'
+DEFAULT_FROM_EMAIL = 'dut200921049@gmail.com'
+EMAIL_USE_TLS = True
 
 
 #########################
