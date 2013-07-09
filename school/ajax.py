@@ -55,7 +55,7 @@ def  StudentDispatch(request, form):
                 remaining_activation_times -= 1
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
             else:
-                message = u"相同邮件已经发送，中断发送或发生内部错误"
+                message = u"邮件发送失败，请重新发送"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
         logger.info("Form Valid Failed"+"**"*10)

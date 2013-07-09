@@ -371,9 +371,11 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
     #判断用户名是否存在，存在的话直接返回
     loginfo(p=person_firstname, label="person_firstname")
     if not AuthStudentExist(request, email):
-        user = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
+        user,send_mail_flag = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
+        loginfo(p=send_mail_flag, label="in send_mail_flag")
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate)
-        return True and result
+        loginfo(p=result, label="in result")
+        return True and result and send_mail_flag
     else:
         return False
 

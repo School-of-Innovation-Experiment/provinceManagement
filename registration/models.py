@@ -94,7 +94,8 @@ class RegistrationManager(models.Manager):
                                            'password':password}
                                            )
                 logger.error(message)
-                send_mail(subject,
+                #此处加监控标志
+                send_mail_flag = send_mail(subject,
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
@@ -134,7 +135,7 @@ class RegistrationManager(models.Manager):
             student_obj.save()
         if profile_callback is not None:
             profile_callback(user=new_user)
-        return new_user
+        return new_user,send_mail_flag
 
     def create_profile(self,user):
         """
