@@ -53,6 +53,8 @@ class ProjectSingle(models.Model):
                                  verbose_name=u"联系方式")
     inspector = models.CharField(max_length=200, blank=False,
                                  verbose_name=u"指导教师")
+    inspector_title = models.CharField(blank=False, null=True, max_length=10,
+                                       verbose_name=u"指导老师职称")
     members = models.CharField(max_length=400, blank=False,
                                verbose_name=u"团队成员")
     im = models.CharField(max_length=50, blank=False, verbose_name=u"QQ")
@@ -136,8 +138,8 @@ class PreSubmit(models.Model):
     project_id = models.ForeignKey(ProjectSingle)
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,
                                 verbose_name=u"题目来源")
-    
-    proj_introduction = models.TextField(blank=False, null=True, 
+
+    proj_introduction = models.TextField(blank=False, null=True,
                                          verbose_name=u"项目简介")
     background = models.TextField(blank=False, null=True, verbose_name=u"项目背景及研究意义")
     key_notes = models.TextField(blank=False, null=True,

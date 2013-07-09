@@ -286,7 +286,7 @@ def get_trend_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':True},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目类型数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },
@@ -317,7 +317,7 @@ def get_grade_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':False},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目级别数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },
@@ -401,9 +401,16 @@ def get_province_trend_lines():
                                ],
                 chart_options={'title': {'text': '学校-评级数据统计'},
                                 'xAxis':{
-                                            'title':{'text': '参赛学校'},
+                                    'title':{'text': '参赛学校'},
+                                    'labels':{
+                                        'step': 1,
+                                        'rotation': 45,
+                                        'align': 'bottom'
+                                    },
                                         },
-                                'yAxis':{'title':{'text': '评级数量'},'allowDecimals':False},
+                                'yAxis':{
+                                    'title':{'text': '评级数量'},
+                                    'allowDecimals':False},
                                 }
                 )
     return cht
