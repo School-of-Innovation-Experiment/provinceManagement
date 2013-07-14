@@ -43,6 +43,9 @@ from django.db import transaction
 from const.models import *
 from const import *
 
+from student.models import Student_Group
+from student.forms import StudentGroupForm, StudentGroupInfoForm
+
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
@@ -77,6 +80,24 @@ def student_view(request):
 
     return render(request, "school/student.html", data)
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def member_change(request):
+    """
+    project group member change
+    """
+    student_account = StudentProfile.objects.get(user_id = request.user)
+    project = ProjectSingle.objects.get(student=student_account)
+    student_group = Student_Group.objects.filter(project = project)
+
+    student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
+    return render(request, "school/member_change.html",
+                  {"student_group": student_group,
+                   "student_group_form": student_group_form,
+                   "student_group_info_form": student_group_info_form})
 
 @csrf.csrf_protect
 @login_required
@@ -146,7 +167,7 @@ def application_report_view(request, pid=None, is_expired=False):
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
-        info_form = InfoForm(request.POST, instance=project)
+        info_form = InfoForm(request.POST, pid=pid,instance=project)
         application_form = iform(request.POST, instance=pre)
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
@@ -174,7 +195,7 @@ def application_report_view(request, pid=None, is_expired=False):
                 logger.info(teacher_enterpriseform.errors)
                 logger.info("--"*10)
     else:
-        info_form = InfoForm(instance=project)
+        info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
 
     data = {'pid': pid,
@@ -372,9 +393,7 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
     loginfo(p=person_firstname, label="person_firstname")
     if not AuthStudentExist(request, email):
         user,send_mail_flag = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
-        loginfo(p=send_mail_flag, label="in send_mail_flag")
-        result = create_newproject(request=request, new_user=user, financial_cate=financial_cate)
-        loginfo(p=result, label="in result")
+        result = create_newproject(request=request, new_user=user, financial_cate=financial_cate,managername=person_firstname)
         return True and result and send_mail_flag
     else:
         return False

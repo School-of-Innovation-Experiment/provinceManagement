@@ -94,3 +94,12 @@ div.school-display{
 .studenttable select{
   width: 120px !important;
 }
+
+input.studispatch{
+  width:100px;
+}
+
+select.studispatch{
+  width:100px;
+  height: 31px;
+}

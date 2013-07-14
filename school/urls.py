@@ -64,5 +64,9 @@ urlpatterns = patterns('',
         r'get_xls/$',
         school_views.get_xls,
     ), 
+    url(
+        r'^memberchange$',
+        school_views.member_change,
+    ),
 )
 

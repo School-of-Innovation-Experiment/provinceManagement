@@ -21,23 +21,38 @@ from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from const import *
+from student.models import Student_Group
 
 class InfoForm(ModelForm):
     """
         Project Basic info
     """
+    def __init__(self, *args, **kwargs):
+        pid = kwargs.pop('pid', None)
+        if not pid:
+            return
+        project = ProjectSingle.objects.get(project_id=pid)
+        student_group = Student_Group.objects.filter(project = project)
+        member = []
+        for temp_student in student_group:
+             member.append(temp_student.studentName)
+        memberlist=','.join(member)
+        super(InfoForm, self).__init__(*args, **kwargs)
+        self.fields['memberlist'].widget.attrs["value"] = memberlist
+
+    memberlist = forms.CharField(
+                           widget=forms.TextInput(attrs={'class':"school-display",'readonly':'readonly','placeholder': '请在“团队成员”标签中添加组员'}))    
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
         exclude = ('project_id', 'adminuser', 'school', 'student','project_category','financial_category',
-                   'year', 'project_grade', 'project_status', 'expert')
+                   'year', 'project_grade', 'project_status', 'expert','members')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector':forms.TextInput(attrs={'class':"school-display"}),
+                 'inspector_title':forms.TextInput(attrs={'class':"school-display"}),
                  'telephone':forms.TextInput(attrs={'class':"school-display"}),
                  'email':forms.TextInput(attrs={'class':"school-display"}),
                  'im':forms.TextInput(attrs={'class':"school-display"}),
-                 'members':forms.TextInput(attrs={'class':"school-display"}),
-                 'original':forms.TextInput(attrs={'class':"school-display"}),
                  'insitute':forms.Select(attrs={'class':"school-display"}),
                  'keywords':forms.TextInput(attrs={'class':"school-display"}),
                  }
@@ -81,6 +96,10 @@ class ApplicationReportForm(ModelForm):
                    "progress_plan": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                           'placeholder':
                                                           '查阅资料、选题、自主设计项目研究方案、开题报告、实验研究、数据统计、处理与分析、研制开发、填写结题表、撰写研究论文和总结报告、参加结题答辩和成果推广等',
+                                                          'class': "fill-form"}),
+                   "proj_introduction":forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                          'placeholder':
+                                                          '项目内容简介（100字以内）',
                                                           'class': "fill-form"}),
                    }
 
@@ -133,6 +152,10 @@ class EnterpriseApplicationReportForm(ModelForm):
                    "school_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                             'placeholder': '学校推荐语',
                                                             'class': "fill-form"}),
+                   "proj_introduction":forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                          'placeholder':
+                                                          '项目内容简介（100字以内）',
+                                                          'class': "fill-form"}),                   
                    }
 
     def get_absolute_url(self):
@@ -201,5 +224,5 @@ class StudentDispatchForm(forms.Form):
     student_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
                            ))
-    proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_UN)
-    person_firstname = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
+    proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_UN,widget=forms.Select(attrs={'class':'studispatch'}))
+    person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'studispatch','id':"person_firstname",'placeholder':u"负责人"}))

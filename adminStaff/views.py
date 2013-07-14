@@ -34,6 +34,7 @@ from backend.logging import logger, loginfo
 from news.models import News
 from news.forms import NewsForm
 from backend.utility import getContext
+from adminStaff.utility import *
 
 class AdminStaffService(object):
     @staticmethod
@@ -443,3 +444,10 @@ class AdminStaffService(object):
         else:
             context = {"newsform": NewsForm}
             return render(request, "adminStaff/news_release.html", context)
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_xls(request):
+        file_path = info_xls(request)
+        return redirect(MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):])
