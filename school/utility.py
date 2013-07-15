@@ -40,6 +40,7 @@ from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 
 from django.contrib.auth.models import User
+from student.models import Student_Group
 
 def check_limits(user):
     """
@@ -286,7 +287,7 @@ def get_trend_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':True},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目类型数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },
@@ -317,7 +318,7 @@ def get_grade_lines(user):
                 series_options=[{'options': {'type': 'column', 'stacking':False},
                                 'terms': ['number']},
                                ],
-                chart_options={'title': {'text': u'历史数据统计'},
+                chart_options={'title': {'text': u'历史项目级别数据统计'},
                                 'xAxis':{
                                             'title':{'text': u'年份'},
                                         },
@@ -401,16 +402,23 @@ def get_province_trend_lines():
                                ],
                 chart_options={'title': {'text': '学校-评级数据统计'},
                                 'xAxis':{
-                                            'title':{'text': '参赛学校'},
+                                    'title':{'text': '参赛学校'},
+                                    'labels':{
+                                        'step': 1,
+                                        'rotation': 45,
+                                        'align': 'bottom'
+                                    },
                                         },
-                                'yAxis':{'title':{'text': '评级数量'},'allowDecimals':False},
+                                'yAxis':{
+                                    'title':{'text': '评级数量'},
+                                    'allowDecimals':False},
                                 }
                 )
     return cht
 
 
 
-def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
+def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CATE_UN):
     """
     create a new project for this usr, it is student profile
     """
@@ -432,6 +440,11 @@ def create_newproject(request, new_user, financial_cate=FINANCIAL_CATE_UN):
         project.insitute = InsituteCategory.objects.all()[0]
         project.financial_category= FinancialCategory.objects.get(category=financial_cate)
         project.save()
+
+        #create team manager
+        new_student = Student_Group(studentName = managername,
+                                    project=project)
+        new_student.save()        
 
         # create presubmit and final report
         pre = PreSubmit()
@@ -511,10 +524,9 @@ def info_xls(request):
 
     _index = 1
     for proj_obj in proj_set:
-        managerid=StudentProfile.objects.get(id=proj_obj.student_id)
-        teammanager = User.objects.get(id=managerid.user_id)
-        memberlist=get_memberlist(proj_obj.members)
-        teammember,membercount,manager = get_teammember(teammanager.first_name,memberlist)
+        manager_name,manager_id = get_manager(proj_obj)
+        memberlist,count = get_memberlist(manager_name,proj_obj)
+
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
         try:
@@ -528,12 +540,12 @@ def info_xls(request):
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
-        xls_obj.write(row, 4, unicode(manager))# 负责人
-        xls_obj.write(row, 5, "") # 学号
-        xls_obj.write(row, 6, unicode(membercount)) # 学生人数
-        xls_obj.write(row, 7, unicode(teammember)) # 项目其他成员
+        xls_obj.write(row, 4, unicode(manager_name))# 负责人
+        xls_obj.write(row, 5, unicode(manager_id)) # 学号
+        xls_obj.write(row, 6, unicode(count)) # 学生人数
+        xls_obj.write(row, 7, unicode(memberlist)) # 项目其他成员
         xls_obj.write(row, 8, unicode(proj_obj.inspector))
-        xls_obj.write(row, 9, "") # 指导老师职称
+        xls_obj.write(row, 9, unicode(proj_obj.inspector_title)) # 指导老师职称
         xls_obj.write(row, 10, fin_type[0]) # 经费
         xls_obj.write(row, 11, fin_type[1]) # 经费
         xls_obj.write(row, 12, fin_type[2]) # 经费
@@ -562,67 +574,94 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
     teacher.telephone = telephones[1]
     teacher_enterpriseform.save()
 
-def get_memberlist(members):
+def get_manager(project):
     """
-        get all members in project
+        get teammanager's name and student_id
     """
-    if ";" in members :
-        memberlist = members.strip(";").split(";")
-    elif u"；" in members :
-        memberlist = members.strip(u"；").split(u"；")
-    elif "," in members :
-        memberlist = members.strip(",").split(",")
-    elif u"，" in members :
-        memberlist = members.strip(u"，").split(u"，")
-    elif " " in members :
-        memberlist = members.strip(" ").split(" ")
-    elif "." in members :
-        memberlist = members.strip(".").split(".")
-    elif u"。" in members :
-        memberlist = members.strip(u"。").split(u"。")
-    elif u"、" in members :
-        memberlist = members.strip(u"、").split(u"、")
-    elif "+" in members :
-        memberlist = members.strip("+").split("+")
-    elif "-" in members :
-        memberlist = members.strip("-").split("-")
-    elif ":" in members :
-        logger.info(members+":")
-        memberlist = members.strip(":").split(":")
-    elif u"：" in members :
-        logger.info(members+u"：")
-        memberlist = members.strip(u"：").split(u"：")
-    else:
-        memberlist=members
+    managerid=StudentProfile.objects.get(id=project.student_id)
+    teammanager = User.objects.get(id=managerid.user_id)
+    manager_name = teammanager.first_name
+    manager_studentid = ""
+    group = project.student_group_set
+    for student in group.all():
+        if student.studentName == manager_name:
+            manager_studentid = student.studentId
+            loginfo(p=manager_studentid,label="manager_studentid")
+    return manager_name , manager_studentid
+def get_memberlist(manager_name,project):
+    """
+        get other members
+    """
+    group = project.student_group_set
+    memberlist=[]
+    for student in group.all():
+        if student.studentName != manager_name:
+            member=student.studentName+"("+student.studentId+")"
+            memberlist.append(member)
+    count=len(memberlist)+1
+    memberlist=','.join(memberlist)
+    return memberlist,count
+# def get_memberlist(members):
+#     """
+#         get all members in project
+#     """
+#     if ";" in members :
+#         memberlist = members.strip(";").split(";")
+#     elif u"；" in members :
+#         memberlist = members.strip(u"；").split(u"；")
+#     elif "," in members :
+#         memberlist = members.strip(",").split(",")
+#     elif u"，" in members :
+#         memberlist = members.strip(u"，").split(u"，")
+#     elif " " in members :
+#         memberlist = members.strip(" ").split(" ")
+#     elif "." in members :
+#         memberlist = members.strip(".").split(".")
+#     elif u"。" in members :
+#         memberlist = members.strip(u"。").split(u"。")
+#     elif u"、" in members :
+#         memberlist = members.strip(u"、").split(u"、")
+#     elif "+" in members :
+#         memberlist = members.strip("+").split("+")
+#     elif "-" in members :
+#         memberlist = members.strip("-").split("-")
+#     elif ":" in members :
+#         logger.info(members+":")
+#         memberlist = members.strip(":").split(":")
+#     elif u"：" in members :
+#         logger.info(members+u"：")
+#         memberlist = members.strip(u"：").split(u"：")
+#     else:
+#         memberlist=members
 
-    return memberlist
+#     return memberlist
 
-def get_teammember(managername,memberlist):
-    """
-        get member expect manager
-    """
-    teammember = memberlist
-    count=1
-    loginfo(p=managername, label="in managername")
-    loginfo(p=memberlist, label="in memberlist")
-    if managername == ""  :#if no manager
-        if type(memberlist) != types.UnicodeType:
-            manager = memberlist[0]
-        else :
-             manager = memberlist  # type is unicodetype用户First_name没有填写时
-    else:
-        manager = managername
+# def get_teammember(managername,memberlist):
+#     """
+#         get member expect manager
+#     """
+#     teammember = memberlist
+#     count=1
+#     loginfo(p=managername, label="in managername")
+#     loginfo(p=memberlist, label="in memberlist")
+#     if managername == ""  :#if no manager
+#         if type(memberlist) != types.UnicodeType:
+#             manager = memberlist[0]
+#         else :
+#              manager = memberlist  # type is unicodetype用户First_name没有填写时
+#     else:
+#         manager = managername
 
-    if manager == teammember:
-        return teammember,count,manager
-    else :
-        if manager in memberlist and manager!=memberlist and type(teammember) != types.UnicodeType:
-            count=len(teammember)
-            teammember.remove(manager)
-            teammember=",".join(teammember)
-        elif type(teammember) != types.UnicodeType : #其他成员超过一个时时
-            count=len(teammember)+1
-            teammember=",".join(teammember)
-        else :  #如果只输入一个且不是负责人时
-            count+=1
-    return teammember,count,manager
+#     if manager == teammember:
+#         return teammember,count,manager
+#     else :
+#         if manager in memberlist and manager!=memberlist and type(teammember) != types.UnicodeType:
+#             count=len(teammember)
+#             teammember.remove(manager)
+#             teammember=",".join(teammember)
+#         elif type(teammember) != types.UnicodeType : #其他成员超过一个时时
+#             count=len(teammember)+1
+#             teammember=",".join(teammember)
+#         else :  #如果只输入一个且不是负责人时
+#             count+=1
+#     return teammember,count,manager

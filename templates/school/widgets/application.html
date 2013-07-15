@@ -15,6 +15,22 @@
             {% endif %}
           </div><!--end form line, for choice-->
       </fieldset><!--Project origin-->
+      <br/>
+
+      {% if userauth.is_student %}
+      <fieldset>
+        <div class="control-group {% if application.proj_introduction.errors %}error{% endif %}">
+          <legend>项目内容简介</legend>
+          {{application.proj_introduction}}
+          {% if application.proj_introduction.errors %}
+          <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.proj_introduction.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset><!--end background-->
+      {% endif %}
 
       </br>
       <fieldset>
@@ -115,6 +131,7 @@
             {% endif %}
           </div><!--end form line, for choice-->
         </div>
+
         <div class="span4">
           <div class="control-group  {% if application.maturity.errors %}error{% endif %}">
             <legend>项目技术成熟程度</legend>
@@ -141,6 +158,21 @@
           </div><!--end form line, for choice-->
       </fieldset><!--Project origin-->
       </br>
+      {% if userauth.is_student %}
+      <fieldset>
+        <div class="control-group {% if application.proj_introduction.errors %}error{% endif %}">
+          <legend>项目内容简介</legend>
+          {{application.proj_introduction}}
+          {% if application.proj_introduction.errors %}
+          <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.proj_introduction.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset><!--end background-->
+      {% endif %}
+      <br/>
       <fieldset>
         <legend>项目的基本情况及创新内容</legend>
           <div class="control-group form-inline {% if application.innovation.errors %}error{% endif %}">

@@ -28,6 +28,9 @@ def get_news(news_id = None):
     return news_content
 
 def index(request):
+    '''
+    for index_new
+    '''
     news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT).order_by('-news_date')
     news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
     news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING).order_by('-news_date')
