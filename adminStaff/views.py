@@ -355,14 +355,17 @@ class AdminStaffService(object):
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             subject_list =  AdminStaffService.GetSubject_list()
+            page = request.GET.get('page')
+            context = getContext(subject_list, page, 'subject', 0) 
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school_name)
-
-        return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+                context = getContext(subject_list, 1, 'subject', 0)
+        context.update({'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly})
+        return render(request, "adminStaff/subject_rating.html", context)
     @staticmethod
     def GetSubjectReviewList(project_id):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
