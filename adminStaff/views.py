@@ -355,8 +355,9 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  AdminStaffService.GetSubject_list()
             page = request.GET.get('page')
+            school_name = request.GET.get('school_name')
+            subject_list = AdminStaffService.GetSubject_list(school = school_name)
             context = getContext(subject_list, page, 'subject', 0) 
 
         else:
@@ -365,7 +366,10 @@ class AdminStaffService(object):
                 school_name = school_category_form.cleaned_data["school_choice"]
                 subject_list =  AdminStaffService.GetSubject_list(school=school_name)
                 context = getContext(subject_list, 1, 'subject', 0)
-        context.update({'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly})
+        context.update({'school_category_form':school_category_form, 
+                        'subject_grade_form':subject_grade_form,
+                        'school_name':school_name,
+                        'readonly':readonly})
         return render(request, "adminStaff/subject_rating.html", context)
     @staticmethod
     def GetSubjectReviewList(project_id):
