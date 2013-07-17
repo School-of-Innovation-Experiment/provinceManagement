@@ -256,12 +256,12 @@ class AdminStaffService(object):
     @staticmethod
     def GetSubject_list(category=None,school=None):
         subject_list = []
-        if category == None and school == None:
-            subject_list = ProjectSingle.objects.all()
-        elif not category == None:
+        if category:
             subject_list = ProjectSingle.objects.filter(insitute_id=category)
-        elif not school == None:
+        elif school:
             subject_list = ProjectSingle.objects.filter(school=school)
+        else:
+            subject_list = ProjectSingle.objects.all()
         return subject_list
     @staticmethod
     @csrf.csrf_protect
@@ -271,7 +271,6 @@ class AdminStaffService(object):
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
-        print request.method
         if request.method == "GET":
             page = request.GET.get('page')
             subject_insitute_form = forms.SubjectInsituteForm()
@@ -357,6 +356,7 @@ class AdminStaffService(object):
             school_category_form = forms.SchoolCategoryForm()
             page = request.GET.get('page')
             school_name = request.GET.get('school_name')
+            if school_name == "None": school_name = None
             subject_list = AdminStaffService.GetSubject_list(school = school_name)
             context = getContext(subject_list, page, 'subject', 0) 
 

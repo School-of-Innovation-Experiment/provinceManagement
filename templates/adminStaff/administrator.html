@@ -4,23 +4,41 @@
     <div class="navbar ">
       <div class="navbar-inner">
         <ul class="nav">
-          <li><a href="/adminStaff/dispatch">邮件激活</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/subject_feedback">项目分配</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/subject_rating">项目等级设定</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/DeadlineSettings">截止日期设定</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/ProjectLimitNumSettings">投稿数量设定</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/news_release">发布新闻</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/NoticeMessageSettings">提醒信息设置</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/ImportExpert">专家导入</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/adminStaff/get_xls">下载统计信息表</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							项目相关设置
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu home_menu" role="menu">
+						  <li><a href="/adminStaff/subject_feedback">项目分配</a></li>
+							<li><a href="/adminStaff/ProjectLimitNumSettings">投稿数量设定</a></li>
+        		  <li><a href="/adminStaff/subject_rating">项目等级设定</a></li>
+         			<li><a href="/adminStaff/DeadlineSettings">截止日期设定</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							账户激活与导入
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu home_menu" role="menu">
+	            <li><a href="/adminStaff/dispatch">邮件激活</a></li>
+      		    <li><a href="/adminStaff/ImportExpert">专家导入</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							网站功能管理
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu home_menu" role="menu">
+          		<li><a href="/adminStaff/NoticeMessageSettings">提醒信息设置</a></li>
+    		      <li><a href="/adminStaff/news_release">发布新闻</a></li>
+      		    <li><a href="/adminStaff/get_xls">下载统计信息表</a></li>
+						</ul>
+					</li>
         </ul>
       </div>
     </div>
