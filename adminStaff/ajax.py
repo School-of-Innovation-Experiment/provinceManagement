@@ -15,10 +15,12 @@ from const.models import SchoolDict, NewsCategory
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory
+from school.models import Project_Is_Assigned, InsituteCategory ,ProjectSingle
 from users.models import SchoolProfile
 from news.models import News
 import datetime
+from backend.logging import logger, loginfo
+from django.template.loader import render_to_string
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -188,12 +190,30 @@ def change_subject_grade(request, project_id, changed_grade):
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     return simplejson.dumps({'status':'1'})
 @dajaxice_register
-def Release_News(request, html):
+def Release_News(request):
     '''
     Release_News
     '''
-    title=datetime.datetime.today().year
-    data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html,
-                news_category=NewsCategory.objects.get(category=NEWS_CATEGORY_ANNOUNCEMENT))
-    data.save()
+    unsubjected = False
+    subject_list = ProjectSingle.objects.all().order_by('school')
+    for project in subject_list:
+        if project.project_grade.grade == GRADE_UN:
+            unsubjected = False
+            break
 
+    if unsubjected:
+        release = False
+    else:
+        html = refresh_member_table(subject_list)
+        release = True
+        title=datetime.datetime.today().year
+        data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html,
+                     news_category=NewsCategory.objects.get(category=NEWS_CATEGORY_ANNOUNCEMENT))
+        data.save()        
+    loginfo(p=release,label="release")
+    return simplejson.dumps({'release':release})
+
+def refresh_member_table(projectlist):
+
+    return render_to_string("adminStaff/widgets/releasenews.html",
+                            {"subject_list": projectlist})

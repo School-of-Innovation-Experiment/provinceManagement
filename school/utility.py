@@ -484,7 +484,9 @@ def info_xls_school_gen(school):
 
     # generate body
     worksheet.write_merge(1, 4, 0, 0, '项目编号')
+    worksheet.col(0).width = len('项目编号') * 400  
     worksheet.write_merge(1, 4, 1, 1, '项目名称')
+    worksheet.col(1).width = len('项目名称') * 800
     worksheet.write_merge(1, 4, 2, 2, '项目类别（甲类、乙类）')
     worksheet.col(2).width = len('项目类别（甲类、乙类）') * 256
     worksheet.write_merge(1, 4, 3, 3, '项目类型')
@@ -519,7 +521,7 @@ def info_xls(request):
     name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = ProjectSingle.objects.filter(school=school_prof.school)
+    proj_set = ProjectSingle.objects.filter(school=school_prof.school).order_by('financial_category')
     xls_obj, workbook = info_xls_school_gen(school_prof)
 
     _index = 1

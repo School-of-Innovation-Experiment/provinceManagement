@@ -1,0 +1,20 @@
+<table class="table table-condensed" id="subject_table">
+    <thead>
+	<tr>
+	  <th>发布题目名称</th>
+	  <th>所属学校</th>
+	  <th>指导教师</th>
+	  <th>修改等级</th>
+	</tr>
+    </thead>
+    <tbody id="subject_table_body">
+	{% for subject in subject_list%}
+	<tr>
+	  <td>{{subject.title}}</td>
+	  <td>{{subject.school}}</td>
+	  <td>{{subject.inspector}}</td>
+	  <td>{{subject.project_grade}}</td>
+	</tr>
+	{%endfor%}
+    </tbody>
+</table>
