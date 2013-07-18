@@ -156,9 +156,11 @@ class AdminStaffService(object):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
             email_list = AdminStaffService.GetRegisterExpertList()
-            data = {'expert_form': expert_form,
-                    'email_list':email_list,}
-            return render(request, "adminStaff/ImportExpert.html", data)
+            
+            page = request.GET.get('page')
+            context = getContext(email_list, page, 'email', 0)
+            context.update({'expert_form': expert_form})
+            return render(request, "adminStaff/ImportExpert.html", context)
 
 
     @staticmethod
