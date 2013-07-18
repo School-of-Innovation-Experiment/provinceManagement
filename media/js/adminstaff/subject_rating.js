@@ -44,11 +44,13 @@ function change_grade_callback(data){
 }
 
 function release_news(){
+  $('#releaseprogress').modal('show');
   Dajaxice.adminStaff.Release_News(release_news_callback);
 }
 function release_news_callback(data){
 
-   if (data.release)
+  $('#releaseprogress').modal('hide');
+  if (data.release)
    {
      $('#myrelease').modal('show');
    }

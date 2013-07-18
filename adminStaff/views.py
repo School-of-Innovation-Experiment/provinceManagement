@@ -36,6 +36,9 @@ from news.forms import NewsForm
 from backend.utility import getContext
 from adminStaff.utility import *
 
+import SocketServer
+from wsgiref import handlers
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,person_firstname,password,email,identity,send_email=True, **kwargs):
@@ -436,6 +439,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
+        news_list = News.objects.all().order_by("-news_date")
         if request.method == 'POST':
             newsform = NewsForm(request.POST, request.FILES)
             if newsform.is_valid():
@@ -449,12 +453,15 @@ class AdminStaffService(object):
                 loginfo(p=newsform.errors.keys(), label="news form error")
             return redirect('/newslist/%d' % new_news.id)
         else:
-            context = {"newsform": NewsForm}
+            context = {"newsform": NewsForm,"news_list":news_list}
             return render(request, "adminStaff/news_release.html", context)
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def get_xls(request):
+    def get_xls_path(request):
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
         file_path = info_xls(request)
-        return redirect(MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):])
+        return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]

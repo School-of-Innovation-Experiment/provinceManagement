@@ -450,7 +450,7 @@ def current_list_add(list=None):
         final = get_object_or_404(FinalSubmit, project_id=pid)
         item.pre_isaudited = pre.is_audited
         item.final_isaudited = final.is_audited
-    return list    
+    return list
 
 @csrf.csrf_protect
 @login_required
@@ -458,15 +458,3 @@ def current_list_add(list=None):
 def get_xls(request):
     file_path = info_xls(request)
     return redirect(MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):])
-    # def readFile(fn, buf_size=DOWNLOAD_BUF_SIZE):
-    #     f = open(fn, "rb")
-    #     while True:
-    #         _c = f.read(buf_size)
-    #         if _c:
-    #             yield _c
-    #         else:
-    #             break
-    #     f.close()
-    # response = HttpResponse(readFile(file_path), content_type='application/vnd.ms-excel')
-    # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(file_path).encode("UTF-8") #NOTICE: the file must be unicode
-    # return response

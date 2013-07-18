@@ -30,9 +30,9 @@ urlpatterns = patterns('',
                         AdminStaffService.NoticeMessageSetting),
     (r'^news_release$',AdminStaffService.NewsRelease),
     (r'^ImportExpert$',AdminStaffService.ImportExpert),
-    url(
-        r'get_xls/$',
-        AdminStaffService.get_xls,
-    ), 
+    # url(
+    #     r'get_xls/$',
+    #     AdminStaffService.get_xls_path,
+    # ), 
 )
 urlpatterns += staticfiles_urlpatterns()

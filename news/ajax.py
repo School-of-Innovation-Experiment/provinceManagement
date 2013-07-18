@@ -64,3 +64,4 @@ def news_search_page(request, news_input, news_cate):
                             context,
                             context_instance=RequestContext(request))
     return simplejson.dumps({'html':html})
+

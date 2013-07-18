@@ -1,0 +1,26 @@
+  <h3>新闻管理</h3>
+  <table class="well table">
+    <thead>
+      <tr>
+        <td><strong>新闻标题</strong></td>
+        <td><strong>新闻类型</strong></td>
+        <td><strong>时间</strong></td>
+        <td><strong>操作</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      {%for news in news_list%}
+      <tr id="{{news.id}}">
+        <td>{{news.news_title}}</td>
+        <td>{{news.news_category}}</td>
+        <td>{{news.news_date}}</td>
+        <td>
+          <button class="btn btn-danger" rel="news_delete" uid="{{news.id}}">
+                <i class="icon-trash icon-white"></i>
+                <span>删除</span>
+          </button>
+        </td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>

@@ -5,3 +5,27 @@ function news_form_submit(){
 $(function (){
   $("#news_form").submit(news_form_submit);
 });
+
+
+$('[rel="news_delete"]').click(function(){
+  
+  var uid = $(this).attr("uid");
+  Dajaxice.adminStaff.get_news_list(news_delete_callback,
+                                         {'uid':uid});
+});
+
+function news_delete_callback(data){
+  if(data.is_deleted == true){
+      var uid = "tr[id=" + data.uid +"]";
+      console.log("successs!");
+      console.log(data.message);
+      console.log(uid);
+      $(uid).remove();
+    }
+  else{
+      console.log("Failed!");
+      console.log(data.message);
+      $("div#delete-error-panel").show();
+      $("p#delete-message").text(data.message);
+  }
+}
