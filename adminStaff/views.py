@@ -248,7 +248,10 @@ class AdminStaffService(object):
             #timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()
             school_limit_num_list = AdminStaffService.SchoolLimitNumList()
-            return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
+            page = request.GET.get('page')
+            context = getContext(school_limit_num_list, page, 'school_limit', 0)
+            context.update({'num_limit_form':num_limit_form})
+            return render(request, "adminStaff/projectlimitnumSettings.html", context)
     @staticmethod
     def SchoolLimitNumList():
         '''
