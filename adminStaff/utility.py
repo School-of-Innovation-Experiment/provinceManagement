@@ -55,10 +55,10 @@ def info_xls_province_gen():
 def info_xls(request):
     """
     """
-    def _format_index(i):
-        i = str(i)
-        i = '0' * (3-len(i)) + i
-        return i
+    # def _format_index(i):
+    #     i = str(i)
+    #     i = '0' * (3-len(i)) + i
+    #     return i
 
     def _format_number(i):
         i = str(i)
@@ -71,7 +71,7 @@ def info_xls(request):
     proj_set = ProjectSingle.objects.all().order_by('school','financial_category')
     xls_obj, workbook = info_xls_province_gen()
 
-    _index = 1
+    # _index = 1
     _number= 1
     for proj_obj in proj_set:
         manager_name,manager_id = get_manager(proj_obj)
@@ -84,18 +84,18 @@ def info_xls(request):
         except Exception, err:
             loginfo(p=err, label="get innovation")
             loginfo(p=proj_obj.project_category.category, label="project category")
-        if _index==1:
-            schoolname = proj_obj.school
-            name_code = get_shcoolcode(schoolname)
-        if schoolname!=proj_obj.school:
-            _index=1
-            schoolname = proj_obj.school
-            name_code = get_shcoolcode(schoolname)   
+        # if _index==1:
+        #     schoolname = proj_obj.school
+        #     name_code = get_shcoolcode(schoolname)
+        # if schoolname!=proj_obj.school:
+        #     _index=1
+        #     schoolname = proj_obj.school
+        #     name_code = get_shcoolcode(schoolname)   
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
         xls_obj.write(row, 1, unicode(proj_obj.school))
-        xls_obj.write(row, 2, "%s%s" % (name_code, _format_index(_index)))
+        xls_obj.write(row, 2, unicode(proj_obj.project_code))
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.financial_category))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
@@ -111,7 +111,7 @@ def info_xls(request):
         xls_obj.write(row, 15, unicode(proj_obj.insitute))
         xls_obj.write_merge(row, row, 16, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
-        _index += 1
+        # _index += 1
         _number+= 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年辽宁省大学生创新创业训练计划项目信息表"))

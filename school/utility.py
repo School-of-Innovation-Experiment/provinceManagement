@@ -515,7 +515,7 @@ def info_xls(request):
     """
     def _format_index(i):
         i = str(i)
-        i = '0' * (3-len(i)) + i
+        i = '0' * (4-len(i)) + i
         return i
 
     name_code = '2013' + request.user.username
@@ -538,7 +538,14 @@ def info_xls(request):
             loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _index
-        xls_obj.write(row, 0, "%s%s" % (name_code, _format_index(_index)))
+        pro_code = name_code+_format_index(_index)
+
+        #保存项目编号
+        project_temp = ProjectSingle.objects.get(project_id = proj_obj.project_id)
+        project_temp.project_code = pro_code
+        project_temp.save()
+
+        xls_obj.write(row, 0, unicode(pro_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
