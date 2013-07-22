@@ -92,6 +92,13 @@ def userauth_settings(request):
         student_message, student_check = student_message[:-1], student_message[-1]
     except:
         pass
+    try:
+        teacher_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_TEACHER_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_TEACHER_HEAD):]
+        teacher_message, teacher_check = teacher_message[:-1], teacher_message[-1]
+    except Exception, e:
+        teacher_message = '' # should be solved
+        pass
+    
     if ProjectControl.objects.all().count():
         projectctl_obj = ProjectControl.objects.all()[0]
         if school_message and school_check == '1':
