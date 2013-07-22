@@ -134,3 +134,5 @@ MEMBER_NUM_LIMIT = {
     CATE_ENTERPRISE_EE: 5,
     }
 
+# School recommend rate
+SCHOOL_RECOMMEND_RATE = 0.3 # 30 %
