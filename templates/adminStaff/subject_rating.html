@@ -7,9 +7,9 @@
       {% if not readonly %}
       {{school_category_form.school_choice}}
       <input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
-      <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/>
       {%endif%}
       {% if readonly %}
+      <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/>
       <span class="help-inline">项目级别分配完以后可以发布新闻</span>
       <div class="alert alert-error" style="margin-top:20px;">
 	<a class="close" data-dismiss="alert">x</a>
@@ -18,7 +18,9 @@
       </div><!--end alert block-->
       {%endif%}
     </form><!--end category form -->
+    <div id="subjectrating_table">
     {% include "adminStaff/widgets/subjectrating_table.html" %}
+    </div>
 	<div class="pagination pagination-right">
 		<ul>
 		{% if subject_page.has_previous %}

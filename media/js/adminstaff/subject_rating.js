@@ -1,6 +1,10 @@
 var glo_project_id;
-function get_subject_id(project_id){
+var glo_page;
+var glo_schoolname;
+function get_subject_id(project_id,subject_page,school_name){
   glo_project_id = project_id;
+  glo_page = subject_page;
+  glo_schoolname = school_name;
 }
 function get_review_list(project_id){
   $("#review_table").empty();
@@ -36,11 +40,10 @@ function review_list_callback(data){
 
 function subject_grade(){
   var changed_grade = $('#id_subject_grade').find("option:selected").val();
-
-  Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
+  Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade,"page":glo_page,"school_name":glo_schoolname});
 }
 function change_grade_callback(data){
-  window.location.reload();
+  $("#subjectrating_table").html(data.table);
 }
 
 function release_news(){

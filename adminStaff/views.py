@@ -442,6 +442,7 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
         news_list = News.objects.all().order_by("-news_date")
+        page = request.GET.get('page')
         if request.method == 'POST':
             newsform = NewsForm(request.POST, request.FILES)
             if newsform.is_valid():
@@ -455,7 +456,8 @@ class AdminStaffService(object):
                 loginfo(p=newsform.errors.keys(), label="news form error")
             return redirect('/newslist/%d' % new_news.id)
         else:
-            context = {"newsform": NewsForm,"news_list":news_list}
+            context = getContext(news_list, page, 'news', 0)
+            context.update({"newsform": NewsForm})
             return render(request, "adminStaff/news_release.html", context)
     @staticmethod
     @csrf.csrf_protect

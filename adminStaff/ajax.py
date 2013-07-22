@@ -9,7 +9,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict, NewsCategory
 from const import *
@@ -21,6 +21,7 @@ from news.models import News
 import datetime
 from backend.logging import logger, loginfo
 from django.template.loader import render_to_string
+from backend.utility import getContext
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -179,16 +180,16 @@ def get_subject_review_list(request, project_id):
     '''
     #dajax = Dajax()
     review_list = AdminStaffService.GetSubjectReviewList(project_id)
-
     return simplejson.dumps({'review_list':review_list})
 
 @dajaxice_register
-def change_subject_grade(request, project_id, changed_grade):
+def change_subject_grade(request, project_id, changed_grade,page,school_name):
     '''
     change subject grade secretly
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
-    return simplejson.dumps({'status':'1'})
+    table = refresh_to_table(page,school_name)
+    return simplejson.dumps({'status':'1','table':table})
 @dajaxice_register
 def Release_News(request):
     '''
@@ -221,7 +222,6 @@ def refresh_member_table(projectlist):
 @dajaxice_register
 def Release_Excel(request):
     path = AdminStaffService.get_xls_path(request)
-    loginfo(p=path,label="what")
     return simplejson.dumps({'path':path})
 
 @dajaxice_register
@@ -241,6 +241,13 @@ def get_news_list(request,uid):
                                  "message": "Warning! Only POST accepted!"})
     except Exception, err:
         logger.info(err)
-    
+
+def refresh_to_table(page,school_name):
+    print page,school_name
+    if school_name == "None": school_name = None
+    subject_list = AdminStaffService.GetSubject_list(school = school_name)
+    context = getContext(subject_list, page, 'subject', 0) 
+
+    return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 
  
