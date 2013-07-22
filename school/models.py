@@ -51,7 +51,10 @@ class ProjectSingle(models.Model):
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
                                verbose_name=u"参加年份")
-    recommend = models.BooleanField(null=False, default=False)
+    recommend = models.BooleanField(null=False, default=False,
+                                    verbose_name=u"推荐")
+    is_over = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"结束判断")
 
     class Meta:
         verbose_name = "参赛项目"
