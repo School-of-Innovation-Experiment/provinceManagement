@@ -62,7 +62,7 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
     contain_end = (paginator.num_pages in index_list)
     _list = list(_page.object_list)
     if add_index:
-      for _index in xrange(len(_list)):
+        for _index in xrange(len(_list)):
             _list[_index].list_index = _index + 1 # .__dict__.update(dict)
     return {'%s_page' % name: _page,
             '%s_list' % name: _list,

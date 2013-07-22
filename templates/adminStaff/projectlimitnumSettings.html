@@ -44,6 +44,32 @@
 	    {%endfor%}
 	  </tbody>
 	</table>
+
+<div class="pagination pagination-right">
+		<ul>
+		{% if school_limit_page.has_previous %}
+      <li><a href="?page={{ school_limit_page.previous_page_number }}" id="email-previous-page" arg="{{school_limit_page.previous_page_number}}"><上一页</a></li>
+		{% endif %}
+		{% if not contain_begin %}
+		<li><a href="?page=1">1</a></li>
+	  <li><span>...</span></li>
+		{% endif %}
+		{% for index in index_list %}
+			{% ifequal index school_limit_page.number %}
+				<li><span>{{ index }}</span></li>
+			{% else %}
+				<li><a href="?page={{ index }}">{{ index }}</a></li>
+			{% endifequal %}
+		{% endfor %}
+		{% if not contain_end %}
+    <li><span>...</span></li>
+		<li><a href="?page={{ school_limit_page.paginator.num_pages }}">{{ school_limit_page.paginator.num_pages }}</a></li>
+		{% endif %}
+		{% if school_limit_page.has_next %}
+    <li><a href="?page={{ school_limit_page.next_page_number }}" id="email-next-page" arg="{{school_limit_page.next_page_number}}">下一页></a></li>
+    {% endif %}
+		</ul>
+	</div>
       </div>
       <!--adminstaff -->
       <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/send_num_limit.js"></script>
