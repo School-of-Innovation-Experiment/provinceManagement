@@ -15,7 +15,7 @@ function add_or_update_member_callback(data) {
     });
   }
   else if(data.status == "0") {
-    $("#member_group_table").html(data.table);
+    $("#temlate_notice_table").html(data.table);
   }
   $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
 };
@@ -39,7 +39,16 @@ function get_student_info(studentId)
 {
   $("#change_info_student_id").html(studentId);
   change_id = studentId;
+  selectedId= studentId;
+  $("input[name='telephone']").val("aaaaa");
+  Dajaxice.student.GetStudentInfo(get_student_info_callback,
+                                {'selectedId':selectedId });
+  
 }
+function get_student_info_callback(data) {
+  $("input[name='email']").val(data.email);
+};
+
 
 function cancel_change() {
   change_id = "";

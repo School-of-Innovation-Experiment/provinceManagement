@@ -75,3 +75,9 @@ class NoticeMessage(models.Model):
     '''
     noticedatetime = models.DateTimeField(blank=True, default=datetime.datetime.now)
     noticemessage = models.CharField(blank=True, max_length=600)
+
+class TemplateNoticeMessage(models.Model):
+    """docstring for NoticeMessageTemplate"""
+    noticeId    = models.DecimalField(blank =False,max_digits=19, decimal_places=2)
+    title       = models.CharField(blank=False,max_length=30)
+    message     = models.CharField(blank=True,max_length=600)

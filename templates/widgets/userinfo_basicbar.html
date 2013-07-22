@@ -45,5 +45,12 @@
 		  <a href="/school" class="label label-warning user-info-label">VIP</a>
     {%endif%}
   </div>
+  <div class=pull-center>
+    {% if userauth.notice_message %}
+      <marquee style="color: #ff0000" onmouseover="this.stop();this.scrollDelay=50;" onmouseout="this.start();this.scrollDelay=1" scrollamount="4"  scrolldelay="1" direction="left">
+          {{ userauth.notice_message}}
+      </marquee>
+    {% endif %}
+  </div>
 </div><!--end container-->
 <br/>

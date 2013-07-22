@@ -76,15 +76,8 @@ def userauth_settings(request):
             userauth["student"] = StudentProfile.objects.get(userid=request.user)
         except StudentProfile.DoesNotExist, err:
             loginfo(p=err, label="context StudentProfile")
-
-    context = {"userauth": userauth}
-
-    return context
-
-def notice_message_settings(request):
-    #TODO: 计算动态时间
-    school_message, expert_message, student_message = "", "" ,""
-    context = {}
+        school_message, expert_message, student_message, teacher_message = "", "" ,"",""
+   
     try:
         expert_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]
     except:
@@ -106,12 +99,24 @@ def notice_message_settings(request):
             if nowstatus[0]:
                 school_message = school_message[:-1] + \
                     u' 提示:当前状态 "%s"，距离截止还有 %d 天' %(nowstatus[0], nowstatus[1])
-    if expert_message:
-        context["expert_notice_message"] = expert_message
-    if school_message:
-        context["school_notice_message"] = school_message
-    if student_message:
-        context["student_notice_message"] = student_message
+    if userauth["is_experter"]:
+        userauth["notice_message"] = expert_message
+    if userauth["is_schooler"]:
+        userauth["notice_message"] = school_message
+    if userauth["is_student"]:
+        userauth["notice_message"] = student_message
+    if userauth["is_teacher"]:
+        userauth["notice_message"] = teacher_message
+    if userauth["is_adminstaff"]:
+        userauth["notice_message"] = ""
+
+    context = {"userauth": userauth}
+
+    return context
+
+def notice_message_settings(request):
+    #TODO: 计算动态时间
+    context = {}
     return context
 
 

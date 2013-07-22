@@ -11,8 +11,8 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm
-from adminStaff.models import  ProjectPerLimits, ProjectControl
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm
+from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
 from const.models import SchoolDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
@@ -161,6 +161,23 @@ def change_subject_grade(request, project_id, changed_grade):
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     return simplejson.dumps({'status':'1'})
+
+@dajaxice_register
+def TemnoticeChange(request):
+    #temnotice_form=TemplateNoticeForm(deserialize_form(form))
+    # if not temnotice_form.is_valid();
+    #     ret = {'status': '2',
+    #            'error_id': temnotice_form.errors.keys(),
+    #            'message': u"输入有误，请重新输入"}
+    # elif not origin: #添加模版消息
+    #     ret = new_temnotice(request,temnotice_form)
+    # else:  #添加模版消息
+    #     ret = change_temnotice(request,temnotice_form,origin)
+    ret = {'status': '2',
+           'message': u"输入有误，请重新输入"}
+
+    return simplejson.dumps(ret)
+
 @dajaxice_register
 def Release_News(request, html):
     '''
@@ -169,3 +186,28 @@ def Release_News(request, html):
     title=datetime.datetime.today().year
     data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
     data.save();
+
+
+def new_temnotice(request,temnotice_form):
+    title = temnotice_form.cleaned_data["title"]
+    message = temnotice_form.cleaned_data["message"]
+
+    # group = project.student_group_set
+
+        # if group.count() == MEMBER_NUM_LIMIT[project.project_category.category]:
+        #     ret = {'status': '1', 'message': u"人员已满，不可添加"}
+        # else:
+    # new_temnotice = TemplateNoticeMessage(  noticeId =3,
+    #                                         title = title,
+    #                                         message=message)
+    # new_temnotice.save()
+    table = refresh_member_table(request)
+    ret = {'status': '0', 'message': u"添加成功", 'table':table}
+    return ret
+def refresh_temnotice_table(request):
+    templatenotice_group = TemplateNoticeMessage.objects.all()
+    templatenotice_group_form = TemplateNoticeForm()
+
+    return render_to_string("adminStaff/widgets/notice_message_table.html",
+                            {"templatenotice_group": templatenotice_group,
+                             "templatenotice_group_form": templatenotice_group_form})

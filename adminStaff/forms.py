@@ -153,3 +153,11 @@ class SubjectGradeForm(forms.Form):
     subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_INSITUTE and grade[0] != GRADE_UN]
     subject_grade_choice = tuple(subject_grade_choice)
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
+
+class TemplateNoticeForm(forms.Form):
+    title =forms.CharField( max_length=30,
+                            required=True,
+                            widget=forms.TextInput(attrs={'class':'templatenotice span12','id':"title",'placeholder':u"标题"}),)
+    message =forms.CharField( max_length=30,
+                            required=True,
+                            widget=forms.TextInput(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"内容"}),)

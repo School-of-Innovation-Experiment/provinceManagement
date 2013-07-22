@@ -22,7 +22,7 @@ def MemberChangeInfo(request, form, origin):
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
     if not stugroup_form.is_valid():
         ret = {'status': '1',
-               'message': u"输入有误，请重新输入"}
+               'message': u"输入 有误，请重新输入"}
     else:
         email = stugroup_form.cleaned_data["email"]
         telephone = stugroup_form.cleaned_data["telephone"]
@@ -57,6 +57,7 @@ def MemberDelete(request, deleteId):
     else:
         ret = {'status': '1', 'message': u"待删除成员不存在，请刷新页面"}
     return simplejson.dumps(ret)
+
 @dajaxice_register
 def MemberChange(request, form, origin):
     stugroup_form = StudentGroupForm(deserialize_form(form))
@@ -68,6 +69,20 @@ def MemberChange(request, form, origin):
         ret = new_or_update_member(request, stugroup_form)
     else:  # 更换成员
         ret = change_member(request, stugroup_form, origin)
+    return simplejson.dumps(ret)
+
+@dajaxice_register
+def GetStudentInfo(request, selectedId):
+    try:
+        project = ProjectSingle.objects.get(student__userid=request.user)
+    except:
+        raise Http404
+    group = project.student_group_set
+    for student in group.all():
+        if student.studentId == selectedId:
+            
+            ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
+            break
     return simplejson.dumps(ret)
 
 def change_member(request, stugroup_form, origin):

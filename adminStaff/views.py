@@ -12,7 +12,7 @@ from datetime import date
 from django.http import HttpResponse, Http404
 from registration.models import *
 from adminStaff import forms
-from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
+from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage, TemplateNoticeMessage
 from django.shortcuts import render_to_response, render, get_object_or_404
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
@@ -371,4 +371,8 @@ class AdminStaffService(object):
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
                 message.save()
-        return render(request, "adminStaff/noticeMessageSettings.html")
+        templatenotice_group_form = forms.TemplateNoticeForm()
+        templatenotice_group = TemplateNoticeMessage.objects.all()
+        return render(request, "adminStaff/noticeMessageSettings.html",
+                      {"templatenotice_group": templatenotice_group,
+                     "templatenotice_group_form": templatenotice_group_form})

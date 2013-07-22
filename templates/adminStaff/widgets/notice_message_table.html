@@ -1,0 +1,81 @@
+
+<div class="modal hide fade" style="display: none;" id="notice_profile_info">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>修改提示信息模版:</h3>
+  </div>
+  <div class="modal-body">
+    <form class="well form" id="template_notice_info_form" method="POST" action="">
+      {% csrf_token %}
+      <div class="input-prepend">
+        <span class="add-on">标题</span>{{templatenotice_group_form.title}}
+      </div>
+      <div class="input-prepend memberchange">
+        <span class="add-on">内容</span>{{templatenotice_group_form.message}}
+      </div>
+    </form><!--end school_email_send_form-->
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal" onclick="cancel_change();">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" 
+       onclick="add_or_update_notice();">保存更新</a>
+  </div>
+</div>
+
+<div class="modal hide fade" style="display: none;" id="notice_delete_info">
+  <div class="modal-header">
+  </div>
+  <div class="modal-body">
+    <h2 class="text-error">确定删除此条信息模版吗？</h2>
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal" onclick="cancel_change();">取消</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="change_member_info();">确定</a>
+  </div>
+</div>
+
+<span><a class="btn btn-primary" data-toggle="modal" href="#notice_profile_info" 
+  onclick="">添加新模版消息</a></span>
+<span id="template_notice_error_message"></span>
+<div id="temlate_notice_table">      
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <td><strong>序号</strong></td>
+        <td><strong>标题</strong></td>
+        <td><strong>内容</strong></td>
+        <td><strong>更新信息</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+    {% if templatenotice_group %}
+      {%for  notice in templatenotice_group%}
+        <tr>
+          <td>{{ notice.id}}</td>
+          <td>{{ notice.title}}</td>
+          <td>{{ notice.message}}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="select_template_notice(this)">选择</button>
+              <button class="btn btn-success" data-toggle="modal" href="#notice_profile_info" onclick="get_template_notice(this);">修改</button>
+              <button class="btn btn-danger"  data-toggle="modal" href="#notice_delete_info">删除</button>
+            </div>
+          </td>
+        </tr>
+      {%endfor%}
+      <tr class="info">
+        <td>1</td>
+        <td>标题</td>
+        <td>内容</td>
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="select_template_notice(this)">选择</button>
+            <button class="btn btn-success" data-toggle="modal" href="#notice_profile_info" onclick="get_template_notice(this);">修改</button>
+            <button class="btn btn-danger"  data-toggle="modal" href="#notice_delete_info">删除</button>
+          </div>
+          </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+</div>

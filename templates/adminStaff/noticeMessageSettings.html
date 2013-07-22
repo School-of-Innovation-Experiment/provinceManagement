@@ -1,46 +1,59 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-  <div><!--FORM2 DIV-->
-    <form class="well form-inline" method="POST" id="noticemessage_form">
-      {% csrf_token %}
-      <fieldset>
-        <div class="alert alert-info control-group">
-	  <a class="close" data-dismiss="alert">×</a>
-	  <strong>说明:</strong>提示信息将在相应角色登录后显示
+
+  <div class="container-fluid"><!--FORM2 DIV-->   
+    <fieldset>
+      <div class="row-fluid">
+        <div class="span4">
+          <form class="well form-inline" method="POST" id="noticemessage_form">
+            {% csrf_token %}
+            <div class="alert alert-info control-group">
+              <a class="close" data-dismiss="alert">×</a>
+              <strong>说明:</strong>提示信息将在相应角色登录后显示
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="select_role">角色选择</label>
+              <div class="alert alert-error" id="noticemessage_warning" style="display: none;">
+                <a class="close" data-dismiss="alert">×</a>
+    	           角色选择错误
+              </div>
+              <div class="controls">
+                <select id="select_role" name="message_role">
+                  <option>请选择</option>
+                  <option value="1">专家</option>
+                  <option value="2">学院</option>
+                  <option value="3">学生</option>
+                </select>
+                <label class="checkbox" id="message_check" style="display: none;">
+                  <input type="checkbox" name="message_checkbox" value="1">
+                  是否提醒截止时间
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="textarea">提醒信息</label>
+              <div class="controls">
+                <textarea class="input-xlarge" id="textarea" rows="6" name="message_content"></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">保存更改</button>
+              <button class="btn">取消</button>
+            </div>
+          </form>
         </div>
-        <div class="control-group">
-          <label class="control-label" for="select_role">角色选择</label>
-          <div class="alert alert-error" id="noticemessage_warning" style="display: none;">
-            <a class="close" data-dismiss="alert">×</a>
-	    角色选择错误
-          </div>
-          <div class="controls">
-            <select id="select_role" name="message_role">
-              <option>请选择</option>
-              <option value="1">专家</option>
-              <option value="2">学院</option>
-              <option value="3">学生</option>
-            </select>
-            <label class="checkbox" id="message_check" style="display: none;">
-              <input type="checkbox" name="message_checkbox" value="1">
-              是否提醒截止时间
-            </label>
-          </div>
+        <div class="bs-docs-example span8">
+          {% include "adminStaff/widgets/notice_message_table.html" %}
         </div>
-        <div class="control-group">
-          <label class="control-label" for="textarea">提醒信息</label>
-          <div class="controls">
-            <textarea class="input-xlarge" id="textarea" rows="6" name="message_content"></textarea>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">保存更改</button>
-          <button class="btn">取消</button>
-        </div>
-      </fieldset>
-    </form>
-    </div><!--End FORM2-->
+      </div>
+    </fieldset>
+  </div><!--End FORM2-->
       <!-- ajax_csrf-->
       <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
-      <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/noticemessage.js"></script>
+      <!-- dajax-->
+      <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/notice_message.js"></script>
+
     {%endblock%}
+
+
+
