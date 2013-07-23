@@ -93,6 +93,16 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         logger.info("--"*10)
         return False
 
+def get_recommend_limit(school = None, scale = 0.3):
+    """
+    get the limit of recommending the projects
+    """
+    project_list = ProjectSingle.objects.filter(school = school)
+    limit = int((project_list.count() + 0.5) * scale) # 小数点后数位四舍五入
+    print limit, '*' * 10
+    used = project_list.filter(recommend = True).count()
+    return limit, limit - used
+
 def save_enterpriseapplication(project=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
     """
     Application Report Save

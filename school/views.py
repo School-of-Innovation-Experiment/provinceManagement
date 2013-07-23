@@ -105,10 +105,17 @@ def SubjectRating(request,is_expired=False):
     subject_grade_form = forms.SubjectGradeForm()
     school = SchoolProfile.objects.get(userid = request.user)
     subject_list =  AdminStaffService.GetSubject_list(school)
+    limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
-        subject.members = ','.join([student.studentName for student in student_group]) 
-    return render_to_response("school/subject_rating.html",{'subject_list':subject_list, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+        subject.members = ','.join([student.studentName for student in student_group])
+    context = {'subject_list': subject_list,
+               'subject_grade_form' : subject_grade_form,
+               'readonly': readonly,
+               'limit': limit,
+               'remaining': remaining,
+                }
+    return render(request, "school/subject_rating.html",context)
 
 @csrf.csrf_protect
 @login_required

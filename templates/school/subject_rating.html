@@ -1,23 +1,30 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
+  <div class="page-header">
+    <h3>
+      本年度项目列表
+      <span class="label label-info">推荐上限:{{limit}}</span>
+      <span class="label label-important">剩余数量:{{remaining}}</span>
+    </h3>
+  </div><!--end page header-->
   <div class="well form-inline">
     <b>
       <table class="table table-condensed" id="subject_table">
 	<thead>
 	  <tr>
 	    <th>发布题目名称</th>
-	    <th>所属学院</th>
-	    <th>指导教师</th>
-            <th>项目成员</th>
+	    <th>项目编号</th>
+	    <th>指导老师</th>
+            <th>负责人</th>
 	    <th>专家评分</th>
-	    <th>修改等级</th>
+	    <th>是否推荐</th>
 	  </tr>
 	</thead>
 	<tbody id="subject_table_body">
 	  {% for subject in subject_list%}
 	    <tr>
 	      <td>{{subject.title}}</td>
-	      <td>{{subject.school}}</td>
+	      <td>{{subject.project_code}}</td>
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
