@@ -11,6 +11,11 @@ from const.models import *
 from school.utility import get_current_year
 from backend.logging import logger, loginfo
 
+DUT_code = "10141"
+
+def get_project_count():
+    return "%04d" % ProjectSingle.objects.all().count()
+
 def create_newproject(request, new_user, category):
     student = get_object_or_404(StudentProfile, userid = new_user)
     teacher = get_object_or_404(TeacherProfile, userid = request.user)
@@ -26,6 +31,7 @@ def create_newproject(request, new_user, category):
         project.year = get_current_year() 
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN) 
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST) 
+        project.project_code = str(get_current_year()) + DUT_code + str(get_project_count())
         project.save()
         
         
