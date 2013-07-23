@@ -136,3 +136,7 @@ MEMBER_NUM_LIMIT = {
 
 # School recommend rate
 SCHOOL_RECOMMEND_RATE = 0.3 # 30 %
+
+
+# Message noticeMessage
+TEMPLATE_NOTICE_MESSAGE_MAX = 8

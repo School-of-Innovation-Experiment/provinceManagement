@@ -33,16 +33,25 @@ $(function(){
 });
 
 function add_or_update_notice(){
-  Dajaxice.adminStaff.TemnoticeChange(add_or_update_notice_callback);
+
+  $("#template_notice_error_message").empty();
+
+
+  Dajaxice.adminStaff.TemNoticeChange(add_or_update_temnotice_callback,
+                                      {'form': $('#template_notice_info_form').serialize(true),
+                                       'origin': change_id});
   
 }
-function add_or_update_notice_callback(data){
-  alert("111111");
+function add_or_update_temnotice_callback(data){
   change_id="";
   if(data.status == "2") {
+    $.each(data.error_id, function (i, item){
+      object = $('#'+item);
+      object.css("border-color", 'red');
+    });
   }
   else if(data.status == "0") {
-    $("#member_group_table").html(data.table);
+    $("#temlate_notice_table").html(data.table);
   }
   $("#template_notice_error_message").append("<strong>"+data.message+"</strong>");
 
@@ -58,11 +67,23 @@ function get_template_notice(caller){
   change_id    = $(tr_parent).children("td:eq(0)").html();
   $("#template_notice_info_form").find("#title").val(text_title);
   $("#template_notice_info_form").find("#message").val(text_message);
-
 }
-function delete_notice_id(noticeId){
+function get_template_notice_id(noticeId){
   change_id = noticeId;
 }
+function delete_template_notice()
+{
+  $("#template_notice_error_message").empty();
+  Dajaxice.adminStaff.TemNoticeDelete(add_or_update_temnotice_callback,
+                                {'deleteId': change_id});
+}
+
+
 function cancel_change() {
   change_id = "";
 }
+function empty_notice_profile_info(){
+  $("#template_notice_info_form").find("#title").val("");
+  $("#template_notice_info_form").find("#message").val("");
+}
+

@@ -43,6 +43,9 @@
           </form>
         </div>
         <div class="bs-docs-example span8">
+          <span><a class="btn btn-primary" data-toggle="modal" href="#notice_profile_info" 
+  onclick="empty_notice_profile_info()">添加新模版消息</a></span>
+<span id="template_notice_error_message"></span>
           {% include "adminStaff/widgets/notice_message_table.html" %}
         </div>
       </div>

@@ -15,7 +15,7 @@ function add_or_update_member_callback(data) {
     });
   }
   else if(data.status == "0") {
-    $("#temlate_notice_table").html(data.table);
+    $("#member_group_table").html(data.table);
   }
   $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
 };

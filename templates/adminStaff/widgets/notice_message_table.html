@@ -30,13 +30,11 @@
   </div>
   <div class="modal-footer">
     <a class="btn" data-dismiss="modal" onclick="cancel_change();">取消</a>
-    <a class="btn btn-primary" data-dismiss="modal" onclick="change_member_info();">确定</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="delete_template_notice();">确定</a>
   </div>
 </div>
 
-<span><a class="btn btn-primary" data-toggle="modal" href="#notice_profile_info" 
-  onclick="">添加新模版消息</a></span>
-<span id="template_notice_error_message"></span>
+
 <div id="temlate_notice_table">      
   <table class="table table-hover">
     <thead>
@@ -58,23 +56,11 @@
             <div class="btn-group">
               <button class="btn btn-primary" onclick="select_template_notice(this)">选择</button>
               <button class="btn btn-success" data-toggle="modal" href="#notice_profile_info" onclick="get_template_notice(this);">修改</button>
-              <button class="btn btn-danger"  data-toggle="modal" href="#notice_delete_info">删除</button>
+              <button class="btn btn-info"  data-toggle="modal" href="#notice_delete_info" onclick="get_template_notice_id({{ notice.id}})">删除</button>
             </div>
           </td>
         </tr>
       {%endfor%}
-      <tr class="info">
-        <td>1</td>
-        <td>标题</td>
-        <td>内容</td>
-        <td>
-          <div class="btn-group">
-            <button class="btn btn-primary" onclick="select_template_notice(this)">选择</button>
-            <button class="btn btn-success" data-toggle="modal" href="#notice_profile_info" onclick="get_template_notice(this);">修改</button>
-            <button class="btn btn-danger"  data-toggle="modal" href="#notice_delete_info">删除</button>
-          </div>
-          </td>
-      </tr>
     {% endif %}
     </tbody>
   </table>
