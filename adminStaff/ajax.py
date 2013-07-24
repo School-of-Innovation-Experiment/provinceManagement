@@ -13,15 +13,17 @@ from django.template.loader import render_to_string
 
 from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
-from const.models import SchoolDict
+from const.models import SchoolDict, ProjectGrade
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory
+from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle
 from users.models import SchoolProfile
 from news.models import News
 
-from const import TEMPLATE_NOTICE_MESSAGE_MAX
+from school.utility import get_recommend_limit
+
+from const import *
 import datetime
 
 def refresh_mail_table(request):
@@ -155,6 +157,32 @@ def get_subject_review_list(request, project_id):
     review_list = AdminStaffService.GetSubjectReviewList(project_id)
 
     return simplejson.dumps({'review_list':review_list})
+
+@dajaxice_register
+def change_subject_recommend_state(request, project_id, changed_grade):
+    """
+    change the recommend state of single project
+    """
+    val = int(changed_grade)
+    project = ProjectSingle.objects.get(project_id = project_id)
+    school = SchoolProfile.objects.get(userid = request.user)
+    exit_status = '1'
+    if val:
+        if project.recommend: 
+            exit_status = '0'
+        else:
+            remaining = get_recommend_limit(school)[1]
+            if remaining:
+                project.recommend = True
+                project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
+                project.save()
+            else:
+               exit_status = '0'
+    else:
+        project.recommend = False
+        project.project_grade = ProjectGrade.objects.get(grade = GRADE_INSITUTE)
+        project.save()
+    return simplejson.dumps({'status': exit_status})
 
 @dajaxice_register
 def change_subject_grade(request, project_id, changed_grade):

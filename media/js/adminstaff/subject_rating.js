@@ -30,6 +30,21 @@ function change_grade_callback(data){
   window.location.reload();
 }
 
+function change_subject_recommend(){
+  var changed_grade = $('#id_subject_grade').find("option:selected").val();
+	$("#alert_message").css("display", "none");
+  Dajaxice.adminStaff.change_subject_recommend_state(change_recommend_state_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
+}
+function change_recommend_state_callback(data){
+	if(data.status == "1"){
+ 		window.location.reload();
+	}
+	else{
+		$("#alert_message").css("display", "block");
+	}
+}
+
+
 function release_news(){
   release=true;
   $("#subject_table_body tr").each(function(){

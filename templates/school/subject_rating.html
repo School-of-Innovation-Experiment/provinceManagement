@@ -7,6 +7,10 @@
       <span class="label label-important">剩余数量:{{remaining}}</span>
     </h3>
   </div><!--end page header-->
+
+	<div class="alert alert-error" style="display:none" id="alert_message">
+		<strong>警告！</strong>推荐数额超过限制，请进行调整。
+	</div>
   <div class="well form-inline">
     <b>
       <table class="table table-condensed" id="subject_table">
@@ -28,7 +32,17 @@
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-	      <td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
+	      <td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">
+					{% if subject.recommend %}
+						已推荐
+					{% else %}
+						{% ifequal subject.project_grade.id 4 %}
+							不推荐
+						{% else %}
+							未指定
+						{% endifequal %}
+					{% endif %}
+				</td>
 	    </tr>
 	  {%endfor%}
 	</tbody>
@@ -46,14 +60,17 @@
       <div class="modal hide fade" style="display: none;" id="grade_choice">
 	<div class="modal-header">
     	  <a class="close" data-dismiss="modal">×</a>
-    	  <h3>选择项目级别</h3>
+    	  <h3>选择是否推荐</h3>
         </div>
   	<div class="modal-body">
-          {{subject_grade_form.subject_grade}}
+          <select name="subject_grade" id="id_subject_grade">
+						<option value="1">推荐</option>
+						<option value="0">不推荐</option>
+					</select>
   	</div>
   	<div class="modal-footer">
     	  <a class="btn" data-dismiss="modal">关闭</a>
-    	  <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
+    	  <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
   	</div>
       </div>
   </div><!--end grade_choice-->

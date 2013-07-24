@@ -108,7 +108,12 @@ def SubjectRating(request,is_expired=False):
     limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
-        subject.members = ','.join([student.studentName for student in student_group])
+       # subject.members = ','.join([student.studentName for student in student_group])
+        try:
+            subject.members = student_group[0]
+        except:
+            pass
+
     context = {'subject_list': subject_list,
                'subject_grade_form' : subject_grade_form,
                'readonly': readonly,
