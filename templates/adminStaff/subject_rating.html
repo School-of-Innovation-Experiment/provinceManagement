@@ -21,7 +21,7 @@
 	<thead>
 	  <tr>
 	    <th>发布题目名称</th>
-	    <th>所属学院</th>
+	    <th>项目编号</th>
 	    <th>指导教师</th>
             <th>项目成员</th>
 	    <th>专家评分</th>
@@ -32,7 +32,7 @@
 	  {% for subject in subject_list%}
 	    <tr>
 	      <td>{{subject.title}}</td>
-	      <td>{{subject.school}}</td>
+	      <td>{{subject.project_code}}</td>
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>

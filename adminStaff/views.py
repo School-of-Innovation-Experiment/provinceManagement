@@ -317,17 +317,20 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  AdminStaffService.GetSubject_list()
+            subject_list =  ProjectSingle.objects.filter(recommend = True)
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+                subject_list =  ProjectSingle.objects.filter(recommend = True)
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
-            subject.members = ','.join([student.studentName for student in student_group])  
+            try:
+                subject.members = student_group[0]
+            except:
+                pass
 
         return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
     @staticmethod
