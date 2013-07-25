@@ -1,0 +1,13 @@
+{% extends "registration/widgets/baseback.html" %}
+
+{%block form-content%}
+	<form  class="form-signin form-horizontal" method="post" action="{% url auth_expertlogin %}?next={%url auth_expertlogin_redirect%}">
+		{% csrf_token %}
+		<h2 class="login">欢迎登录创新创业训练管理平台</h2>			
+    <br/>
+		{% include 'base/_form.html' %}			
+    <button class="btn btn-large btn-success pull-right" id="login-button" type="submit">登陆</button>
+		<p class="forget-text">想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
+	</form>	
+    {% include "base/checkbrowser.html" %}
+{%endblock%}

@@ -9,7 +9,8 @@ Desc: Registration and login redirect
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -70,22 +71,70 @@ def register(request, success_url=None,
                               {'form': form},
                               context_instance=context)
 
-def login_redirect(request):
+# def login_redirect(request):
+#     """
+#     When the user login, it will decide to jump the according page, in other
+#     words, school user will be imported /school/ page, if the user have many
+#     authorities, the system will jump randomly
+#     """
+#     #TODO: I will use reverse function to redirect, like school and expert
+#     if check_auth(request.user, SCHOOL_USER):
+#         return HttpResponseRedirect(reverse('school.views.home_view'))
+#     elif check_auth(request.user, STUDENT_USER):
+#         return HttpResponseRedirect(reverse('school.views.student_view'))
+#     elif check_auth(request.user, EXPERT_USER):
+#         return HttpResponseRedirect(reverse('expert.views.home_view'))
+#     elif check_auth(request.user, ADMINSTAFF_USER):
+#         return HttpResponseRedirect('/adminStaff/')
+#     else:
+#         return HttpResponseRedirect('/')
+
+def provincelogin_redirect(request): 
     """
     When the user login, it will decide to jump the according page, in other
     words, school user will be imported /school/ page, if the user have many
     authorities, the system will jump randomly
     """
-    #TODO: I will use reverse function to redirect, like school and expert
-    if check_auth(request.user, SCHOOL_USER):
-        return HttpResponseRedirect(reverse('school.views.home_view'))
-    elif check_auth(request.user, STUDENT_USER):
-        return HttpResponseRedirect(reverse('school.views.student_view'))
-    elif check_auth(request.user, EXPERT_USER):
-        return HttpResponseRedirect(reverse('expert.views.home_view'))
-    elif check_auth(request.user, ADMINSTAFF_USER):
+    if check_auth(request.user, ADMINSTAFF_USER):
         return HttpResponseRedirect('/adminStaff/')
     else:
-        return HttpResponseRedirect('/')
+        logout(request)
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))
+
+def schoollogin_redirect(request): 
+    """
+    When the user login, it will decide to jump the according page, in other
+    words, school user will be imported /school/ page, if the user have many
+    authorities, the system will jump randomly
+    """
+    if check_auth(request.user, SCHOOL_USER):
+        return HttpResponseRedirect(reverse('school.views.home_view'))
+    else:
+        logout(request)
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))
 
 
+def expertlogin_redirect(request): 
+    """
+    When the user login, it will decide to jump the according page, in other
+    words, school user will be imported /school/ page, if the user have many
+    authorities, the system will jump randomly
+    """
+    if check_auth(request.user, EXPERT_USER):
+        return HttpResponseRedirect(reverse('expert.views.home_view'))
+    else:
+        logout(request)
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))
+
+
+def studentlogin_redirect(request): 
+    """
+    When the user login, it will decide to jump the according page, in other
+    words, school user will be imported /school/ page, if the user have many
+    authorities, the system will jump randomly
+    """
+    if check_auth(request.user, STUDENT_USER):
+        return HttpResponseRedirect(reverse('school.views.student_view'))
+    else:
+        logout(request)
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))        

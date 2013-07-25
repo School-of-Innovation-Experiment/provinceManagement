@@ -66,6 +66,7 @@ class RegistrationManager(models.Manager):
 
         """
         #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
+        send_mail_flag = True
         if User.objects.filter(email=email).count() == 0:
             new_user = User.objects.create_user(username, email, password)
             #new_user.is_active = False
@@ -77,6 +78,7 @@ class RegistrationManager(models.Manager):
             registration_profile.save()
             current_site = Site.objects.get_current()
             site_domain=current_site.domain
+
             if send_email:
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
@@ -99,6 +101,7 @@ class RegistrationManager(models.Manager):
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
+                send_mail_flag = False
         else:
             new_user = User.objects.get(email=email)
 

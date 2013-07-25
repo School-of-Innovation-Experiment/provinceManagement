@@ -67,7 +67,7 @@ class RegistrationForm(forms.Form):
         Create the new ``User`` and ``RegistrationProfile``, and
         returns the ``User``.
         """
-        new_user = RegistrationProfile.objects.create_inactive_user(request,
+        new_user,send_mail_flag = RegistrationProfile.objects.create_inactive_user(request,
                                                                     username=self.cleaned_data['username'],
                                                                     password=self.cleaned_data['password1'],
                                                                     email=self.cleaned_data['email'],

@@ -63,7 +63,7 @@ urlpatterns = patterns('',
     url(
         r'^feedback/$',
         direct_to_template, {'template': 'base/feedback.html'},
-        name="features"
+        name="feedback"
     ),
     url(
         r'^show/',

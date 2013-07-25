@@ -148,8 +148,8 @@ INSTALLED_APPS = (
     'showtime',
     'analysis',
     'backend',
-    #Add-on
     'student',
+    #Add-on
     'south',
     'dajaxice',
     'dajax',
