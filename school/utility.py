@@ -301,3 +301,10 @@ def get_trend_lines(user):
                                 }
                 )
     return cht
+
+def check_year(project):
+    current_year = get_current_year()
+    if project.year == current_year:
+        return True
+    else:
+        return False

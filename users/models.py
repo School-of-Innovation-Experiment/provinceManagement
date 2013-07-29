@@ -38,6 +38,8 @@ class SchoolProfile(models.Model):
     school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
     userid = models.ForeignKey(User, unique=True, \
                                verbose_name="权限对应ID")
+    is_applying = models.BooleanField(null=False, default=True,
+                                  verbose_name=u"允许申请")
 
     class Meta:
         verbose_name = "院级管理员"

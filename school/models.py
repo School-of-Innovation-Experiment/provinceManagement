@@ -55,6 +55,8 @@ class ProjectSingle(models.Model):
                                     verbose_name=u"推荐")
     is_over = models.BooleanField(null=False, default=False,
                                   verbose_name=u"结束判断")
+    # is_applicationover = models.BooleanField(null=False, default=False,
+    #                               verbose_name=u"申请结束判断")    
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
     class Meta:
         verbose_name = "参赛项目"
