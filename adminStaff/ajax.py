@@ -16,7 +16,7 @@ from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 from school.models import Project_Is_Assigned, InsituteCategory ,ProjectSingle
-from users.models import SchoolProfile
+from users.models import SchoolProfile, ExpertProfile
 from news.models import News
 import datetime
 from backend.logging import logger, loginfo
@@ -80,6 +80,14 @@ def DeadlineSettings(request, form):
         #return simplejson.dumps({'field':form.data["pre_start_date"],'id':form,'status':'1','message':u'更新成功'})
     else:
         return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误"})
+
+@dajaxice_register
+def RemoveExpert(request, email):
+    """
+    Remove the exist expert user from database
+    """
+    ExpertProfile.objects.get(userid__email = email).delete()
+    return simplejson.dumps({"status":"1"})
 
 @dajaxice_register
 def ExpertImport(request, form):

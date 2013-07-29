@@ -27,6 +27,7 @@
         <td><strong>负责人</strong></td>
         <td><strong>用户权限</strong></td>
         <td><strong>用户状态</strong></td>
+				<td><strong>操作</strong></td>
       </tr>
     </thead>
     <tbody>
@@ -40,6 +41,7 @@
         {%else%}
         <td><button class="btn btn-warning">已发送，尚未激活</button></td>
         {%endif%}
+				<td><button class="btn btn-danger" onclick="remove_expert('{{user.email}}');">移除</button></td>
       </tr>
       {%endfor%}
     </tbody>

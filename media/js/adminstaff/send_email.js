@@ -27,7 +27,14 @@ function ExpertDispatch_callback(data){
   }
 }
 
+function remove_expert(email){
+	var email = email
+	Dajaxice.adminStaff.RemoveExpert(remove_expert_callback,{'email':email});
+}
 
+function remove_expert_callback(data){
+	window.location.reload();
+}	
 function import_expert(){
   $("#expert_email_error_message").empty();
   Dajaxice.adminStaff.ExpertImport(ExpertImport_callback,{'form':$('#expert_email_send_form').serialize(true)});
