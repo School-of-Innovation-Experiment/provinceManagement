@@ -363,3 +363,19 @@ class TeacherProjectPerLimits(models.Model):
 
     def __unicode__(self):
         return self.teacher.userid.email + ":" +  str(self.number)
+
+class ProjectControl(models.Model):
+    """
+    Project is_over control
+    """
+    userid = models.ForeignKey(User)
+    project_year = models.IntegerField(blank=False,max_length=4,
+                               verbose_name=u"项目年份")
+    class Meta:
+        verbose_name = "结题项目年份"
+        verbose_name_plural = "结题项目年份"
+
+    def __unicode__(self):
+        return str(self.project_year)
+
+

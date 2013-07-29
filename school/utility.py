@@ -308,3 +308,13 @@ def check_year(project):
         return True
     else:
         return False
+
+def check_applycontrol(project):
+    """
+        检查申报开关是否打开，打开返回True,否则返回False
+    """
+    school = SchoolProfile.objects.get(id = project.school_id )
+    if school.is_applying :
+        return True
+    else : 
+        return False

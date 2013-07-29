@@ -163,3 +163,14 @@ def SubjectAlloc(request, is_expired = False):
         except Project_Is_Assigned.DoesNotExist:
             obj = None
     return render_to_response("school/project_alloc.html",{'subject_list':subject_list,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def project_control(request):
+    school = SchoolProfile.objects.get(userid = request.user)
+    is_applying = school.is_applying
+    return render(request, "school/project_control.html",
+                {"is_applying":is_applying
+
+                })

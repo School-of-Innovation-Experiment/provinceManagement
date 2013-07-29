@@ -119,4 +119,19 @@ def judge_is_assigned(request):
         return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请联系管理员更新数据库"}) 
     return simplejson.dumps({'flag': obj.is_assigned_in_presubmit})
 
+@dajaxice_register
+def applicaton_control(request):
+    try:
+        schoolObj = SchoolProfile.objects.get(userid = request.user)
+    except SchoolProfile.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+    if schoolObj.is_applying:
+        schoolObj.is_applying = False
+        schoolObj.save()
+        flag = False
+    else:
+        schoolObj.is_applying =True
+        schoolObj.save()
+        flag = True
+    return simplejson.dumps({'flag': flag})
 

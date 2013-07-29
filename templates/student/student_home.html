@@ -17,6 +17,7 @@
       </tr>
     </thead>
     <tbody>
+      {% for item in item_list %}
       <tr>
         <td>{{item.title}}</td>
         <td>{{item.project_category}}</td>
@@ -30,6 +31,7 @@
           <span><a href="{% url student.views.file_view item.project_id%}" class='btn btn-primary'>文件上传</a></span>
         </td>
       </tr>
+      {%  endfor %}
     </tbody>
   </table><!--end current_list table-->
 </div><!--end current list content-->

@@ -41,8 +41,9 @@ def home_view(request):
     """
     display project at the current year
     """
-    item = ProjectSingle.objects.get(student__userid=request.user)
-    return render(request, "student/student_home.html", {"item": item})
+    item_list = ProjectSingle.objects.filter(student__userid=request.user)
+
+    return render(request, "student/student_home.html", {"item_list": item_list})
 
 @csrf.csrf_protect
 @login_required
@@ -119,8 +120,9 @@ def application_report_view(request,pid=None,is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
-    is_currentyear = check_year(project) 
-    readonly= is_expired or not is_currentyear
+    is_currentyear = check_year(project)
+    is_applying = check_applycontrol(project)
+    readonly= is_expired or not is_currentyear or not is_applying
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
 

@@ -36,4 +36,8 @@ urlpatterns = patterns(
         r'^subject_alloc$',
         school_views.SubjectAlloc,
         ),
+    url(
+        r'^project_control$',
+        school_views.project_control,
+        ),    
 )

@@ -1,0 +1,7 @@
+{% extends "school/home.html" %}
+{%block nav_admin_content%}
+<input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 
+<p> 项目申请过程管理开关</p>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
+{%endblock%}
