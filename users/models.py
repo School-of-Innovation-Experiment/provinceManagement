@@ -15,7 +15,7 @@ class AdminStaffProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name="权限对应ID")
     jobs = models.CharField(max_length=50, blank=True, verbose_name="职务")
-    is_finishing = models.BooleanField(null=False, default=True,
+    is_finishing = models.BooleanField(null=False, default=False,
                                   verbose_name=u"允许结题")
 
     class Meta:
@@ -40,9 +40,9 @@ class SchoolProfile(models.Model):
     school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
     userid = models.ForeignKey(User, unique=True, \
                                verbose_name="权限对应ID")
-    is_applying = models.BooleanField(null=False, default=True,
+    is_applying = models.BooleanField(null=False, default=False,
                                   verbose_name=u"允许申请")
-    is_finishing = models.BooleanField(null=False, default=True,
+    is_finishing = models.BooleanField(null=False, default=False,
                                   verbose_name=u"允许结题")
 
     class Meta:
