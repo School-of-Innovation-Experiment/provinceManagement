@@ -170,7 +170,18 @@ def SubjectAlloc(request, is_expired = False):
 def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
+    pro_list=ProjectSingle.objects.filter(school_id = school.id,is_over=False)
+    year_list=[]
+    for pro_obj in pro_list :
+        if pro_obj.year not in year_list :
+            year_list.append(pro_obj.year)
+    # loginfo(p=year_list,label="year_list")
+    is_finishing = False
+    # if request.method == "POST":
+    #     check_box_list = request.REQUEST.getlist('check_box_list') 
+    #     loginfo(p=check_box_list,label="check_box_list")
     return render(request, "school/project_control.html",
-                {"is_applying":is_applying
-
+                {   "is_applying":is_applying,
+                    "is_finishing":is_finishing,
+                    "year_list":year_list,
                 })

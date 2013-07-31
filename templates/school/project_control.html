@@ -1,7 +1,18 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
+<h4>项目申请管理</h4>
 <input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 
-<p> 项目申请过程管理开关</p>
+<span> 项目申请过程管理开关</span>
+<form id="project_control_form">
+	{% csrf_token %}
+	<h4>项目结题管理</h4>
+	{% for year in year_list%}
+	<input type="checkbox" value="{{year}}" name="check_box_list" style="margin-top: 0px;margin-right: 10px;">{{year}}
+	<br>
+	{% endfor%}
+	<input type="button" id="finish_button"  onclick="finish_control()" {%if is_finishing %}value="关闭结题" class="btn btn-warning"{%endif%}{%if not is_finishing%} class="btn btn-primary" value="打开结题"{%endif%}> 
+	<span> 项目结题过程管理开关</span>
+</form>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
 {%endblock%}
