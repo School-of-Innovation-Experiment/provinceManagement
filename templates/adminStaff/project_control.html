@@ -1,8 +1,5 @@
-{% extends "school/home.html" %}
+{% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-<h4>项目申请管理</h4>
-<input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 
-<span> 项目申请过程管理开关</span>
 <form id="project_control_form">
 	{% csrf_token %}
 	<h4>项目结题管理</h4>
@@ -16,5 +13,5 @@
 	<span> 项目结题过程管理开关</span>
 </form>
 
-<script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}

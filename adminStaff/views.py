@@ -22,9 +22,10 @@ from django.contrib.auth.models import User
 from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
-from users.models import ExpertProfile
+from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
+from django.db.models import Q 
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
@@ -379,3 +380,21 @@ class AdminStaffService(object):
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
                      "templatenotice_group_form": templatenotice_group_form})
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_control(request):
+        adminStaff = AdminStaffProfile.objects.get(userid = request.user)
+        is_finishing = adminStaff.is_finishing
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        year_list=[]
+        for pro_obj in pro_list :
+            if pro_obj.year not in pro_list :
+                year_list.append(pro_obj.year)
+                
+        return render(request, "adminStaff/project_control.html",
+                    {   
+                        "is_finishing":is_finishing,
+                        "year_list":year_list,
+                    })

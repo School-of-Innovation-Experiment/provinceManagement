@@ -33,6 +33,7 @@ from school import forms
 from student.models import Student_Group
 from const.models import *
 from const import *
+from django.db.models import Q 
 
 from school.utility import *
 from backend.logging import logger, loginfo
@@ -171,16 +172,12 @@ def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
     is_finishing = school.is_finishing
-    pro_list=ProjectSingle.objects.filter(school_id = school.id,is_over=False)
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
     year_list=[]
     for pro_obj in pro_list :
-        if pro_obj.year not in year_list :
+        if pro_obj.year not in pro_list :
             year_list.append(pro_obj.year)
-    # loginfo(p=year_list,label="year_list")
-
-    # if request.method == "POST":
-    #     check_box_list = request.REQUEST.getlist('check_box_list') 
-    #     loginfo(p=check_box_list,label="check_box_list")
+            
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,

@@ -13,7 +13,7 @@ from news.models import News
 from django.contrib.auth.models import User
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectControl
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 
@@ -129,31 +129,36 @@ def applicaton_control(request):
     if schoolObj.is_applying:
         schoolObj.is_applying = False
         schoolObj.save()
-        flag = False
     else:
         schoolObj.is_applying =True
         schoolObj.save()
-        flag = True
+    flag=schoolObj.is_applying
     return simplejson.dumps({'flag': flag})
 
 @dajaxice_register
 def finish_control(request,year_list):
-    print "10101"*10
     try:
         schoolObj = SchoolProfile.objects.get(userid = request.user)
     except SchoolProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
     user = User.objects.get(id=schoolObj.userid_id)
-    loginfo(p=user,label="user")
-    loginfo(p=year_list,label="year_list")
-    if year_list != []:
-        print "xixixixi"
-        for temp in year_list:
-            print "haha"
-            projectcontrol=ProjectControl()
-            projectcontrol.userid=user
-            projectcontrol.project_year=temp
-            projectcontrol.save()
-    flag = True
+    if schoolObj.is_finishing ==False:
+        if year_list != []:            
+            for temp in year_list:
+                projectcontrol=ProjectFinishControl()
+                projectcontrol.userid=user
+                projectcontrol.project_year=temp
+                projectcontrol.save()
+            schoolObj.is_finishing=True
+            schoolObj.save()
+            flag = True
+        else:
+            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
+    else:
+        projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
+        projectcontrol_list.delete()
+        schoolObj.is_finishing=False
+        schoolObj.save()
+    flag = schoolObj.is_finishing 
     return simplejson.dumps({'flag': flag})
 

@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 from chartit import PivotDataPool, PivotChart
 
@@ -26,11 +27,11 @@ from school.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
+from users.models import SchoolProfile,AdminStaffProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
+from const import PROJECT_GRADE_CHOICES, GRADE_UN,GRADE_PROVINCE,GRADE_NATION
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
 from backend.utility import search_tuple
@@ -309,12 +310,43 @@ def check_year(project):
     else:
         return False
 
+def check_finishingyear(project):
+    """
+       检查项目年份是否在结题的年份中
+    """
+    if project.project_grade == GRADE_UN:
+        return False
+    elif project.project_grade.grade == GRADE_NATION or project.project_grade.grade ==GRADE_PROVINCE:
+        adminObj = AdminStaffProfile.objects.all()
+        user = User.objects.get(id=adminObj[0].userid_id)
+    else:
+        schoolObj=SchoolProfile.objects.get(id=project.school_id)
+        user = User.objects.get(id=schoolObj.userid_id)  
+    projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
+    year_list=get_yearlist(projectcontrol_list)
+    if  project.year in year_list:
+        return True
+    else:
+        return False
+
+
 def check_applycontrol(project):
     """
         检查申报开关是否打开，打开返回True,否则返回False
     """
-    school = SchoolProfile.objects.get(id = project.school_id )
+    school = SchoolProfile.objects.get(id=project.school_id)
+
     if school.is_applying :
         return True
     else : 
         return False
+
+def get_yearlist(object_list):
+    """
+    返回年份列表
+    """
+    year_list=[]
+    for pro_obj in object_list :
+        if pro_obj.project_year not in year_list :
+            year_list.append(pro_obj.project_year)
+    return year_list

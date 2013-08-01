@@ -197,9 +197,9 @@ def final_report_view(request, pid=None,is_expired=False):
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
-    readonly = is_expired
-
-
+    is_finishing = check_finishingyear(project)
+    is_over = project.is_over
+    readonly = is_over or not is_finishing
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)

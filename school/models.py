@@ -364,7 +364,7 @@ class TeacherProjectPerLimits(models.Model):
     def __unicode__(self):
         return self.teacher.userid.email + ":" +  str(self.number)
 
-class ProjectControl(models.Model):
+class ProjectFinishControl(models.Model):
     """
     Project is_over control
     """

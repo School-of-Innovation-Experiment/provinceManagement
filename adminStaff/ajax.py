@@ -17,9 +17,10 @@ from const.models import SchoolDict, ProjectGrade
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle
-from users.models import SchoolProfile
+from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle,ProjectFinishControl
+from users.models import SchoolProfile, AdminStaffProfile
 from news.models import News
+from django.contrib.auth.models import User
 
 from school.utility import get_recommend_limit
 
@@ -267,3 +268,31 @@ def change_temnotice(request, temnotice_form, origin):
     else: 
         ret = {'status': '1', 'message': u"输入有误，请刷新后重新输入"}
     return ret
+
+@dajaxice_register
+def finish_control(request,year_list):
+    try:
+        adminObj = AdminStaffProfile.objects.get(userid = request.user)
+    except AdminStaffProfile.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"}) 
+    user = User.objects.get(id=adminObj.userid_id)
+    if adminObj.is_finishing ==False:
+        if year_list != []:            
+            for temp in year_list:
+                projectcontrol=ProjectFinishControl()
+                projectcontrol.userid=user
+                projectcontrol.project_year=temp
+                projectcontrol.save()
+            adminObj.is_finishing=True
+            adminObj.save()
+            flag = True
+        else:
+            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
+    else:
+        projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
+        projectcontrol_list.delete()
+        adminObj.is_finishing=False
+        adminObj.save()
+    flag = adminObj.is_finishing 
+    return simplejson.dumps({'flag': flag})
+

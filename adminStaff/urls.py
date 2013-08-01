@@ -26,5 +26,6 @@ urlpatterns = patterns('',
     (r'^school_dispatch/$',AdminStaffService.schoolDispatch),
     (r'^create_inactive_user$',AdminStaffService.expertDispatch),
     (r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
+    (r'^project_control$',AdminStaffService.project_control), 
 )
 urlpatterns += staticfiles_urlpatterns()
