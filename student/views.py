@@ -233,7 +233,7 @@ def file_view(request, pid=None,is_expired = False):
     """
     file management view
     """
-    readonly = is_expired
+    # readonly = is_expired
     if request.method == "POST" :
         if request.FILES is not None:
             return upload_response(request, pid)
@@ -244,7 +244,7 @@ def file_view(request, pid=None,is_expired = False):
 
     data = {'pid': pid,
             'files': file_history,
-            'readonly': readonly,
+            'readonly': False,
             }
     return render(request, 'student/fileupload.html', data)
 
