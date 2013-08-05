@@ -1,0 +1,112 @@
+{% extends "student/base/_content.html" %}
+
+{% block calculate-content %}
+<div class="page-header">
+    <h3>历史文件列表</h3>
+  </div>
+  <table class="table table-hover table-striped" >      
+    <thead>
+      <tr>
+        <td>名称</td>
+        <td>类型</td>
+        <td>大小</td>
+        <td>上传时间</td>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in files%}
+      <tr>
+        <td>{{item.name}}</td>
+        <td>{{item.file_type}}</td>
+        <td>{{item.file_size}}</td>
+        <td>{{item.uploadtime}}</td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table><!--end history list table-->
+    {% if show_projectcompilation %}  
+    <div class="alert alert-error">
+      <a class="close" data-dismiss="alert">x</a> 
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>你上传的文件名不包含“项目汇编”字段，请确认后再上传</p>
+    </div>
+    {%endif%}
+    {% if show_applicationwarn %}  
+    <div class="alert alert-error">
+      <a class="close" data-dismiss="alert">x</a> 
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>你上传的文件名不包含“申请书”字段，请确认后再上传</p>
+    </div><!--end alert block-->
+    {%endif%}
+    {% if show_interimchecklist %}  
+    <div class="alert alert-error ">
+      <a class="close" data-dismiss="alert">x</a> 
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>你上传的文件名不包含“中期检查表”字段，请确认后再上传</p>
+    </div>
+    {%endif%}
+    {% if show_summary %}  
+    <div class="alert alert-error">
+      <a class="close" data-dismiss="alert">x</a> 
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>你上传的文件名不包含“结题验收”字段，请确认后再上传</p>
+    </div>
+    {%endif%}
+  <br/>
+  <div class="span4" style="margin-left:0px;border: solid #3a87ad 1px;">
+    <form method="POST"  action={% url student.views.file_application_view pid%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>申报书上传</h4></span> 
+      <br>
+      <br>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin-left:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+
+  </div> 
+  <div class="span4" style="margin-left:10px;border: solid #3a87ad 1px;">
+    <form method="POST"  action={% url student.views.file_interimchecklist_view pid%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>中期检查表上传</h4></span> 
+      <br>
+      <br>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin-left:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div> 
+
+ <div class="span4" style="margin-left:10px;border: solid #3a87ad 1px;">
+    <form method="POST"  action={% url student.views.file_summary_view pid%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>结题验收</h4></span> 
+      <br>
+      <br>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin-left:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div> 
+  <br>
+  <div class="span4" style="margin-left:0px;margin-top:10px;border: solid #3a87ad 1px;">
+    <form method="POST"  action={% url student.views.file_projectcompilation_view pid%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>项目汇编上传</h4></span> 
+      <br>
+      <br>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin-left:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+
+{% endblock %}

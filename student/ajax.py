@@ -11,6 +11,9 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm
 from student.models import Student_Group
 from school.models import ProjectSingle
 from users.models import StudentProfile
+from school.utility import *
+
+from backend.logging import logger, loginfo
 
 from const import MEMBER_NUM_LIMIT
 @dajaxice_register
@@ -144,3 +147,16 @@ def refresh_member_table(request):
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
 
+# @dajaxice_register
+# def file_application(request):
+#     print "haha"*20
+#     student_account = StudentProfile.objects.get(userid = request.user)
+#     project = ProjectSingle.objects.get(student=student_account)
+#     pid = project.project_id
+#     if request.method == "POST" :
+#             if request.FILES is not None:
+#                 loginfo(p=request.FILES,label="request.FILES")
+#                 print "haha"*20
+#                 upload_response(request, pid)
+#                 return simplejson.dumps({'message':"haoshime"})
+    

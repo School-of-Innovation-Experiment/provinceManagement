@@ -33,7 +33,7 @@
   <br/>
   {%if not readonly %}
   <div class="page-header">
-    <h3>文件上传操作</h3>
+    <h3>附件上传操作</h3>
   </div>
   <!--File upload operator-->
   <form id="fileupload" method="post" action={% url student.views.file_view pid%}>
@@ -71,12 +71,11 @@
           <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
         </table>
     </form>
-    <div class="fileupload-content">
-        <table class="files"></table>
-        <div class="fileupload-progressbar"></div>
-    </div>
+  <div class="fileupload-content">
+    <table class="files"></table>
+    <div class="fileupload-progressbar"></div>
+  </div>
 
-<!--files list-->
 {% upload_js %}
 
 <!--Files Upload Tips-->
@@ -92,4 +91,5 @@
     </ul>
 </div>
   {%endif%}
+<!-- <script type='text/javascript' src="{{STATIC_URL}}js/student/studentuploadfile.js"></script> -->
 {%endblock%}

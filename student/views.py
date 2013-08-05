@@ -1,4 +1,5 @@
 # Create your views here.
+# coding: UTF-8
 import datetime
 import os
 import sys
@@ -236,6 +237,7 @@ def file_view(request, pid=None,is_expired = False):
     # readonly = is_expired
     if request.method == "POST" :
         if request.FILES is not None:
+            loginfo(p=request.FILES,label="request.FILES")
             return upload_response(request, pid)
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
@@ -275,3 +277,171 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
         return HttpResponse(str(fid))
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def files_important_view(request):
+    """
+    project group member change
+    """
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project = ProjectSingle.objects.get(student=student_account)
+    file_history = UploadedFiles.objects.filter(project_id=project.project_id)
+    logger.info("**"*10)
+    logger.info(file_history)
+    pid=project.project_id
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_application_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    print "haha"*20
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"申请书"
+                if check_uploadfie_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_application = True
+                    project.save()
+                else:
+                    show_applicationwarn = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_interimchecklist_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    print "haha"*20
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"中期检查表"
+                if check_uploadfie_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_interimchecklist = True
+                    project.save()
+                else:
+                    show_interimchecklist = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_summary_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    print "haha"*20
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"结题验收"
+                if check_uploadfie_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_summary = True
+                    project.save()
+                else:
+                    show_summary = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_projectcompilation_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    print "haha"*20
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"项目汇编"
+                if check_uploadfie_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_projectcompilation = True
+                    project.save()
+                else:
+                    show_projectcompilation = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation
+            }
+    return render(request, 'student/fileimportant.html', data)

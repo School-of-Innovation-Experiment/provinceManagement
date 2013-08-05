@@ -36,7 +36,7 @@ from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
 from backend.utility import search_tuple
 
-from backend.logging import logger
+from backend.logging import logger,loginfo
 
 
 def check_limits(user):
@@ -194,7 +194,7 @@ def upload_response(request, pid):
 
     response = JSONResponse(data, {}, response_minetype(request))
     response["Content-Dispostion"] = "inline; filename=files.json"
-
+    loginfo(p=response,label="response")
     return response
 
 
@@ -350,3 +350,12 @@ def get_yearlist(object_list):
         if pro_obj.project_year not in year_list :
             year_list.append(pro_obj.project_year)
     return year_list
+
+def check_uploadfie_name(request,des_name):
+    f = request.FILES["file"]    
+    wrapper_f = UploadedFile(f)
+    name, filetype = split_name(wrapper_f.name)
+    if des_name in name:
+        return True
+    else:
+        return False
