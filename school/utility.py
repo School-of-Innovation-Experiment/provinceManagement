@@ -372,11 +372,20 @@ def check_uploadfile_exist(des_name,pid):
         return False
 
 def enabledelete_file(file_list):
-    important_filelist=[u"申请书",u"中期检查表",u"结题验收",u"项目汇编"]
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
     for temp in file_list:
         if temp.name in important_filelist:
             temp.enabledelete = False
         else :
             temp.enabledelete = True
     return file_list
-    
+
+def check_othername(request):
+    f = request.FILES["file"]    
+    wrapper_f = UploadedFile(f)
+    name, filetype = split_name(wrapper_f.name)
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+    if name in important_filelist:
+        return False
+    else:
+        return True
