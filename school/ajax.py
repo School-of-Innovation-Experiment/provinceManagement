@@ -13,7 +13,7 @@ from news.models import News
 from django.contrib.auth.models import User
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 
@@ -162,3 +162,12 @@ def finish_control(request,year_list):
     flag = schoolObj.is_finishing 
     return simplejson.dumps({'flag': flag})
 
+@dajaxice_register
+def isover_control(request,pid):
+    project=ProjectSingle.objects.get(project_id=pid)
+    if project.is_over:
+        project.is_over =False
+    else:
+        project.is_over = True
+    project.save()
+    return simplejson.dumps({"flag":project.is_over})

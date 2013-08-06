@@ -147,16 +147,32 @@ def refresh_member_table(request):
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
 
-# @dajaxice_register
-# def file_application(request):
-#     print "haha"*20
-#     student_account = StudentProfile.objects.get(userid = request.user)
-#     project = ProjectSingle.objects.get(student=student_account)
-#     pid = project.project_id
-#     if request.method == "POST" :
-#             if request.FILES is not None:
-#                 loginfo(p=request.FILES,label="request.FILES")
-#                 print "haha"*20
-#                 upload_response(request, pid)
-#                 return simplejson.dumps({'message':"haoshime"})
+
+@dajaxice_register
+def FileDeleteConsistence(request, pid, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(UploadedFiles, file_id=fid)
+    p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
+
+    if f.project_id.project_id != p.project_id:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Authority Failed!!!"})
+
+    if request.method == "POST":
+        f.delete()
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
+
+
     

@@ -351,11 +351,32 @@ def get_yearlist(object_list):
             year_list.append(pro_obj.project_year)
     return year_list
 
-def check_uploadfie_name(request,des_name):
+def check_uploadfile_name(request,des_name):
     f = request.FILES["file"]    
     wrapper_f = UploadedFile(f)
     name, filetype = split_name(wrapper_f.name)
-    if des_name in name:
+    if des_name == name:
         return True
     else:
         return False
+
+def check_uploadfile_exist(des_name,pid):
+    """
+    检查上传的文件中是否已存在相同名称的文件
+    """
+    try:
+        check_obj=UploadedFiles.objects.get(project_id_id = pid,name=des_name)
+        check_obj.delete()
+        return True
+    except:
+        return False
+
+def enabledelete_file(file_list):
+    important_filelist=[u"申请书",u"中期检查表",u"结题验收",u"项目汇编"]
+    for temp in file_list:
+        if temp.name in important_filelist:
+            temp.enabledelete = False
+        else :
+            temp.enabledelete = True
+    return file_list
+    

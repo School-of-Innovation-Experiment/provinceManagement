@@ -296,6 +296,7 @@ def files_important_view(request):
     logger.info("**"*10)
     logger.info(file_history)
     pid=project.project_id
+    file_history=enabledelete_file(file_history)
     data = {'pid': pid,
             'files': file_history,
             'readonly': False,
@@ -320,8 +321,10 @@ def file_application_view(request,pid):
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"申请书"
-                if check_uploadfie_name(request,des_name):
+                des_name=u"申报书"
+                loginfo(p=des_name,label="des_name")
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_application = True
                     project.save()
@@ -356,7 +359,8 @@ def file_interimchecklist_view(request,pid):
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
                 des_name=u"中期检查表"
-                if check_uploadfie_name(request,des_name):
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_interimchecklist = True
                     project.save()
@@ -390,8 +394,9 @@ def file_summary_view(request,pid):
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"结题验收"
-                if check_uploadfie_name(request,des_name):
+                des_name=u"结题验收表"
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_summary = True
                     project.save()
@@ -426,7 +431,8 @@ def file_projectcompilation_view(request,pid):
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
                 des_name=u"项目汇编"
-                if check_uploadfie_name(request,des_name):
+                check_uploadfile_exist(des_name,pid)               
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_projectcompilation = True
                     project.save()
