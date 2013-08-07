@@ -157,7 +157,7 @@ def refresh_member_table(request):
                              "student_group_info_form": student_group_info_form})
 
 
-<<<<<<< HEAD
+
 def new_or_update_record(request, record_form):
     record_weekId   = record_form.cleaned_data["weekId"]
     record_recorder = record_form.cleaned_data["recorder"]
@@ -191,20 +191,8 @@ def refresh_record_table(request):
 
     return render_to_string("student/widgets/record_group_table.html",
                             {"record_group": record_group,
-                             "record_group_info_form": record_group_info_form})
-# @dajaxice_register
-# def file_application(request):
-#     print "haha"*20
-#     student_account = StudentProfile.objects.get(userid = request.user)
-#     project = ProjectSingle.objects.get(student=student_account)
-#     pid = project.project_id
-#     if request.method == "POST" :
-#             if request.FILES is not None:
-#                 loginfo(p=request.FILES,label="request.FILES")
-#                 print "haha"*20
-#                 upload_response(request, pid)
-#                 return simplejson.dumps({'message':"haoshime"})
-=======
+                            "record_group_info_form": record_group_info_form})
+
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
@@ -232,5 +220,4 @@ def FileDeleteConsistence(request, pid, fid):
                                  "message": "Warning! Only POST accepted!"})
 
 
->>>>>>> f788544e942ff808a7492a09da0b1352cde3975a
     
