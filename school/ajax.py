@@ -10,9 +10,10 @@ from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 from users.models import SchoolProfile, TeacherProfile
 from news.models import News
+from django.contrib.auth.models import User
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 
@@ -128,10 +129,45 @@ def applicaton_control(request):
     if schoolObj.is_applying:
         schoolObj.is_applying = False
         schoolObj.save()
-        flag = False
     else:
         schoolObj.is_applying =True
         schoolObj.save()
-        flag = True
+    flag=schoolObj.is_applying
     return simplejson.dumps({'flag': flag})
 
+@dajaxice_register
+def finish_control(request,year_list):
+    try:
+        schoolObj = SchoolProfile.objects.get(userid = request.user)
+    except SchoolProfile.DoesNotExist:
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+    user = User.objects.get(id=schoolObj.userid_id)
+    if schoolObj.is_finishing ==False:
+        if year_list != []:            
+            for temp in year_list:
+                projectcontrol=ProjectFinishControl()
+                projectcontrol.userid=user
+                projectcontrol.project_year=temp
+                projectcontrol.save()
+            schoolObj.is_finishing=True
+            schoolObj.save()
+            flag = True
+        else:
+            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
+    else:
+        projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
+        projectcontrol_list.delete()
+        schoolObj.is_finishing=False
+        schoolObj.save()
+    flag = schoolObj.is_finishing 
+    return simplejson.dumps({'flag': flag})
+
+@dajaxice_register
+def isover_control(request,pid):
+    project=ProjectSingle.objects.get(project_id=pid)
+    if project.is_over:
+        project.is_over =False
+    else:
+        project.is_over = True
+    project.save()
+    return simplejson.dumps({"flag":project.is_over})

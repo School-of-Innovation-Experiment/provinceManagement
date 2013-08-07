@@ -42,4 +42,36 @@ urlpatterns = patterns('',
         r'^newtechcompetition/$',
         student_views.new_techcompetition,
     ),
+    url(
+        r'^file_application/(?P<pid>.{36})$',
+        student_views.file_application_view,
+    ),
+    url(
+        r'^file_interimchecklist/(?P<pid>.{36})$',
+        student_views.file_interimchecklist_view,
+    ),
+    url(
+        r'^file_summary/(?P<pid>.{36})$',
+        student_views.file_summary_view,
+    ),
+    url(
+        r'^file_projectcompilation/(?P<pid>.{36})$',
+        student_views.file_projectcompilation_view,
+    ),
+    url(
+        r'^file_scoreapplication_view/(?P<pid>.{36})$',
+        student_views.file_scoreapplication_view,
+    ),
+    url(
+        r'^file_other_view/(?P<pid>.{36})$',
+        student_views.file_other_view,
+    ),
+    url(
+        r'^files_important$',
+        student_views.files_important_view,
+    ),
+    url(
+        r'^processrecord$',
+        student_views.processrecord_view,
+    ),
 )

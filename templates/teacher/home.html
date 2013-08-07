@@ -38,6 +38,7 @@
 								<span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>初期报告</a></span>
 						    <span><a href="{% url teacher.views.final_report_view project.project_id%}" class='btn btn-primary'>结题报告</a></span>
 						    <span><a href="{% url teacher.views.file_view project.project_id%}" class='btn btn-primary'>文件上传</a></span>
+                <span><a href="{% url teacher.views.file_view project.project_id%}" class='btn btn-primary'>过程记录管理</a></span>
 		      		</td>
 							</tr>
 					{% endfor %}

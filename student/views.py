@@ -1,4 +1,5 @@
 # Create your views here.
+# coding: UTF-8
 import datetime
 import os
 import sys
@@ -30,8 +31,8 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
-from student.models import Student_Group
-from student.forms import StudentGroupForm, StudentGroupInfoForm
+from student.models import Student_Group,StudentWeeklySummary
+from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 #from student.utility import checkidentity
 
 @csrf.csrf_protect
@@ -197,9 +198,9 @@ def final_report_view(request, pid=None,is_expired=False):
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
-    readonly = is_expired
-
-
+    is_finishing = check_finishingyear(project)
+    is_over = project.is_over
+    readonly = is_over or not is_finishing
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
@@ -233,9 +234,10 @@ def file_view(request, pid=None,is_expired = False):
     """
     file management view
     """
-    readonly = is_expired
+    # readonly = is_expired
     if request.method == "POST" :
         if request.FILES is not None:
+            loginfo(p=request.FILES,label="request.FILES")
             return upload_response(request, pid)
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
@@ -244,7 +246,7 @@ def file_view(request, pid=None,is_expired = False):
 
     data = {'pid': pid,
             'files': file_history,
-            'readonly': readonly,
+            'readonly': False,
             }
     return render(request, 'student/fileupload.html', data)
 
@@ -275,3 +277,283 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
         return HttpResponse(str(fid))
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def files_important_view(request):
+    """
+    project group member change
+    """
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project = ProjectSingle.objects.get(student=student_account)
+    file_history = UploadedFiles.objects.filter(project_id=project.project_id)
+    logger.info("**"*10)
+    logger.info(file_history)
+    pid=project.project_id
+    file_history=enabledelete_file(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_application_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"申报书"
+                loginfo(p=des_name,label="des_name")
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_application = True
+                    project.save()
+                else:
+                    show_applicationwarn = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_interimchecklist_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"中期检查表"
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_interimchecklist = True
+                    project.save()
+                else:
+                    show_interimchecklist = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_summary_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"结题验收表"
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_summary = True
+                    project.save()
+                else:
+                    show_summary = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_projectcompilation_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"项目汇编"
+                check_uploadfile_exist(des_name,pid)               
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_projectcompilation = True
+                    project.save()
+                else:
+                    show_projectcompilation = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_scoreapplication_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"学分申请表"
+                check_uploadfile_exist(des_name,pid)               
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                else:
+                    show_scoreapplication = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_other_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                if check_othername(request):            
+                    upload_response(request, pid)
+                else:
+                    show_other = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def processrecord_view(request):
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project         = ProjectSingle.objects.get(student=student_account)
+    record_group    = StudentWeeklySummary.objects.filter(project = project)
+    processRecord_group_form = ProcessRecordForm()
+    data = {"record_group": record_group,
+            "processRecord_group_form":processRecord_group_form
+            }
+    return render(request, 'student/processrecord.html',data)

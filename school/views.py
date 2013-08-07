@@ -33,6 +33,7 @@ from school import forms
 from student.models import Student_Group
 from const.models import *
 from const import *
+from django.db.models import Q 
 
 from school.utility import *
 from backend.logging import logger, loginfo
@@ -43,7 +44,23 @@ from adminStaff.views import AdminStaffService
 @login_required
 @authority_required(SCHOOL_USER)
 def home_view(request):
-    return HttpResponseRedirect(reverse('school.views.dispatch'))
+    school = SchoolProfile.objects.get(userid=request.user)
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+    if request.method =="POST":
+        project_manage_form = forms.ProjectManageForm(request.POST,school=school)
+        if project_manage_form.is_valid():
+            project_grade = project_manage_form.cleaned_data["project_grade"]
+            project_year =  project_manage_form.cleaned_data["project_year"]
+            project_isover = project_manage_form.cleaned_data["project_isover"]
+            pro_list = ProjectSingle.objects.filter(Q(school_id=school)&Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+    else:
+        project_manage_form = forms.ProjectManageForm(school=school)
+
+    context = {
+                'pro_list': pro_list,
+                'project_manage_form':project_manage_form
+                }
+    return render(request, "school/school_home.html",context)
 
 @csrf.csrf_protect
 @login_required
@@ -170,7 +187,15 @@ def SubjectAlloc(request, is_expired = False):
 def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
+    is_finishing = school.is_finishing
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+    year_list=[]
+    for pro_obj in pro_list :
+        if pro_obj.year not in pro_list :
+            year_list.append(pro_obj.year)
+            
     return render(request, "school/project_control.html",
-                {"is_applying":is_applying
-
+                {   "is_applying":is_applying,
+                    "is_finishing":is_finishing,
+                    "year_list":year_list,
                 })

@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 from chartit import PivotDataPool, PivotChart
 
@@ -26,16 +27,16 @@ from school.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
-from users.models import SchoolProfile
+from users.models import SchoolProfile,AdminStaffProfile
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
-from const import PROJECT_GRADE_CHOICES, GRADE_UN
+from const import PROJECT_GRADE_CHOICES, GRADE_UN,GRADE_PROVINCE,GRADE_NATION
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
 from backend.utility import search_tuple
 
-from backend.logging import logger
+from backend.logging import logger,loginfo
 
 
 def check_limits(user):
@@ -193,7 +194,7 @@ def upload_response(request, pid):
 
     response = JSONResponse(data, {}, response_minetype(request))
     response["Content-Dispostion"] = "inline; filename=files.json"
-
+    loginfo(p=response,label="response")
     return response
 
 
@@ -309,12 +310,82 @@ def check_year(project):
     else:
         return False
 
+def check_finishingyear(project):
+    """
+       检查项目年份是否在结题的年份中
+    """
+    if project.project_grade == GRADE_UN:
+        return False
+    elif project.project_grade.grade == GRADE_NATION or project.project_grade.grade ==GRADE_PROVINCE:
+        adminObj = AdminStaffProfile.objects.all()
+        user = User.objects.get(id=adminObj[0].userid_id)
+    else:
+        schoolObj=SchoolProfile.objects.get(id=project.school_id)
+        user = User.objects.get(id=schoolObj.userid_id)  
+    projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
+    year_list=get_yearlist(projectcontrol_list)
+    if  project.year in year_list:
+        return True
+    else:
+        return False
+
+
 def check_applycontrol(project):
     """
         检查申报开关是否打开，打开返回True,否则返回False
     """
-    school = SchoolProfile.objects.get(id = project.school_id )
+    school = SchoolProfile.objects.get(id=project.school_id)
+
     if school.is_applying :
         return True
     else : 
         return False
+
+def get_yearlist(object_list):
+    """
+    返回年份列表
+    """
+    year_list=[]
+    for pro_obj in object_list :
+        if pro_obj.project_year not in year_list :
+            year_list.append(pro_obj.project_year)
+    return year_list
+
+def check_uploadfile_name(request,des_name):
+    f = request.FILES["file"]    
+    wrapper_f = UploadedFile(f)
+    name, filetype = split_name(wrapper_f.name)
+    if des_name == name:
+        return True
+    else:
+        return False
+
+def check_uploadfile_exist(des_name,pid):
+    """
+    检查上传的文件中是否已存在相同名称的文件
+    """
+    try:
+        check_obj=UploadedFiles.objects.get(project_id_id = pid,name=des_name)
+        check_obj.delete()
+        return True
+    except:
+        return False
+
+def enabledelete_file(file_list):
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+    for temp in file_list:
+        if temp.name in important_filelist:
+            temp.enabledelete = False
+        else :
+            temp.enabledelete = True
+    return file_list
+
+def check_othername(request):
+    f = request.FILES["file"]    
+    wrapper_f = UploadedFile(f)
+    name, filetype = split_name(wrapper_f.name)
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+    if name in important_filelist:
+        return False
+    else:
+        return True

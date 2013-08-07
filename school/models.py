@@ -55,6 +55,14 @@ class ProjectSingle(models.Model):
                                     verbose_name=u"推荐")
     is_over = models.BooleanField(null=False, default=False,
                                   verbose_name=u"结束判断")
+    file_application = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"申报书")
+    file_interimchecklist = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"中期检查表") 
+    file_summary = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"结题验收") 
+    file_projectcompilation = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"项目汇编")     
     # is_applicationover = models.BooleanField(null=False, default=False,
     #                               verbose_name=u"申请结束判断")    
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
@@ -364,7 +372,7 @@ class TeacherProjectPerLimits(models.Model):
     def __unicode__(self):
         return self.teacher.userid.email + ":" +  str(self.number)
 
-class ProjectControl(models.Model):
+class ProjectFinishControl(models.Model):
     """
     Project is_over control
     """
