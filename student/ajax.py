@@ -16,6 +16,7 @@ from school.utility import *
 from backend.logging import logger, loginfo
 
 from const import MEMBER_NUM_LIMIT
+from const import *
 @dajaxice_register
 def MemberChangeInfo(request, form, origin):
     try:
@@ -156,8 +157,6 @@ def refresh_member_table(request):
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
 
-
-<<<<<<< HEAD
 def new_or_update_record(request, record_form):
     record_weekId   = record_form.cleaned_data["weekId"]
     record_recorder = record_form.cleaned_data["recorder"]
@@ -169,10 +168,14 @@ def new_or_update_record(request, record_form):
     group = project.studentweeklysummary_set
     for record in group.all():
         if record.weekId == record_weekId:
-            ret = {'status': '2', }
+            record.summary  = record_text
+            record.recorder = record_recorder
+            record.save()
+            table = refresh_record_table(request)
+            ret = {'status': '0', 'message': u"过程记录更新成功", 'table':table}
             break
     else: 
-        if group.count() == MEMBER_NUM_LIMIT[project.project_category.category]:
+        if group.count() == PROGRESS_RECORD_MAX:
             ret = {'status': '1', 'message': u"过程记录已满，不可添加"}
         else:
             new_record = StudentWeeklySummary( weekId    = record_weekId,
@@ -204,7 +207,6 @@ def refresh_record_table(request):
 #                 print "haha"*20
 #                 upload_response(request, pid)
 #                 return simplejson.dumps({'message':"haoshime"})
-=======
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
@@ -232,5 +234,4 @@ def FileDeleteConsistence(request, pid, fid):
                                  "message": "Warning! Only POST accepted!"})
 
 
->>>>>>> f788544e942ff808a7492a09da0b1352cde3975a
     

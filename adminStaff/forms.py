@@ -162,9 +162,6 @@ class TemplateNoticeForm(forms.Form):
                             widget=forms.TextInput(attrs={'class':'templatenotice span12','id':"title",'placeholder':u"项目记录人"}),)
     message =forms.CharField( max_length=300,
                             required=True,
-<<<<<<< HEAD
-                            widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"过程记录"}),)
-=======
                             widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"内容"}),)
 
 class ProjectManageForm(forms.Form):
@@ -185,4 +182,4 @@ class ProjectManageForm(forms.Form):
               yearlist.append((temp.year, str(temp.year)+"年"))
         YEAR_CHOICE = tuple(yearlist)
         self.fields['project_year'].choices = YEAR_CHOICE    
->>>>>>> f788544e942ff808a7492a09da0b1352cde3975a
+

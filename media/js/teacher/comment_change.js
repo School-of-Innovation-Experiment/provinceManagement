@@ -1,13 +1,12 @@
-
-function add_or_update_record() {
+function add_or_update_comment() {
   
   $("#record_error_message").empty();
-  Dajaxice.student.recordChange(add_or_update_record_callback,
+  Dajaxice.student.recordChange(add_or_update_comment_callback,
                                 {'form':$('#process_record_info_form').serialize(true)
                                 });
 };
 
-function add_or_update_record_callback(data) {
+function add_or_update_comment_callback(data) {
     if(data.status == "2") {
     $.each(data.error_id, function (i, item){
       object = $('#'+item);
