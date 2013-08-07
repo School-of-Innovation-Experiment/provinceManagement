@@ -1,0 +1,46 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+  <div class="well form-inline">
+    <b>
+      <form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
+	{% csrf_token %}
+	
+      </form><!--end category form -->
+      <table class="table table-condensed" id="subject_table">
+	<thead>
+	  <tr>
+	    <th></th>
+	    <th>项目编号</th>
+	    <th>指导教师</th>
+      <th>项目成员</th>
+	    <th>专家评分</th>
+	    <th>修改等级</th>
+	  </tr>
+	</thead>
+	<tbody id="subject_table_body">
+	  {% for subject in subject_list%}
+	    <tr>
+	      <td>{{subject.fund_datetime}}</td>
+	      <td>{{subject.student_name}}</td>
+	      <td>{{subject.funs_amount}}</td> 
+        <td>{{subject.funds_detail}}</td>
+	    </tr>
+	  {%endfor%}
+	</tbody>
+      </table>
+      <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
+	<div class="modal-header">
+    	  <a class="close" data-dismiss="modal">×</a>
+    	  <h3>专家得分/评价列表</h3>
+	</div>
+
+      </div><!--end subject_review-->
+      
+</div><!-- end the whole form -->
+
+
+
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/funds_change.js"></script>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+{%endblock%}

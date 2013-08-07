@@ -15,8 +15,10 @@ from backend.decorators import *
 from const import *
 from const.models import *
 from users.models import TeacherProfile, StudentProfile
+from student.models import  StudentWeeklySummary
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
+from student.forms import  ProcessRecordForm
 from school.forms import *
 from teacher.forms import StudentDispatchForm
 from registration.models import *
@@ -236,3 +238,21 @@ def StudentDispatch(request):
             'remaining_activation_times': remaining_activation_times
             }
         return render(request, 'teacher/dispatch.html', data)
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(TEACHER_USER)
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
+def processrecord_view(request, pid=None,is_expired = False):
+    """
+    file management view
+    """
+    record_group    = StudentWeeklySummary.objects.filter(project=pid)
+    processRecord_group_form = ProcessRecordForm()
+    
+    data = {"record_group": record_group,
+            "processRecord_group_form":processRecord_group_form
+            }
+    return render(request, 'teacher/processrecord.html',data)

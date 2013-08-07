@@ -140,3 +140,5 @@ SCHOOL_RECOMMEND_RATE = 0.3 # 30 %
 
 # Message noticeMessage
 TEMPLATE_NOTICE_MESSAGE_MAX = 8
+# Progress Record
+PROGRESS_RECORD_MAX = 20

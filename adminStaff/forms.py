@@ -165,6 +165,23 @@ class TemplateNoticeForm(forms.Form):
                             required=True,
                             widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"内容"}),)
 
+class FundsChangeForm(forms.Form):
+    fnuds_datetime = forms.CharField(max_length = 100,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':u"报销日期"}),)    
+    student_name = forms.CharField(max_length = 100,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u"报销人"}),)    
+    funds_amount = forms.CharField(max_length = 100,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u"报销金额"}),)    
+    funds_detail = forms.CharField(max_length = 100,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_detail','placeholder':u"经费明细"}),)    
+    funds_remaining = forms.CharField(max_length = 100,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"经费余额"}),)    
+
 class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_NATION or grade[0] == GRADE_PROVINCE]
     project_grade_choice = list(project_grade_choice)
