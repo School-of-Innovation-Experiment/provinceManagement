@@ -32,7 +32,7 @@ class StudentWeeklySummary(models.Model):
     date        = models.DateField(default=datetime.datetime.today)
     recorder    = models.CharField(blank=True, max_length=100,
                                 verbose_name=u"记录人")
-<<<<<<< HEAD
+    weekId      = models.IntegerField(blank=False, verbose_name="周次", default=1)
 
 
 class Funds_Group(models.Model):
@@ -57,6 +57,6 @@ class Funds_Group(models.Model):
 
 
 
-=======
-    weekId      = models.IntegerField(blank=False, verbose_name="周次", default=1)
->>>>>>> e444d413535c94d3b8fd3a6ad642e1ef47458d05
+
+   
+

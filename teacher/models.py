@@ -8,5 +8,4 @@ class TeacherMonthComment(models.Model):
     comment = models.CharField(blank=True, max_length=500,
                                verbose_name=u"项目月评")
     date = models.DateField(default=datetime.datetime.today)
-
-    monthId  = dmodels.IntegerField(blank=False, verbose_name="月次", default=0)
+    monthId  = models.IntegerField(blank=False, verbose_name="月次", default=0)

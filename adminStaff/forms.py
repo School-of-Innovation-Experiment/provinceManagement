@@ -164,7 +164,6 @@ class TemplateNoticeForm(forms.Form):
                             required=True,
                             widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"内容"}),)
 
-<<<<<<< HEAD
 class FundsChangeForm(forms.Form):
     fnuds_datetime = forms.CharField(max_length = 100,
                                     required=False,
@@ -182,28 +181,6 @@ class FundsChangeForm(forms.Form):
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"经费余额"}),)    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
 class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_NATION or grade[0] == GRADE_PROVINCE]
     project_grade_choice = tuple(project_grade_choice)
@@ -222,4 +199,3 @@ class ProjectManageForm(forms.Form):
               yearlist.append((temp.year, str(temp.year)+"年"))
         YEAR_CHOICE = tuple(yearlist)
         self.fields['project_year'].choices = YEAR_CHOICE    
->>>>>>> e444d413535c94d3b8fd3a6ad642e1ef47458d05
