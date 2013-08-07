@@ -9,6 +9,7 @@ from backend.utility import convert2media_url, getContext
 from const import PROJECT_GRADE_CHOICES, GRADE_NATION, DEFAULT_IMG_URL
 from const.models import SchoolDict, ProjectGrade
 from student.models import Student_Group
+from backend.logging import loginfo
 
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 
@@ -76,7 +77,7 @@ def show_index_get_search_context(request, project_page):
     search_school = request.GET.get('search_school') or ""
     search_year = request.GET.get('search_year') or ""
     search_grade = request.GET.get('search_grade') or ""
-
+    loginfo(p=search_school,label="search_school")
     q1 = (search_year and Q(year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None

@@ -52,7 +52,17 @@ def home_view(request):
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
             project_isover = project_manage_form.cleaned_data["project_isover"]
-            pro_list = ProjectSingle.objects.filter(Q(school_id=school)&Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+            if project_grade == "-1":
+                project_grade=''
+            if project_year == '-1':
+                project_year=''
+            q1 = (project_year and Q(year=project_year)) or None
+            q2 = (project_isover and Q(is_over=project_isover)) or None
+            q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+            qset = filter(lambda x: x != None, [q1, q2, q3])
+            if qset :
+                qset = reduce(lambda x, y: x & y, qset)
+                pro_list = ProjectSingle.objects.filter(qset)
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 

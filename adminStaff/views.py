@@ -20,7 +20,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from const import *
-from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
+from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
@@ -404,16 +404,36 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))            
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
             if project_manage_form.is_valid():
                 project_grade = project_manage_form.cleaned_data["project_grade"]
                 project_year =  project_manage_form.cleaned_data["project_year"]
                 project_isover = project_manage_form.cleaned_data["project_isover"]
-                pro_list = ProjectSingle.objects.filter(Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+                project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+                if project_grade == "-1":
+                    project_grade=''
+                if project_year == '-1':
+                    project_year=''
+                q1 = (project_year and Q(year=project_year)) or None
+                q2 = (project_isover and Q(is_over=project_isover)) or None
+                q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+                q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
+                qset = filter(lambda x: x != None, [q1, q2, q3,q4])
+                if qset :
+                    qset = reduce(lambda x, y: x & y, qset)
+                    pro_list = ProjectSingle.objects.filter(qset)
+            loginfo(p=qset,label="qset")
         else:
             project_manage_form = forms.ProjectManageForm()
+
+        for pro_obj in pro_list:
+            file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            for file_temp in file_history:
+                if file_temp.name == u"学分申请表":
+                    url = file_temp.file_obj.url
+                    pro_obj.url = url
 
         context = {
                     'pro_list': pro_list,

@@ -7,6 +7,7 @@ Created on 2013-3-28
 from datetime import *
 from django import  forms
 from django.db.models import Q 
+from backend.logging import loginfo
 from adminStaff.models import ProjectControl
 from const import *
 from users.models import *
@@ -166,12 +167,17 @@ class TemplateNoticeForm(forms.Form):
 
 class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_NATION or grade[0] == GRADE_PROVINCE]
-    project_grade_choice = tuple(project_grade_choice)
+    project_grade_choice = list(project_grade_choice)
+    project_grade_choice.insert(0,('-1',u"级别"))
+    loginfo(p=project_grade_choice,label="project_grade_choice")
     project_isover_choice = [(0,"未结题"),(1,"已结题")]
+    project_scoreapplication_choice = [(0,"未申请"),(1,"已申请")]
     project_isover_choice = tuple(project_isover_choice)
+    project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
     project_isover = forms.ChoiceField(choices=project_isover_choice)
+    project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
 
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
@@ -180,5 +186,6 @@ class ProjectManageForm(forms.Form):
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
               yearlist.append((temp.year, str(temp.year)+"年"))
-        YEAR_CHOICE = tuple(yearlist)
+        YEAR_CHOICE = list(yearlist)
+        YEAR_CHOICE.insert(0,('-1',u"年份"))
         self.fields['project_year'].choices = YEAR_CHOICE    
