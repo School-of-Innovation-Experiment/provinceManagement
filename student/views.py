@@ -31,8 +31,8 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
-from student.models import Student_Group
-from student.forms import StudentGroupForm, StudentGroupInfoForm
+from student.models import Student_Group,StudentWeeklySummary
+from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 #from student.utility import checkidentity
 
 @csrf.csrf_protect
@@ -445,3 +445,16 @@ def file_projectcompilation_view(request,pid):
             'show_projectcompilation':show_projectcompilation
             }
     return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def processrecord_view(request):
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project         = ProjectSingle.objects.get(student=student_account)
+    record_group    = StudentWeeklySummary.objects.filter(project = project)
+    processRecord_group_form = ProcessRecordForm()
+    data = {"record_group": record_group,
+            "processRecord_group_form":processRecord_group_form
+            }
+    return render(request, 'student/processrecord.html',data)

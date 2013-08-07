@@ -62,4 +62,8 @@ urlpatterns = patterns('',
         r'^files_important$',
         student_views.files_important_view,
     ),
+    url(
+        r'^processrecord$',
+        student_views.processrecord_view,
+    ),
 )

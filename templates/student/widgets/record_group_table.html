@@ -1,0 +1,22 @@
+<table class="well table">
+  <thead>
+    <tr>
+      <td><strong>周次</strong></td>
+      <td><strong>记录人</strong></td>
+      <td><strong>记录日期</strong></td>
+      <td><strong>过程内容</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    {% if record_group %}
+      {%for record in record_group%}
+        <tr>
+          <td>第{{record.weekId}}周</td>
+          <td>{{record.recorder}}</td>
+          <td>{{record.date}}</td>
+          <td title={{record.summary|slice:"300"}}>{{record.summary|slice:"20"}}</td>
+        </tr>
+      {%endfor%}
+    {% endif %}
+  </tbody>
+</table>

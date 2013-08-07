@@ -157,7 +157,7 @@ class SubjectGradeForm(forms.Form):
 class TemplateNoticeForm(forms.Form):
     title =forms.CharField( max_length=30,
                             required=True,
-                            widget=forms.TextInput(attrs={'class':'templatenotice span12','id':"title",'placeholder':u"标题"}),)
+                            widget=forms.TextInput(attrs={'class':'templatenotice span12','id':"title",'placeholder':u"项目记录人"}),)
     message =forms.CharField( max_length=300,
                             required=True,
-                            widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"内容"}),)
+                            widget=forms.Textarea(attrs={'class':'templatenotice span12','id':"message",'placeholder':u"过程记录"}),)

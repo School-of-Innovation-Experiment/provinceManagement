@@ -234,7 +234,7 @@ def new_temnotice(request,temnotice_form):
     message = temnotice_form.cleaned_data["message"]
     group = TemplateNoticeMessage.objects.all()
     if group.count() == TEMPLATE_NOTICE_MESSAGE_MAX:
-        ret = {'status': '1', 'message': u"人员已满，不可添加"}
+        ret = {'status': '1', 'message': u"模版消息已满，不可添加"}
     else:
         new_temnotice = TemplateNoticeMessage(  noticeId =3,
                                                 title = title,

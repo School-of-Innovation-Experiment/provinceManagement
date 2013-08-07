@@ -1,0 +1,33 @@
+{% extends "student/base/_content.html" %}
+{% block calculate-content %}
+    <form class="well form" id="process_record_info_form" method="POST" action="#">
+        {% csrf_token %}
+        <div class="input-prepend ">
+            <span class="add-on ">周   次</span>{{processRecord_group_form.weekId}}
+        </div>
+        <div class="input-prepend ">
+            <span class="add-on">项目记录人</span>{{processRecord_group_form.recorder}}
+        </div>
+        <span id="record_error_message"></span>
+        <div class="input-prepend">
+
+            <button class="btn btn-primary span1 offset2" id="email_to_teacher" onclick="add_or_update_record(); return false;">提交</button>
+         </div>
+         <div class="input-prepend ">
+            {{processRecord_group_form.recordtext}}
+        </div>
+    </form>
+
+    <div class="page-header">
+        <h3>历史过程记录列表</h3>
+    </div>
+    <div id="record_group_table">
+      {% include "student/widgets/record_group_table.html" %}
+    </div>
+     <span class=" pull-right"><input type="button"  class="btn btn-primary" id="email_to_teacher" onclick="add_or_update_record();" value="添加新成员"/></span>
+    <!-- ajax_csrf-->
+    <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+    <!-- dajax-->
+    <script type='text/javascript' src="{{STATIC_URL}}js/student/record_change.js"></script>
+
+{% endblock %}
