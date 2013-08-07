@@ -30,6 +30,7 @@ from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
 from student.models import Student_Group
+from student.models import Funds_Group
 
 class AdminStaffService(object):
     @staticmethod
@@ -398,3 +399,55 @@ class AdminStaffService(object):
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                     })
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def funds_manage(request,is_expired=False):
+        readonly=is_expired
+        subject_grade_form = forms.SubjectGradeForm()
+        if request.method == "GET":
+            school_category_form = forms.SchoolCategoryForm()
+            subject_list =  ProjectSingle.objects.filter(recommend = True)
+
+        else:
+            school_category_form = forms.SchoolCategoryForm(request.POST)
+            if school_category_form.is_valid():
+                school_name = school_category_form.cleaned_data["school_choice"]
+                subject_list =  ProjectSingle.objects.filter(recommend = True)
+        
+        for subject in subject_list:
+            student_group = Student_Group.objects.filter(project = subject)
+            try:
+                subject.members = student_group[0]
+            except:
+                pass
+
+        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def funds_change(request,project_id):
+        test = Funds_Group.objects.create(
+                                                project_id = 2013101410001,
+                                                fund_datetime = '20130807',
+                                                student_name = u'小成亲',
+                                                funds_amount = '8563',
+                                                funds_detail = u'逗你玩',
+                                                funds_remaining = '5632')
+        # test.save()
+
+
+        project_funds_list = Funds_Group.objects.get(project_id = project_id)
+
+
+        return render_to_response(request,"adminStaff/funds_change.html",{'subject_list':project_funds_list,})
+
+
+
+
