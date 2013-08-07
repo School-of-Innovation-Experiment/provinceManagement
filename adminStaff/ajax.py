@@ -160,17 +160,18 @@ def get_subject_review_list(request, project_id):
     return simplejson.dumps({'review_list':review_list})
 
 @dajaxice_register
-def change_subject_recommend_state(request, project_id, changed_grade):
+def change_subject_recommend(request, project_id, changed_grade):
     """
     change the recommend state of single project
     """
     val = int(changed_grade)
     project = ProjectSingle.objects.get(project_id = project_id)
+    print [x.project_grade for x in ProjectSingle.objects.all()]
     school = SchoolProfile.objects.get(userid = request.user)
     exit_status = '1'
-    if val:
+    if val == 1:
         if project.recommend: 
-            exit_status = '0'
+            exit_status = '1'
         else:
             remaining = get_recommend_limit(school)[1]
             if remaining:
@@ -180,8 +181,11 @@ def change_subject_recommend_state(request, project_id, changed_grade):
             else:
                exit_status = '0'
     else:
+        change_to = val and GRADE_INSITUTE or GRADE_SCHOOL
+        print change_to, "-" * 50
         project.recommend = False
-        project.project_grade = ProjectGrade.objects.get(grade = GRADE_INSITUTE)
+        project.project_grade = ProjectGrade.objects.get(grade = change_to)
+        print project.project_grade
         project.save()
     return simplejson.dumps({'status': exit_status})
 

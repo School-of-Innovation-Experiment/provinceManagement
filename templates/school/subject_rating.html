@@ -36,11 +36,7 @@
 					{% if subject.recommend %}
 						已推荐
 					{% else %}
-						{% ifequal subject.project_grade.id 4 %}
-							不推荐
-						{% else %}
-							未指定
-						{% endifequal %}
+						未推荐（{{ subject.project_grade }}）
 					{% endif %}
 				</td>
 	    </tr>
@@ -65,7 +61,8 @@
   	<div class="modal-body">
           <select name="subject_grade" id="id_subject_grade">
 						<option value="1">推荐</option>
-						<option value="0">不推荐</option>
+						<option value="0">校级</option>
+						<option value="-1">院级</option>
 					</select>
   	</div>
   	<div class="modal-footer">
