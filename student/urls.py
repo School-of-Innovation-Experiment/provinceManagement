@@ -59,6 +59,14 @@ urlpatterns = patterns('',
         student_views.file_projectcompilation_view,
     ),
     url(
+        r'^file_scoreapplication_view/(?P<pid>.{36})$',
+        student_views.file_scoreapplication_view,
+    ),
+    url(
+        r'^file_other_view/(?P<pid>.{36})$',
+        student_views.file_other_view,
+    ),
+    url(
         r'^files_important$',
         student_views.files_important_view,
     ),

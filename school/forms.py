@@ -13,6 +13,7 @@ import time
 from django import forms
 from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.db.models import Q 
 from django.forms.util import ErrorList
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
@@ -274,3 +275,30 @@ class TeacherNumLimitForm(forms.Form):
             TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
         TEACHER_CHOICE = tuple(TEACHER_CHOICE_list)
         self.fields["teacher_name"].choices = TEACHER_CHOICE
+
+class ProjectManageForm(forms.Form):
+    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_INSITUTE or grade[0] == GRADE_SCHOOL]
+    project_grade_choice = tuple(project_grade_choice)
+    project_isover_choice = [(0,"未结题"),(1,"已结题")]
+    project_isover_choice = tuple(project_isover_choice)
+    project_grade = forms.ChoiceField(choices=project_grade_choice)
+    project_year = forms.ChoiceField() 
+    project_isover = forms.ChoiceField(choices=project_isover_choice)
+
+    def __init__(self, *args, **kwargs):
+        school = kwargs.pop('school', None)
+        super(ProjectManageForm, self).__init__(*args, **kwargs)
+        loginfo(p=school,label="school")
+        if not school:
+            return
+        project_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+        yearlist = []
+        for temp in project_list:
+            if (temp.year, str(temp.year)+"年") not in yearlist:
+              yearlist.append((temp.year, str(temp.year)+"年"))
+        YEAR_CHOICE = tuple(yearlist)
+        loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
+        self.fields['project_year'].choices = YEAR_CHOICE
+
+
+      

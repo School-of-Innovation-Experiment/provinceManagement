@@ -289,20 +289,24 @@ def files_important_view(request):
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
-
+    show_scoreapplication = False
+    show_other = False
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
     logger.info("**"*10)
     logger.info(file_history)
     pid=project.project_id
+    file_history=enabledelete_file(file_history)
     data = {'pid': pid,
             'files': file_history,
             'readonly': False,
             'show_applicationwarn':show_applicationwarn,
             'show_interimchecklist':show_interimchecklist,
             'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
 
@@ -316,12 +320,15 @@ def file_application_view(request,pid):
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
-    print "haha"*20
+    show_scoreapplication = False
+    show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"申请书"
-                if check_uploadfie_name(request,des_name):
+                des_name=u"申报书"
+                loginfo(p=des_name,label="des_name")
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_application = True
                     project.save()
@@ -329,6 +336,7 @@ def file_application_view(request,pid):
                     show_applicationwarn = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
     logger.info("**"*10)
     logger.info(file_history)
     data = {'pid': pid,
@@ -337,7 +345,9 @@ def file_application_view(request,pid):
             'show_applicationwarn':show_applicationwarn,
             'show_interimchecklist':show_interimchecklist,
             'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
 
@@ -351,12 +361,14 @@ def file_interimchecklist_view(request,pid):
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
-    print "haha"*20
+    show_scoreapplication = False
+    show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
                 des_name=u"中期检查表"
-                if check_uploadfie_name(request,des_name):
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_interimchecklist = True
                     project.save()
@@ -364,6 +376,7 @@ def file_interimchecklist_view(request,pid):
                     show_interimchecklist = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
     logger.info("**"*10)
     logger.info(file_history)
     data = {'pid': pid,
@@ -372,7 +385,9 @@ def file_interimchecklist_view(request,pid):
             'show_applicationwarn':show_applicationwarn,
             'show_interimchecklist':show_interimchecklist,
             'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
 
@@ -386,12 +401,14 @@ def file_summary_view(request,pid):
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
-    print "haha"*20
+    show_scoreapplication = False
+    show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"结题验收"
-                if check_uploadfie_name(request,des_name):
+                des_name=u"结题验收表"
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_summary = True
                     project.save()
@@ -399,6 +416,7 @@ def file_summary_view(request,pid):
                     show_summary = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
     logger.info("**"*10)
     logger.info(file_history)
     data = {'pid': pid,
@@ -407,7 +425,9 @@ def file_summary_view(request,pid):
             'show_applicationwarn':show_applicationwarn,
             'show_interimchecklist':show_interimchecklist,
             'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
 
@@ -421,12 +441,14 @@ def file_projectcompilation_view(request,pid):
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
-    print "haha"*20
+    show_scoreapplication = False
+    show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
                 des_name=u"项目汇编"
-                if check_uploadfie_name(request,des_name):
+                check_uploadfile_exist(des_name,pid)               
+                if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
                     project.file_projectcompilation = True
                     project.save()
@@ -434,6 +456,7 @@ def file_projectcompilation_view(request,pid):
                     show_projectcompilation = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
     logger.info("**"*10)
     logger.info(file_history)
     data = {'pid': pid,
@@ -442,7 +465,83 @@ def file_projectcompilation_view(request,pid):
             'show_applicationwarn':show_applicationwarn,
             'show_interimchecklist':show_interimchecklist,
             'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_scoreapplication_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"学分申请表"
+                check_uploadfile_exist(des_name,pid)               
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                else:
+                    show_scoreapplication = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_other_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                if check_othername(request):            
+                    upload_response(request, pid)
+                else:
+                    show_other = True
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
 

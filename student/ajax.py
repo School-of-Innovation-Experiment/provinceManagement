@@ -157,6 +157,7 @@ def refresh_member_table(request):
                              "student_group_info_form": student_group_info_form})
 
 
+<<<<<<< HEAD
 def new_or_update_record(request, record_form):
     record_weekId   = record_form.cleaned_data["weekId"]
     record_recorder = record_form.cleaned_data["recorder"]
@@ -203,4 +204,33 @@ def refresh_record_table(request):
 #                 print "haha"*20
 #                 upload_response(request, pid)
 #                 return simplejson.dumps({'message':"haoshime"})
+=======
+@dajaxice_register
+def FileDeleteConsistence(request, pid, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(UploadedFiles, file_id=fid)
+    p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
+
+    if f.project_id.project_id != p.project_id:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Authority Failed!!!"})
+
+    if request.method == "POST":
+        f.delete()
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
+
+
+>>>>>>> f788544e942ff808a7492a09da0b1352cde3975a
     
