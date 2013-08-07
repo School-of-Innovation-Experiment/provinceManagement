@@ -490,6 +490,8 @@ def file_scoreapplication_view(request,pid):
                 check_uploadfile_exist(des_name,pid)               
                 if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
+                    project.score_application = True
+                    project.save()
                 else:
                     show_scoreapplication = True
 
