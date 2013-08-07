@@ -182,4 +182,3 @@ class ProjectManageForm(forms.Form):
               yearlist.append((temp.year, str(temp.year)+"年"))
         YEAR_CHOICE = tuple(yearlist)
         self.fields['project_year'].choices = YEAR_CHOICE    
-

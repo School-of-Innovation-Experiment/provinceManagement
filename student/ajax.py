@@ -195,18 +195,6 @@ def refresh_record_table(request):
     return render_to_string("student/widgets/record_group_table.html",
                             {"record_group": record_group,
                              "record_group_info_form": record_group_info_form})
-# @dajaxice_register
-# def file_application(request):
-#     print "haha"*20
-#     student_account = StudentProfile.objects.get(userid = request.user)
-#     project = ProjectSingle.objects.get(student=student_account)
-#     pid = project.project_id
-#     if request.method == "POST" :
-#             if request.FILES is not None:
-#                 loginfo(p=request.FILES,label="request.FILES")
-#                 print "haha"*20
-#                 upload_response(request, pid)
-#                 return simplejson.dumps({'message':"haoshime"})
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
