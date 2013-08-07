@@ -64,7 +64,7 @@ function get_template_notice(caller){
   tr_parent = $(caller).parent().parent().parent();
   text_title   = $(tr_parent).children("td:eq(1)").html();
   text_message = $(tr_parent).children("td:eq(2)").html();
-  change_id    = $(tr_parent).children("td:eq(0)").html();
+  change_id    = $(tr_parent).children("td:eq(0)").attr('id');
   $("#template_notice_info_form").find("#title").val(text_title);
   $("#template_notice_info_form").find("#message").val(text_message);
 }

@@ -49,10 +49,10 @@
     {% if templatenotice_group %}
       {%for  notice in templatenotice_group%}
         <tr >
-          <td >{{ notice.id}}</td>
-          <td >{{ notice.title}}</td>
-          <td  width="100px" style="overflow:hidden; text-overflow:ellipsis;">{{ notice.message}}</td>
-          <td >
+          <td id={{ notice.id }}>{{ notice.iid}}</td>
+          <td>{{ notice.title}}</td>
+          <td>{{ notice.message}}</td>
+          <td>
             <div class="btn-group">
               <button class="btn btn-primary" onclick="select_template_notice(this)">选择</button>
               <button class="btn btn-success" data-toggle="modal" href="#notice_profile_info" onclick="get_template_notice(this);">修改</button>

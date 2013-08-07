@@ -378,6 +378,10 @@ class AdminStaffService(object):
                 message.save()
         templatenotice_group_form = forms.TemplateNoticeForm()
         templatenotice_group = TemplateNoticeMessage.objects.all()
+        _range = 1
+        for i in templatenotice_group:
+            i.iid = _range
+            _range += 1
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
                      "templatenotice_group_form": templatenotice_group_form})
