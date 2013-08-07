@@ -7,8 +7,8 @@ from django.http import Http404
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from student.forms import StudentGroupForm, StudentGroupInfoForm
-from student.models import Student_Group
+from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+from student.models import Student_Group,StudentWeeklySummary
 from school.models import ProjectSingle
 from users.models import StudentProfile
 from school.utility import *
@@ -72,6 +72,15 @@ def MemberChange(request, form, origin):
         ret = new_or_update_member(request, stugroup_form)
     else:  # 更换成员
         ret = change_member(request, stugroup_form, origin)
+    return simplejson.dumps(ret)
+
+@dajaxice_register
+def recordChange(request, form):
+    record_form = ProcessRecordForm(deserialize_form(form))
+    if not record_form.is_valid():
+        ret = {'status': '2'}
+    else:
+        ret = new_or_update_record(request,record_form)
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -147,16 +156,68 @@ def refresh_member_table(request):
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
 
-# @dajaxice_register
-# def file_application(request):
-#     print "haha"*20
-#     student_account = StudentProfile.objects.get(userid = request.user)
-#     project = ProjectSingle.objects.get(student=student_account)
-#     pid = project.project_id
-#     if request.method == "POST" :
-#             if request.FILES is not None:
-#                 loginfo(p=request.FILES,label="request.FILES")
-#                 print "haha"*20
-#                 upload_response(request, pid)
-#                 return simplejson.dumps({'message':"haoshime"})
+
+
+def new_or_update_record(request, record_form):
+    record_weekId   = record_form.cleaned_data["weekId"]
+    record_recorder = record_form.cleaned_data["recorder"]
+    record_text     = record_form.cleaned_data["recordtext"]
+    try:
+        project = ProjectSingle.objects.get(student__userid=request.user)
+    except:
+        raise Http404
+    group = project.studentweeklysummary_set
+    for record in group.all():
+        if record.weekId == record_weekId:
+            ret = {'status': '2', }
+            break
+    else: 
+        if group.count() == MEMBER_NUM_LIMIT[project.project_category.category]:
+            ret = {'status': '1', 'message': u"过程记录已满，不可添加"}
+        else:
+            new_record = StudentWeeklySummary( weekId    = record_weekId,
+                                  summary   = record_text,
+                                  recorder  = record_recorder,
+                                  project=project)
+            new_record.save()
+            table = refresh_record_table(request)
+            ret = {'status': '0', 'message': u"过程记录添加成功", 'table':table}
+    return ret
+def refresh_record_table(request):
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project = ProjectSingle.objects.get(student=student_account)
+    record_group    = StudentWeeklySummary.objects.filter(project = project)
+    record_group_info_form = ProcessRecordForm()
+
+    return render_to_string("student/widgets/record_group_table.html",
+                            {"record_group": record_group,
+                            "record_group_info_form": record_group_info_form})
+
+@dajaxice_register
+def FileDeleteConsistence(request, pid, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(UploadedFiles, file_id=fid)
+    p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
+
+    if f.project_id.project_id != p.project_id:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Authority Failed!!!"})
+
+    if request.method == "POST":
+        f.delete()
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
+
+
     

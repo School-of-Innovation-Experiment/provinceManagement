@@ -12,7 +12,7 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 dajaxice_autodiscover()
 urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    url(r'^$',AdminStaffService.Dispatch),
+    url(r'^$',AdminStaffService.home_view),
     (r'^settings$',AdminStaffService.AdminSetting),
     (r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
     (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),

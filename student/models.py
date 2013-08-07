@@ -26,12 +26,13 @@ class Student_Group(models.Model):
         return self.studentName
 
 class StudentWeeklySummary(models.Model):
-    project = models.ForeignKey(ProjectSingle, verbose_name=u"项目")
-    summary = models.CharField(blank=True, max_length=500,
+    project     = models.ForeignKey(ProjectSingle, verbose_name=u"项目")
+    summary     = models.CharField(blank=True, max_length=500,
                                verbose_name=u"项目周报")
-    date = models.DateField(default=datetime.datetime.today)
-    recorder = models.CharField(blank=True, max_length=100,
+    date        = models.DateField(default=datetime.datetime.today)
+    recorder    = models.CharField(blank=True, max_length=100,
                                 verbose_name=u"记录人")
+<<<<<<< HEAD
 
 
 class Funds_Group(models.Model):
@@ -56,3 +57,6 @@ class Funds_Group(models.Model):
 
 
 
+=======
+    weekId      = models.IntegerField(blank=False, verbose_name="周次", default=1)
+>>>>>>> e444d413535c94d3b8fd3a6ad642e1ef47458d05

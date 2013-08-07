@@ -63,7 +63,9 @@ class ProjectSingle(models.Model):
     file_summary = models.BooleanField(null=False, default=False,
                                   verbose_name=u"结题验收") 
     file_projectcompilation = models.BooleanField(null=False, default=False,
-                                  verbose_name=u"项目汇编")     
+                                  verbose_name=u"项目汇编")  
+    score_application = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"学分申请")    
     # is_applicationover = models.BooleanField(null=False, default=False,
     #                               verbose_name=u"申请结束判断")    
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")

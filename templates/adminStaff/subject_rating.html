@@ -17,13 +17,15 @@
 	  </div><!--end alert block-->
 	{%endif%}
       </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
+
+
+	<table class="table table-condensed" id="subject_table">
 	<thead>
 	  <tr>
 	    <th>发布题目名称</th>
 	    <th>项目编号</th>
 	    <th>指导教师</th>
-            <th>项目成员</th>
+      <th>项目成员</th>
 	    <th>专家评分</th>
 	    <th>修改等级</th>
 	  </tr>
@@ -81,6 +83,7 @@
 </div>
 </div>
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/multi_select.js"></script>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

@@ -404,6 +404,7 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+<<<<<<< HEAD
     def funds_manage(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
@@ -451,3 +452,22 @@ class AdminStaffService(object):
 
 
 
+=======
+    def home_view(request):
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        if request.method =="POST":
+            project_manage_form = forms.ProjectManageForm(request.POST)
+            if project_manage_form.is_valid():
+                project_grade = project_manage_form.cleaned_data["project_grade"]
+                project_year =  project_manage_form.cleaned_data["project_year"]
+                project_isover = project_manage_form.cleaned_data["project_isover"]
+                pro_list = ProjectSingle.objects.filter(Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+        else:
+            project_manage_form = forms.ProjectManageForm()
+
+        context = {
+                    'pro_list': pro_list,
+                    'project_manage_form':project_manage_form
+                    }
+        return render(request, "adminStaff/adminstaff_home.html",context)
+>>>>>>> e444d413535c94d3b8fd3a6ad642e1ef47458d05

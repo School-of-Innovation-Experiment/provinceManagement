@@ -31,3 +31,27 @@ function finish_control_callback(data){
     alert(data.message);
   }
 }
+
+$('[rel="isover"]').click(function(){
+  var pid = $(this).attr("pid");
+  Dajaxice.school.isover_control(isover_control_callback,{"pid":pid});
+})
+
+function isover_control_callback(data){
+  if (data.flag == 1){
+    $('#isover_button').attr("class","btn btn-primary");
+    $('#isover_button').val("打开结题");
+    alert("已经关闭项目");
+  }
+  else if(data.flag == 0)
+  {
+    //警告样式，只可筛选
+    $('#isover_button').attr("class","btn btn-warning");
+    $('#isover_button').val("关闭结题");
+    alert("已经打开项目");
+  }
+  else
+  {
+    alert(data.message);
+  }
+}

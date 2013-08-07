@@ -44,7 +44,23 @@ from adminStaff.views import AdminStaffService
 @login_required
 @authority_required(SCHOOL_USER)
 def home_view(request):
-    return HttpResponseRedirect(reverse('school.views.dispatch'))
+    school = SchoolProfile.objects.get(userid=request.user)
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+    if request.method =="POST":
+        project_manage_form = forms.ProjectManageForm(request.POST,school=school)
+        if project_manage_form.is_valid():
+            project_grade = project_manage_form.cleaned_data["project_grade"]
+            project_year =  project_manage_form.cleaned_data["project_year"]
+            project_isover = project_manage_form.cleaned_data["project_isover"]
+            pro_list = ProjectSingle.objects.filter(Q(school_id=school)&Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+    else:
+        project_manage_form = forms.ProjectManageForm(school=school)
+
+    context = {
+                'pro_list': pro_list,
+                'project_manage_form':project_manage_form
+                }
+    return render(request, "school/school_home.html",context)
 
 @csrf.csrf_protect
 @login_required
