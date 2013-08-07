@@ -17,7 +17,25 @@
 	  </div><!--end alert block-->
 	{%endif%}
       </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
+
+	<form id="multi_select" action="." method="POST">
+		<label class="checkbox inline">
+			<input type="checkbox" value="1" name="checkop"> 省级
+		</label>
+		<label class="checkbox inline">
+			<input type="checkbox" value="2" name="checkop"> 国家级
+		</label>
+		<label class="checkbox inline">
+			<input type="checkbox" value="3" name="checkop"> 推荐
+		</label>
+		<label class="checkbox inline">
+			<input type="checkbox" value="4" name="checkop"> 已完结
+		</label>
+		<label class="inline">
+			<input type="submit" class="btn" value="筛选">
+		</label>
+	</form>
+	<table class="table table-condensed" id="subject_table">
 	<thead>
 	  <tr>
 	    <th>发布题目名称</th>
@@ -81,6 +99,7 @@
 </div>
 </div>
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/multi_select.js"></script>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}
