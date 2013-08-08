@@ -1,4 +1,10 @@
 var glo_project_id;
+var fund_project_id;
+$().ready(function(){
+  var strUrl = location.href.split("/");
+  fund_project_id =  strUrl[strUrl.length-1];
+  // alert(fund_project_id);
+})
 function get_subject_id(project_id){
   glo_project_id = project_id;
 }
@@ -70,3 +76,31 @@ function release_news(){
 function release_news_callback(data){
 
 }
+function add_or_update_funds() {
+  $("#funds_error_message").empty();  
+  Dajaxice.adminStaff.fundsChange(add_or_update_funds_callback,
+                                {'form':$('#funds_change_form_info').serialize(true),
+                                'pid':fund_project_id
+                                });
+}
+
+
+function add_or_update_funds_callback(data) {
+
+    if(data.status == "2") {
+    $.each(data.error_id, function (i, item){
+      object = $('#'+item);
+      object.css("border-color", 'red');
+    });
+  }
+  else if(data.status == "0") {
+
+    $("#project_funds_table").html(data.table);
+  }
+  $("#funds_error_message").append("<strong>"+data.message+"</strong>");
+}
+
+
+
+
+

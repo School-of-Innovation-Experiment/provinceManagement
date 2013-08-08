@@ -1,0 +1,28 @@
+<table class="table table-condensed" id="project_funds_table">
+	<thead>
+	  <tr>
+	  	<th>项目名称</th>
+	    <th>项目编号</th>
+	    <th>指导教师</th>
+      	<th>报销人</th>
+      	<th>报销日期</th>
+	    <th>报销金额</th>
+	    <th>报销明细</th>
+	    <th>经费余额</th>
+	  </tr>
+	</thead>
+	<tbody id="project_funds_table_body">
+	  {% for project_funds in project_funds_list%}
+	    <tr>
+	   	  <td></td>
+	   	  <td></td>
+	   	  <td></td>
+	   	  <td>{{project_funds.student_name}}</td>
+	      <td>{{project_funds.funds_datetime}}</td>
+	      <td>{{project_funds.funds_amount}}</td> 
+          <td>{{project_funds.funds_detail}}</td>
+          <td>{{project_funds.funds_remaining}}</td>
+	    </tr>
+	  {%endfor%}
+	</tbody>
+</table>

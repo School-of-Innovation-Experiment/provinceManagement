@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm,FundsChangeForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
 from const.models import SchoolDict, ProjectGrade
 from const import *
@@ -20,12 +20,14 @@ from adminStaff.views import AdminStaffService
 from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle,ProjectFinishControl
 from users.models import SchoolProfile, AdminStaffProfile
 from news.models import News
+from student.models import Funds_Group
 from django.contrib.auth.models import User
 
 from school.utility import get_recommend_limit
 
 from const import *
 import datetime
+from backend.logging import logger, loginfo
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList()
@@ -299,4 +301,55 @@ def finish_control(request,year_list):
         adminObj.save()
     flag = adminObj.is_finishing 
     return simplejson.dumps({'flag': flag})
+
+
+@dajaxice_register
+def fundsChange(request,form,pid):
+    project_id = pid
+    funds_form = FundsChangeForm(deserialize_form(form))
+    if not funds_form.is_valid():
+        ret = {'status': '2'}
+    else:
+        ret = new_or_update_funds(request,project_id,funds_form)
+    return simplejson.dumps(ret)
+
+def new_or_update_funds(request,pid,funds_form):
+    funds_studentname   = funds_form.cleaned_data["student_name"]
+    funds_amount        = funds_form.cleaned_data["funds_amount"]
+    funds_detail        = funds_form.cleaned_data["funds_detail"]
+    funds_remaining     = funds_form.cleaned_data["funds_remaining"]
+    try:
+        project = ProjectSingle.objects.get(project_id = pid)
+    except:
+        raise Http404
+
+    group = project.funds_group_set
+    for funds in group.all():
+        if  funds.funds_remaining == funds_remaining:
+            funds.student_name = funds_studentname 
+            funds.funds_amount = funds_amount
+            funds.funds_detail = funds_detail
+            funds.save()
+            table = refresh_funds_table(request,pid)
+            ret = {'status': '0', 'message': u"经费信息更新成功", 'table':table}
+            break
+    else: 
+            new_funds = Funds_Group(
+                                  project_id = project, 
+                                  student_name = funds_studentname,
+                                  funds_remaining = funds_remaining,
+                                  funds_amount = funds_amount,
+                                  funds_detail = funds_detail
+                                  )
+            new_funds.save()
+            table = refresh_funds_table(request,pid)
+            ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table}
+    return ret
+
+def refresh_funds_table(request,pid):
+
+    funds_list    = Funds_Group.objects.filter(project_id = pid)
+    
+    return render_to_string("adminStaff/widgets/funds_table.html",
+                            {"project_funds_list": funds_list})
 

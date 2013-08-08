@@ -436,21 +436,27 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def funds_change(request,project_id):
-        test = Funds_Group.objects.create(
-                                                project_id = 2013101410001,
-                                                fund_datetime = '20130807',
-                                                student_name = u'小成亲',
-                                                funds_amount = '8563',
-                                                funds_detail = u'逗你玩',
-                                                funds_remaining = '5632')
-        # test.save()
+    def funds_change(request,pid):
+        project = ProjectSingle.objects.get(project_id = pid)
+        # test = Funds_Group(
+        #                     project_id = project,
+        #                     project_code = '20130506',
+        #                     funds_datetime = '2013-08-08',
+        #                     student_name = u'小成亲',
+        #                     funds_amount = '8653',
+        #                     funds_remaining = '15630',
+        #                     funds_detail = u'逗你玩'
+        #                     )
+        # test.save();
+        project_funds_list = Funds_Group.objects.filter(project_id = pid)
+        fundsChange_group_form = forms.FundsChangeForm();
+        return_data = {
+                        "project_funds_list":project_funds_list,
+                        "fundsChange_group_form":fundsChange_group_form
+                        } 
 
+        return render(request,"adminStaff/funds_change.html",return_data)
 
-        project_funds_list = Funds_Group.objects.get(project_id = project_id)
-
-
-        return render_to_response(request,"adminStaff/funds_change.html",{'subject_list':project_funds_list,})
 
     @staticmethod
     @csrf.csrf_protect
