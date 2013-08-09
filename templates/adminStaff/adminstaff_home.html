@@ -17,6 +17,7 @@
 			<tr>
 				<th>名称</th>
 				<th>项目编号</th>
+				<th>项目级别</th>
 				<th>指导教师</th>
 				<th>申请书</th>
 				<th>中期检查表</th>
@@ -31,6 +32,7 @@
 			<tr>
 				<td>{{item.title|truncatechars:15}}</td>
 				<td>{{item.project_code}}</td>
+				<td>{{item.project_grade}}</td>
 				<td>{{item.adminuser}}</td>
 				<td>
 					{% if item.file_application %}<span class="label label-success">已上传</span>{% endif %}

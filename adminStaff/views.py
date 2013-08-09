@@ -425,13 +425,13 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  ProjectSingle.objects.filter(recommend = True)
+            subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -486,22 +486,13 @@ class AdminStaffService(object):
                 project_year =  project_manage_form.cleaned_data["project_year"]
                 project_isover = project_manage_form.cleaned_data["project_isover"]
                 project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
-                if project_grade == "-1":
-                    project_grade=''
-                if project_year == '-1':
-                    project_year=''
-                if project_isover == '-1':
-                    project_isover = ''
-                if project_scoreapplication == '-1':
-                    project_scoreapplication = ''
-                q1 = (project_year and Q(year=project_year)) or None
-                q2 = (project_isover and Q(is_over=project_isover)) or None
-                q3 = (project_grade and Q(project_grade__grade=project_grade)) or (Q(project_grade=1)|Q(project_grade=2))
-                q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
-                qset = filter(lambda x: x != None, [q1, q2, q3,q4])
+                qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
                 if qset :
                     qset = reduce(lambda x, y: x & y, qset)
-                    pro_list = ProjectSingle.objects.filter(qset)
+                    if project_grade == "-1" and project_scoreapplication == "-1":
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                    else:
+                        pro_list = ProjectSingle.objects.filter(qset)
             loginfo(p=qset,label="qset")
         else:
             project_manage_form = forms.ProjectManageForm()
@@ -518,3 +509,20 @@ class AdminStaffService(object):
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/adminstaff_home.html",context)
+
+    @staticmethod
+    def get_filter(project_grade,project_year,project_isover,project_scoreapplication):
+        if project_grade == "-1":
+            project_grade=''
+        if project_year == '-1':
+            project_year=''
+        if project_isover == '-1':
+            project_isover=''
+        if project_scoreapplication == '-1':
+            project_scoreapplication=''
+        q1 = (project_year and Q(year=project_year)) or None
+        q2 = (project_isover and Q(is_over=project_isover)) or None
+        q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+        q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4])
+        return qset

@@ -31,7 +31,7 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
-from student.models import Student_Group,StudentWeeklySummary
+from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 #from student.utility import checkidentity
 
@@ -559,3 +559,16 @@ def processrecord_view(request):
             "processRecord_group_form":processRecord_group_form
             }
     return render(request, 'student/processrecord.html',data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+def funds_view(request):
+    student_account = StudentProfile.objects.get(userid = request.user)
+    project         = ProjectSingle.objects.get(student=student_account)
+    funds_group     = Funds_Group.objects.filter(project_id = project)
+
+    return render(request, 'student/funds_view.html',{"funds_list":funds_group})
+
+
+

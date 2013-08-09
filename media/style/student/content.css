@@ -87,9 +87,9 @@ div.school-display{
   float:center;
 }
 
-table.table tbody tr td:nth-child(4){
-    width:50px;
+/*table.table tbody tr td:nth-child(4){
+    width:200px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-}
+}*/

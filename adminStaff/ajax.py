@@ -354,3 +354,21 @@ def refresh_funds_table(request,pid):
     return render_to_string("adminStaff/widgets/funds_table.html",
                             {"project_funds_list": funds_list})
 
+
+@dajaxice_register
+def FundsDelete(request,funds_remaining,pid):
+    try:
+        project = ProjectSingle.objects.get(project_id = pid)
+    except:
+        raise Http404
+    group = project.funds_group_set
+    for funds in group.all():
+        if funds.funds_remaining == funds_remaining:
+            funds.delete()
+            table = refresh_funds_table(request,pid)
+            ret = {'status': '0', 'message': u"条目删除成功", 'table':table}
+            break
+    else:
+        ret = {'status': '1', 'message': u"待删除条目不存在"}
+    return simplejson.dumps(ret)
+
