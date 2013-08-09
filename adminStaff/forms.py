@@ -145,7 +145,7 @@ class SchoolCategoryForm(forms.Form):
     school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
     def __init__(self, *args, **kwargs):
         super(SchoolCategoryForm, self).__init__(*args, **kwargs)
-        SCHOOL_CHOICE_list = []
+        SCHOOL_CHOICE_list = [(-1, u"显示所有学部学院")]
         school_list        = SchoolProfile.objects.all()
         for object in school_list:
             SCHOOL_CHOICE_list.append((object.id, object.school))
@@ -188,8 +188,8 @@ class ProjectManageForm(forms.Form):
     project_grade_choice = list(project_grade_choice)
     project_grade_choice.insert(0,('-1',u"级别"))
     loginfo(p=project_grade_choice,label="project_grade_choice")
-    project_isover_choice = [(0,"未结题"),(1,"已结题")]
-    project_scoreapplication_choice = [(0,"未申请"),(1,"已申请")]
+    project_isover_choice = [(-1, "结题状态"), (0,"未结题"),(1,"已结题")]
+    project_scoreapplication_choice = [(-1, "申请状态"), (0,"未申请"),(1,"已申请")]
     project_isover_choice = tuple(project_isover_choice)
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
