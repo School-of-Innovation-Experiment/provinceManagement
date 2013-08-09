@@ -413,13 +413,13 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  ProjectSingle.objects.filter(recommend = True)
+            subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)

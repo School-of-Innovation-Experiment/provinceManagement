@@ -84,7 +84,6 @@ function add_or_update_funds() {
                                 });
 }
 
-
 function add_or_update_funds_callback(data) {
 
     if(data.status == "2") {
@@ -99,6 +98,15 @@ function add_or_update_funds_callback(data) {
   }
   $("#funds_error_message").append("<strong>"+data.message+"</strong>");
 }
+
+function delete_funds(caller) {
+  $("#funds_error_message").empty();  
+  funds_remaining = $(caller).parent().parent().children("td:eq(3)").html();
+  Dajaxice.adminStaff.FundsDelete(add_or_update_funds_callback,
+                                {'funds_remaining': funds_remaining,
+                                'pid':fund_project_id});
+}
+
 
 
 

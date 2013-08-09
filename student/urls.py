@@ -74,4 +74,8 @@ urlpatterns = patterns('',
         r'^processrecord$',
         student_views.processrecord_view,
     ),
+    url(
+        r'^funds_view$',
+        student_views.funds_view,
+    ),
 )

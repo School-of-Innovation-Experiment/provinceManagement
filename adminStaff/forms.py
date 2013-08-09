@@ -168,13 +168,14 @@ class TemplateNoticeForm(forms.Form):
 class FundsChangeForm(forms.Form):
     fnuds_datetime = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':datetime.datetime}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':datetime.datetime,
+                                        'cols':"6"}),)    
     student_name = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u"",'cols':"6"}),)    
     funds_amount = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u"",'cols':"6"}),)    
     funds_detail = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.Textarea(attrs={'class':'span4 fundsTextarea','id':'funds_detail','placeholder':u"报销明细",
