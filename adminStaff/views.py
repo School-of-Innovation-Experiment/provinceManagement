@@ -336,8 +336,17 @@ class AdminStaffService(object):
                 subject.members = student_group[0]
             except:
                 pass
+        rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
+        nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
+        context = {
+            'rec_subject_list': rec_subject_list,
+            'nrec_subject_list': nrec_subject_list,
+            'school_category_form': school_category_form,
+            'subject_grade_form': subject_grade_form,
+            'readonly': readonly,
+            }
+        return render(request, "adminStaff/subject_rating.html", context)
 
-        return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
     @staticmethod
     def GetSubjectReviewList(project_id):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()

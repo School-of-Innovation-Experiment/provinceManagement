@@ -197,7 +197,8 @@ def change_subject_grade(request, project_id, changed_grade):
     change subject grade secretly
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
-    return simplejson.dumps({'status':'1'})
+    res = changed_grade == "nation" and "国家级" or "省级"
+    return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
 def TemNoticeChange(request,form,origin):

@@ -27,7 +27,8 @@ function subject_grade(){
   Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
 }
 function change_grade_callback(data){
-  window.location.reload();
+	var target = "#gradeid_" + glo_project_id;
+	$(target).html(data.res);
 }
 
 function change_subject_recommend(){
