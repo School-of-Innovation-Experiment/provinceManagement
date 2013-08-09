@@ -7,7 +7,6 @@ Created on 2013-3-28
 from datetime import *
 from django import  forms
 from django.db.models import Q 
-from backend.logging import loginfo
 from adminStaff.models import ProjectControl
 from const import *
 from users.models import *
@@ -145,7 +144,7 @@ class SchoolCategoryForm(forms.Form):
     school_choice   = forms.ChoiceField(choices=SCHOOL_CHOICE)
     def __init__(self, *args, **kwargs):
         super(SchoolCategoryForm, self).__init__(*args, **kwargs)
-        SCHOOL_CHOICE_list = [(-1, u"显示所有学部学院")]
+        SCHOOL_CHOICE_list = []
         school_list        = SchoolProfile.objects.all()
         for object in school_list:
             SCHOOL_CHOICE_list.append((object.id, object.school))
@@ -168,42 +167,35 @@ class TemplateNoticeForm(forms.Form):
 class FundsChangeForm(forms.Form):
     fnuds_datetime = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':datetime.datetime}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':u"报销日期"}),)    
     student_name = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u"报销人"}),)    
     funds_amount = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u"报销金额"}),)    
     funds_detail = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.Textarea(attrs={'class':'span4 fundsTextarea','id':'funds_detail','placeholder':u"报销明细",
-                                                                    'rows':"3",'cols':"20"}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_detail','placeholder':u"经费明细"}),)    
     funds_remaining = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"经费余额"}),)    
 
 class ProjectManageForm(forms.Form):
-    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_CITY and grade[0] != GRADE_UN]
-    project_grade_choice = list(project_grade_choice)
-    project_grade_choice.insert(0,('-1',u"级别"))
-    loginfo(p=project_grade_choice,label="project_grade_choice")
-    project_isover_choice = [(-1, "结题状态"),(0,"未结题"),(1,"已结题")]
-    project_scoreapplication_choice = [(-1, "申请状态"),(0,"未申请"),(1,"已申请")]
+    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_NATION or grade[0] == GRADE_PROVINCE]
+    project_grade_choice = tuple(project_grade_choice)
+    project_isover_choice = [(0,"未结题"),(1,"已结题")]
     project_isover_choice = tuple(project_isover_choice)
-    project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
     project_isover = forms.ChoiceField(choices=project_isover_choice)
-    project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
 
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
-        project_list = ProjectSingle.objects.all()
+        project_list = ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         yearlist = []
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
               yearlist.append((temp.year, str(temp.year)+"年"))
-        YEAR_CHOICE = list(yearlist)
-        YEAR_CHOICE.insert(0,('-1',u"年份"))
+        YEAR_CHOICE = tuple(yearlist)
         self.fields['project_year'].choices = YEAR_CHOICE    

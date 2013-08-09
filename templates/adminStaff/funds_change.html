@@ -1,40 +1,34 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-  <div class="well form-inline">
-    <b>
-      <form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
-	{% csrf_token %}
-	
-      </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
-	<thead>
-	  <tr>
-	    <th></th>
-	    <th>项目编号</th>
-	    <th>指导教师</th>
-      <th>项目成员</th>
-	    <th>专家评分</th>
-	    <th>修改等级</th>
-	  </tr>
-	</thead>
-	<tbody id="subject_table_body">
-	  {% for subject in subject_list%}
-	    <tr>
-	      <td>{{subject.fund_datetime}}</td>
-	      <td>{{subject.student_name}}</td>
-	      <td>{{subject.funs_amount}}</td> 
-        <td>{{subject.funds_detail}}</td>
-	    </tr>
-	  {%endfor%}
-	</tbody>
-      </table>
-      <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
-	<div class="modal-header">
-    	  <a class="close" data-dismiss="modal">×</a>
-    	  <h3>专家得分/评价列表</h3>
-	</div>
 
-      </div><!--end subject_review-->
+  	<form class="well form-inline" id="funds_change_form_info" method="POST" action="">
+	{% csrf_token %}
+    <li class="input-prepend ">
+         <span class="add-on">报销人</span>{{fundsChange_group_form.student_name}}</li>
+    	 
+    <div class="input-prepend ">
+        <span class="add-on">报销金额</span>{{fundsChange_group_form.funds_amount}}</div>
+
+    <div class="input-prepend ">
+        <span class="add-on">经费余额</span>{{fundsChange_group_form.funds_remaining}}</div>
+
+<!--     <div class="input-prepend ">
+        <span class="add-on">报销日期</span>{{fundsChange_group_form.funds_datetime}}</div> -->
+ 
+        <span id="funds_error_message"></span>
+    <div class="input-prepend">
+            <button class="btn btn-primary span1 offset2" id="add_funds_record" onclick="add_or_update_funds(); return false;">提交</button>
+
+    </div>
+<!-- {{project_funds_list.project_id}} -->
+    <div class="input-prepend ">
+        {{fundsChange_group_form.funds_detail}}
+    </div>
+    </form><!--end funds_change_form-->
+
+    <div>
+    	{% include "adminStaff/widgets/funds_table.html" %}
+    </div>
       
 </div><!-- end the whole form -->
 

@@ -325,7 +325,10 @@ class AdminStaffService(object):
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                if int(school_name) == -1:
+                    subject_list = ProjectSingle.objects.filter(recommend = True)
+                else:
+                    subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -436,27 +439,36 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def funds_change(request,project_id):
-        test = Funds_Group.objects.create(
-                                                project_id = 2013101410001,
-                                                fund_datetime = '20130807',
-                                                student_name = u'小成亲',
-                                                funds_amount = '8563',
-                                                funds_detail = u'逗你玩',
-                                                funds_remaining = '5632')
-        # test.save()
+    def funds_change(request,pid):
+        project = ProjectSingle.objects.get(project_id = pid)
+        # test = Funds_Group(
+        #                     project_id = project,
+        #                     project_code = '20130506',
+        #                     funds_datetime = '2013-08-08',
+        #                     student_name = u'小成亲',
+        #                     funds_amount = '8653',
+        #                     funds_remaining = '15630',
+        #                     funds_detail = u'逗你玩'
+        #                     )
+        # test.save();
+        project_funds_list = Funds_Group.objects.filter(project_id = pid)
+        fundsChange_group_form = forms.FundsChangeForm();
+        return_data = {
+                        "project_funds_list":project_funds_list,
+                        "fundsChange_group_form":fundsChange_group_form
+                        } 
 
+        return render(request,"adminStaff/funds_change.html",return_data)
 
-        project_funds_list = Funds_Group.objects.get(project_id = project_id)
-
-
-        return render_to_response(request,"adminStaff/funds_change.html",{'subject_list':project_funds_list,})
 
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
+        """
+        默认只显示省级和国家级项目
+        """
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))            
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
