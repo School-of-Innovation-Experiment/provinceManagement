@@ -183,12 +183,12 @@ class FundsChangeForm(forms.Form):
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"经费余额"}),)    
 
 class ProjectManageForm(forms.Form):
-    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_NATION or grade[0] == GRADE_PROVINCE]
+    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_CITY and grade[0] != GRADE_UN]
     project_grade_choice = list(project_grade_choice)
     project_grade_choice.insert(0,('-1',u"级别"))
     loginfo(p=project_grade_choice,label="project_grade_choice")
-    project_isover_choice = [(0,"未结题"),(1,"已结题")]
-    project_scoreapplication_choice = [(0,"未申请"),(1,"已申请")]
+    project_isover_choice = [(-1,"结题管理"),(0,"未结题"),(1,"已结题")]
+    project_scoreapplication_choice = [(-1,"学分管理"),(0,"未申请"),(1,"已申请")]
     project_isover_choice = tuple(project_isover_choice)
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
@@ -198,7 +198,7 @@ class ProjectManageForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
-        project_list = ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        project_list = ProjectSingle.objects.all()
         yearlist = []
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
