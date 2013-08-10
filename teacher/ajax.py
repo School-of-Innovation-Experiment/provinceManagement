@@ -56,7 +56,9 @@ def StudentDispatch(request, form):
 def commentChange(request, form, pid):
     comment_form = MonthCommentForm(deserialize_form(form))
     if not comment_form.is_valid():
-        ret = {'status': '2'}
+        ret = {'status': '2',               
+               'error_id': comment_form.errors.keys(),
+               'message': u"输入有误，请重新输入"}
     else:
         ret = new_or_update_comment(request,comment_form,pid)
     return simplejson.dumps(ret)

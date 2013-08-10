@@ -79,7 +79,9 @@ def MemberChange(request, form, origin):
 def recordChange(request, form):
     record_form = ProcessRecordForm(deserialize_form(form))
     if not record_form.is_valid():
-        ret = {'status': '2'}
+        ret = {'status' : '2',
+               'error_id':record_form.errors.keys(),
+               'message': u"输入有误，请重新输入"}
     else:
         ret = new_or_update_record(request,record_form)
     return simplejson.dumps(ret)
