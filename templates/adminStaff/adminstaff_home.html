@@ -8,6 +8,7 @@
 	{{project_manage_form.project_grade}}
     {{project_manage_form.project_year}}
     {{project_manage_form.project_isover}}
+    {{project_manage_form.project_scoreapplication}}
     <input type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索"/>
 </form>
 <div>
@@ -16,11 +17,13 @@
 			<tr>
 				<th>名称</th>
 				<th>项目编号</th>
+				<th>项目级别</th>
 				<th>指导教师</th>
 				<th>申请书</th>
 				<th>中期检查表</th>
 				<th>结题验收</th>
 				<th>项目汇编</th>
+				<th>申请学分</th>
 				<th>是否结题</th>
 			</tr>
 		</thead>
@@ -29,22 +32,26 @@
 			<tr>
 				<td>{{item.title|truncatechars:15}}</td>
 				<td>{{item.project_code}}</td>
+				<td>{{item.project_grade}}</td>
 				<td>{{item.adminuser}}</td>
 				<td>
-					{% if item.file_application %}<span class="span label label-success">已上传</span>{% endif %}
-          			{% if not item.file_application %}<span class="span label label-important">未上传</span>{% endif %}
+					{% if item.file_application %}<span class="label label-success">已上传</span>{% endif %}
+          			{% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
 				</td>
 				<td>
-					{% if item.file_interimchecklist %}<span class="span label label-success">已上传</span>{% endif %}
-          			{% if not item.file_interimchecklist %}<span class="span label label-important">未上传</span>{% endif %}
+					{% if item.file_interimchecklist %}<span class="label label-success">已上传</span>{% endif %}
+          			{% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
 				</td>
 				<td>
-					{% if item.file_summary %}<span class="span label label-success">已上传</span>{% endif %}
-          			{% if not item.file_summary %}<span class="span label label-important">未上传</span>{% endif %}
+					{% if item.file_summary %}<span class="label label-success">已上传</span>{% endif %}
+          			{% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
 				</td>
 				<td>
-					{% if item.file_projectcompilation %}<span class="span label label-success">已上传</span>{% endif %}
-          			{% if not item.file_projectcompilation %}<span class="span label label-important">未上传</span>{% endif %}
+					{% if item.file_projectcompilation %}<span class="label label-success">已上传</span>{% endif %}
+          			{% if not item.file_projectcompilation %}<span class="label label-important">未上传</span>{% endif %}
+				</td>
+				<td>
+					{% if item.score_application %}<span class="label label-important"><a href="{{item.url}}" style="font-size:14px;color:white;">申请学分</a></span>{% endif %}
 				</td>
 				<td>
 					<input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> 

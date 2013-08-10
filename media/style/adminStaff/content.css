@@ -1,5 +1,63 @@
-table.table tbody tr td:nth-child(3){
-    width:100px;
+/*table.table tbody tr td:nth-child(3){
+    width:150px;
     overflow:hidden; 
     text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(2){
+    width:200px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(1){
+    width:200px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(4){
+    width:500px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+*/
+#name_div
+{    
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 250px;
+}
+#amount_div
+{   
+    margin-left: 0px;
+    margin-top: 0px; 
+    width: 250px;
+
+}
+#remaining_div
+{   
+    margin-left: 0px; 
+    margin-top: 0px;
+    width: 250px;
+}
+
+#err_div
+{
+    position: absolute;
+    margin-top: -25px;
+    margin-left: 800px;  
+}
+
+#add_funds_record
+{
+    margin-left: 1000px;
+    margin-top: -30px;   
+}
+
+
+#fundsTextarea{
+
+    margin-top:20px;
+    margin-bottom:25px;
 }

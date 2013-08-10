@@ -278,8 +278,9 @@ class TeacherNumLimitForm(forms.Form):
 
 class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_INSITUTE or grade[0] == GRADE_SCHOOL]
-    project_grade_choice = tuple(project_grade_choice)
-    project_isover_choice = [(0,"未结题"),(1,"已结题")]
+    project_grade_choice = list(project_grade_choice)
+    project_grade_choice.insert(0,('-1',u"级别"))
+    project_isover_choice = [(-1,"结题管理"),(0,"未结题"),(1,"已结题")]
     project_isover_choice = tuple(project_isover_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
@@ -296,7 +297,8 @@ class ProjectManageForm(forms.Form):
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
               yearlist.append((temp.year, str(temp.year)+"年"))
-        YEAR_CHOICE = tuple(yearlist)
+        YEAR_CHOICE = list(yearlist)
+        YEAR_CHOICE.insert(0,('-1',u"年份"))
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
         self.fields['project_year'].choices = YEAR_CHOICE
 

@@ -80,7 +80,7 @@ GRADE_PROVINCE = "province"
 GRADE_CITY = "city"
 GRADE_SCHOOL = "school"
 GRADE_INSITUTE = "insitute"
-GRADE_UN = "undifined"
+GRADE_UN = "undefined"
 
 PROJECT_GRADE_CHOICES = (
     (GRADE_NATION, u"国家级"),

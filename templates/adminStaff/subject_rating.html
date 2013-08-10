@@ -18,31 +18,77 @@
 	{%endif%}
       </form><!--end category form -->
 
+<div class="tab-content">
+  <div class="tab-pane fade active in" id="review-page">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#undefined-section" data-toggle="tab">未分级</a>
+      </li>
+      <li>
+        <a href="#defined-section" data-toggle="tab">已分级</a>
+      </li>
 
-	<table class="table table-condensed" id="subject_table">
-	<thead>
-	  <tr>
-	    <th>发布题目名称</th>
-	    <th>项目编号</th>
-	    <th>指导教师</th>
-      <th>项目成员</th>
-	    <th>专家评分</th>
-	    <th>修改等级</th>
-	  </tr>
-	</thead>
-	<tbody id="subject_table_body">
-	  {% for subject in subject_list%}
-	    <tr>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.project_code}}</td>
-	      <td>{{subject.adminuser}}</td>
-              <td>{{subject.members}}</td>
-	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-	      <td><a data-toggle="modal" href="#grade_choice" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</td>
-	    </tr>
-	  {%endfor%}
-	</tbody>
+    </ul><!--end ul title-->
+
+    <div class="tab-content">
+      <div class="tab-pane fade active in" id="undefined-section">
+				<table class="table table-condensed" id="undefined_subject_table">
+				<thead>
+					<tr>
+						<th>发布题目名称</th>
+						<th>项目编号</th>
+						<th>指导教师</th>
+						<th>项目成员</th>
+						<th>专家评分</th>
+						<th>修改等级</th>
+					</tr>
+				</thead>
+				<tbody id="subject_table_body">
+					{% for subject in nrec_subject_list%}
+						<tr>
+							<td>{{subject.title}}</td>
+							<td>{{subject.project_code}}</td>
+							<td>{{subject.adminuser}}</td>
+						        <td>{{subject.members}}</td>
+							<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
+							<td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</a></td>
+						</tr>
+					{%endfor%}
+				</tbody>
       </table>
+      </div><!--end content section-->
+
+      <div class="tab-pane fade " id="defined-section">
+				<table class="table table-condensed" id="defined_subject_table">
+					<thead>
+						<tr>
+							<th>发布题目名称</th>
+							<th>项目编号</th>
+							<th>指导教师</th>
+							<th>项目成员</th>
+							<th>专家评分</th>
+							<th>修改等级</th>
+						</tr>
+					</thead>
+					<tbody id="subject_table_body">
+						{% for subject in rec_subject_list%}
+							<tr>
+								<td>{{subject.title}}</td>
+								<td>{{subject.project_code}}</td>
+								<td>{{subject.adminuser}}</td>
+								      <td>{{subject.members}}</td>
+								<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
+								<td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</a></td>
+							</tr>
+						{%endfor%}
+					</tbody>
+      </table>
+      </div>
+
+    </div><!--end tab content-->
+  </div><!--end tab pane-->
+</div><!--end tab content-->
+
       <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
 	<div class="modal-header">
     	  <a class="close" data-dismiss="modal">×</a>

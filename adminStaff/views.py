@@ -20,7 +20,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from const import *
-from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
+from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
@@ -325,7 +325,10 @@ class AdminStaffService(object):
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                if int(school_name) == -1:
+                    subject_list = ProjectSingle.objects.filter(recommend = True)
+                else:
+                    subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -333,8 +336,17 @@ class AdminStaffService(object):
                 subject.members = student_group[0]
             except:
                 pass
+        rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
+        nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
+        context = {
+            'rec_subject_list': rec_subject_list,
+            'nrec_subject_list': nrec_subject_list,
+            'school_category_form': school_category_form,
+            'subject_grade_form': subject_grade_form,
+            'readonly': readonly,
+            }
+        return render(request, "adminStaff/subject_rating.html", context)
 
-        return render_to_response("adminStaff/subject_rating.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
     @staticmethod
     def GetSubjectReviewList(project_id):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
@@ -413,13 +425,13 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  ProjectSingle.objects.filter(recommend = True)
+            subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -436,40 +448,81 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def funds_change(request,project_id):
-        test = Funds_Group.objects.create(
-                                                project_id = 2013101410001,
-                                                fund_datetime = '20130807',
-                                                student_name = u'小成亲',
-                                                funds_amount = '8563',
-                                                funds_detail = u'逗你玩',
-                                                funds_remaining = '5632')
-        # test.save()
+    def funds_change(request,pid):
+        project = ProjectSingle.objects.get(project_id = pid)
+        # test = Funds_Group(
+        #                     project_id = project,
+        #                     project_code = '20130506',
+        #                     funds_datetime = '2013-08-08',
+        #                     student_name = u'小成亲',
+        #                     funds_amount = '8653',
+        #                     funds_remaining = '15630',
+        #                     funds_detail = u'逗你玩'
+        #                     )
+        # test.save();
+        project_funds_list = Funds_Group.objects.filter(project_id = pid)
+        fundsChange_group_form = forms.FundsChangeForm();
+        return_data = {
+                        "project_funds_list":project_funds_list,
+                        "fundsChange_group_form":fundsChange_group_form
+                        } 
 
+        return render(request,"adminStaff/funds_change.html",return_data)
 
-        project_funds_list = Funds_Group.objects.get(project_id = project_id)
-
-
-        return render_to_response(request,"adminStaff/funds_change.html",{'subject_list':project_funds_list,})
 
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        """
+        默认只显示省级和国家级项目
+        """
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))            
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
             if project_manage_form.is_valid():
                 project_grade = project_manage_form.cleaned_data["project_grade"]
                 project_year =  project_manage_form.cleaned_data["project_year"]
                 project_isover = project_manage_form.cleaned_data["project_isover"]
-                pro_list = ProjectSingle.objects.filter(Q(year=project_year)&Q(is_over=project_isover)&Q(project_grade__grade=project_grade))
+                project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+                qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+                if qset :
+                    qset = reduce(lambda x, y: x & y, qset)
+                    if project_grade == "-1" and project_scoreapplication == "-1":
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                    else:
+                        pro_list = ProjectSingle.objects.filter(qset)
+            loginfo(p=qset,label="qset")
         else:
             project_manage_form = forms.ProjectManageForm()
+
+        for pro_obj in pro_list:
+            file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            for file_temp in file_history:
+                if file_temp.name == u"学分申请表":
+                    url = file_temp.file_obj.url
+                    pro_obj.url = url
 
         context = {
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/adminstaff_home.html",context)
+
+    @staticmethod
+    def get_filter(project_grade,project_year,project_isover,project_scoreapplication):
+        if project_grade == "-1":
+            project_grade=''
+        if project_year == '-1':
+            project_year=''
+        if project_isover == '-1':
+            project_isover=''
+        if project_scoreapplication == '-1':
+            project_scoreapplication=''
+        q1 = (project_year and Q(year=project_year)) or None
+        q2 = (project_isover and Q(is_over=project_isover)) or None
+        q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+        q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4])
+        return qset
