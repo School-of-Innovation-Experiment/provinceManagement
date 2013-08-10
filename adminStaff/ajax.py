@@ -168,10 +168,11 @@ def change_subject_recommend(request, project_id, changed_grade):
     """
     val = int(changed_grade)
     project = ProjectSingle.objects.get(project_id = project_id)
-    print [x.project_grade for x in ProjectSingle.objects.all()]
     school = SchoolProfile.objects.get(userid = request.user)
     exit_status = '1'
+    res = ''
     if val == 1:
+        res = "已推荐"
         if project.recommend: 
             exit_status = '1'
         else:
@@ -183,13 +184,13 @@ def change_subject_recommend(request, project_id, changed_grade):
             else:
                exit_status = '0'
     else:
+        res = val and "未推荐（学院级）" or "未推荐（校级）"
         change_to = val and GRADE_INSITUTE or GRADE_SCHOOL
-        print change_to, "-" * 50
         project.recommend = False
         project.project_grade = ProjectGrade.objects.get(grade = change_to)
-        print project.project_grade
         project.save()
-    return simplejson.dumps({'status': exit_status})
+    remaining = str(get_recommend_limit(school)[1])
+    return simplejson.dumps({'status': exit_status, 'res': res, 'remaining': remaining})
 
 @dajaxice_register
 def change_subject_grade(request, project_id, changed_grade):
