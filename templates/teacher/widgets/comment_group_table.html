@@ -1,16 +1,16 @@
-<div class="processrecord"  >
-    {% if record_group %}
-      {%for record in record_group%}
+<div class="commentrecord">
+    {% if comment_group %}
+      {%for comment in comment_group%}
         <div class="alert push">
             <div class="body">
               <div class="title">
-                第{{record.weekId}}周过程记录
+                第{{comment.monthId}}月评阅记录
               </div>
               <div class="time">
-                {{record.recorder}}&nbsp;于&nbsp;{{record.date}}&nbsp;填写完成
+                &nbsp;{{comment.date}}&nbsp;填写完成
               </div> 
               <div class="details">
-                {{record.summary}}
+                {{comment.comment}}
               </div>  
             </div>
         </div>

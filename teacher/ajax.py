@@ -5,8 +5,13 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
-from teacher.forms import StudentDispatchForm
+
+from django.http import Http404
+
+from teacher.forms import StudentDispatchForm, MonthCommentForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
+from teacher.models import TeacherMonthComment
+from school.models import ProjectSingle
 from const.models import SchoolDict
 from const import *
 import datetime
@@ -46,6 +51,49 @@ def StudentDispatch(request, form):
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
         return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+
+@dajaxice_register
+def commentChange(request, form, pid):
+    comment_form = MonthCommentForm(deserialize_form(form))
+    if not comment_form.is_valid():
+        ret = {'status': '2'}
+    else:
+        ret = new_or_update_comment(request,comment_form,pid)
+    return simplejson.dumps(ret)
+
+def new_or_update_comment(request,comment_form,pid):
+    comment_monthId   = comment_form.cleaned_data["monthId"]
+    comment_text     = comment_form.cleaned_data["commenttext"]
+    try:
+        project = ProjectSingle.objects.get(project_id=pid)
+    except:
+        raise Http404
+    group = project.teachermonthcomment_set
+    for comment in group.all():
+        if comment.monthId == comment_monthId:
+            comment.comment  = comment_text
+            comment.save()
+            table = refresh_comment_table(request,pid)
+            ret = {'status': '0', 'message': u"评论记录更新成功", 'table':table}
+            break
+    else: 
+        if group.count() == PROGRESS_RECORD_MAX:
+            ret = {'status': '1', 'message': u"评论记录已满，不可添加"}
+        else:
+            new_comment = TeacherMonthComment( monthId = comment_monthId,
+                                  comment   = comment_text,
+                                  project=project)
+            new_comment.save()
+            table = refresh_comment_table(request,pid)
+            ret = {'status': '0', 'message': u"评论记录添加成功", 'table':table}
+    return ret
+
+def refresh_comment_table(request,pid):
+    project = ProjectSingle.objects.get(project_id=pid)
+    comment_group  = TeacherMonthComment.objects.filter(project=pid)
+    
+    return render_to_string("teacher/widgets/comment_group_table.html",
+                            {"comment_group": comment_group})
 
 
 

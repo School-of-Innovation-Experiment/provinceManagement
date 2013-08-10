@@ -1,24 +1,32 @@
-{% extends "student/base/_content.html" %}
+{% extends "teacher/base/_content.html" %}
 {% block calculate-content %}
-    <form class="well form" id="process_record_info_form" method="POST" action="#">
+    <form class="well form" id="process_record_info_form" method="POST" action="">
         {% csrf_token %}
         <div class="input-prepend ">
-            <span class="add-on ">月   次</span>{{processRecord_group_form.weekId}}
+            <span class="add-on ">月   次</span>{{monthcomment_form.monthId}}
         </div>
-        <span id="record_error_message"></span>
+        <span id="comment_error_message"></span>
         <div class="input-prepend">
-            <button class="btn btn-primary span1 offset4" id="email_to_teacher" onclick="add_or_update_comment(); return false;">提交</button>
+            <button class="btn btn-primary span1 offset4" id="teacher_comment" onclick="add_or_update_comment(); return false;">提交</button>
          </div>
          <div class="input-prepend ">
-            {{processRecord_group_form.recordtext}}
+            {{monthcomment_form.commenttext}}
         </div>
     </form>
 
-    <div class="page-header">
-        <h3>学生过程记录列表</h3>
-    </div>
-    <div id="record_group_table" class="well form"s>
-      {% include "student/widgets/record_group_table.html" %}
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#studentRecord" data-toggle="tab"><strong>学生过程记录</strong></a></li>
+            <li><a href="#teacherComment" data-toggle="tab"><strong>教师评语记录</strong></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="studentRecord">
+                {% include "student/widgets/record_group_table.html" %}
+            </div>
+            <div class="tab-pane" id="teacherComment">
+                {% include "teacher/widgets/comment_group_table.html" %}
+            </div>
+        </div>
     </div>
     <!-- ajax_csrf-->
     <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>

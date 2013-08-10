@@ -15,12 +15,13 @@ from backend.decorators import *
 from const import *
 from const.models import *
 from users.models import TeacherProfile, StudentProfile
+from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from student.forms import  ProcessRecordForm
 from school.forms import *
-from teacher.forms import StudentDispatchForm
+from teacher.forms import StudentDispatchForm, MonthCommentForm
 from registration.models import *
 from teacher.utility import *
 from school.utility import *
@@ -249,10 +250,12 @@ def processrecord_view(request, pid=None,is_expired = False):
     """
     file management view
     """
-    record_group    = StudentWeeklySummary.objects.filter(project=pid)
-    processRecord_group_form = ProcessRecordForm()
+    comment_group       = TeacherMonthComment.objects.filter(project=pid)
+    record_group        = StudentWeeklySummary.objects.filter(project=pid)
+    monthcomment_form   = MonthCommentForm()
     
-    data = {"record_group": record_group,
-            "processRecord_group_form":processRecord_group_form
+    data = {"record_group"  : record_group,
+            "comment_group" : comment_group,
+            "monthcomment_form":monthcomment_form,
             }
     return render(request, 'teacher/processrecord.html',data)

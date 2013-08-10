@@ -193,8 +193,7 @@ def refresh_record_table(request):
     record_group_info_form = ProcessRecordForm()
 
     return render_to_string("student/widgets/record_group_table.html",
-                            {"record_group": record_group,
-                             "record_group_info_form": record_group_info_form})
+                            {"record_group": record_group})
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
