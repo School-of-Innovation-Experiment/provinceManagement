@@ -38,7 +38,9 @@ function change_subject_recommend(){
 }
 function change_recommend_state_callback(data){
 	if(data.status == "1"){
- 		window.location.reload();
+		var target = "#gradeid_" + glo_project_id;
+ 		$(target).html(data.res);
+		$("#id_remaining").html("剩余数量:"+data.remaining);
 	}
 	else{
 		$("#alert_message").css("display", "block");

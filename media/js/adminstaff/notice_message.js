@@ -33,10 +33,7 @@ $(function(){
 });
 
 function add_or_update_notice(){
-
   $("#template_notice_error_message").empty();
-
-
   Dajaxice.adminStaff.TemNoticeChange(add_or_update_temnotice_callback,
                                       {'form': $('#template_notice_info_form').serialize(true),
                                        'origin': change_id});

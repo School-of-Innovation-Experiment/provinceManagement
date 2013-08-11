@@ -79,7 +79,9 @@ def MemberChange(request, form, origin):
 def recordChange(request, form):
     record_form = ProcessRecordForm(deserialize_form(form))
     if not record_form.is_valid():
-        ret = {'status': '2'}
+        ret = {'status' : '2',
+               'error_id':record_form.errors.keys(),
+               'message': u"输入有误，请重新输入"}
     else:
         ret = new_or_update_record(request,record_form)
     return simplejson.dumps(ret)
@@ -193,8 +195,7 @@ def refresh_record_table(request):
     record_group_info_form = ProcessRecordForm()
 
     return render_to_string("student/widgets/record_group_table.html",
-                            {"record_group": record_group,
-                             "record_group_info_form": record_group_info_form})
+                            {"record_group": record_group})
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
