@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm,FundsChangeForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm, SchoolDictDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
 from const.models import SchoolDict, ProjectGrade
 from const import *
@@ -305,17 +305,17 @@ def finish_control(request,year_list):
 
 
 @dajaxice_register
-def fundsChange(request,form,pid):
+def fundsChange(request,form,name,pid):
     project_id = pid
     funds_form = FundsChangeForm(deserialize_form(form))
     if not funds_form.is_valid():
         ret = {'status': '2'}
     else:
-        ret = new_or_update_funds(request,project_id,funds_form)
+        ret = new_or_update_funds(request,project_id,funds_form,name)
     return simplejson.dumps(ret)
 
-def new_or_update_funds(request,pid,funds_form):
-    funds_studentname   = funds_form.cleaned_data["student_name"]
+def new_or_update_funds(request,pid,funds_form,name):
+    funds_studentname   = name#funds_form.cleaned_data["student_choice"]
     funds_amount        = funds_form.cleaned_data["funds_amount"]
     funds_detail        = funds_form.cleaned_data["funds_detail"]
     funds_remaining     = funds_form.cleaned_data["funds_remaining"]

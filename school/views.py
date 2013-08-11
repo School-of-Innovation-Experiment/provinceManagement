@@ -39,6 +39,10 @@ from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from adminStaff.views import AdminStaffService
+from adminStaff.forms import FundsChangeForm,StudentNameForm
+from student.models import Funds_Group
+
+
 
 @csrf.csrf_protect
 @login_required
@@ -214,3 +218,39 @@ def project_control(request):
                     "is_finishing":is_finishing,
                     "year_list":year_list,
                 })
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def funds_manage(request):
+    school = SchoolProfile.objects.get(userid = request.user)
+
+
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+
+
+    subject_list =  AdminStaffService.GetSubject_list(school)
+
+
+    return render(request, "school/funds_manage.html",{'subject_list': subject_list})
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def funds_change(request,pid):
+        project = ProjectSingle.objects.get(project_id = pid)
+
+        project_funds_list = Funds_Group.objects.filter(project_id = pid)
+        fundsChange_group_form = FundsChangeForm();
+        student_name_form = StudentNameForm(pid = pid);
+
+        return_data = {
+                        "project_funds_list":project_funds_list,
+                        "fundsChange_group_form":fundsChange_group_form,
+                        "student_name_form":student_name_form
+                        } 
+
+        return render(request,"school/funds_change.html",return_data)
+
+

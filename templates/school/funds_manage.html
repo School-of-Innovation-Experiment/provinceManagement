@@ -1,26 +1,19 @@
-{% extends "adminStaff/administrator.html" %}
+{% extends "school/home.html" %}
 {%block nav_admin_content%}
-
-<div class="page-header">
+  <div class="page-header">
     <h3>
       项目列表
     </h3>
   </div><!--end page header-->
 
-
   <div class="well form-inline">
-      <form id="school_category_form" method="POST" action="/adminStaff/fundsmanage/">
-	{% csrf_token %}
-	  {{school_category_form.school_choice}}
-	  <input type="submit" class="btn btn-primary" id="filter_button" value="按照学院进行筛选"/>
-      </form><!--end category form -->
       <table class="table table-condensed" id="subject_table">
 	<thead>
 	  <tr>
 	    <th>项目名称</th>
 	    <th>项目编号</th>
-	    <th>指导教师</th>
-        <th>项目成员</th>
+	    <th>指导老师</th>
+      <th>负责人</th>
 	    <th>经费管理</th>
 	  </tr>
 	</thead>
@@ -30,15 +23,14 @@
 	      <td>{{subject.title}}</td>
 	      <td>{{subject.project_code}}</td>
 	      <td>{{subject.adminuser}}</td>
-          <td>{{subject.members}}</td>
-	      <td><a data-toggle="modal" href="/adminStaff/fundschange/{{subject.project_id}}" >添加帐目</td>
+        <td>{{subject.members}}</td>
+	      <td><a data-toggle="modal" href="/school/fundschange/{{subject.project_id}}" >添加帐目</td>
 
 	    </tr>
 	  {%endfor%}
-
-	</tbody>
-      </table>
-  </div>
+  </tbody>
+    </table>	
+</div>
 
 
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/funds_change.js"></script>

@@ -12,6 +12,7 @@ from adminStaff.models import ProjectControl
 from const import *
 from users.models import *
 from school.models import *
+from student.models import Student_Group
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
     expert_password = forms.CharField(max_length=20, required=False,
@@ -183,6 +184,30 @@ class FundsChangeForm(forms.Form):
     funds_remaining = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u""}),)    
+
+class StudentNameForm(forms.Form):
+    STUDENT_CHOICE_list = []
+    student_list        = Student_Group.objects.all();
+    for object in student_list:
+        STUDENT_CHOICE_list.append((object.studentId, object.studentName))
+    STUDENT_CHOICE = tuple(STUDENT_CHOICE_list)
+    student_choice   = forms.ChoiceField(choices=STUDENT_CHOICE)
+    def __init__(self, *args, **kwargs):
+        pid = kwargs.pop('pid', None)
+        if not pid:
+            return
+        project = ProjectSingle.objects.get(project_id=pid)
+        student_list = Student_Group.objects.filter(project = project)
+
+        super(StudentNameForm, self).__init__(*args, **kwargs)
+        STUDENT_CHOICE_list = [(-1, u"选择学生姓名")]
+        # student_list        = Student_Group.objects.all()
+        for object in student_list:
+            STUDENT_CHOICE_list.append((object.studentId, object.studentName))
+        STUDENT_CHOICE = tuple(STUDENT_CHOICE_list)
+        self.fields["student_choice"].choices = STUDENT_CHOICE
+
+
 
 class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_CITY and grade[0] != GRADE_UN]

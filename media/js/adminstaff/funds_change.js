@@ -80,8 +80,12 @@ function add_or_update_funds() {
   $("#funds_error_message").empty();  
   Dajaxice.adminStaff.fundsChange(add_or_update_funds_callback,
                                 {'form':$('#funds_change_form_info').serialize(true),
+                                  'name':$('#name_div').find("option:selected").text(),
+                                  //'name':$('#name_div').find("option:selected").val(),
                                 'pid':fund_project_id
                                 });
+
+
 }
 
 function add_or_update_funds_callback(data) {

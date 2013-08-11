@@ -421,7 +421,6 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
-        readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
@@ -440,7 +439,7 @@ class AdminStaffService(object):
             except:
                 pass
 
-        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
 
 
 
@@ -462,9 +461,12 @@ class AdminStaffService(object):
         # test.save();
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
         fundsChange_group_form = forms.FundsChangeForm();
+        student_name_form = forms.StudentNameForm(pid = pid);
+
         return_data = {
                         "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form
+                        "fundsChange_group_form":fundsChange_group_form,
+                        "student_name_form":student_name_form
                         } 
 
         return render(request,"adminStaff/funds_change.html",return_data)

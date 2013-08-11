@@ -1,0 +1,50 @@
+{% extends "school/home.html" %}
+{%block nav_admin_content%}
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/adminStaff/content.css" >
+
+
+    <form class="well form-inline" id="funds_change_form_info" method="POST" action="">
+    {% csrf_token %}
+    <div>
+          <div id = "name_div" class="input-prepend ">
+              <span class="add-on">报销人</span>
+            {{student_name_form.student_choice}}
+
+            <!-- {{fundsChange_group_form.student_name}} -->
+
+          </div>
+          <div id = "amount_div" class="input-prepend ">
+              <span class="add-on">报销金额</span>{{fundsChange_group_form.funds_amount}}</div>
+          <div id = "remaining_div" class="input-prepend ">
+              <span class="add-on">经费余额</span>{{fundsChange_group_form.funds_remaining}}</div>
+
+<!--     <div class="input-prepend ">
+        <span class="add-on">报销日期</span>{{fundsChange_group_form.funds_datetime}}</div> -->
+ 
+          <div id = "err_div"> 
+              <span class="span2" id="funds_error_message"></span>
+          </div>
+
+          <div id = "button_div" class="input-prepend">
+              <button class="btn btn-primary" id="add_funds_record" onclick="add_or_update_funds(); return false;">提交</button>
+          </div>
+
+          <div id = "text_div" class="input-prepend ">
+              {{fundsChange_group_form.funds_detail}}
+          </div>
+          <div id = "err_div"> 
+              <span class="span1" id="funds_error_message"></span>
+          </div>
+    </div>
+    </form><!--end funds_change_form-->
+
+    <div>
+      {% include "adminStaff/widgets/funds_table.html" %}
+    </div>
+      
+<!-- end the whole form -->
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/funds_change.js"></script>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+{%endblock%}

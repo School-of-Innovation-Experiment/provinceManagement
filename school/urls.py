@@ -33,6 +33,14 @@ urlpatterns = patterns(
 		school_views.SubjectRating,
 		),
     url(
+        r'^subject_funds$',
+        school_views.funds_manage,
+        ),
+    url(
+        r'^fundschange/(?P<pid>.{36}$)',
+        school_views.funds_change,
+        ),
+    url(
         r'^subject_alloc$',
         school_views.SubjectAlloc,
         ),

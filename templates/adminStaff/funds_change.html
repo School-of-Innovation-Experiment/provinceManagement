@@ -5,7 +5,12 @@
 	{% csrf_token %}
     <div>
         <div id = "name_div" class="input-prepend ">
-            <span class="add-on">报销人</span>{{fundsChange_group_form.student_name}}</div>
+            <span class="add-on">报销人</span>
+            {{student_name_form.student_choice}}
+
+            <!-- {{fundsChange_group_form.student_name}} -->
+
+        </div>
         <div id = "amount_div" class="input-prepend ">
             <span class="add-on">报销金额</span>{{fundsChange_group_form.funds_amount}}</div>
         <div id = "remaining_div" class="input-prepend ">
@@ -18,7 +23,7 @@
             <span class="span2" id="funds_error_message"></span>
         </div>
 
-        <div is = "button_div" class="input-prepend">
+        <div id = "button_div" class="input-prepend">
             <button class="btn btn-primary" id="add_funds_record" onclick="add_or_update_funds(); return false;">提交</button>
         </div>
 
