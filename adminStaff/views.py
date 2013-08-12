@@ -309,6 +309,7 @@ class AdminStaffService(object):
             for j in xrange(num):
                 ret[subject].append(expert_list[(i + j) % len(expert_list)])
         return ret
+
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -319,11 +320,23 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            subject_list =  ProjectSingle.objects.filter(recommend = True)
+            page1 = request.GET.get('nrec_page')
+            if page1 == "None": page1 = None
+            page2 = request.GET.get('rec_page')
+            if page2 == "None": page2 = None
+            school_name = request.GET.get('school_name')
+            if school_name == "None": school_name = None
+
+            if not school_name or int(school_name) == -1:
+                subject_list =  ProjectSingle.objects.filter(recommend = True)
+            else:
+                subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
+                page1 = 1
+                page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
                 if int(school_name) == -1:
                     subject_list = ProjectSingle.objects.filter(recommend = True)
@@ -337,12 +350,18 @@ class AdminStaffService(object):
             except:
                 pass
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
+        rec = getContext(rec_subject_list, page1, 'subject', 0)
         nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
+        nrec = getContext(nrec_subject_list, page2, 'subject, 0')
+
         context = {
-            'rec_subject_list': rec_subject_list,
-            'nrec_subject_list': nrec_subject_list,
+            'page1': page1,
+            'page2': page2,
+            'rec': rec,
+            'nrec': nrec,
             'school_category_form': school_category_form,
             'subject_grade_form': subject_grade_form,
+            'school_name': school_name,
             'readonly': readonly,
             }
         return render(request, "adminStaff/subject_rating.html", context)
@@ -421,7 +440,6 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
-        readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
@@ -440,7 +458,7 @@ class AdminStaffService(object):
             except:
                 pass
 
-        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form,'readonly':readonly},context_instance=RequestContext(request))
+        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
 
 
 
@@ -462,9 +480,12 @@ class AdminStaffService(object):
         # test.save();
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
         fundsChange_group_form = forms.FundsChangeForm();
+        student_name_form = forms.StudentNameForm(pid = pid);
+
         return_data = {
                         "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form
+                        "fundsChange_group_form":fundsChange_group_form,
+                        "student_name_form":student_name_form
                         } 
 
         return render(request,"adminStaff/funds_change.html",return_data)
