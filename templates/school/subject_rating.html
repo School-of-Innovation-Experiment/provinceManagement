@@ -32,13 +32,21 @@
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-	      <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
-					{% if subject.recommend %}
-						已推荐
-					{% else %}
-						未推荐（{{ subject.project_grade }}）
-					{% endif %}
-				</a></td>
+				{% ifequal subject.project_grade.id 1%}
+					<td><span>已推荐（{{ subject.project_grade }}）</span><td>
+				{% endifequal %}
+
+				{% ifequal subject.project_grade.id 2%}
+					<td><span>已推荐（{{ subject.project_grade }}）</span><td>
+				{% else %}
+			    <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
+						{% if subject.recommend %}
+							已推荐
+						{% else %}
+							未推荐（{{ subject.project_grade }}）
+						{% endif %}
+					</a></td>
+				{% endifequal %}
 	    </tr>
 	  {%endfor%}
 	</tbody>
