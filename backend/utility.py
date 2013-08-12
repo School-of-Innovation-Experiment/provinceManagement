@@ -34,7 +34,7 @@ def convert2media_url(raw_url):
     return raw_url
     #return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
 
-def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
+def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PAGE_ELEMENTS):
     """
     分页：
     contenList:分页内容,集合类型
@@ -43,6 +43,7 @@ def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
         #{name}_page:Page对象,默认"context_page"
         #{name}_list:第page页元素集合,默认"context_list"
     """
+    
     paginator = Paginator(contentList, page_elems)
     try:
         _page = paginator.page(page)
@@ -52,11 +53,22 @@ def getContext(contentList, page=1, name="context", page_elems=PAGE_ELEMENTS):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         _page = paginator.page(paginator.num_pages)
+    page = _page.number
+    index_list = [page + x for x in xrange(-2, 3) if 1 <= page + x <= paginator.num_pages]
+        # return the nearest 5 page's index number
+    contain_begin = (1 in index_list)
+    contain_end = (paginator.num_pages in index_list)
     _list = list(_page.object_list)
-    for _index in xrange(len(_list)):
-        _list[_index].list_index = _index + 1 # .__dict__.update(dict)
+    if add_index:
+        for _index in xrange(len(_list)):
+            _list[_index].list_index = _index + 1 # .__dict__.update(dict)
     return {'%s_page' % name: _page,
-            '%s_list' % name: _list}
+            '%s_list' % name: _list,
+            'index_list': index_list,
+            'contain_end': contain_end,
+            'contain_begin': contain_begin,
+            }
+
 
 def make_uuid():
     """
