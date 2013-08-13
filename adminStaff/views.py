@@ -518,7 +518,7 @@ class AdminStaffService(object):
                 if qset :
                     qset = reduce(lambda x, y: x & y, qset)
                     if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
                     else:
                         pro_list = ProjectSingle.objects.filter(qset)
             loginfo(p=qset,label="qset")
@@ -531,8 +531,12 @@ class AdminStaffService(object):
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
-
+        loginfo(p=pro_list,label="pro_list")
+        if pro_list.count() != 0:
+            havedata_p = True
+        else: havedata_p = False          
         context = {
+                    'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }

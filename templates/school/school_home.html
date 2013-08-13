@@ -3,7 +3,7 @@
 <h3>
   项目列表
 </h3>
-{% if pro_list %}
+{% if havedata_p %}
 <form id="project_manage_form" method="POST" action="/school/" >
   {% csrf_token %}
   {{project_manage_form.project_grade}}
@@ -58,7 +58,7 @@
   </table>
 </div>
 {% else %}
-目前没有进行中的项目或者项目未分级，请现在查看项目等级设定界面查看是否有未分级项目<br>
+目前没有进行中的项目或者项目未分级，请在查看项目等级设定界面查看是否有未分级项目<br>
 <a type="button" class="btn btn-primary" href="/school/subject_rating">项目等级设定</a>
 {% endif %}
 <script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
