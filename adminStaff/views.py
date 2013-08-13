@@ -404,6 +404,8 @@ class AdminStaffService(object):
                 rolemessage = MESSAGE_SCHOOL_HEAD
             elif request.POST["message_role"] == '3':
                 rolemessage = MESSAGE_STUDENT_HEAD
+            elif request.POST["message_role"] == '4':
+                rolemessage = MESSAGE_TEACHER_HEAD
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
