@@ -252,7 +252,7 @@ class AdminStaffService(object):
         if request.method == "GET":
             #subject_insitute_form = forms.SubjectInsituteForm()
             subject_insitute_form = forms.SchoolCategoryForm()
-            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:]
+            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:] #特殊处理：去除form中的“显示所有学部学院”选项
         else:
             #subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             subject_insitute_form = forms.SchoolCategoryForm(request.POST)
@@ -321,14 +321,14 @@ class AdminStaffService(object):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
-            page1 = request.GET.get('nrec_page')
+            page1 = request.GET.get('page1')
             if page1 == "None": page1 = None
-            page2 = request.GET.get('rec_page')
+            page2 = request.GET.get('page2')
             if page2 == "None": page2 = None
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
 
-            if not school_name or int(school_name) == -1:
+            if (not school_name) or int(school_name) == -1:
                 subject_list =  ProjectSingle.objects.filter(recommend = True)
             else:
                 subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
