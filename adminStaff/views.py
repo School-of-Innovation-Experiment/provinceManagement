@@ -332,7 +332,6 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(recommend = True)
             else:
                 subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
-
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -353,8 +352,7 @@ class AdminStaffService(object):
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
         rec = getContext(rec_subject_list, page1, 'subject', 0)
         nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
-        nrec = getContext(nrec_subject_list, page2, 'subject, 0')
-
+        nrec = getContext(nrec_subject_list, page2, 'subject', 0)
         context = {
             'page1': page1,
             'page2': page2,
@@ -429,7 +427,7 @@ class AdminStaffService(object):
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         year_list=[]
         for pro_obj in pro_list :
-            if pro_obj.year not in pro_list :
+            if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
         if year_list:
             havedata_p = True
@@ -540,8 +538,12 @@ class AdminStaffService(object):
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
-
+        loginfo(p=pro_list,label="pro_list")
+        if pro_list.count() != 0 or request.method == "POST":
+            havedata_p = True
+        else: havedata_p = False
         context = {
+                    'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
