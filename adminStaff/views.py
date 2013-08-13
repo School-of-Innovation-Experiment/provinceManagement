@@ -252,6 +252,7 @@ class AdminStaffService(object):
         if request.method == "GET":
             #subject_insitute_form = forms.SubjectInsituteForm()
             subject_insitute_form = forms.SchoolCategoryForm()
+            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:]
         else:
             #subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             subject_insitute_form = forms.SchoolCategoryForm(request.POST)
