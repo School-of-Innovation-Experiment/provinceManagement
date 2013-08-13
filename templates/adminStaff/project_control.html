@@ -8,7 +8,7 @@
     <span class="help-block">请先选择结题项目年份（可以多选）</span>
     {% for year in year_list%}
     <label class="checkbox">
-      <input type="checkbox" value="{{year}}" name="check_box_list" style="margin-top: 0px;margin-right: 10px;">{{year}}
+      <input type="checkbox" value="{{year}}" name="check_box_list">{{year}}
     </label>
     {% endfor%}
     <input type="button" id="finish_button"  onclick="finish_control()" {%if is_finishing %}value="关闭结题" class="btn btn-warning"{%endif%}{%if not is_finishing%} class="btn btn-primary" value="打开结题"{%endif%}>
