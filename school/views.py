@@ -227,10 +227,18 @@ def funds_manage(request):
     school = SchoolProfile.objects.get(userid = request.user)
 
 
-    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+    # pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
 
 
     subject_list =  AdminStaffService.GetSubject_list(school)
+
+    for subject in subject_list:
+        student_group = Student_Group.objects.filter(project = subject) 
+       # subject.members = ','.join([student.studentName for student in student_group])
+        try:
+            subject.members = student_group[0]
+        except:
+            pass
 
 
     return render(request, "school/funds_manage.html",{'subject_list': subject_list})
