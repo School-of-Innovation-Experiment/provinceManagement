@@ -332,7 +332,6 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(recommend = True)
             else:
                 subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
-
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -353,8 +352,7 @@ class AdminStaffService(object):
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
         rec = getContext(rec_subject_list, page1, 'subject', 0)
         nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
-        nrec = getContext(nrec_subject_list, page2, 'subject, 0')
-
+        nrec = getContext(nrec_subject_list, page2, 'subject', 0)
         context = {
             'page1': page1,
             'page2': page2,

@@ -98,8 +98,9 @@ def get_recommend_limit(school = None, scale = 0.3):
     """
     get the limit of recommending the projects
     """
+    import math
     project_list = ProjectSingle.objects.filter(school = school)
-    limit = int((project_list.count() + 0.5) * scale) # 小数点后数位四舍五入
+    limit = int(math.ceil(project_list.count() * scale)) # 向上取整
     print limit, '*' * 10
     used = project_list.filter(recommend = True).count()
     return limit, limit - used
