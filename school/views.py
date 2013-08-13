@@ -217,9 +217,9 @@ def project_control(request):
     pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
     year_list=[]
     for pro_obj in pro_list :
-        if pro_obj.year not in pro_list :
+        if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
-            
+
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
