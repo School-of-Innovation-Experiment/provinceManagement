@@ -98,7 +98,7 @@ class AdminStaffService(object):
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
             for auth in auth_list:
-                dict["auth"] += auth.__unicode__()+' '
+                dict["auth"] += auth.__unicode__() + '(' + register.school.__unicode__() + ')'
             ##########################################################################
             res_list.append(dict)
         # 添加所有的评委用户
