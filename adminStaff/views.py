@@ -554,3 +554,46 @@ class AdminStaffService(object):
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         qset = filter(lambda x: x != None, [q1, q2, q3,q4])
         return qset
+
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    @only_user_required
+    def processrecord(request, pid=None,is_expired = False):
+        """
+        process record view
+        """
+        """
+        默认只显示省级和国家级项目
+        """
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        if request.method =="POST":
+            project_manage_form = forms.ProjectManageForm(request.POST)
+            if project_manage_form.is_valid():
+                project_grade = project_manage_form.cleaned_data["project_grade"]
+                project_year =  project_manage_form.cleaned_data["project_year"]
+                project_isover = project_manage_form.cleaned_data["project_isover"]
+                project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+                qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+                if qset :
+                    qset = reduce(lambda x, y: x & y, qset)
+                    if project_grade == "-1" and project_scoreapplication == "-1":
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                    else:
+                        pro_list = ProjectSingle.objects.filter(qset)
+            loginfo(p=qset,label="qset")
+        else:
+            project_manage_form = forms.ProjectManageForm()
+
+        for pro_obj in pro_list:
+            file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            for file_temp in file_history:
+                if file_temp.name == u"学分申请表":
+                    url = file_temp.file_obj.url
+                    pro_obj.url = url
+
+        context = {
+                    'pro_list': pro_list,
+                    'project_manage_form':project_manage_form
+                    }
+        return render(request, "adminStaff/adminstaff_home.html",context)

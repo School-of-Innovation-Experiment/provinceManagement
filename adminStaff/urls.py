@@ -13,6 +13,7 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
+    url(r'^processrecord',AdminStaffService.processrecord,),
     (r'^settings$',AdminStaffService.AdminSetting),
     (r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
     (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
