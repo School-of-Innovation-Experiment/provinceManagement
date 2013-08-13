@@ -50,8 +50,10 @@ def home_view(request, is_expired = False):
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid)    
-    readonly= is_expired
+    project = get_object_or_404(ProjectSingle, project_id=pid)  
+    is_currentyear = check_year(project)
+    is_applying = check_applycontrol(project)  
+    readonly= is_expired or not is_currentyear or not is_applying
     if check_auth(user=request.user,authority=TEACHER_USER):
         is_show = False
     else:
@@ -250,8 +252,8 @@ def processrecord_view(request, pid=None,is_expired = False):
     """
     file management view
     """
-    comment_group       = TeacherMonthComment.objects.filter(project=pid)
-    record_group        = StudentWeeklySummary.objects.filter(project=pid)
+    comment_group       = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
+    record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
     monthcomment_form   = MonthCommentForm()
     
     data = {"record_group"  : record_group,

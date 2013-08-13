@@ -29,3 +29,13 @@ input.studentdisplay{
 div.processrecord{
   width : 620px;
 }
+div.title{
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+div.time{
+  margin-bottom: 8px;
+}
+div.details{
+  font-size: 14px;
+}
