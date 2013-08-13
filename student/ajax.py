@@ -191,7 +191,7 @@ def new_or_update_record(request, record_form):
 def refresh_record_table(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
-    record_group    = StudentWeeklySummary.objects.filter(project = project)
+    record_group    = StudentWeeklySummary.objects.filter(project = project).order_by("weekId")
     record_group_info_form = ProcessRecordForm()
 
     return render_to_string("student/widgets/record_group_table.html",

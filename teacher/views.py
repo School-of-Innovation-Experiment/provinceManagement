@@ -250,8 +250,8 @@ def processrecord_view(request, pid=None,is_expired = False):
     """
     file management view
     """
-    comment_group       = TeacherMonthComment.objects.filter(project=pid)
-    record_group        = StudentWeeklySummary.objects.filter(project=pid)
+    comment_group       = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
+    record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
     monthcomment_form   = MonthCommentForm()
     
     data = {"record_group"  : record_group,

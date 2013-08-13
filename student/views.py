@@ -553,7 +553,7 @@ def file_other_view(request,pid):
 def processrecord_view(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project         = ProjectSingle.objects.get(student=student_account)
-    record_group    = StudentWeeklySummary.objects.filter(project = project)
+    record_group    = StudentWeeklySummary.objects.filter(project = project).order_by("weekId")
     processRecord_group_form = ProcessRecordForm()
     data = {"record_group": record_group,
             "processRecord_group_form":processRecord_group_form

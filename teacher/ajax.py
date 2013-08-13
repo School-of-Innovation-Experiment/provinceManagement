@@ -92,7 +92,7 @@ def new_or_update_comment(request,comment_form,pid):
 
 def refresh_comment_table(request,pid):
     project = ProjectSingle.objects.get(project_id=pid)
-    comment_group  = TeacherMonthComment.objects.filter(project=pid)
+    comment_group  = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
     
     return render_to_string("teacher/widgets/comment_group_table.html",
                             {"comment_group": comment_group})

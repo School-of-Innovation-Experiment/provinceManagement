@@ -1,19 +1,19 @@
 <div class="processrecord"  >
     {% if record_group %}
       {%for record in record_group%}
-        <div class="alert push">
-            <div class="body">
-              <div class="title">
-                第{{record.weekId}}周过程记录
-              </div>
-              <div class="time">
-                {{record.recorder}}&nbsp;于&nbsp;{{record.date}}&nbsp;填写完成
-              </div> 
-              <div class="details">
-                {{record.summary}}
-              </div>  
+        <div class="well form">
+          <div class="body">
+            <div class="title">
+              <strong>第{{record.weekId}}周过程记录</strong>
             </div>
+             <div class="time">
+              <strong>{{record.recorder}}&nbsp;于&nbsp;{{record.date}}&nbsp;填写完成</strong>
+            </div> 
+            <div class="details">
+              {{record.summary}}
+            </div>  
+          </div>
         </div>
       {%endfor%}
     {% endif %}
-</div>commit 
+</div>

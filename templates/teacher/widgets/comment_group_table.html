@@ -1,13 +1,13 @@
 <div class="commentrecord">
     {% if comment_group %}
       {%for comment in comment_group%}
-        <div class="alert push">
+        <div class="well form">
             <div class="body">
               <div class="title">
-                第{{comment.monthId}}月评阅记录
+                <strong>第{{comment.monthId}}月评阅记录</strong>
               </div>
               <div class="time">
-                &nbsp;{{comment.date}}&nbsp;填写完成
+                <strong>&nbsp;{{comment.date}}&nbsp;填写完成</strong>
               </div> 
               <div class="details">
                 {{comment.comment}}
