@@ -38,16 +38,17 @@ $('[rel="isover"]').click(function(){
 })
 
 function isover_control_callback(data){
+  var pid = data.pid;
   if (data.flag == 1){
-    $('#isover_button').attr("class","btn btn-primary");
-    $('#isover_button').val("打开结题");
+    $('#'+pid).attr("class","btn btn-primary");
+    $('#'+pid).val("打开结题");
     alert("已经关闭项目");
   }
   else if(data.flag == 0)
   {
     //警告样式，只可筛选
-    $('#isover_button').attr("class","btn btn-warning");
-    $('#isover_button').val("关闭结题");
+    $('#'+pid).attr("class","btn btn-warning");
+    $('#'+pid).val("关闭结题");
     alert("已经打开项目");
   }
   else
