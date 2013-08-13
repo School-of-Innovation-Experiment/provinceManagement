@@ -52,7 +52,7 @@
           {% if not item.file_projectcompilation %}<span class="label label-important">未上传</span>{% endif %}
 	</td>
 	<td>
-	  {% if item.score_application %}<span class="label label-important"><a href="{{item.url}}" style="font-size:14px;color:white;">申请学分</a></span>{% endif %}
+	  {% if item.score_application %}<a type="button" class="btn btn-primary" href="{{item.url}}" style="font-size:14px;color:white;">申请学分</a>{% endif %}
 	</td>
 	<td>
 	  <input type="button" id="{{item.project_id}}"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> 
