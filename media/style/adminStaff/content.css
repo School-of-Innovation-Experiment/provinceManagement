@@ -67,3 +67,9 @@ table.table tbody tr td:nth-child(4){
 {
     width: 140px;
 }
+table.table tbody tr td:nth-child(3){
+    width:200px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
