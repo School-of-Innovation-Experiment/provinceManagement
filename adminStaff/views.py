@@ -25,7 +25,7 @@ from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
-from django.db.models import Q 
+from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
@@ -285,7 +285,7 @@ class AdminStaffService(object):
                                     loginfo(p = subject.project_id, label="subject.project_id: ")
                                     #subject.expert.add(expert)
                                     try:
-                                        re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
+                                        re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id,
                                             expert_id=expert.id)
                                         re_project_expert.delete()
                                     except:
@@ -343,7 +343,7 @@ class AdminStaffService(object):
                     subject_list = ProjectSingle.objects.filter(recommend = True)
                 else:
                     subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
-        
+
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
@@ -372,8 +372,8 @@ class AdminStaffService(object):
         review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.comments, obj.score_significant, 
-                        obj.score_value, obj.score_innovation, 
+            obj_list = [obj.comments, obj.score_significant,
+                        obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
             review_list.append(obj_list)
@@ -429,11 +429,15 @@ class AdminStaffService(object):
         for pro_obj in pro_list :
             if pro_obj.year not in pro_list :
                 year_list.append(pro_obj.year)
-                
+        if year_list:
+            havedata_p = True
+        else:
+            havedata_p = False
         return render(request, "adminStaff/project_control.html",
-                    {   
+                    {
                         "is_finishing":is_finishing,
                         "year_list":year_list,
+                        "havedata_p":havedata_p,
                     })
 
     @staticmethod
@@ -451,7 +455,7 @@ class AdminStaffService(object):
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
                 subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
-        
+
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
@@ -487,7 +491,7 @@ class AdminStaffService(object):
                         "project_funds_list":project_funds_list,
                         "fundsChange_group_form":fundsChange_group_form,
                         "student_name_form":student_name_form
-                        } 
+                        }
 
         return render(request,"adminStaff/funds_change.html",return_data)
 
@@ -500,7 +504,7 @@ class AdminStaffService(object):
         """
         默认只显示省级和国家级项目
         """
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))            
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
             if project_manage_form.is_valid():
