@@ -170,4 +170,4 @@ def isover_control(request,pid):
     else:
         project.is_over = True
     project.save()
-    return simplejson.dumps({"flag":project.is_over})
+    return simplejson.dumps({"flag":project.is_over,"pid":pid})
