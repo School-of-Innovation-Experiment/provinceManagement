@@ -516,7 +516,7 @@ class AdminStaffService(object):
                 if qset :
                     qset = reduce(lambda x, y: x & y, qset)
                     if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
                     else:
                         pro_list = ProjectSingle.objects.filter(qset)
             loginfo(p=qset,label="qset")
