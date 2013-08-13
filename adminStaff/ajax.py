@@ -255,6 +255,10 @@ def new_temnotice(request,temnotice_form):
 def refresh_temnotice_table(request):
     templatenotice_group = TemplateNoticeMessage.objects.all()
     templatenotice_group_form = TemplateNoticeForm()
+    _range = 1
+    for i in templatenotice_group:
+        i.iid = _range
+        _range += 1
 
     return render_to_string("adminStaff/widgets/notice_message_table.html",
                             {"templatenotice_group": templatenotice_group,

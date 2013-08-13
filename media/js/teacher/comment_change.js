@@ -2,6 +2,7 @@ var pid;
 $(document).ready(function(){
   var strUrl  = location.href.split("/");
   pid     = strUrl[strUrl.length-1];
+  
 })
 function add_or_update_comment() {
   $("#comment_error_message").empty();
@@ -12,7 +13,6 @@ function add_or_update_comment() {
 };
 
 function add_or_update_comment_callback(data) {
-  alert("222");
   if(data.status == "2") {
     $.each(data.error_id, function (i, item){
       object = $('#'+item);
