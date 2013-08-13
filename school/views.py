@@ -78,7 +78,11 @@ def home_view(request):
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
+    if pro_list.count() != 0:
+        havedata_p = True
+    else: havedata_p = False     
     context = {
+                'havedata_p':havedata_p,
                 'pro_list': pro_list,
                 'project_manage_form':project_manage_form
                 }

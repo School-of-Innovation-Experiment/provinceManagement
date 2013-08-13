@@ -3,7 +3,7 @@
 <h3>
   项目列表
 </h3>
-{% if pro_list %}
+{% if havedata_p %}
 <form id="project_manage_form" method="POST" action="/school/" >
   {% csrf_token %}
   {{project_manage_form.project_grade}}

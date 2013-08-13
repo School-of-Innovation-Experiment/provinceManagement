@@ -531,8 +531,12 @@ class AdminStaffService(object):
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
-
+        loginfo(p=pro_list,label="pro_list")
+        if pro_list.count() != 0:
+            havedata_p = True
+        else: havedata_p = False          
         context = {
+                    'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
