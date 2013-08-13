@@ -427,7 +427,7 @@ class AdminStaffService(object):
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         year_list=[]
         for pro_obj in pro_list :
-            if pro_obj.year not in pro_list :
+            if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
         if year_list:
             havedata_p = True
