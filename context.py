@@ -95,17 +95,16 @@ def userauth_settings(request):
     try:
         teacher_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_TEACHER_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_TEACHER_HEAD):]
         teacher_message, teacher_check = teacher_message[:-1], teacher_message[-1]
-    except Exception, e:
-        teacher_message = '' # should be solved
+    except:
         pass
     
-    if ProjectControl.objects.all().count():
-        projectctl_obj = ProjectControl.objects.all()[0]
-        if school_message and school_check == '1':
-            nowstatus = projectctl_obj.now_status()
-            if nowstatus[0]:
-                school_message = school_message[:-1] + \
-                    u' 提示:当前状态 "%s"，距离截止还有 %d 天' %(nowstatus[0], nowstatus[1])
+    # if ProjectControl.objects.all().count():
+    #     projectctl_obj = ProjectControl.objects.all()[0]
+    #     if school_message and school_check == '1':
+    #         nowstatus = projectctl_obj.now_status()
+    #         if nowstatus[0]:
+    #             school_message = school_message[:-1] + \
+    #                 u' 提示:当前状态 "%s"，距离截止还有 %d 天' %(nowstatus[0], nowstatus[1])
     if userauth["is_experter"]:
         userauth["notice_message"] = expert_message
     if userauth["is_schooler"]:
@@ -113,6 +112,7 @@ def userauth_settings(request):
     if userauth["is_student"]:
         userauth["notice_message"] = student_message
     if userauth["is_teacher"]:
+        loginfo("teacher_message"+teacher_message);
         userauth["notice_message"] = teacher_message
     if userauth["is_adminstaff"]:
         userauth["notice_message"] = ""
