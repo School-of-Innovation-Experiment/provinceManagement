@@ -71,7 +71,7 @@ def home_view(request):
             loginfo(p=qset,label="qset")
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE))
+                pro_list = ProjectSingle.objects.filter(qset&Q(school_id=school)).exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE))
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
@@ -227,10 +227,18 @@ def funds_manage(request):
     school = SchoolProfile.objects.get(userid = request.user)
 
 
-    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+    # pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
 
 
     subject_list =  AdminStaffService.GetSubject_list(school)
+
+    for subject in subject_list:
+        student_group = Student_Group.objects.filter(project = subject) 
+       # subject.members = ','.join([student.studentName for student in student_group])
+        try:
+            subject.members = student_group[0]
+        except:
+            pass
 
 
     return render(request, "school/funds_manage.html",{'subject_list': subject_list})
