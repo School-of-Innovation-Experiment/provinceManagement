@@ -308,7 +308,6 @@ def finish_control(request,year_list):
     flag = adminObj.is_finishing 
     return simplejson.dumps({'flag': flag})
 
-
 @dajaxice_register
 def fundsChange(request,form,name,pid):
     project_id = pid
@@ -323,18 +322,32 @@ def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
     funds_amount        = funds_form.cleaned_data["funds_amount"]
     funds_detail        = funds_form.cleaned_data["funds_detail"]
-    funds_remaining     = funds_form.cleaned_data["funds_remaining"]
+    funds_total         = funds_form.cleaned_data["funds_remaining"]
     try:
         project = ProjectSingle.objects.get(project_id = pid)
     except:
         raise Http404
 
-    group = project.funds_group_set
+    group = Funds_Group.objects.filter(project_id = pid)
+
+    num = Funds_Group.objects.filter(project_id = pid).count()
+    cost = 0
+    if(num == 0):
+        fundstotal = int(funds_total)
+    else:
+        for funds in group.all():
+            fundstotal = funds.funds_total
+            cost = cost + funds.funds_amount
+            
+
+
     for funds in group.all():
-        if  funds.funds_remaining == funds_remaining:
+        if  funds.funds_remaining == funds_total:
             funds.student_name = funds_studentname 
             funds.funds_amount = funds_amount
             funds.funds_detail = funds_detail
+            funds_total = funds_total
+
             funds.save()
             table = refresh_funds_table(request,pid)
             ret = {'status': '0', 'message': u"经费信息更新成功", 'table':table}
@@ -343,14 +356,35 @@ def new_or_update_funds(request,pid,funds_form,name):
             new_funds = Funds_Group(
                                   project_id = project, 
                                   student_name = funds_studentname,
-                                  funds_remaining = funds_remaining,
+                                  funds_remaining = fundstotal-cost-funds_amount,
                                   funds_amount = funds_amount,
-                                  funds_detail = funds_detail
+                                  funds_detail = funds_detail,
+                                  funds_total  = fundstotal
                                   )
+
             new_funds.save()
             table = refresh_funds_table(request,pid)
             ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table}
     return ret
+
+@dajaxice_register
+def FundsDelete(request,funds_remaining,pid):
+    remaining = int(funds_remaining)
+
+    try:
+        project = ProjectSingle.objects.get(project_id = pid)
+    except:
+        raise Http404
+    group = project.funds_group_set
+    for funds in group.all():
+        if funds.funds_remaining == remaining:
+            funds.delete()
+            table = refresh_funds_table(request,pid)
+            ret = {'status': '0', 'message': u"条目删除成功", 'table':table}
+            break
+    else:
+        ret = {'status': '1', 'message': u"待删除条目不存在"}
+    return simplejson.dumps(ret)
 
 def refresh_funds_table(request,pid):
 
@@ -360,20 +394,4 @@ def refresh_funds_table(request,pid):
                             {"project_funds_list": funds_list})
 
 
-@dajaxice_register
-def FundsDelete(request,funds_remaining,pid):
-    try:
-        project = ProjectSingle.objects.get(project_id = pid)
-    except:
-        raise Http404
-    group = project.funds_group_set
-    for funds in group.all():
-        if funds.funds_remaining == funds_remaining:
-            funds.delete()
-            table = refresh_funds_table(request,pid)
-            ret = {'status': '0', 'message': u"条目删除成功", 'table':table}
-            break
-    else:
-        ret = {'status': '1', 'message': u"待删除条目不存在"}
-    return simplejson.dumps(ret)
 

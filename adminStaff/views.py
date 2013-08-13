@@ -486,7 +486,16 @@ class AdminStaffService(object):
         #                     )
         # test.save();
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
+
         fundsChange_group_form = forms.FundsChangeForm();
+
+        for subject in project_funds_list:
+            student_group = Student_Group.objects.filter(project = subject)
+            try:
+                subject.members = student_group[0]
+            except:
+                pass
+
         student_name_form = forms.StudentNameForm(pid = pid);
 
         return_data = {

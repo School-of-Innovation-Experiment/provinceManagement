@@ -253,7 +253,11 @@ def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
 
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
+
+
         fundsChange_group_form = FundsChangeForm();
+
+
         student_name_form = StudentNameForm(pid = pid);
 
         return_data = {
