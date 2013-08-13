@@ -530,9 +530,9 @@ class AdminStaffService(object):
                     url = file_temp.file_obj.url
                     pro_obj.url = url
         loginfo(p=pro_list,label="pro_list")
-        if pro_list.count() != 0:
+        if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
-        else: havedata_p = False          
+        else: havedata_p = False
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
