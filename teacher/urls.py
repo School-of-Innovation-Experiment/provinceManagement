@@ -34,4 +34,13 @@ urlpatterns = patterns('',
         r'processrecord_view/(?P<pid>.{36})$',
         teacher_views.processrecord_view,
     ),
+    url(
+        r'funds_manage$',
+        teacher_views.funds_manage,
+    ),
+    url(
+        r'^fundsview/(?P<pid>.{36}$)',
+        teacher_views.funds_view,
+        ),
+ 
 )

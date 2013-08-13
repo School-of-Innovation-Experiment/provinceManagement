@@ -16,7 +16,7 @@ from const import *
 from const.models import *
 from users.models import TeacherProfile, StudentProfile
 from teacher.models import TeacherMonthComment
-from student.models import  StudentWeeklySummary
+from student.models import  StudentWeeklySummary,Funds_Group
 from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from student.forms import  ProcessRecordForm
@@ -259,3 +259,30 @@ def processrecord_view(request, pid=None,is_expired = False):
             "monthcomment_form":monthcomment_form,
             }
     return render(request, 'teacher/processrecord.html',data)
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(TEACHER_USER)
+def funds_manage(request):
+    project_list = ProjectSingle.objects.filter(adminuser__userid = request.user)
+    for subject in project_list:
+        student_group = Student_Group.objects.filter(project = subject) 
+        try:
+            subject.members = student_group[0]
+        except:
+            pass
+
+    data = {
+        "subject_list": project_list,
+        }
+
+    return render(request, "teacher/funds_manage.html", data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(TEACHER_USER)
+def funds_view(request,pid):
+
+    funds_group     = Funds_Group.objects.filter(project_id = pid)
+    return render(request, 'teacher/funds_view.html',{"funds_list":funds_group})
