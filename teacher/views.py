@@ -289,3 +289,4 @@ def funds_view(request,pid):
 
     funds_group     = Funds_Group.objects.filter(project_id = pid)
     return render(request, 'teacher/funds_view.html',{"funds_list":funds_group})
+

@@ -1,19 +1,5 @@
-{% extends "teacher/base/_content.html" %}
-{% block calculate-content %}
-    <form class="well form" id="process_record_info_form" method="POST" action="">
-        {% csrf_token %}
-        <div class="input-prepend ">
-            <span class="add-on ">月   次</span>{{monthcomment_form.monthId}}
-        </div>
-        <span id="comment_error_message"></span>
-        <div class="input-prepend">
-            <button class="btn btn-primary span1 offset4" id="teacher_comment" onclick="add_or_update_comment(); return false;">提交</button>
-         </div>
-         <div class="input-prepend ">
-            {{monthcomment_form.commenttext}}
-        </div>
-    </form>
-
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
     <div class="tabbable">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#studentRecord" data-toggle="tab"><strong>学生过程记录</strong></a></li>

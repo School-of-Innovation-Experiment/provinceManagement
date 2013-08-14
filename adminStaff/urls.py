@@ -13,25 +13,26 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
-    url(r'^processrecord',AdminStaffService.processrecord,),
-    (r'^settings$',AdminStaffService.AdminSetting),
-    (r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
-    (r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
+    url(r'^processrecord$',AdminStaffService.processrecord),
+    url(r'^processrecord_view/(?P<pid>.{36})$', AdminStaffService.record_view),
+    url(r'^settings$',AdminStaffService.AdminSetting),
+    url(r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
+    url(r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
 
-    (r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
-    (r'^subject_rating/$',AdminStaffService.SubjectRating),
+    url(r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
+    url(r'^subject_rating/$',AdminStaffService.SubjectRating),
     #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
 
-    (r'^dispatch/$',AdminStaffService.Dispatch),
-    (r'^expert_dispatch/$',AdminStaffService.expertDispatch),
-    (r'^school_dispatch/$',AdminStaffService.schoolDispatch),
-    (r'^create_inactive_user$',AdminStaffService.expertDispatch),
+    url(r'^dispatch/$',AdminStaffService.Dispatch),
+    url(r'^expert_dispatch/$',AdminStaffService.expertDispatch),
+    url(r'^school_dispatch/$',AdminStaffService.schoolDispatch),
+    url(r'^create_inactive_user$',AdminStaffService.expertDispatch),
     
-    (r'^fundsmanage/$',AdminStaffService.funds_manage),
-    (r'^fundschange/(?P<pid>.{36})$',AdminStaffService.funds_change),
+    url(r'^fundsmanage/$',AdminStaffService.funds_manage),
+    url(r'^fundschange/(?P<pid>.{36})$',AdminStaffService.funds_change),
 
-    (r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
-    (r'^project_control$',AdminStaffService.project_control), 
+    url(r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
+    url(r'^project_control$',AdminStaffService.project_control), 
 
 )
 urlpatterns += staticfiles_urlpatterns()

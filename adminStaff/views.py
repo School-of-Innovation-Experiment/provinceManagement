@@ -20,6 +20,8 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from const import *
+from teacher.models import TeacherMonthComment
+from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile, AdminStaffProfile
@@ -29,9 +31,6 @@ from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
-from student.models import Student_Group
-from student.models import Funds_Group
-
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -332,7 +331,6 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(recommend = True)
             else:
                 subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
-
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -353,8 +351,7 @@ class AdminStaffService(object):
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
         rec = getContext(rec_subject_list, page1, 'subject', 0)
         nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
-        nrec = getContext(nrec_subject_list, page2, 'subject, 0')
-
+        nrec = getContext(nrec_subject_list, page2, 'subject', 0)
         context = {
             'page1': page1,
             'page2': page2,
@@ -518,7 +515,7 @@ class AdminStaffService(object):
                 if qset :
                     qset = reduce(lambda x, y: x & y, qset)
                     if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
                     else:
                         pro_list = ProjectSingle.objects.filter(qset)
             loginfo(p=qset,label="qset")
@@ -531,8 +528,12 @@ class AdminStaffService(object):
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
-
+        loginfo(p=pro_list,label="pro_list")
+        if pro_list.count() != 0:
+            havedata_p = True
+        else: havedata_p = False          
         context = {
+                    'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
@@ -555,11 +556,11 @@ class AdminStaffService(object):
         qset = filter(lambda x: x != None, [q1, q2, q3,q4])
         return qset
 
+    @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    @only_user_required
-    def processrecord(request, pid=None,is_expired = False):
+    def processrecord(request):
         """
         process record view
         """
@@ -578,7 +579,7 @@ class AdminStaffService(object):
                 if qset :
                     qset = reduce(lambda x, y: x & y, qset)
                     if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL))
+                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
                     else:
                         pro_list = ProjectSingle.objects.filter(qset)
             loginfo(p=qset,label="qset")
@@ -591,9 +592,26 @@ class AdminStaffService(object):
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
-
+        loginfo(p=pro_list,label="pro_list")
+        if pro_list.count() != 0:
+            havedata_p = True
+        else: havedata_p = False          
         context = {
+                    'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
-        return render(request, "adminStaff/adminstaff_home.html",context)
+        return render(request, "adminStaff/project_processrecord.html",context)
+    
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def record_view(request, pid):
+        loginfo("record_view")
+        comment_group       = TeacherMonthComment.objects.filter(project_id=pid).order_by("monthId")
+        record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
+        data = {"record_group"  : record_group,
+                "comment_group" : comment_group,
+                }
+        return render(request, 'adminStaff/processrecord.html',data)
