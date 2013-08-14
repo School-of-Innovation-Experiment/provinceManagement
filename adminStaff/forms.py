@@ -173,17 +173,21 @@ class FundsChangeForm(forms.Form):
                                         'cols':"6"}),)    
     student_name = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u"",'cols':"6"}),)    
-    funds_amount = forms.CharField(max_length = 100,
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)    
+    funds_amount = forms.IntegerField(
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u"",'cols':"6"}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)    
     funds_detail = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.Textarea(attrs={'class':'span4 fundsTextarea','id':'funds_detail','placeholder':u"报销明细",
                                                                     'rows':"3",'cols':"20"}),)    
-    funds_remaining = forms.CharField(max_length = 100,
+    funds_remaining = forms.IntegerField(
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"初始化/修改明细填写"}),) 
+    # funds_total = forms.IntegerField(
+    #                                 required=False,
+    #                                 widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_total','placeholder':u""}),) 
+
 
 class StudentNameForm(forms.Form):
     STUDENT_CHOICE_list = []
@@ -215,7 +219,7 @@ class ProjectManageForm(forms.Form):
     project_grade_choice.insert(0,('-1',u"级别"))
     loginfo(p=project_grade_choice,label="project_grade_choice")
     project_isover_choice = [(-1, "结题状态"),(0,"未结题"),(1,"已结题")]
-    project_scoreapplication_choice = [(-1, "申请状态"),(0,"未申请"),(1,"已申请")]
+    project_scoreapplication_choice = [(-1, "学分申请状态"),(0,"未申请"),(1,"已申请")]
     project_isover_choice = tuple(project_isover_choice)
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)

@@ -426,7 +426,7 @@ class AdminStaffService(object):
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         year_list=[]
         for pro_obj in pro_list :
-            if pro_obj.year not in pro_list :
+            if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
         if year_list:
             havedata_p = True
@@ -483,7 +483,16 @@ class AdminStaffService(object):
         #                     )
         # test.save();
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
+
         fundsChange_group_form = forms.FundsChangeForm();
+
+        for subject in project_funds_list:
+            student_group = Student_Group.objects.filter(project = subject)
+            try:
+                subject.members = student_group[0]
+            except:
+                pass
+
         student_name_form = forms.StudentNameForm(pid = pid);
 
         return_data = {
@@ -529,9 +538,9 @@ class AdminStaffService(object):
                     url = file_temp.file_obj.url
                     pro_obj.url = url
         loginfo(p=pro_list,label="pro_list")
-        if pro_list.count() != 0:
+        if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
-        else: havedata_p = False          
+        else: havedata_p = False
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,

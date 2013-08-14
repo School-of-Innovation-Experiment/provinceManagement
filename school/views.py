@@ -78,9 +78,9 @@ def home_view(request):
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
-    if pro_list.count() != 0:
+    if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
-    else: havedata_p = False     
+    else: havedata_p = False
     context = {
                 'havedata_p':havedata_p,
                 'pro_list': pro_list,
@@ -217,9 +217,9 @@ def project_control(request):
     pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
     year_list=[]
     for pro_obj in pro_list :
-        if pro_obj.year not in pro_list :
+        if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
-            
+
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
@@ -257,7 +257,11 @@ def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
 
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
+
+
         fundsChange_group_form = FundsChangeForm();
+
+
         student_name_form = StudentNameForm(pid = pid);
 
         return_data = {

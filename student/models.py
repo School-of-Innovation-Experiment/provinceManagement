@@ -37,19 +37,21 @@ class StudentWeeklySummary(models.Model):
 
 class Funds_Group(models.Model):
     project_id = models.ForeignKey(ProjectSingle,blank = True)
-
     project_code = models.CharField(blank=True,max_length = 100,
                                  verbose_name = u"项目编号")
     funds_datetime = models.DateField(blank=True, max_length=100,default=datetime.datetime.today,
                                   verbose_name=u"报销日期")
     student_name = models.CharField(blank=False, max_length=100,
                                    verbose_name=u"报销人")
-    funds_amount = models.CharField(blank=False, max_length=100,
+    funds_amount = models.IntegerField(blank=False,
                                  verbose_name=u"报销金额")
     funds_detail = models.CharField(blank=False, max_length=100,
                                  verbose_name=u"经费明细")
-    funds_remaining = models.CharField(blank=False,max_length=100,
-                                 verbose_name=u"经费余额")
+    funds_remaining = models.IntegerField(blank=False,
+                                 verbose_name=u"经费余额",default=0)
+    funds_total = models.IntegerField(blank=True,
+                                 verbose_name=u"经费总额",default=0)
+
 
     
 
