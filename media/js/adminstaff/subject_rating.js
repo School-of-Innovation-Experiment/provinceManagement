@@ -57,8 +57,20 @@ function release_news(){
     }
   });
   if (release)
-  {
+  { 
+    var table = $("#defined_subject_table");
+    html_originstr = $("#defined_subject_table")[0].outerHTML;
+    $("#defined_subject_table thead tr").each(function(){
+      $(this).find("th").eq(4).remove();
+    });
+    $("#defined_subject_table tbody tr").each(function(){
+      $(this).find("td").eq(5).html($(this).find("td").eq(5).find('a').text());
+      $(this).find("td").eq(4).remove();
+    });
+
     html_str = $("#defined_subject_table")[0].outerHTML;
+
+    $("#defined_subject_table")[0].innerHTML = html_originstr;
     Dajaxice.adminStaff.Release_News(release_news_callback, {html: html_str});
     $('#myrelease').modal('show');
   }
