@@ -58,7 +58,7 @@ function release_news(){
   });
   if (release)
   {
-    html_str = $("#subject_table")[0].outerHTML;
+    html_str = $("#defined_subject_table")[0].outerHTML;
     Dajaxice.adminStaff.Release_News(release_news_callback, {html: html_str});
     $('#myrelease').modal('show');
   }
