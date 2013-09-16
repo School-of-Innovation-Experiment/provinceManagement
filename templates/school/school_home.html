@@ -53,6 +53,9 @@
 				<td>
 					<input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> 
 				</td>
+				<td>
+      				<span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
+  				</td>
 			</tr>
 			{%endfor%}
 		</tbody>

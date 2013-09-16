@@ -47,5 +47,9 @@ urlpatterns = patterns(
     url(
         r'^project_control$',
         school_views.project_control,
+        ),
+    url(
+        r'^processrecord_view/(?P<pid>.{36})$', 
+        school_views.record_view
         ),    
 )

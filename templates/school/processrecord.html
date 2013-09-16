@@ -1,0 +1,22 @@
+{% extends "school/base/_content.html" %}
+{% block school_content %}
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#studentRecord" data-toggle="tab"><strong>学生过程记录</strong></a></li>
+            <li><a href="#teacherComment" data-toggle="tab"><strong>教师评语记录</strong></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="studentRecord">
+                {% include "student/widgets/record_group_table.html" %}
+            </div>
+            <div class="tab-pane" id="teacherComment">
+                {% include "teacher/widgets/comment_group_table.html" %}
+            </div>
+        </div>
+    </div>
+    <!-- ajax_csrf-->
+    <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+    <!-- dajax-->
+    <script type='text/javascript' src="{{STATIC_URL}}js/teacher/comment_change.js"></script>
+
+{% endblock %}

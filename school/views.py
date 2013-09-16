@@ -25,12 +25,14 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
+
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school import forms
-from student.models import Student_Group
+from teacher.models import TeacherMonthComment
+from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from const.models import *
 from const import *
 from django.db.models import Q 
@@ -271,5 +273,15 @@ def funds_change(request,pid):
                         } 
 
         return render(request,"school/funds_change.html",return_data)
-
-
+        
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def record_view(request, pid):
+    loginfo("record_view")
+    comment_group       = TeacherMonthComment.objects.filter(project_id=pid).order_by("monthId")
+    record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
+    data = {"record_group"  : record_group,
+            "comment_group" : comment_group,
+            }
+    return render(request, 'school/processrecord.html',data)
