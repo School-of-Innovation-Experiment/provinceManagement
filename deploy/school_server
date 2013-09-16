@@ -23,17 +23,17 @@ server {
 	}
 
     location /static {
-       alias /home/sie/mysites/schoolManagement/static/; 
-       access_log off;  
+       alias /home/sie/mysites/schoolManagement/static/;
+       access_log off;
     }
 
 
-    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf)$ {
+    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf|doc|docx)$ {
        expires 3d;
     }
 
     location /media {
-        root  /home/sie/mysites/schoolManagement/media/; 
+        root  /home/sie/mysites/schoolManagement/;
         break;
     }
 
@@ -41,4 +41,3 @@ server {
        expires 12h;
     }
 }
-
