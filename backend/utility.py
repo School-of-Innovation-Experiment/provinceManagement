@@ -10,6 +10,10 @@ import uuid
 from settings import STATIC_URL, MEDIA_URL
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from const.__init__ import PAGE_ELEMENTS
+
+def user_isusing(user):
+    pass
+
 def search_tuple(src, target):
     """
     search value in tuple
