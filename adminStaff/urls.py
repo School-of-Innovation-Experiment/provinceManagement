@@ -32,7 +32,9 @@ urlpatterns = patterns('',
     url(r'^fundschange/(?P<pid>.{36})$',AdminStaffService.funds_change),
 
     url(r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
-    url(r'^project_control$',AdminStaffService.project_control), 
+    url(r'^project_control$',AdminStaffService.project_control),
+
+    (r'^news_release$', AdminStaffService.NewsRelease),
 
 )
 urlpatterns += staticfiles_urlpatterns()
