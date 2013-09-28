@@ -158,8 +158,11 @@ def SubjectRating(request,is_expired=False):
             subject.members = student_group[0]
         except:
             pass
-
+    undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.id == 6), subject_list)
+    def_subject_list = filter(lambda x: not((not x.recommend) and (x.project_grade.id == 6)), subject_list)
     context = {'subject_list': subject_list,
+               'undef_subject_list': undef_subject_list,
+               'def_subject_list': def_subject_list,
                'subject_grade_form' : subject_grade_form,
                'readonly': readonly,
                'limit': limit,
