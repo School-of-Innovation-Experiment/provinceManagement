@@ -18,6 +18,7 @@ RegisterClass = (SchoolDict,
                  ProjectOrigin,
                  ProjectEnterpriseOrigin,
                  ProjectEnterpriseMaturity,
+                 NewsCategory,
                 )
 
 for item in RegisterClass:

@@ -10,6 +10,8 @@ Desc: dict table
 from django.db import models
 from django.contrib.auth.models import User
 
+from const import NEWS_CATEGORY_CHOICES
+from const import NEWS_CATEGORY_ANNOUNCEMENT
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
@@ -159,3 +161,17 @@ class ProjectEnterpriseMaturity(models.Model):
 
     def __unicode__(self):
         return self.get_maturity_display()
+
+class NewsCategory(models.Model):
+    """
+    """
+    category = models.CharField(blank=False, null=False, unique=True, max_length=20,
+                                choices=NEWS_CATEGORY_CHOICES, \
+                                default=NEWS_CATEGORY_ANNOUNCEMENT ,
+                                verbose_name=u"新闻类型")
+    class Meta:
+        verbose_name = "新闻类型"
+        verbose_name_plural = "新闻类型"
+
+    def __unicode__(self):
+        return self.get_category_display()

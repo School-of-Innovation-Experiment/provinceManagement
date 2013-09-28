@@ -110,6 +110,20 @@ PROJECT_STATUS_CHOICES = (
 
 
 # APP: news
+# the following 4 variables are used in foreground,
+# so use some meaning words
+NEWS_CATEGORY_ANNOUNCEMENT = "announcement"
+NEWS_CATEGORY_POLICY = "policy"
+NEWS_CATEGORY_OUTSTANDING = "outstanding"
+NEWS_CATEGORY_OTHERS = "others"
+NEWS_CATEGORY_CHOICES = (
+    (NEWS_CATEGORY_ANNOUNCEMENT, u"通知公告"),
+    (NEWS_CATEGORY_POLICY, u"政策规章"),
+    (NEWS_CATEGORY_OUTSTANDING, u"优秀项目"),
+    (NEWS_CATEGORY_OTHERS, u"他山之石"),
+)
+# the max length of news_content
+NEWS_MAX_LENGTH = 10000000
 
 
 # Paginator default Page elements
