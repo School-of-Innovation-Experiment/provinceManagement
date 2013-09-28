@@ -45,6 +45,10 @@ urlpatterns = patterns(
         school_views.SubjectAlloc,
         ),
     url(
+        r'^subject_alloc_new$',
+        school_views.NewSubjectAlloc,
+        ),
+    url(
         r'^project_control$',
         school_views.project_control,
         ),
