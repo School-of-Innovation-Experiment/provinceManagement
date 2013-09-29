@@ -97,17 +97,18 @@ function add_or_update_funds_callback(data) {
     });
   }
   else if(data.status == "0") {
-
     $("#project_funds_table").html(data.table);
+    $("#funds_project_detail").find("#funds_total").html("经费总额: "+data.funds_total);
+    $("#funds_project_detail").find("#funds_remain").html("经费余额: "+data.funds_remain);
   }
   $("#funds_error_message").append("<strong>"+data.message+"</strong>");
 }
 
 function delete_funds(caller) {
   $("#funds_error_message").empty();  
-  funds_remaining = $(caller).parent().parent().children("td:eq(3)").html();
+  delete_id = $(caller).parent().parent().children("td:eq(0)").attr('id');
   Dajaxice.adminStaff.FundsDelete(add_or_update_funds_callback,
-                                {'funds_remaining': funds_remaining,
+                                {'delete_id': delete_id,
                                 'pid':fund_project_id});
 }
 

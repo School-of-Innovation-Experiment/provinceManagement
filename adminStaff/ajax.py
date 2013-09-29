@@ -322,7 +322,7 @@ def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
     funds_amount        = funds_form.cleaned_data["funds_amount"]
     funds_detail        = funds_form.cleaned_data["funds_detail"]
-    funds_total         = funds_form.cleaned_data["funds_remaining"]
+    funds_total         = funds_form.cleaned_data["funds_total"]
     try:
         project = ProjectSingle.objects.get(project_id = pid)
     except:
@@ -331,45 +331,34 @@ def new_or_update_funds(request,pid,funds_form,name):
     group = Funds_Group.objects.filter(project_id = pid)
 
     num = Funds_Group.objects.filter(project_id = pid).count()
-    cost = 0
-    if(num == 0):
-        fundstotal = int(funds_total)
-    else:
-        for funds in group.all():
-            fundstotal = funds.funds_total
-            cost = cost + funds.funds_amount
-            
-
-
+    cost = funds_amount
+    
     for funds in group.all():
-        if  funds.funds_remaining == funds_total:
-            funds.student_name = funds_studentname 
-            funds.funds_amount = funds_amount
-            funds.funds_detail = funds_detail
-            funds_total = funds_total
-
-            funds.save()
-            table = refresh_funds_table(request,pid)
-            ret = {'status': '0', 'message': u"经费信息更新成功", 'table':table}
-            break
-    else: 
-            new_funds = Funds_Group(
-                                  project_id = project, 
-                                  student_name = funds_studentname,
-                                  funds_remaining = fundstotal-cost-funds_amount,
-                                  funds_amount = funds_amount,
-                                  funds_detail = funds_detail,
-                                  funds_total  = fundstotal
-                                  )
-
-            new_funds.save()
-            table = refresh_funds_table(request,pid)
-            ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table}
+        cost = cost + funds.funds_amount
+    loginfo(cost)
+    if funds_total != None:
+        project.funds_total = funds_total
+    if project.funds_total >= cost :
+        new_funds = Funds_Group(
+                      project_id = project, 
+                      student_name = funds_studentname,
+                      funds_amount = funds_amount,
+                      funds_detail = funds_detail,
+                      )
+        new_funds.save()
+        project.funds_remain = project.funds_total - cost
+        project.save()
+        table = refresh_funds_table(request,pid)
+        ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table,
+                            "funds_total":project.funds_total,
+                            "funds_remain":project.funds_remain}
+    else:
+        ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"} 
     return ret
 
 @dajaxice_register
-def FundsDelete(request,funds_remaining,pid):
-    remaining = int(funds_remaining)
+def FundsDelete(request,delete_id,pid):
+    delete_id = int(delete_id)
 
     try:
         project = ProjectSingle.objects.get(project_id = pid)
@@ -377,10 +366,14 @@ def FundsDelete(request,funds_remaining,pid):
         raise Http404
     group = project.funds_group_set
     for funds in group.all():
-        if funds.funds_remaining == remaining:
+        if funds.id == delete_id:
+            project.funds_remain = project.funds_remain + funds.funds_amount
             funds.delete()
+            project.save()
             table = refresh_funds_table(request,pid)
-            ret = {'status': '0', 'message': u"条目删除成功", 'table':table}
+            ret = {'status': '0', 'message': u"条目删除成功", 'table':table,
+                            "funds_total":project.funds_total,
+                            "funds_remain":project.funds_remain}
             break
     else:
         ret = {'status': '1', 'message': u"待删除条目不存在"}

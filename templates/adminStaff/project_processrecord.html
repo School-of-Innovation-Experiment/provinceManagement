@@ -4,7 +4,7 @@
   项目列表
 </h3>
 {% if havedata_p %}
-<form id="project_manage_form" method="POST" action="/adminStaff/" >
+<form id="project_manage_form" method="POST" action="/adminStaff/processrecord" >
   {% csrf_token %}
   {{project_manage_form.project_grade}}
   {{project_manage_form.project_year}}
@@ -16,8 +16,8 @@
   <table class="table table-hover">
     <thead>
       <tr>
-          <th>名称</th>
           <th>项目编号</th>
+          <th>名称</th>
           <th>项目级别</th>
           <th>指导教师</th>
           <th>过程记录</th>
@@ -26,13 +26,13 @@
     <tbody>
       {% for item in pro_list%}
       <tr>
-  <td>{{item.title|truncatechars:15}}</td>
-  <td>{{item.project_code}}</td>
-  <td>{{item.project_grade}}</td>
-  <td>{{item.adminuser}}</td>
-  <td>
-      <span><a href="/adminStaff/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
-  </td>
+        <td>{{item.project_code}}</td>
+        <td>{{item.title|truncatechars:15}}</td>
+        <td>{{item.project_grade}}</td>
+        <td>{{item.adminuser}}</td>
+        <td>
+            <span><a href="/adminStaff/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
+        </td>
       </tr>
       {%endfor%}
     </tbody>
