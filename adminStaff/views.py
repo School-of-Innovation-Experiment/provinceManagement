@@ -31,6 +31,9 @@ from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
+from news.models import News
+from news.forms import NewsForm
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -600,3 +603,27 @@ class AdminStaffService(object):
                 "comment_group" : comment_group,
                 }
         return render(request, 'adminStaff/processrecord.html',data)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def NewsRelease(request):
+        news_list = News.objects.all().order_by("-news_date")
+        page = request.GET.get('page')
+        if request.method == 'POST':
+            newsform = NewsForm(request.POST, request.FILES)
+            if newsform.is_valid():
+                new_news = News(news_title = newsform.cleaned_data["news_title"],
+                                news_content = newsform.cleaned_data["news_content"],
+                                news_date = newsform.cleaned_data["news_date"],
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
+                                # news_document = request.FILES["news_document"],)
+                new_news.save()
+            else:
+                loginfo(p=newsform.errors.keys(), label="news form error")
+            return redirect('/newslist/%d' % new_news.id)
+        else:
+            context = getContext(news_list, page, 'news', 0)
+            context.update({"newsform": NewsForm})
+            return render(request, "adminStaff/news_release.html", context)

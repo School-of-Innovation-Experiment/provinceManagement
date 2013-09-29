@@ -1,0 +1,45 @@
+{% extends "school/home.html" %}
+{%block nav_admin_content%}
+  <div class="well form-inline">
+    <b>
+      <form id="subject_insitute_form" method="POST" action="/school/subject_alloc"><!-- begin category form-->
+	{% csrf_token %}
+	{% if not readonly %}
+	  <input type="submit" class="btn btn-primary" id="filter_button" value=""/>
+	{%endif%}
+	{% if readonly %}
+	  <div class="alert alert-error" style="margin-top:20px;">
+	    <a class="close" data-dismiss="alert">x</a>
+	    <h4 class="alert-heading">系统提示！</h4>
+	    <p>目前不能给专家指派项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+	  </div><!--end alert block-->
+	{%endif%}
+	{{exist_message}}
+      </form><!--end category form -->
+      <table class="table table-condensed" id="subject_table">
+	<thead>
+	  <tr>
+			<th>项目编号</th>
+	    <th>发布题目名称</th>
+	    <th>所属学院</th>
+	    <th>所属分类</th>
+	    <th>题目状态</th>
+	  </tr>
+	</thead>
+	<tbody id="subject_table_body">
+	  {% for subject in subject_list%}
+	    <tr>
+				<td>{{subject.project_code}}</td>
+	      <td>{{subject.title}}</td>
+	      <td>{{subject.school}}</td>
+	      <td>{{subject.project_category}}</td>
+	      <td>{{subject.project_status}}</td>
+	    </tr>
+	  {%endfor%}
+	</tbody>
+      </table>
+  </div><!-- end the whole form -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/school/is_assigned.js" onload="is_assigned();"></script>
+  <!-- ajax_csrf-->
+  <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+{%endblock%}

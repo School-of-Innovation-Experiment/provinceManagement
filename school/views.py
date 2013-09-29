@@ -158,14 +158,61 @@ def SubjectRating(request,is_expired=False):
             subject.members = student_group[0]
         except:
             pass
-
+    undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.id == 6), subject_list)
+    def_subject_list = filter(lambda x: not((not x.recommend) and (x.project_grade.id == 6)), subject_list)
     context = {'subject_list': subject_list,
+               'undef_subject_list': undef_subject_list,
+               'def_subject_list': def_subject_list,
                'subject_grade_form' : subject_grade_form,
                'readonly': readonly,
                'limit': limit,
                'remaining': remaining,
                 }
     return render(request, "school/subject_rating.html",context)
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+#@transaction.commit_on_success
+#@time_controller(phase=STATUS_PRESUBMIT)
+def NewSubjectAlloc(request, is_expired = False):
+    exist_message = ''
+    readonly = is_expired
+    school = get_object_or_404(SchoolProfile, userid = request.user)
+    subject_list = AdminStaffService.GetSubject_list(school)
+    if request.method == "POST":
+        try:
+            obj = Project_Is_Assigned.objects.get(school=school)
+            if obj.is_assigned_in_presubmit:
+                pass
+            else:
+                expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+                loginfo(p = expert_list, label = "hujun")
+                if len(expert_list) == 0 or len(subject_list) == 0:
+                    if not expert_list:
+                        exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
+                    else:
+                        exist_message = '没有可分配的项目，无法进行指派'
+                else:
+                    re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
+
+                    for subject in re_dict.keys():
+                        for expert in re_dict[subject]:
+                            try:
+                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
+                                    expert_id=expert.id)
+                                re_project_expert.delete()
+                            except:
+                                pass
+                            finally:
+                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
+                    obj.is_assigned_in_presubmit = True
+                    obj.save()
+        except Project_Is_Assigned.DoesNotExist:
+            obj = None
+    return render_to_response("school/project_alloc_new.html",{'subject_list':subject_list,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
+
 
 @csrf.csrf_protect
 @login_required
