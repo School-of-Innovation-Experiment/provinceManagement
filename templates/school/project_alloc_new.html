@@ -2,11 +2,6 @@
 {%block nav_admin_content%}
   <div class="well form-inline">
     <b>
-      <form id="subject_insitute_form" method="POST" action="/school/subject_alloc"><!-- begin category form-->
-	{% csrf_token %}
-	{% if not readonly %}
-	  <input type="submit" class="btn btn-primary" id="filter_button" value=""/>
-	{%endif%}
 	{% if readonly %}
 	  <div class="alert alert-error" style="margin-top:20px;">
 	    <a class="close" data-dismiss="alert">x</a>
@@ -15,31 +10,112 @@
 	  </div><!--end alert block-->
 	{%endif%}
 	{{exist_message}}
-      </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
-	<thead>
-	  <tr>
-			<th>项目编号</th>
-	    <th>发布题目名称</th>
-	    <th>所属学院</th>
-	    <th>所属分类</th>
-	    <th>题目状态</th>
-	  </tr>
-	</thead>
-	<tbody id="subject_table_body">
-	  {% for subject in subject_list%}
-	    <tr>
-				<td>{{subject.project_code}}</td>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.school}}</td>
-	      <td>{{subject.project_category}}</td>
-	      <td>{{subject.project_status}}</td>
-	    </tr>
-	  {%endfor%}
-	</tbody>
+
+<div class="tab-content">
+  <div class="tab-pane fade active in" id="review-page">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#unalloced-section" data-toggle="tab">未指派</a>
+      </li>
+      <li>
+        <a href="#alloced-section" data-toggle="tab">已指派</a>
+      </li>
+
+    </ul><!--end ul title-->
+
+    <div class="tab-content">
+      <div class="tab-pane fade active in" id="unalloced-section">
+				<table class="table table-condensed" id="unalloced_subject_table">
+					<thead>
+						<tr>
+							<th>项目编号</th>
+							<th>发布题目名称</th>
+							<th>所属学院</th>
+							<th>所属分类</th>
+							<th>题目状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+						<tbody id="subject_table_body">
+						{% for subject in subject_list%}
+							<tr>
+								<td>{{subject.project_code}}</td>
+								<td>{{subject.title}}</td>
+								<td>{{subject.school}}</td>
+								<td>{{subject.project_category}}</td>
+								<td>{{subject.project_status}}</td>
+								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">指派专家</a></td>
+							</tr>
+						{%endfor%}
+					</tbody>
       </table>
+    </div><!--end content section-->
+
+      <div class="tab-pane fade " id="alloced-section">
+				<table class="table table-condensed" id="alloced_subject_table">
+					<thead>
+						<tr>
+							<th>项目编号</th>
+							<th>发布题目名称</th>
+							<th>所属学院</th>
+							<th>所属分类</th>
+							<th>题目状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="subject_table_body">
+						{% for subject in subject_list%}
+							<tr>
+								<td>{{subject.project_code}}</td>
+								<td>{{subject.title}}</td>
+								<td>{{subject.school}}</td>
+								<td>{{subject.project_category}}</td>
+								<td>{{subject.project_status}}</td>
+								<td><a data-toggle="modal" href="#query_or_cancel" id="allocid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">查询或取消指派</a></td>
+							</tr>
+						{%endfor%}
+					</tbody>
+      </table>
+      </div>
+
+    </div><!--end tab content-->
+  </div><!--end tab pane-->
+</div><!--end tab content-->
+	<div class="modal hide fade" style="display: none;" id="alloc_choice"><!--alloc_choice-->
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>选择指派评委</h3>
+		</div>
+		<div class="modal-body">
+			{% for expert in expert_list %}
+				<label class="checkbox">
+					<input type="checkbox" value="">
+					{{ expert.userid }}
+				</label>
+			{% endfor %}
+		</div>
+		<div class="modal-footer">
+			<a class="btn" data-dismiss="modal">关闭</a>
+			<a class="btn btn-success" data-dismiss="modal" onclick=";">保存</a>
+		</div>
+	</div><!--end alloc_choice-->
   </div><!-- end the whole form -->
-  <script type="text/javascript" src="{{STATIC_URL}}js/school/is_assigned.js" onload="is_assigned();"></script>
+
+	<div class="modal hide fade" style="display: none;" id="query_or_cancel"><!--query_or_cancel-->
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>指派评委列表</h3>
+		</div>
+		<div class="modal-body">
+
+		</div>
+		<div class="modal-footer">
+			<a class="btn" data-dismiss="modal">关闭</a>
+			<a class="btn btn-danger" data-dismiss="modal" onclick=";">取消指派</a>
+		</div>
+	</div><!--end query_or_cancel-->
+
+  <script type="text/javascript" src="{{STATIC_URL}}js/school/is_alloced.js" onload="is_alloced();"></script>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

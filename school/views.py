@@ -181,6 +181,8 @@ def NewSubjectAlloc(request, is_expired = False):
     readonly = is_expired
     school = get_object_or_404(SchoolProfile, userid = request.user)
     subject_list = AdminStaffService.GetSubject_list(school)
+    expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+
     if request.method == "POST":
         try:
             obj = Project_Is_Assigned.objects.get(school=school)
@@ -211,7 +213,11 @@ def NewSubjectAlloc(request, is_expired = False):
                     obj.save()
         except Project_Is_Assigned.DoesNotExist:
             obj = None
-    return render_to_response("school/project_alloc_new.html",{'subject_list':subject_list,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
+    context = {'subject_list': subject_list,
+               'expert_list': expert_list,
+               'exist_message': exist_message,
+               'readonly': readonly,}
+    return render(request, "school/project_alloc_new.html",context)
 
 
 @csrf.csrf_protect
