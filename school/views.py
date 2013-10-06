@@ -182,38 +182,13 @@ def NewSubjectAlloc(request, is_expired = False):
     school = get_object_or_404(SchoolProfile, userid = request.user)
     subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
-
-    if request.method == "POST":
-        try:
-            obj = Project_Is_Assigned.objects.get(school=school)
-            if obj.is_assigned_in_presubmit:
-                pass
-            else:
-                expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
-                loginfo(p = expert_list, label = "hujun")
-                if len(expert_list) == 0 or len(subject_list) == 0:
-                    if not expert_list:
-                        exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
-                    else:
-                        exist_message = '没有可分配的项目，无法进行指派'
-                else:
-                    re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
-
-                    for subject in re_dict.keys():
-                        for expert in re_dict[subject]:
-                            try:
-                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
-                                    expert_id=expert.id)
-                                re_project_expert.delete()
-                            except:
-                                pass
-                            finally:
-                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
-                    obj.is_assigned_in_presubmit = True
-                    obj.save()
-        except Project_Is_Assigned.DoesNotExist:
-            obj = None
+    
+    alloced_subject_list = [subject for subject in subject_list if Re_Project_Expert.objects.filter(project = subject).count()]
+    unalloced_subject_list = [subject for subject in subject_list if not Re_Project_Expert.objects.filter(project = subject).count()]
+    print [subject.expert for subject in subject_list]
     context = {'subject_list': subject_list,
+               'alloced_subject_list': alloced_subject_list,
+               'unalloced_subject_list': unalloced_subject_list,
                'expert_list': expert_list,
                'exist_message': exist_message,
                'readonly': readonly,}

@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 						<tbody id="subject_table_body">
-						{% for subject in subject_list%}
+						{% for subject in unalloced_subject_list%}
 							<tr>
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
@@ -64,14 +64,14 @@
 						</tr>
 					</thead>
 					<tbody id="subject_table_body">
-						{% for subject in subject_list%}
+						{% for subject in alloced_subject_list%}
 							<tr>
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
 								<td>{{subject.school}}</td>
 								<td>{{subject.project_category}}</td>
 								<td>{{subject.project_status}}</td>
-								<td><a data-toggle="modal" href="#query_or_cancel" id="allocid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">查询或取消指派</a></td>
+								<td><a data-toggle="modal" href="#query_or_cancel" id="allocid_{{subject.project_id}}" onclick="query_or_cancel('{{subject.project_id}}');">查询或取消指派</a></td>
 							</tr>
 						{%endfor%}
 					</tbody>
@@ -89,7 +89,7 @@
 		<div class="modal-body">
 			{% for expert in expert_list %}
 				<label class="checkbox">
-					<input type="checkbox" value="">
+					<input type="checkbox" name="checkbox" value="">
 					{{ expert.userid }}
 				</label>
 			{% endfor %}
@@ -106,16 +106,16 @@
 			<a class="close" data-dismiss="modal">×</a>
 			<h3>指派评委列表</h3>
 		</div>
-		<div class="modal-body">
-
+		<div class="modal-body" id="alloc_expert_list">
+			
 		</div>
 		<div class="modal-footer">
 			<a class="btn" data-dismiss="modal">关闭</a>
-			<a class="btn btn-danger" data-dismiss="modal" onclick=";">取消指派</a>
+			<a class="btn btn-danger" data-dismiss="modal" onclick="cancel_this();">取消指派</a>
 		</div>
 	</div><!--end query_or_cancel-->
 
-  <script type="text/javascript" src="{{STATIC_URL}}js/school/is_alloced.js" onload="is_alloced();"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/school/alloc.js"></script>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}
