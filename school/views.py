@@ -185,7 +185,6 @@ def NewSubjectAlloc(request, is_expired = False):
     
     alloced_subject_list = [subject for subject in subject_list if Re_Project_Expert.objects.filter(project = subject).count()]
     unalloced_subject_list = [subject for subject in subject_list if not Re_Project_Expert.objects.filter(project = subject).count()]
-    print [subject.expert for subject in subject_list]
     context = {'subject_list': subject_list,
                'alloced_subject_list': alloced_subject_list,
                'unalloced_subject_list': unalloced_subject_list,

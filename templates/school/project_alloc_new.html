@@ -36,9 +36,9 @@
 							<th>操作</th>
 						</tr>
 					</thead>
-						<tbody id="subject_table_body">
+						<tbody id="unalloced_subject_table_body">
 						{% for subject in unalloced_subject_list%}
-							<tr>
+							<tr id="tr_{{subject.project_id}}">
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
 								<td>{{subject.school}}</td>
@@ -63,9 +63,9 @@
 							<th>操作</th>
 						</tr>
 					</thead>
-					<tbody id="subject_table_body">
+					<tbody id="alloced_subject_table_body">
 						{% for subject in alloced_subject_list%}
-							<tr>
+							<tr id="tr_{{subject.project_id}}">
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
 								<td>{{subject.school}}</td>
@@ -89,14 +89,15 @@
 		<div class="modal-body">
 			{% for expert in expert_list %}
 				<label class="checkbox">
-					<input type="checkbox" name="checkbox" value="">
+					<input type="checkbox" name="checkbox" value="{{ expert.userid }}">
 					{{ expert.userid }}
 				</label>
+				<br>
 			{% endfor %}
 		</div>
 		<div class="modal-footer">
 			<a class="btn" data-dismiss="modal">关闭</a>
-			<a class="btn btn-success" data-dismiss="modal" onclick=";">保存</a>
+			<a class="btn btn-success" data-dismiss="modal" onclick="save();">保存</a>
 		</div>
 	</div><!--end alloc_choice-->
   </div><!-- end the whole form -->
@@ -104,7 +105,7 @@
 	<div class="modal hide fade" style="display: none;" id="query_or_cancel"><!--query_or_cancel-->
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
-			<h3>指派评委列表</h3>
+			<h3>已指派评委列表</h3>
 		</div>
 		<div class="modal-body" id="alloc_expert_list">
 			
