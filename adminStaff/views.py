@@ -531,7 +531,8 @@ class AdminStaffService(object):
     
     @staticmethod
     @csrf.csrf_protect
-    def projectFilterList(request,project_manage_form):       
+    def projectFilterList(request,project_manage_form):
+        pro_list = ProjectSingle.objects.exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
@@ -565,7 +566,7 @@ class AdminStaffService(object):
             project_scoreapplication=''
         q1 = (project_year and Q(year=project_year)) or None
         # q2 = (project_isover and Q(is_over=project_isover)) or None
-        q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
+        q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         qset = filter(lambda x: x != None, [q1, q2, q3,q4])

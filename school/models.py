@@ -22,6 +22,7 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from const import OVER_STATUS_NOTOVER
 # from const import YEAR_CHOICES
 import datetime
 
@@ -56,8 +57,13 @@ class ProjectSingle(models.Model):
                                     verbose_name=u"推荐")
     # is_over = models.BooleanField(null=False, default=False,
     #                               verbose_name=u"结束判断")
+    try:
+        default_status = OverStatus.objects.get(status==OVER_STATUS_NOTOVER)
+    except:
+        default_status = 1
     over_status = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
-                                   blank=True, null=True)
+                                    blank=True, null=True,
+                                    default=default_status)
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
     file_interimchecklist = models.BooleanField(null=False, default=False,
@@ -97,6 +103,7 @@ class Project_Is_Assigned(models.Model):
 class Re_Project_Expert(models.Model):
     project = models.ForeignKey(ProjectSingle)
     expert = models.ForeignKey(ExpertProfile)
+    is_assign_by_adminStaff = models.BooleanField(default=False, blank=False, null=False)
     comments = models.TextField(blank=True, verbose_name="评价")
     score_significant = models.FloatField(blank=False, verbose_name=u"项目选题意义",
                                           default=0)
