@@ -28,6 +28,7 @@
 				<table class="table table-condensed" id="unalloced_subject_table">
 					<thead>
 						<tr>
+						  <th>选择</th>
 							<th>项目编号</th>
 							<th>发布题目名称</th>
 							<th>所属学院</th>
@@ -39,6 +40,10 @@
 						<tbody id="unalloced_subject_table_body">
 						{% for subject in unalloced_subject_list%}
 							<tr id="tr_{{subject.project_id}}">
+							  <td><label class="checkbox">
+					           <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}">
+				            </label>
+				        </td>
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
 								<td>{{subject.school}}</td>
@@ -49,12 +54,14 @@
 						{%endfor%}
 					</tbody>
       </table>
+      <a data-toggle="modal" href="#alloc_choice"><button class="btn btn-primary">批量指派</button></a>
     </div><!--end content section-->
 
       <div class="tab-pane fade " id="alloced-section">
 				<table class="table table-condensed" id="alloced_subject_table">
 					<thead>
 						<tr>
+						  <th>选择</th>
 							<th>项目编号</th>
 							<th>发布题目名称</th>
 							<th>所属学院</th>
@@ -66,6 +73,10 @@
 					<tbody id="alloced_subject_table_body">
 						{% for subject in alloced_subject_list%}
 							<tr id="tr_{{subject.project_id}}">
+							  <td><label class="checkbox">
+					           <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}">
+				            </label>
+				        </td>
 								<td>{{subject.project_code}}</td>
 								<td>{{subject.title}}</td>
 								<td>{{subject.school}}</td>
@@ -76,6 +87,7 @@
 						{%endfor%}
 					</tbody>
       </table>
+      <a data-toggle="modal" href="#query_or_cancel"><button class="btn btn-primary">批量取消</button></a>
       </div>
 
     </div><!--end tab content-->

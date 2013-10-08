@@ -29,7 +29,7 @@ function Alloc_Project_to_Expert_callback(data){
 	}
 	else{
 		var target_tr = "#tr_" + glo_project_id;
-		$(target_tr).children('td').eq(5).html(Join_td_1());
+		$(target_tr).children('td').eq(6).html(Join_td_1());
 		var add_html = $('<tr id="tr_' + glo_project_id + '">' + $(target_tr).html() + '</tr>');
 		$(target_tr).remove();
 		$("#alloced_subject_table_body").prepend(add_html);
@@ -41,7 +41,7 @@ function cancel_this(){
 
 function Cancel_Alloced_Experts_callback(data){
 	var target_tr = "#tr_" + glo_project_id;
-	$(target_tr).children('td').eq(5).html(Join_td_2());
+	$(target_tr).children('td').eq(6).html(Join_td_2());
 	var add_html = $('<tr id="tr_' + glo_project_id + '">' + $(target_tr).html() + '</tr>');
 	$(target_tr).remove();
 	$("#unalloced_subject_table_body").prepend(add_html);
