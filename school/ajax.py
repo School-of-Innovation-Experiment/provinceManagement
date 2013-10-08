@@ -17,6 +17,7 @@ from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatc
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
+from django.db.models import Q
 
 def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
@@ -111,7 +112,7 @@ def Alloc_Project_to_Expert(request, expert_list, project_list):
 def Query_Alloced_Expert(request, project_id):
     message = ''
     project = get_object_or_404(ProjectSingle, project_id = project_id)
-    expert_list = [item.expert for item in Re_Project_Expert.objects.filter(project = project)]
+    expert_list = [item.expert for item in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = False))]
     
     expert_list_html = ''
     for expert in expert_list:
@@ -126,7 +127,7 @@ def Cancel_Alloced_Experts(request, project_list):
         message = 'no project input'
     for project_id in project_list:
         project = get_object_or_404(ProjectSingle, project_id = project_id)
-        for re_project_expert in Re_Project_Expert.objects.filter(project = project):
+        for re_project_expert in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = False)):
             re_project_expert.delete()
             
     return simplejson.dumps({'message': message})
