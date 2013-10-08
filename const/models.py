@@ -12,6 +12,8 @@ from django.contrib.auth.models import User
 
 from const import NEWS_CATEGORY_CHOICES
 from const import NEWS_CATEGORY_ANNOUNCEMENT
+from const import OVER_STATUS_CHOICES
+from const import OVER_STATUS_NOTOVER
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
@@ -175,3 +177,17 @@ class NewsCategory(models.Model):
 
     def __unicode__(self):
         return self.get_category_display()
+
+class OverStatus(models.Model):
+    """
+    """
+    status = models.CharField(blank=False, null=False, unique=True, max_length=20,
+                                choices=OVER_STATUS_CHOICES, \
+                                default=OVER_STATUS_NOTOVER ,
+                                verbose_name=u"项目结束状态")
+    class Meta:
+        verbose_name = "项目结束状态"
+        verbose_name_plural = "项目结束状态"
+
+    def __unicode__(self):
+        return self.get_status_display()
