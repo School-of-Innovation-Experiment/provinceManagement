@@ -36,12 +36,15 @@ function save(){
 	Dajaxice.school.Alloc_Project_to_Expert(Alloc_Project_to_Expert_callback,{'expert_list': expert_list, 'project_list': project_list});
 }
 function Alloc_Project_to_Expert_callback(data){
-	if(data.message == "empty input"){
-		alert("空输入");
+	if(data.message == "no expert input"){
+		alert("未选择评委");
+	}
+	else if(data.message == "no project input"){
+	    alert("未选择项目");  
 	}
 	else{
-	    for (var i = 0; i < project.length; ++i){
-	        glo_project_id = project[i];
+	    for (var i = 0; i < project_list.length; ++i){
+	        glo_project_id = project_list[i];
 		    var target_tr = "#tr_" + glo_project_id;
 		    $(target_tr).children('td').eq(6).html(Join_td_1());
 		    var add_html = $('<tr id="tr_' + glo_project_id + '">' + $(target_tr).html() + '</tr>');
@@ -56,12 +59,18 @@ function cancel_this(){
 }
 
 function Cancel_Alloced_Experts_callback(data){
-    for (var i = 0; i < project.length; ++i){
-	    var target_tr = "#tr_" + glo_project_id;
-	    $(target_tr).children('td').eq(6).html(Join_td_2());
-	    var add_html = $('<tr id="tr_' + glo_project_id + '">' + $(target_tr).html() + '</tr>');
-	    $(target_tr).remove();
-	    $("#unalloced_subject_table_body").prepend(add_html);
+    if(data.message == "no project input"){
+	    alert("未选择项目");  
+	}
+	else{
+        for (var i = 0; i < project_list.length; ++i){
+            glo_project_id = project_list[i];
+	        var target_tr = "#tr_" + glo_project_id;
+	        $(target_tr).children('td').eq(6).html(Join_td_2());
+	        var add_html = $('<tr id="tr_' + glo_project_id + '">' + $(target_tr).html() + '</tr>');
+	        $(target_tr).remove();
+	        $("#unalloced_subject_table_body").prepend(add_html);
+	    }
 	}
 	$("[name='checkbox_project']").removeAttr("checked");
 }

@@ -89,12 +89,10 @@ def teacherProjNumLimit(request, form):
 @dajaxice_register
 def Alloc_Project_to_Expert(request, expert_list, project_list):
     message = ''
-    project = get_object_or_404(ProjectSingle, project_id = project_id)
     if len(expert_list) == 0:
         message = 'no expert input'
     if len(project_list) == 0:
         message = 'no project input'
-
     for project_id in project_list:
         project = get_object_or_404(ProjectSingle, project_id = project_id)
         for expert_id in expert_list:
