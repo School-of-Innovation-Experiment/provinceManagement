@@ -218,13 +218,18 @@ class ProjectManageForm(forms.Form):
     project_grade_choice = list(project_grade_choice)
     project_grade_choice.insert(0,('-1',u"级别"))
     loginfo(p=project_grade_choice,label="project_grade_choice")
-    project_isover_choice = [(-1, "结题状态"),(0,"未结题"),(1,"已结题")]
+    # project_isover_choice = [(-1, "结题状态"),(0,"未结题"),(1,"已结题")]
+    # project_isover_choice = tuple(project_isover_choice)
+
+    project_overstatus_choice = list(OVER_STATUS_CHOICES)
+    project_overstatus_choice = tuple([(-1, u"结题状态")] + project_overstatus_choice)
+
     project_scoreapplication_choice = [(-1, "学分申请状态"),(0,"未申请"),(1,"已申请")]
-    project_isover_choice = tuple(project_isover_choice)
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
-    project_isover = forms.ChoiceField(choices=project_isover_choice)
+    # project_isover = forms.ChoiceField(choices=project_isover_choice)
+    project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
     project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
 
     def __init__(self, *args, **kwargs):
