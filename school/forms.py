@@ -280,11 +280,14 @@ class ProjectManageForm(forms.Form):
     project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_INSITUTE or grade[0] == GRADE_SCHOOL]
     project_grade_choice = list(project_grade_choice)
     project_grade_choice.insert(0,('-1',u"级别"))
-    project_isover_choice = [(-1,"结题管理"),(0,"未结题"),(1,"已结题")]
-    project_isover_choice = tuple(project_isover_choice)
+    # project_isover_choice = [(-1,"结题管理"),(0,"未结题"),(1,"已结题")]
+    # project_isover_choice = tuple(project_isover_choice)
+    project_overstatus_choice = list(OVER_STATUS_CHOICES)
+    project_overstatus_choice = tuple([(-1, u"结题状态")] + project_overstatus_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
-    project_isover = forms.ChoiceField(choices=project_isover_choice)
+    # project_isover = forms.ChoiceField(choices=project_isover_choice)
+    project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
 
     def __init__(self, *args, **kwargs):
         school = kwargs.pop('school', None)

@@ -57,17 +57,21 @@ def home_view(request):
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
-            project_isover = project_manage_form.cleaned_data["project_isover"]
+            # project_isover = project_manage_form.cleaned_data["project_isover"]
+            project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             if project_grade == "-1":
                 project_grade= ''
             if project_year == '-1':
                 project_year=''
-            if project_isover == '-1':
-                project_isover=''
+            # if project_isover == '-1':
+            #     project_isover=''
+            if project_overstatus == '-1':
+                project_overstatus=''
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
-            q2 = (project_isover and Q(is_over=project_isover)) or None
+            # q2 = (project_isover and Q(is_over=project_isover)) or None
+            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
