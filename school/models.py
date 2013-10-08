@@ -56,7 +56,7 @@ class ProjectSingle(models.Model):
                                     verbose_name=u"推荐")
     # is_over = models.BooleanField(null=False, default=False,
     #                               verbose_name=u"结束判断")
-    overstatus = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
+    over_status = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
                                    blank=True, null=True)
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
