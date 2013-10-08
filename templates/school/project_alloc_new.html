@@ -49,12 +49,12 @@
 								<td>{{subject.school}}</td>
 								<td>{{subject.project_category}}</td>
 								<td>{{subject.project_status}}</td>
-								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">指派专家</a></td>
+								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="single_storage('{{subject.project_id}}');">指派专家</a></td>
 							</tr>
 						{%endfor%}
 					</tbody>
       </table>
-      <a data-toggle="modal" href="#alloc_choice"><button class="btn btn-primary">批量指派</button></a>
+      <a data-toggle="modal" href="#alloc_choice" onclick="bulk_storage();"><button class="btn btn-primary">批量指派</button></a>
     </div><!--end content section-->
 
       <div class="tab-pane fade " id="alloced-section">
@@ -87,7 +87,7 @@
 						{%endfor%}
 					</tbody>
       </table>
-      <a data-toggle="modal" href="#query_or_cancel"><button class="btn btn-primary">批量取消</button></a>
+      <a data-toggle="modal" href="#query_or_cancel" onclick="bulk_cancel();"><button class="btn btn-primary">批量取消</button></a>
       </div>
 
     </div><!--end tab content-->
@@ -101,7 +101,7 @@
 		<div class="modal-body">
 			{% for expert in expert_list %}
 				<label class="checkbox">
-					<input type="checkbox" name="checkbox" value="{{ expert.userid }}">
+					<input type="checkbox" name="checkbox_expert" value="{{ expert.userid }}">
 					{{ expert.userid }}
 				</label>
 				<br>

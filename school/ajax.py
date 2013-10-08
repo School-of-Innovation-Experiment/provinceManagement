@@ -87,21 +87,25 @@ def teacherProjNumLimit(request, form):
 
 
 @dajaxice_register
-def Alloc_Project_to_Expert(request, expert_list, project_id):
+def Alloc_Project_to_Expert(request, expert_list, project_list):
     message = ''
     project = get_object_or_404(ProjectSingle, project_id = project_id)
     if len(expert_list) == 0:
-        message = 'empty input'
+        message = 'no expert input'
+    if len(project_list) == 0:
+        message = 'no project input'
 
-    for expert_id in expert_list:
-        expert = ExpertProfile.objects.get(userid__email = expert_id)
-        try:
-            re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert)
-            re_project_expert.delete()
-        except:
-            pass
-        finally:
-            Re_Project_Expert(project = project, expert = expert).save()
+    for project_id in project_list:
+        project = get_object_or_404(ProjectSingle, project_id = project_id)
+        for expert_id in expert_list:
+            expert = ExpertProfile.objects.get(userid__email = expert_id)
+            try:
+                re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert)
+                re_project_expert.delete()
+            except:
+                pass
+            finally:
+                Re_Project_Expert(project = project, expert = expert).save()
     
     return simplejson.dumps({'message': message})
 
@@ -118,11 +122,15 @@ def Query_Alloced_Expert(request, project_id):
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
-def Cancel_Alloced_Experts(request, project_id):
+def Cancel_Alloced_Experts(request, project_list):
     message = ''
-    project = get_object_or_404(ProjectSingle, project_id = project_id)
-    for re_project_expert in Re_Project_Expert.objects.filter(project = project):
-        re_project_expert.delete()
+    if len(project_list) == 0:
+        message = 'no project input'
+    for project_id in project_list:
+        project = get_object_or_404(ProjectSingle, project_id = project_id)
+        for re_project_expert in Re_Project_Expert.objects.filter(project = project):
+            re_project_expert.delete()
+            
     return simplejson.dumps({'message': message})
 
 @dajaxice_register
