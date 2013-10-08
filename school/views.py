@@ -170,6 +170,30 @@ def SubjectRating(request,is_expired=False):
                 }
     return render(request, "school/subject_rating.html",context)
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+#@transaction.commit_on_success
+#@time_controller(phase=STATUS_PRESUBMIT)
+def NewSubjectAlloc(request, is_expired = False):
+    exist_message = ''
+    readonly = is_expired
+    school = get_object_or_404(SchoolProfile, userid = request.user)
+    subject_list = AdminStaffService.GetSubject_list(school)
+    expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+    
+    alloced_subject_list = [subject for subject in subject_list if Re_Project_Expert.objects.filter(project = subject).count()]
+    unalloced_subject_list = [subject for subject in subject_list if not Re_Project_Expert.objects.filter(project = subject).count()]
+    context = {'subject_list': subject_list,
+               'alloced_subject_list': alloced_subject_list,
+               'unalloced_subject_list': unalloced_subject_list,
+               'expert_list': expert_list,
+               'exist_message': exist_message,
+               'readonly': readonly,}
+    return render(request, "school/project_alloc_new.html",context)
+
+
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)

@@ -456,7 +456,7 @@ class AdminStaffService(object):
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+                subject_list =  pro_list=ProjectSingle.objects.filter((Q(project_grade=1)|Q(project_grade=2) )and Q(school = school_name))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -475,16 +475,6 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
-        # test = Funds_Group(
-        #                     project_id = project,
-        #                     project_code = '20130506',
-        #                     funds_datetime = '2013-08-08',
-        #                     student_name = u'小成亲',
-        #                     funds_amount = '8653',
-        #                     funds_remaining = '15630',
-        #                     funds_detail = u'逗你玩'
-        #                     )
-        # test.save();
         project_funds_list = Funds_Group.objects.filter(project_id = pid)
 
         fundsChange_group_form = forms.FundsChangeForm();
@@ -501,11 +491,11 @@ class AdminStaffService(object):
         return_data = {
                         "project_funds_list":project_funds_list,
                         "fundsChange_group_form":fundsChange_group_form,
-                        "student_name_form":student_name_form
+                        "student_name_form":student_name_form,
+                        "project":project,
                         }
 
         return render(request,"adminStaff/funds_change.html",return_data)
-
 
     @staticmethod
     @csrf.csrf_protect
@@ -518,19 +508,7 @@ class AdminStaffService(object):
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
-            if project_manage_form.is_valid():
-                project_grade = project_manage_form.cleaned_data["project_grade"]
-                project_year =  project_manage_form.cleaned_data["project_year"]
-                project_isover = project_manage_form.cleaned_data["project_isover"]
-                project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
-                qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-                if qset :
-                    qset = reduce(lambda x, y: x & y, qset)
-                    if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
-                    else:
-                        pro_list = ProjectSingle.objects.filter(qset)
-            loginfo(p=qset,label="qset")
+            pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
         else:
             project_manage_form = forms.ProjectManageForm()
 
@@ -550,7 +528,24 @@ class AdminStaffService(object):
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/adminstaff_home.html",context)
-
+    
+    @staticmethod
+    @csrf.csrf_protect
+    def projectFilterList(request,project_manage_form):       
+        if project_manage_form.is_valid():
+            project_grade = project_manage_form.cleaned_data["project_grade"]
+            project_year =  project_manage_form.cleaned_data["project_year"]
+            project_isover = project_manage_form.cleaned_data["project_isover"]
+            project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+            if qset :
+                qset = reduce(lambda x, y: x & y, qset)
+                if project_grade == "-1" and project_scoreapplication == "-1":
+                    pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
+                else:
+                    pro_list = ProjectSingle.objects.filter(qset)
+        loginfo(p=qset,label="qset")
+        return pro_list
     @staticmethod
     def get_filter(project_grade,project_year,project_isover,project_scoreapplication):
         if project_grade == "-1":
@@ -582,32 +577,13 @@ class AdminStaffService(object):
         pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
-            if project_manage_form.is_valid():
-                project_grade = project_manage_form.cleaned_data["project_grade"]
-                project_year =  project_manage_form.cleaned_data["project_year"]
-                project_isover = project_manage_form.cleaned_data["project_isover"]
-                project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
-                qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-                if qset :
-                    qset = reduce(lambda x, y: x & y, qset)
-                    if project_grade == "-1" and project_scoreapplication == "-1":
-                        pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
-                    else:
-                        pro_list = ProjectSingle.objects.filter(qset)
-            loginfo(p=qset,label="qset")
+            pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
         else:
             project_manage_form = forms.ProjectManageForm()
 
-        for pro_obj in pro_list:
-            file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
-            for file_temp in file_history:
-                if file_temp.name == u"学分申请表":
-                    url = file_temp.file_obj.url
-                    pro_obj.url = url
-        loginfo(p=pro_list,label="pro_list")
-        if pro_list.count() != 0:
+        if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
-        else: havedata_p = False          
+        else: havedata_p = False       
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,

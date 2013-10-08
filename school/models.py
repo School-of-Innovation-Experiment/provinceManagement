@@ -70,6 +70,10 @@ class ProjectSingle(models.Model):
                                   verbose_name=u"学分申请")    
     # is_applicationover = models.BooleanField(null=False, default=False,
     #                               verbose_name=u"申请结束判断")    
+    funds_total   = models.FloatField(blank=False, verbose_name=u"经费总额",
+                                    default=0)
+    funds_remain  = models.FloatField(blank=False, verbose_name=u"经费余额",
+                                    default=0)
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
     class Meta:
         verbose_name = "参赛项目"

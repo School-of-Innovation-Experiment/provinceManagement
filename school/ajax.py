@@ -1,4 +1,5 @@
 # coding: UTF8
+from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -8,12 +9,12 @@ from const.models import SchoolDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from users.models import SchoolProfile, TeacherProfile
+from users.models import SchoolProfile, TeacherProfile, ExpertProfile
 from news.models import News
 from django.contrib.auth.models import User
 import datetime
 from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 
@@ -84,6 +85,45 @@ def teacherProjNumLimit(request, form):
         loginfo(form.errors)
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
 
+
+@dajaxice_register
+def Alloc_Project_to_Expert(request, expert_list, project_id):
+    message = ''
+    project = get_object_or_404(ProjectSingle, project_id = project_id)
+    if len(expert_list) == 0:
+        message = 'empty input'
+
+    for expert_id in expert_list:
+        expert = ExpertProfile.objects.get(userid__email = expert_id)
+        try:
+            re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert)
+            re_project_expert.delete()
+        except:
+            pass
+        finally:
+            Re_Project_Expert(project = project, expert = expert).save()
+    
+    return simplejson.dumps({'message': message})
+
+@dajaxice_register
+def Query_Alloced_Expert(request, project_id):
+    message = ''
+    project = get_object_or_404(ProjectSingle, project_id = project_id)
+    expert_list = [item.expert for item in Re_Project_Expert.objects.filter(project = project)]
+    
+    expert_list_html = ''
+    for expert in expert_list:
+        expert_list_html += '<p>' + expert.__str__() + '</p>'
+
+    return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
+
+@dajaxice_register
+def Cancel_Alloced_Experts(request, project_id):
+    message = ''
+    project = get_object_or_404(ProjectSingle, project_id = project_id)
+    for re_project_expert in Re_Project_Expert.objects.filter(project = project):
+        re_project_expert.delete()
+    return simplejson.dumps({'message': message})
 
 @dajaxice_register
 def  TeacherDispatch(request, form):
