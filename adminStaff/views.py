@@ -241,6 +241,71 @@ class AdminStaffService(object):
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    @transaction.commit_on_success
+    @time_controller(phase=STATUS_FINSUBMIT)
+    def SubjectAlloc(request, is_expired=False):
+        """
+        手动指派项目
+        """
+        exist_message = ''
+        readonly=is_expired
+        subject_list =  AdminStaffService.GetSubject_list()
+        if request.method == "GET":
+            #subject_insitute_form = forms.SubjectInsituteForm()
+            subject_insitute_form = forms.SchoolCategoryForm()
+            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:] #特殊处理：去除form中的“显示所有学部学院”选项
+        else:
+            #subject_insitute_form = forms.SubjectInsituteForm(request.POST)
+            subject_insitute_form = forms.SchoolCategoryForm(request.POST)
+            if subject_insitute_form.is_valid():
+                school = subject_insitute_form.cleaned_data["school_choice"]
+                subject_list =  AdminStaffService.GetSubject_list(school=school)
+                expert_school = SchoolProfile.objects.get(id=school)
+                try:
+                    obj = Project_Is_Assigned.objects.get(school = expert_school)
+                    #如果已经指派专家了直接返回列表即可
+                    if obj.is_assigned == 1:
+                        pass
+                    #没有指派专家，则进行专家指派
+                    else:
+                        #筛选专家列表
+                        expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+                        #如果所属学科专家不存在，则进行提示
+                        if len(expert_list) == 0 or len(subject_list) == 0:
+                            if not expert_list :
+                                exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
+                            else:
+                                exist_message = '没有可分配的项目，无法进行指派'
+
+                        else:
+                            re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
+                            #将返回数据进入Re_Project_Expert表中
+
+                            for subject in re_dict.keys():
+                                for expert in re_dict[subject]:
+                                    loginfo(p = subject.project_id, label="subject.project_id: ")
+                                    #subject.expert.add(expert)
+                                    try:
+                                        re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id,
+                                            expert_id=expert.id)
+                                        re_project_expert.delete()
+                                    except:
+                                        pass
+                                    finally:
+                                        Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
+                            #保存已分配标志，值为1
+                            obj.is_assigned = True
+                            obj.save()
+                except Project_Is_Assigned.DoesNotExist:
+                    obj = None
+        return render_to_response("adminStaff/subject_alloc.html",{'subject_list':subject_list,'subject_insitute_form':subject_insitute_form,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
+
+
     @staticmethod
     @csrf.csrf_protect
     @login_required

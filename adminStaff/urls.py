@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^settings$',AdminStaffService.AdminSetting),
     url(r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
     url(r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
-
+    url(r'^subject_alloc/$', AdminStaffService.SubjectAlloc),
     url(r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
     url(r'^subject_rating/$',AdminStaffService.SubjectRating),
     #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
