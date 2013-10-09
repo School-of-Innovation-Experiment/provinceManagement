@@ -51,7 +51,10 @@ from student.models import Funds_Group
 @authority_required(SCHOOL_USER)
 def home_view(request):
     school = SchoolProfile.objects.get(userid=request.user)
-    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+    over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+    grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
         if project_manage_form.is_valid():
@@ -67,6 +70,8 @@ def home_view(request):
             #     project_isover=''
             if project_overstatus == '-1':
                 project_overstatus=''
+            else:
+                project_overstatus=OverStatus.objects.get(status=project_overstatus)
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
@@ -75,12 +80,15 @@ def home_view(request):
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
+            over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+            grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+            grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6))).filter(qset)
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school))).filter(qset)
                 #.exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE) or Q(project_grade__grade=GRADE_UN))
             else:
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
@@ -247,16 +255,22 @@ def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
     is_finishing = school.is_finishing
-    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+    # try
+    over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+    grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(over_status=over_notover_status)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+    loginfo(p=pro_list,label="pro_list in school %s" % request.user)
     year_list=[]
     for pro_obj in pro_list :
         if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
-
+    havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
                     "year_list":year_list,
+                    "havedata_p":havedata_p,
                 })
 
 

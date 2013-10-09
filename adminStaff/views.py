@@ -562,6 +562,8 @@ class AdminStaffService(object):
         #     project_isover=''
         if project_overstatus == '-1':
             project_overstatus=''
+        else:
+            project_overstatus=OverStatus.objects.get(status=project_overstatus)
         if project_scoreapplication == '-1':
             project_scoreapplication=''
         q1 = (project_year and Q(year=project_year)) or None

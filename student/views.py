@@ -123,9 +123,9 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)
     is_applying = check_applycontrol(project)
-    readonly= is_expired or not is_currentyear or not is_applying
+    readonly= is_expired or (not is_currentyear) or (not is_applying)
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
+    logger.info(readonly)
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -199,8 +199,8 @@ def final_report_view(request, pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
     is_finishing = check_finishingyear(project)
-    is_over = project.is_over
-    readonly = is_over or not is_finishing
+    over_status = project.over_status
+    readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
