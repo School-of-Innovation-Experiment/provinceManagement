@@ -7,7 +7,6 @@ Created on 2012-11-10
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
-
 from const.models import *
 from const import SCHOOL_USER, EXPERT_USER, ADMINSTAFF_USER, VISITOR_USER, STUDENT_USER, TEACHER_USER, EXPERT_GRADE_CHOICES
 

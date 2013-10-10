@@ -35,9 +35,8 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN,GRADE_PROVINCE,GRADE_NATION
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 
 from backend.utility import search_tuple
-
 from backend.logging import logger,loginfo
-
+from django.db.models import Q
 
 def check_limits(user):
     """
@@ -56,6 +55,12 @@ def check_limits(user):
 
     return True if total > currents else False
 
+def check_project_is_assign(project, is_assign_by_adminStaff = False):
+    """
+    check a project is assign by someone
+    """
+    return Re_Project_Expert.objects.filter(Q(project = project) & 
+                                   Q(is_assign_by_adminStaff = is_assign_by_adminStaff)).count()
 
 def get_current_year():
     """
