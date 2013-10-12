@@ -27,7 +27,6 @@ def search_tuple(src, target):
 
     return None
 
-
 def convert2media_url(raw_url):
     """
     convert filefield's default url-string to media url

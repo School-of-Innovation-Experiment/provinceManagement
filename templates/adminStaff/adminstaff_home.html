@@ -8,7 +8,8 @@
   {% csrf_token %}
   {{project_manage_form.project_grade}}
   {{project_manage_form.project_year}}
-  {{project_manage_form.project_isover}}
+  <!-- {{project_manage_form.project_isover}} -->
+  {{project_manage_form.project_overstatus}}
   {{project_manage_form.project_scoreapplication}}
   <input type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索"/>
 </form>
@@ -55,7 +56,8 @@
       {% if item.score_application %}<span class="label label-important"><a href="{{item.url}}" style="font-size:14px;color:white;">申请学分</a></span>{% endif %}
     </td>
     <td>
-      <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> 
+      <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
+      <input type="button" id="overstatus_button"  pid="{{item.project_id}}" rel="overstatus" value={{item.over_status}} class="btn btn-primary">
     </td>
       </tr>
       {%endfor%}

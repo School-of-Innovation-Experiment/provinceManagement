@@ -51,32 +51,44 @@ from student.models import Funds_Group
 @authority_required(SCHOOL_USER)
 def home_view(request):
     school = SchoolProfile.objects.get(userid=request.user)
-    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+    over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+    grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
-            project_isover = project_manage_form.cleaned_data["project_isover"]
+            # project_isover = project_manage_form.cleaned_data["project_isover"]
+            project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             if project_grade == "-1":
                 project_grade= ''
             if project_year == '-1':
                 project_year=''
-            if project_isover == '-1':
-                project_isover=''
+            # if project_isover == '-1':
+            #     project_isover=''
+            if project_overstatus == '-1':
+                project_overstatus=''
+            else:
+                project_overstatus=OverStatus.objects.get(status=project_overstatus)
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
-            q2 = (project_isover and Q(is_over=project_isover)) or None
+            # q2 = (project_isover and Q(is_over=project_isover)) or None
+            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
+            over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+            grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+            grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6))).filter(qset)
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school))).filter(qset)
                 #.exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE) or Q(project_grade__grade=GRADE_UN))
             else:
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
@@ -181,37 +193,17 @@ def NewSubjectAlloc(request, is_expired = False):
     readonly = is_expired
     school = get_object_or_404(SchoolProfile, userid = request.user)
     subject_list = AdminStaffService.GetSubject_list(school)
-    if request.method == "POST":
-        try:
-            obj = Project_Is_Assigned.objects.get(school=school)
-            if obj.is_assigned_in_presubmit:
-                pass
-            else:
-                expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
-                loginfo(p = expert_list, label = "hujun")
-                if len(expert_list) == 0 or len(subject_list) == 0:
-                    if not expert_list:
-                        exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
-                    else:
-                        exist_message = '没有可分配的项目，无法进行指派'
-                else:
-                    re_dict = AdminStaffService.Assign_Expert_For_Subject(subject_list, expert_list)
-
-                    for subject in re_dict.keys():
-                        for expert in re_dict[subject]:
-                            try:
-                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
-                                    expert_id=expert.id)
-                                re_project_expert.delete()
-                            except:
-                                pass
-                            finally:
-                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
-                    obj.is_assigned_in_presubmit = True
-                    obj.save()
-        except Project_Is_Assigned.DoesNotExist:
-            obj = None
-    return render_to_response("school/project_alloc_new.html",{'subject_list':subject_list,'exist_message':exist_message,'readonly':readonly},context_instance=RequestContext(request))
+    expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+    
+    alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
+    unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject)]
+    context = {'subject_list': subject_list,
+               'alloced_subject_list': alloced_subject_list,
+               'unalloced_subject_list': unalloced_subject_list,
+               'expert_list': expert_list,
+               'exist_message': exist_message,
+               'readonly': readonly,}
+    return render(request, "school/project_alloc_new.html",context)
 
 
 @csrf.csrf_protect
@@ -263,16 +255,22 @@ def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
     is_finishing = school.is_finishing
-    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
+    # try
+    over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+    grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(over_status=over_notover_status)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+    loginfo(p=pro_list,label="pro_list in school %s" % request.user)
     year_list=[]
     for pro_obj in pro_list :
         if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
-
+    havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
                     "year_list":year_list,
+                    "havedata_p":havedata_p,
                 })
 
 

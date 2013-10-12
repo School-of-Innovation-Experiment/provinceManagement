@@ -33,6 +33,7 @@ from backend.decorators import *
 from backend.logging import loginfo
 from news.models import News
 from news.forms import NewsForm
+from school.utility import check_project_is_assign
 
 class AdminStaffService(object):
     @staticmethod
@@ -84,7 +85,7 @@ class AdminStaffService(object):
         return res_list
 
     @staticmethod
-    def GetRegisterList():
+    def GetRegisterList(request):
         '''
         获得学校及评委用户列表
         '''
@@ -103,8 +104,8 @@ class AdminStaffService(object):
                 dict["auth"] += auth.__unicode__() + '(' + register.school.__unicode__() + ')'
             ##########################################################################
             res_list.append(dict)
-        # 添加所有的评委用户
-        for register in ExpertProfile.objects.all():
+        # 添加所有的校级评委用户
+        for register in ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user):
             dict = {}
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
             dict["auth"] = ''
@@ -123,7 +124,7 @@ class AdminStaffService(object):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDictDispatchForm()
-            email_list  = AdminStaffService.GetRegisterList()
+            email_list  = AdminStaffService.GetRegisterList(request)
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
@@ -241,6 +242,52 @@ class AdminStaffService(object):
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    @transaction.commit_on_success
+    @time_controller(phase=STATUS_FINSUBMIT)
+    def SubjectAlloc(request, is_expired=False):
+        """
+        手动指派项目
+        """
+        exist_message = ''
+        readonly=is_expired
+        subject_list =  ProjectSingle.objects.filter(recommend = True)
+        expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+        if len(expert_list) == 0 or len(subject_list) == 0:
+            if not expert_list :
+                exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
+            else:
+                exist_message = '没有可分配的项目，无法进行指派'
+
+
+        if request.method == "GET":
+            subject_insitute_form = forms.SchoolCategoryForm()
+            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:] #特殊处理：去除form中的“显示所有学部学院”选项
+        else:
+            subject_insitute_form = forms.SchoolCategoryForm(request.POST)
+            subject_insitute_form.fields['school_choice'].choices = subject_insitute_form.fields['school_choice'].choices[1:] #特殊处理：去除form中的“显示所有学部学院”选项
+
+            if subject_insitute_form.is_valid():
+                school = subject_insitute_form.cleaned_data["school_choice"]
+                subject_list =  ProjectSingle.objects.filter(Q(recommend = True) & Q(school__id = school))
+
+        alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject, True)]
+        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)]
+ 
+        context = {'subject_list': subject_list,
+                   'alloced_subject_list': alloced_subject_list,
+                   'unalloced_subject_list': unalloced_subject_list,
+                   'expert_list': expert_list,
+                   'subject_insitute_form': subject_insitute_form,
+                   'exist_message': exist_message,
+                   'readonly': readonly,}
+        return render(request, "adminStaff/subject_alloc.html", context)
+
+
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -531,13 +578,16 @@ class AdminStaffService(object):
     
     @staticmethod
     @csrf.csrf_protect
-    def projectFilterList(request,project_manage_form):       
+    def projectFilterList(request,project_manage_form):
+        pro_list = ProjectSingle.objects.exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
-            project_isover = project_manage_form.cleaned_data["project_isover"]
+            # project_isover = project_manage_form.cleaned_data["project_isover"]
+            project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+            # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 if project_grade == "-1" and project_scoreapplication == "-1":
@@ -546,18 +596,26 @@ class AdminStaffService(object):
                     pro_list = ProjectSingle.objects.filter(qset)
         loginfo(p=qset,label="qset")
         return pro_list
+
+    ##
+    # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_isover,project_scoreapplication):
+    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
             project_year=''
-        if project_isover == '-1':
-            project_isover=''
+        # if project_isover == '-1':
+        #     project_isover=''
+        if project_overstatus == '-1':
+            project_overstatus=''
+        else:
+            project_overstatus=OverStatus.objects.get(status=project_overstatus)
         if project_scoreapplication == '-1':
             project_scoreapplication=''
         q1 = (project_year and Q(year=project_year)) or None
-        q2 = (project_isover and Q(is_over=project_isover)) or None
+        # q2 = (project_isover and Q(is_over=project_isover)) or None
+        q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         qset = filter(lambda x: x != None, [q1, q2, q3,q4])

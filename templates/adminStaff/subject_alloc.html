@@ -1,7 +1,11 @@
-{% extends "school/home.html" %}
+{% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
   <div class="well form-inline">
     <b>
+      <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_alloc/"><!-- begin category form-->
+	{% csrf_token %}
+	{{subject_insitute_form.school_choice}}
+  <input type="submit" class="btn btn-primary" id="filter_button" value="按照学院进行筛选"/>
 	{% if readonly %}
 	  <div class="alert alert-error" style="margin-top:20px;">
 	    <a class="close" data-dismiss="alert">x</a>
@@ -10,8 +14,9 @@
 	  </div><!--end alert block-->
 	{%endif%}
 	{{exist_message}}
-
-<div class="tab-content">
+  </form><!--end category form -->
+  
+  <div class="tab-content">
   <div class="tab-pane fade active in" id="review-page">
     <ul class="nav nav-tabs">
       <li class="active">
@@ -89,11 +94,9 @@
       </table>
       <a data-toggle="modal" onclick="bulk_cancel();"><button class="btn btn-primary">批量取消</button></a>
       </div>
-
     </div><!--end tab content-->
   </div><!--end tab pane-->
-</div><!--end tab content-->
-	<div class="modal hide fade" style="display: none;" id="alloc_choice"><!--alloc_choice-->
+  	<div class="modal hide fade" style="display: none;" id="alloc_choice"><!--alloc_choice-->
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
 			<h3>选择指派评委</h3>
@@ -127,8 +130,8 @@
 			<a class="btn btn-danger" data-dismiss="modal" onclick="cancel_this();">取消指派</a>
 		</div>
 	</div><!--end query_or_cancel-->
-
-  <script type="text/javascript" src="{{STATIC_URL}}js/school/alloc.js" onload="get_user('school');"></script>
+	  </div><!-- end the whole form -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/school/alloc.js" onload="get_user('adminStaff');"></script>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}
