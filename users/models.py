@@ -37,6 +37,9 @@ class SchoolProfile(models.Model):
     """
     address = models.CharField(max_length=100, blank=True, verbose_name="地址")
     school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
+    name = models.CharField(blank=True, max_length=100,
+                            verbose_name=u"姓名")
+
     userid = models.ForeignKey(User, unique=True, \
                                verbose_name="权限对应ID")
     is_applying = models.BooleanField(null=False, default=False,
@@ -60,6 +63,9 @@ class SchoolProfile(models.Model):
 class ExpertProfile(models.Model):
     userid = models.ForeignKey(User, unique=True,
                                verbose_name=u"权限对应ID")
+    name = models.CharField(blank=True, max_length=100,
+                            verbose_name=u"姓名")
+
     jobs = models.CharField(max_length=100, blank=True,
                             verbose_name=u"工作单位")
     assigned_by_school = models.ForeignKey(SchoolProfile, blank=True, null=True)
@@ -121,6 +127,8 @@ class StudentProfile(models.Model):
                                 verbose_name="权限对应ID")
     teacher = models.ForeignKey(TeacherProfile,
                                 verbose_name="指导教师")
+    name = models.CharField(blank=True, max_length=100,
+                            verbose_name=u"姓名")
 
     class Meta:
         verbose_name = "参赛学生账户"
@@ -131,4 +139,3 @@ class StudentProfile(models.Model):
         super(StudentProfile, self).save()
         auth, created = UserIdentity.objects.get_or_create(identity=STUDENT_USER)
         self.userid.identities.add(auth)
-
