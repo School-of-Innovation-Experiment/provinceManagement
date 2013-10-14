@@ -53,7 +53,7 @@
 	</td>
 	<td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
-          <input type="button" id="overstatus_button"  pid="{{item.project_id}}" rel="overstatus" value={{item.over_status}} class="btn btn-primary">
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
 	</td>
 	<td>
       	  <span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
@@ -62,6 +62,19 @@
       {%endfor%}
     </tbody>
   </table>
+  <div class="modal hide fade" style="display: none;" id="overstatus_choice">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>选择项目结题状态</h3>
+    </div>
+    <div class="modal-body">
+      {{project_manage_form.project_overstatus}}
+    </div>
+    <div class="modal-footer">
+      <a class="btn" data-dismiss="modal">关闭</a>
+      <a class="btn btn-primary" data-dismiss="modal" onclick="project_overstatus();">保存更新</a>
+    </div>
+  </div>
 </div>
 {% else %}
 目前没有进行中的项目或者项目未分级，请在查看项目等级设定界面查看是否有未分级项目<br>

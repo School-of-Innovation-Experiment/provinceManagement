@@ -176,7 +176,7 @@ def change_subject_recommend(request, project_id, changed_grade):
     res = ''
     if val == 1:
         res = "已推荐"
-        if project.recommend: 
+        if project.recommend:
             exit_status = '1'
         else:
             remaining = get_recommend_limit(school)[1]
@@ -205,6 +205,37 @@ def change_subject_grade(request, project_id, changed_grade):
     return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
+def change_project_overstatus(request, project_id, changed_overstatus):
+    '''
+    change project overstatus
+    '''
+    choices = dict(OVER_STATUS_CHOICES)
+    if changed_overstatus in choices:
+        AdminStaffService.ProjectOverStatusChange(project_id, changed_overstatus)
+        res = choices[changed_overstatus]
+    else:
+        res = "操作失败，请重试"
+    return simplejson.dumps({'status':'1', 'res':res})
+
+@dajaxice_register
+def get_news_list(request, uid):
+
+    logger.info("sep delete news"+"**"*10)
+    # check mapping relation
+    try:
+        delnews=News.objects.get(id=uid)
+        if request.method == "POST":
+            delnews.delete()
+            return simplejson.dumps({"is_deleted": True,
+                    "message": "delete it successfully!",
+                    "uid": str(uid)})
+        else:
+            return simplejson.dumps({"is_deleted": False,
+                                     "message": "Warning! Only POST accepted!"})
+    except Exception, err:
+        logger.info(err)
+
+@dajaxice_register
 def TemNoticeChange(request,form,origin):
     temnotice_form=TemplateNoticeForm(deserialize_form(form))
     if not temnotice_form.is_valid():
@@ -215,7 +246,7 @@ def TemNoticeChange(request,form,origin):
         ret = new_temnotice(request,temnotice_form)
     else:  #添加模版消息
         ret = change_temnotice(request,temnotice_form,origin)
-    
+
 
     return simplejson.dumps(ret)
 
@@ -280,7 +311,7 @@ def change_temnotice(request, temnotice_form, origin):
             table = refresh_temnotice_table(request)
             ret = {'status': '0', 'message': u"模版消息变更成功", 'table':table}
             break
-    else: 
+    else:
         ret = {'status': '1', 'message': u"输入有误，请刷新后重新输入"}
     return ret
 
@@ -289,10 +320,10 @@ def finish_control(request,year_list):
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"}) 
+        return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"})
     user = User.objects.get(id=adminObj.userid_id)
     if adminObj.is_finishing ==False:
-        if year_list != []:            
+        if year_list != []:
             for temp in year_list:
                 projectcontrol=ProjectFinishControl()
                 projectcontrol.userid=user
@@ -302,13 +333,13 @@ def finish_control(request,year_list):
             adminObj.save()
             flag = True
         else:
-            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
+            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"})
     else:
         projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
         projectcontrol_list.delete()
         adminObj.is_finishing=False
         adminObj.save()
-    flag = adminObj.is_finishing 
+    flag = adminObj.is_finishing
     return simplejson.dumps({'flag': flag})
 
 @dajaxice_register
@@ -335,7 +366,7 @@ def new_or_update_funds(request,pid,funds_form,name):
 
     num = Funds_Group.objects.filter(project_id = pid).count()
     cost = funds_amount
-    
+
     for funds in group.all():
         cost = cost + funds.funds_amount
     loginfo(cost)
@@ -343,7 +374,7 @@ def new_or_update_funds(request,pid,funds_form,name):
         project.funds_total = funds_total
     if project.funds_total >= cost :
         new_funds = Funds_Group(
-                      project_id = project, 
+                      project_id = project,
                       student_name = funds_studentname,
                       funds_amount = funds_amount,
                       funds_detail = funds_detail,
@@ -356,7 +387,7 @@ def new_or_update_funds(request,pid,funds_form,name):
                             "funds_total":project.funds_total,
                             "funds_remain":project.funds_remain}
     else:
-        ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"} 
+        ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"}
     return ret
 
 @dajaxice_register
@@ -385,9 +416,6 @@ def FundsDelete(request,delete_id,pid):
 def refresh_funds_table(request,pid):
 
     funds_list    = Funds_Group.objects.filter(project_id = pid)
-    
+
     return render_to_string("adminStaff/widgets/funds_table.html",
                             {"project_funds_list": funds_list})
-
-
-

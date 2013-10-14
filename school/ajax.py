@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.template.loader import render_to_string
 from const.models import SchoolDict
 from const import *
+from const.models import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
 from users.models import SchoolProfile, TeacherProfile, ExpertProfile
@@ -211,6 +212,24 @@ def finish_control(request,year_list):
         schoolObj.save()
     flag = schoolObj.is_finishing 
     return simplejson.dumps({'flag': flag})
+
+@dajaxice_register
+def change_project_overstatus(request, project_id, changed_overstatus):
+    '''
+    change project overstatus
+    '''
+    choices = dict(OVER_STATUS_CHOICES)
+    if changed_overstatus in choices:
+        project_obj = ProjectSingle.objects.get(project_id = project_id)
+        try:
+            project_obj.over_status = OverStatus.objects.get(status = changed_overstatus)
+            project_obj.save()
+        except:
+            pass
+        res = choices[changed_overstatus]
+    else:
+        res = "操作失败，请重试"
+    return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
 def isover_control(request,pid):
