@@ -215,6 +215,24 @@ def change_project_overstatus(request, project_id, changed_overstatus):
     return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
+def get_news_list(request, uid):
+
+    logger.info("sep delete news"+"**"*10)
+    # check mapping relation
+    try:
+        delnews=News.objects.get(id=uid)
+        if request.method == "POST":
+            delnews.delete()
+            return simplejson.dumps({"is_deleted": True,
+                    "message": "delete it successfully!",
+                    "uid": str(uid)})
+        else:
+            return simplejson.dumps({"is_deleted": False,
+                                     "message": "Warning! Only POST accepted!"})
+    except Exception, err:
+        logger.info(err)
+
+@dajaxice_register
 def TemNoticeChange(request,form,origin):
     temnotice_form=TemplateNoticeForm(deserialize_form(form))
     if not temnotice_form.is_valid():

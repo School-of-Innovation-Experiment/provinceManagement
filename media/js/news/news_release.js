@@ -8,10 +8,12 @@ $(function (){
 
 
 $('[rel="news_delete"]').click(function(){
-  
-  var uid = $(this).attr("uid");
-  Dajaxice.adminStaff.get_news_list(news_delete_callback,
+  var bln = window.confirm("是否确认删除该条新闻?");
+  if(bln){
+    var uid = $(this).attr("uid");
+    Dajaxice.adminStaff.get_news_list(news_delete_callback,
                                          {'uid':uid});
+  }
 });
 
 function news_delete_callback(data){
