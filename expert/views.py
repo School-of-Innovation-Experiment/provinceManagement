@@ -52,10 +52,13 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
+    
+    school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False))
+    adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True))
+    
+    data = {'school_list': school_project_list,
+            'adminStaff_list': adminStaff_project_list,}
 
-    loginfo(p=re_project, label="EXPERT HOME")
-
-    data = {'current_list': re_project}
     return render(request, 'expert/home.html', data)
 
 
