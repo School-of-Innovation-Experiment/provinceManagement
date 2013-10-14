@@ -228,31 +228,6 @@ class TechCompetitionForm(forms.Form):
 
     def get_absolute_url(self):
         return reverse('student.views.final_report_view', args=(str(self.instance.project_id),))
-
-
-class StudentDispatchForm(forms.Form):
-    student_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
-                           ),
-)
-    student_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'}
-                           ))
-    person_firstname = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
-
-class TeacherDispatchForm(forms.Form):
-    teacher_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))
-    teacher_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
-    person_firstname = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
-class ExpertDispatchForm(forms.Form):
-    expert_password = forms.CharField(max_length=20, required=False,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}
-                           ))
-    expert_email    = forms.EmailField(required=True,
-    widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
-    person_firstname = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
 class TeacherNumLimitForm(forms.Form):
     TEACHER_CHOICE_list = []
     teacher_list        = TeacherProfile.objects.all()

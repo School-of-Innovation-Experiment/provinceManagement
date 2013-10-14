@@ -30,7 +30,7 @@ import datetime
 from backend.logging import logger, loginfo
 
 def refresh_mail_table(request):
-    email_list  = AdminStaffService.GetRegisterList()
+    email_list  = AdminStaffService.GetRegisterList(request)
     return render_to_string("adminStaff/widgets/email_table.html",
                             {"email_list": email_list})
 def refresh_numlimit_table(request):
@@ -103,9 +103,10 @@ def  ExpertDispatch(request, form):
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
         name = email
+        person_name = expert_form.cleaned_data["person_firstname"]
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True)
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True,person_name=person_name)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)
@@ -114,7 +115,7 @@ def  ExpertDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误"})
 @dajaxice_register
 def SchoolDispatch(request, form):
     #dajax = Dajax()
@@ -124,9 +125,11 @@ def SchoolDispatch(request, form):
         email = school_form.cleaned_data["school_email"]
         name = email
         school_name = school_form.cleaned_data["school_name"]
+        person_name = school_form.cleaned_data["person_firstname"]
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,SCHOOL_USER, school_name=school_name)
+        flag = AdminStaffService.sendemail(request, name, password,email,SCHOOL_USER, school_name=school_name,person_name = person_name)
+        loginfo(flag)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)
@@ -135,7 +138,7 @@ def SchoolDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误"})
 @dajaxice_register
 def judge_is_assigned(request, school):
     '''

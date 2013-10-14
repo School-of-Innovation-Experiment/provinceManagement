@@ -50,7 +50,6 @@ function teacherDispatch_callback(data){
     });
     //error field background turn into red
     $.each(data.error_id,function(i,item){
-      alert(item);
       object = $('#'+item);
       object.css("border-color","red");
     });

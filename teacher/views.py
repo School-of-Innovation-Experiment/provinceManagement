@@ -21,7 +21,8 @@ from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, Fin
 from school.models import UploadedFiles
 from student.forms import  ProcessRecordForm
 from school.forms import *
-from teacher.forms import StudentDispatchForm, MonthCommentForm
+from teacher.forms import   MonthCommentForm
+from adminStaff.forms import StudentDispatchForm 
 from registration.models import *
 from teacher.utility import *
 from school.utility import *
@@ -206,12 +207,12 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
-def Send_email_to_student(request, username, password, email, category, identity):
+def Send_email_to_student(request, username, password, email, category,person_name, identity):
     """
     check the existence of user
     """
     if User.objects.filter(email = email).count() == 0:
-        user = RegistrationManager().create_inactive_user(request, username, password, email, identity, student_user = True)
+        user = RegistrationManager().create_inactive_user(request, username, password, email, identity,student=True,person_name=person_name )
         result = create_newproject(request=request, new_user=user, category=category)
         return True and result
     else:

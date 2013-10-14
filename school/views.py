@@ -31,11 +31,12 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school import forms
+from adminStaff.forms import TeacherDispatchForm ,ExpertDispatchForm
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from const.models import *
 from const import *
-from django.db.models import Q 
+from django.db.models import Q
 
 from school.utility import *
 from backend.logging import logger, loginfo
@@ -106,8 +107,8 @@ def home_view(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def dispatch(request):
-    teacher_form = forms.TeacherDispatchForm()
-    expert_form = forms.ExpertDispatchForm()
+    teacher_form = TeacherDispatchForm()
+    expert_form = ExpertDispatchForm()
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
