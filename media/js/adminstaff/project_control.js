@@ -1,3 +1,7 @@
+var glo_project_id;
+function get_subject_id(project_id){
+  glo_project_id = project_id;
+}
 function finish_control(){
   var year_list=new Array();
   var j=0;
@@ -7,7 +11,7 @@ function finish_control(){
     if(checkBoxs[i].type=="checkbox" && checkBoxs[i].checked)
     {
       year_list[j]=checkBoxs[i].value;
-      j++;   
+      j++;
     }
   }
   Dajaxice.adminStaff.finish_control(finish_control_callback,{"year_list":year_list});
@@ -32,10 +36,20 @@ function finish_control_callback(data){
   }
 }
 
+function project_overstatus(){
+  var overstatus = $('#overstatus_choice').find("option:selected").val();
+  Dajaxice.adminStaff.change_project_overstatus(change_overstatus_callback,{'project_id':glo_project_id,"changed_overstatus":overstatus});
+}
+function change_overstatus_callback(data){
+  var target = "#overstatus_" + glo_project_id;
+  $(target).html(data.res);
+}
+
+
 $('[rel="isover"]').click(function(){
   var pid = $(this).attr("pid");
   Dajaxice.school.isover_control(isover_control_callback,{"pid":pid});
-})
+});
 
 function isover_control_callback(data){
   var pid = data.pid;

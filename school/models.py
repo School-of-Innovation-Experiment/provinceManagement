@@ -40,7 +40,7 @@ class ProjectSingle(models.Model):
     expert = models.ManyToManyField(ExpertProfile, through='Re_Project_Expert')
     adminuser = models.ForeignKey(TeacherProfile, blank=False, null=False, verbose_name=u"指导教师")
     student = models.OneToOneField(StudentProfile, blank=False, null=False, verbose_name=u"参赛学生")
- 
+
     school = models.ForeignKey(SchoolProfile, blank=False, null=False, verbose_name=u"所属学院")
 
     project_category = models.ForeignKey(ProjectCategory, verbose_name=u"项目类型",
