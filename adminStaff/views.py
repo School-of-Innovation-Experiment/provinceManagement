@@ -692,9 +692,10 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
+                return redirect('/newslist/%d' % new_news.id)
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-            return redirect('/newslist/%d' % new_news.id)
+                return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm})
