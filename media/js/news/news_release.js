@@ -30,6 +30,8 @@ $('#news_title').keydown(check_news_is_void);
 $('#id_news_date').keydown(check_news_is_void);
 $('#news_title').keyup(check_news_is_void);
 $('#id_news_date').keyup(check_news_is_void);
+$('#news_title').change(check_news_is_void);
+$('#id_news_date').change(check_news_is_void);
 
 
 function news_delete_callback(data){
