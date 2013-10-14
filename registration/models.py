@@ -137,7 +137,7 @@ class RegistrationManager(models.Manager):
                 expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
 
-        elif kwargs.get("student_user", True):
+        elif kwargs.get("student_user",False):
             teacher_name = request.user.username
             teacher = User.objects.get(username=teacher_name)
             teacher_profile = TeacherProfile.objects.get(userid = teacher)

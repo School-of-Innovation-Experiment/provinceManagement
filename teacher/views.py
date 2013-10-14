@@ -212,7 +212,7 @@ def Send_email_to_student(request, username, password, email, category,person_na
     check the existence of user
     """
     if User.objects.filter(email = email).count() == 0:
-        user = RegistrationManager().create_inactive_user(request, username, password, email, identity,student=True,person_name=person_name )
+        user = RegistrationManager().create_inactive_user(request, username, password, email, identity,student_user=True,person_name=person_name )
         result = create_newproject(request=request, new_user=user, category=category)
         return True and result
     else:
