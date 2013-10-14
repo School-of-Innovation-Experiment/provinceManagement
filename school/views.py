@@ -193,8 +193,8 @@ def NewSubjectAlloc(request, is_expired = False):
     subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
     
-    alloced_subject_list = [subject for subject in subject_list if Re_Project_Expert.objects.filter(project = subject).count()]
-    unalloced_subject_list = [subject for subject in subject_list if not Re_Project_Expert.objects.filter(project = subject).count()]
+    alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
+    unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject)]
     context = {'subject_list': subject_list,
                'alloced_subject_list': alloced_subject_list,
                'unalloced_subject_list': unalloced_subject_list,

@@ -13,6 +13,7 @@ class StudentDispatchForm(forms.Form):
            )
     category            = forms.ChoiceField(choices = PROJECT_CATE_CHOICES, 
            )
+    person_firstname = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
 class  MonthCommentForm(forms.Form):
     monthId    = forms.IntegerField(max_value=50,
                             required=True,

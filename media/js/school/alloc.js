@@ -1,17 +1,28 @@
 var project_list = [];
 var glo_project_id;
+var glo_user_grade;
+
+function get_user(user_grade){
+    glo_user_grade = user_grade;
+}
+function remove_expert_check(){
+    $("[name='checkbox_expert']").removeAttr("checked");
+}
+function remove_project_check(){
+    $("[name='checkbox_project']").removeAttr("checked");
+}
 
 function single_storage(project_id){
     project_list = [];
     project_list.push(project_id);
-	$("[name='checkbox_expert']").removeAttr("checked");
+	remove_expert_check();
 }
 function bulk_storage(){
     project_list = [];
 	$("input[name='checkbox_project']:checkbox:checked").each(function(){ 
 		project_list.push($(this).val());
 	});
-	$("[name='checkbox_expert']").removeAttr("checked");
+	remove_expert_check();
 }
 function bulk_cancel(){
     project_list = [];
@@ -23,7 +34,7 @@ function bulk_cancel(){
 function query_or_cancel(project_id){
     project_list = [];
     project_list.push(project_id);
-	Dajaxice.school.Query_Alloced_Expert(Query_Alloced_Expert_callback,{'project_id': project_id});
+	Dajaxice.school.Query_Alloced_Expert(Query_Alloced_Expert_callback,{'project_id': project_id, 'user_grade': glo_user_grade});
 }
 function Query_Alloced_Expert_callback(data){
 	$("#alloc_expert_list").html(data.expert_list_html);
@@ -33,7 +44,7 @@ function save(){
 	$("input[name='checkbox_expert']:checkbox:checked").each(function(){ 
 		expert_list.push($(this).val());
 	}) 
-	Dajaxice.school.Alloc_Project_to_Expert(Alloc_Project_to_Expert_callback,{'expert_list': expert_list, 'project_list': project_list});
+	Dajaxice.school.Alloc_Project_to_Expert(Alloc_Project_to_Expert_callback,{'expert_list': expert_list, 'project_list': project_list, 'user_grade': glo_user_grade});
 }
 function Alloc_Project_to_Expert_callback(data){
 	if(data.message == "no expert input"){
@@ -52,10 +63,10 @@ function Alloc_Project_to_Expert_callback(data){
 		    $("#alloced_subject_table_body").prepend(add_html);
 		}
 	}
-	$("[name='checkbox_project']").removeAttr("checked");
+	remove_project_check();
 }
 function cancel_this(){
-	Dajaxice.school.Cancel_Alloced_Experts(Cancel_Alloced_Experts_callback,{'project_list': project_list});
+	Dajaxice.school.Cancel_Alloced_Experts(Cancel_Alloced_Experts_callback,{'project_list': project_list, 'user_grade': glo_user_grade});
 }
 
 function Cancel_Alloced_Experts_callback(data){
@@ -72,7 +83,7 @@ function Cancel_Alloced_Experts_callback(data){
 	        $("#unalloced_subject_table_body").prepend(add_html);
 	    }
 	}
-	$("[name='checkbox_project']").removeAttr("checked");
+	remove_project_check();
 }
 
 function Join_td_1(){
@@ -82,7 +93,7 @@ function Join_td_1(){
 }
 function Join_td_2(){
     ret = '<a data-toggle="modal" href="#alloc_choice" ';
-    ret += 'id="allocid_' + glo_project_id + '" onclick="get_subject_id(' + "'" + glo_project_id + "'" + ');">指派专家</a>';
+    ret += 'id="allocid_' + glo_project_id + '" onclick="single_storage(' + "'" + glo_project_id + "'" + ');">指派专家</a>';
     return ret;
 }
 

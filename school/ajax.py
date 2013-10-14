@@ -89,7 +89,8 @@ def teacherProjNumLimit(request, form):
 
 
 @dajaxice_register
-def Alloc_Project_to_Expert(request, expert_list, project_list):
+def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
+    flag = (user_grade == 'adminStaff')
     message = ''
     if len(expert_list) == 0:
         message = 'no expert input'
@@ -100,20 +101,21 @@ def Alloc_Project_to_Expert(request, expert_list, project_list):
         for expert_id in expert_list:
             expert = ExpertProfile.objects.get(userid__email = expert_id)
             try:
-                re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert)
+                re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert, is_assign_by_adminStaff = flag)
                 re_project_expert.delete()
             except:
                 pass
             finally:
-                Re_Project_Expert(project = project, expert = expert).save()
+                Re_Project_Expert(project = project, expert = expert, is_assign_by_adminStaff = flag).save()
     
     return simplejson.dumps({'message': message})
 
 @dajaxice_register
-def Query_Alloced_Expert(request, project_id):
+def Query_Alloced_Expert(request, project_id, user_grade):
+    flag = (user_grade == 'adminStaff')
     message = ''
     project = get_object_or_404(ProjectSingle, project_id = project_id)
-    expert_list = [item.expert for item in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = False))]
+    expert_list = [item.expert for item in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag))]
     
     expert_list_html = ''
     for expert in expert_list:
@@ -122,13 +124,14 @@ def Query_Alloced_Expert(request, project_id):
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
-def Cancel_Alloced_Experts(request, project_list):
+def Cancel_Alloced_Experts(request, project_list, user_grade):
+    flag = (user_grade == 'adminStaff')
     message = ''
     if len(project_list) == 0:
         message = 'no project input'
     for project_id in project_list:
         project = get_object_or_404(ProjectSingle, project_id = project_id)
-        for re_project_expert in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = False)):
+        for re_project_expert in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag)):
             re_project_expert.delete()
             
     return simplejson.dumps({'message': message})
