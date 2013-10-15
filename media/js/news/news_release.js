@@ -8,11 +8,31 @@ $(function (){
 
 
 $('[rel="news_delete"]').click(function(){
-  
-  var uid = $(this).attr("uid");
-  Dajaxice.adminStaff.get_news_list(news_delete_callback,
+  var bln = window.confirm("是否确认删除该条新闻?");
+  if(bln){
+    var uid = $(this).attr("uid");
+    Dajaxice.adminStaff.get_news_list(news_delete_callback,
                                          {'uid':uid});
+  }
 });
+function check_news_is_void(){
+  if($('#news_title').val()=='' || $('#id_news_date').val()==''){
+    $('#news_release_button').attr('disabled', 'disabled');
+  } else {
+    $('#news_release_button').removeAttr('disabled', 'disabled');
+  };
+}
+$('#news_title').focus(check_news_is_void);
+$('#id_news_date').focus(check_news_is_void);
+$('#news_title').focusout(check_news_is_void);
+$('#id_news_date').focusout(check_news_is_void);
+$('#news_title').keydown(check_news_is_void);
+$('#id_news_date').keydown(check_news_is_void);
+$('#news_title').keyup(check_news_is_void);
+$('#id_news_date').keyup(check_news_is_void);
+$('#news_title').change(check_news_is_void);
+$('#id_news_date').change(check_news_is_void);
+
 
 function news_delete_callback(data){
   if(data.is_deleted == true){

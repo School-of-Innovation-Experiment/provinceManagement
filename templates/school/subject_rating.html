@@ -1,16 +1,16 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
-  <div class="page-header">
-    <h3>
-      本年度项目列表
-      <span class="label label-info">推荐上限:{{limit}}</span>
-      <span class="label label-important" id="id_remaining">剩余数量:{{remaining}}</span>
-    </h3>
-  </div><!--end page header-->
+<div class="page-header">
+  <h3>
+    本年度项目列表
+    <span class="label label-info">推荐上限:{{limit}}</span>
+    <span class="label label-important" id="id_remaining">剩余数量:{{remaining}}</span>
+  </h3>
+</div><!--end page header-->
 
-	<div class="alert alert-error" style="display:none" id="alert_message">
-		<strong>注意！</strong>推荐数额超过限制，请进行调整。
-	</div>
+<div class="alert alert-error" style="display:none" id="alert_message">
+  <strong>注意！</strong>推荐数额超过限制，请进行调整。
+</div>
 <div class="tab-content">
   <div class="tab-pane fade active in" id="review-page">
     <ul class="nav nav-tabs">
@@ -25,85 +25,85 @@
 
     <div class="tab-content">
       <div class="tab-pane fade active in" id="undefined-section">
-				<table class="table table-condensed" id="undefined_subject_table">
-				<thead>
-					<tr>
-						<th>项目编号</th>
-						<th>发布题目名称</th>
-						<th>指导教师</th>
-						<th>负责人</th>
-						<th>专家评分</th>
-						<th>修改等级</th>
-					</tr>
-				</thead>
-				<tbody id="undefined_subject_table_body">
-					{% for subject in undef_subject_list%}
+	<table class="table table-condensed" id="undefined_subject_table">
+	  <thead>
+	    <tr>
+	      <th>项目编号</th>
+	      <th>发布题目名称</th>
+	      <th>指导教师</th>
+	      <th>负责人</th>
+	      <th>专家评分</th>
+	      <th>修改等级</th>
+	    </tr>
+	  </thead>
+	  <tbody id="undefined_subject_table_body">
+	    {% for subject in undef_subject_list%}
 	    <tr>
 	      <td>{{subject.project_code}}</td>
 	      <td>{{subject.title}}</td>
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-				{% ifequal subject.project_grade.id 1%}
-					<td><span>已推荐（{{ subject.project_grade }}）</span><td>
+	      {% ifequal subject.project_grade.id 1%}
+	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
                 {% else %}
-			    	{% ifequal subject.project_grade.id 2%}
-				    	<td><span>已推荐（{{ subject.project_grade }}）</span><td>
-				    {% else %}
-			        <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
-						    {% if subject.recommend %}
-						    	已推荐
-						    {% else %}
-						    	未推荐（{{ subject.project_grade }}）
-						    {% endif %}
-					    </a></td>
-				    {% endifequal %}
-         {% endifequal %}
+		{% ifequal subject.project_grade.id 2%}
+	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
+		{% else %}
+	      <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
+		  {% if subject.recommend %}
+		  已推荐
+		  {% else %}
+		  未推荐（{{ subject.project_grade }}）
+		  {% endif %}
+	      </a></td>
+	      {% endifequal %}
+              {% endifequal %}
 	    </tr>
-	  {%endfor%}
-				</tbody>
-      </table>
-    </div><!--end content section-->
+	    {%endfor%}
+	  </tbody>
+        </table>
+      </div><!--end content section-->
 
       <div class="tab-pane fade " id="defined-section">
-				<table class="table table-condensed" id="defined_subject_table">
-					<thead>
-						<tr>
-							<th>项目编号</th>
-							<th>发布题目名称</th>
-							<th>指导教师</th>
-							<th>负责人</th>
-							<th>专家评分</th>
-							<th>修改等级</th>
-						</tr>
-					</thead>
-					<tbody id="defined_subject_table_body">
-						{% for subject in def_subject_list%}
+	<table class="table table-condensed" id="defined_subject_table">
+	  <thead>
+	    <tr>
+	      <th>项目编号</th>
+	      <th>发布题目名称</th>
+	      <th>指导教师</th>
+	      <th>负责人</th>
+	      <th>专家评分</th>
+	      <th>修改等级</th>
+	    </tr>
+	  </thead>
+	  <tbody id="defined_subject_table_body">
+	    {% for subject in def_subject_list%}
 	    <tr>
 	      <td>{{subject.project_code}}</td>
 	      <td>{{subject.title}}</td>
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-				{% ifequal subject.project_grade.id 1%}
-					<td><span>已推荐（{{ subject.project_grade }}）</span><td>
+	      {% ifequal subject.project_grade.id 1%}
+	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
                 {% else %}
-			    	{% ifequal subject.project_grade.id 2%}
-				    	<td><span>已推荐（{{ subject.project_grade }}）</span><td>
-				    {% else %}
-			        <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
-						    {% if subject.recommend %}
-						    	已推荐
-						    {% else %}
-						    	未推荐（{{ subject.project_grade }}）
-						    {% endif %}
-					    </a></td>
-				    {% endifequal %}
-         {% endifequal %}
+		{% ifequal subject.project_grade.id 2%}
+	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
+		{% else %}
+	      <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
+		  {% if subject.recommend %}
+		  已推荐
+		  {% else %}
+		  未推荐（{{ subject.project_grade }}）
+		  {% endif %}
+	      </a></td>
+	      {% endifequal %}
+              {% endifequal %}
 	    </tr>
-	  {%endfor%}
-					</tbody>
-      </table>
+	    {%endfor%}
+	  </tbody>
+        </table>
       </div>
 
     </div><!--end tab content-->
@@ -113,35 +113,35 @@
 
 
 
-  
-      <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
-	<div class="modal-header">
-    	  <a class="close" data-dismiss="modal">×</a>
-    	  <h3>专家得分/评价列表</h3>
-	</div>
-  	<div class="modal-body">
-          <table id="review_table"class="table table-condensed">
-          </table>
-  	</div>
-      </div><!--end subject_review-->
-      <div class="modal hide fade" style="display: none;" id="grade_choice">
-	<div class="modal-header">
-    	  <a class="close" data-dismiss="modal">×</a>
-    	  <h3>选择是否推荐</h3>
-        </div>
-  	<div class="modal-body">
-          <select name="subject_grade" id="id_subject_grade">
-						<option value="1">推荐</option>
-						<option value="0">校级</option>
-						<option value="-1">院级</option>
-					</select>
-  	</div>
-  	<div class="modal-footer">
-    	  <a class="btn" data-dismiss="modal">关闭</a>
-    	  <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
-  	</div>
-      </div>
-  </div><!--end grade_choice-->
+
+<div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>专家得分/评价列表</h3>
+  </div>
+  <div class="modal-body">
+    <table id="review_table"class="table table-condensed">
+    </table>
+  </div>
+</div><!--end subject_review-->
+<div class="modal hide fade" style="display: none;" id="grade_choice">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>选择是否推荐</h3>
+  </div>
+  <div class="modal-body">
+    <select name="subject_grade" id="id_subject_grade">
+      <option value="1">推荐</option>
+      <option value="0">校级</option>
+      <option value="-1">院级</option>
+    </select>
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
+  </div>
+</div>
+</div><!--end grade_choice-->
 
 </div><!-- end the whole form -->
 <div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -159,5 +159,5 @@
 </div>
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/subject_rating.js"></script>
 <!-- ajax_csrf-->
-<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

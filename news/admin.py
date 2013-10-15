@@ -23,9 +23,11 @@ class NewsAdmin(admin.ModelAdmin):
     formfield_overrides = { models.TextField: {'widget': forms.Textarea(attrs={'class':'ckeditor'})}, }
     class Media:
         js = [
+            STATIC_URL + '/bootstrap/assets/js/jquery-1.9.1.min.js',
             # STATIC_URL + '/tiny_mce/tiny_mce_src.js',
             STATIC_URL + '/ckeditor/ckeditor.js',
             STATIC_URL + '/filebrowser/js/FB_CKEditor.js',
+            STATIC_URL + '/js/news/wysiwyg-config.js',
             ]
 
 admin.site.register(News, NewsAdmin)

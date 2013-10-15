@@ -31,11 +31,12 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from school import forms
+from adminStaff.forms import TeacherDispatchForm ,ExpertDispatchForm
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from const.models import *
 from const import *
-from django.db.models import Q 
+from django.db.models import Q
 
 from school.utility import *
 from backend.logging import logger, loginfo
@@ -70,13 +71,11 @@ def home_view(request):
             #     project_isover=''
             if project_overstatus == '-1':
                 project_overstatus=''
-            else:
-                project_overstatus=OverStatus.objects.get(status=project_overstatus)
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
             # q2 = (project_isover and Q(is_over=project_isover)) or None
-            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
+            q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
@@ -106,8 +105,8 @@ def home_view(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def dispatch(request):
-    teacher_form = forms.TeacherDispatchForm()
-    expert_form = forms.ExpertDispatchForm()
+    teacher_form = TeacherDispatchForm()
+    expert_form = ExpertDispatchForm()
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404

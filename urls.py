@@ -24,6 +24,7 @@ handler404 = 'backend.errorviews.error404'
 
 
 urlpatterns = patterns('',
+    url(r'admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
     url(
         r'^',
         include('news.urls'),
