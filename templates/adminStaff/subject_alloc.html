@@ -105,7 +105,7 @@
 			{% for expert in expert_list %}
 				<label class="checkbox">
 					<input type="checkbox" name="checkbox_expert" value="{{ expert.userid }}">
-					{{ expert.userid }}
+					{{ expert.name }}（{{expert.userid}}）
 				</label>
 				<br>
 			{% endfor %}
