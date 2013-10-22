@@ -20,7 +20,7 @@ from django.contrib.sites.models import get_current_site,Site
 from django.db import models
 from const.models import UserIdentity
 from const import *
-from backend.logging import logger
+from backend.logging import logger,loginfo
 from users.models import *
 from const.models import SchoolDict, InsituteCategory
 from school.models import TeacherProjectPerLimits, Project_Is_Assigned
@@ -67,6 +67,7 @@ class RegistrationManager(models.Manager):
 
         """
         #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
+        loginfo("person_name:"+kwargs["person_name"])
         if User.objects.filter(email=email).count() == 0:
             new_user = User.objects.create_user(username, email, password)
             new_user.is_active = False
@@ -103,21 +104,23 @@ class RegistrationManager(models.Manager):
         new_authority = UserIdentity.objects.get(identity=Identity)
         new_authority.auth_groups.add(new_user)
         new_authority.save()
-
+        
         #如果是学校注册 添加学校注册姓名
-        if kwargs.has_key('school_name'):
+        if kwargs.get('school_name',False):
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
-                schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user)
+                loginfo("person_name:"+kwargs["person_name"])
+                schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user,name = kwargs["person_name"])
                 schoolProfileObj.save()
                 project_is_assigned = Project_Is_Assigned(school=schoolProfileObj)
                 project_is_assigned.save()
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
+                schooolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
         elif kwargs.get('teacher_school', False):
-            teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user)
+            teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
             teacherProfileObj.save()
             teacherProjLimit = TeacherProjectPerLimits(teacher=teacherProfileObj,
                                                        number=0)
@@ -125,7 +128,7 @@ class RegistrationManager(models.Manager):
 
         elif kwargs.get("expert_user", False):
             # insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
-            expertProfileObj = ExpertProfile(userid =new_user)
+            expertProfileObj = ExpertProfile(userid =new_user,name = kwargs["person_name"])
             if kwargs["expert_user"] == "assigned_by_school":
                 expertProfileObj.grade = "0"
                 expertProfileObj.assigned_by_school = SchoolProfile.objects.get(userid = request.user)
@@ -134,11 +137,11 @@ class RegistrationManager(models.Manager):
                 expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
 
-        elif kwargs.get("student_user", False):
+        elif kwargs.get("student_user",False):
             teacher_name = request.user.username
             teacher = User.objects.get(username=teacher_name)
             teacher_profile = TeacherProfile.objects.get(userid = teacher)
-            student_obj = StudentProfile(userid = new_user,teacher = teacher_profile)
+            student_obj = StudentProfile(userid = new_user,teacher = teacher_profile,name = kwargs["person_name"])
             student_obj.save()
         else:
             raise Http404 
