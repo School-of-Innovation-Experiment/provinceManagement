@@ -693,6 +693,17 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def ResetProjNumLimit(request):
+        num_limit_form = forms.NumLimitForm()
+        school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+        TeacherProjectPerLimits.objects.all().delete()
+        ProjectPerLimits.objects.all().delete()
+        return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def NewsRelease(request):
         news_list = News.objects.all().order_by("-news_date")
         page = request.GET.get('page')
