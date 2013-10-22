@@ -32,10 +32,7 @@ from adminStaff.views import AdminStaffService
 @login_required
 @authority_required(TEACHER_USER)
 def home_view(request, is_expired = False):
-    email_list  = GetStudentRegisterList(request)
-    email_num = len(email_list)
-    limited_num = TeacherLimitNumber(request)
-    remaining_activation_times = limited_num - email_num
+    limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
     project_list = ProjectSingle.objects.filter(adminuser__userid = request.user)
     data = {
         "project_list": project_list,
@@ -234,9 +231,7 @@ def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
         email_list  = GetStudentRegisterList(request)
-        email_num = len(email_list)
-        limited_num = TeacherLimitNumber(request)
-        remaining_activation_times = limited_num - email_num
+        limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
         data = {
             'student_form': student_form,
             'email_list': email_list,

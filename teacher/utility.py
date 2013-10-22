@@ -1,4 +1,4 @@
-# coding: UTF-8 
+# coding: UTF-8
 
 import os, sys, datetime, uuid
 
@@ -10,6 +10,7 @@ from const import *
 from const.models import *
 from school.utility import get_current_year
 from backend.logging import logger, loginfo
+from django.db.models import Q
 
 DUT_code = "10141"
 
@@ -25,20 +26,20 @@ def create_newproject(request, new_user, category):
         project.project_id = pid
         project.title = u"未命名"
         project.adminuser = teacher
-        project.student = student 
+        project.student = student
         project.school = teacher.school
         project.project_category = ProjectCategory.objects.get(category = category)
-        project.year = get_current_year() 
-        project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN) 
-        project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST) 
+        project.year = get_current_year()
+        project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
+        project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
         project.project_code = str(get_current_year()) + DUT_code + str(get_project_count())
         project.save()
-        
-        
+
+
         if category == CATE_INNOVATION:
             pre = PreSubmit()
-            pre.content_id = uuid.uuid4() 
-            pre.project_id = project 
+            pre.content_id = uuid.uuid4()
+            pre.project_id = project
             pre.save()
         else:
             pre_interprise = PreSubmitEnterprise()
@@ -52,10 +53,18 @@ def create_newproject(request, new_user, category):
             pre_interprise.save()
 
         final = FinalSubmit()
-        final.content_id = uuid.uuid4() 
+        final.content_id = uuid.uuid4()
         final.project_id = project
         final.save()
     except Exception, err:
-        loginfo(p=err, label="creat a project for the user")  
+        loginfo(p=err, label="creat a project for the user")
         return False
     return True
+def get_limited_num_and_remaining_times(request):
+    teacher_profile = TeacherProfile.objects.get(userid = request.user)
+    proj_list = [each for each in StudentProfile.objects.filter(Q(teacher = teacher_profile)
+                                                                & Q(projectsingle__is_past = False))]
+    proj_num = len(proj_list)
+    limited_num = TeacherLimitNumber(request)
+    remaining_activation_times = limited_num - limited_num
+    return limited_num, remaining_activation_times
