@@ -41,14 +41,12 @@ class AdminStaffService(object):
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
         if not AdminStaffService.AuthUserExist(email, identity):
-            if kwargs.has_key('school_name'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, school_name=kwargs['school_name'])
-            elif kwargs.has_key('expert_user'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, expert_user=kwargs['expert_user'])
-            elif kwargs.has_key('teacher_school'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
-            elif kwargs.has_key('student_user'):
-                RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
+            # if kwargs.has_key('school_name'):
+            #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
+            # elif kwargs.has_key('expert_user'):
+            #     RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
+            # elif kwargs.has_key('teacher_school'):
+            RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
             return True
         else:
             return False

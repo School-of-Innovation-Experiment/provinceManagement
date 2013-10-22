@@ -8,7 +8,8 @@ from django.template.loader import render_to_string
 
 from django.http import Http404
 
-from teacher.forms import StudentDispatchForm, MonthCommentForm
+from adminStaff.forms import StudentDispatchForm
+from teacher.forms import  MonthCommentForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
 from teacher.models import TeacherMonthComment
 from school.models import ProjectSingle
@@ -29,6 +30,7 @@ def StudentDispatch(request, form):
         email = student_form.cleaned_data["student_email"]
         category = student_form.cleaned_data["category"]
         name = email
+        person_name = student_form.cleaned_data["person_firstname"]
         if password == "":
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
@@ -40,7 +42,7 @@ def StudentDispatch(request, form):
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
-            flag = Send_email_to_student(request, name, password, email, category, STUDENT_USER)
+            flag = Send_email_to_student(request, name, password, email, category,person_name, STUDENT_USER)
             if flag:
                 message = u"发送邮件成功"
                 remaining_activation_times -= 1
@@ -50,13 +52,13 @@ def StudentDispatch(request, form):
                 message = u"相同邮件已经发送，中断发送或发生内部错误"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
-        return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,"})
 
 @dajaxice_register
 def commentChange(request, form, pid):
     comment_form = MonthCommentForm(deserialize_form(form))
     if not comment_form.is_valid():
-        ret = {'status': '2',               
+        ret = {'status': '2',
                'error_id': comment_form.errors.keys(),
                'message': u"输入有误，请重新输入"}
     else:

@@ -14,7 +14,8 @@ from users.models import SchoolProfile, TeacherProfile, ExpertProfile
 from news.models import News
 from django.contrib.auth.models import User
 import datetime
-from school.forms import TeacherDispatchForm, TeacherNumLimitForm, ExpertDispatchForm
+from adminStaff.forms import TeacherDispatchForm, ExpertDispatchForm
+from school.forms import TeacherNumLimitForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
@@ -42,9 +43,10 @@ def  ExpertDispatch(request, form):
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
         name = email
+        person_name = expert_form.cleaned_data["person_firstname"]
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school")
+        flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school",person_name=person_name)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)
@@ -53,7 +55,7 @@ def  ExpertDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误"})
 
 @dajaxice_register
 def teacherProjNumLimit(request, form):
@@ -86,8 +88,6 @@ def teacherProjNumLimit(request, form):
         loginfo(p=form.errors.keys(),label="keys")
         loginfo(form.errors)
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
-
-
 @dajaxice_register
 def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
     flag = (user_grade == 'adminStaff')
@@ -107,7 +107,6 @@ def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
                 pass
             finally:
                 Re_Project_Expert(project = project, expert = expert, is_assign_by_adminStaff = flag).save()
-    
     return simplejson.dumps({'message': message})
 
 @dajaxice_register
@@ -146,9 +145,10 @@ def  TeacherDispatch(request, form):
         # school = teacher_form.cleaned_data["teacher_school"]
         school = SchoolProfile.objects.get(userid=request.user)
         name = email
+        person_name = teacher_form.cleaned_data["person_firstname"]
         if password == "":
             password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school)
+        flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school,person_name = person_name)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)
@@ -157,7 +157,7 @@ def  TeacherDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'field':teacher_form.data.keys(),'error_id':teacher_form.errors.keys(),'message':u"输入有误,请检查邮箱的合法性"})
+        return simplejson.dumps({'field':teacher_form.data.keys(),'error_id':teacher_form.errors.keys(),'message':u"输入有误"})
 
 @dajaxice_register
 def judge_is_assigned(request):
