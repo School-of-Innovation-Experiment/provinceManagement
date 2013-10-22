@@ -693,7 +693,7 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def ResetProjNumLimit(request):
+    def ProjectLimitNumReset(request):
         num_limit_form = forms.NumLimitForm()
         school_limit_num_list = AdminStaffService.SchoolLimitNumList()
         TeacherProjectPerLimits.objects.all().delete()

@@ -220,10 +220,6 @@ def GetStudentRegisterList(request):
     student_list = [each.userid for each in StudentProfile.objects.filter(teacher = teacher_profile)]
     return student_list
 
-def TeacherLimitNumber(request):
-    limit = TeacherProjectPerLimits.objects.get(teacher__userid = request.user)
-    return limit.number
-
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
