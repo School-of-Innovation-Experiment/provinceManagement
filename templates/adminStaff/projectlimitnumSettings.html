@@ -3,6 +3,10 @@
   <div><!--FORM2 DIV-->
     <form class="well form-inline" method="POST" id="num_limit_form" action="">
       {% csrf_token %}
+      <div class="alert alert-error">
+	<a class="close" data-dismiss="alert">×</a>
+	<strong>警告:</strong>项目数量重置将设置所有学院项目数量上限为0。用于开启新的一届项目，重新设置项目上限
+      </div>
       <div class="alert alert-info">
 	<a class="close" data-dismiss="alert">×</a>
 	<strong>注意:</strong>针对不同学校可以有不同的上传数量限制，如果没有限制可以不用填写或者更改以前的限制数量为0即可
