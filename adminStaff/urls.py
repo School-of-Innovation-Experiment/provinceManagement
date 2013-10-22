@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^settings$',AdminStaffService.AdminSetting),
     url(r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
     url(r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
+    url(r'^ProjectLimitNumReset$',AdminStaffService.ProjectLimitNumReset),
     url(r'^subject_alloc/$', AdminStaffService.SubjectAlloc),
     url(r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
     url(r'^subject_rating/$',AdminStaffService.SubjectRating),
@@ -27,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^expert_dispatch/$',AdminStaffService.expertDispatch),
     url(r'^school_dispatch/$',AdminStaffService.schoolDispatch),
     url(r'^create_inactive_user$',AdminStaffService.expertDispatch),
-    
+
     url(r'^fundsmanage/$',AdminStaffService.funds_manage),
     url(r'^fundschange/(?P<pid>.{36})$',AdminStaffService.funds_change),
 
