@@ -55,8 +55,8 @@ class ProjectSingle(models.Model):
                                verbose_name=u"参加年份")
     recommend = models.BooleanField(null=False, default=False,
                                     verbose_name=u"推荐")
-    # is_over = models.BooleanField(null=False, default=False,
-    #                               verbose_name=u"结束判断")
+    is_past = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"往届项目")
     try:
         default_status = OverStatus.objects.get(status==OVER_STATUS_NOTOVER)
     except:
@@ -67,15 +67,15 @@ class ProjectSingle(models.Model):
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
     file_interimchecklist = models.BooleanField(null=False, default=False,
-                                  verbose_name=u"中期检查表") 
+                                  verbose_name=u"中期检查表")
     file_summary = models.BooleanField(null=False, default=False,
-                                  verbose_name=u"结题验收") 
+                                  verbose_name=u"结题验收")
     file_projectcompilation = models.BooleanField(null=False, default=False,
-                                  verbose_name=u"项目汇编")  
+                                  verbose_name=u"项目汇编")
     score_application = models.BooleanField(null=False, default=False,
-                                  verbose_name=u"学分申请")    
+                                  verbose_name=u"学分申请")
     # is_applicationover = models.BooleanField(null=False, default=False,
-    #                               verbose_name=u"申请结束判断")    
+    #                               verbose_name=u"申请结束判断")
     funds_total   = models.FloatField(blank=False, verbose_name=u"经费总额",
                                     default=0)
     funds_remain  = models.FloatField(blank=False, verbose_name=u"经费余额",
@@ -401,5 +401,3 @@ class ProjectFinishControl(models.Model):
 
     def __unicode__(self):
         return str(self.project_year)
-
-
