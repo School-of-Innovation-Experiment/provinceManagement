@@ -6,6 +6,14 @@ function send_num_limit(){
   }
   Dajaxice.adminStaff.NumLimit(limitednum_callback,{'form':$('#num_limit_form').serialize(true)});
 }
+$('[rel="project_limit_num_reset"]').click(function(){
+  var bln = window.confirm("是否确认重置所有项目数量限制?（此操作不可撤销）");
+  if(bln){
+    var uid = $(this).attr("uid");
+    Dajaxice.adminStaff.get_news_list(news_delete_callback,
+                                         {'uid':uid});
+  }
+});
 function limitednum_callback(data){
   if (data.status == "1"){
     $("#limited_num").css("background","white");
