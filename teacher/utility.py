@@ -4,6 +4,7 @@ import os, sys, datetime, uuid
 
 from django.shortcuts import get_object_or_404
 
+from school.models import TeacherProjectPerLimits
 from users.models import StudentProfile, TeacherProfile
 from school.models import ProjectSingle, PreSubmit, FinalSubmit, PreSubmitEnterprise, Teacher_Enterprise
 from const import *
@@ -60,6 +61,19 @@ def create_newproject(request, new_user, category):
         loginfo(p=err, label="creat a project for the user")
         return False
     return True
+
+def Teacher_Profile(request):
+    return TeacherProfile.objects.get(userid = request.user)
+
+def TeacherLimitNumber(request):
+    teacher_profile = Teacher_Profile(request)
+    if TeacherProjectPerLimits.objects.filter(teacher__userid=request.user).count() == 0:
+        newT = TeacherProjectPerLimits(teacher = teacher_profile,
+                                       number = 0)
+        newT.save()
+    limit = TeacherProjectPerLimits.objects.get(teacher__userid = request.user)
+    return limit.number
+
 def get_limited_num_and_remaining_times(request):
     teacher_profile = TeacherProfile.objects.get(userid = request.user)
     proj_list = [each for each in StudentProfile.objects.filter(Q(teacher = teacher_profile)
