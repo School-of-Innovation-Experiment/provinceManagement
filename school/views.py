@@ -133,6 +133,12 @@ def project_limitnumSettings(request):
 @authority_required(SCHOOL_USER)
 def get_project_num_and_remaining(request):
     teacher_list = TeacherProfile.objects.filter(school__userid=request.user)
+    for p in teacher_list:
+        if TeacherProjectPerLimits.get(teacher=p).count() == 0:
+            newTeacherProjPerLimits = TeacherProjectPerLimits(
+                teacher = p,
+                number = 0)
+            newTeacherProjPerLimits.save()
     used_proj_num = sum([p.teacherprojectperlimits.number
                         for p in teacher_list \
                         if hasattr(p, 'teacherprojectperlimits')])
