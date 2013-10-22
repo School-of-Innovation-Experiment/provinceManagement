@@ -53,7 +53,9 @@
 	</td>
 	<td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
+          {%if item.is_showoverstatus%}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
+          {% endif %}
 	</td>
 	<td>
       	  <span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>

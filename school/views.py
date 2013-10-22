@@ -54,8 +54,9 @@ def home_view(request):
     school = SchoolProfile.objects.get(userid=request.user)
     over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
     grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
     grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
         if project_manage_form.is_valid():
@@ -84,12 +85,14 @@ def home_view(request):
             grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school))).filter(qset)
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
                 #.exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE) or Q(project_grade__grade=GRADE_UN))
             else:
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).order_by('project_grade')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
+
+    pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性
 
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
