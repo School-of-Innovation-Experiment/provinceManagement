@@ -40,8 +40,22 @@ class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
-        print email, identity
-        if not AdminStaffService.AuthUserExist(email, identity):
+
+        #expert多重身份特殊处理
+        if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
+            expert_obj = ExpertProfile.objects.get(userid__email = email)
+            if kwargs["expert_user"] == "assigned_by_school":
+                if expert_obj.assigned_by_school: return False
+                expert_obj.assigned_by_school = SchoolProfile.objects.get(userid = request.user)
+                expert_obj.save()
+                return True
+            else:
+                if expert_obj.assigned_by_adminstaff: return False
+                expert_obj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
+                expert_obj.save()
+                return True
+
+        if not AdminStaffService.AuthUserExist(email, identity, **kwargs):
             # if kwargs.has_key('school_name'):
             #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             # elif kwargs.has_key('expert_user'):
@@ -157,7 +171,7 @@ class AdminStaffService(object):
                 school_form = forms.SchoolDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
     @staticmethod
-    def AuthUserExist(email, identity):
+    def AuthUserExist(email, identity, **kwargs):
         if User.objects.filter(email=email).count():
             user_obj = User.objects.get(email=email)
             ui_obj = UserIdentity.objects.get(identity=identity)
