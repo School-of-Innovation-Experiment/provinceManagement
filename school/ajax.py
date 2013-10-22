@@ -118,7 +118,7 @@ def Query_Alloced_Expert(request, project_id, user_grade):
     
     expert_list_html = ''
     for expert in expert_list:
-        expert_list_html += '<p>' + expert.__str__() + '</p>'
+        expert_list_html += '<p>' + expert.name + '(' + str(expert) + ')' + '</p>'
 
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
