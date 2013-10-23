@@ -159,10 +159,12 @@ def get_subject_review_list(request, project_id):
     '''
     to get subject evaluate list through project_id
     '''
-    #dajax = Dajax()
     review_list = AdminStaffService.GetSubjectReviewList(project_id)
 
-    return simplejson.dumps({'review_list':review_list})
+    cnt_of_list = len(review_list)
+
+    average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    return simplejson.dumps({'review_list':review_list, 'average_list': average_list})
 
 @dajaxice_register
 def change_subject_recommend(request, project_id, changed_grade):
