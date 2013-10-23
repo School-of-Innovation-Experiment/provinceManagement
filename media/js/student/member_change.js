@@ -42,8 +42,8 @@ function get_student_info(caller)
   $("#change_info_student_id").html(change_id);
   $("input[name='email']").val($(tr_parent).children("td:eq(2)").html());
   $("input[name='telephone']").val($(tr_parent).children("td:eq(3)").html());
-  $("input[name='classInfo']").val($(tr_parent).children("td:eq(4)").html());
-  
+  $("input[name='major']").val($(tr_parent).children("td:eq(5)").html());
+  $("input[name='classInfo']").val($(tr_parent).children("td:eq(6)").html());
 }
 
 function cancel_change() {

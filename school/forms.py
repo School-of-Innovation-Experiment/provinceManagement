@@ -282,5 +282,3 @@ class ProjectManageForm(forms.Form):
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
         self.fields['project_year'].choices = YEAR_CHOICE
 
-
-      

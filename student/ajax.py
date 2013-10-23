@@ -31,12 +31,23 @@ def MemberChangeInfo(request, form, origin):
         email = stugroup_form.cleaned_data["email"]
         telephone = stugroup_form.cleaned_data["telephone"]
         classInfo = stugroup_form.cleaned_data["classInfo"]
+        sex = stugroup_form.cleaned_data["sex"]
+        nation = stugroup_form.cleaned_data["nation"]
+        school = stugroup_form.cleaned_data["school"]
+        school = SchoolDict.objects.get(id = int(school))
+        major = stugroup_form.cleaned_data["major"]
+        grade = stugroup_form.cleaned_data["grade"]
         group = project.student_group_set
         for student in group.all():
             if student.studentId == origin:
                 student.email = email
                 student.telephone = telephone
                 student.classInfo = classInfo
+                student.sex = sex
+                student.nation = nation
+                student.school = school
+                student.major = major
+                student.grade = grade
                 student.save()
                 table = refresh_member_table(request)
                 ret = {'status': '0', 'message': u"人员变更成功", 'table':table}

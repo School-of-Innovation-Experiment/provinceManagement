@@ -72,11 +72,13 @@ def home_view(request):
             #     project_isover=''
             if project_overstatus == '-1':
                 project_overstatus=''
+            else:
+                project_overstatus=OverStatus.objects.get(status=project_overstatus)
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
             # q2 = (project_isover and Q(is_over=project_isover)) or None
-            q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
+            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
@@ -115,7 +117,7 @@ def dispatch(request):
         raise Http404
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
-    email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+    email_list.extend(AdminStaffService.eGetRegisterExpertListBySchool(school))
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect

@@ -2,6 +2,8 @@
 
 from django.db import models
 from school.models import ProjectSingle
+from const.models import *
+from const import SEX_CHOICES, SEX_MALE, DEFAULT_NATION, MAJOR_CHOICES
 import datetime
 
 class Student_Group(models.Model):
@@ -14,6 +16,17 @@ class Student_Group(models.Model):
                                  verbose_name=u"学号")
     studentName = models.CharField(blank=False, max_length=100,
                                    verbose_name=u"姓名")
+    sex = models.CharField(blank=False, max_length=20, choices=SEX_CHOICES,
+                           default = SEX_MALE,
+                           verbose_name=u"性别")
+    nation = models.CharField(blank=True, null=True, max_length=20, default = DEFAULT_NATION,
+                              verbose_name=u"民族")
+    school = models.ForeignKey(SchoolDict, blank=True, null=True, verbose_name=u"所属学院")
+    grade = models.CharField(blank=True, null=True, max_length=20,
+                             verbose_name=u"年级")
+    major = models.ForeignKey(MajorDict, blank=True, null=True, verbose_name=u"专业")
+    # major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES,
+    #                          verbose_name=u"专业")
     project = models.ForeignKey(ProjectSingle, blank=True)
 
 
