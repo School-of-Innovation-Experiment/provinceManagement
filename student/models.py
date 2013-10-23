@@ -10,7 +10,7 @@ class Student_Group(models.Model):
     email = models.EmailField(verbose_name=u"电子邮件")
     telephone = models.CharField(max_length=20, blank=True,
                                  verbose_name=u"联系电话")
-    classInfo = models.CharField(blank=True, max_length=100,
+    classInfo = models.CharField(blank=True, null=True, max_length=100,
                                  verbose_name=u"班级")
     studentId = models.CharField(blank=False, max_length=20,
                                  verbose_name=u"学号")
@@ -30,6 +30,9 @@ class Student_Group(models.Model):
     project = models.ForeignKey(ProjectSingle, blank=True)
 
 
+    def get_sex_display(self):
+        if sex == 'male': return u"男"
+        else: return u"女"
 
     class Meta:
         verbose_name = "参赛学生信息"
@@ -46,6 +49,9 @@ class StudentWeeklySummary(models.Model):
     recorder    = models.CharField(blank=True, max_length=100,
                                 verbose_name=u"记录人")
     weekId      = models.IntegerField(blank=False, verbose_name="周次", default=1)
+    class Meta:
+        verbose_name = "学生项目周报"
+        verbose_name_plural = "学生项目周报"
 
 
 class Funds_Group(models.Model):
@@ -64,13 +70,7 @@ class Funds_Group(models.Model):
                                  verbose_name=u"经费余额",default=0)
     funds_total = models.IntegerField(blank=True,
                                  verbose_name=u"经费总额",default=0)
-
-
-    
-
-
-
-
-
-   
+    class Meta:
+        verbose_name = "项目经费"
+        verbose_name_plural = "项目经费"
 

@@ -16,7 +16,14 @@ class StudentGroupInfoForm(forms.Form):
     school_list        = SchoolDict.objects.all()
     for obj in school_list:
         SCHOOL_CHOICES_list.append((obj.id, obj.schoolName))
-    SCHOOL_CHOICES = tuple(SCHOOL_CHOICES_list)
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICES_list)
+
+    MAJOR_CHOICES_list = []
+    major_list        = MajorDict.objects.all()
+    for obj in major_list:
+        MAJOR_CHOICES_list.append((obj.id, obj.__unicode__()))
+    MAJOR_CHOICE = tuple(MAJOR_CHOICES_list)
+
     email = forms.EmailField(required=False,
                              widget=forms.TextInput(attrs={'class':'span2 studentchange', 'placeholder':u"邮箱",'id':'email'}))
     telephone = forms.CharField(max_length=20,
@@ -31,10 +38,10 @@ class StudentGroupInfoForm(forms.Form):
     nation = forms.CharField(max_length=20,
                              required=True,
                              widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_nation",'placeholder':u"民族"}),)
-    school = forms.ChoiceField(choices = SCHOOL_CHOICES,
+    school = forms.ChoiceField(choices = SCHOOL_CHOICE,
                                required=False,)
                              # widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_school",'placeholder':u"学院"}),)
-    major = forms.ChoiceField(choices = MAJOR_CHOICES,
+    major = forms.ChoiceField(choices = MAJOR_CHOICE,
                             required=True,)
                             # widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_major",'placeholder':u"专业"}),)
     grade = forms.CharField(max_length=20,

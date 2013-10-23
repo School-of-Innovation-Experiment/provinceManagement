@@ -10,6 +10,7 @@ from const.models import *
 
 
 RegisterClass = (SchoolDict,
+                 MajorDict,
                  ProjectCategory,
                  ProjectGrade,
                  ProjectStatus,
