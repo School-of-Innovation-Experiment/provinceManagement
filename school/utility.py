@@ -395,3 +395,14 @@ def check_othername(request):
         return False
     else:
         return True
+
+def is_showoverstatus(project_list):
+    """
+    判断项目级别，院级管理员对于校级以上项目没有改变结题状态的权限
+    """
+    for temp in project_list:
+        if temp.project_grade.grade in (GRADE_PROVINCE,GRADE_NATION):
+            temp.is_showoverstatus = False
+        else:
+            temp.is_showoverstatus = True
+    return project_list

@@ -19,7 +19,7 @@ class ExpertDispatchForm(forms.Form):
                                       widget=forms.TextInput(attrs={'class':'span2','id':"expert_password",'placeholder':u"默认密码：邮箱名字",'id':'expert_password'}),)
     expert_email    = forms.EmailField(required=True,
                                        widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
-    person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
+    person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"专家姓名"}))
 class SchoolDictDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()
@@ -34,7 +34,7 @@ class SchoolDictDispatchForm(forms.Form):
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
-    person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
+    person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"学院管理员"}))
     def __init__(self, *args, **kwargs):
         super(SchoolDictDispatchForm, self).__init__(*args, **kwargs)
         SCHOOL_CHOICE_list = []
@@ -59,7 +59,7 @@ class SchoolDispatchForm(forms.Form):
                            ))
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
     person_firstname = forms.CharField(required=True,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
+                                       widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"指导教师姓名"}))
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
                                        widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
@@ -71,7 +71,7 @@ class StudentDispatchForm(forms.Form):
     )
 
     person_firstname = forms.CharField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"负责人"}))
+                                        widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"指导教师姓名"}))
 class TeacherDispatchForm(forms.Form):
     teacher_password = forms.CharField(max_length=20, required=False,
                                        widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))

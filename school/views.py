@@ -54,8 +54,9 @@ def home_view(request):
     school = SchoolProfile.objects.get(userid=request.user)
     over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
     grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
     grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
         if project_manage_form.is_valid():
@@ -71,11 +72,13 @@ def home_view(request):
             #     project_isover=''
             if project_overstatus == '-1':
                 project_overstatus=''
+            else:
+                project_overstatus=OverStatus.objects.get(status=project_overstatus)
 
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
             # q2 = (project_isover and Q(is_over=project_isover)) or None
-            q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
+            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
             q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
             qset = filter(lambda x: x != None, [q1, q2, q3])
             loginfo(p=qset,label="qset")
@@ -84,12 +87,14 @@ def home_view(request):
             grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school))).filter(qset)
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
                 #.exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE) or Q(project_grade__grade=GRADE_UN))
             else:
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).order_by('project_grade')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
+
+    pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性
 
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
@@ -112,7 +117,7 @@ def dispatch(request):
         raise Http404
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
-    email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+    email_list.extend(AdminStaffService.eGetRegisterExpertListBySchool(school))
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect

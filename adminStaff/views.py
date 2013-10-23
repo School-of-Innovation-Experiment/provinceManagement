@@ -19,7 +19,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
 from const import *
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
@@ -443,20 +442,8 @@ class AdminStaffService(object):
     @staticmethod
     def SubjectGradeChange(project_id, changed_grade):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
-        try:
-            subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
-            subject_obj.save()
-        except:
-            pass
-
-    @staticmethod
-    def ProjectOverStatusChange(project_id, changed_overstatus):
-        project_obj = ProjectSingle.objects.get(project_id = project_id)
-        try:
-            project_obj.over_status = OverStatus.objects.get(status = changed_overstatus)
-            project_obj.save()
-        except:
-            pass
+        subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
+        subject_obj.save()
 
 
     @staticmethod
@@ -578,10 +565,7 @@ class AdminStaffService(object):
         """
         默认只显示省级和国家级项目
         """
-        over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
-        grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
-        grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=grade_nation)|Q(project_grade=grade_province))
+        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         if request.method =="POST":
             project_manage_form = forms.ProjectManageForm(request.POST)
             pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
@@ -604,11 +588,11 @@ class AdminStaffService(object):
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/adminstaff_home.html",context)
-
+    
     @staticmethod
     @csrf.csrf_protect
     def projectFilterList(request,project_manage_form):
-        pro_list = ProjectSingle.objects.exclude(Q(project_grade__grade=GRADE_INSITUTE)|Q(project_grade__grade=GRADE_SCHOOL)|Q(project_grade__grade=GRADE_UN))
+        pro_list = ProjectSingle.objects.exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
@@ -638,6 +622,8 @@ class AdminStaffService(object):
         #     project_isover=''
         if project_overstatus == '-1':
             project_overstatus=''
+        else:
+            project_overstatus=OverStatus.objects.get(status=project_overstatus)
         if project_scoreapplication == '-1':
             project_scoreapplication=''
         q1 = (project_year and Q(year=project_year)) or None
@@ -668,14 +654,14 @@ class AdminStaffService(object):
 
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
-        else: havedata_p = False
+        else: havedata_p = False       
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/project_processrecord.html",context)
-
+    
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -719,10 +705,9 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
-                return redirect('/newslist/%d' % new_news.id)
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-                return redirect('/newslist/')
+            return redirect('/newslist/%d' % new_news.id)
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm})

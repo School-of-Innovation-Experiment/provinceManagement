@@ -254,7 +254,7 @@ class TeacherNumLimitForm(forms.Form):
         self.fields["teacher_name"].choices = TEACHER_CHOICE
 
 class ProjectManageForm(forms.Form):
-    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_INSITUTE or grade[0] == GRADE_SCHOOL]
+    project_grade_choice = [grade for grade in PROJECT_GRADE_CHOICES if grade[0] not in (GRADE_UN,GRADE_CITY)]
     project_grade_choice = list(project_grade_choice)
     project_grade_choice.insert(0,('-1',u"级别"))
     # project_isover_choice = [(-1,"结题管理"),(0,"未结题"),(1,"已结题")]
@@ -272,7 +272,7 @@ class ProjectManageForm(forms.Form):
         loginfo(p=school,label="school")
         if not school:
             return
-        project_list = ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=4)|Q(project_grade=6)))
+        project_list = ProjectSingle.objects.filter(Q(school_id=school))
         yearlist = []
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
@@ -282,5 +282,3 @@ class ProjectManageForm(forms.Form):
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
         self.fields['project_year'].choices = YEAR_CHOICE
 
-
-      
