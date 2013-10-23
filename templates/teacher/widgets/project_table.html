@@ -3,18 +3,35 @@
     <tr>
       <td><strong>已发送学生用户邮箱</strong></td>
       <td><strong>用户状态</strong></td>
+      <td><strong>操作</strong></td>
     </tr>
   </thead>
   <tbody>
     {%for user in email_list%}
-      <tr>
+      <tr name="tr_{{user.email}}">
         <td>{{user.email}}</td>
         {%if user.is_active %}
           <td><button class="btn btn-success">已经激活</button></td>
+          <td><a data-toggle="modal" href="#brute_delete_checker" onclick="get_email('{{user.email}}');"><button class="btn btn-danger">删除</button></a></td>
         {%else%}
           <td><button class="btn btn-warning">已发送，尚未激活</button></td>
+          <td><button class="btn btn-danger" onclick="simple_delete('{{user.email}}');">删除</button></td>
         {%endif%}
       </tr>
     {%endfor%}
   </tbody>
+  
+  <div class="modal hide fade" style="display: none;" id="brute_delete_checker"><!--brute delete checker-->
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>警告</h3>
+		</div>
+		<div class="modal-body">
+		  <strong>该帐号已经激活，请再次确认是否删除...</strong>
+		</div>
+		<div class="modal-footer">
+			<a class="btn" data-dismiss="modal">关闭</a>
+			<a class="btn btn-danger" data-dismiss="modal" onclick="brute_delete();">删除</a>
+		</div>
+	</div><!--brute delete checker-->
 </table>
