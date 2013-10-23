@@ -56,6 +56,8 @@ def member_change(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
+    for s in student_group:
+        s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
     student_group_info_form = StudentGroupInfoForm()
