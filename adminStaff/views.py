@@ -136,7 +136,7 @@ class AdminStaffService(object):
     def Dispatch(request):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
-            school_form = forms.SchoolDictDispatchForm()
+            school_form = forms.SchoolDispatchForm()
             email_list  = AdminStaffService.GetRegisterList(request)
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
@@ -591,7 +591,7 @@ class AdminStaffService(object):
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/adminstaff_home.html",context)
-    
+
     @staticmethod
     @csrf.csrf_protect
     def projectFilterList(request,project_manage_form):
@@ -657,14 +657,13 @@ class AdminStaffService(object):
 
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
-        else: havedata_p = False       
+        else: havedata_p = False
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
         return render(request, "adminStaff/project_processrecord.html",context)
-    
     @staticmethod
     @csrf.csrf_protect
     @login_required
