@@ -5,14 +5,15 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
-
+from django.contrib.auth.models import User
 from django.http import Http404
 
 from adminStaff.forms import StudentDispatchForm
 from teacher.forms import  MonthCommentForm
 from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
 from teacher.models import TeacherMonthComment
-from school.models import ProjectSingle
+from school.models import *
+from users.models import StudentProfile
 from const.models import SchoolDict
 from const import *
 import datetime
@@ -21,6 +22,81 @@ def refresh_project_table(request):
     email_list  = GetStudentRegisterList(request)
     return render_to_string("teacher/widgets/project_table.html",
                             {"email_list": email_list})
+
+def delete_project_ralated(project):
+    category = project.project_category.category
+    
+    if category == CATE_INNOVATION:
+        pre = PreSubmit.objects.get(project_id = project)
+        pre.delete()
+    else:
+        pre_interprise = PreSubmitEnterprise.objects.get(project_id = project)
+        teacher_enterprise = pre_interprise.enterpriseTeacher
+        teacher_enterprise.delete()
+        pre_interprise.delete()
+
+    final = FinalSubmit.objects.get(project_id = project)
+    for achievement in AchievementObjects.objects.filter(project_id = final):
+        achievement.delete()
+    final.delete()
+
+def ext_delete_project_ralated(project):
+    for re_project_expert in Re_Project_Single.objects.filter(project = project):
+        re_project_expert.delete()
+
+    for paper in Papers.objects.filter(project_id = project):
+        paper.delete()
+
+    for tech_competition in TechCompetition.objects.filter(project_id = project):
+        tech_competition.delete()
+
+    for patent in Patents.objects.filter(project_id = project):
+        patent.delete()
+
+    for uploaderfile in UploadedFiles.objects.filter(project_id = project):
+        uploaderfile.delete()
+
+@dajaxice_register
+def simple_delete(request, email):
+    """
+    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
+    """
+    message = ""
+    user = User.objects.get(email = email)
+
+    student = StudentProfile.objects.get(userid = user)
+    student.delete()
+    try:
+        project = ProjectSingle.objects.get(student__userid = user)
+        delete_project_ralated(project)
+        project.delete()
+    except:
+        pass
+    user.delete()
+
+    return simplejson.dumps({"message": message})
+
+@dajaxice_register
+def brute_delete(request, email):
+    """
+    删除已激活User，删除User, Student及相关Project，Presubmit，finalsubmit
+    追加删除Re_Project_Single, Papers, TechCompetition, patents, UploadedFiles
+    """
+    message = ""
+    user = User.objects.get(email = email)
+
+    student = StudentProfile.objects.get(userid = user)
+    student.delete()
+    try:
+        project = ProjectSingle.objects.get(student__userid = user)
+        delete_project_ralated(project)
+        ext_delete_project_ralated(project)
+        project.delete()
+    except:
+        pass
+    user.delete()
+    
+    return simplejson.dumps({"message": message})
 
 @dajaxice_register
 def StudentDispatch(request, form):
