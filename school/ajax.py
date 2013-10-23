@@ -92,6 +92,7 @@ def teacherProjNumLimit(request, form):
 def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
     flag = (user_grade == 'adminStaff')
     message = ''
+
     if len(expert_list) == 0:
         message = 'no expert input'
     if len(project_list) == 0:
@@ -118,7 +119,7 @@ def Query_Alloced_Expert(request, project_id, user_grade):
 
     expert_list_html = ''
     for expert in expert_list:
-        expert_list_html += '<p>' + expert.name + '(' + str(expert) + ')' + '</p>'
+        expert_list_html += r'<p>' + expert.__str__() + r'</p>'
 
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 

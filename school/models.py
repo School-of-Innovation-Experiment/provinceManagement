@@ -121,7 +121,7 @@ class Re_Project_Expert(models.Model):
     class Meta:
         #Here, we use together unique key, otherwise the one project will be
         #reviewed by one expert twice!
-        unique_together=(('project', 'expert'), )
+        unique_together=(('project', 'expert', ), )
         verbose_name = "项目审核分配"
         verbose_name_plural = "项目审核分配"
 
