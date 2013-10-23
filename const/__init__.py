@@ -151,6 +151,13 @@ MESSAGE_SCHOOL_HEAD = '__school__'
 MESSAGE_STUDENT_HEAD = '__student__'
 MESSAGE_TEACHER_HEAD = '__teacher__'
 # APP student
+DEFAULT_NATION = u"汉族"
+SEX_MALE = "male"
+SEX_FEMALE = "female"
+SEX_CHOICES = {
+    (SEX_MALE, u"男"),
+    (SEX_FEMALE, u"女"),
+}
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {
     CATE_INNOVATION: 3,
