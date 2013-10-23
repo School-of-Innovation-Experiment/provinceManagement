@@ -22,6 +22,21 @@
       <div class="input-prepend">
 	<span class="add-on">班级</span>{{student_group_info_form.classInfo}}
       </div>
+      <div class="input-prepend">
+	<span class="add-on">性别</span>{{student_group_info_form.sex}}
+      </div>
+      <div class="input-prepend">
+	<span class="add-on">民族</span>{{student_group_info_form.nation}}
+      </div>
+      <div class="input-prepend">
+	<span class="add-on">学院</span>{{student_group_info_form.school}}
+      </div>
+      <div class="input-prepend">
+	<span class="add-on">专业</span>{{student_group_info_form.major}}
+      </div>
+      <div class="input-prepend">
+	<span class="add-on">年级</span>{{student_group_info_form.grade}}
+      </div>
     </form><!--end school_email_send_form-->
   </div>
   <div class="modal-footer">
@@ -37,6 +52,8 @@
       <td><strong>姓名</strong></td>
       <td><strong>邮箱</strong></td>
       <td><strong>电话</strong></td>
+      <td><strong>学院</strong></td>
+      <td><strong>专业</strong></td>
       <td><strong>班级</strong></td>
       <td><strong>更新信息</strong></td>
       <td><strong>人员变更</strong></td>
@@ -50,6 +67,8 @@
           <td>{{student.studentName}}</td>
           <td>{{student.email}}</td>
           <td>{{student.telephone}}</td>
+          <td>{{student.school}}</td>
+          <td>{{student.major}}</td>
           <td>{{student.classInfo}}</td>
           <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息</td>
           <td><button class="btn btn-success" onclick="delete_member(this);">删除</button></td>

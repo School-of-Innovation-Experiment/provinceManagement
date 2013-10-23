@@ -115,7 +115,7 @@ def Query_Alloced_Expert(request, project_id, user_grade):
     message = ''
     project = get_object_or_404(ProjectSingle, project_id = project_id)
     expert_list = [item.expert for item in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag))]
-    
+
     expert_list_html = ''
     for expert in expert_list:
         expert_list_html += '<p>' + expert.name + '(' + str(expert) + ')' + '</p>'
