@@ -20,9 +20,19 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import PROJECT_INNOVATION_ORIGIN_CHOICES
 from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES
+from const import MAJOR_CHOICES
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
+class MajorDict(models.Model):
+    major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES, unique=True,
+                             verbose_name=u"专业")
+    class Meta:
+        verbose_name = "专业列表"
+        verbose_name_plural = "专业列表"
+
+    def __unicode__(self):
+        return self.get_major_display()
 
 class SchoolDict(models.Model):
     """
