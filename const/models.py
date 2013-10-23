@@ -25,14 +25,14 @@ from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
 class MajorDict(models.Model):
-    major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES,
+    major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES, unique=True,
                              verbose_name=u"专业")
     class Meta:
         verbose_name = "专业列表"
         verbose_name_plural = "专业列表"
 
     def __unicode__(self):
-        return self.major
+        return self.get_major_display()
 
 class SchoolDict(models.Model):
     """

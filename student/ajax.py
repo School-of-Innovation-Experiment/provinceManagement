@@ -36,6 +36,7 @@ def MemberChangeInfo(request, form, origin):
         school = stugroup_form.cleaned_data["school"]
         school = SchoolDict.objects.get(id = int(school))
         major = stugroup_form.cleaned_data["major"]
+        major = MajorDict.objects.get(id = int(major))
         grade = stugroup_form.cleaned_data["grade"]
         group = project.student_group_set
         for student in group.all():
