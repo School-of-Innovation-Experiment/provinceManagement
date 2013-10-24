@@ -1,4 +1,4 @@
-<form method="post"  action={% url expert.views.review_report_view pid %}>
+<form method="post"  action="?pid={{pid}}&flag={{flag}}">
   {% csrf_token %}
   <div class="row">
     <div class="span4">
