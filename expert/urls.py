@@ -18,7 +18,7 @@ urlpatterns = patterns('',
         expert_views.home_view,
     ),
     url(
-        r'^review/(?P<pid>.{36})$',
+        r'^review/',
         expert_views.review_report_view,
     ),
     url(
