@@ -36,7 +36,7 @@
           <td>{{item.title|truncatechars:15}}</td>
           <td>{{item.project_code}}</td>
           <td>{{item.project_grade}}</td>
-          <td>{{item.adminuser}}</td>
+          <td>{{item.adminuser.get_name}}</td>
           <td>
             {% if item.file_application %}<span class="label label-success">已上传</span>{% endif %}
             {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
