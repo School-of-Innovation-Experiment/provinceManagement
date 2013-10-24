@@ -29,7 +29,7 @@ class ReviewForm(ModelForm):
     class Meta:
         model = Re_Project_Expert
         #TODO: add css into widgets
-        exclude = ('project', 'expert', )
+        exclude = ('project', 'expert', 'is_assign_by_adminStaff', )
         widgets = {'comments': forms.Textarea(attrs={'class': "fill-form", 'rows': "6", 
                                                       'placeholder': "给这个项目提点意见或建议吧。。。"}),
                    'score_significant': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
