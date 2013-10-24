@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <td><strong>已发送用户邮箱</strong></td>
+      <td><strong>用户姓名</strong></td>
       <td><strong>用户权限</strong></td>
       <td><strong>用户状态</strong></td>
     </tr>
@@ -10,6 +11,7 @@
     {%for user in email_list%}
       <tr>
         <td>{{user.email}}</td>
+        <td>{{user.name}}</td>
         <td>{{user.auth}}</td>
         {%if user.is_active %}
           <td><button class="btn btn-success">已经激活</button></td>

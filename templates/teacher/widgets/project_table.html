@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <td><strong>已发送学生用户邮箱</strong></td>
+      <td><strong>学生姓名</strong></td>
       <td><strong>用户状态</strong></td>
       <td><strong>操作</strong></td>
     </tr>
@@ -10,6 +11,7 @@
     {%for user in email_list%}
       <tr name="tr_{{user.email}}">
         <td>{{user.email}}</td>
+        <td>{{user.name}}</td>
         {%if user.is_active %}
           <td><button class="btn btn-success">已经激活</button></td>
           <td><a data-toggle="modal" href="#brute_delete_checker" onclick="get_email('{{user.email}}');"><button class="btn btn-danger">删除</button></a></td>

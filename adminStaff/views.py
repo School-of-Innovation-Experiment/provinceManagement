@@ -73,11 +73,13 @@ class AdminStaffService(object):
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
-            dict["auth"] = ''
+            dict["name"] = register.get_name
             dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
+            dict["auth"] = []
             for auth in auth_list:
-                dict["auth"] += auth.__unicode__()+' '
+                dict["auth"].append(auth.__unicode__())
+            dict["auth"] = u'、'.join(dict["auth"])
             ##########################################################################
             res_list.append(dict)
         return res_list
@@ -88,6 +90,14 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=TeacherProfile.objects.filter(school = school.id)
+        res_list = AdminStaffService.getUserInfoList(src)
+        return res_list
+    @staticmethod
+    def GetRegisterListByTeacher(teacher):
+        '''
+        获得对应`学院`的指导教师用户列表
+        '''
+        src=StudentProfile.objects.filter(teacher = teacher.id)
         res_list = AdminStaffService.getUserInfoList(src)
         return res_list
 
@@ -110,22 +120,26 @@ class AdminStaffService(object):
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
-            dict["auth"] = ''
             dict["email"] = register.userid.email
+            dict["name"] = register.get_name
             dict["is_active"] = register.userid.is_active
+            dict["auth"] = []
             for auth in auth_list:
-                dict["auth"] += auth.__unicode__() + '(' + register.school.__unicode__() + ')'
+                dict["auth"].append(auth.__unicode__())
+            dict["auth"] = u'、'.join(dict["auth"])
             ##########################################################################
             res_list.append(dict)
         # 添加所有的校级评委用户
         for register in ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user):
             dict = {}
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
-            dict["auth"] = ''
+            dict["name"] = register.get_name
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
+            dict["auth"] = []
             for auth in auth_list:
-                dict["auth"] += auth.__unicode__()+' '
+                dict["auth"].append(auth.__unicode__())
+            dict["auth"] = u'、'.join(dict["auth"])
             res_list.append(dict)
         return res_list
 
