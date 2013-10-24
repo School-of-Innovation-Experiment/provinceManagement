@@ -1,5 +1,8 @@
-
+#project_manage_form select
+{
+    width:180px;
+}
 input:
-{	
+{
 	background-color:white;
 }
