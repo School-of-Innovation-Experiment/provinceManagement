@@ -450,6 +450,9 @@ class AdminStaffService(object):
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
+            print obj_list
+            obj_list.append(sum(map(float, obj_list[1:])))
+
             review_list.append(obj_list)
         return review_list
 
