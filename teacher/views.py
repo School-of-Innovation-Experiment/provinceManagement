@@ -215,10 +215,6 @@ def Send_email_to_student(request, username, password, email, category,person_na
     else:
         return False
 
-def GetStudentRegisterList(request):
-    teacher_profile = TeacherProfile.objects.get(userid = request.user)
-    student_list = [each.userid for each in StudentProfile.objects.filter(teacher = teacher_profile)]
-    return student_list
 
 @csrf.csrf_protect
 @login_required
@@ -226,7 +222,8 @@ def GetStudentRegisterList(request):
 def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
-        email_list  = GetStudentRegisterList(request)
+        teacher_profile = TeacherProfile.objects.get(userid = request.user)
+        email_list  = AdminStaffService.GetRegisterListByTeacher(teacher_profile)
         limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
         data = {
             'student_form': student_form,

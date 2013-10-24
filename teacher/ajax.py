@@ -10,16 +10,18 @@ from django.http import Http404
 
 from adminStaff.forms import StudentDispatchForm
 from teacher.forms import  MonthCommentForm
-from teacher.views import GetStudentRegisterList, TeacherLimitNumber, Send_email_to_student
+from teacher.views import  TeacherLimitNumber, Send_email_to_student
 from teacher.models import TeacherMonthComment
 from school.models import *
 from users.models import StudentProfile
 from const.models import SchoolDict
+from adminStaff.views import AdminStaffService
 from const import *
 import datetime
 
 def refresh_project_table(request):
-    email_list  = GetStudentRegisterList(request)
+    teacher_profile = TeacherProfile.objects.get(userid = request.user)
+    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher_profile)
     return render_to_string("teacher/widgets/project_table.html",
                             {"email_list": email_list})
 
