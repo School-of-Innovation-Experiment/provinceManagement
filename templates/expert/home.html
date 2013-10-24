@@ -55,7 +55,7 @@
             </td>
             <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td>
             <td>
-              <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
+              <span><a href="review/?pid={{item.project.project_id}}&flag={{item.is_assigned_by_adminStaff}}" class='btn btn-primary'>审阅</a></span>
             </td>
           </tr>
           {%endfor%}
@@ -92,7 +92,7 @@
         </td>
         <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td>
         <td>
-          <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
+          <span><a href="review/?pid={{item.project.project_id}}&flag={{item.is_assigned_by_adminStaff}}" class='btn btn-primary'>审阅</a></span>
         </td>
       </tr>
       {%endfor%}

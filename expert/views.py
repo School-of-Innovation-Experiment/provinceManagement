@@ -56,6 +56,13 @@ def home_view(request):
     school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False))
     adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True))
     
+    for project in school_project_list:
+        project.is_assigned_by_adminStaff = False
+
+    for project in adminStaff_project_list:
+        project.is_assigned_by_adminStaff = True
+    #为project对象临时添加属性，方便之后Re_Project_Expert的获取
+
     data = {'school_list': school_project_list,
             'adminStaff_list': adminStaff_project_list,}
 
@@ -65,14 +72,17 @@ def home_view(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(EXPERT_USER)
-def review_report_view(request, pid=None):
+def review_report_view(request):
     """
     expert home management page
     """
     # get or check authorities
+    pid = request.GET.get('pid')
+    flag = request.GET.get('flag') == 'True'
+    print pid, flag, "*"*100
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
+    re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project, is_assign_by_adminStaff = flag)
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
     info_form = InfoForm(instance=re_project.project, pid=pid)
@@ -89,6 +99,7 @@ def review_report_view(request, pid=None):
         review_form = ReviewForm(request.POST, instance=re_project)
         if review_form.is_valid():
             review_form.save()
+            #re_project.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
         else:
             loginfo(p = review_form.errors)
@@ -100,6 +111,7 @@ def review_report_view(request, pid=None):
     data = {
             "is_innovation": is_innovation,
             "pid": pid,
+            "flag": flag,
             "info": info_form,
             "application": application_form,
             "review": review_form,
