@@ -205,10 +205,6 @@ class FundsChangeForm(forms.Form):
     funds_total = forms.IntegerField(
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"初始化/修改明细填写"}),) 
-    # funds_total = forms.IntegerField(
-    #                                 required=False,
-    #                                 widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_total','placeholder':u""}),) 
-
 
 class StudentNameForm(forms.Form):
     STUDENT_CHOICE_list = []
@@ -249,9 +245,16 @@ class ProjectManageForm(forms.Form):
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
     project_year = forms.ChoiceField() 
-    # project_isover = forms.ChoiceField(choices=project_isover_choice)
+    #project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
     project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
+
+    SCHOOL_CHOICE_list = []
+    school_list        = SchoolProfile.objects.all()
+    for object in school_list:
+        SCHOOL_CHOICE_list.append((object.id, object.school))
+    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+    project_school = forms.ChoiceField(choices=SCHOOL_CHOICE)
 
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
@@ -262,4 +265,10 @@ class ProjectManageForm(forms.Form):
               yearlist.append((temp.year, str(temp.year)+"年"))
         YEAR_CHOICE = list(yearlist)
         YEAR_CHOICE.insert(0,('-1',u"年份"))
-        self.fields['project_year'].choices = YEAR_CHOICE    
+        self.fields['project_year'].choices = YEAR_CHOICE
+        SCHOOL_CHOICE_list = [(-1, u"显示所有学部学院")]
+        school_list     = SchoolProfile.objects.all()
+        for object in school_list:
+            SCHOOL_CHOICE_list.append((object.id, object.school))
+        SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
+        self.fields["project_school"].choices = SCHOOL_CHOICE

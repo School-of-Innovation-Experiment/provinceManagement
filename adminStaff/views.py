@@ -526,15 +526,11 @@ class AdminStaffService(object):
     def funds_manage(request,is_expired=False):
         subject_grade_form = forms.SubjectGradeForm()
         if request.method == "GET":
-            school_category_form = forms.SchoolCategoryForm()
+            project_manage_form = forms.ProjectManageForm()
             subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
 
         else:
-            school_category_form = forms.SchoolCategoryForm(request.POST)
-            if school_category_form.is_valid():
-                school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  pro_list=ProjectSingle.objects.filter((Q(project_grade=1)|Q(project_grade=2) )and Q(school = school_name))
-
+            project_manage_form = forms.ProjectManageForm(request.POST)
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
@@ -542,7 +538,7 @@ class AdminStaffService(object):
             except:
                 pass
 
-        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'school_category_form':school_category_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
+        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'project_manage_form':project_manage_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
 
 
 

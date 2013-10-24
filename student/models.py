@@ -31,9 +31,10 @@ class Student_Group(models.Model):
 
 
     def get_sex_display(self):
-        if sex == 'male': return u"男"
-        else: return u"女"
-
+        if sex == 'male':
+            return u"男"
+        else:
+            return u"女"
     class Meta:
         verbose_name = "参赛学生信息"
         verbose_name_plural = "参赛学生信息"

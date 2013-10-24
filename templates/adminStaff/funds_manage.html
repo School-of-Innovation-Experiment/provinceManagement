@@ -9,10 +9,14 @@
 
 
   <div class="well form-inline">
-      <form id="school_category_form" method="POST" action="/adminStaff/fundsmanage/">
+      <form id="project_manage_form" method="POST" action="/adminStaff/fundsmanage/">
 	{% csrf_token %}
-	  {{school_category_form.school_choice}}
-	  <input type="submit" class="btn btn-primary" id="filter_button" value="按照学院进行筛选"/>
+	  {{project_manage_form.project_grade}}
+          {{project_manage_form.project_year}}
+          {{project_manage_form.project_overstatus}}
+          {{project_manage_form.project_scoreapplication}}
+          {{project_manage_form.project_school}}
+	  <input type="submit" class="btn btn-primary" id="filter_button" value="检索"/>
       </form><!--end category form -->
       <table class="table table-condensed" id="subject_table">
 	<thead>
