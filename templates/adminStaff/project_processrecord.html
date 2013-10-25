@@ -30,7 +30,7 @@
         <td>{{item.project_code}}</td>
         <td>{{item.title|truncatechars:15}}</td>
         <td>{{item.project_grade}}</td>
-        <td>{{item.adminuser}}</td>
+        <td>{{item.adminuser.get_name}}</td>
         <td>
             <span><a href="/adminStaff/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
         </td>

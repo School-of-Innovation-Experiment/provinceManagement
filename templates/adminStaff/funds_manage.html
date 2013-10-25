@@ -1,14 +1,10 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-
-<div class="page-header">
+   
     <h3>
       项目列表
     </h3>
-  </div><!--end page header-->
-
-
-  <div class="well form-inline">
+    {% if havedata_p %}
       <form id="project_manage_form" method="POST" action="/adminStaff/fundsmanage/">
 	{% csrf_token %}
 	  {{project_manage_form.project_grade}}
@@ -18,35 +14,37 @@
           {{project_manage_form.project_school}}
 	  <input type="submit" class="btn btn-primary" id="filter_button" value="检索"/>
       </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
-	<thead>
-	  <tr>
-        <th>项目编号</th>
-	    <th>项目名称</th>
-	    <th>指导教师</th>
-        <th>项目成员</th>
-        <th>经费总额</th>
-        <th>经费余额</th>
-	    <th>经费管理</th>
-	  </tr>
-	</thead>
-	<tbody id="subject_table_body">
-	  {% for subject in subject_list%}
+      <div>
+        <table class="table table-condensed" id="subject_table">
+	  <thead>
 	    <tr>
-          <td>{{subject.project_code}}</td>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.adminuser}}</td>
-          <td>{{subject.members}}</td>
-          <td>{{subject.funds_total}}</td>
-          <td>{{subject.funds_remain}}</td>
+              <th>项目编号</th>
+	      <th>项目名称</th>
+	      <th>指导教师</th>
+              <th>项目成员</th>
+              <th>经费总额</th>
+              <th>经费余额</th>
+	      <th>经费管理</th>
+	    </tr>
+	  </thead>
+	  <tbody id="subject_table_body">
+	    {% for item in pro_list%}
+	    <tr>
+              <td>{{item.project_code}}</td>
+	      <td>{{item.title}}</td>
+	      <td>{{item.adminuser.get_name}}</td>
+              <td>{{item.members}}</td>
+              <td>{{item.funds_total}}</td>
+              <td>{{item.funds_remain}}</td>
 	      <td><a data-toggle="modal" href="/adminStaff/fundschange/{{subject.project_id}}" >添加帐目</td>
 	    </tr>
-	  {%endfor%}
-
-	</tbody>
-      </table>
-  </div>
-
+	    {%endfor%}
+	  </tbody>
+        </table>
+      </div>
+   {% else %}
+  目前没有正在进行的项目
+  {% endif %}
 
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/funds_change.js"></script>
 <!-- ajax_csrf-->
