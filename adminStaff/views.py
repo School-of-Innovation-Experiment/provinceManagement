@@ -524,23 +524,15 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
-        subject_grade_form = forms.SubjectGradeForm()
-        if request.method == "GET":
-            project_manage_form = forms.ProjectManageForm()
-            subject_list =  pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
-
-        else:
-            project_manage_form = forms.ProjectManageForm(request.POST)
-        for subject in subject_list:
-            student_group = Student_Group.objects.filter(project = subject)
+        context = AdminStaffService.projectListInfor(request)
+        for pro_obj in context["pro_list"]:
+            student_group = Student_Group.objects.filter(project = pro_obj)
             try:
-                subject.members = student_group[0]
+                pro_obj.members = student_group[0]
             except:
                 pass
 
-        return render_to_response("adminStaff/funds_manage.html",{'subject_list':subject_list,'project_manage_form':project_manage_form, 'subject_grade_form':subject_grade_form},context_instance=RequestContext(request))
-
-
+        return render_to_response("adminStaff/funds_manage.html",context,context_instance=RequestContext(request))
 
     @staticmethod
     @csrf.csrf_protect
@@ -575,22 +567,27 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
-        """
-        默认只显示省级和国家级项目
-        """
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
-        if request.method =="POST":
-            project_manage_form = forms.ProjectManageForm(request.POST)
-            pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
-        else:
-            project_manage_form = forms.ProjectManageForm()
-
-        for pro_obj in pro_list:
+        context = AdminStaffService.projectListInfor(request)
+        for pro_obj in context["pro_list"]:
             file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
             for file_temp in file_history:
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
                     pro_obj.url = url
+
+        return render(request, "adminStaff/adminstaff_home.html",context)
+    @staticmethod
+    @csrf.csrf_protect
+    def projectListInfor(request):
+        """
+        默认只显示省级和国家级项目
+        """
+        if request.method =="POST":
+            project_manage_form = forms.ProjectManageForm(request.POST)
+            pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
+        else:
+            project_manage_form = forms.ProjectManageForm()
+            pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
@@ -600,8 +597,7 @@ class AdminStaffService(object):
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
                     }
-        return render(request, "adminStaff/adminstaff_home.html",context)
-
+        return context
     @staticmethod
     @csrf.csrf_protect
     def projectFilterList(request,project_manage_form):
@@ -609,11 +605,11 @@ class AdminStaffService(object):
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]
-            # project_isover = project_manage_form.cleaned_data["project_isover"]
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+            project_school = project_manage_form.cleaned_data["project_school"]
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication,project_school)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 if project_grade == "-1" and project_scoreapplication == "-1":
@@ -626,7 +622,7 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication):
+    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication,project_school):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -639,12 +635,15 @@ class AdminStaffService(object):
             project_overstatus=OverStatus.objects.get(status=project_overstatus)
         if project_scoreapplication == '-1':
             project_scoreapplication=''
+        if project_school  == '-1':
+            project_school = '';
         q1 = (project_year and Q(year=project_year)) or None
         # q2 = (project_isover and Q(is_over=project_isover)) or None
         q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4])
+        q5 = (project_school and Q(school_id = project_school)) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5])
         return qset
 
     @staticmethod
@@ -658,21 +657,7 @@ class AdminStaffService(object):
         """
         默认只显示省级和国家级项目
         """
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
-        if request.method =="POST":
-            project_manage_form = forms.ProjectManageForm(request.POST)
-            pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
-        else:
-            project_manage_form = forms.ProjectManageForm()
-
-        if pro_list.count() != 0 or request.method == "POST":
-            havedata_p = True
-        else: havedata_p = False
-        context = {
-                    'havedata_p': havedata_p,
-                    'pro_list': pro_list,
-                    'project_manage_form':project_manage_form
-                    }
+        context = AdminStaffService.projectListInfor(request)
         return render(request, "adminStaff/project_processrecord.html",context)
     @staticmethod
     @csrf.csrf_protect
