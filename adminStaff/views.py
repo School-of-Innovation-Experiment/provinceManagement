@@ -426,9 +426,9 @@ class AdminStaffService(object):
                 subject.members = student_group[0]
             except:
                 pass
-        rec_subject_list = [subject for subject in subject_list if subject.project_grade.id == 1 or subject.project_grade.id == 2]
+        rec_subject_list = [subject for subject in subject_list if subject.project_grade.grade != GRADE_UN]
         rec = getContext(rec_subject_list, page1, 'subject', 0)
-        nrec_subject_list = [subject for subject in subject_list if not (subject.project_grade.id == 1 or subject.project_grade.id == 2)]
+        nrec_subject_list = [subject for subject in subject_list if subject.project_grade.grade == GRADE_UN]
         nrec = getContext(nrec_subject_list, page2, 'subject', 0)
         context = {
             'page1': page1,
