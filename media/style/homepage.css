@@ -19,8 +19,10 @@ p, ul, ol{
 }
 .home-title {
     height: 95px;
-    text-align:center;
-    margin-left: auto;
+    /* text-align:center; */
+    /* margin-left: auto; */
+    text-align:left;
+    margin-left: 150px;
     margin-right: auto;
     /* background-color: #0e4c92; */
 }
