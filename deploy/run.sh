@@ -63,9 +63,9 @@ elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
     cd $(cd "$(dirname "$0")"; pwd)/../
     echo "check branch to school"
-    git checkout school
+    git checkout minzu 
     echo "update code repo"
-    git pull origin school
+    git pull origin minzu
     echo "update static folder"
     python manage.py collectstatic
     echo "*_* update codebase *_*"
