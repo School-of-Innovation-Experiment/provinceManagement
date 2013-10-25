@@ -474,8 +474,8 @@ class AdminStaffService(object):
             project_obj.save()
         except:
             pass
-        subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
-        subject_obj.save()
+        # subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
+        # subject_obj.save()
 
 
     @staticmethod
