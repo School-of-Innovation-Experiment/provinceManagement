@@ -272,3 +272,12 @@ li.nav-li{
 li.nav-li-username{
 	float: center;
 }
+p.schoolLogo-image{
+display: block;
+background: url(../images/DalianNational.png) left no-repeat;
+position:absolute;
+left: 5%;
+width: 100px;
+height: 100px;
+margin-left: -50px;
+}
