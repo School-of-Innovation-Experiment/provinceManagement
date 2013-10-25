@@ -1,6 +1,6 @@
 server {
-	listen   10000; ## listen for ipv4; this line is default and implied
-	listen   [::]:10000 default ipv6only=on; ## listen for ipv6
+	listen   9001; ## listen for ipv4; this line is default and implied
+	listen   [::]:9001 default ipv6only=on; ## listen for ipv6
 
     root /home/sie/mysites/schoolManagement;
 
