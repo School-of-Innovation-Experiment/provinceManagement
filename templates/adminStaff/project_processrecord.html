@@ -3,7 +3,6 @@
 <h3>
   项目列表
 </h3>
-{% if havedata_p %}
 <form id="project_manage_form" method="POST" action="/adminStaff/processrecord" >
   {% csrf_token %}
   {{project_manage_form.project_grade}}
@@ -11,8 +10,9 @@
   {{project_manage_form.project_overstatus}}
   {{project_manage_form.project_scoreapplication}}
   {{project_manage_form.project_school}}
-  <input type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索"/>
+  <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索">检索</button>
 </form>
+{% if havedata_p %}
 <div>
   <table class="table table-hover">
     <thead>
