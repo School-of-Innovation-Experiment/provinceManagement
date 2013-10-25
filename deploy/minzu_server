@@ -1,0 +1,43 @@
+server {
+	listen   10002; ## listen for ipv4; this line is default and implied
+	listen   [::]:10002 default ipv6only=on; ## listen for ipv6
+
+    root /home/sie/mysites/schoolManagement;
+
+	server_name 192.168.20.100;
+    client_max_body_size 50m;
+    client_body_temp_path /home/sie/mysites/tmp;
+
+	location / {
+        root /home/sie/mysites/schoolManagement;
+        uwsgi_pass 192.168.20.100:9002;
+        include uwsgi_params;
+        access_log off;
+	}
+
+	location /doc/ {
+		alias /usr/share/doc/;
+		autoindex on;
+		allow 127.0.0.1;
+		deny all;
+	}
+
+    location /static {
+       alias /home/sie/mysites/schoolManagement/static/;
+       access_log off;
+    }
+
+
+    location ~.*\.(gif|jpg|png|ico|jpeg|bmp|swf|doc|docx)$ {
+       expires 3d;
+    }
+
+    location /media {
+        root  /home/sie/mysites/schoolManagement/;
+        break;
+    }
+
+    location ~.*\.(css|js)$ {
+       expires 12h;
+    }
+}
