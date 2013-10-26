@@ -36,7 +36,7 @@ class SchoolDictDispatchForm(forms.Form):
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
     person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"学院管理员"}))
     def __init__(self, *args, **kwargs):
-        super(SchoolDispatchForm, self).__init__(*args, **kwargs)
+        super(SchoolDictDispatchForm, self).__init__(*args, **kwargs)
         SCHOOL_CHOICE_list = []
         school_list        = SchoolDict.objects.all()
         for obj in school_list:
