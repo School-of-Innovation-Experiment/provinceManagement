@@ -43,7 +43,7 @@ def  ExpertDispatch(request, form):
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
         name = email
-        person_name = expert_form.cleaned_data["person_firstname"]
+        person_name = expert_form.cleaned_data["expert_personname"]
         if password == "":
             password = email.split('@')[0]
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user="assigned_by_school",person_name=person_name)
@@ -133,7 +133,6 @@ def Cancel_Alloced_Experts(request, project_list, user_grade):
         project = get_object_or_404(ProjectSingle, project_id = project_id)
         for re_project_expert in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag)):
             re_project_expert.delete()
-            
     return simplejson.dumps({'message': message})
 
 @dajaxice_register
@@ -146,7 +145,7 @@ def  TeacherDispatch(request, form):
         # school = teacher_form.cleaned_data["teacher_school"]
         school = SchoolProfile.objects.get(userid=request.user)
         name = email
-        person_name = teacher_form.cleaned_data["person_firstname"]
+        person_name = teacher_form.cleaned_data["teacher_personname"]
         if password == "":
             password = email.split('@')[0]
         flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school,person_name = person_name)
