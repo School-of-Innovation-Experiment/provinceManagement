@@ -147,12 +147,13 @@ def application_report_view(request,pid=None,is_expired=False):
         application_form = iform(request.POST, instance=pre)
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
+                logger.info("form")
                 if save_application(project, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(" info  application Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
                 logger.info(application_form.errors)
                 logger.info("--"*10)
@@ -164,7 +165,7 @@ def application_report_view(request,pid=None,is_expired=False):
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
+                logger.info("info  application teacher Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
                 logger.info(application_form.errors)
                 logger.info(teacher_enterpriseform.errors)
