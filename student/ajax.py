@@ -155,6 +155,7 @@ def new_or_update_member(request, stugroup_form):
         else:
             new_student = Student_Group(studentId = student_id,
                                         studentName = student_name,
+                                        classInfo = "",
                                         project=project)
             new_student.save()
             table = refresh_member_table(request)
