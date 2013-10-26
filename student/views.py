@@ -43,7 +43,6 @@ def home_view(request):
     display project at the current year
     """
     item_list = ProjectSingle.objects.filter(student__userid=request.user)
-
     return render(request, "student/student_home.html", {"item_list": item_list})
 
 @csrf.csrf_protect
@@ -147,7 +146,6 @@ def application_report_view(request,pid=None,is_expired=False):
         application_form = iform(request.POST, instance=pre)
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
-                logger.info("form")
                 if save_application(project, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
