@@ -20,6 +20,7 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
                                        widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
     expert_personname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"expert_personname",'placeholder':u"专家姓名"}))
+
 class SchoolDictDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()
@@ -177,7 +178,7 @@ class SchoolCategoryForm(forms.Form):
         self.fields["school_choice"].choices = SCHOOL_CHOICE
 
 class SubjectGradeForm(forms.Form):
-    subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] == GRADE_PROVINCE or grade[0] == GRADE_NATION]
+    subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_UN and grade[0] != GRADE_CITY]
     subject_grade_choice = tuple(subject_grade_choice)
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
 

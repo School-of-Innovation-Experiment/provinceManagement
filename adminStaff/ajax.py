@@ -11,7 +11,8 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
+#from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
+from adminStaff.forms import *
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
 from const.models import SchoolDict, ProjectGrade
 from const import *
@@ -203,7 +204,9 @@ def change_subject_grade(request, project_id, changed_grade):
     change subject grade secretly
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
-    res = changed_grade == "nation" and "国家级" or "省级"
+    
+    project = ProjectSingle.objects.get(project_id = project_id)
+    res = project.project_grade.get_grade_display()
     return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
