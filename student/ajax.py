@@ -107,7 +107,6 @@ def GetStudentInfo(request, selectedId):
     group = project.student_group_set
     for student in group.all():
         if student.studentId == selectedId:
-            
             ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
             break
     return simplejson.dumps(ret)
