@@ -20,7 +20,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 sys.path.append('/home/sie/mysites/')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'schoolManagement.settings_production'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'minzuManagement.settings_production'
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
