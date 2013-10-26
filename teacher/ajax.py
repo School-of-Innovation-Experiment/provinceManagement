@@ -112,7 +112,7 @@ def StudentDispatch(request, form):
         if password == "":
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
-        email_list  = GetStudentRegisterList(request)
+        email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
         email_num = email_list and len(email_list) or 0
         limited_num = TeacherLimitNumber(request)
         remaining_activation_times = limited_num - email_num
