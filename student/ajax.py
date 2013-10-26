@@ -167,6 +167,9 @@ def refresh_member_table(request):
     student_group = Student_Group.objects.filter(project = project)
     student_group_info_form = StudentGroupInfoForm()
 
+    for student in student_group:
+        student.sex = student.get_sex_display()
+
     return render_to_string("student/widgets/member_group_table.html",
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
