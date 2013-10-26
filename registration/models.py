@@ -117,7 +117,7 @@ class RegistrationManager(models.Manager):
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
-                schooolProfileObj.name  = kwargs["person_name"]
+                schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])

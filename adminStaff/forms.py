@@ -20,7 +20,7 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
                                        widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
     person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"专家姓名"}))
-class SchoolDispatchForm(forms.Form):
+class SchoolDictDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()
     for obj in school_list:
@@ -36,7 +36,7 @@ class SchoolDispatchForm(forms.Form):
     school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
     person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"person_firstname",'placeholder':u"学院管理员"}))
     def __init__(self, *args, **kwargs):
-        super(SchoolDispatchForm, self).__init__(*args, **kwargs)
+        super(SchoolDictDispatchForm, self).__init__(*args, **kwargs)
         SCHOOL_CHOICE_list = []
         school_list        = SchoolDict.objects.all()
         for obj in school_list:
