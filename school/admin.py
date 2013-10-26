@@ -17,7 +17,8 @@ RegisterClass = (ProjectSingle,
                  UploadedFiles,
                  PreSubmitEnterprise,
                  Teacher_Enterprise,
-                 TeacherProjectPerLimits)
+                 TeacherProjectPerLimits,
+                 ProjectFinishControl)
 
 for item in RegisterClass:
     admin.site.register(item)

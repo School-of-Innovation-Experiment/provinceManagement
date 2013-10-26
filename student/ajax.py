@@ -107,7 +107,6 @@ def GetStudentInfo(request, selectedId):
     group = project.student_group_set
     for student in group.all():
         if student.studentId == selectedId:
-            
             ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
             break
     return simplejson.dumps(ret)
@@ -155,6 +154,7 @@ def new_or_update_member(request, stugroup_form):
         else:
             new_student = Student_Group(studentId = student_id,
                                         studentName = student_name,
+                                        classInfo = "",
                                         project=project)
             new_student.save()
             table = refresh_member_table(request)
@@ -166,6 +166,9 @@ def refresh_member_table(request):
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
     student_group_info_form = StudentGroupInfoForm()
+
+    for student in student_group:
+        student.sex = student.get_sex_display()
 
     return render_to_string("student/widgets/member_group_table.html",
                             {"student_group": student_group,

@@ -43,7 +43,6 @@ def home_view(request):
     display project at the current year
     """
     item_list = ProjectSingle.objects.filter(student__userid=request.user)
-
     return render(request, "student/student_home.html", {"item_list": item_list})
 
 @csrf.csrf_protect
@@ -56,6 +55,7 @@ def member_change(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
+
     for s in student_group:
         s.sex = s.get_sex_display()
 
@@ -151,7 +151,7 @@ def application_report_view(request,pid=None,is_expired=False):
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(" info  application Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
                 logger.info(application_form.errors)
                 logger.info("--"*10)
@@ -163,7 +163,7 @@ def application_report_view(request,pid=None,is_expired=False):
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
+                logger.info("info  application teacher Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
                 logger.info(application_form.errors)
                 logger.info(teacher_enterpriseform.errors)
@@ -202,8 +202,8 @@ def final_report_view(request, pid=None,is_expired=False):
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
-    readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
+    readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         # techcompetition_form =
