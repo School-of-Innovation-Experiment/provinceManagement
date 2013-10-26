@@ -108,11 +108,11 @@ def StudentDispatch(request, form):
         email = student_form.cleaned_data["student_email"]
         category = student_form.cleaned_data["category"]
         name = email
-        person_name = student_form.cleaned_data["person_firstname"]
+        person_name = student_form.cleaned_data["student_personname"]
         if password == "":
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
-        email_list  = GetStudentRegisterList(request)
+        email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
         email_num = email_list and len(email_list) or 0
         limited_num = TeacherLimitNumber(request)
         remaining_activation_times = limited_num - email_num

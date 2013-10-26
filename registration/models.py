@@ -104,7 +104,7 @@ class RegistrationManager(models.Manager):
         new_authority = UserIdentity.objects.get(identity=Identity)
         new_authority.auth_groups.add(new_user)
         new_authority.save()
-        
+
         #如果是学校注册 添加学校注册姓名
         if kwargs.get('school_name',False):
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
@@ -117,7 +117,7 @@ class RegistrationManager(models.Manager):
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
                 schoolProfileObj.userid = new_user
-                schooolProfileObj.name  = kwargs["person_name"]
+                schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
@@ -144,7 +144,7 @@ class RegistrationManager(models.Manager):
             student_obj = StudentProfile(userid = new_user,teacher = teacher_profile,name = kwargs["person_name"])
             student_obj.save()
         else:
-            raise Http404 
+            raise Http404
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user

@@ -129,8 +129,8 @@ def final_report_view(request, pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     
     is_finishing = check_finishingyear(project)
-    is_over = project.is_over
-    readonly = is_over or not is_finishing
+    over_status = project.over_status
+    readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
 
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)

@@ -11,7 +11,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from django.template.loader import render_to_string
 
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
 from const.models import SchoolDict, ProjectGrade
 from const import *
@@ -103,7 +103,7 @@ def  ExpertDispatch(request, form):
         password = expert_form.cleaned_data["expert_password"]
         email = expert_form.cleaned_data["expert_email"]
         name = email
-        person_name = expert_form.cleaned_data["person_firstname"]
+        person_name = expert_form.cleaned_data["expert_personname"]
         if password == "":
             password = email.split('@')[0]
         flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True,person_name=person_name)
@@ -125,7 +125,7 @@ def SchoolDispatch(request, form):
         email = school_form.cleaned_data["school_email"]
         name = email
         school_name = school_form.cleaned_data["school_name"]
-        person_name = school_form.cleaned_data["person_firstname"]
+        person_name = school_form.cleaned_data["school_personname"]
         if password == "":
             password = email.split('@')[0]
         flag = AdminStaffService.sendemail(request, name, password,email,SCHOOL_USER, school_name=school_name,person_name = person_name)
@@ -138,7 +138,7 @@ def SchoolDispatch(request, form):
             message = u"相同邮件已经发送，中断发送"
             return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
     else:
-        return simplejson.dumps({'id':school_form.errors.keys(),'message':u"输入有误"})
+        return simplejson.dumps({'field':school_form.data.keys(),'error_id':school_form.errors.keys(),'message':u"输入有误"})
 @dajaxice_register
 def judge_is_assigned(request, school):
     '''

@@ -76,7 +76,7 @@ def userauth_settings(request):
             userauth["student"] = StudentProfile.objects.get(userid=request.user)
         except StudentProfile.DoesNotExist, err:
             loginfo(p=err, label="context StudentProfile")
-        school_message, expert_message, student_message, teacher_message = "", "" ,"",""
+    school_message, expert_message, student_message, teacher_message = "", "" ,"",""
    
     try:
         expert_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]

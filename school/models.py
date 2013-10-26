@@ -63,7 +63,7 @@ class ProjectSingle(models.Model):
         default_status = 1
     over_status = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
                                     blank=True, null=True,
-                                    default=default_status)
+                                       default=default_status)
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
     file_interimchecklist = models.BooleanField(null=False, default=False,

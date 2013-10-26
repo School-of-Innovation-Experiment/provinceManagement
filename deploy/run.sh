@@ -52,20 +52,20 @@ elif [ $1 = 'restart' ];then
     echo "*_* Restart uwsgi and nginx [OK] *_* "
 
 elif [ $1 = 'deploy' ];then
-    sudo cp school_server /etc/nginx/sites-available/school_server
-    sudo ln -s /etc/nginx/sites-available/school_server /etc/nginx/sites-enabled/school_server
-    sudo cp school_server.ini /etc/uwsgi/apps-available/
-    sudo ln -s /etc/uwsgi/apps-available/school_server.ini /etc/uwsgi/apps-enabled/school_server.ini 
+    sudo cp minzu_server /etc/nginx/sites-available/minzu_server
+    sudo ln -s /etc/nginx/sites-available/minzu_server /etc/nginx/sites-enabled/minzu_server
+    sudo cp minzu_server.ini /etc/uwsgi/apps-available/
+    sudo ln -s /etc/uwsgi/apps-available/minzu_server.ini /etc/uwsgi/apps-enabled/minzu_server.ini 
     sudo chmod 777 /var/run/nginx.pid
     echo "*_* Deploy and copy scipts *_*"
 
 elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
     cd $(cd "$(dirname "$0")"; pwd)/../
-    echo "check branch to school"
-    git checkout school
+    echo "check branch to minzu"
+    git checkout minzu 
     echo "update code repo"
-    git pull origin school
+    git pull origin minzu
     echo "update static folder"
     python manage.py collectstatic
     echo "*_* update codebase *_*"
