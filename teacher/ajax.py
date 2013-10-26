@@ -108,7 +108,7 @@ def StudentDispatch(request, form):
         email = student_form.cleaned_data["student_email"]
         category = student_form.cleaned_data["category"]
         name = email
-        person_name = student_form.cleaned_data["person_firstname"]
+        person_name = student_form.cleaned_data["student_personname"]
         if password == "":
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
