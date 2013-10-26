@@ -44,14 +44,14 @@ function teacherDispatch_callback(data){
   }
   else
   {
-    $.each(data.field,function(i,item){
+     $.each(data.field,function(i,item){
       object = $('#'+item);
-      object.css("border-color","red");
+      object.css("background","white");
     });
     //error field background turn into red
     $.each(data.error_id,function(i,item){
       object = $('#'+item);
-      object.css("border-color","red");
+      object.css("background","red");
     });
     $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
   }
