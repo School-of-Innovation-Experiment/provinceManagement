@@ -225,7 +225,6 @@ def StudentDispatch(request):
         teacher_profile = TeacherProfile.objects.get(userid = request.user)
         email_list  = AdminStaffService.GetRegisterListByTeacher(teacher_profile)
         limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
-        print limited_num, remaining_activation_times
         data = {
             'student_form': student_form,
             'email_list': email_list,
