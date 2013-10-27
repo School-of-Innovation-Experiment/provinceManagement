@@ -174,7 +174,7 @@ EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
 EMAIL_HOST_PASSWORD = '9683096830'
 DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 
 
 #########################
