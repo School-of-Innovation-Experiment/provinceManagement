@@ -26,6 +26,7 @@ function ExpertDispatch_callback(data){
     });
     $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
   }
+  $("#close_is_dispatching").trigger('click');
 }
 
 
@@ -57,4 +58,5 @@ function SchoolDispatch_callback(data){
     });
     $("#school_email_error_message").append("<strong>"+data.message+"</strong>");
   }
+  $("#close_is_dispatching").trigger('click');
 }
