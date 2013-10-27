@@ -24,6 +24,7 @@ function studentDispatch_callback(data){
       object = $('#'+item);
       object.css("background","red");
     });
-    $("#student_email_error_message").append("<strong>"+data.message+"</strong>")
+    $("#student_email_error_message").append("<strong>"+data.message+"</strong>");
+    $("#close_is_dispatching").trigger('click');
   }
 }
