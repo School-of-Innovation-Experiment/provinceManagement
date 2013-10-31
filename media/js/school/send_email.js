@@ -26,6 +26,7 @@ function ExpertDispatch_callback(data){
     });
     $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
   }
+  $("#close_is_dispatching").trigger('click');
 }
 function send_email_to_teacher(){
   $("#teacher_email_error_message").empty();
@@ -55,4 +56,5 @@ function teacherDispatch_callback(data){
     });
     $("#teacher_email_error_message").append("<strong>"+data.message+"</strong>");
   }
+  $("#close_is_dispatching").trigger('click');
 }
