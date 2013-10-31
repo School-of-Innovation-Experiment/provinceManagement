@@ -9,38 +9,38 @@
       <span class="label label-info">申请上限:{{ limited_num }}</span>
       <span class="label label-important">剩余数量:{{ remaining_activation_times }}</span>
     </h3>
-  </div>	
+  </div>
   <table class="table table-hover">
     <thead>
-    <tr>
-    <th>名称</th>
-    <th>项目类型</th>
+      <tr>
+        <th>名称</th>
+        <th>项目类型</th>
         <th>当前状态</th>
-<th>评审级别</th>
-<th>详情</th>
-    </tr>
-               </thead>
-       <tbody>
-					{% for project in project_list %}
-						<tr>
-							<td>{{ project.title }}</td>
-							<td>{{ project.project_category }}</td>
-							<td>
-								<span class="label label-warning">{{ project.project_status }}</span>
-							</td>
-							<td>
-								<span class="label label-important">{{ project.project_grade }}</span>
-							</td>
-							<td>
-								<span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>初期报告</a></span>
-						    <span><a href="{% url teacher.views.final_report_view project.project_id%}" class='btn btn-primary'>结题报告</a></span>
-                <span><a href="{% url teacher.views.processrecord_view project.project_id%}" class='btn btn-primary'>过程记录管理</a></span>
-		      		</td>
-							</tr>
-					{% endfor %}
-       </tbody>
+        <th>评审级别</th>
+        <th>详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in project_list %}
+      <tr>
+	<td>{{ project.title }}</td>
+	<td>{{ project.project_category }}</td>
+	<td>
+	  <span class="label label-warning">{{ project.project_status }}</span>
+	</td>
+	<td>
+	  <span class="label label-important">{{ project.project_grade }}</span>
+	</td>
+	<td>
+	  <span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>初期报告</a></span>
+	  <span><a href="{% url teacher.views.final_report_view project.project_id%}" class='btn btn-primary'>结题报告</a></span>
+          <span><a href="{% url teacher.views.processrecord_view project.project_id%}" class='btn btn-primary'>过程记录管理</a></span>
+	</td>
+      </tr>
+      {% endfor %}
+    </tbody>
 
-    </table>
+  </table>
 </div>
 
 {% endblock %}

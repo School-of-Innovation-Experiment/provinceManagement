@@ -40,7 +40,6 @@ class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
-
         #expert多重身份特殊处理
         if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
             expert_obj = ExpertProfile.objects.get(userid__email = email)

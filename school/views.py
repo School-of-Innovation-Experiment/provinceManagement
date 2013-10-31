@@ -180,10 +180,11 @@ def SubjectRating(request,is_expired=False):
             subject.members = student_group[0]
         except:
             pass
+
     undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
-    #未分级项目为未推荐and未分级的项目
+        #未分级项目为未推荐and未分级的项目
     def_subject_list = filter(lambda x: x.project_grade.grade == GRADE_SCHOOL or x.project_grade.grade == GRADE_INSITUTE, subject_list)
-    #已分级项目为所有划分为校级or学院级的项目
+        #已分级项目为所有划分为校级or学院级的项目
     context = {'subject_list': subject_list,
                'undef_subject_list': undef_subject_list,
                'def_subject_list': def_subject_list,
