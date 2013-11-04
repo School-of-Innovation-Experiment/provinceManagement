@@ -80,7 +80,7 @@ class ProjectSingle(models.Model):
                                     default=0)
     funds_remain  = models.FloatField(blank=False, verbose_name=u"经费余额",
                                     default=0)
-    project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
+    project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目申报编号")
     class Meta:
         verbose_name = "参赛项目"
         verbose_name_plural = "参赛项目"
