@@ -11,6 +11,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 dajaxice_autodiscover()
 urlpatterns = patterns('',
+
+    url(r'^project_view/(?P<pid>.{36})$', AdminStaffService.showProject),
+
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
     url(r'^processrecord$',AdminStaffService.processrecord),
