@@ -358,7 +358,7 @@ def file_application_view(request,pid):
 @authority_required(STUDENT_USER)
 @only_user_required
 def file_interimchecklist_view(request,pid):
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
