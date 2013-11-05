@@ -58,7 +58,7 @@ class ProjectSingle(models.Model):
     is_past = models.BooleanField(null=False, default=False,
                                   verbose_name=u"往届项目")
     try:
-        default_status = OverStatus.objects.get(status==OVER_STATUS_NOTOVER)
+        default_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
     except:
         default_status = 1
     over_status = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
