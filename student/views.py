@@ -202,8 +202,11 @@ def final_report_view(request, pid=None,is_expired=False):
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
-
-    readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    loginfo(p=over_status.status, label="STATUS")
+    try:
+        readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
+    except:
+        readonly = false
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         # techcompetition_form =
