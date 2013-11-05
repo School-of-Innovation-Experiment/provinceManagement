@@ -71,7 +71,7 @@ def get_current_year():
     return datetime.datetime.today().year
 
 
-def save_application(project=None, info_form=None, application_form=None, user=None):
+def save_application(project=None, pre=None, info_form=None, application_form=None, user=None):
     """
     Application Report Save
     Arguments:
@@ -110,7 +110,7 @@ def get_recommend_limit(school = None, scale = 0.3):
     used = project_list.filter(recommend = True).count()
     return limit, limit - used
 
-def save_enterpriseapplication(project=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
+def save_enterpriseapplication(project=None, pre=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
     """
     Application Report Save
     Arguments:
