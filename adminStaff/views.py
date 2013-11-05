@@ -673,7 +673,6 @@ class AdminStaffService(object):
     @staticmethod
     @csrf.csrf_protect
     def projectFilterList(request,project_manage_form):
-        
         if project_manage_form.is_valid():
             project_grade = project_manage_form.cleaned_data["project_grade"]
             project_year =  project_manage_form.cleaned_data["project_year"]

@@ -204,7 +204,6 @@ def change_subject_grade(request, project_id, changed_grade):
     change subject grade secretly
     '''
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
-    
     project = ProjectSingle.objects.get(project_id = project_id)
     res = project.project_grade.get_grade_display()
     return simplejson.dumps({'status':'1', 'res':res})
