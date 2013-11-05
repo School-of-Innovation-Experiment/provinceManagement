@@ -13,7 +13,7 @@ from school.utility import get_current_year
 from backend.logging import logger, loginfo
 from django.db.models import Q
 
-DUT_code = "10141"
+
 
 def get_project_count():
     return "%04d" % ProjectSingle.objects.all().count()

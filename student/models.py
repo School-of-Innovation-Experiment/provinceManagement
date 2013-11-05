@@ -58,7 +58,7 @@ class StudentWeeklySummary(models.Model):
 class Funds_Group(models.Model):
     project_id = models.ForeignKey(ProjectSingle,blank = True)
     project_code = models.CharField(blank=True,max_length = 100,
-                                 verbose_name = u"项目编号")
+                                 verbose_name = u"项目申报编号")
     funds_datetime = models.DateField(blank=True, max_length=100,default=datetime.datetime.today,
                                   verbose_name=u"报销日期")
     student_name = models.CharField(blank=False, max_length=100,
