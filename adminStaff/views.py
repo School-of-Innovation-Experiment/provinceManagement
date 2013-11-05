@@ -65,21 +65,57 @@ class AdminStaffService(object):
             return True
         else:
             return False
+    
+    @staticmethod
+    def filter_display(email, auth_list, host_email):
+        """
+        过滤所有dispatch页面中显示帐号与该管理员无关的身份权限
+        """
+        ret_list = []
+        for auth in auth_list:
+            if auth.identity == SCHOOL_USER:
+                school = SchoolProfile.objects.filter(userid__email = email)
+                if school.count(): school = school[0]
+                else: continue
+                if AdminStaffProfile.objects.filter(userid__email = host_email).count():
+                    ret_list.append(auth)
+            elif auth.identity == EXPERT_USER:
+                expert = ExpertProfile.objects.filter(userid__email = email)
+                if expert.count(): expert = expert[0]
+                else: continue
+                if (expert.assigned_by_school and expert.assigned_by_school.userid.email == host_email) \
+                    or (expert.assigned_by_adminstaff and expert.assigned_by_adminstaff.userid.email == host_email):
+                    ret_list.append(auth)
+            elif auth.identity == TEACHER_USER:
+                teacher = TeacherProfile.objects.filter(userid__email = email)
+                if teacher.count(): teacher = teacher[0]
+                else: continue
+                if teacher.school.userid.email == host_email:
+                    ret_list.append(auth)
+            elif auth.identity == STUDENT_USER:
+                student = StudentProfile.objects.filter(userid__email = email)
+                if student.count(): student = student[0]
+                else: continue
+                if student.teacher.userid.email == host_email:
+                    ret_list.append(auth)
+        return ret_list
 
     @staticmethod
-    def getUserInfoList(src):
+    def getUserInfoList(src, host_email):
         res_list = []
         for register in src:
             dict = {}
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, host_email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
             dict["auth"] = []
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
+
             dict["auth"] = u'、'.join(dict["auth"])
             ##########################################################################
             res_list.append(dict)
@@ -91,7 +127,7 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=TeacherProfile.objects.filter(school = school.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
     @staticmethod
     def GetRegisterListByTeacher(teacher):
@@ -99,13 +135,13 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=StudentProfile.objects.filter(teacher = teacher.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, teacher.userid.email)
         return res_list
 
     @staticmethod
     def GetRegisterExpertListBySchool(school):
         src = ExpertProfile.objects.filter(assigned_by_school = school)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
 
     @staticmethod
@@ -121,6 +157,7 @@ class AdminStaffService(object):
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["email"] = register.userid.email
             dict["name"] = register.get_name
             dict["is_active"] = register.userid.is_active
@@ -128,12 +165,14 @@ class AdminStaffService(object):
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
             dict["auth"] = u'、'.join(dict["auth"])
+
             ##########################################################################
             res_list.append(dict)
         # 添加所有的校级评委用户
         for register in ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user):
             dict = {}
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
