@@ -1,0 +1,28 @@
+<!--content for calculate, layout, basic widgets-->
+
+{% extends "adminStaff/administrator.html" %}
+
+
+
+{% load i18n %}
+{%block nav_admin_content%}
+
+  <!-- <div class="container form-container"> -->
+
+  {% block calculate-content %}
+  {% endblock %}
+
+  <!-- </div> -->
+{% endblock %}
+
+{% block footer-alert-bar %}
+  {% if student_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ student_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
+{% endblock %}
+
+
