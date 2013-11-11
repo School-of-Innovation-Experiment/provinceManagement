@@ -918,7 +918,7 @@ class AdminStaffService(object):
         """
         project group member change
         """
-        loginfo("^%&" * 10)   
+        loginfo("LK" * 10)   
         
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)

@@ -101,7 +101,7 @@ def recordChange(request, form):
 
 @dajaxice_register
 def GetStudentInfo(request, selectedId):
-    if check_auth()
+    #if check_auth()
     try:
         project = ProjectSingle.objects.get(student__userid=request.user)
     except:
