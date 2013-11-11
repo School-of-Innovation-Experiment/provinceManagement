@@ -34,7 +34,7 @@
       <tbody>
         {% for item in pro_list%}
         <tr>
-          <td>  <a href="/adminStaff/project_view/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
+          <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
           <td>{{item.title|truncatechars:15}}</td>
           <td>{{item.project_grade}}</td>
           <td>{{item.adminuser.get_name}}</td>

@@ -14,6 +14,7 @@ from users.models import StudentProfile
 from school.utility import *
 
 from backend.logging import logger, loginfo
+from backend.decorators import check_auth
 
 from const import MEMBER_NUM_LIMIT
 from const import *
@@ -100,6 +101,7 @@ def recordChange(request, form):
 
 @dajaxice_register
 def GetStudentInfo(request, selectedId):
+    if check_auth()
     try:
         project = ProjectSingle.objects.get(student__userid=request.user)
     except:
@@ -114,10 +116,22 @@ def GetStudentInfo(request, selectedId):
 def change_member(request, stugroup_form, origin):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
-    try:
-        project = ProjectSingle.objects.get(student__userid=request.user)
-    except:
-        raise Http404
+
+    loginfo("3" * 10)
+    
+    if check_auth(request.user, SCHOOL_USER):
+        try:
+            project = ProjectSingle.objects.get(project_id = pid)
+        except:
+            raise Http404
+    else :
+        try:
+            project = ProjectSingle.objects.get(student__userid=request.user)
+        except:
+            raise Http404
+
+
+        
     group = project.student_group_set
     if filter(lambda x:x==student_id, [student.studentId for student in group.all()]):
         return {'status': '1', 'message': u"替换成员已存在队伍中，请选择删除"}
@@ -136,6 +150,7 @@ def change_member(request, stugroup_form, origin):
 def new_or_update_member(request, stugroup_form):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
+    loginfo(request.user)
     try:
         project = ProjectSingle.objects.get(student__userid=request.user)
     except:
