@@ -20,6 +20,7 @@ class ExpertDispatchForm(forms.Form):
     expert_email    = forms.EmailField(required=True,
                                        widget=forms.TextInput(attrs={'class':'span2','id':"expert_mailbox",'placeholder':u"邮箱",'id':'expert_email'}))
     expert_personname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"expert_personname",'placeholder':u"专家姓名"}))
+
 class SchoolDictDispatchForm(forms.Form):
     SCHOOL_CHOICE_list = []
     school_list        = SchoolDict.objects.all()
