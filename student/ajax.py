@@ -18,12 +18,33 @@ from backend.decorators import check_auth
 
 from const import MEMBER_NUM_LIMIT
 from const import *
+
+def getProject(request):
+    if check_auth(request.user, ADMINSTAFF_USER):
+        try:
+            strUrl = request.META['HTTP_REFERER']
+            pid = strUrl.split('/')[-1]
+            loginfo(pid)
+            project = ProjectSingle.objects.get(project_id = pid)
+        except:
+            raise Http404
+    else :        
+        try:
+            project = ProjectSingle.objects.get(student__userid=request.user)
+        except:
+            raise Http404
+    return project
+
+
+
 @dajaxice_register
 def MemberChangeInfo(request, form, origin):
-    try:
-        project = ProjectSingle.objects.get(student__userid=request.user)
-    except:
-        raise Http404
+    # try:
+    #     project = ProjectSingle.objects.get(student__userid=request.user)
+    # except:
+    #     raise Http404
+    project = getProject(request)
+
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
     if not stugroup_form.is_valid():
         ret = {'status': '1',
@@ -60,10 +81,11 @@ def MemberChangeInfo(request, form, origin):
 
 @dajaxice_register
 def MemberDelete(request, deleteId):
-    try:
-        project = ProjectSingle.objects.get(student__userid=request.user)
-    except:
-        raise Http404
+    # try:
+    #     project = ProjectSingle.objects.get(student__userid=request.user)
+    # except:
+    #     raise Http404
+    project = getProject(request)
     group = project.student_group_set
     for student in group.all():
         if student.studentId == deleteId:
@@ -77,6 +99,7 @@ def MemberDelete(request, deleteId):
 
 @dajaxice_register
 def MemberChange(request, form, origin):
+
     stugroup_form = StudentGroupForm(deserialize_form(form))
     if not stugroup_form.is_valid():
         ret = {'status': '2',
@@ -100,8 +123,7 @@ def recordChange(request, form):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def GetStudentInfo(request, selectedId):
-    #if check_auth()
+def GetStudentInfo(request, selectedId):    
     try:
         project = ProjectSingle.objects.get(student__userid=request.user)
     except:
@@ -117,21 +139,8 @@ def change_member(request, stugroup_form, origin):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
 
-    loginfo("3" * 10)
-    
-    if check_auth(request.user, SCHOOL_USER):
-        try:
-            project = ProjectSingle.objects.get(project_id = pid)
-        except:
-            raise Http404
-    else :
-        try:
-            project = ProjectSingle.objects.get(student__userid=request.user)
-        except:
-            raise Http404
+    project = getProject(request)
 
-
-        
     group = project.student_group_set
     if filter(lambda x:x==student_id, [student.studentId for student in group.all()]):
         return {'status': '1', 'message': u"替换成员已存在队伍中，请选择删除"}
@@ -147,14 +156,15 @@ def change_member(request, stugroup_form, origin):
         ret = {'status': '1', 'message': u"输入有误，请刷新后重新输入"}
     return ret
 
+
+
 def new_or_update_member(request, stugroup_form):
+
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
     loginfo(request.user)
-    try:
-        project = ProjectSingle.objects.get(student__userid=request.user)
-    except:
-        raise Http404
+    
+    project = getProject(request)
     group = project.student_group_set
     for student in group.all():
         if student.studentId == student_id:
@@ -177,8 +187,8 @@ def new_or_update_member(request, stugroup_form):
     return ret
 
 def refresh_member_table(request):
-    student_account = StudentProfile.objects.get(userid = request.user)
-    project = ProjectSingle.objects.get(student=student_account)
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    project = getProject(request)
     student_group = Student_Group.objects.filter(project = project)
     student_group_info_form = StudentGroupInfoForm()
 
@@ -193,10 +203,9 @@ def new_or_update_record(request, record_form):
     record_weekId   = record_form.cleaned_data["weekId"]
     record_recorder = record_form.cleaned_data["recorder"]
     record_text     = record_form.cleaned_data["recordtext"]
-    try:
-        project = ProjectSingle.objects.get(student__userid=request.user)
-    except:
-        raise Http404
+
+    project = getProject(request)
+
     group = project.studentweeklysummary_set
     for record in group.all():
         if record.weekId == record_weekId:
@@ -219,8 +228,9 @@ def new_or_update_record(request, record_form):
             ret = {'status': '0', 'message': u"过程记录添加成功", 'table':table}
     return ret
 def refresh_record_table(request):
-    student_account = StudentProfile.objects.get(userid = request.user)
-    project = ProjectSingle.objects.get(student=student_account)
+
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    project = getProject(request)
     record_group    = StudentWeeklySummary.objects.filter(project = project).order_by("weekId")
     record_group_info_form = ProcessRecordForm()
 

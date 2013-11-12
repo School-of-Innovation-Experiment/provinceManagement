@@ -52,8 +52,7 @@ def member_change(request):
     """
     project group member change
     """
-    print "2b" * 100
-
+    
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
@@ -204,10 +203,8 @@ def final_report_view(request, pid=None,is_expired=False):
     # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
-    try:
-        readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
-    except:
-        readonly = false
+
+    readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         # techcompetition_form =
@@ -362,7 +359,7 @@ def file_application_view(request,pid):
 @authority_required(STUDENT_USER)
 @only_user_required
 def file_interimchecklist_view(request,pid):
-    project = get_object_or_404(ProjectSingle, project_id=pid)
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
