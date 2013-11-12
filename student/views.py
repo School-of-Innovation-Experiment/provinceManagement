@@ -52,6 +52,8 @@ def member_change(request):
     """
     project group member change
     """
+    print "2b" * 100
+
     student_account = StudentProfile.objects.get(userid = request.user)
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)

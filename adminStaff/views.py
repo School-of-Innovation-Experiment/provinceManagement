@@ -795,14 +795,13 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    @only_user_required
-    @time_controller(phase=STATUS_PRESUBMIT)
-    def showProject(request,pid=None ,is_expired=False):
+    def application_report_view(request, pid=None):
         """
             readonly determined by time
             is_show determined by identity 
             is_innovation determined by project_category
         """
+        is_expired=False
         loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 
         is_currentyear = check_year(project)
@@ -825,6 +824,7 @@ class AdminStaffService(object):
 
         teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
         if request.method == "POST" and readonly is not True:
+            
             info_form = InfoForm(request.POST,pid=pid,instance=project)
             application_form = iform(request.POST, instance=pre)
             if is_innovation == True:
@@ -853,10 +853,11 @@ class AdminStaffService(object):
                     logger.info("--"*10)
 
         else:
+            loginfo('&'*20)
             info_form = InfoForm(instance=project,pid=pid)
             application_form = iform(instance=pre)
             # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-
+        loginfo('&'*40)    
         data = {'pid': pid,
                 'info': info_form,
                 'application': application_form,
@@ -865,4 +866,73 @@ class AdminStaffService(object):
                 'is_innovation':is_innovation,
                 'is_show':is_show,
                 }
-        return render(request, 'student/application.html', data)
+        return render(request, 'adminStaff/application.html', data)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def final_report_view(request, pid=None,is_expired=False):
+        """
+        student final report
+        Arguments:
+            In: id, it is project id
+        """
+        loginfo(p=pid+str(is_expired), label="in application")
+        final = get_object_or_404(FinalSubmit, project_id=pid)
+        project = get_object_or_404(ProjectSingle, project_id=pid)
+        # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
+        is_finishing = check_finishingyear(project)
+        over_status = project.over_status
+
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        if request.method == "POST" and readonly is not True:
+            final_form = FinalReportForm(request.POST, instance=final)
+            # techcompetition_form =
+            if final_form.is_valid():
+                final_form.save()
+                project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+                project.save()
+                return HttpResponseRedirect(reverse('student.views.home_view'))
+            else:
+                logger.info("Final Form Valid Failed"+"**"*10)
+                logger.info(final_form.errors)
+                logger.info("--"*10)
+
+        final_form = FinalReportForm(instance=final)
+        # techcompetition_form = TechCompetitionForm(instance=techcompetition)
+
+        data = {'pid': pid,
+                'final': final_form,
+             #    'techcompetition':techcompetition,
+                'readonly':readonly,
+                }
+        return render(request, 'adminStaff/final.html', data)
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    #@login_required
+    #@authority_required(ADMINSTAFF_USER)    
+    def member_change(request, pid):
+        """
+        project group member change
+        """
+        loginfo("^%&" * 10)   
+        
+        #student_account = StudentProfile.objects.get(userid = request.user)
+        #project = ProjectSingle.objects.get(student=student_account)
+
+        project = ProjectSingle.objects.get(project_id = pid) 
+
+        student_group = Student_Group.objects.filter(project = project)
+
+        for s in student_group:
+            s.sex = s.get_sex_display()
+
+        student_group_form = StudentGroupForm()
+        student_group_info_form = StudentGroupInfoForm()
+        return render(request, "adminStaff/member_change.html",
+                      {"student_group": student_group,
+                       "student_group_form": student_group_form,
+                       "student_group_info_form": student_group_info_form})
