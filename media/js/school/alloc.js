@@ -3,19 +3,31 @@ var project_teacher_email_list = [];
 var glo_project_id;
 var glo_user_grade;
 
+if(!String.prototype.format) {
+    String.prototype.format = function() {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function(match, number) {
+            return typeof args[number] != 'undefined'
+                ? args[number] : match;
+        });
+    };
+}
+
 function get_user(user_grade){
     glo_user_grade = user_grade;
 }
 function remove_expert_check(){
     $("[name='checkbox_expert']").removeAttr("checked");
+    $("[name='checkbox_label']").removeAttr("style");
 }
 function remove_project_check(){
     $("[name='checkbox_project']").removeAttr("checked");
 }
 function filter_expert_display(){
     $("[name='checkbox_expert']").each(function(){
-        cur_expert_email = $(this).attr("teacher_email");
-        if(project_teacher_email_list.indexOf(cur_expert_email) != -1) $(this).css("display", "none");
+        cur_expert_email = $(this).val();
+        target_label = "[args='label_{0}']".format(cur_expert_email);
+        if(project_teacher_email_list.indexOf(cur_expert_email) != -1) $(target_label).hide();
     });
 }
 function single_storage(project_id, project_teacher_email){
