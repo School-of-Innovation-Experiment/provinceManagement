@@ -59,8 +59,8 @@
 	    <ul>
 	      {% if nrec.subject_page.has_previous %}
 	      <li><a href="?page1={{ page1 }}&page2={{ nrec.subject_page.previous_page_number }}&school_name={{ school_name }}" id="subject-previous-page" arg="{{nrec.subject_page.previous_page_number}}"><上一页</a></li>
-				                                                                                                                                                                               {% endif %}
-				                                                                                                                                                                               {% if not nrec.contain_begin %}
+        {% endif %}
+        {% if not nrec.contain_begin %}
 				                                                                                                                                                                               <li><a href="?page1={{ page1 }}&page2=1&school_name={{ school_name }}">1</a></li>
 	      <li><span>...</span></li>
 	      {% endif %}
@@ -102,7 +102,7 @@
 		<td>{{subject.adminuser}}</td>
 		<td>{{subject.members}}</td>
 		<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-		<td><span>{{subject.project_grade}}</span></td>
+        <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</a></td>
 	      </tr>
 	      {%endfor%}
 	    </tbody>

@@ -258,7 +258,7 @@ table.documents td {
     height: 80%;
     min-height: 440px;
 }
-.news-content div {
+.news-content > div {
     height: 100%;
     overflow-y: auto;
     padding: 0 10px;

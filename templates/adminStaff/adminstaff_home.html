@@ -1,3 +1,4 @@
+
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 <div>
@@ -22,9 +23,9 @@
           <th>名称</th>
           <th>项目级别</th>
           <th>指导教师</th>
-          <th>申请书</th>
+          <th>申报书</th>
           <th>中期检查表</th>
-          <th>结题验收</th>
+          <th>结题验收表</th>
           <th>项目汇编</th>
           <th>申请学分</th>
           <th>是否结题</th>
@@ -33,7 +34,7 @@
       <tbody>
         {% for item in pro_list%}
         <tr>
-          <td>{{item.project_code}}</td>
+          <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
           <td>{{item.title|truncatechars:15}}</td>
           <td>{{item.project_grade}}</td>
           <td>{{item.adminuser.get_name}}</td>

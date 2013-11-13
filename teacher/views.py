@@ -33,7 +33,10 @@ from adminStaff.views import AdminStaffService
 @authority_required(TEACHER_USER)
 def home_view(request, is_expired = False):
     limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
-    project_list = ProjectSingle.objects.filter(adminuser__userid = request.user)
+    project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
+                                                Q(is_past = False))
+
+    print project_list
     data = {
         "project_list": project_list,
         "limited_num": limited_num,
@@ -257,7 +260,8 @@ def processrecord_view(request, pid=None,is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 def funds_manage(request):
-    project_list = ProjectSingle.objects.filter(adminuser__userid = request.user)
+    project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
+                                                Q(is_past = False))
     for subject in project_list:
         student_group = Student_Group.objects.filter(project = subject) 
         try:

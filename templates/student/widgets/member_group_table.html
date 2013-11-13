@@ -45,6 +45,24 @@
   </div>
 </div>
 
+<div class="modal hide fade" style="display: none;" id="student_delete_confirm">
+   <!-- <div class="modal-header"> -->
+    <!-- <a class="close" data-dismiss="modal">×</a> -->
+    <!-- <h3>修改个人信息:</h3> -->
+    <!-- <small id="change_info_student_id"></small> -->
+  <!-- </div> -->
+
+  <div class="modal-body">
+
+    <p> </p>
+  你确认要删除该队员？  
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">取消</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="delete_member();">确认</a>
+  </div>
+</div>
+
 <table class="well table">
   <thead>
     <tr>
@@ -75,7 +93,7 @@
           <td>{{student.major}}</td>
           <td>{{student.grade}}</td>
           <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息</td>
-          <td><button class="btn btn-success" onclick="delete_member(this);">删除</button></td>
+          <td><button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button></td>
         </tr>
       {%endfor%}
     {% endif %}
