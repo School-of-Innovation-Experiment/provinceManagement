@@ -1,6 +1,6 @@
 server {
-	listen   10002; ## listen for ipv4; this line is default and implied
-	listen   [::]:10002 default ipv6only=on; ## listen for ipv6
+	listen   9090; ## listen for ipv4; this line is default and implied
+	listen   [::]:9090 default ipv6only=on; ## listen for ipv6
 
     root /home/sie/mysites/schoolManagement;
 
@@ -10,7 +10,7 @@ server {
 
 	location / {
         root /home/sie/mysites/schoolManagement;
-        uwsgi_pass 192.168.20.100:9002;
+        uwsgi_pass 192.168.20.100:9001;
         include uwsgi_params;
         access_log off;
 	}

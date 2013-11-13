@@ -36,6 +36,45 @@ from news.models import News
 from news.forms import NewsForm
 from school.utility import check_project_is_assign
 
+
+
+#liuzhuo add
+import datetime
+import os
+import sys
+import uuid
+
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.shortcuts import render_to_response
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseForbidden, Http404, HttpResponseBadRequest
+from django.template import RequestContext
+from django.utils import simplejson
+from django.views.decorators import csrf
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
+
+from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition
+from school.models import UploadedFiles
+from adminStaff.models import ProjectPerLimits
+from users.models import StudentProfile
+from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+
+
+from const.models import *
+from const import *
+
+from school.utility import *
+from backend.logging import logger, loginfo
+from backend.decorators import *
+from student.models import Student_Group,StudentWeeklySummary,Funds_Group
+from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+#from student.utility import checkidentity
+#end liuzhuo add
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -65,21 +104,57 @@ class AdminStaffService(object):
             return True
         else:
             return False
+    
+    @staticmethod
+    def filter_display(email, auth_list, host_email):
+        """
+        过滤所有dispatch页面中显示帐号与该管理员无关的身份权限
+        """
+        ret_list = []
+        for auth in auth_list:
+            if auth.identity == SCHOOL_USER:
+                school = SchoolProfile.objects.filter(userid__email = email)
+                if school.count(): school = school[0]
+                else: continue
+                if AdminStaffProfile.objects.filter(userid__email = host_email).count():
+                    ret_list.append(auth)
+            elif auth.identity == EXPERT_USER:
+                expert = ExpertProfile.objects.filter(userid__email = email)
+                if expert.count(): expert = expert[0]
+                else: continue
+                if (expert.assigned_by_school and expert.assigned_by_school.userid.email == host_email) \
+                    or (expert.assigned_by_adminstaff and expert.assigned_by_adminstaff.userid.email == host_email):
+                    ret_list.append(auth)
+            elif auth.identity == TEACHER_USER:
+                teacher = TeacherProfile.objects.filter(userid__email = email)
+                if teacher.count(): teacher = teacher[0]
+                else: continue
+                if teacher.school.userid.email == host_email:
+                    ret_list.append(auth)
+            elif auth.identity == STUDENT_USER:
+                student = StudentProfile.objects.filter(userid__email = email)
+                if student.count(): student = student[0]
+                else: continue
+                if student.teacher.userid.email == host_email:
+                    ret_list.append(auth)
+        return ret_list
 
     @staticmethod
-    def getUserInfoList(src):
+    def getUserInfoList(src, host_email):
         res_list = []
         for register in src:
             dict = {}
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, host_email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
             dict["auth"] = []
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
+
             dict["auth"] = u'、'.join(dict["auth"])
             ##########################################################################
             res_list.append(dict)
@@ -91,7 +166,7 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=TeacherProfile.objects.filter(school = school.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
     @staticmethod
     def GetRegisterListByTeacher(teacher):
@@ -99,13 +174,13 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=StudentProfile.objects.filter(teacher = teacher.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, teacher.userid.email)
         return res_list
 
     @staticmethod
     def GetRegisterExpertListBySchool(school):
         src = ExpertProfile.objects.filter(assigned_by_school = school)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
 
     @staticmethod
@@ -121,6 +196,7 @@ class AdminStaffService(object):
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["email"] = register.userid.email
             dict["name"] = register.get_name
             dict["is_active"] = register.userid.is_active
@@ -128,12 +204,14 @@ class AdminStaffService(object):
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
             dict["auth"] = u'、'.join(dict["auth"])
+
             ##########################################################################
             res_list.append(dict)
         # 添加所有的校级评委用户
         for register in ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user):
             dict = {}
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
@@ -518,7 +596,8 @@ class AdminStaffService(object):
     def project_control(request):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
@@ -719,10 +798,168 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
+                return redirect('/newslist/')
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-                return redirect('/newslist/')
+                return render(request, "adminStaff/news_release.html", context)
+                # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm})
             return render(request, "adminStaff/news_release.html", context)
+
+    #liuzhuo write
+    
+    # @csrf.csrf_protect
+    # @login_required
+    # @authority_required(ADMINSTAFF_USER)            
+    # def showProject(request, pid):
+
+        # return render(request,"adminStaff/project_view.html", None)
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def application_report_view(request, pid=None):
+        """
+            readonly determined by time
+            is_show determined by identity 
+            is_innovation determined by project_category
+        """
+        is_expired=False
+        loginfo(p=pid+str(is_expired), label="in application")
+        project = get_object_or_404(ProjectSingle, project_id=pid) 
+        is_currentyear = check_year(project)
+        is_applying = check_applycontrol(project)
+        #readonly= is_expired or (not is_currentyear) or (not is_applying)
+        readonly = True
+        is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+        logger.info(readonly)
+
+        if project.project_category.category == CATE_INNOVATION:
+            iform = ApplicationReportForm
+            pre = get_object_or_404(PreSubmit, project_id=pid)
+            teacher_enterprise=None
+            is_innovation = True
+        else:
+            iform = EnterpriseApplicationReportForm
+            pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+            teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
+            is_innovation = False
+
+        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+        if request.method == "POST" and readonly is not True:
+            
+            info_form = InfoForm(request.POST,pid=pid,instance=project)
+            application_form = iform(request.POST, instance=pre)
+            if is_innovation == True:
+                if info_form.is_valid() and application_form.is_valid():
+                    if save_application(project, info_form, application_form, request.user):
+                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                        project.save()
+                        return HttpResponseRedirect(reverse('student.views.home_view'))
+                else:
+                    logger.info(" info  application Form Valid Failed"+"**"*10)
+                    logger.info(info_form.errors)
+                    logger.info(application_form.errors)
+                    logger.info("--"*10)
+            else :
+                teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
+                if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
+                    if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                        project.save()
+                        return HttpResponseRedirect(reverse('student.views.home_view'))
+                else:
+                    logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                    logger.info(info_form.errors)
+                    logger.info(application_form.errors)
+                    logger.info(teacher_enterpriseform.errors)
+                    logger.info("--"*10)
+
+        else:
+            loginfo('&'*20)
+            info_form = InfoForm(instance=project,pid=pid)
+            application_form = iform(instance=pre)
+            # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+        loginfo('&'*40)    
+        data = {'pid': pid,
+                'info': info_form,
+                'application': application_form,
+                'teacher_enterpriseform':teacher_enterpriseform,
+                'readonly': readonly,
+                'is_innovation':is_innovation,
+                'is_show':is_show,
+                }
+        return render(request, 'adminStaff/application.html', data)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def final_report_view(request, pid=None,is_expired=False):
+        """
+        student final report
+        Arguments:
+            In: id, it is project id
+        """
+        loginfo(p=pid+str(is_expired), label="in application")
+        final = get_object_or_404(FinalSubmit, project_id=pid)
+        project = get_object_or_404(ProjectSingle, project_id=pid)
+        # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
+        is_finishing = check_finishingyear(project)
+        over_status = project.over_status
+
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        if request.method == "POST" and readonly is not True:
+            final_form = FinalReportForm(request.POST, instance=final)
+            # techcompetition_form =
+            if final_form.is_valid():
+                final_form.save()
+                project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+                project.save()
+                return HttpResponseRedirect(reverse('student.views.home_view'))
+            else:
+                logger.info("Final Form Valid Failed"+"**"*10)
+                logger.info(final_form.errors)
+                logger.info("--"*10)
+
+        final_form = FinalReportForm(instance=final)
+        # techcompetition_form = TechCompetitionForm(instance=techcompetition)
+
+        data = {'pid': pid,
+                'final': final_form,
+             #    'techcompetition':techcompetition,
+                'readonly':readonly,
+                }
+        return render(request, 'adminStaff/final.html', data)
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    #@login_required
+    #@authority_required(ADMINSTAFF_USER)    
+    def member_change(request, pid):
+        """
+        project group member change
+        """
+        loginfo("LK" * 10)   
+        
+        #student_account = StudentProfile.objects.get(userid = request.user)
+        #project = ProjectSingle.objects.get(student=student_account)
+
+        project = ProjectSingle.objects.get(project_id = pid) 
+
+        student_group = Student_Group.objects.filter(project = project)
+
+        for s in student_group:
+            s.sex = s.get_sex_display()
+
+        student_group_form = StudentGroupForm()
+        student_group_info_form = StudentGroupInfoForm()
+        return render(request, "adminStaff/member_change.html",
+                      {"student_group": student_group,
+                       "student_group_form": student_group_form,
+                       "student_group_info_form": student_group_info_form})

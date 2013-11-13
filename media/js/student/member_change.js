@@ -27,12 +27,12 @@ function change_member(caller)
   $("#teacher_email_error_message").append("<strong>"+"更换队员：" +change_id+"</strong>");
 };
 
-function delete_member(caller)
+function delete_member()
 {
   $("#teacher_email_error_message").empty();
-  delete_id = $(caller).parent().parent().children("td").first("td").html();
+  // delete_id = $(caller).parent().parent().children("td").first("td").html();
   Dajaxice.student.MemberDelete(add_or_update_member_callback,
-                                {'deleteId': delete_id});
+                                {'deleteId': change_id});
 }
 
 function get_student_info(caller)
@@ -45,8 +45,13 @@ function get_student_info(caller)
   $("input[name='email']").val($(tr_parent).children("td:eq(4)").html());
   $("input[name='telephone']").val($(tr_parent).children("td:eq(5)").html());
 
-  $("input[name='major']").val($(tr_parent).children("td:eq(6)").html());
-  $("input[name='grade']").val($(tr_parent).children("td:eq(6)").html());
+  // $("input[name='major']").val($(tr_parent).children("td:eq(7)").html());
+  $("input[name='grade']").val($(tr_parent).children("td:eq(8)").html());
+}
+function get_student_deleteid(caller)
+{
+  var  tr_parent= $(caller).parent().parent();
+  change_id   =  $(tr_parent).children("td").first("td").html();
 }
 
 function cancel_change() {
