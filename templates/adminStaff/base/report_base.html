@@ -1,0 +1,83 @@
+<!--report base html-->
+{% extends "adminStaff/base/_content_student.html" %}
+
+{%block calculate-content%}
+<!--Project Choice-->
+<div class="row">
+  <div class="span4">
+    <div class="alert alert-info" style=" text-align:center;">
+      <h4>
+          {#<a href="{% url adminstaff_home.AdminStaffService.application_report_view pid%}">#}
+          <a href="/adminStaff/application/{{pid}}">
+          {#<a href="{% url student.views.application_report_view pid%}">#}
+
+
+          初期报告</a>
+
+      </h4>
+
+
+    </div><!--end alert-->
+  </div><!--end left span-->
+  <div class="span4">
+    <div class="alert alert-important" style=" text-align:center;">
+      <h4>
+        {#<a href="{% url student.views.final_report_view pid%}">#}
+        <a href="/adminStaff/final/{{pid}}">
+
+        结题报告</a></h4>
+    </div><!--end alert-->
+  </div><!--mid right span--> 
+  <div class="span4">
+    <div class="alert alert-success" style=" text-align:center;">
+      <h4>
+         {#<a href="{% url student.views.files_important_view%}"> #}
+         <a href="/adminStaff/memberchange/{{pid}}">
+
+
+         队员变更
+      </a></h4>
+    </div><!--end alert-->
+  </div><!--end right span--> 
+</div><!--end row-->
+<!--Notice Messager-->
+{% if readonly %}
+  <div class="alert alert-error">
+    <a class="close" data-dismiss="alert">x</a> 
+    <h4 class="alert-heading">系统提示！</h4>
+    <p>目前此文档编辑权限已被系统锁定，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+  </div><!--end alert block-->
+{%endif%}
+
+<div class="container">
+  {%block report-content%}
+  {%endblock%}
+</div>
+
+
+{%endblock%}
+
+{% block endjs%}
+  <!--external scripts for files upload-->
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.ui.widget.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/tmpl.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/load-image.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/canvas-to-blob.min.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.iframe-transport.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload-fp.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/jquery.fileupload-ui.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/locale.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/main.js"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/csrf.js"></script>
+{% endblock %}
+
+{% block footer-alert-bar %}
+  {% if student_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ student_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
+{% endblock %}

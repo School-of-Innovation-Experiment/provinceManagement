@@ -9,8 +9,16 @@ from django.views.generic.simple import direct_to_template
 from adminStaff.views import AdminStaffService
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from adminStaff import views as adminStaff_views
 dajaxice_autodiscover()
 urlpatterns = patterns('',
+
+    url(r'^application/(?P<pid>.{36})$', AdminStaffService.application_report_view),
+    url(r'^final/(?P<pid>.{36})$', AdminStaffService.final_report_view),
+    url(r'^memberchange/(?P<pid>.{36})$', AdminStaffService.member_change),
+    #url(r'^memberchange$', AdminStaffService.member_change),
+
+
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
     url(r'^processrecord$',AdminStaffService.processrecord),
