@@ -611,7 +611,8 @@ class AdminStaffService(object):
     def project_control(request):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
