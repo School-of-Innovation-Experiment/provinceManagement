@@ -1,4 +1,5 @@
 var project_list = [];
+var project_teacher_email_list = [];
 var glo_project_id;
 var glo_user_grade;
 
@@ -11,18 +12,32 @@ function remove_expert_check(){
 function remove_project_check(){
     $("[name='checkbox_project']").removeAttr("checked");
 }
-
-function single_storage(project_id){
+function filter_expert_display(){
+    $("[name='checkbox_expert']").each(function(){
+        cur_expert_email = $(this).attr("teacher_email");
+        if(project_teacher_email_list.indexOf(cur_expert_email) != -1) $(this).css("display", "none");
+    });
+}
+function single_storage(project_id, project_teacher_email){
     project_list = [];
+    project_teacher_email_list = [];
     project_list.push(project_id);
+    project_teacher_email_list.push(project_teacher_email);
+    
 	remove_expert_check();
+    filter_expert_display();
 }
 function bulk_storage(){
     project_list = [];
+    project_teacher_email_list = [];
+    
 	$("input[name='checkbox_project']:checkbox:checked").each(function(){ 
 		project_list.push($(this).val());
+		project_teacher_email_list.push($(this).attr("teacher_email"));
 	});
+	
 	remove_expert_check();
+	filter_expert_display();
 }
 function bulk_cancel(){
     project_list = [];

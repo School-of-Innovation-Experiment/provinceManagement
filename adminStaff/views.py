@@ -246,6 +246,14 @@ class AdminStaffService(object):
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDictDispatchForm()
             email_list  = AdminStaffService.GetRegisterList(request)
+
+            def unique(lst):
+                keys = {}
+                for item in lst:
+                    keys[item["email"]] = item
+                return keys.values()
+            email_list = unique(email_list)
+      
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
