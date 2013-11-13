@@ -54,6 +54,7 @@ def member_change(request):
     """
     
     student_account = StudentProfile.objects.get(userid = request.user)
+    print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
 
