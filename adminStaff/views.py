@@ -75,21 +75,6 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 #from student.utility import checkidentity
 #end liuzhuo add
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -619,7 +604,8 @@ class AdminStaffService(object):
     def project_control(request):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
@@ -820,9 +806,11 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
+                return redirect('/newslist/')
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-                return redirect('/newslist/')
+                return render(request, "adminStaff/news_release.html", context)
+                # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm})
