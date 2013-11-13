@@ -81,6 +81,8 @@ class ProjectSingle(models.Model):
     funds_remain  = models.FloatField(blank=False, verbose_name=u"经费余额",
                                     default=0)
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目申报编号")
+    project_unique_code = models.CharField(blank=True, null=True, default='',
+                                           max_length=14, verbose_name=u"项目编号")
     class Meta:
         verbose_name = "参赛项目"
         verbose_name_plural = "参赛项目"
@@ -172,8 +174,8 @@ class PreSubmit(models.Model):
                                        verbose_name="学校评审意见")
 
     class Meta:
-        verbose_name = "项目申请书"
-        verbose_name_plural = "项目申请书"
+        verbose_name = "项目申报书"
+        verbose_name_plural = "项目申报书"
 
     def __unicode__(self):
         return self.project_id.title
@@ -209,8 +211,8 @@ class PreSubmitEnterprise(models.Model):
                                        verbose_name="学校评审意见")
 
     class Meta:
-        verbose_name = "创业项目申请书"
-        verbose_name_plural = "创业项目申请书"
+        verbose_name = "创业项目申报书"
+        verbose_name_plural = "创业项目申报书"
 
     def __unicode__(self):
         return self.project_id.title
