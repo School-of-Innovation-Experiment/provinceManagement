@@ -1,0 +1,23 @@
+<table class="table table-condensed" id="project_funds_table">
+	<thead>
+	  <tr>
+      	    <th>报销人</th>
+      	    <th>报销日期</th>
+	    <th>报销金额</th>
+	    <th>报销明细</th>
+	  </tr>
+	</thead>
+	<tbody id="project_funds_table_body">
+	  {% for project_funds in project_funds_list%}
+	    <tr>
+	      <td id= "{{project_funds.id}}">{{project_funds.student_name}}</td>
+	      <td>{{project_funds.funds_datetime}}</td>
+	      <td>{{project_funds.funds_amount}}</td> 
+              <td>{{project_funds.funds_detail}}</td>
+              {%if userauth.is_adminstaff or userauth.is_schooler or is_admin %}
+                  <td><button class="btn btn-success" id="fund_delete">删除</button></td>
+              {%endif%}
+            </tr>
+	  {%endfor%}
+	</tbody>
+</table>
