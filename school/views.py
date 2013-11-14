@@ -45,7 +45,7 @@ from adminStaff.views import AdminStaffService
 from adminStaff.forms import FundsChangeForm,StudentNameForm
 from student.models import Funds_Group
 
-
+from settings import IS_MINZU_SCHOOL
 
 @csrf.csrf_protect
 @login_required
@@ -118,6 +118,14 @@ def dispatch(request):
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
     email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+
+    def unique(lst):
+        keys = {}
+        for item in lst:
+            keys[item["email"]] = item
+        return keys.values()
+    email_list = unique(email_list)
+
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect
@@ -184,6 +192,7 @@ def SubjectRating(request,is_expired=False):
     #未分级项目为未推荐and未分级的项目
     def_subject_list = filter(lambda x: x.project_grade.grade == GRADE_SCHOOL or x.project_grade.grade == GRADE_INSITUTE, subject_list)
     #已分级项目为所有划分为校级or学院级的项目
+    #！！民族学院只含有学院级项目
     context = {'subject_list': subject_list,
                'undef_subject_list': undef_subject_list,
                'def_subject_list': def_subject_list,
@@ -191,6 +200,7 @@ def SubjectRating(request,is_expired=False):
                'readonly': readonly,
                'limit': limit,
                'remaining': remaining,
+               'is_minzu_school': IS_MINZU_SCHOOL,
                 }
     return render(request, "school/subject_rating.html",context)
 
