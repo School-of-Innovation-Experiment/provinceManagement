@@ -1,0 +1,35 @@
+   <form class="well form-inline" id="funds_change_form_info" method="POST" action="">
+	{% csrf_token %}
+    <div>
+        <div id="funds_project_detail"class="input-prepend ">
+            <span class="span1"><legend>项目名称:  {{project.title}}  </legend></span>
+            <span class="span1 offset2" > <legend id="funds_total"> 经费总额:  {{project.funds_total}} </legend></span>
+            <span class="span1 offset2" > <legend id="funds_remain">经费余额:  {{project.funds_remain}}</legend>l</span>
+        </div>
+       {%if userauth.is_adminstaff or userauth.is_schooler %}
+            <ol>
+                <li>只需在第一次添加帐目时填入经费总额</li>
+                <li>经费总额如需修改则填写数额，不需更改数额则不需填写</li>
+            </ol>
+             <div id = "name_div" class="input-prepend ">
+                 <span class="add-on">报销人</span>{{student_name_form.student_choice}}</div>
+             <div id = "amount_div" class="input-prepend ">
+                 <span class="add-on">报销金额</span>{{fundsChange_group_form.funds_amount}}</div>
+             <div id = "remaining_div" class="input-prepend ">
+                 <span class="add-on">经费总额</span>{{fundsChange_group_form.funds_total}}</div>
+             <div id = "err_div"> 
+                 <span class="span2" id="funds_error_message"></span>
+             </div>
+             <div id = "button_div" class="input-prepend">
+                 <!-- <button class="btn btn-primary" id="add_funds_record" onclick="add_or_update_funds(); return false;">提交</button> -->
+                 <button class="btn btn-primary" id="add_funds_record">提交</button>
+             </div>
+             <div id = "text_div" class="input-prepend ">
+                 {{fundsChange_group_form.funds_detail}}
+             </div>
+             <div id = "err_div">
+                 <span class="span1" id="funds_error_message"></span>
+             </div>
+        {%endif%}
+    </div>
+    </form><!--end funds_change_form-->

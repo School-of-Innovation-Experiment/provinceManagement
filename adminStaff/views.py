@@ -32,12 +32,10 @@ from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
+from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
 from school.utility import check_project_is_assign
-
-
-
 #liuzhuo add
 import datetime
 import os
@@ -63,33 +61,13 @@ from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
 
-
 from const.models import *
 from const import *
-
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
-#from student.utility import checkidentity
-#end liuzhuo add
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -648,27 +626,8 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
-        project_funds_list = Funds_Group.objects.filter(project_id = pid)
-
-        fundsChange_group_form = forms.FundsChangeForm();
-
-        for subject in project_funds_list:
-            student_group = Student_Group.objects.filter(project = subject)
-            try:
-                subject.members = student_group[0]
-            except:
-                pass
-
-        student_name_form = forms.StudentNameForm(pid = pid);
-
-        return_data = {
-                        "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form,
-                        "student_name_form":student_name_form,
-                        "project":project,
-                        }
-
-        return render(request,"adminStaff/funds_change.html",return_data)
+        ret = CFundManage.get_form_tabledata(project)
+        return render(request,"adminStaff/funds_change.html",ret)
 
     @staticmethod
     @csrf.csrf_protect
@@ -821,10 +780,9 @@ class AdminStaffService(object):
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
-    
     # @csrf.csrf_protect
     # @login_required
-    # @authority_required(ADMINSTAFF_USER)            
+    # @authority_required(ADMINSTAFF_USER)
     # def showProject(request, pid):
 
         # return render(request,"adminStaff/project_view.html", None)
@@ -837,7 +795,7 @@ class AdminStaffService(object):
     def application_report_view(request, pid=None):
         """
             readonly determined by time
-            is_show determined by identity 
+            is_show determined by identity
             is_innovation determined by project_category
         """
         is_expired=False
@@ -863,7 +821,6 @@ class AdminStaffService(object):
 
         teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
         if request.method == "POST" and readonly is not True:
-            
             info_form = InfoForm(request.POST,pid=pid,instance=project)
             application_form = iform(request.POST, instance=pre)
             if is_innovation == True:
@@ -957,8 +914,6 @@ class AdminStaffService(object):
         """
         project group member change
         """
-        loginfo("LK" * 10)   
-        
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
 
