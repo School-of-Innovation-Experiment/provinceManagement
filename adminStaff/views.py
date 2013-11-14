@@ -224,6 +224,14 @@ class AdminStaffService(object):
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDictDispatchForm()
             email_list  = AdminStaffService.GetRegisterList(request)
+
+            def unique(lst):
+                keys = {}
+                for item in lst:
+                    keys[item["email"]] = item
+                return keys.values()
+            email_list = unique(email_list)
+      
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
@@ -589,7 +597,8 @@ class AdminStaffService(object):
     def project_control(request):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
@@ -771,9 +780,11 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
+                return redirect('/newslist/')
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-                return redirect('/newslist/')
+                return render(request, "adminStaff/news_release.html", context)
+                # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm})
