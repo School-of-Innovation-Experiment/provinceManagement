@@ -245,7 +245,6 @@ def processrecord_view(request, pid=None,is_expired = False):
     comment_group       = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
     record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
     monthcomment_form   = MonthCommentForm()
-    
     data = {"record_group"  : record_group,
             "comment_group" : comment_group,
             "monthcomment_form":monthcomment_form,
@@ -257,20 +256,8 @@ def processrecord_view(request, pid=None,is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 def funds_manage(request):
-    project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
-                                                Q(over_status__status = OVER_STATUS_NOTOVER))
-    for subject in project_list:
-        student_group = Student_Group.objects.filter(project = subject) 
-        try:
-            subject.members = student_group[0]
-        except:
-            pass
-
-    data = {
-        "subject_list": project_list,
-        }
-
-    return render(request, "teacher/funds_manage.html", data)
+    ret = AdminStaffService.projectListInfor(request)
+    return render(request, "teacher/funds_manage.html", ret)
 
 @csrf.csrf_protect
 @login_required
