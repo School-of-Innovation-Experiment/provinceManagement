@@ -550,8 +550,18 @@ class AdminStaffService(object):
             pass
         # subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         # subject_obj.save()
-
-
+    @staticmethod
+    def ProjectUniqueCodeChange(project_id, project_unique_code):
+        project_obj = ProjectSingle.objects.get(project_id = project_id)
+        loginfo(project_obj)
+        try:
+            project_obj.project_unique_code = project_unique_code
+            project_obj.save()
+            if len(project_unique_code.strip()) == 0:
+               project_unique_code = "无"
+        except:
+            project_unique_code = "操作失败，请重试"
+        return project_unique_code
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -634,6 +644,8 @@ class AdminStaffService(object):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
             file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            if len(pro_obj.project_unique_code.strip()) == 0:
+                pro_obj.project_unique_code = "无"
             for file_temp in file_history:
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
