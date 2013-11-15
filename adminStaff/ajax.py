@@ -220,6 +220,13 @@ def change_project_overstatus(request, project_id, changed_overstatus):
     else:
         res = "操作失败，请重试"
     return simplejson.dumps({'status':'1', 'res':res})
+@dajaxice_register
+def change_project_unique_code(request, project_id,project_unique_code):
+    '''
+    change project_unique_code
+    '''
+    res = AdminStaffService.ProjectUniqueCodeChange(project_id, project_unique_code)
+    return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
 def get_news_list(request, uid):
