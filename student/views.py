@@ -23,7 +23,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
-
+from backend.fund import CFundManage
 
 from const.models import *
 from const import *
@@ -572,9 +572,8 @@ def processrecord_view(request):
 def funds_view(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project         = ProjectSingle.objects.get(student=student_account)
-    funds_group     = Funds_Group.objects.filter(project_id = project)
-
-    return render(request, 'student/funds_view.html',{"funds_list":funds_group})
+    ret = CFundManage.get_form_tabledata(project)
+    return render(request, 'student/funds_change.html',ret)
 
 
 
