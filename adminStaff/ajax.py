@@ -222,6 +222,13 @@ def change_project_overstatus(request, project_id, changed_overstatus):
     return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
+def Release_Excel(request,exceltype):
+    print "hehe"*100
+    path = AdminStaffService.get_xls_path(request,exceltype)
+    loginfo(p=path,label="path")
+    return simplejson.dumps({'path':path})
+
+@dajaxice_register
 def get_news_list(request, uid):
 
     logger.info("sep delete news"+"**"*10)

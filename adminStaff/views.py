@@ -68,6 +68,7 @@ from const.models import *
 from const import *
 
 from school.utility import *
+from adminStaff.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
@@ -625,6 +626,16 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def project_informationexport(request):
+        return render(request, "adminStaff/project_informationexport.html",
+                    {
+
+                    })
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
@@ -971,3 +982,14 @@ class AdminStaffService(object):
                       {"student_group": student_group,
                        "student_group_form": student_group_form,
                        "student_group_info_form": student_group_info_form})
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_xls_path(request,exceltype):
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+        file_path = info_xls(request,exceltype)
+        return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
