@@ -23,7 +23,7 @@ from users.models import SchoolProfile, AdminStaffProfile
 from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
-
+from context import userauth_settings
 from school.utility import get_recommend_limit
 
 from const import *
@@ -220,6 +220,13 @@ def change_project_overstatus(request, project_id, changed_overstatus):
     else:
         res = "操作失败，请重试"
     return simplejson.dumps({'status':'1', 'res':res})
+@dajaxice_register
+def change_project_unique_code(request, project_id,project_unique_code):
+    '''
+    change project_unique_code
+    '''
+    res = AdminStaffService.ProjectUniqueCodeChange(project_id, project_unique_code)
+    return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
 def Release_Excel(request,exceltype):
@@ -257,8 +264,6 @@ def TemNoticeChange(request,form,origin):
         ret = new_temnotice(request,temnotice_form)
     else:  #添加模版消息
         ret = change_temnotice(request,temnotice_form,origin)
-
-
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -354,6 +359,28 @@ def finish_control(request,year_list):
     return simplejson.dumps({'flag': flag})
 
 @dajaxice_register
+def FundsDelete(request,delete_id,pid):
+    delete_id = int(delete_id)
+    try:
+        project = ProjectSingle.objects.get(project_id = pid)
+    except:
+        raise Http404
+    group = project.funds_group_set
+    for funds in group.all():
+        if funds.id == delete_id:
+            project.funds_remain = project.funds_remain + funds.funds_amount
+            funds.delete()
+            project.save()
+            table = refresh_funds_table(request,pid)
+            ret = {'status': '0', 'message': u"条目删除成功", 'table':table,
+                            "funds_total":project.funds_total,
+                            "funds_remain":project.funds_remain}
+            break
+    else:
+        ret = {'status': '1', 'message': u"待删除条目不存在"}
+    return simplejson.dumps(ret)
+
+@dajaxice_register
 def fundsChange(request,form,name,pid):
     project_id = pid
     funds_form = FundsChangeForm(deserialize_form(form))
@@ -372,12 +399,9 @@ def new_or_update_funds(request,pid,funds_form,name):
         project = ProjectSingle.objects.get(project_id = pid)
     except:
         raise Http404
-
     group = Funds_Group.objects.filter(project_id = pid)
-
     num = Funds_Group.objects.filter(project_id = pid).count()
     cost = funds_amount
-
     for funds in group.all():
         cost = cost + funds.funds_amount
     loginfo(cost)
@@ -400,33 +424,10 @@ def new_or_update_funds(request,pid,funds_form,name):
     else:
         ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"}
     return ret
-
-@dajaxice_register
-def FundsDelete(request,delete_id,pid):
-    delete_id = int(delete_id)
-
-    try:
-        project = ProjectSingle.objects.get(project_id = pid)
-    except:
-        raise Http404
-    group = project.funds_group_set
-    for funds in group.all():
-        if funds.id == delete_id:
-            project.funds_remain = project.funds_remain + funds.funds_amount
-            funds.delete()
-            project.save()
-            table = refresh_funds_table(request,pid)
-            ret = {'status': '0', 'message': u"条目删除成功", 'table':table,
-                            "funds_total":project.funds_total,
-                            "funds_remain":project.funds_remain}
-            break
-    else:
-        ret = {'status': '1', 'message': u"待删除条目不存在"}
-    return simplejson.dumps(ret)
-
 def refresh_funds_table(request,pid):
-
     funds_list    = Funds_Group.objects.filter(project_id = pid)
-
-    return render_to_string("adminStaff/widgets/funds_table.html",
-                            {"project_funds_list": funds_list})
+    
+    context = userauth_settings(request)
+    context["project_funds_list"] = funds_list
+    return render_to_string("widgets/fund/fund_table.html",
+                            context)

@@ -22,11 +22,9 @@ def application_settings(request):
     mysettings = {}
     for keyword in all_required:
         mysettings[keyword] = getattr(settings, keyword)
-
     context = {
         'settings': mysettings,
     }
-
     return context
 
 
