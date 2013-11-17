@@ -73,3 +73,6 @@ table.table tbody tr td:nth-child(4){
     text-overflow:ellipsis;
     white-space:nowrap;
 }
+button.id_export_button{
+    width:250px; 
+}
