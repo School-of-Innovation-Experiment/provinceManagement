@@ -969,5 +969,8 @@ class AdminStaffService(object):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
-        file_path = info_xls(request,exceltype)
+        if exceltype == 1:
+            file_path = info_xls_baseinformation(request)
+        elif exceltype == 2:
+            file_path = info_xls_expertscore(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
