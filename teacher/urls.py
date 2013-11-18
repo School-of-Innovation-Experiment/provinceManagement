@@ -42,5 +42,4 @@ urlpatterns = patterns('',
         r'^fundsview/(?P<pid>.{36}$)',
         teacher_views.funds_view,
         ),
- 
 )

@@ -237,6 +237,9 @@ FILE_DELETE_URL = '/student/delete/'
 # news documents path
 NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
 
+# tmp files path
+TMP_FILES_PATH = join(MEDIA_ROOT, "tmp")
+
 #FILE Upload
 #NOTICE: the prefix 0 is important
 FILE_UPLOAD_PERMISSIONS = 0644
