@@ -118,6 +118,14 @@ def dispatch(request):
 
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
     email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+
+    def unique(lst):
+        keys = {}
+        for item in lst:
+            keys[item["email"]] = item
+        return keys.values()
+    email_list = unique(email_list)
+
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
 @csrf.csrf_protect
@@ -293,11 +301,6 @@ def project_control(request):
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
     school = SchoolProfile.objects.get(userid = request.user)
-
-
-    # pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(is_over=False)&(Q(project_grade=6)|Q(project_grade=4)))
-
-
     subject_list =  AdminStaffService.GetSubject_list(school)
 
     for subject in subject_list:

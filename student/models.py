@@ -1,5 +1,4 @@
 # coding: UTF-8
-
 from django.db import models
 from school.models import ProjectSingle
 from const.models import *
@@ -74,4 +73,3 @@ class Funds_Group(models.Model):
     class Meta:
         verbose_name = "项目经费"
         verbose_name_plural = "项目经费"
-

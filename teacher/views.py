@@ -17,8 +17,7 @@ from const.models import *
 from users.models import TeacherProfile, StudentProfile
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary,Funds_Group
-from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit
-from school.models import UploadedFiles
+from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, FinalSubmit,UploadedFiles
 from student.forms import  ProcessRecordForm
 from school.forms import *
 from teacher.forms import   MonthCommentForm
@@ -27,6 +26,7 @@ from registration.models import *
 from teacher.utility import *
 from school.utility import *
 from adminStaff.views import AdminStaffService
+from backend.fund import CFundManage
 
 @csrf.csrf_protect
 @login_required
@@ -34,9 +34,7 @@ from adminStaff.views import AdminStaffService
 def home_view(request, is_expired = False):
     limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
     project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
-                                                Q(is_past = False))
-
-    print project_list
+                                                Q(over_status__status = OVER_STATUS_NOTOVER))
     data = {
         "project_list": project_list,
         "limited_num": limited_num,
@@ -130,7 +128,6 @@ def final_report_view(request, pid=None,is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
     readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
@@ -248,7 +245,6 @@ def processrecord_view(request, pid=None,is_expired = False):
     comment_group       = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
     record_group        = StudentWeeklySummary.objects.filter(project=pid).order_by("weekId")
     monthcomment_form   = MonthCommentForm()
-    
     data = {"record_group"  : record_group,
             "comment_group" : comment_group,
             "monthcomment_form":monthcomment_form,
@@ -260,26 +256,14 @@ def processrecord_view(request, pid=None,is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 def funds_manage(request):
-    project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
-                                                Q(is_past = False))
-    for subject in project_list:
-        student_group = Student_Group.objects.filter(project = subject) 
-        try:
-            subject.members = student_group[0]
-        except:
-            pass
-
-    data = {
-        "subject_list": project_list,
-        }
-
-    return render(request, "teacher/funds_manage.html", data)
+    ret = AdminStaffService.projectListInfor(request)
+    return render(request, "teacher/funds_manage.html", ret)
 
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
 def funds_view(request,pid):
-
-    funds_group     = Funds_Group.objects.filter(project_id = pid)
-    return render(request, 'teacher/funds_view.html',{"funds_list":funds_group})
+    project = ProjectSingle.objects.get(project_id = pid)
+    ret = CFundManage.get_form_tabledata(project)
+    return render(request, 'teacher/funds_change.html',ret)
 

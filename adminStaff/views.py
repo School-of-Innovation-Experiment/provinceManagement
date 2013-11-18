@@ -32,12 +32,10 @@ from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
+from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
 from school.utility import check_project_is_assign
-
-
-
 #liuzhuo add
 import datetime
 import os
@@ -63,18 +61,14 @@ from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
 
-
 from const.models import *
 from const import *
-
 from school.utility import *
+from adminStaff.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
-#from student.utility import checkidentity
-#end liuzhuo add
-
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -231,6 +225,12 @@ class AdminStaffService(object):
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDictDispatchForm()
             email_list  = AdminStaffService.GetRegisterList(request)
+            def unique(lst):
+                keys = {}
+                for item in lst:
+                    keys[item["email"]] = item
+                return keys.values()
+            email_list = unique(email_list)
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
@@ -348,7 +348,6 @@ class AdminStaffService(object):
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
-
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -382,8 +381,7 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(Q(recommend = True) & Q(school__id = school))
 
         alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject, True)]
-        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)]
- 
+        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)] 
         context = {'subject_list': subject_list,
                    'alloced_subject_list': alloced_subject_list,
                    'unalloced_subject_list': unalloced_subject_list,
@@ -456,7 +454,6 @@ class AdminStaffService(object):
 
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list):
-
         ret = {}
         for i in xrange(len(subject_list)):
             subject = subject_list[i]
@@ -554,8 +551,18 @@ class AdminStaffService(object):
             pass
         # subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         # subject_obj.save()
-
-
+    @staticmethod
+    def ProjectUniqueCodeChange(project_id, project_unique_code):
+        project_obj = ProjectSingle.objects.get(project_id = project_id)
+        loginfo(project_obj)
+        try:
+            project_obj.project_unique_code = project_unique_code
+            project_obj.save()
+            if len(project_unique_code.strip()) == 0:
+               project_unique_code = "无"
+        except:
+            project_unique_code = "操作失败，请重试"
+        return project_unique_code
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -617,15 +624,18 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def project_informationexport(request):
+        return render(request, "adminStaff/project_informationexport.html",
+                    {
+
+                    })
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
         context = AdminStaffService.projectListInfor(request)
-        for pro_obj in context["pro_list"]:
-            student_group = Student_Group.objects.filter(project = pro_obj)
-            try:
-                pro_obj.members = student_group[0]
-            except:
-                pass
-
         return render_to_response("adminStaff/funds_manage.html",context,context_instance=RequestContext(request))
 
     @staticmethod
@@ -634,27 +644,8 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
-        project_funds_list = Funds_Group.objects.filter(project_id = pid)
-
-        fundsChange_group_form = forms.FundsChangeForm();
-
-        for subject in project_funds_list:
-            student_group = Student_Group.objects.filter(project = subject)
-            try:
-                subject.members = student_group[0]
-            except:
-                pass
-
-        student_name_form = forms.StudentNameForm(pid = pid);
-
-        return_data = {
-                        "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form,
-                        "student_name_form":student_name_form,
-                        "project":project,
-                        }
-
-        return render(request,"adminStaff/funds_change.html",return_data)
+        ret = CFundManage.get_form_tabledata(project)
+        return render(request,"adminStaff/funds_change.html",ret)
 
     @staticmethod
     @csrf.csrf_protect
@@ -664,6 +655,8 @@ class AdminStaffService(object):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
             file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            if len(pro_obj.project_unique_code.strip()) == 0:
+                pro_obj.project_unique_code = "无"
             for file_temp in file_history:
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
@@ -684,7 +677,18 @@ class AdminStaffService(object):
             over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-            pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province))&Q(is_past = False))
+            if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+                pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
+                                                      Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=SCHOOL_USER):
+                pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=TEACHER_USER):
+                pro_list = ProjectSingle.objects.filter(Q(adminuser__userid=request.user) & \
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=EXPERT_USER):
+                pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
@@ -809,10 +813,9 @@ class AdminStaffService(object):
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
-    
     # @csrf.csrf_protect
     # @login_required
-    # @authority_required(ADMINSTAFF_USER)            
+    # @authority_required(ADMINSTAFF_USER)
     # def showProject(request, pid):
 
         # return render(request,"adminStaff/project_view.html", None)
@@ -825,7 +828,7 @@ class AdminStaffService(object):
     def application_report_view(request, pid=None):
         """
             readonly determined by time
-            is_show determined by identity 
+            is_show determined by identity
             is_innovation determined by project_category
         """
         is_expired=False
@@ -851,7 +854,6 @@ class AdminStaffService(object):
 
         teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
         if request.method == "POST" and readonly is not True:
-            
             info_form = InfoForm(request.POST,pid=pid,instance=project)
             application_form = iform(request.POST, instance=pre)
             if is_innovation == True:
@@ -878,13 +880,10 @@ class AdminStaffService(object):
                     logger.info(application_form.errors)
                     logger.info(teacher_enterpriseform.errors)
                     logger.info("--"*10)
-
         else:
-            loginfo('&'*20)
             info_form = InfoForm(instance=project,pid=pid)
             application_form = iform(instance=pre)
             # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        loginfo('&'*40)    
         data = {'pid': pid,
                 'info': info_form,
                 'application': application_form,
@@ -945,8 +944,6 @@ class AdminStaffService(object):
         """
         project group member change
         """
-        loginfo("LK" * 10)   
-        
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
 
@@ -963,3 +960,17 @@ class AdminStaffService(object):
                       {"student_group": student_group,
                        "student_group_form": student_group_form,
                        "student_group_info_form": student_group_info_form})
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_xls_path(request,exceltype):
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+        if exceltype == 1:
+            file_path = info_xls_baseinformation(request)
+        elif exceltype == 2:
+            file_path = info_xls_expertscore(request)
+        return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
