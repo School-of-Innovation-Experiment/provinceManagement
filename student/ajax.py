@@ -193,6 +193,7 @@ def refresh_member_table(request):
     student_group_info_form = StudentGroupInfoForm()
 
     for student in student_group:
+        student.sex_val = student.sex
         student.sex = student.get_sex_display()
 
     return render_to_string("student/widgets/member_group_table.html",
