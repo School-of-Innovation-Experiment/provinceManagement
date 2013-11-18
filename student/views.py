@@ -52,13 +52,13 @@ def member_change(request):
     """
     project group member change
     """
-    
     student_account = StudentProfile.objects.get(userid = request.user)
     print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
 
     for s in student_group:
+        s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
