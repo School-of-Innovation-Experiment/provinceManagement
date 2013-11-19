@@ -216,7 +216,8 @@ def NewSubjectAlloc(request, is_expired = False):
     school = get_object_or_404(SchoolProfile, userid = request.user)
     subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
-    
+    expert_list = get_alloced_num(expert_list, 0)
+   
     alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
     unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject)]
     context = {'subject_list': subject_list,
