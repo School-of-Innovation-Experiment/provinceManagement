@@ -362,6 +362,8 @@ class AdminStaffService(object):
         readonly=is_expired
         subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+        expert_list = get_alloced_num(expert_list, 1)
+
         if len(expert_list) == 0 or len(subject_list) == 0:
             if not expert_list :
                 exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
