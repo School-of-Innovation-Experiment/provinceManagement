@@ -20,6 +20,7 @@ from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectP
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 from django.db.models import Q
+from school.utility import *
 
 def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
@@ -108,7 +109,13 @@ def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
                 pass
             finally:
                 Re_Project_Expert(project = project, expert = expert, is_assign_by_adminStaff = flag).save()
-    return simplejson.dumps({'message': message})
+    if flag:
+        expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+    else:
+        expert_list = ExpertProfile.objects.filter(assigned_by_school__userid = request.user)
+    expert_list = get_alloced_num(expert_list, flag)
+    expert_list_html = render_to_string('adminStaff/widgets/expert_list.html', {'expert_list':expert_list})
+    return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
 def Query_Alloced_Expert(request, project_id, user_grade):
@@ -133,7 +140,13 @@ def Cancel_Alloced_Experts(request, project_list, user_grade):
         project = get_object_or_404(ProjectSingle, project_id = project_id)
         for re_project_expert in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag)):
             re_project_expert.delete()
-    return simplejson.dumps({'message': message})
+    if flag:
+        expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+    else:
+        expert_list = ExpertProfile.objects.filter(assigned_by_school__userid = request.user)
+    expert_list = get_alloced_num(expert_list, flag)
+    expert_list_html = render_to_string('adminStaff/widgets/expert_list.html', {'expert_list':expert_list})
+    return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
 def  TeacherDispatch(request, form):
