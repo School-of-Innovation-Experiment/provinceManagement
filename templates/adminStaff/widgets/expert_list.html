@@ -1,0 +1,17 @@
+<hr></hr>
+<table class="table" id="table_expert_list">
+    <thead>
+        <tr>
+            <th>专家姓名</th>
+            <th>已分配数量</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for expert in expert_list %}
+            <tr>
+            <td>{{ expert }}</td>
+            <td>{{ expert.num }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
