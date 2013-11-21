@@ -62,10 +62,10 @@ elif [ $1 = 'deploy' ];then
 elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
     cd $(cd "$(dirname "$0")"; pwd)/../
-    echo "check branch to minzu"
-    git checkout minzu 
+    echo "check branch to school"
+    git checkout school 
     echo "update code repo"
-    git pull origin minzu
+    git pull origin school 
     echo "update static folder"
     python manage.py collectstatic
     echo "*_* update codebase *_*"
