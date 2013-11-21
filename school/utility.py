@@ -38,6 +38,11 @@ from backend.utility import search_tuple
 from backend.logging import logger,loginfo
 from django.db.models import Q
 
+def get_alloced_num(expert_list, flag):
+    for expert in expert_list:
+        expert.num = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = flag)).count()
+    return expert_list
+
 def check_limits(user):
     """
     Check school limits of quota
@@ -71,7 +76,7 @@ def get_current_year():
     return datetime.datetime.today().year
 
 
-def save_application(project=None, info_form=None, application_form=None, user=None):
+def save_application(project=None, pre=None, info_form=None, application_form=None, user=None):
     """
     Application Report Save
     Arguments:
@@ -110,7 +115,7 @@ def get_recommend_limit(school = None, scale = 0.3):
     used = project_list.filter(recommend = True).count()
     return limit, limit - used
 
-def save_enterpriseapplication(project=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
+def save_enterpriseapplication(project=None, pre=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
     """
     Application Report Save
     Arguments:

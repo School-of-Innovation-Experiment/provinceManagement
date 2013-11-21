@@ -1,20 +1,44 @@
 <!--report base html-->
-{% extends "teacher/base/_content.html" %}
+{% extends "adminStaff/base/_content_student.html" %}
 
 {%block calculate-content%}
 <!--Project Choice-->
 <div class="row">
   <div class="span4">
     <div class="alert alert-info" style=" text-align:center;">
-      <h4><a href="{% url teacher.views.application_report_view pid%}">申请表</a></h4>
+      <h4>
+          {#<a href="{% url adminstaff_home.AdminStaffService.application_report_view pid%}">#}
+          <a href="/adminStaff/application/{{pid}}">
+          {#<a href="{% url student.views.application_report_view pid%}">#}
+
+
+          申请表</a>
+
+      </h4>
+
+
     </div><!--end alert-->
   </div><!--end left span-->
   <div class="span4">
     <div class="alert alert-important" style=" text-align:center;">
-      <h4><a href="{% url teacher.views.final_report_view pid%}">结题验收表</a></h4>
+      <h4>
+        {#<a href="{% url student.views.final_report_view pid%}">#}
+        <a href="/adminStaff/final/{{pid}}">
+
+        结题验收表</a></h4>
     </div><!--end alert-->
   </div><!--mid right span--> 
- 
+  <div class="span4">
+    <div class="alert alert-success" style=" text-align:center;">
+      <h4>
+         {#<a href="{% url student.views.files_important_view%}"> #}
+         <a href="/adminStaff/memberchange/{{pid}}">
+
+
+         队员变更
+      </a></h4>
+    </div><!--end alert-->
+  </div><!--end right span--> 
 </div><!--end row-->
 <!--Notice Messager-->
 {% if readonly %}
@@ -46,4 +70,14 @@
   <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/locale.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/main.js"></script>
   <script type='text/javascript' src="{{ STATIC_URL }}js/filesupload/csrf.js"></script>
+{% endblock %}
+
+{% block footer-alert-bar %}
+  {% if student_notice_message %}
+    <div class="alert footer-alert-bar">
+      <marquee scrollamount="2">
+          {{ student_notice_message }}
+      </marquee>
+    </div>
+  {% endif %}
 {% endblock %}

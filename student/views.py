@@ -23,7 +23,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
-
+from backend.fund import CFundManage
 
 from const.models import *
 from const import *
@@ -53,10 +53,12 @@ def member_change(request):
     project group member change
     """
     student_account = StudentProfile.objects.get(userid = request.user)
+    print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
 
     for s in student_group:
+        s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
@@ -146,7 +148,7 @@ def application_report_view(request,pid=None,is_expired=False):
         application_form = iform(request.POST, instance=pre)
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
-                if save_application(project, info_form, application_form, request.user):
+                if save_application(project, pre, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
@@ -158,7 +160,7 @@ def application_report_view(request,pid=None,is_expired=False):
         else :
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
-                if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
@@ -203,7 +205,7 @@ def final_report_view(request, pid=None,is_expired=False):
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
     try:
-        readonly = (over_status.status != OVER_STATUS_NOTOVER) or not is_finishing
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
     except:
         readonly = false
     if request.method == "POST" and readonly is not True:
@@ -360,7 +362,7 @@ def file_application_view(request,pid):
 @authority_required(STUDENT_USER)
 @only_user_required
 def file_interimchecklist_view(request,pid):
-    project = get_object_or_404(ProjectSingle, project_id=pid)
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
@@ -570,9 +572,8 @@ def processrecord_view(request):
 def funds_view(request):
     student_account = StudentProfile.objects.get(userid = request.user)
     project         = ProjectSingle.objects.get(student=student_account)
-    funds_group     = Funds_Group.objects.filter(project_id = project)
-
-    return render(request, 'student/funds_view.html',{"funds_list":funds_group})
+    ret = CFundManage.get_form_tabledata(project)
+    return render(request, 'student/funds_change.html',ret)
 
 
 
