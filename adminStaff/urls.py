@@ -9,10 +9,15 @@ from django.views.generic.simple import direct_to_template
 from adminStaff.views import AdminStaffService
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from adminStaff import views as adminStaff_views
 dajaxice_autodiscover()
 urlpatterns = patterns('',
 
-    url(r'^project_view/(?P<pid>.{36})$', AdminStaffService.showProject),
+    url(r'^application/(?P<pid>.{36})$', AdminStaffService.application_report_view),
+    url(r'^final/(?P<pid>.{36})$', AdminStaffService.final_report_view),
+    url(r'^memberchange/(?P<pid>.{36})$', AdminStaffService.member_change),
+    #url(r'^memberchange$', AdminStaffService.member_change),
+
 
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
@@ -37,7 +42,7 @@ urlpatterns = patterns('',
 
     url(r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
     url(r'^project_control$',AdminStaffService.project_control),
-
+    url(r'^project_informationexport$',AdminStaffService.project_informationexport),
     (r'^news_release$', AdminStaffService.NewsRelease),
 
 )

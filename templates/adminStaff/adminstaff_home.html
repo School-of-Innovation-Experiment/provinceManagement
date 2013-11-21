@@ -6,13 +6,7 @@
     项目列表
   </h3>
   <form id="project_manage_form" method="POST" action="/adminStaff/" >
-    {% csrf_token %}
-    {{project_manage_form.project_grade}}
-    {{project_manage_form.project_year}}
-    {{project_manage_form.project_overstatus}}
-    {{project_manage_form.project_scoreapplication}}
-    {{project_manage_form.project_school}}
-    <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button">检索</button>
+    {% include "widgets/project_filter_form.html" %}
   </form>
   {% if havedata_p %}
   <div>
@@ -21,11 +15,12 @@
         <tr>
           <th>项目申报编号</th>
           <th>名称</th>
+          <th>项目编号</th>
           <th>项目级别</th>
           <th>指导教师</th>
-          <th>申请书</th>
+          <th>申报书</th>
           <th>中期检查表</th>
-          <th>结题验收</th>
+          <th>结题验收表</th>
           <th>项目汇编</th>
           <th>申请学分</th>
           <th>是否结题</th>
@@ -34,8 +29,11 @@
       <tbody>
         {% for item in pro_list%}
         <tr>
-          <td>  <a href="/adminStaff/project_view/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
+          <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
           <td>{{item.title|truncatechars:15}}</td>
+          <td>
+             <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
+          </td>
           <td>{{item.project_grade}}</td>
           <td>{{item.adminuser.get_name}}</td>
           <td>
@@ -59,7 +57,7 @@
           </td>
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
-            <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
+            <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"   pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
           </td>
         </tr>
         {%endfor%}
@@ -80,6 +78,19 @@
     <div class="modal-footer">
       <a class="btn" data-dismiss="modal">关闭</a>
       <a class="btn btn-primary" data-dismiss="modal" onclick="project_overstatus();">保存更新</a>
+    </div>
+  </div>
+  <div class="modal hide fade" style="display: none;" id="project_code_add">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>项目编号</h3>
+    </div>
+    <div class="modal-body">
+      <input class="span2" id="project_code" type="text">
+    </div>
+    <div class="modal-footer">
+      <a class="btn" data-dismiss="modal">关闭</a>
+      <a class="btn btn-primary" data-dismiss="modal" onclick="project_code_add()">保存更新</a>
     </div>
   </div>
 </div>

@@ -22,11 +22,9 @@ def application_settings(request):
     mysettings = {}
     for keyword in all_required:
         mysettings[keyword] = getattr(settings, keyword)
-
     context = {
         'settings': mysettings,
     }
-
     return context
 
 
@@ -77,7 +75,7 @@ def userauth_settings(request):
         except StudentProfile.DoesNotExist, err:
             loginfo(p=err, label="context StudentProfile")
     school_message, expert_message, student_message, teacher_message = "", "" ,"",""
-   
+
     try:
         expert_message = NoticeMessage.objects.filter(noticemessage__startswith = MESSAGE_EXPERT_HEAD).order_by('-noticedatetime')[0].noticemessage[len(MESSAGE_EXPERT_HEAD): -1]
     except:

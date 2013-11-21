@@ -67,9 +67,12 @@ table.table tbody tr td:nth-child(4){
 {
     width: 140px;
 }
-table.table tbody tr td:nth-child(3){
+#temlate_notice_table tbody tr td:nth-child(3){
     width:200px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
+}
+button.id_export_button{
+    width:250px; 
 }
