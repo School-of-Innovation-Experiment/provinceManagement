@@ -615,8 +615,12 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+
+        recommend_rate_obj = SchoolRecommendRate.load()
+
         return render(request, "adminStaff/project_control.html",
                     {
+                        "recommend_rate": recommend_rate_obj,
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
