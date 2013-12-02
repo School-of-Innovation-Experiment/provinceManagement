@@ -121,8 +121,11 @@
   </div>
   <div class="modal-body">
     <select name="subject_grade" id="id_subject_grade">
-      <option value="1">推荐（校级以及校级以上）</option>
-      {% if not is_minzu_school %}  
+
+      {% if is_minzu_school %}  
+        <option value="1">推荐(校级及校级以上)</option>
+      {% else %}
+        <option value="1">推荐(省级及省级以上)</option>
         <option value="0">校级</option>
       {% endif %}
       <option value="-1">院级</option>
