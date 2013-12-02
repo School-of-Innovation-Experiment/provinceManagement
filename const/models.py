@@ -201,3 +201,24 @@ class OverStatus(models.Model):
 
     def __unicode__(self):
         return self.get_status_display()
+
+class SchoolRecommendRate(models.Model):
+    """
+    """
+    rate = models.FloatField(default=0)
+    class Meta:
+        abstract = True
+    def save(self, *args, **kwargs):
+        self.__class__.objects.exclude(id=self.id).delete()
+        super(SchoolRecommendRate, self).save(*args, **kwargs)
+
+    def __init__(self, ):
+        """
+        """
+
+    @classmethod
+    def load(cls):
+        """
+        """
+        try: return cls.objects.get()
+        except: return cls()
