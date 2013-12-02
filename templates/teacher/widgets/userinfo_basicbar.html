@@ -3,13 +3,13 @@
   <!--TODO: Add more authorities choice-->
   <div class="pull-right">
     {%if userauth.is_student %}
-    <a type="button" class="btn btn-success"  href={% url student.views.home_view %}  >参赛学生</a>
+    <a type="button" class="btn btn-success"  href={% url student.views.home_view %}  >学生</a>
     {%endif%}
     {%if userauth.is_teacher %}
     <a type="button" class="btn btn-info"  href={% url teacher.views.home_view %}  >指导老师</a>
     {%endif%}
     {%if userauth.is_schooler %}
-    <a type="button" class="btn btn-primary"  href="{% url school.views.home_view %}"  >参赛学院</a>
+    <a type="button" class="btn btn-primary"  href="{% url school.views.home_view %}"  >(学部)学院管理员</a>
     {%endif%}
     {%if userauth.is_adminstaff %}
       <!--TODO, I will use url tag to replace hard code-->

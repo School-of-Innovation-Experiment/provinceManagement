@@ -76,12 +76,10 @@ def TeacherLimitNumber(request):
 
 def get_limited_num_and_remaining_times(request):
     teacher_profile = TeacherProfile.objects.get(userid = request.user)
-    proj_list = [each for each in ProjectSingle.objects.filter(Q(adminuser = teacher_profile)
-                                                                & Q(is_past = False))]
-    
-    
+    proj_list = ProjectSingle.objects.filter(Q(adminuser = teacher_profile)
+                                                                & Q(is_past = False))
     proj_num = len(proj_list)
     limited_num = TeacherLimitNumber(request)
-
+    print proj_num, limited_num, "-"*100
     remaining_activation_times = limited_num - proj_num
     return limited_num, remaining_activation_times
