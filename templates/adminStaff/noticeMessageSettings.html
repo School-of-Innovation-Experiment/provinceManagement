@@ -20,11 +20,9 @@
               <div class="controls">
                 <select id="select_role" name="message_role">
                   <option>请选择</option>
-                  <option value="1">专家</option>
-                  <option value="2">学院</option>
-                  <option value="3">学生</option>
-                  <option value="4">教师</option>
-                  <option value="5">全部</option>
+                  {% for item in message_role_choice %}
+                     <option value="{{item.0}}">{{item.1}}</option>
+                  {% endfor %}
                 </select>
               </div>
             </div>
