@@ -13,6 +13,7 @@ from news.models import News
 from django.template import Context #, loader
 from django.http import HttpResponse, Http404
 from backend.utility import getContext
+from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 import datetime, os
 
 def get_news(news_id = None):
@@ -29,8 +30,10 @@ def index(request):
     the_latest_news = get_news()
     the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
     context = {
-            'the_latest_news': the_latest_news,
-            }
+        'the_latest_news': the_latest_news,
+        'IS_DLUT_SCHOOL': IS_DLUT_SCHOOL,
+        'IS_MINZU_SCHOOL': IS_MINZU_SCHOOL,
+    }
     context.update(
         getContext(
             News.objects.exclude(news_document=u'')[:5], \

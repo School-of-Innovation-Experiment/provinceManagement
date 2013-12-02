@@ -41,7 +41,7 @@
 						{% for subject in unalloced_subject_list%}
 							<tr id="tr_{{subject.project_id}}">
 							  <td><label class="checkbox">
-					           <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}">
+					           <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}" teacher_email="{{ subject.adminuser.userid }}">
 				            </label>
 				        </td>
 								<td>{{subject.project_code}}</td>
@@ -49,7 +49,7 @@
 								<td>{{subject.school}}</td>
 								<td>{{subject.project_category}}</td>
 								<td>{{subject.project_status}}</td>
-								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="single_storage('{{subject.project_id}}');">指派专家</a></td>
+								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="single_storage('{{subject.project_id}}', '{{subject.adminuser.userid}}');">指派专家</a></td>
 							</tr>
 						{%endfor%}
 					</tbody>
@@ -92,6 +92,10 @@
 
     </div><!--end tab content-->
   </div><!--end tab pane-->
+    <hr/>
+  <div id="expert_list_div">
+    {% include "adminStaff/widgets/expert_list.html" %}
+  </div>
 </div><!--end tab content-->
 	<div class="modal hide fade" style="display: none;" id="alloc_choice"><!--alloc_choice-->
 		<div class="modal-header">
@@ -100,7 +104,7 @@
 		</div>
 		<div class="modal-body">
 			{% for expert in expert_list %}
-				<label class="checkbox">
+				<label class="checkbox" name="checkbox_label" args="label_{{ expert.userid }}">
 					<input type="checkbox" name="checkbox_expert" value="{{ expert.userid }}">
 					{{ expert.name }}({{expert.userid}})
 				</label>

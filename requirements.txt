@@ -5,3 +5,4 @@ django-chartit
 south
 django-dajax
 django-dajaxice
+xlwt

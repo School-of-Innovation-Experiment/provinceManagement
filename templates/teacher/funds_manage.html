@@ -3,40 +3,11 @@
 
 {% block calculate-content%}
 <div>
-  <div class="page-header">
     <h3>
         项目列表
     </h3>
-  </div><!--end page header-->
-
-  		<div class="well form-inline">
-      <table class="table table-condensed" id="subject_table">
-	<thead>
-	  <tr>
-	    <th>项目名称</th>
-	    <th>项目申报编号</th>
-	    <th>指导老师</th>
-      	<th>负责人</th>
-	    <th>经费管理</th>
-	  </tr>
-	</thead>
-	<tbody id="subject_table_body">
-	  {% for subject in subject_list%}
-	    <tr>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.project_code}}</td>
-	      <td>{{subject.adminuser}}</td>
-          <td>{{subject.members}}</td>
-	      <td><a data-toggle="modal" href="/teacher/fundsview/{{subject.project_id}}" >查看帐目</td>
-
-	    </tr>
-	  {%endfor%}
-  </tbody>
-    </table>	
-		</div>
+    {% include "widgets/fund/fund_project_table.html" %}
 </div>
-
-
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 {%endblock%}

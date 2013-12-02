@@ -1,7 +1,6 @@
-{% extends "student/base/_content.html" %}
-
-{% block calculate-content %}
-   <div id="project_funds_change">
+{% extends "teacher/base/_content.html" %}
+{% block calculate-content%}
+  <div id="project_funds_change">
     {% include "widgets/fund/fund_form.html" %}
     <div>
     	 {% include "widgets/fund/fund_table.html" %}
@@ -9,5 +8,5 @@
   </div>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
-  <!-- dajax-->
+
 {% endblock %}

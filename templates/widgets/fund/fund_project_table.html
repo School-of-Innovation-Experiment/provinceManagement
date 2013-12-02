@@ -1,0 +1,38 @@
+{% if havedata_p %}
+   <div>
+        <table class="table table-condensed" id="subject_table">
+           <thead>
+             <tr>
+               <th>项目申报编号</th>
+               <th>项目名称</th>
+               <th>指导教师</th>
+               <th>项目负责人</th>
+               <th>经费总额</th>
+               <th>经费余额</th>
+               <th>经费管理</th>
+             </tr>
+           </thead>
+           <tbody id="subject_table_body">
+             {% for item in pro_list%}
+             <tr>
+               <td>{{item.project_code}}</td>
+               <td>{{item.title}}</td>
+               <td>{{item.adminuser.get_name}}</td>
+               <td>{{item.student.get_name}}</td>
+               <td>{{item.funds_total}}</td>
+               <td>{{item.funds_remain}}</td>
+               {%if userauth.is_adminstaff  %}
+                   <td><a data-toggle="modal" href="/adminStaff/fundschange/{{item.project_id}}" >添加帐目</td>
+               {%elif userauth.is_schooler %}
+                   <td><a data-toggle="modal" href="/school/fundsview/{{item.project_id}}" >查看帐目</td>
+               {%elif userauth.is_teacher %}
+                   <td><a data-toggle="modal" href="/teacher/fundsview/{{item.project_id}}" >查看帐目</td>
+               {%endif%}
+             </tr>
+             {%endfor%}
+           </tbody>
+       </table>
+   </div>
+{% else %}
+   目前没有正在进行的项目
+{% endif %}
