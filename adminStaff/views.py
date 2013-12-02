@@ -29,7 +29,6 @@ from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
 from django.db.models import Q
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
 from backend.fund import CFundManage
@@ -100,7 +99,7 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
+
     @staticmethod
     def filter_display(email, auth_list, host_email):
         """
@@ -589,6 +588,8 @@ class AdminStaffService(object):
                 rolemessage = MESSAGE_STUDENT_HEAD
             elif request.POST["message_role"] == '4':
                 rolemessage = MESSAGE_TEACHER_HEAD
+            elif request.POST["message_role"] == '5':
+                rolemessage = MESSAGE_ALL_HEAD
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
