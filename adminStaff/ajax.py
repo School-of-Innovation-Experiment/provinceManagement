@@ -389,6 +389,20 @@ def fundsChange(request,form,name,pid):
     else:
         ret = new_or_update_funds(request,project_id,funds_form,name)
     return simplejson.dumps(ret)
+@dajaxice_register
+def set_recommend_rate(request, set_val):
+    message = ""
+    try:
+        set_val = float(set_val)
+        if set_val < 0 or set_val > 100: raise
+    except:
+        message = "wrong input"
+        return simplejson.dumps({'message': message})
+    
+    recommend_rate_obj = SchoolRecommendRate.load()
+    recommend_rate_obj.rate = set_val
+    recommend_rate_obj.save()
+    return simplejson.dumps({'message': message})
 
 def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
@@ -431,3 +445,4 @@ def refresh_funds_table(request,pid):
     context["project_funds_list"] = funds_list
     return render_to_string("widgets/fund/fund_table.html",
                             context)
+
