@@ -207,14 +207,16 @@ class SchoolRecommendRate(models.Model):
     """
     rate = models.FloatField(default=0)
     class Meta:
-        abstract = True
-    def save(self, *args, **kwargs):
-        self.__class__.objects.exclude(id=self.id).delete()
-        super(SchoolRecommendRate, self).save(*args, **kwargs)
+        verbose_name = "项目结束状态"
+        verbose_name_plural = "项目结束状态"
 
-    def __init__(self, ):
-        """
-        """
+    def __unicode__(self):
+        return self.get_status_display()
+
+
+    #def mysave(self, *args, **kwargs):
+        #self.__class__.objects.exclude(id=self.id).delete()
+    #    super(SchoolRecommendRate, self).save(*args, **kwargs)
 
     @classmethod
     def load(cls):
