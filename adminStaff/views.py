@@ -569,6 +569,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NoticeMessageSetting(request):
+        message_role_choice =list(MESSAGE_ROLE_CHOICES)
         if request.POST.get("message_content", False):
             datemessage = ""
             if request.POST.get('message_checkbox', False):
@@ -576,16 +577,10 @@ class AdminStaffService(object):
             else:
                 datemessage = "0"
             # TODO: 前台控制角色选择验证
-            if request.POST["message_role"] == '1':
-                rolemessage = MESSAGE_EXPERT_HEAD
-            elif request.POST["message_role"] == '2':
-                rolemessage = MESSAGE_SCHOOL_HEAD
-            elif request.POST["message_role"] == '3':
-                rolemessage = MESSAGE_STUDENT_HEAD
-            elif request.POST["message_role"] == '4':
-                rolemessage = MESSAGE_TEACHER_HEAD
-            elif request.POST["message_role"] == '5':
-                rolemessage = MESSAGE_ALL_HEAD
+            for item in message_role_choice:
+                if request.POST["message_role"] == item[0]:
+                    rolemessage = item[2]
+                    break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
@@ -598,7 +593,8 @@ class AdminStaffService(object):
             _range += 1
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
-                     "templatenotice_group_form": templatenotice_group_form})
+                       "templatenotice_group_form": templatenotice_group_form,
+                       "message_role_choice":message_role_choice })
     @staticmethod
     @csrf.csrf_protect
     @login_required

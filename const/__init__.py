@@ -152,11 +152,11 @@ MESSAGE_STUDENT_HEAD = '__student__'
 MESSAGE_TEACHER_HEAD = '__teacher__'
 MESSAGE_ALL_HEAD     = '__allmess__'
 MESSAGE_ROLE_CHOICES =(
-    ('1',u"专家"),
-    ('2',u"学院"),
-    ('3',u"学生"),
-    ('4',u"教师"),
-    ('5',u"全部"),
+    ('1',u"专家",'__experts__'),
+    ('2',u"学院",'__schools__'),
+    ('3',u"学生",'__student__'),
+    ('4',u"教师",'__teacher__'),
+    ('5',u"全部",'__allmess__'),
 )
 # APP student
 DEFAULT_NATION = u"汉族"
