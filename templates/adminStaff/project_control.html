@@ -17,7 +17,12 @@
     目前没有未结题项目或未到结题阶段
     {% endif %}
   </fieldset>
+  <hr \>
+  <fieldset>
+    <legend>项目推荐比例管理</legend>
+    <input type="text" class="input-medium" placeholder="设定比例值(0-100)...">
+    <input type="button" class="btn btn-warning" value="设定比例">
+  </fieldset>
 </form>
-
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}
