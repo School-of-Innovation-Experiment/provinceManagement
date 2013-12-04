@@ -253,5 +253,10 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 
 #school information
+<<<<<<< HEAD
 IS_MINZU_SCHOOL = False
 IS_DLUT_SCHOOL = True
+=======
+IS_MINZU_SCHOOL = True
+IS_DLUT_SCHOOL = False
+>>>>>>> f5cad3e... major choice by school
