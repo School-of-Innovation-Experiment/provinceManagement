@@ -259,4 +259,7 @@ IS_DLUT_SCHOOL = True
 =======
 IS_MINZU_SCHOOL = True
 IS_DLUT_SCHOOL = False
+<<<<<<< HEAD
+>>>>>>> f5cad3e... major choice by school
+=======
 >>>>>>> f5cad3e... major choice by school
