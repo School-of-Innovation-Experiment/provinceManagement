@@ -7,7 +7,7 @@ Created on 2013-03-27
 Desc: const defination
 '''
 
-from settings import STATIC_URL, MEDIA_URL
+from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 UNDIFINED = "undifined"
 
