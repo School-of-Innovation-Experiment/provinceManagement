@@ -19,7 +19,8 @@ class StudentGroupInfoForm(forms.Form):
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICES_list)
 
     MAJOR_CHOICES_list = []
-    major_list        = MajorDict.objects.all().order_by("major")
+    major_list        = MajorDict.objects.all()
+    major_list = sorted(major_list, key = lambda i: int(i.major))
     for obj in major_list:
         MAJOR_CHOICES_list.append((obj.id, obj.__unicode__()))
     MAJOR_CHOICE = tuple(MAJOR_CHOICES_list)
