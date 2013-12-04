@@ -109,7 +109,7 @@ def get_recommend_limit(school = None):
     get the limit of recommending the projects
     """
     import math
-    rate = SchoolRecommendRate.load().rate
+    rate = SchoolRecommendRate.load().rate / 100.0
     project_list = ProjectSingle.objects.filter(school = school)
     limit = int(math.ceil(project_list.count() * rate)) # 向上取整
     used = project_list.filter(recommend = True).count()
