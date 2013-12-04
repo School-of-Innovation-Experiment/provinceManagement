@@ -38,6 +38,19 @@ from backend.utility import search_tuple
 from backend.logging import logger,loginfo
 from django.db.models import Q
 
+def get_current_project_query_set():
+    """
+    得到当前数据库中当前届的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_past = False)
+def get_running_project_query_set():
+    """
+    得到当前数据库中正在进行的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(over_status__status = OVER_STATUS_NOTOVER)
+
 def get_alloced_num(expert_list, flag):
     for expert in expert_list:
         expert.num = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = flag)).count()
@@ -110,7 +123,7 @@ def get_recommend_limit(school = None):
     """
     import math
     rate = SchoolRecommendRate.load().rate / 100.0
-    project_list = ProjectSingle.objects.filter(school = school)
+    project_list = get_current_project_query_set().filter(school = school)
     limit = int(math.ceil(project_list.count() * rate)) # 向上取整
     used = project_list.filter(recommend = True).count()
     return limit, limit - used

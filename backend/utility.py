@@ -10,6 +10,7 @@ import uuid
 from settings import STATIC_URL, MEDIA_URL
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from const.__init__ import PAGE_ELEMENTS
+from const import *
 
 def user_isusing(user):
     pass
