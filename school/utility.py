@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 from chartit import PivotDataPool, PivotChart
 
 from school.models import *
-from const.models import SchoolDict, ProjectCategory, InsituteCategory
+from const.models import SchoolDict, ProjectCategory, InsituteCategory, SchoolRecommendRate
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile,AdminStaffProfile
@@ -104,14 +104,14 @@ def save_application(project=None, pre=None, info_form=None, application_form=No
         logger.info("--"*10)
         return False
 
-def get_recommend_limit(school = None, scale = 0.3):
+def get_recommend_limit(school = None):
     """
     get the limit of recommending the projects
     """
     import math
+    rate = SchoolRecommendRate.load().rate
     project_list = ProjectSingle.objects.filter(school = school)
-    limit = int(math.ceil(project_list.count() * scale)) # 向上取整
-    print limit, '*' * 10
+    limit = int(math.ceil(project_list.count() * rate)) # 向上取整
     used = project_list.filter(recommend = True).count()
     return limit, limit - used
 
