@@ -82,3 +82,19 @@ function get_project_unique_code(caller){
   var project_unique_code = $(caller).parent().text().trim();
   $('#project_code_add').find('#project_code').val(project_unique_code);
 }
+
+function set_recommend_rate(){
+    var set_val = $("#id_rec_setting").val()
+    $("#warning_bar").hide();
+    $("#success_bar").hide();
+    Dajaxice.adminStaff.set_recommend_rate(set_recommend_rate_callback, {'set_val': set_val})
+}
+function set_recommend_rate_callback(data){
+    if(data.message == "wrong input"){
+        $("#warning_bar").show();
+    }
+    else{
+        $("#current_rate").html('项目推荐比例管理（当前比例:' + $("#id_rec_setting").val() + '%)');
+        $("#success_bar").show();
+    }
+}
