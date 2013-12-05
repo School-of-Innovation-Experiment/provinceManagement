@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 from chartit import PivotDataPool, PivotChart
 
 from school.models import *
-from const.models import SchoolDict, ProjectCategory, InsituteCategory
+from const.models import SchoolDict, ProjectCategory, InsituteCategory, SchoolRecommendRate
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile,AdminStaffProfile
@@ -37,6 +37,24 @@ from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from backend.utility import search_tuple
 from backend.logging import logger,loginfo
 from django.db.models import Q
+
+def get_current_project_query_set():
+    """
+    得到当前数据库中当前届的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_past = False)
+def get_running_project_query_set():
+    """
+    得到当前数据库中正在进行的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(over_status__status = OVER_STATUS_NOTOVER)
+
+def get_alloced_num(expert_list, flag):
+    for expert in expert_list:
+        expert.num = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = flag)).count()
+    return expert_list
 
 def check_limits(user):
     """
@@ -71,7 +89,7 @@ def get_current_year():
     return datetime.datetime.today().year
 
 
-def save_application(project=None, info_form=None, application_form=None, user=None):
+def save_application(project=None, pre=None, info_form=None, application_form=None, user=None):
     """
     Application Report Save
     Arguments:
@@ -99,18 +117,18 @@ def save_application(project=None, info_form=None, application_form=None, user=N
         logger.info("--"*10)
         return False
 
-def get_recommend_limit(school = None, scale = 0.3):
+def get_recommend_limit(school = None):
     """
     get the limit of recommending the projects
     """
     import math
-    project_list = ProjectSingle.objects.filter(school = school)
-    limit = int(math.ceil(project_list.count() * scale)) # 向上取整
-    print limit, '*' * 10
+    rate = SchoolRecommendRate.load().rate / 100.0
+    project_list = get_current_project_query_set().filter(school = school)
+    limit = int(math.ceil(project_list.count() * rate)) # 向上取整
     used = project_list.filter(recommend = True).count()
     return limit, limit - used
 
-def save_enterpriseapplication(project=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
+def save_enterpriseapplication(project=None, pre=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
     """
     Application Report Save
     Arguments:
