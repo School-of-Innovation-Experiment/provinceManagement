@@ -804,8 +804,8 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES["news_document"],)
                 new_news.save()
                 return redirect('/newslist/')
             else:
@@ -814,7 +814,7 @@ class AdminStaffService(object):
                 # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
-            context.update({"newsform": NewsForm})
+            context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
