@@ -359,7 +359,8 @@ class AdminStaffService(object):
         """
         exist_message = ''
         readonly=is_expired
-        subject_list =  ProjectSingle.objects.filter(recommend = True)
+        subject_list = get_current_project_query_set().filter(recommend = True)
+        #subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
         expert_list = get_alloced_num(expert_list, 1)
 
@@ -472,6 +473,7 @@ class AdminStaffService(object):
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
+        subject_list = get_current_project_query_set()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             page1 = request.GET.get('page1')
@@ -482,9 +484,9 @@ class AdminStaffService(object):
             if school_name == "None": school_name = None
 
             if (not school_name) or int(school_name) == -1:
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  subject_list.filter(recommend = True)
             else:
-                subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -492,9 +494,9 @@ class AdminStaffService(object):
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
                 if int(school_name) == -1:
-                    subject_list = ProjectSingle.objects.filter(recommend = True)
+                    subject_list = subject_list.filter(recommend = True)
                 else:
-                    subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                    subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -802,8 +804,8 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES["news_document"],)
                 new_news.save()
                 return redirect('/newslist/')
             else:
@@ -812,7 +814,7 @@ class AdminStaffService(object):
                 # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
-            context.update({"newsform": NewsForm})
+            context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
