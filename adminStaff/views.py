@@ -807,11 +807,13 @@ class AdminStaffService(object):
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
-                                news_document = request.FILES["news_document"],)
+                                news_document = request.FILES.get("news_document", None),)
                 new_news.save()
-                return redirect('/newslist/')
+                return redirect('/newslist/%s' % new_news.id)
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
+                context = getContext(news_list, page, 'news', 0)
+                context.update({"newsform": NewsForm()})
                 return render(request, "adminStaff/news_release.html", context)
                 # return redirect('/newslist/')
         else:
