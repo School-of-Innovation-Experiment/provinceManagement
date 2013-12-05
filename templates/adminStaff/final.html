@@ -8,14 +8,13 @@
 {%block report-content%}
 
 
-  <form method="post" action={% url student.views.final_report_view pid %}>
+  <!-- <form method="post" action={% url student.views.final_report_view pid %}> -->
     {% csrf_token %}
     <!--Project Content-->
     {% include "student/widgets/final.html" %}
-    <br/>
     <!--submit button-->
     {% include "student/widgets/commit_button.html" %}
-  </form>
+  <!-- </form> -->
 
 
 {%endblock%}
