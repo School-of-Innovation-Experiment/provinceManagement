@@ -179,7 +179,8 @@ def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
     school = SchoolProfile.objects.get(userid = request.user)
-    subject_list =  AdminStaffService.GetSubject_list(school)
+    subject_list = get_current_project_query_set().filter(school = school)
+    #subject_list =  AdminStaffService.GetSubject_list(school)
     limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
@@ -214,7 +215,8 @@ def NewSubjectAlloc(request, is_expired = False):
     exist_message = ''
     readonly = is_expired
     school = get_object_or_404(SchoolProfile, userid = request.user)
-    subject_list = AdminStaffService.GetSubject_list(school)
+    subject_list = get_current_project_query_set().filter(school = school)
+    #subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
     expert_list = get_alloced_num(expert_list, 0)
    
