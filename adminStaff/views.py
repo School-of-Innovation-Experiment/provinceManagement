@@ -955,23 +955,21 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
-     def member_change(request, pid):
-		         """
-					         project group member change
-							         """
-								           #student_account = StudentProfile.objects.get(userid = request.user)
-								           #project = ProjectSingle.objects.get(student=student_account)
+    def member_change(request, pid):
+        """
+        project group member change
+		"""
+        #student_account = StudentProfile.objects.get(userid = request.user)
+        #project = ProjectSingle.objects.get(student=student_account)
+        project = ProjectSingle.objects.get(project_id = pid) 
+        student_group = Student_Group.objects.filter(project = project)
 
-								           project = ProjectSingle.objects.get(project_id = pid) 
+        for s in student_group :
+            s.sex = s.get_sex_display()
+            student_group_form = StudentGroupForm()
+            student_group_info_form = StudentGroupInfoForm()
 
-	        student_group = Student_Group.objects.filter(project = project)
-
-	        for s in student_group:
-			            s.sex = s.get_sex_display()
-
-	        student_group_form = StudentGroupForm()
-	        student_group_info_form = StudentGroupInfoForm()
-	        return render(request, "adminStaff/member_change.html",
+        return render(request, "adminStaff/member_change.html",
 					                      {"student_group": student_group,
 										   "student_group_form": student_group_form,
 							               "student_group_info_form": student_group_info_form})
