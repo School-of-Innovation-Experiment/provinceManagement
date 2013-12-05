@@ -42,7 +42,7 @@ urlpatterns = patterns('',
 
     url(r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
     url(r'^project_control$',AdminStaffService.project_control),
-
+    url(r'^project_informationexport$',AdminStaffService.project_informationexport),
     (r'^news_release$', AdminStaffService.NewsRelease),
 
 )

@@ -102,7 +102,7 @@
 		<td>{{subject.adminuser}}</td>
 		<td>{{subject.members}}</td>
 		<td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-		<td><span>{{subject.project_grade}}</span></td>
+        <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">{{subject.project_grade}}</a></td>
 	      </tr>
 	      {%endfor%}
 	    </tbody>

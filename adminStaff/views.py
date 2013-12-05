@@ -32,12 +32,10 @@ from django.db.models import Q
 from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
+from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
 from school.utility import check_project_is_assign
-
-
-
 #liuzhuo add
 import datetime
 import os
@@ -63,38 +61,18 @@ from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
 
-
 from const.models import *
 from const import *
-
 from school.utility import *
+from adminStaff.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
-#from student.utility import checkidentity
-#end liuzhuo add
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
-
         #expert多重身份特殊处理
         if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
             expert_obj = ExpertProfile.objects.get(userid__email = email)
@@ -119,21 +97,57 @@ class AdminStaffService(object):
             return True
         else:
             return False
+    
+    @staticmethod
+    def filter_display(email, auth_list, host_email):
+        """
+        过滤所有dispatch页面中显示帐号与该管理员无关的身份权限
+        """
+        ret_list = []
+        for auth in auth_list:
+            if auth.identity == SCHOOL_USER:
+                school = SchoolProfile.objects.filter(userid__email = email)
+                if school.count(): school = school[0]
+                else: continue
+                if AdminStaffProfile.objects.filter(userid__email = host_email).count():
+                    ret_list.append(auth)
+            elif auth.identity == EXPERT_USER:
+                expert = ExpertProfile.objects.filter(userid__email = email)
+                if expert.count(): expert = expert[0]
+                else: continue
+                if (expert.assigned_by_school and expert.assigned_by_school.userid.email == host_email) \
+                    or (expert.assigned_by_adminstaff and expert.assigned_by_adminstaff.userid.email == host_email):
+                    ret_list.append(auth)
+            elif auth.identity == TEACHER_USER:
+                teacher = TeacherProfile.objects.filter(userid__email = email)
+                if teacher.count(): teacher = teacher[0]
+                else: continue
+                if teacher.school.userid.email == host_email:
+                    ret_list.append(auth)
+            elif auth.identity == STUDENT_USER:
+                student = StudentProfile.objects.filter(userid__email = email)
+                if student.count(): student = student[0]
+                else: continue
+                if student.teacher.userid.email == host_email:
+                    ret_list.append(auth)
+        return ret_list
 
     @staticmethod
-    def getUserInfoList(src):
+    def getUserInfoList(src, host_email):
         res_list = []
         for register in src:
             dict = {}
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, host_email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
             dict["auth"] = []
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
+
             dict["auth"] = u'、'.join(dict["auth"])
             ##########################################################################
             res_list.append(dict)
@@ -145,7 +159,7 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=TeacherProfile.objects.filter(school = school.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
     @staticmethod
     def GetRegisterListByTeacher(teacher):
@@ -153,13 +167,13 @@ class AdminStaffService(object):
         获得对应`学院`的指导教师用户列表
         '''
         src=StudentProfile.objects.filter(teacher = teacher.id)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, teacher.userid.email)
         return res_list
 
     @staticmethod
     def GetRegisterExpertListBySchool(school):
         src = ExpertProfile.objects.filter(assigned_by_school = school)
-        res_list = AdminStaffService.getUserInfoList(src)
+        res_list = AdminStaffService.getUserInfoList(src, school.userid.email)
         return res_list
 
     @staticmethod
@@ -175,6 +189,7 @@ class AdminStaffService(object):
             #查询权限列表
             ##########################################################################
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["email"] = register.userid.email
             dict["name"] = register.get_name
             dict["is_active"] = register.userid.is_active
@@ -182,12 +197,14 @@ class AdminStaffService(object):
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
             dict["auth"] = u'、'.join(dict["auth"])
+
             ##########################################################################
             res_list.append(dict)
         # 添加所有的校级评委用户
         for register in ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user):
             dict = {}
             auth_list = UserIdentity.objects.filter(auth_groups=register.userid).all()
+            auth_list = AdminStaffService.filter_display(register.userid.email, auth_list, request.user.email)
             dict["name"] = register.get_name
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
@@ -207,6 +224,12 @@ class AdminStaffService(object):
             expert_form = forms.ExpertDispatchForm()
             school_form = forms.SchoolDictDispatchForm()
             email_list  = AdminStaffService.GetRegisterList(request)
+            def unique(lst):
+                keys = {}
+                for item in lst:
+                    keys[item["email"]] = item
+                return keys.values()
+            email_list = unique(email_list)
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form,'email_list':email_list},context_instance=RequestContext(request))
     @staticmethod
     def expertDispatch(request):
@@ -324,7 +347,6 @@ class AdminStaffService(object):
         elif not school == None:
             subject_list = ProjectSingle.objects.filter(school=school)
         return subject_list
-
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -337,8 +359,11 @@ class AdminStaffService(object):
         """
         exist_message = ''
         readonly=is_expired
-        subject_list =  ProjectSingle.objects.filter(recommend = True)
+        subject_list = get_current_project_query_set().filter(recommend = True)
+        #subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
+        expert_list = get_alloced_num(expert_list, 1)
+
         if len(expert_list) == 0 or len(subject_list) == 0:
             if not expert_list :
                 exist_message = '专家用户不存在或未激活，请确认已发送激活邮件并提醒专家激活'
@@ -358,8 +383,7 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(Q(recommend = True) & Q(school__id = school))
 
         alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject, True)]
-        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)]
- 
+        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)] 
         context = {'subject_list': subject_list,
                    'alloced_subject_list': alloced_subject_list,
                    'unalloced_subject_list': unalloced_subject_list,
@@ -432,7 +456,6 @@ class AdminStaffService(object):
 
     @staticmethod
     def Assign_Expert_For_Subject(subject_list, expert_list):
-
         ret = {}
         for i in xrange(len(subject_list)):
             subject = subject_list[i]
@@ -450,6 +473,7 @@ class AdminStaffService(object):
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
+        subject_list = get_current_project_query_set()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             page1 = request.GET.get('page1')
@@ -460,9 +484,9 @@ class AdminStaffService(object):
             if school_name == "None": school_name = None
 
             if (not school_name) or int(school_name) == -1:
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  subject_list.filter(recommend = True)
             else:
-                subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -470,9 +494,9 @@ class AdminStaffService(object):
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
                 if int(school_name) == -1:
-                    subject_list = ProjectSingle.objects.filter(recommend = True)
+                    subject_list = subject_list.filter(recommend = True)
                 else:
-                    subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                    subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -530,8 +554,18 @@ class AdminStaffService(object):
             pass
         # subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         # subject_obj.save()
-
-
+    @staticmethod
+    def ProjectUniqueCodeChange(project_id, project_unique_code):
+        project_obj = ProjectSingle.objects.get(project_id = project_id)
+        loginfo(project_obj)
+        try:
+            project_obj.project_unique_code = project_unique_code
+            project_obj.save()
+            if len(project_unique_code.strip()) == 0:
+               project_unique_code = "无"
+        except:
+            project_unique_code = "操作失败，请重试"
+        return project_unique_code
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -572,7 +606,8 @@ class AdminStaffService(object):
     def project_control(request):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
-        pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
+        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
@@ -581,8 +616,12 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+
+        recommend_rate_obj = SchoolRecommendRate.load()
+
         return render(request, "adminStaff/project_control.html",
                     {
+                        "recommend_rate": recommend_rate_obj,
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
@@ -592,15 +631,18 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def project_informationexport(request):
+        return render(request, "adminStaff/project_informationexport.html",
+                    {
+
+                    })
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def funds_manage(request,is_expired=False):
         context = AdminStaffService.projectListInfor(request)
-        for pro_obj in context["pro_list"]:
-            student_group = Student_Group.objects.filter(project = pro_obj)
-            try:
-                pro_obj.members = student_group[0]
-            except:
-                pass
-
         return render_to_response("adminStaff/funds_manage.html",context,context_instance=RequestContext(request))
 
     @staticmethod
@@ -609,27 +651,8 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def funds_change(request,pid):
         project = ProjectSingle.objects.get(project_id = pid)
-        project_funds_list = Funds_Group.objects.filter(project_id = pid)
-
-        fundsChange_group_form = forms.FundsChangeForm();
-
-        for subject in project_funds_list:
-            student_group = Student_Group.objects.filter(project = subject)
-            try:
-                subject.members = student_group[0]
-            except:
-                pass
-
-        student_name_form = forms.StudentNameForm(pid = pid);
-
-        return_data = {
-                        "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form,
-                        "student_name_form":student_name_form,
-                        "project":project,
-                        }
-
-        return render(request,"adminStaff/funds_change.html",return_data)
+        ret = CFundManage.get_form_tabledata(project)
+        return render(request,"adminStaff/funds_change.html",ret)
 
     @staticmethod
     @csrf.csrf_protect
@@ -639,6 +662,8 @@ class AdminStaffService(object):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
             file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
+            if len(pro_obj.project_unique_code.strip()) == 0:
+                pro_obj.project_unique_code = "无"
             for file_temp in file_history:
                 if file_temp.name == u"学分申请表":
                     url = file_temp.file_obj.url
@@ -659,7 +684,18 @@ class AdminStaffService(object):
             over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-            pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province))&Q(is_past = False))
+            if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+                pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
+                                                      Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=SCHOOL_USER):
+                pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=TEACHER_USER):
+                pro_list = ProjectSingle.objects.filter(Q(adminuser__userid=request.user) & \
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
+            elif check_auth(user=request.user, authority=EXPERT_USER):
+                pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
+                                                        Q(over_status__status = OVER_STATUS_NOTOVER))
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
@@ -770,22 +806,23 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES["news_document"],)
                 new_news.save()
+                return redirect('/newslist/')
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
-                return redirect('/newslist/')
+                return render(request, "adminStaff/news_release.html", context)
+                # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
-            context.update({"newsform": NewsForm})
+            context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
-    
     # @csrf.csrf_protect
     # @login_required
-    # @authority_required(ADMINSTAFF_USER)            
+    # @authority_required(ADMINSTAFF_USER)
     # def showProject(request, pid):
 
         # return render(request,"adminStaff/project_view.html", None)
@@ -798,7 +835,7 @@ class AdminStaffService(object):
     def application_report_view(request, pid=None):
         """
             readonly determined by time
-            is_show determined by identity 
+            is_show determined by identity
             is_innovation determined by project_category
         """
         is_expired=False
@@ -824,7 +861,6 @@ class AdminStaffService(object):
 
         teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
         if request.method == "POST" and readonly is not True:
-            
             info_form = InfoForm(request.POST,pid=pid,instance=project)
             application_form = iform(request.POST, instance=pre)
             if is_innovation == True:
@@ -851,13 +887,10 @@ class AdminStaffService(object):
                     logger.info(application_form.errors)
                     logger.info(teacher_enterpriseform.errors)
                     logger.info("--"*10)
-
         else:
-            loginfo('&'*20)
             info_form = InfoForm(instance=project,pid=pid)
             application_form = iform(instance=pre)
             # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        loginfo('&'*40)    
         data = {'pid': pid,
                 'info': info_form,
                 'application': application_form,
@@ -914,25 +947,36 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
-    def member_change(request, pid):
-        """
-        project group member change
-        """
-        loginfo("LK" * 10)   
-        
-        #student_account = StudentProfile.objects.get(userid = request.user)
-        #project = ProjectSingle.objects.get(student=student_account)
+     def member_change(request, pid):
+		         """
+					         project group member change
+							         """
+								           #student_account = StudentProfile.objects.get(userid = request.user)
+								           #project = ProjectSingle.objects.get(student=student_account)
 
-        project = ProjectSingle.objects.get(project_id = pid) 
+								           project = ProjectSingle.objects.get(project_id = pid) 
 
-        student_group = Student_Group.objects.filter(project = project)
+	        student_group = Student_Group.objects.filter(project = project)
 
-        for s in student_group:
-            s.sex = s.get_sex_display()
+	        for s in student_group:
+			            s.sex = s.get_sex_display()
 
-        student_group_form = StudentGroupForm()
-        student_group_info_form = StudentGroupInfoForm()
-        return render(request, "adminStaff/member_change.html",
-                      {"student_group": student_group,
-                       "student_group_form": student_group_form,
-                       "pid":pid})
+	        student_group_form = StudentGroupForm()
+	        student_group_info_form = StudentGroupInfoForm()
+	        return render(request, "adminStaff/member_change.html",
+					                      {"student_group": student_group,
+										   "student_group_form": student_group_form,
+							               "student_group_info_form": student_group_info_form})
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_xls_path(request,exceltype):
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+        if exceltype == 1:
+            file_path = info_xls_baseinformation(request)
+        elif exceltype == 2:
+            file_path = info_xls_expertscore(request)
+        return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
