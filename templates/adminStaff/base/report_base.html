@@ -1,4 +1,5 @@
 <!--report base html-->
+
 {% extends "adminStaff/base/_content_student.html" %}
 
 {%block calculate-content%}
@@ -10,10 +11,7 @@
           {#<a href="{% url adminstaff_home.AdminStaffService.application_report_view pid%}">#}
           <a href="/adminStaff/application/{{pid}}">
           {#<a href="{% url student.views.application_report_view pid%}">#}
-
-
           初期报告</a>
-
       </h4>
 
 
@@ -24,7 +22,6 @@
       <h4>
         {#<a href="{% url student.views.final_report_view pid%}">#}
         <a href="/adminStaff/final/{{pid}}">
-
         结题报告</a></h4>
     </div><!--end alert-->
   </div><!--mid right span--> 
@@ -33,8 +30,6 @@
       <h4>
          {#<a href="{% url student.views.files_important_view%}"> #}
          <a href="/adminStaff/memberchange/{{pid}}">
-
-
          队员变更
       </a></h4>
     </div><!--end alert-->

@@ -4,7 +4,7 @@
 {% extends "adminStaff/base/report_base.html" %}  
 
 {%block report-content%}
-  <form method="post" action={% url student.views.application_report_view pid %}>
+  <!-- <form method="post" action={% url student.views.application_report_view pid %}> -->
     {% csrf_token %}
     <!--Basic Infomation-->
 
@@ -20,5 +20,5 @@
     {% include "student/widgets/commit_button.html" %}
 
 
-  </form>
+  <!-- </form> -->
 {%endblock%}

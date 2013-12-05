@@ -935,4 +935,4 @@ class AdminStaffService(object):
         return render(request, "adminStaff/member_change.html",
                       {"student_group": student_group,
                        "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form})
+                       "pid":pid})
