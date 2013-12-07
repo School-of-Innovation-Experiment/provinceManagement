@@ -115,7 +115,7 @@ def techcompetition_detail(request,pid=None):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(STUDENT_USER)
+#@authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
@@ -124,6 +124,9 @@ def application_report_view(request,pid=None,is_expired=False):
         is_show determined by identity 
         is_innovation determined by project_category
     """
+
+    print "-=" * 10
+
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)
