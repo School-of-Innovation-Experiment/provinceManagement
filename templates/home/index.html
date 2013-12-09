@@ -124,19 +124,41 @@
             <div class="front-wrap">
               <div class="home-news">
                 <h3>焦点新闻 <small>Hot</small></h3>
-                <table class="news">
-                  {% if the_latest_news %}
-                  <tbody>
-                    <tr>
-                      <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3>
-                        {% autoescape off %}
-                        {{ the_latest_news.news_content }}
-                        {% endautoescape %}
-                      </td>
-                    </tr>
-                  </tbody>
-                  {% endif %}
-                </table>
+                <!-- <table class="news"> -->
+                <!--   {% if the_latest_news %} -->
+                <!--   <tbody> -->
+                <!--     <tr> -->
+                <!--       <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3> -->
+                <!--         {% autoescape off %} -->
+                <!--         {{ the_latest_news.news_content }} -->
+                <!--         {% endautoescape %} -->
+                <!--       </td> -->
+                <!--     </tr> -->
+                <!--   </tbody> -->
+                <!--   {% endif %} -->
+                <!-- </table> -->
+                <div class="documents-list">
+                  <table class="documents">
+                    <colgroup>
+                      <col width="5%" />
+                      <col width="75%" />
+                      <col width="15%" />
+                    </colgroup>
+                    <tbody>
+                      {% for news in homepage_news_list %}
+                      <tr>
+                        <td>{{ news.list_index }}.</td>
+                        <td>
+                          <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
+                        </td>
+                        <td>
+                          {{ news.news_date|date:"[y-m-d]" }}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
                 <hr />
                 <strong><a href="newslist/">更多»</a></strong>
               </div> <!-- home-news -->
