@@ -98,7 +98,7 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
+
     @staticmethod
     def filter_display(email, auth_list, host_email):
         """
