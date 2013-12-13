@@ -25,7 +25,7 @@ if [ $1 = 'start' ];then
         echo "uwsgi is running now!"
     else
         echo "execute uwsgi command..."
-        loadini_func 
+        loadini_func
     fi
 
     psid=$(ps aux|grep "nginx"|grep -v "grep"|wc -l)
@@ -45,9 +45,9 @@ elif [ $1 = 'stop' ];then
     echo "*_* Stop uwsgi and nginx [OK] *_* "
 
 elif [ $1 = 'restart' ];then
-    sudo killall -9 uwsgi 
-    sudo killall -9 nginx 
-    loadini_func 
+    sudo killall -9 uwsgi
+    sudo killall -9 nginx
+    loadini_func
     sudo /etc/init.d/nginx restart
     echo "*_* Restart uwsgi and nginx [OK] *_* "
 
@@ -55,7 +55,7 @@ elif [ $1 = 'deploy' ];then
     sudo cp minzu_server /etc/nginx/sites-available/minzu_server
     sudo ln -s /etc/nginx/sites-available/minzu_server /etc/nginx/sites-enabled/minzu_server
     sudo cp minzu_server.ini /etc/uwsgi/apps-available/
-    sudo ln -s /etc/uwsgi/apps-available/minzu_server.ini /etc/uwsgi/apps-enabled/minzu_server.ini 
+    sudo ln -s /etc/uwsgi/apps-available/minzu_server.ini /etc/uwsgi/apps-enabled/minzu_server.ini
     sudo chmod 777 /var/run/nginx.pid
     echo "*_* Deploy and copy scipts *_*"
 
@@ -63,7 +63,7 @@ elif [ $1 = 'update' ];then
     echo "update production source code and update static files"
     cd $(cd "$(dirname "$0")"; pwd)/../
     echo "check branch to minzu"
-    git checkout minzu 
+    git checkout minzu
     echo "update code repo"
     git pull origin minzu
     echo "update static folder"

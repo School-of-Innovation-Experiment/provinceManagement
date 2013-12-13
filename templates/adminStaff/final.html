@@ -8,7 +8,7 @@
 {%block report-content%}
 
 
-  <form method="post" action={% url student.views.final_report_view pid %}>
+  <form method="post" action="/adminStaff/final/{{pid}}">
     {% csrf_token %}
     <!--Project Content-->
     {% include "student/widgets/final.html" %}

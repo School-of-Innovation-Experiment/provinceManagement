@@ -29,7 +29,6 @@ from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
 from django.db.models import Q
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
 from backend.fund import CFundManage
@@ -360,7 +359,8 @@ class AdminStaffService(object):
         """
         exist_message = ''
         readonly=is_expired
-        subject_list =  ProjectSingle.objects.filter(recommend = True)
+        subject_list = get_current_project_query_set().filter(recommend = True)
+        #subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
         expert_list = get_alloced_num(expert_list, 1)
 
@@ -473,6 +473,7 @@ class AdminStaffService(object):
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
+        subject_list = get_current_project_query_set()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             page1 = request.GET.get('page1')
@@ -483,9 +484,9 @@ class AdminStaffService(object):
             if school_name == "None": school_name = None
 
             if (not school_name) or int(school_name) == -1:
-                subject_list =  ProjectSingle.objects.filter(recommend = True)
+                subject_list =  subject_list.filter(recommend = True)
             else:
-                subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -493,9 +494,9 @@ class AdminStaffService(object):
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
                 if int(school_name) == -1:
-                    subject_list = ProjectSingle.objects.filter(recommend = True)
+                    subject_list = subject_list.filter(recommend = True)
                 else:
-                    subject_list = ProjectSingle.objects.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                    subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -570,6 +571,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NoticeMessageSetting(request):
+        message_role_choice =list(MESSAGE_ROLE_CHOICES)
         if request.POST.get("message_content", False):
             datemessage = ""
             if request.POST.get('message_checkbox', False):
@@ -577,14 +579,10 @@ class AdminStaffService(object):
             else:
                 datemessage = "0"
             # TODO: 前台控制角色选择验证
-            if request.POST["message_role"] == '1':
-                rolemessage = MESSAGE_EXPERT_HEAD
-            elif request.POST["message_role"] == '2':
-                rolemessage = MESSAGE_SCHOOL_HEAD
-            elif request.POST["message_role"] == '3':
-                rolemessage = MESSAGE_STUDENT_HEAD
-            elif request.POST["message_role"] == '4':
-                rolemessage = MESSAGE_TEACHER_HEAD
+            for item in message_role_choice:
+                if request.POST["message_role"] == item[0]:
+                    rolemessage = item[2]
+                    break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
@@ -597,7 +595,8 @@ class AdminStaffService(object):
             _range += 1
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
-                     "templatenotice_group_form": templatenotice_group_form})
+                       "templatenotice_group_form": templatenotice_group_form,
+                       "message_role_choice":message_role_choice })
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -615,8 +614,12 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+
+        recommend_rate_obj = SchoolRecommendRate.load()
+
         return render(request, "adminStaff/project_control.html",
                     {
+                        "recommend_rate": recommend_rate_obj,
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
@@ -801,17 +804,19 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES.get("news_document", None),)
                 new_news.save()
-                return redirect('/newslist/')
+                return redirect('/newslist/%s' % new_news.id)
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
+                context = getContext(news_list, page, 'news', 0)
+                context.update({"newsform": NewsForm()})
                 return render(request, "adminStaff/news_release.html", context)
                 # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
-            context.update({"newsform": NewsForm})
+            context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
     #liuzhuo write
@@ -832,14 +837,15 @@ class AdminStaffService(object):
             readonly determined by time
             is_show determined by identity
             is_innovation determined by project_category
-        """
+        """        
+
         is_expired=False
         loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 
         is_currentyear = check_year(project)
         is_applying = check_applycontrol(project)
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
-        readonly = True
+        readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
         logger.info(readonly)
 
@@ -909,32 +915,37 @@ class AdminStaffService(object):
         loginfo(p=pid+str(is_expired), label="in application")
         final = get_object_or_404(FinalSubmit, project_id=pid)
         project = get_object_or_404(ProjectSingle, project_id=pid)
-        # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
+        #techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
         is_finishing = check_finishingyear(project)
         over_status = project.over_status
 
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+
+        readonly = False
+        print "mid" * 10
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
             if final_form.is_valid():
+                print "$$$" * 20
                 final_form.save()
                 project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
                 project.save()
-                return HttpResponseRedirect(reverse('student.views.home_view'))
+                #return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
                 logger.info("Final Form Valid Failed"+"**"*10)
                 logger.info(final_form.errors)
                 logger.info("--"*10)
 
         final_form = FinalReportForm(instance=final)
-        # techcompetition_form = TechCompetitionForm(instance=techcompetition)
+        #techcompetition_form = TechCompetitionForm(instance=techcompetition)
 
         data = {'pid': pid,
                 'final': final_form,
-             #    'techcompetition':techcompetition,
+              #   'techcompetition':techcompetition,
                 'readonly':readonly,
                 }
+        print "end:" * 20 
         return render(request, 'adminStaff/final.html', data)
 
 
