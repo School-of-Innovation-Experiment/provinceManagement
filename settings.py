@@ -254,3 +254,4 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 
 #school information
 IS_MINZU_SCHOOL = True
+IS_DLUT_SCHOOL = False
