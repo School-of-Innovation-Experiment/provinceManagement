@@ -839,14 +839,15 @@ class AdminStaffService(object):
             readonly determined by time
             is_show determined by identity
             is_innovation determined by project_category
-        """
+        """        
+
         is_expired=False
         loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 
         is_currentyear = check_year(project)
         is_applying = check_applycontrol(project)
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
-        readonly = True
+        readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
         logger.info(readonly)
 
@@ -916,32 +917,37 @@ class AdminStaffService(object):
         loginfo(p=pid+str(is_expired), label="in application")
         final = get_object_or_404(FinalSubmit, project_id=pid)
         project = get_object_or_404(ProjectSingle, project_id=pid)
-        # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
+        #techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
         is_finishing = check_finishingyear(project)
         over_status = project.over_status
 
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+
+        readonly = False
+        print "mid" * 10
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
             if final_form.is_valid():
+                print "$$$" * 20
                 final_form.save()
                 project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
                 project.save()
-                return HttpResponseRedirect(reverse('student.views.home_view'))
+                #return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
                 logger.info("Final Form Valid Failed"+"**"*10)
                 logger.info(final_form.errors)
                 logger.info("--"*10)
 
         final_form = FinalReportForm(instance=final)
-        # techcompetition_form = TechCompetitionForm(instance=techcompetition)
+        #techcompetition_form = TechCompetitionForm(instance=techcompetition)
 
         data = {'pid': pid,
                 'final': final_form,
-             #    'techcompetition':techcompetition,
+              #   'techcompetition':techcompetition,
                 'readonly':readonly,
                 }
+        print "end:" * 20 
         return render(request, 'adminStaff/final.html', data)
 
 
@@ -952,24 +958,21 @@ class AdminStaffService(object):
     def member_change(request, pid):
         """
         project group member change
-        """
+		"""
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
-
         project = ProjectSingle.objects.get(project_id = pid) 
-
         student_group = Student_Group.objects.filter(project = project)
 
-        for s in student_group:
+        for s in student_group :
             s.sex = s.get_sex_display()
+            student_group_form = StudentGroupForm()
+            student_group_info_form = StudentGroupInfoForm()
 
-        student_group_form = StudentGroupForm()
-        student_group_info_form = StudentGroupInfoForm()
         return render(request, "adminStaff/member_change.html",
-                      {"student_group": student_group,
-                       "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form})
-
+					                      {"student_group": student_group,
+										   "student_group_form": student_group_form,
+							               "student_group_info_form": student_group_info_form})
     @staticmethod
     @csrf.csrf_protect
     @login_required
