@@ -29,7 +29,13 @@ class SchoolProfileForm(ModelForm):
     class Meta:
         model = SchoolProfile
         exclude = ("userid", "school")
-
+class TeacherProfileForm(ModelForm):
+    """
+        Teacher Profile settings form
+    """
+    class Meta:
+        model = TeacherProfile
+        exclude = ("userid","school")
 
 class ExpertProfileForm(ModelForm):
     """
