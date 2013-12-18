@@ -56,7 +56,6 @@ def base_profile_view(request, authority=None):
         return None
 
     if request.method == "POST":
-        loginfo('#'*50)
         if authority == SCHOOL_USER:
             form = SchoolProfileForm(request.POST, instance=user)
         elif authority == EXPERT_USER:
@@ -64,7 +63,6 @@ def base_profile_view(request, authority=None):
         elif authority == ADMINSTAFF_USER:
             form = AdminStaffProfileForm(request.POST, instance=user)
         elif authority == TEACHER_USER:
-            loginfo('&'*50)
             form = TeacherProfileForm(request.POST, instance=user)
         else:
             return None
