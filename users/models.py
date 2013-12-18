@@ -20,6 +20,70 @@ class AdminStaffProfile(models.Model):
     class Meta:
         verbose_name = "校级管理员"
         verbose_name_plural = "校级管理员"
+    def __unicode__(self):
+         return '%s' % (self.userid)
+    def save(self, *args, **kwargs):
+         super(AdminStaffProfile, self).save()
+         auth, created = UserIdentity.objects.get_or_create(identity=ADMINSTAFF_USER)
+         self.userid.identities.add(auth)
+
+
+class SchoolProfile(models.Model):
+     """
+     User Profile Extend
+     The Administrator can modified them in admin.page
+     """
+     address = models.CharField(max_length=100, blank=True, verbose_name="地址")
+     school = models.ForeignKey(SchoolDict, unique=True, verbose_name="学院名称")
+     name = models.CharField(blank=True, max_length=100,
+                             verbose_name=u"姓名")
+
+     userid = models.ForeignKey(User, unique=True, \
+                                verbose_name="权限对应ID")
+     is_applying = models.BooleanField(null=False, default=False,
+                                   verbose_name=u"允许申请")
+     is_finishing = models.BooleanField(null=False, default=False,
+                                   verbose_name=u"允许结题")
+
+     class Meta:
+         verbose_name = "院级管理员"
+         verbose_name_plural = "学院管理员"
+
+     def __unicode__(self):
+         return "%s(%s)"% (self.name, self.school.schoolName)
+     def get_name(self):
+         return "%s(%s)"% (self.name, self.school.schoolName)
+     def save(self, *args, **kwargs):
+         super(SchoolProfile, self).save()
+         auth, created = UserIdentity.objects.get_or_create(identity=SCHOOL_USER)
+         self.userid.identities.add(auth)
+
+class ExpertProfile(models.Model):
+    userid = models.ForeignKey(User, unique=True,
+                                verbose_name=u"权限对应ID")
+    name = models.CharField(blank=True, max_length=100,
+                             verbose_name=u"姓名")
+
+    jobs = models.CharField(max_length=100, blank=True,
+                             verbose_name=u"工作单位")
+    assigned_by_school = models.ForeignKey(SchoolProfile, blank=True, null=True)
+    assigned_by_adminstaff = models.ForeignKey(AdminStaffProfile, blank=True, null=True)
+    grade = models.CharField(blank=False, max_length=30,
+                              choices=EXPERT_GRADE_CHOICES,
+                              verbose_name=u"评审项目级别")
+
+    class Meta:
+        verbose_name = "评审专家"
+        verbose_name_plural = "评审专家"
+    def __unicode__(self):
+        return '%s(%s)' % (self.name, self.userid)
+    def get_name(self):
+        return '%s' % (self.name)
+    def save(self, *args, **kwargs):
+        super(ExpertProfile, self).save()
+        auth, created = UserIdentity.objects.get_or_create(identity=EXPERT_USER)
+        self.userid.identities.add(auth)
+
 class TeacherProfile(models.Model):
     """
     User Profile Extend
