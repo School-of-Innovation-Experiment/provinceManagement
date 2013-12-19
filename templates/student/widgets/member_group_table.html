@@ -94,8 +94,20 @@
           <td val={{student.major.id}}>{{student.major}}</td>
           <td>{{student.grade}}</td>
           <td disabled>{{student.classInfo}}</td>
-          <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息</td>
-          <td><button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button></td>
+          <td>
+            {% if lock %}
+            已申报，无法修改
+            {% else %}
+            <a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息
+            {% endif %}
+          </td>
+          <td>
+            {% if lock %}
+            已申报，无法修改
+            {% else %}
+            <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
+            {% endif %}
+          </td>
         </tr>
       {%endfor%}
     {% endif %}
