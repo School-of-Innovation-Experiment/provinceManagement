@@ -57,6 +57,7 @@ def member_change(request):
     print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
+    lock = project.recommend or (project.project_grade.grade != GRADE_UN)
 
     for s in student_group:
         s.sex_val = s.sex
@@ -65,7 +66,8 @@ def member_change(request):
     student_group_form = StudentGroupForm()
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
-                  {"student_group": student_group,
+                  {"lock": lock,
+                   "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
 
