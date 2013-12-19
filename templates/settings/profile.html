@@ -50,6 +50,22 @@
         </div><!--end modal body-->
       </div><!--end adminstaff  profile modal-->
     {%endif%}
+    {%if userauth.is_teacher%}
+      <div class="modal modal-fixed ">
+        <div class="modal-header">
+          <h3><b>教师</b></h3>
+	</div>
+	<div class="modal-body">
+	  <label class="settings-label">姓名</label>
+          {{ teacher_form.name }}
+          <span class="form-error help-inline">{{ teacher_form.name.errors}}</span>
+          <label class="settings-label">联系电话</label>
+          {{ teacher_form.telephone }}
+          <span class="form-error help-inline">{{ teacher_form.telephone.errors}}</span>
+          <br/>
+        </div><!--end modal body-->
+      </div><!--end adminstaff  profile modal-->
+    {%endif%}
 
     <br/>
     <div class="modal-footer">
