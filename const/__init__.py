@@ -328,5 +328,6 @@ TEMPLATE_NOTICE_MESSAGE_MAX = 8
 PROGRESS_RECORD_MAX = 20
 
 # school code
-DUT_code = "10141"
-# DUT_code = "12026" # MINZU_code
+if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
+elif IS_DLUT_SCHOOL: DUT_code = "10141"
+# DUT_code = "10141"
