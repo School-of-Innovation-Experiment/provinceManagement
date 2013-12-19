@@ -43,13 +43,15 @@ def base_profile_view(request, authority=None):
     is_auth = check_auth(user=request.user, authority=authority)
     if not is_auth:
         return None
-    
+
     if authority == SCHOOL_USER:
         user = SchoolProfile.objects.get(userid=request.user)
     elif authority == EXPERT_USER:
         user = ExpertProfile.objects.get(userid=request.user)
     elif authority == ADMINSTAFF_USER:
         user = AdminStaffProfile.objects.get(userid=request.user)
+    elif authority == TEACHER_USER:
+        user = TeacherProfile.objects.get(userid=request.user)
     else:
         return None
 
@@ -60,9 +62,10 @@ def base_profile_view(request, authority=None):
             form = ExpertProfileForm(request.POST, instance=user)
         elif authority == ADMINSTAFF_USER:
             form = AdminStaffProfileForm(request.POST, instance=user)
+        elif authority == TEACHER_USER:
+            form = TeacherProfileForm(request.POST, instance=user)
         else:
             return None
-
         if form.is_valid():
             form.save()
     else:
@@ -72,6 +75,8 @@ def base_profile_view(request, authority=None):
             form = ExpertProfileForm(instance=user)
         elif authority == ADMINSTAFF_USER:
             form = AdminStaffProfileForm(instance=user)
+        elif authority == TEACHER_USER:
+            form = TeacherProfileForm(instance=user)
         else:
             return None
 
@@ -87,10 +92,12 @@ def profile_view(request):
     school_form = base_profile_view(request, authority=SCHOOL_USER)
     expert_form = base_profile_view(request, authority=EXPERT_USER)
     adminstaff_form = base_profile_view(request, authority=ADMINSTAFF_USER)
+    teacher_form =  base_profile_view(request,authority=TEACHER_USER)
 
     data = {"school_form": school_form,
             "expert_form": expert_form,
-            "adminstaff_form": adminstaff_form}
+            "adminstaff_form": adminstaff_form,
+            "teacher_form":teacher_form,}
 
     return render(request, "settings/profile.html", data)
 
