@@ -970,10 +970,10 @@ class AdminStaffService(object):
         student_group_form = StudentGroupForm()
         student_group_info_form = StudentGroupInfoForm()
         return render(request, "adminStaff/member_change.html",
-                      {"student_group": student_group,
+                      {"pid": pid,
+                       "student_group": student_group,
                        "student_group_form": student_group_form,
                        "student_group_info_form": student_group_info_form})
-
     @staticmethod
     @csrf.csrf_protect
     @login_required
