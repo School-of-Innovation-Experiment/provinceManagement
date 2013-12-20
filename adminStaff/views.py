@@ -868,7 +868,7 @@ class AdminStaffService(object):
             application_form = iform(request.POST, instance=pre)
             if is_innovation == True:
                 if info_form.is_valid() and application_form.is_valid():
-                    if save_application(project, info_form, application_form, request.user):
+                    if save_application(project, pre, info_form, application_form, request.user):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
@@ -879,7 +879,7 @@ class AdminStaffService(object):
             else :
                 teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
                 if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
-                    if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                    if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
