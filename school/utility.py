@@ -104,11 +104,13 @@ def save_application(project=None, pre=None, info_form=None, application_form=No
         return False
 
     try:
-        info = info_form.save(commit=False)
-        info.save()
+        info_form.save()
+        application_form.save()
+        # info = info_form.save(commit=False)
+        # info.save()
 
-        application = application_form.save(commit=False)
-        application.save()
+        # application = application_form.save(commit=False)
+        # application.save()
 
         return True
     except Exception, err:
@@ -143,14 +145,17 @@ def save_enterpriseapplication(project=None, pre=None, info_form=None, applicati
         return False
 
     try:
-        info = info_form.save(commit=False)
-        info.save()
+        info_form.save()
+        application_form.save()
+        teacher_enterpriseform.save()
+        # info = info_form.save(commit=False)
+        # info.save()
 
-        application = application_form.save(commit=False)
-        application.save()
+        # application = application_form.save(commit=False)
+        # application.save()
 
-        teacher_enterprise=teacher_enterpriseform.save(commit=False)
-        teacher_enterprise.save()
+        # teacher_enterprise=teacher_enterpriseform.save(commit=False)
+        # teacher_enterprise.save()
 
         return True
     except Exception, err:
