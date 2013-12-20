@@ -871,7 +871,6 @@ class AdminStaffService(object):
                     if save_application(project, info_form, application_form, request.user):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
-                        return HttpResponseRedirect(reverse('student.views.home_view'))
                 else:
                     logger.info(" info  application Form Valid Failed"+"**"*10)
                     logger.info(info_form.errors)
@@ -883,7 +882,6 @@ class AdminStaffService(object):
                     if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
-                        return HttpResponseRedirect(reverse('student.views.home_view'))
                 else:
                     logger.info("info  application teacher Form Valid Failed"+"**"*10)
                     logger.info(info_form.errors)
