@@ -104,19 +104,19 @@ def save_application(project=None, pre=None, info_form=None, application_form=No
         return False
 
     try:
-        info_form.save()
-        application_form.save()
-        # info = info_form.save(commit=False)
-        # info.save()
-
-        # application = application_form.save(commit=False)
-        # application.save()
+        # info_form.save()
+        # application_form.save()
+        info = info_form.save(commit=False)
+        info.save()
+        application = application_form.save(commit=False)
+        application.save()
 
         return True
     except Exception, err:
         logger.info("save process"+"**"*10)
         logger.info(err)
         logger.info("--"*10)
+        raise err
         return False
 
 def get_recommend_limit(school = None):
@@ -145,17 +145,17 @@ def save_enterpriseapplication(project=None, pre=None, info_form=None, applicati
         return False
 
     try:
-        info_form.save()
-        application_form.save()
-        teacher_enterpriseform.save()
-        # info = info_form.save(commit=False)
-        # info.save()
+        # info_form.save()
+        # application_form.save()
+        # teacher_enterpriseform.save()
+        info = info_form.save(commit=False)
+        info.save()
 
-        # application = application_form.save(commit=False)
-        # application.save()
+        application = application_form.save(commit=False)
+        application.save()
 
-        # teacher_enterprise=teacher_enterpriseform.save(commit=False)
-        # teacher_enterprise.save()
+        teacher_enterprise=teacher_enterpriseform.save(commit=False)
+        teacher_enterprise.save()
 
         return True
     except Exception, err:
