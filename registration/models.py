@@ -123,11 +123,13 @@ class RegistrationManager(models.Manager):
                     obj.userid = new_user
                     obj.save()
                 #覆盖某些对象的外键关系
-                oldUserObj.delete() #删除被覆盖的user
 
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
+
+                oldUserObj.delete() #删除被覆盖用户
+
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
             teacherProfileObj.save()
