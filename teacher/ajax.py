@@ -66,14 +66,14 @@ def simple_delete(request, email):
     message = ""
     user = User.objects.get(email = email)
 
-    student = StudentProfile.objects.get(userid = user)
-    student.delete()
-    try:
-        project = ProjectSingle.objects.get(student__userid = user)
-        delete_project_ralated(project)
-        project.delete()
-    except:
-        pass
+   # student = StudentProfile.objects.get(userid = user)
+   # student.delete()
+   # try:
+   #     project = ProjectSingle.objects.get(student__userid = user)
+   #     delete_project_ralated(project)
+   #     project.delete()
+   # except:
+   #     pass
     user.delete()
 
     return simplejson.dumps({"message": message})
