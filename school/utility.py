@@ -428,4 +428,19 @@ def is_showoverstatus(project_list):
             temp.is_showoverstatus = False
         else:
             temp.is_showoverstatus = True
+        add_fileurl(temp)
     return project_list
+
+def add_fileurl(project):
+    uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
+    for filetemp in uploadfiles:
+        if filetemp.name == u"申报书":
+            project.fileurl_application = filetemp.file_obj.url 
+        elif filetemp.name == u"中期检查表":
+            project.fileurl_interimchecklist = filetemp.file_obj.url
+        elif filetemp.name == u"结题验收表":
+            project.fileurl_file_summary = filetemp.file_obj.url
+        elif filetemp.name == u"项目汇编":
+            project.fileurl_projectcompilation = filetemp.file_obj.url
+        elif filetemp.name == u"学分申请表":
+            project.scoreurl_application = filetemp.file_obj.url

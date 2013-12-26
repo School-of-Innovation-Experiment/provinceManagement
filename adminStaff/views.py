@@ -659,13 +659,9 @@ class AdminStaffService(object):
     def home_view(request):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
-            file_history = UploadedFiles.objects.filter(project_id=pro_obj.project_id)
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-            for file_temp in file_history:
-                if file_temp.name == u"学分申请表":
-                    url = file_temp.file_obj.url
-                    pro_obj.url = url
+                add_fileurl(pro_obj)
 
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
