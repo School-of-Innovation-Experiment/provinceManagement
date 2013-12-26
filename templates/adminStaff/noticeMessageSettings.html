@@ -1,7 +1,7 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 
-  <div class="container-fluid"><!--FORM2 DIV-->   
+  <div class="container-fluid"><!--FORM2 DIV-->
     <fieldset>
       <div class="row-fluid">
         <div class="span4">
@@ -20,15 +20,10 @@
               <div class="controls">
                 <select id="select_role" name="message_role">
                   <option>请选择</option>
-                  <option value="1">专家</option>
-                  <option value="2">学院</option>
-                  <option value="3">学生</option>
-                  <option value="4">教师</option>
+                  {% for item in message_role_choice %}
+                     <option value="{{item.0}}">{{item.1}}</option>
+                  {% endfor %}
                 </select>
-<!--                 <label class="checkbox" id="message_check" style="display: none;">
-                  <input type="checkbox" name="message_checkbox" value="1">
-                  是否提醒截止时间
-                </label> -->
               </div>
             </div>
             <div class="control-group">
