@@ -23,7 +23,7 @@ from const import *
 from backend.logging import logger,loginfo
 from users.models import *
 from const.models import SchoolDict, InsituteCategory
-from school.models import TeacherProjectPerLimits, Project_Is_Assigned
+from school.models import *
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -116,6 +116,15 @@ class RegistrationManager(models.Manager):
                 project_is_assigned.save()
             else:
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
+
+                oldUserObj = schoolProfileObj.userid
+                
+                for obj in ProjectFinishControl.objects.filter(userid = oldUserObj):
+                    obj.userid = new_user
+                    obj.save()
+                #覆盖某些对象的外键关系
+                oldUserObj.delete() #删除被覆盖的user
+
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
