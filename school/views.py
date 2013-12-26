@@ -179,7 +179,8 @@ def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
     school = SchoolProfile.objects.get(userid = request.user)
-    subject_list =  AdminStaffService.GetSubject_list(school)
+    subject_list = get_current_project_query_set().filter(school = school)
+    #subject_list =  AdminStaffService.GetSubject_list(school)
     limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
@@ -190,7 +191,8 @@ def SubjectRating(request,is_expired=False):
             pass
     undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
     #未分级项目为未推荐and未分级的项目
-    def_subject_list = filter(lambda x: x.project_grade.grade == GRADE_SCHOOL or x.project_grade.grade == GRADE_INSITUTE, subject_list)
+    def_subject_list = filter(lambda x: (x.recommend) or (x.project_grade.grade != GRADE_UN), subject_list)
+    # def_subject_list = filter(lambda x: x.project_grade.grade == GRADE_SCHOOL or x.project_grade.grade == GRADE_INSITUTE, subject_list)
     #已分级项目为所有划分为校级or学院级的项目
     #！！民族学院只含有学院级项目
     context = {'subject_list': subject_list,
@@ -214,9 +216,11 @@ def NewSubjectAlloc(request, is_expired = False):
     exist_message = ''
     readonly = is_expired
     school = get_object_or_404(SchoolProfile, userid = request.user)
-    subject_list = AdminStaffService.GetSubject_list(school)
+    subject_list = get_current_project_query_set().filter(school = school)
+    #subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
-    
+    expert_list = get_alloced_num(expert_list, 0)
+   
     alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
     unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject)]
     context = {'subject_list': subject_list,

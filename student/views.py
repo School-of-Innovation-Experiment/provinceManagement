@@ -42,7 +42,8 @@ def home_view(request):
     """
     display project at the current year
     """
-    item_list = ProjectSingle.objects.filter(student__userid=request.user)
+    item_list = get_current_project_query_set().filter(student__userid=request.user)
+    #item_list = ProjectSingle.objects.filter(student__userid=request.user)
     return render(request, "student/student_home.html", {"item_list": item_list})
 
 @csrf.csrf_protect
@@ -52,19 +53,21 @@ def member_change(request):
     """
     project group member change
     """
-    
     student_account = StudentProfile.objects.get(userid = request.user)
     print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
+    lock = project.recommend or (project.project_grade.grade != GRADE_UN)
 
     for s in student_group:
+        s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
-                  {"student_group": student_group,
+                  {"lock": lock,
+                   "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
 
@@ -114,7 +117,7 @@ def techcompetition_detail(request,pid=None):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(STUDENT_USER)
+#@authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
@@ -123,6 +126,9 @@ def application_report_view(request,pid=None,is_expired=False):
         is_show determined by identity 
         is_innovation determined by project_category
     """
+
+    print "-=" * 10
+
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)

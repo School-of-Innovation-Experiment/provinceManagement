@@ -7,7 +7,7 @@ Created on 2013-03-27
 Desc: const defination
 '''
 
-from settings import STATIC_URL, MEDIA_URL
+from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 UNDIFINED = "undifined"
 
@@ -33,7 +33,7 @@ SCHOOL_GRADE = "1"
 EXPERT_GRADE_CHOICES = (
     (INSTITUTE_GRADE, u"院系内项目初审专家"),
     (SCHOOL_GRADE, u"校级以上项目评审专家"),
-    )
+)
 #Project Category
 CATE_INNOVATION = "innovation"
 CATE_ENTERPRISE = "enterprise"
@@ -44,7 +44,7 @@ PROJECT_CATE_CHOICES = (
     (CATE_INNOVATION, u"创新训练"),
     (CATE_ENTERPRISE, u"创业训练"),
     (CATE_ENTERPRISE_EE, u"创业实践"),
-  #  (CATE_UN, u"未指定"),
+    #  (CATE_UN, u"未指定"),
 )
 
 #Project_Origin
@@ -146,10 +146,18 @@ DEFAULT_IMG_URL = STATIC_URL + "/images/no_pic.jpg"
 YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
 
 # adminStaff noticeMessage settings
-MESSAGE_EXPERT_HEAD = '__expert__'
-MESSAGE_SCHOOL_HEAD = '__school__'
+MESSAGE_EXPERT_HEAD = '__experts__'
+MESSAGE_SCHOOL_HEAD = '__schools__'
 MESSAGE_STUDENT_HEAD = '__student__'
 MESSAGE_TEACHER_HEAD = '__teacher__'
+MESSAGE_ALL_HEAD     = '__allmess__'
+MESSAGE_ROLE_CHOICES =(
+    ('1',u"专家",'__experts__'),
+    ('2',u"学院",'__schools__'),
+    ('3',u"学生",'__student__'),
+    ('4',u"教师",'__teacher__'),
+    ('5',u"全部",'__allmess__'),
+)
 # APP student
 DEFAULT_NATION = u"汉族"
 SEX_MALE = "male"
@@ -158,7 +166,96 @@ SEX_CHOICES = (
     (SEX_MALE, u"男"),
     (SEX_FEMALE, u"女"),
 )
-MAJOR_CHOICES = (
+
+# dlut major
+DLUT_MAJOR_CHOICES = (
+    ('0', "哲学"),
+    ('1', "国际经济与贸易（英语强化）"),
+    ('2', "金融学（英语强化）"),
+    ('3', "法学"),
+    ('4', "思想政治教育"),
+    ('5', "汉语言文学"),
+    ('6', "汉语言"),
+    ('7', "英语"),
+    ('8', "日语"),
+    ('9', "翻译"),
+    ('10', "广播电视新闻学"),
+    ('11', "数学与应用数学"),
+    ('12', "信息与计算科学"),
+    ('13', "应用物理学"),
+    ('14', "应用化学"),
+    ('15', "生物技术"),
+    ('16', "工程力学"),
+    ('17', "机械设计制造及其自动化"),
+    ('18', "机械设计制造及其自动化（日语强化）"),
+    ('19', "机械设计制造及其自动化（国际班）"),
+    ('20', "材料成型及控制工程"),
+    ('21', "工业设计"),
+    ('22', "过程装备与控制工程"),
+    ('23', "车辆工程（英语强化）"),
+    ('24', "测控技术与仪器"),
+    ('25', "材料物理"),
+    ('26', "金属材料工程"),
+    ('27', "金属材料工程（日语强化）"),
+    ('28', "无机非金属材料工程"),
+    ('29', "高分子材料与工程"),
+    ('30', "功能材料"),
+    ('31', "纳米材料与技术"),
+    ('32', "能源与动力工程"),
+    ('33', "能源与环境系统工程"),
+    ('34', "电气工程及其自动化"),
+    ('35', "电子信息工程"),
+    ('36', "电子信息工程（英语强化）"),
+    ('37', "电子科学与技术"),
+    ('38', "通信工程"),
+    ('39', "光信息科学与技术"),
+    ('40', "集成电路设计与集成系统"),
+    ('41', "自动化"),
+    ('42', "计算机科学与技术"),
+    ('43', "计算机科学与技术（日语强化）"),
+    ('44', "计算机科学与技术"),
+    ('45', "软件工程"),
+    ('46', "软件工程"),
+    ('47', "软件工程（日语强化）"),
+    ('48', "网络工程"),
+    ('49', "物联网工程"),
+    ('50', "土木工程"),
+    ('51', "土木工程（国际班）"),
+    ('52', "建筑环境与能源应用工程"),
+    ('53', "水利水电工程"),
+    ('54', "港口航道与海岸工程"),
+    ('55', "化学工程与工艺"),
+    ('56', "化学工程与工艺（国际班）"),
+    ('57', "制药工程"),
+    ('58', "能源化学工程"),
+    ('59', "交通工程"),
+    ('60', "船舶与海洋工程"),
+    ('61', "海洋资源开发技术"),
+    ('62', "飞行器设计与工程"),
+    ('63', "环境工程"),
+    ('64', "环境科学"),
+    ('65', "生物医学工程"),
+    ('66', "建筑学"),
+    ('67', "城乡规划"),
+    ('68', "安全工程"),
+    ('69', "生物工程"),
+    ('70', "信息管理与信息系统"),
+    ('71', "工程管理"),
+    ('72', "工商管理"),
+    ('73', "市场营销"),
+    ('74', "人力资源管理"),
+    ('75', "公共事业管理"),
+    ('76', "物流管理"),
+    ('77', "物流工程"),
+    ('78', "工业工程"),
+    ('79', "雕塑"),
+    ('80', "视觉传达设计"),
+    ('81', "环境设计"),
+    ('82', "生物信息学"),
+)
+
+# minzu major
+MINZU_MAJOR_CHOICES = (
     ('1', u"工商管理"),
     ('2', u"经济学"),
     ('3', u"旅游管理"),
@@ -210,13 +307,17 @@ MAJOR_CHOICES = (
     ('49', u"动画"),
     ('50', u"工业设计"),
 )
+
+if IS_MINZU_SCHOOL: MAJOR_CHOICES = MINZU_MAJOR_CHOICES
+if IS_DLUT_SCHOOL: MAJOR_CHOICES = DLUT_MAJOR_CHOICES
+
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {
     CATE_INNOVATION: 5,
     # CATE_INNOVATION: 3,
     CATE_ENTERPRISE: 5,
     CATE_ENTERPRISE_EE: 5,
-    }
+}
 
 # School recommend rate
 SCHOOL_RECOMMEND_RATE = 0.3 # 30 %
@@ -228,5 +329,6 @@ TEMPLATE_NOTICE_MESSAGE_MAX = 8
 PROGRESS_RECORD_MAX = 20
 
 # school code
+if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
+elif IS_DLUT_SCHOOL: DUT_code = "10141"
 # DUT_code = "10141"
-DUT_code = "12026"

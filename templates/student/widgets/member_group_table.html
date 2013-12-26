@@ -75,6 +75,7 @@
       <td><strong>学院</strong></td>
       <td><strong>专业</strong></td>
       <td><strong>年级</strong></td>
+      <td><strong>班级</strong></td>
       <td><strong>更新信息</strong></td>
       <td><strong>人员变更</strong></td>
     </tr>
@@ -85,15 +86,28 @@
         <tr>
           <td>{{student.studentId}}</td>
           <td>{{student.studentName}}</td>
-          <td>{{student.sex}}</td>
+          <td val={{student.sex_val}}>{{student.sex}}</td>
           <td>{{student.nation}}</td>
           <td>{{student.email}}</td>
           <td>{{student.telephone}}</td>
-          <td>{{student.school}}</td>
-          <td>{{student.major}}</td>
+          <td val={{student.school.id}}>{{student.school}}</td>
+          <td val={{student.major.id}}>{{student.major}}</td>
           <td>{{student.grade}}</td>
-          <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息</td>
-          <td><button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button></td>
+          <td disabled>{{student.classInfo}}</td>
+          <td>
+            {% if lock %}
+            已申报，无法修改
+            {% else %}
+            <a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息
+            {% endif %}
+          </td>
+          <td>
+            {% if lock %}
+            已申报，无法修改
+            {% else %}
+            <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
+            {% endif %}
+          </td>
         </tr>
       {%endfor%}
     {% endif %}

@@ -35,6 +35,14 @@ def index(request):
         getContext(
             News.objects.exclude(news_document=u'')[:5], \
                 1, 'homepage_docs'))
+    news_count = News.objects.count()
+    if news_count >= 5:
+        news_list = News.objects.order_by('-news_date')[:5]
+    else:
+        news_list = News.objects.order_by('-news_date')[:news_count]
+    context.update(
+        getContext(news_list, \
+                   1, 'homepage_news'))
     return render(request, 'home/index.html', context)
 
 def read_news(request, news_id):

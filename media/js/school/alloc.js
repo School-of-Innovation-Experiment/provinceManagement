@@ -89,6 +89,7 @@ function Alloc_Project_to_Expert_callback(data){
 		    $(target_tr).remove();
 		    $("#alloced_subject_table_body").prepend(add_html);
 		}
+	    $("#table_expert_list").html(data.expert_list_html);
 	}
 	remove_project_check();
 }
@@ -109,6 +110,7 @@ function Cancel_Alloced_Experts_callback(data){
 	        $(target_tr).remove();
 	        $("#unalloced_subject_table_body").prepend(add_html);
 	    }
+        $("#expert_list_div").html(data.expert_list_html);
 	}
 	remove_project_check();
 }
