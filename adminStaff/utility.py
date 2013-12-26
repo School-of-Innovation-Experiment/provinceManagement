@@ -192,7 +192,7 @@ def check_scoreapplication(check_obj):
         return u"申请学分"
     else:
         return u""    
-
+                
 def get_expertscore(proj_obj):
     """
         get expert score

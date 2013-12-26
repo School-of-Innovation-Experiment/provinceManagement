@@ -9,6 +9,5 @@ function releaseexcel_baseinformation_callback(data){
 
 function releaseexcel_expertscore(){
   $('#excelprogress').modal('show');
-  alert("haha");
   Dajaxice.adminStaff.Release_Excel(releaseexcel_baseinformation_callback,{'exceltype':2});
 }
