@@ -5,11 +5,12 @@
       <td><strong>用户姓名</strong></td>
       <td><strong>用户权限</strong></td>
       <td><strong>用户状态</strong></td>
+      <td><strong>操作</strong></td>
     </tr>
   </thead>
   <tbody>
     {%for user in email_list%}
-      <tr>
+      <tr name="tr_{{user.email}}">
         <td>{{user.email}}</td>
         <td>{{user.name}}</td>
         <td>{{user.auth}}</td>
@@ -17,6 +18,7 @@
           <td><button class="btn btn-success">已经激活</button></td>
         {%else%}
           <td><button class="btn btn-warning">已发送，尚未激活</button></td>
+          <td><button class="btn btn-danger" onclick="simple_delete('{{user.email}}');">删除</button></td>
         {%endif%}
       </tr>
     {%endfor%}
