@@ -12,7 +12,8 @@ function brute_delete_callback(data){
 }
 function simple_delete(email){
     glob_email = email;
-    Dajaxice.teacher.simple_delete(simple_delete_callback,{'email': email});
+    var ret = confirm("是否确定删除用户: " + email);
+    if(ret) Dajaxice.teacher.simple_delete(simple_delete_callback,{'email': email});
 }
 function simple_delete_callback(data){
     var target_tr = "[name='" + "tr_" + glob_email + "']";
