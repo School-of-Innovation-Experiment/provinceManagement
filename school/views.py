@@ -94,7 +94,7 @@ def home_view(request):
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
 
-    pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性
+    pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性以及文件下载链接
 
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
