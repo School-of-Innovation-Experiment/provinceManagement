@@ -24,22 +24,21 @@ table.table tbody tr td:nth-child(4){
 */
 
 #name_div
-{    
+{
     margin-left: 0px;
     margin-top: 20px;
     width: 100px;
 }
 #amount_div
-{   
-    
+{
     margin-left: 100px;
-    margin-top: 20px; 
+    margin-top: 20px;
     width: 250px;
 
 }
 #remaining_div
-{   
-    margin-left: 0px; 
+{
+    margin-left: 0px;
     margin-top: 20px;
     width: 250px;
 }
@@ -47,7 +46,7 @@ table.table tbody tr td:nth-child(4){
 #err_div
 {
     margin-top: -25px;
-    margin-left: 700px;  
+    margin-left: 700px;
 }
 
 #add_funds_record

@@ -1,0 +1,41 @@
+#err_div
+{
+    margin-top: -25px;
+    margin-left: 700px;
+}
+#funds_detail{
+
+    margin-top:20px;
+    margin-bottom:25px;
+}
+#name_div
+{
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 100px;
+}
+#amount_div
+{
+    margin-left: 100px;
+    margin-top: 20px;
+    width: 250px;
+
+}
+#remaining_div
+{
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 250px;
+}
+#add_funds_record
+{
+    margin-left: 100px;
+    margin-top: -5px;
+}
+#id_student_choice
+{
+    width: 140px;
+}
+button.id_export_button{
+    width:250px; 
+}
