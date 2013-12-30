@@ -16,7 +16,7 @@
              {% for item in pro_list%}
              <tr>
                <td>{{item.project_code}}</td>
-               <td>{{item.title}}</td>
+               <td>{{item.title|truncatechars:15}}</td>
                <td>{{item.adminuser.get_name}}</td>
                <td>{{item.student.get_name}}</td>
                <td>{{item.funds_total}}</td>
@@ -24,7 +24,7 @@
                {%if userauth.is_adminstaff  %}
                    <td><a data-toggle="modal" href="/adminStaff/fundschange/{{item.project_id}}" >添加帐目</td>
                {%elif userauth.is_schooler %}
-                   <td><a data-toggle="modal" href="/school/fundsview/{{item.project_id}}" >查看帐目</td>
+                   <td><a data-toggle="modal" href="/school/fundschange/{{item.project_id}}" >查看帐目</td>
                {%elif userauth.is_teacher %}
                    <td><a data-toggle="modal" href="/teacher/fundsview/{{item.project_id}}" >查看帐目</td>
                {%endif%}
