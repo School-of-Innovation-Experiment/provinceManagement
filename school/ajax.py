@@ -66,16 +66,24 @@ def teacherProjNumLimit(request, form):
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
         num_and_remaining = get_project_num_and_remaining(request)
-        if num_and_remaining['projects_remaining'] < limited_num:
-            return simplejson.dumps({'id':"limited_num" ,'message':u'分配数量不能大于剩余数量'})
+        # if num_and_remaining['projects_remaining'] < limited_num:
+        #     return simplejson.dumps({'id':"limited_num" ,'message':u'分配数量不能大于剩余数量'})
         try:
             if  TeacherProjectPerLimits.objects.filter(teacher=teacher_obj).count() == 0:
+                if num_and_remaining['projects_remaining'] < limited_num:
+                    return simplejson.dumps({'id':"limited_num" ,'message':u'分配数量剩余不足'})
+
                 projLimit_obj = TeacherProjectPerLimits(teacher=teacher_obj,
                                                        number=limited_num)
                 projLimit_obj.save()
             else:
                 projLimit_obj = TeacherProjectPerLimits.objects.get(teacher=teacher_obj)
-                projLimit_obj.number += limited_num
+                if num_and_remaining['projects_remaining']+projLimit_obj.number < limited_num:
+                    return simplejson.dumps({'id':"limited_num" ,'message':u'分配数量剩余不足'})
+                minnum = ProjectSingle.objects.filter(Q(adminuser=teacher_obj)&Q(is_past=False)).count()
+                if limited_num < minnum:
+                    return simplejson.dumps({'message':u'更新失败,数量不得少于该老师已开始项目数量',})
+                projLimit_obj.number = limited_num
                 projLimit_obj.save()
                 # return simplejson.dumps({'id':"teacher_name" ,'message':u'已分配项目给该指导老师，不可重复分配'})
             ret = {'status':'1','message':u'更新成功'}
