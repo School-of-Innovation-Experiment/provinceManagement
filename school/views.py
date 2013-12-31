@@ -41,6 +41,7 @@ from django.db.models import Q
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
+from backend.fund import CFundManage
 from adminStaff.views import AdminStaffService
 from adminStaff.forms import FundsChangeForm,StudentNameForm
 from student.models import Funds_Group
@@ -455,42 +456,16 @@ def project_control(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
-    school = SchoolProfile.objects.get(userid = request.user)
-    subject_list =  AdminStaffService.GetSubject_list(school)
-
-    for subject in subject_list:
-        student_group = Student_Group.objects.filter(project = subject) 
-       # subject.members = ','.join([student.studentName for student in student_group])
-        try:
-            subject.members = student_group[0]
-        except:
-            pass
-
-
-    return render(request, "school/funds_manage.html",{'subject_list': subject_list})
+    context = AdminStaffService.projectListInfor(request)
+    return render_to_response("school/funds_manage.html",context,context_instance=RequestContext(request))
 
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
 def funds_change(request,pid):
-        project = ProjectSingle.objects.get(project_id = pid)
-
-        project_funds_list = Funds_Group.objects.filter(project_id = pid)
-
-
-        fundsChange_group_form = FundsChangeForm();
-
-
-        student_name_form = StudentNameForm(pid = pid);
-
-        return_data = {
-                        "project_funds_list":project_funds_list,
-                        "fundsChange_group_form":fundsChange_group_form,
-                        "student_name_form":student_name_form
-                        } 
-
-        return render(request,"school/funds_change.html",return_data)
-        
+    project = ProjectSingle.objects.get(project_id = pid)
+    ret = CFundManage.get_form_tabledata(project)
+    return render(request,"school/funds_change.html",ret)
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)

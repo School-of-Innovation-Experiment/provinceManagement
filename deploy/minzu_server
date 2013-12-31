@@ -5,7 +5,7 @@ server {
     root /home/sie/mysites/minzuManagement;
 
 	server_name 192.168.20.100;
-    client_max_body_size 50m;
+    client_max_body_size 120m;
     client_body_temp_path /home/sie/mysites/tmp;
 
 	location / {
