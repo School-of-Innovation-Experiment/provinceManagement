@@ -20,7 +20,9 @@ from const import MEMBER_NUM_LIMIT
 from const import *
 
 def getProject(request):
-    if check_auth(request.user, ADMINSTAFF_USER):
+    ok = check_auth(request.user, ADMINSTAFF_USER)
+    ok = ok or check_auth(request.user, SCHOOL_USER)
+    if ok == True:
         try:
             strUrl = request.META['HTTP_REFERER']
             pid = strUrl.split('/')[-1]
@@ -43,6 +45,7 @@ def MemberChangeInfo(request, form, origin):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    
     project = getProject(request)
 
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
@@ -99,12 +102,15 @@ def MemberDelete(request, deleteId):
 
 @dajaxice_register
 def MemberChange(request, form, origin):
+    print "hehe" 
 
     stugroup_form = StudentGroupForm(deserialize_form(form))
     if not stugroup_form.is_valid():
+        print 'sb'
         ret = {'status': '2',
                'error_id': stugroup_form.errors.keys(),
                'message': u"输入有误，请重新输入"}
+        print stugroup_form["student_id"]
     elif not origin: # 添加或更新成员
         ret = new_or_update_member(request, stugroup_form)
     else:  # 更换成员

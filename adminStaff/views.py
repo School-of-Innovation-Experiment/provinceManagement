@@ -68,6 +68,11 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+
+
+
+
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -829,6 +834,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
+        
         """
             readonly determined by time
             is_show determined by identity

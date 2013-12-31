@@ -16,6 +16,16 @@ from school import views as school_views
 
 urlpatterns = patterns(
     '',
+    url(        
+        r'^application/(?P<pid>.{36})$',
+        school_views.application_report_view,
+        ),
+    url(r'^final/(?P<pid>.{36})$',
+        school_views.final_report_view,
+        ),
+
+    url(r'^memberchange/(?P<pid>.{36})$', 
+        school_views.member_change),
     url(
         r'^$',
         school_views.home_view,
