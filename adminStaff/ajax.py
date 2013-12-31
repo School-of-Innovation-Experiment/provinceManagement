@@ -25,6 +25,7 @@ from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
 from school.utility import get_recommend_limit
+from django.db.models import Q
 
 from const import *
 import datetime
@@ -53,6 +54,10 @@ def NumLimit(request, form):
                 projectlimit.save()
             else:
                 object = ProjectPerLimits.objects.get(school=school_obj)
+                minnum = ProjectSingle.objects.filter(Q(school=school_obj)&Q(is_past=False)).count()
+                if limited_num < minnum:
+                    return simplejson.dumps({'status':'1',
+                                             'message':u'更新失败,数量不得少于该学院已开始项目数量',})
                 object.number = limited_num
                 object.save()
             table = refresh_numlimit_table(request)
