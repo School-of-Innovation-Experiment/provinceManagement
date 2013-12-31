@@ -42,6 +42,14 @@
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 
+      <span class=" pull-right"><input type="button" class="btn btn-primary" id="email_to_teacher" onclick="add_or_update_member();" value="添加新成员"/></span>
+    </form><!--end school_email_send_form-->
+    <div id="member_group_table">
+      {% include "student/widgets/member_group_table.html" %}
+    </div>
+  </div>
+  <!-- ajax_csrf-->
+  <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
   <!-- dajax-->
   <script type='text/javascript' src="{{STATIC_URL}}js/student/member_change.js"></script>
 
