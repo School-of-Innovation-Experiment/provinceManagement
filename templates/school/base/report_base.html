@@ -1,5 +1,7 @@
 <!--report base html-->
-{% extends "school/base/_content.html" %}
+
+
+{% extends "school/home.html" %}
 
 {%block calculate-content%}
 <!--Project Choice-->
@@ -11,12 +13,13 @@
   </div><!--end left span-->
   <div class="span4">
     <div class="alert alert-important" style=" text-align:center;">
-      <h4><a href={% url school.views.final_report_view pid%}>结题验收表</a></h4>
+      <h4> <a href={% url school.views.final_report_view pid%}  >结题验收表      </a></h4>
     </div><!--end alert-->
   </div><!--mid right span--> 
   <div class="span4">
     <div class="alert alert-success" style=" text-align:center;">
-      <h4><a href={% url school.views.file_view pid%}>成果上传</a></h4>
+      <h4><a href={% url school.views.member_change pid%}
+        >队员变更</a></h4>
     </div><!--end alert-->
   </div><!--end right span--> 
 </div><!--end row-->

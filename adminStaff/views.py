@@ -70,8 +70,10 @@ from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 
 from django.core.files.uploadedfile import UploadedFile
-
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+
+
+
 
 class AdminStaffService(object):
     @staticmethod
@@ -839,6 +841,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
+        
         """
             readonly determined by time
             is_show determined by identity
