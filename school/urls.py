@@ -33,7 +33,7 @@ urlpatterns = patterns(
 		school_views.SubjectRating,
 		),
     url(
-        r'^subject_funds$',
+        r'^fundsmanage/$',
         school_views.funds_manage,
         ),
     url(
@@ -53,7 +53,7 @@ urlpatterns = patterns(
         school_views.project_control,
         ),
     url(
-        r'^processrecord_view/(?P<pid>.{36})$', 
+        r'^processrecord_view/(?P<pid>.{36})$',
         school_views.record_view
-        ),    
+        ),
 )
