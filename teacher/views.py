@@ -258,9 +258,8 @@ def processrecord_view(request, pid=None,is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 def funds_manage(request):
-    ret = AdminStaffService.projectListInfor(request)
+    ret = AdminStaffService.projectListInfor(request,TEACHER_USER)
     return render(request, "teacher/funds_manage.html", ret)
-
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)

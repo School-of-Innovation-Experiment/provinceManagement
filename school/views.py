@@ -305,7 +305,7 @@ def project_control(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
-    context = AdminStaffService.projectListInfor(request)
+    context = AdminStaffService.projectListInfor(request,SCHOOL_USER)
     return render_to_response("school/funds_manage.html",context,context_instance=RequestContext(request))
 
 @csrf.csrf_protect
