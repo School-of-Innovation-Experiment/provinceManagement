@@ -85,12 +85,21 @@
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
+<<<<<<< HEAD
 	      {% if subject.recommend %}
 	        <td><span>已推荐（{{ subject.project_grade }}）</span><td>
 	      {% else %}
 	        <td><span>未推荐（{{ subject.project_grade }}）</span><td>
 	      {% endif %}
 	    </tr>
+=======
+	              {% if subject.recommend %}
+                  <td><span>已推荐（{{ subject.project_grade }}）</span><td>
+                {% else %}
+                  <td><a data-toggle="modal" href="#grade_choice_2" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">未推荐（{{ subject.project_grade }}）</a><td>
+                {% endif %}
+	     </tr>
+>>>>>>> fd6ee4d... fix bug @ change rating of subject
 	    {%endfor%}
 	  </tbody>
         </table>
@@ -120,11 +129,18 @@
     <h3>选择是否推荐</h3>
   </div>
   <div class="modal-body">
+<<<<<<< HEAD
     <select name="subject_grade" id="id_subject_grade">
 
       {% if is_minzu_school %}  
         <option value="1">推荐(校级及校级以上)</option>
       {% else %}
+=======
+    <select name="subject_grade" id="id_subject_recommend">
+      {% if is_minzu_school %}
+        <option value="1">推荐（校级以及校级以上）</option>
+      {% else %}  
+>>>>>>> fd6ee4d... fix bug @ change rating of subject
         <option value="1">推荐(省级及省级以上)</option>
         <option value="0">校级</option>
       {% endif %}
@@ -134,6 +150,25 @@
   <div class="modal-footer">
     <a class="btn" data-dismiss="modal">关闭</a>
     <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
+  </div>
+</div>
+</div><!--end grade_choice-->
+
+<div class="modal hide fade" style="display: none;" id="grade_choice_2">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>选择修改后的等级</h3>
+  </div>
+  <div class="modal-body">
+    <select name="subject_grade" id="id_subject_grade">
+      <option value="school">校级</option>
+      <option value="institute">院级</option>
+      <option value="undefined">未指定</option>
+    </select>
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
   </div>
 </div>
 </div><!--end grade_choice-->
