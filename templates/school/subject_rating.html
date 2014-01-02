@@ -85,21 +85,12 @@
 	      <td>{{subject.adminuser}}</td>
               <td>{{subject.members}}</td>
 	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-<<<<<<< HEAD
-	      {% if subject.recommend %}
-	        <td><span>已推荐（{{ subject.project_grade }}）</span><td>
-	      {% else %}
-	        <td><span>未推荐（{{ subject.project_grade }}）</span><td>
-	      {% endif %}
-	    </tr>
-=======
 	              {% if subject.recommend %}
                   <td><span>已推荐（{{ subject.project_grade }}）</span><td>
                 {% else %}
                   <td><a data-toggle="modal" href="#grade_choice_2" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">未推荐（{{ subject.project_grade }}）</a><td>
                 {% endif %}
 	     </tr>
->>>>>>> fd6ee4d... fix bug @ change rating of subject
 	    {%endfor%}
 	  </tbody>
         </table>
@@ -130,12 +121,15 @@
   </div>
   <div class="modal-body">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <select name="subject_grade" id="id_subject_grade">
 
       {% if is_minzu_school %}  
         <option value="1">推荐(校级及校级以上)</option>
       {% else %}
 =======
+=======
+>>>>>>> fd6ee4d... fix bug @ change rating of subject
     <select name="subject_grade" id="id_subject_recommend">
       {% if is_minzu_school %}
         <option value="1">推荐（校级以及校级以上）</option>
