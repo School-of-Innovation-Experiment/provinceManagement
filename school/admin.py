@@ -9,7 +9,7 @@ from django.contrib import admin
 from school.models import *
 
 
-RegisterClass = (ProjectSingle,
+RegisterClass = (
                  Project_Is_Assigned,
                  Re_Project_Expert,
                  PreSubmit,
@@ -22,3 +22,8 @@ RegisterClass = (ProjectSingle,
 
 for item in RegisterClass:
     admin.site.register(item)
+
+class ProjectSingleAdmin(admin.ModelAdmin):
+    search_fields = ['project_code','title']
+
+admin.site.register(ProjectSingle,ProjectSingleAdmin)
