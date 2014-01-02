@@ -683,7 +683,7 @@ class AdminStaffService(object):
             if auth_identity == ADMINSTAFF_USER:
                 pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
                                                       Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif auth_identity = SCHOOL_USER:
+            elif auth_identity == SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
             elif auth_identity == TEACHER_USER:
