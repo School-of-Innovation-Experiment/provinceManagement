@@ -668,7 +668,7 @@ class AdminStaffService(object):
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
     @csrf.csrf_protect
-    def projectListInfor(request):
+    def projectListInfor(request,auth_identity = ADMINSTAFF_USER):
         """
         默认只显示省级和国家级项目
         """
@@ -680,16 +680,16 @@ class AdminStaffService(object):
             over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-            if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+            if auth_identity == ADMINSTAFF_USER:
                 pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
                                                       Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=SCHOOL_USER):
+            elif auth_identity = SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=TEACHER_USER):
+            elif auth_identity == TEACHER_USER:
                 pro_list = ProjectSingle.objects.filter(Q(adminuser__userid=request.user) & \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=EXPERT_USER):
+            elif auth_identity == EXPERT_USER:
                 pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
         loginfo(p=pro_list,label="pro_list")
