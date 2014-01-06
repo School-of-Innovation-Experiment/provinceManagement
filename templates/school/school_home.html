@@ -24,6 +24,7 @@
 	<th>中期检查表</th>
 	<th>结题验收</th>
 	<th>项目汇编</th>
+        <th>联系方式</th>
 	<th>是否结题</th>
 	<th>查看过程记录</th>
       </tr>
@@ -52,8 +53,12 @@
     {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
     {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
   </td>
+  <td>
+     {{item.telephone}}
+  </td>
 <td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
+       
           {%if item.is_showoverstatus%}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
           {% endif %}
