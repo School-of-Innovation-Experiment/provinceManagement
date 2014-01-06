@@ -132,13 +132,13 @@ class Teacher_Enterprise(models.Model):
     """
     Enterprise teacher for Enterprise Project
     """
-    name = models.CharField(blank=True, null=True, max_length=100,
+    name = models.CharField(blank=True, null=True, max_length=100, default="",
                             verbose_name=u"姓名")
-    telephone = models.CharField(blank=True, null=True, max_length=20,
+    telephone = models.CharField(blank=True, null=True, max_length=20, default="",
                                  verbose_name=u"联系电话")
-    titles = models.CharField(blank=True, null=True, max_length=20,
+    titles = models.CharField(blank=True, null=True, max_length=20, default="",
                               verbose_name=u"职称")
-    jobs = models.CharField(max_length=100, blank=True, null=True,
+    jobs = models.CharField(max_length=100, blank=True, null=True, default="",
                             verbose_name=u"工作单位")
 
     class Meta:
@@ -146,7 +146,7 @@ class Teacher_Enterprise(models.Model):
         verbose_name_plural = "企业导师"
 
     def __unicode__(self):
-        return self.name
+        return unicode(self.name) or u'未命名'
 
 class PreSubmit(models.Model):
     """
