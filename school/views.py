@@ -225,7 +225,6 @@ def home_view(request):
                 project_overstatus=''
             else:
                 project_overstatus=OverStatus.objects.get(status=project_overstatus)
-
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
             # q2 = (project_isover and Q(is_over=project_isover)) or None
@@ -246,7 +245,7 @@ def home_view(request):
         project_manage_form = forms.ProjectManageForm(school=school)
 
     pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性以及文件下载链接
-
+    pro_list = add_telephone(pro_list)
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else: havedata_p = False
