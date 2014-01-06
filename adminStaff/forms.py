@@ -178,7 +178,7 @@ class SchoolCategoryForm(forms.Form):
         self.fields["school_choice"].choices = SCHOOL_CHOICE
 
 class SubjectGradeForm(forms.Form):
-    subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_UN and grade[0] != GRADE_CITY]
+    subject_grade_choice =  [grade for grade in PROJECT_GRADE_CHOICES if grade[0] != GRADE_CITY]
     subject_grade_choice = tuple(subject_grade_choice)
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
 
