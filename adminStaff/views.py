@@ -71,6 +71,8 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
+
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -834,6 +836,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
+        
         """
             readonly determined by time
             is_show determined by identity
