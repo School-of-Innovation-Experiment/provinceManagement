@@ -32,8 +32,7 @@
     <tbody>
       {% for item in pro_list%}
       <tr>
-	<td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:15}} </a></td>
-  
+	<td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:15}} </a></td>  
 	<td>{{item.project_code}}</td>
 	<td>{{item.project_grade}}</td>
 	<td>{{item.adminuser}}</td>
@@ -53,12 +52,10 @@
     {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
     {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
   </td>
-  <td>
-     {{item.telephone}}
-  </td>
+        <td>{{item.telephone}}</td>
 <td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
-       
+ 
           {%if item.is_showoverstatus%}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
           {% endif %}

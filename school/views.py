@@ -127,7 +127,6 @@ def final_report_view(request, pid=None):
 @login_required
 @authority_required(SCHOOL_USER)
 def application_report_view(request, pid=None):
-        
         """
             readonly determined by time
             is_show determined by identity
@@ -243,14 +242,13 @@ def home_view(request):
                 pro_list = ProjectSingle.objects.filter(Q(school_id=school)).order_by('project_grade')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
-
+    pro_list = pro_list.order_by('adminuser')
     pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性以及文件下载链接
-    pro_list = add_telephone(pro_list)
+
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else: havedata_p = False
 
-    pro_list = pro_list.order_by('adminuser')
     context = {
                 'havedata_p':havedata_p,
                 'pro_list': pro_list,
