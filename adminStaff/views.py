@@ -697,12 +697,11 @@ class AdminStaffService(object):
             elif auth_identity == EXPERT_USER:
                 pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
+        pro_list = pro_list.order_by('adminuser')
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
         else: havedata_p = False
-
-        pro_list = pro_list.order_by('adminuser')
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
