@@ -102,15 +102,12 @@ def MemberDelete(request, deleteId):
 
 @dajaxice_register
 def MemberChange(request, form, origin):
-    print "hehe" 
 
     stugroup_form = StudentGroupForm(deserialize_form(form))
     if not stugroup_form.is_valid():
-        print 'sb'
         ret = {'status': '2',
                'error_id': stugroup_form.errors.keys(),
                'message': u"输入有误，请重新输入"}
-        print stugroup_form["student_id"]
     elif not origin: # 添加或更新成员
         ret = new_or_update_member(request, stugroup_form)
     else:  # 更换成员
