@@ -20,7 +20,9 @@ from const import MEMBER_NUM_LIMIT
 from const import *
 
 def getProject(request):
-    if check_auth(request.user, ADMINSTAFF_USER):
+    ok = check_auth(request.user, ADMINSTAFF_USER)
+    ok = ok or check_auth(request.user, SCHOOL_USER)
+    if ok == True:
         try:
             strUrl = request.META['HTTP_REFERER']
             pid = strUrl.split('/')[-1]
@@ -43,6 +45,7 @@ def MemberChangeInfo(request, form, origin):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    
     project = getProject(request)
 
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
@@ -162,8 +165,7 @@ def new_or_update_member(request, stugroup_form):
 
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
-
-    # loginfo(request.user)
+    loginfo(request.user)
     
     project = getProject(request)
     group = project.student_group_set
@@ -243,9 +245,13 @@ def FileDeleteConsistence(request, pid, fid):
     """
     Delete files in history file list
     """
+    logger.info("sep delete files"+"**"*10)
     # check mapping relation
     f = get_object_or_404(UploadedFiles, file_id=fid)
     p = get_object_or_404(ProjectSingle, project_id=pid)
+
+    logger.info(f.project_id.project_id)
+    logger.info(p.project_id)
 
     if f.project_id.project_id != p.project_id:
         return simplejson.dumps({"is_deleted": False,
@@ -259,3 +265,6 @@ def FileDeleteConsistence(request, pid, fid):
     else:
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
+
+
+    
