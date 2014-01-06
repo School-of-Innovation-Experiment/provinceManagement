@@ -68,6 +68,11 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+
+
+
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
@@ -663,6 +668,8 @@ class AdminStaffService(object):
                 pro_obj.project_unique_code = "无"
                 add_fileurl(pro_obj)
 
+        context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
+        context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
     @csrf.csrf_protect
@@ -829,6 +836,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
+        
         """
             readonly determined by time
             is_show determined by identity
