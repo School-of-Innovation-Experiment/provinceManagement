@@ -430,14 +430,13 @@ def is_showoverstatus(project_list):
         else:
             temp.is_showoverstatus = True
         add_fileurl(temp)
+        add_telephone(temp)
     return project_list
-def add_telephone(project_list):
-    for temp in project_list:
-        student_groups = Student_Group.objects.filter(project = temp)
-        for student_group in student_groups:
-            temp.telephone =student_group.telephone
-            break
-    return project_list
+def add_telephone(project):
+    student_groups = Student_Group.objects.filter(project = project)
+    for student_group in student_groups:
+        project.telephone =student_group.telephone
+        break
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
