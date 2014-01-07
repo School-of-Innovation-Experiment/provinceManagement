@@ -127,8 +127,6 @@ def application_report_view(request,pid=None,is_expired=False):
         is_innovation determined by project_category
     """
 
-    print "-=" * 10
-
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)
@@ -160,10 +158,11 @@ def application_report_view(request,pid=None,is_expired=False):
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info(" info  application Form Valid Failed"+"**"*10)
-                logger.info(info_form.errors)
-                logger.info(application_form.errors)
-                logger.info("--"*10)
+                pass                
+                # logger.info(" info  application Form Valid Failed"+"**"*10)
+                # logger.info(info_form.errors)
+                # logger.info(application_form.errors)
+                # logger.info("--"*10)
         else :
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
@@ -172,11 +171,12 @@ def application_report_view(request,pid=None,is_expired=False):
                     project.save()
                     return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                logger.info(info_form.errors)
-                logger.info(application_form.errors)
-                logger.info(teacher_enterpriseform.errors)
-                logger.info("--"*10)
+                pass
+                # logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                # logger.info(info_form.errors)
+                # logger.info(application_form.errors)
+                # logger.info(teacher_enterpriseform.errors)
+                # logger.info("--"*10)
 
     else:
         info_form = InfoForm(instance=project,pid=pid)
@@ -224,9 +224,10 @@ def final_report_view(request, pid=None,is_expired=False):
             project.save()
             return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
-            logger.info("Final Form Valid Failed"+"**"*10)
-            logger.info(final_form.errors)
-            logger.info("--"*10)
+            pass
+            # logger.info("Final Form Valid Failed"+"**"*10)
+            # logger.info(final_form.errors)
+            # logger.info("--"*10)
 
     final_form = FinalReportForm(instance=final)
     # techcompetition_form = TechCompetitionForm(instance=techcompetition)

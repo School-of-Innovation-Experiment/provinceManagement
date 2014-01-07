@@ -20,7 +20,9 @@ from const import MEMBER_NUM_LIMIT
 from const import *
 
 def getProject(request):
-    if check_auth(request.user, ADMINSTAFF_USER):
+    ok = check_auth(request.user, ADMINSTAFF_USER)
+    ok = ok or check_auth(request.user, SCHOOL_USER)
+    if ok == True:
         try:
             strUrl = request.META['HTTP_REFERER']
             pid = strUrl.split('/')[-1]
@@ -43,6 +45,7 @@ def MemberChangeInfo(request, form, origin):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    
     project = getProject(request)
 
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
