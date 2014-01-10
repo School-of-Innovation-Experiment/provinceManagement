@@ -140,7 +140,6 @@ def application_report_view(request, pid=None):
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
         readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-        
 
         if project.project_category.category == CATE_INNOVATION:
             iform = ApplicationReportForm
@@ -163,7 +162,7 @@ def application_report_view(request, pid=None):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    pass                    
+                    pass 
                     # logger.info(" info  application Form Valid Failed"+"**"*10)
                     # logger.info(info_form.errors)
                     # logger.info(application_form.errors)

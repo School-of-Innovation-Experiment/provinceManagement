@@ -4,14 +4,9 @@
   项目列表
 </h3>
 {% if havedata_p %}
-<form id="project_manage_form" method="POST" action="/school/" >
-  {% csrf_token %}
-  {{project_manage_form.project_grade}}
-  {{project_manage_form.project_year}}
-  <!-- {{project_manage_form.project_isover}} -->
-  {{project_manage_form.project_overstatus}}
-  <input type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索"/>
-</form>
+   <form id="project_manage_form" method="POST" action="/school/" >
+      {%include "school/widgets/project_filter_form.html"%}
+   </form>
 <div>
   <table class="table table-hover">
     <thead>
@@ -35,7 +30,7 @@
 	<td>{{item.title|truncatechars:15}}</td>  
 	<td>{{item.project_code}}</td>
 	<td>{{item.project_grade}}</td>
-	<td>{{item.adminuser}}</td>
+	<td>{{item.adminuser.get_name}}</td>
   <td>
     {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
     {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
@@ -58,6 +53,8 @@
  
           {%if item.is_showoverstatus%}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
+          {% else %}
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
           {% endif %}
 	</td>
 	<td>
