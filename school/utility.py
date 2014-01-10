@@ -435,7 +435,7 @@ def is_showoverstatus(project_list):
 def add_telephone(project):
     student_groups = Student_Group.objects.filter(project = project)
     for student_group in student_groups:
-        project.telephone =student_group.telephone
+        project.telephone =student_group.get_telephone_display
         break
 
 def add_fileurl(project):
