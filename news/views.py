@@ -15,6 +15,7 @@ from django.http import HttpResponse, Http404
 from backend.utility import getContext
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 import datetime, os
+from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
