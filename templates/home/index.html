@@ -5,200 +5,211 @@
 {% endblock %}
 {% block content %}
 
-  <!-- index style -->
-  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}style/homepage.css" type="text/css" media="screen" />
-  <div class="body">
+<!-- index style -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}style/homepage.css" type="text/css" media="screen" />
+<div class="body">
 
-    <!-- showcss: ~/document/django/InnovationManagement/media/style/homepage.css -->
+  <!-- showcss: ~/document/django/InnovationManagement/media/style/homepage.css -->
 
-    <div class="home-title">
-      <p class='schoolLogo-image'></p>
-      <p>欢迎使用<span style="color: #fff;"> 大连民族学院创新创业项目管理平台</span></p>
-    </div>
-    <div class="home-out-wrap">
-      <div class="home-main">
-        <div class="home-aside">
-          <div class="home-nav">
-            <ul>
-              <li>
-                <a href="/">主页</a>
-              </li>
-              <li>
-                <a href="/features/">平台介绍</a>
-              </li>
-              <li>
-                <a href="/show/">成果展示</a>
-              </li>
-            </ul>
-            <br/>
-            <ul>
+  {% if IS_DLUT_SCHOOL %}
+  <div class="home-title">
+    <p>欢迎使用<span style="color: #fff;"> 大连理工大学创新创业项目管理平台</span></p>
+  </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  <div class="home-title">
+    <!-- <p class='schoolLogo-image'></p> -->
+    <p>欢迎使用<span style="color: #fff;"> 大学生创新创业项目管理平台</span></p>
+  </div>
+  {% endif %}
+  <div class="home-out-wrap">
+    <div class="home-main">
+      <div class="home-aside">
+        <div class="home-nav">
+          <ul>
+            <li>
+              <a href="/">主页</a>
+            </li>
+            <li>
+              <a href="/features/">平台介绍</a>
+            </li>
+            <li>
+              <a href="/show/">成果展示</a>
+            </li>
+          </ul>
+          <br/>
+          <ul>
             {% if request.user.is_authenticated %}
-              <li>
-                  <a href="/settings/profile">用户信息: {{ request.user.username }}</a>
-              </li>
-              <li><a>角色选择</a></li>
-              {%if userauth.is_schooler %}
-              <li>
-                  <a  href={% url school.views.home_view %} >---参赛学院</a>
-              </li>
-              {%endif%}
-              {%if userauth.is_adminstaff %}
-              <li>
-                  <a href="/adminStaff/" >---校级管理员</a>
-              </li>
-              {%endif%}
-              {%if userauth.is_experter %}
-              <li>
-                  <a href={% url expert.views.home_view %} >---评审专家</a>
-              </li>
-              {%endif%}
-              {%if userauth.is_teacher %}
-              <li>
-                  <a  href={% url teacher.views.home_view %} >---指导教师</a>
-              </li>
-              {%endif%}
-              {%if userauth.is_student %}
-              <li>
-                  <a  href={% url student.views.home_view %} >---参赛学生</a>
-              </li>
-              {%endif%}
-              {%if request.user.is_superuser%}
-              <li>
-                  <a href="/admin/"  >---超级用户</a>
-              </li>
-              {%endif%}
-              <li>
-                <a href="/accounts/logout">注销</a>
-              </li>
+            <li>
+              <a href="/settings/profile">用户信息: {{ request.user.username }}</a>
+            </li>
+            <li><a>角色选择</a></li>
+            {%if userauth.is_schooler %}
+            <li>
+              <a  href={% url school.views.home_view %} >---参赛学院</a>
+            </li>
+            {%endif%}
+            {%if userauth.is_adminstaff %}
+            <li>
+              <a href="/adminStaff/" >---校级管理员</a>
+            </li>
+            {%endif%}
+            {%if userauth.is_experter %}
+            <li>
+              <a href={% url expert.views.home_view %} >---评审专家</a>
+            </li>
+            {%endif%}
+            {%if userauth.is_teacher %}
+            <li>
+              <a  href={% url teacher.views.home_view %} >---指导教师</a>
+            </li>
+            {%endif%}
+            {%if userauth.is_student %}
+            <li>
+              <a  href={% url student.views.home_view %} >---参赛学生</a>
+            </li>
+            {%endif%}
+            {%if request.user.is_superuser%}
+            <li>
+              <a href="/admin/"  >---超级用户</a>
+            </li>
+            {%endif%}
+            <li>
+              <a href="/accounts/logout">注销</a>
+            </li>
             {% else %}
-      	      <li ><a href="/accounts/login">登陆</a></li>
+      	    <li ><a href="/accounts/login">登陆</a></li>
             {% endif%}
-            </ul>
-          </div>
-          <div class="home-link">
-            <h6>相关链接:</h6>
-            <ul>
-              <li><a href="http://www.dlut.edu.cn" >大连理工大学</a></li>
-              <li><a href="http://gs.dlut.edu.cn">大工研究生主页</a></li>
-              <li><a href="http://teach.dlut.edu.cn">大工教务处主页</a></li>
-              <li><a href="http://dasai.upln.cn/index.php?m=yp">辽宁省大学生创新创业竞赛</a></li>
-            </ul>
-          </div>
+          </ul>
         </div>
-        {% block home-content %}
-          <div class="home-content">
-            <!-- Carousel  ================================================== -->
-            <div id="myCarousel" class="carousel slide">
-              <div class="carousel-inner">
-                <div class="item">
-                  <img src="{{STATIC_URL}}/images/slide/slide-01.jpg" alt="">
-                  <div class="carousel-caption">
-                    <h1>创新创业训练计划</h1>
-                    <p class="lead">开始创新、创业的奇妙旅程</p>
-                    <a class="btn btn-large btn-primary" href="/accounts/login">进入系统</a>
-                  </div>
-                      <li>
-                </div>
-                <div class="item active">
-                  <img src="{{STATIC_URL}}/images/slide/slide-02.jpg" alt="">
-                  <div class="carousel-caption">
-                    <h1>创业</h1>
-                    <p class="lead">民族复兴的一把金钥匙</p>
-                    <a class="btn btn-large btn-primary" href="/features">平台介绍</a>
-                  </div>
-                </div>
-                <div class="item">
-                  <img src="{{STATIC_URL}}/images/slide/slide-03.jpg" alt="">
-                  <div class="carousel-caption">
-                    <h1>创新</h1>
-                    <p class="lead">民族进步的灵魂，国家兴旺发达的不竭动力</p>
-                    <a class="btn btn-large btn-primary" href="/show">成果展示</a>
-                  </div>
-                </div>
-              </div>
-              <a class="left carousel-control" href="/#myCarousel" data-slide="prev">‹</a>
-              <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
-
-            </div><!-- /.carousel -->
-            <div class="front-wrap">
-              <div class="home-news">
-                <h3>焦点新闻 <small>Hot</small></h3>
-                <!-- <table class="news"> -->
-                <!--   {% if the_latest_news %} -->
-                <!--   <tbody> -->
-                <!--     <tr> -->
-                <!--       <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3> -->
-                <!--         {% autoescape off %} -->
-                <!--         {{ the_latest_news.news_content }} -->
-                <!--         {% endautoescape %} -->
-                <!--       </td> -->
-                <!--     </tr> -->
-                <!--   </tbody> -->
-                <!--   {% endif %} -->
-                <!-- </table> -->
-                <div class="documents-list">
-                  <table class="documents">
-                    <colgroup>
-                      <col width="5%" />
-                      <col width="75%" />
-                      <col width="15%" />
-                    </colgroup>
-                    <tbody>
-                      {% for news in homepage_news_list %}
-                      <tr>
-                        <td>{{ news.list_index }}.</td>
-                        <td>
-                          <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
-                        </td>
-                        <td>
-                          {{ news.news_date|date:"[y-m-d]" }}
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-                <hr />
-                <strong><a href="newslist/">更多»</a></strong>
-              </div> <!-- home-news -->
-              <div class="home-news">
-                <h3>文件下载 <small>Documents</small></h3>
-                <div class="documents-list">
-                  <table class="documents">
-                    <colgroup>
-                      <col width="5%" />
-                      <col width="75%" />
-                      <col width="15%" />
-                    </colgroup>
-                    <tbody>
-                      {% for docs in homepage_docs_list %}
-                      <tr>
-                        <td>{{ docs.list_index }}.</td>
-                        <td>
-                          <a href="newslist/{{ docs.id }}/download_news_doc">{{ docs.document_name }}</a>
-                        </td>
-                        <td>
-                          {{ docs.news_date|date:"[y-m-d]" }}
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-                <hr />
-                <strong><a href="newslist/">更多»</a></strong>
-              </div> <!-- home-news -->
-            </div> <!-- front-wrap -->
-          </div> <!-- home-content -->
-        {% endblock %}
+        <div class="home-link">
+          {% if IS_DLUT_SCHOOL %}
+          <h6>相关链接:</h6>
+          <ul>
+            <li><a href="http://www.dlut.edu.cn" >大连理工大学</a></li>
+            <li><a href="http://gs.dlut.edu.cn">大工研究生主页</a></li>
+            <li><a href="http://teach.dlut.edu.cn">大工教务处主页</a></li>
+            <li><a href="http://dasai.upln.cn/index.php?m=yp">辽宁省大学生创新创业竞赛</a></li>
+          </ul>
+          {% endif %}
+          {% if IS_MINZU_SCHOOL %}
+          {% endif %}
+        </div>
       </div>
-    </div> <!-- out-warp -->
-  </div> <!-- body -->
+      {% block home-content %}
+      <div class="home-content">
+        <!-- Carousel  ================================================== -->
+        <div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="item">
+              <img src="{{STATIC_URL}}/images/slide/slide-01.jpg" alt="">
+              <div class="carousel-caption">
+                <h1>创新创业训练计划</h1>
+                <p class="lead">开始创新、创业的奇妙旅程</p>
+                <a class="btn btn-large btn-primary" href="/accounts/login">进入系统</a>
+              </div>
+              <li>
+            </div>
+            <div class="item active">
+              <img src="{{STATIC_URL}}/images/slide/slide-02.jpg" alt="">
+              <div class="carousel-caption">
+                <h1>创业</h1>
+                <p class="lead">民族复兴的一把金钥匙</p>
+                <a class="btn btn-large btn-primary" href="/features">平台介绍</a>
+              </div>
+            </div>
+            <div class="item">
+              <img src="{{STATIC_URL}}/images/slide/slide-03.jpg" alt="">
+              <div class="carousel-caption">
+                <h1>创新</h1>
+                <p class="lead">民族进步的灵魂，国家兴旺发达的不竭动力</p>
+                <a class="btn btn-large btn-primary" href="/show">成果展示</a>
+              </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="/#myCarousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
+
+        </div><!-- /.carousel -->
+        <div class="front-wrap">
+          <div class="home-news">
+            <h3>焦点新闻 <small>Hot</small></h3>
+            <!-- <table class="news"> -->
+            <!--   {% if the_latest_news %} -->
+            <!--   <tbody> -->
+            <!--     <tr> -->
+            <!--       <td><h3><a href="newslist/{{ the_latest_news.id }}">{{ the_latest_news.news_title }}</a></h3> -->
+            <!--         {% autoescape off %} -->
+            <!--         {{ the_latest_news.news_content }} -->
+            <!--         {% endautoescape %} -->
+            <!--       </td> -->
+            <!--     </tr> -->
+            <!--   </tbody> -->
+            <!--   {% endif %} -->
+            <!-- </table> -->
+            <div class="documents-list">
+              <table class="documents">
+                <colgroup>
+                  <col width="5%" />
+                  <col width="75%" />
+                  <col width="15%" />
+                </colgroup>
+                <tbody>
+                  {% for news in homepage_news_list %}
+                  <tr>
+                    <td>{{ news.list_index }}.</td>
+                    <td>
+                      <a href="newslist/{{ news.id }}">{{ news.news_title }}</a>
+                    </td>
+                    <td>
+                      {{ news.news_date|date:"[y-m-d]" }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <hr />
+            <strong><a href="newslist/">更多»</a></strong>
+          </div> <!-- home-news -->
+          <div class="home-news">
+            <h3>文件下载 <small>Documents</small></h3>
+            <div class="documents-list">
+              <table class="documents">
+                <colgroup>
+                  <col width="5%" />
+                  <col width="75%" />
+                  <col width="15%" />
+                </colgroup>
+                <tbody>
+                  {% for docs in homepage_docs_list %}
+                  <tr>
+                    <td>{{ docs.list_index }}.</td>
+                    <td>
+                      <a href="newslist/{{ docs.id }}/download_news_doc">{{ docs.document_name }}</a>
+                    </td>
+                    <td>
+                      {{ docs.news_date|date:"[y-m-d]" }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <hr />
+            <strong><a href="newslist/">更多»</a></strong>
+          </div> <!-- home-news -->
+        </div> <!-- front-wrap -->
+      </div> <!-- home-content -->
+      {% endblock %}
+    </div>
+  </div> <!-- out-warp -->
+</div> <!-- body -->
 
 {% endblock %}
 {% block bottom_js %}
-  {{ block.super }}
+{{ block.super }}
 {% endblock %}
 {% block home-footer %}
 {% endblock %}
