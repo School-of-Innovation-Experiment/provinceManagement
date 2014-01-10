@@ -673,7 +673,7 @@ class AdminStaffService(object):
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
     @csrf.csrf_protect
-    def projectListInfor(request):
+    def projectListInfor(request,auth_identity = ADMINSTAFF_USER):
         """
         默认只显示省级和国家级项目
         """
@@ -685,18 +685,19 @@ class AdminStaffService(object):
             over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-            if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+            if auth_identity == ADMINSTAFF_USER:
                 pro_list=ProjectSingle.objects.filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
                                                       Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=SCHOOL_USER):
+            elif auth_identity == SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=TEACHER_USER):
+            elif auth_identity == TEACHER_USER:
                 pro_list = ProjectSingle.objects.filter(Q(adminuser__userid=request.user) & \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-            elif check_auth(user=request.user, authority=EXPERT_USER):
+            elif auth_identity == EXPERT_USER:
                 pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
+        pro_list = pro_list.order_by('adminuser')
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
@@ -816,7 +817,6 @@ class AdminStaffService(object):
                 context = getContext(news_list, page, 'news', 0)
                 context.update({"newsform": NewsForm()})
                 return render(request, "adminStaff/news_release.html", context)
-                # return redirect('/newslist/')
         else:
             context = getContext(news_list, page, 'news', 0)
             context.update({"newsform": NewsForm()})
@@ -851,7 +851,6 @@ class AdminStaffService(object):
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
         readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-        logger.info(readonly)
 
         if project.project_category.category == CATE_INNOVATION:
             iform = ApplicationReportForm
@@ -874,10 +873,11 @@ class AdminStaffService(object):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    logger.info(" info  application Form Valid Failed"+"**"*10)
-                    logger.info(info_form.errors)
-                    logger.info(application_form.errors)
-                    logger.info("--"*10)
+                    pass
+                    # logger.info(" info  application Form Valid Failed"+"**"*10)
+                    # logger.info(info_form.errors)
+                    # logger.info(application_form.errors)
+                    # logger.info("--"*10)
             else :
                 teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
                 if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
@@ -885,11 +885,12 @@ class AdminStaffService(object):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                    logger.info(info_form.errors)
-                    logger.info(application_form.errors)
-                    logger.info(teacher_enterpriseform.errors)
-                    logger.info("--"*10)
+                    pass                    
+                    # logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                    # logger.info(info_form.errors)
+                    # logger.info(application_form.errors)
+                    # logger.info(teacher_enterpriseform.errors)
+                    # logger.info("--"*10)
         else:
             info_form = InfoForm(instance=project,pid=pid)
             application_form = iform(instance=pre)
@@ -924,21 +925,19 @@ class AdminStaffService(object):
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
         readonly = False
-        print "mid" * 10
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
             if final_form.is_valid():
-                print "$$$" * 20
                 final_form.save()
                 project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
                 project.save()
                 #return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Final Form Valid Failed"+"**"*10)
-                logger.info(final_form.errors)
-                logger.info("--"*10)
-
+                pass            
+                # logger.info("Final Form Valid Failed"+"**"*10)
+                # logger.info(final_form.errors)
+                # logger.info("--"*10)
         final_form = FinalReportForm(instance=final)
         #techcompetition_form = TechCompetitionForm(instance=techcompetition)
 
@@ -947,7 +946,6 @@ class AdminStaffService(object):
               #   'techcompetition':techcompetition,
                 'readonly':readonly,
                 }
-        print "end:" * 20 
         return render(request, 'adminStaff/final.html', data)
 
 

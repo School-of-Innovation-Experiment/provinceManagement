@@ -28,6 +28,7 @@ from const.models import SchoolDict, ProjectCategory, InsituteCategory, SchoolRe
 from const.models import UserIdentity, ProjectGrade, ProjectStatus
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile,AdminStaffProfile
+from student.models import Student_Group
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -429,7 +430,13 @@ def is_showoverstatus(project_list):
         else:
             temp.is_showoverstatus = True
         add_fileurl(temp)
+        add_telephone(temp)
     return project_list
+def add_telephone(project):
+    student_groups = Student_Group.objects.filter(project = project)
+    for student_group in student_groups:
+        project.telephone =student_group.get_telephone_display
+        break
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)

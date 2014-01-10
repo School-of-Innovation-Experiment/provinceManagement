@@ -58,7 +58,6 @@ def member_change(request, pid):
         """
         project group member change
         """
-        print "fuck ***" 
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
 
@@ -88,7 +87,8 @@ def final_report_view(request, pid=None):
             In: id, it is project id
         """
         is_expired=False
-        loginfo(p=pid+str(is_expired), label="in application")
+        # loginfo(p=pid+str(is_expired), label="in application")
+
         final = get_object_or_404(FinalSubmit, project_id=pid)
         project = get_object_or_404(ProjectSingle, project_id=pid)
         #techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
@@ -98,20 +98,19 @@ def final_report_view(request, pid=None):
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
         readonly = False
-        print "mid" * 10
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
             if final_form.is_valid():
-                print "$$$" * 20
                 final_form.save()
                 project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
                 project.save()
                 #return HttpResponseRedirect(reverse('student.views.home_view'))
             else:
-                logger.info("Final Form Valid Failed"+"**"*10)
-                logger.info(final_form.errors)
-                logger.info("--"*10)
+                pass
+                # logger.info("Final Form Valid Failed"+"**"*10)
+                # logger.info(final_form.errors)
+                # logger.info("--"*10)
 
         final_form = FinalReportForm(instance=final)
         #techcompetition_form = TechCompetitionForm(instance=techcompetition)
@@ -121,7 +120,6 @@ def final_report_view(request, pid=None):
               #   'techcompetition':techcompetition,
                 'readonly':readonly,
                 }
-        print "end:" * 20 
         return render(request, 'school/final.html', data)
 
 
@@ -129,22 +127,19 @@ def final_report_view(request, pid=None):
 @login_required
 @authority_required(SCHOOL_USER)
 def application_report_view(request, pid=None):
-        
         """
             readonly determined by time
             is_show determined by identity
             is_innovation determined by project_category
-        """        
-
+        """
         is_expired=False
-        loginfo(p=pid+str(is_expired), label="in application")
+        # loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 
         is_currentyear = check_year(project)
         is_applying = check_applycontrol(project)
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
         readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-        logger.info(readonly)
 
         if project.project_category.category == CATE_INNOVATION:
             iform = ApplicationReportForm
@@ -167,10 +162,11 @@ def application_report_view(request, pid=None):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    logger.info(" info  application Form Valid Failed"+"**"*10)
-                    logger.info(info_form.errors)
-                    logger.info(application_form.errors)
-                    logger.info("--"*10)
+                    pass 
+                    # logger.info(" info  application Form Valid Failed"+"**"*10)
+                    # logger.info(info_form.errors)
+                    # logger.info(application_form.errors)
+                    # logger.info("--"*10)
             else :
                 teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
                 if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
@@ -178,11 +174,12 @@ def application_report_view(request, pid=None):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                    logger.info(info_form.errors)
-                    logger.info(application_form.errors)
-                    logger.info(teacher_enterpriseform.errors)
-                    logger.info("--"*10)
+                    pass
+                    # logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                    # logger.info(info_form.errors)
+                    # logger.info(application_form.errors)
+                    # logger.info(teacher_enterpriseform.errors)
+                    # logger.info("--"*10)
         else:
             info_form = InfoForm(instance=project,pid=pid)
             application_form = iform(instance=pre)
@@ -226,7 +223,6 @@ def home_view(request):
                 project_overstatus=''
             else:
                 project_overstatus=OverStatus.objects.get(status=project_overstatus)
-
             loginfo(p=project_grade,label="project_grade")
             q1 = (project_year and Q(year=project_year)) or None
             # q2 = (project_isover and Q(is_over=project_isover)) or None
@@ -245,12 +241,12 @@ def home_view(request):
                 pro_list = ProjectSingle.objects.filter(Q(school_id=school)).order_by('project_grade')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
-
+    pro_list = pro_list.order_by('adminuser')
     pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性以及文件下载链接
-
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else: havedata_p = False
+
     context = {
                 'havedata_p':havedata_p,
                 'pro_list': pro_list,
@@ -456,7 +452,7 @@ def project_control(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
-    context = AdminStaffService.projectListInfor(request)
+    context = AdminStaffService.projectListInfor(request,SCHOOL_USER)
     return render_to_response("school/funds_manage.html",context,context_instance=RequestContext(request))
 
 @csrf.csrf_protect
