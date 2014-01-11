@@ -164,11 +164,11 @@ def judge_is_assigned(request, school):
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
-def get_subject_review_list(request, project_id):
+def get_subject_review_list(request, project_id, identity):
     '''
     to get subject evaluate list through project_id
     '''
-    review_list = AdminStaffService.GetSubjectReviewList(project_id)
+    review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
 
     cnt_of_list = len(review_list)
 
