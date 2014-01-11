@@ -181,6 +181,8 @@ def new_or_update_member(request, stugroup_form):
     else: # new student
         if group.count() == MEMBER_NUM_LIMIT[project.project_category.category]:
             ret = {'status': '1', 'message': u"人员已满，不可添加"}
+        elif sum(student_id in [student.studentId for student in project.student_group_set.all()] for project in get_running_project_query_set()):
+            ret = {'status': '1', 'message': u"相同学号已存在于其它正在进行的项目中"}
         else:
             new_student = Student_Group(studentId = student_id,
                                         studentName = student_name,
