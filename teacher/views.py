@@ -53,7 +53,7 @@ def application_report_view(request,pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)  
     is_currentyear = check_year(project)
     is_applying = check_applycontrol(project)  
-    readonly= is_expired or not is_currentyear or not is_applying
+    readonly= not is_applying or project.is_past or not is_expired
     if check_auth(user=request.user,authority=TEACHER_USER):
         is_show = False
     else:
