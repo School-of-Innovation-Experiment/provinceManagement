@@ -1,18 +1,18 @@
 {% extends "showtime/base/_content.html" %}
 {%block show-content%}
-  <div class="container">
-    <div class="row">
-      <div class="span6" >
-	<div class="introShow">
-	  <div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" title="project-photo"><img title="project-img" id="midImg" src="{{ first_img }}" class="Picture220"/></a>
-	  </div>
-	  <div class="scroll" id="scroll">
-	    <a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
-	    <a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
-	    <ul id="thumList">
-	      {% for img in imgs %}
-		<li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem"><img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
-	      {% endfor %}
+<div class="container">
+  <div class="row">
+    <div class="span6" >
+      <div class="introShow">
+	<div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" title="project-photo"><img title="project-img" id="midImg" src="{{ first_img }}" class="Picture220"/></a>
+	</div>
+	<div class="scroll" id="scroll">
+	  <a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
+	  <a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
+	  <ul id="thumList">
+	    {% for img in imgs %}
+	    <li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem"><img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
+{% endfor %}
 </ul>
 </div>
 </div>
@@ -77,4 +77,4 @@
   });
 </script>
 
-{%endblock%}
+  {%endblock%}

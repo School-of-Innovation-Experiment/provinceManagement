@@ -4,7 +4,8 @@ Created on 2013-3-29
 
 @author: sytmac
 '''
-
+import os, sys
+from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -30,6 +31,8 @@ from django.db.models import Q
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+
+from adminStaff.models import HomePagePic
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList(request)
@@ -161,11 +164,11 @@ def judge_is_assigned(request, school):
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
-def get_subject_review_list(request, project_id):
+def get_subject_review_list(request, project_id, identity):
     '''
     to get subject evaluate list through project_id
     '''
-    review_list = AdminStaffService.GetSubjectReviewList(project_id)
+    review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
 
     cnt_of_list = len(review_list)
 
@@ -450,3 +453,23 @@ def refresh_funds_table(request,pid):
     return render_to_string("widgets/fund/fund_table.html",
                             context)
 
+@dajaxice_register
+def FileDeleteConsistence(request, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(HomePagePic, id=fid)
+
+    if request.method == "POST":
+        try:
+            os.remove(f.pic_obj.url)
+            f.delete()
+        except: pass
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
