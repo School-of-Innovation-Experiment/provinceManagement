@@ -29,7 +29,6 @@ from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
 from django.db.models import Q
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
 from backend.fund import CFundManage
@@ -102,7 +101,7 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
+
     @staticmethod
     def filter_display(email, auth_list, host_email):
         """
@@ -591,6 +590,8 @@ class AdminStaffService(object):
                 rolemessage = MESSAGE_STUDENT_HEAD
             elif request.POST["message_role"] == '4':
                 rolemessage = MESSAGE_TEACHER_HEAD
+            elif request.POST["message_role"] == '5':
+                rolemessage = MESSAGE_ALL_HEAD
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
@@ -708,7 +709,7 @@ class AdminStaffService(object):
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
-                    }
+                  }
         return context
     @staticmethod
     @csrf.csrf_protect
@@ -978,13 +979,14 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def get_xls_path(request,exceltype):
-
-        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
-        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
-        if exceltype == 1:
+        if exceltype == EXCEL_TYPE_BASEINFORMATION:
             file_path = info_xls_baseinformation(request)
-        elif exceltype == 2:
+        elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
             file_path = info_xls_expertscore(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
+            file_path = info_xls_summaryinnovate(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
+            file_path = info_xls_summaryentrepreneuship(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod

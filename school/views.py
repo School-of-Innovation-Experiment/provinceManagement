@@ -140,7 +140,6 @@ def application_report_view(request, pid=None):
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
         readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-        
 
         if project.project_category.category == CATE_INNOVATION:
             iform = ApplicationReportForm
@@ -163,7 +162,7 @@ def application_report_view(request, pid=None):
                         project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                         project.save()
                 else:
-                    pass                    
+                    pass 
                     # logger.info(" info  application Form Valid Failed"+"**"*10)
                     # logger.info(info_form.errors)
                     # logger.info(application_form.errors)
@@ -201,58 +200,8 @@ def application_report_view(request, pid=None):
 @login_required
 @authority_required(SCHOOL_USER)
 def home_view(request):
-    school = SchoolProfile.objects.get(userid=request.user)
-    over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
-    grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
-    grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
-    grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-    pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
-    if request.method =="POST":
-        project_manage_form = forms.ProjectManageForm(request.POST,school=school)
-        if project_manage_form.is_valid():
-            project_grade = project_manage_form.cleaned_data["project_grade"]
-            project_year =  project_manage_form.cleaned_data["project_year"]
-            # project_isover = project_manage_form.cleaned_data["project_isover"]
-            project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
-            if project_grade == "-1":
-                project_grade= ''
-            if project_year == '-1':
-                project_year=''
-            # if project_isover == '-1':
-            #     project_isover=''
-            if project_overstatus == '-1':
-                project_overstatus=''
-            else:
-                project_overstatus=OverStatus.objects.get(status=project_overstatus)
-            loginfo(p=project_grade,label="project_grade")
-            q1 = (project_year and Q(year=project_year)) or None
-            # q2 = (project_isover and Q(is_over=project_isover)) or None
-            q2 = (project_overstatus and Q(over_status=project_overstatus)) or None
-            q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-            qset = filter(lambda x: x != None, [q1, q2, q3])
-            loginfo(p=qset,label="qset")
-            over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
-            grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
-            grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-            if qset :
-                qset = reduce(lambda x, y: x & y, qset)
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
-                #.exclude(Q(project_grade__grade=GRADE_NATION) or Q(project_grade__grade=GRADE_PROVINCE) or Q(project_grade__grade=GRADE_UN))
-            else:
-                pro_list = ProjectSingle.objects.filter(Q(school_id=school)).order_by('project_grade')
-    else:
-        project_manage_form = forms.ProjectManageForm(school=school)
-    pro_list = pro_list.order_by('adminuser')
-    pro_list = is_showoverstatus(pro_list)#添加是否显示结题的属性以及文件下载链接
-    if pro_list.count() != 0 or request.method == "POST":
-        havedata_p = True
-    else: havedata_p = False
-
-    context = {
-                'havedata_p':havedata_p,
-                'pro_list': pro_list,
-                'project_manage_form':project_manage_form
-                }
+    context = projectListInfor(request)
+    context["pro_list"] = is_showoverstatus(context["pro_list"])#添加是否显示结题的属性以及文件下载链接
     return render(request, "school/school_home.html",context)
 
 @csrf.csrf_protect
@@ -264,7 +213,6 @@ def dispatch(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
-
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
     email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
 
@@ -453,7 +401,8 @@ def project_control(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
-    context = AdminStaffService.projectListInfor(request,SCHOOL_USER)
+    context = projectListInfor(request)
+    context['pro_list'] = is_addFundDetail(context['pro_list'])
     return render_to_response("school/funds_manage.html",context,context_instance=RequestContext(request))
 
 @csrf.csrf_protect
@@ -462,6 +411,7 @@ def funds_manage(request):
 def funds_change(request,pid):
     project = ProjectSingle.objects.get(project_id = pid)
     ret = CFundManage.get_form_tabledata(project)
+    ret['is_addFundDetail'] = get_addFundDetail_status(project)
     return render(request,"school/funds_change.html",ret)
 @csrf.csrf_protect
 @login_required
@@ -474,3 +424,52 @@ def record_view(request, pid):
             "comment_group" : comment_group,
             }
     return render(request, 'school/processrecord.html',data)
+@csrf.csrf_protect
+def projectListInfor(request):
+    school = SchoolProfile.objects.get(userid=request.user)
+    if request.method =="POST":
+        project_manage_form = forms.ProjectManageForm(request.POST,school=school)
+        pro_list = projectFilterList(request,project_manage_form,school)
+    else:
+        project_manage_form = forms.ProjectManageForm(school=school)
+        over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+        grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+        grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
+        grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+        pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
+    if pro_list.count() != 0 or request.method == "POST":
+        havedata_p = True
+    else:
+        havedata_p = False
+    context = {
+               'havedata_p': havedata_p,
+               'pro_list': pro_list,
+               'project_manage_form':project_manage_form
+              }
+    return context
+@csrf.csrf_protect
+def projectFilterList(request,project_manage_form,school):
+    if project_manage_form.is_valid():
+        project_grade = project_manage_form.cleaned_data["project_grade"]
+        project_year =  project_manage_form.cleaned_data["project_year"]
+        project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
+        qset = get_filter(project_grade,project_year,project_overstatus)
+        if qset :
+           qset = reduce(lambda x, y: x & y, qset)
+           pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
+        else:
+           pro_list = ProjectSingle.objects.filter(Q(school_id=school))
+    pro_list = pro_list.order_by('adminuser')
+    return pro_list
+def get_filter(project_grade,project_year,project_overstatus):
+    if project_grade == "-1":
+        project_grade=''
+    if project_year == '-1':
+        project_year=''
+    if project_overstatus == '-1':
+        project_overstatus=''
+    q1 = (project_year and Q(year=project_year)) or None
+    q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
+    q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+    qset = filter(lambda x: x != None, [q1, q2, q3])
+    return qset

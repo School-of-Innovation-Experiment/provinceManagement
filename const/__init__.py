@@ -146,10 +146,18 @@ DEFAULT_IMG_URL = STATIC_URL + "/images/no_pic.jpg"
 YEAR_CHOICES = tuple([(y, y) for y in range(2000, 2049)])
 
 # adminStaff noticeMessage settings
-MESSAGE_EXPERT_HEAD = '__expert__'
-MESSAGE_SCHOOL_HEAD = '__school__'
+MESSAGE_EXPERT_HEAD = '__experts__'
+MESSAGE_SCHOOL_HEAD = '__schools__'
 MESSAGE_STUDENT_HEAD = '__student__'
 MESSAGE_TEACHER_HEAD = '__teacher__'
+MESSAGE_ALL_HEAD     = '__allmess__'
+MESSAGE_ROLE_CHOICES =(
+    ('1',u"专家"),
+    ('2',u"学院"),
+    ('3',u"学生"),
+    ('4',u"教师"),
+    ('5',u"全部"),
+)
 # APP student
 DEFAULT_NATION = u"汉族"
 SEX_MALE = "male"
@@ -330,3 +338,14 @@ PROGRESS_RECORD_MAX = 20
 if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
 elif IS_DLUT_SCHOOL: DUT_code = "10141"
 # DUT_code = "10141"
+
+EXCEL_TYPE_BASEINFORMATION = "baseinformation"
+EXCEL_TYPE_APPLICATIONSCORE = "applicationscore"
+EXCEL_TYPE_SUMMARYSHEET_INNOVATE = "summary_innovate"
+EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP = "summary_entrepreneuship"
+EXCEL_TYPE_CHOICES = (
+    (EXCEL_TYPE_BASEINFORMATION, u"基本信息表"),
+    (EXCEL_TYPE_APPLICATIONSCORE, u"初期评分表"),
+    (EXCEL_TYPE_SUMMARYSHEET_INNOVATE, u"创新项目汇总表"),
+    (EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP, u"创业项目汇总表"),
+)
