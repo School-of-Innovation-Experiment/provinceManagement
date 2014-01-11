@@ -234,6 +234,9 @@ LOGGING = {
 PROCESS_FILE_PATH = join("tmp", "process_file")
 FILE_DELETE_URL = '/student/delete/'
 
+# home page picture file
+HOMEPAGE_PIC_PATH = join(MEDIA_ROOT, "homepage_pic")
+
 # news documents path
 NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
 

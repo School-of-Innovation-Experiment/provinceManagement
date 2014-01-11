@@ -98,6 +98,7 @@
       </div>
       {% block home-content %}
       <div class="home-content">
+        {% if False %}
         <!-- Carousel  ================================================== -->
         <div id="myCarousel" class="carousel slide">
           <div class="carousel-inner">
@@ -131,6 +132,40 @@
           <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
 
         </div><!-- /.carousel -->
+        {% endif %}
+        {% if IS_MINZU_SCHOOL %}
+        <!-- Carousel  ================================================== -->
+        <div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            {% for pic in homepage_pic %}
+            <div class="item {% if pic.active %} active {% endif %}">
+              <img src="{{pic.url}}" alt="">
+              <div class="carousel-caption">
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <a class="left carousel-control" href="/#myCarousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
+
+        </div><!-- /.carousel -->
+        {% endif %}
+        {% if IS_DLUT_SCHOOL %}
+        <!-- Carousel  ================================================== -->
+        <div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            {% for pic in homepage_pic %}
+            <div class="item {% if pic.active %} active {% endif %}">
+              <img src="{{pic.url}}" alt="">
+              <div class="carousel-caption">
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <a class="left carousel-control" href="/#myCarousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="/#myCarousel" data-slide="next">›</a>
+        </div><!-- /.carousel -->
+        {% endif %}
         <div class="front-wrap">
           <div class="home-news">
             <h3>焦点新闻 <small>Hot</small></h3>
