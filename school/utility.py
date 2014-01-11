@@ -440,9 +440,9 @@ def add_telephone(project):
         break
 def is_addFundDetail(project_list):
     for temp in project_list:
-        temp.is_addFundDetail = get_addFundDetail_status(temp)
+        temp.is_addFundDetail = get_schooluser_project_modify_status(temp)
     return project_list
-def get_addFundDetail_status(project):
+def get_schooluser_project_modify_status(project):
     if project.project_grade.grade in SCHOOL_USER_PROJECT_GRADE:
         return True
     else:
