@@ -4,6 +4,7 @@ Created on 2013-3-29
 
 @author: sytmac
 '''
+import os, sys
 from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -463,7 +464,10 @@ def FileDeleteConsistence(request, fid):
     f = get_object_or_404(HomePagePic, id=fid)
 
     if request.method == "POST":
-        f.delete()
+        try:
+            os.remove(f.pic_obj.url)
+            f.delete()
+        except: pass
         return simplejson.dumps({"is_deleted": True,
                                  "message": "delete it successfully!",
                                  "fid": str(fid)})
