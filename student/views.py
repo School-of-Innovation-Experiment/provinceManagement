@@ -132,7 +132,7 @@ def application_report_view(request,pid=None,is_expired=False):
     is_currentyear = check_year(project)
     is_applying = check_applycontrol(project)
     # readonly= is_expired or (not is_currentyear) or (not is_applying)
-    readonly= not is_applying
+    readonly= not is_applying or project.is_past or not is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     logger.info(readonly)
 
