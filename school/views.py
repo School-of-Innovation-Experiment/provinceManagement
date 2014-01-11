@@ -213,7 +213,6 @@ def dispatch(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
-
     email_list  = AdminStaffService.GetRegisterListBySchool(school)
     email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
 
@@ -403,6 +402,7 @@ def project_control(request):
 @authority_required(SCHOOL_USER)
 def funds_manage(request):
     context = projectListInfor(request)
+    context['pro_list'] = is_addFundDetail(context['pro_list'])
     return render_to_response("school/funds_manage.html",context,context_instance=RequestContext(request))
 
 @csrf.csrf_protect
@@ -411,6 +411,7 @@ def funds_manage(request):
 def funds_change(request,pid):
     project = ProjectSingle.objects.get(project_id = pid)
     ret = CFundManage.get_form_tabledata(project)
+    ret['is_addFundDetail'] = get_addFundDetail_status(project)
     return render(request,"school/funds_change.html",ret)
 @csrf.csrf_protect
 @login_required
