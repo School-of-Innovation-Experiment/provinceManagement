@@ -13,7 +13,7 @@ import sys
 import time
 import datetime
 
-from django.shortcuts import get_object_or_404         
+from django.shortcuts import get_object_or_404 
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
@@ -34,6 +34,7 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN,GRADE_PROVINCE,GRADE_NATION
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
+from school import SCHOOL_USER_PROJECT_GRADE
 
 from backend.utility import search_tuple
 from backend.logging import logger,loginfo
@@ -425,10 +426,10 @@ def is_showoverstatus(project_list):
     判断项目级别，院级管理员对于校级以上项目没有改变结题状态的权限
     """
     for temp in project_list:
-        if temp.project_grade.grade in (GRADE_PROVINCE,GRADE_NATION):
-            temp.is_showoverstatus = False
-        else:
+        if temp.project_grade.grade in SCHOOL_USER_PROJECT_GRADE:
             temp.is_showoverstatus = True
+        else:
+            temp.is_showoverstatus = False
         add_fileurl(temp)
         add_telephone(temp)
     return project_list
@@ -437,6 +438,15 @@ def add_telephone(project):
     for student_group in student_groups:
         project.telephone =student_group.get_telephone_display
         break
+def is_addFundDetail(project_list):
+    for temp in project_list:
+        temp.is_addFundDetail = get_addFundDetail_status(temp)
+    return project_list
+def get_addFundDetail_status(project):
+    if project.project_grade.grade in SCHOOL_USER_PROJECT_GRADE:
+        return True
+    else:
+        return False
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
