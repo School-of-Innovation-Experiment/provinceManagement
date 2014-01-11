@@ -134,7 +134,6 @@ def application_report_view(request,pid=None,is_expired=False):
     readonly= not is_applying or project.is_past
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     logger.info(readonly)
-
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
