@@ -525,15 +525,15 @@ class AdminStaffService(object):
         return render(request, "adminStaff/subject_rating.html", context)
 
     @staticmethod
-    def GetSubjectReviewList(project_id):
-        review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
+    def GetSubjectReviewList(project_id, identity):
+        flag = (identity == 'adminStaff')
+        review_obj_list = Re_Project_Expert.objects.filter(Q(project=project_id)&Q(is_assign_by_adminStaff=flag))
         review_list = []
         for obj in review_obj_list:
             obj_list = [obj.comments, obj.score_significant,
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
-            print obj_list
             obj_list.append(sum(map(float, obj_list[1:])))
 
             review_list.append(obj_list)
