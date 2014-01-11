@@ -28,12 +28,13 @@ class Student_Group(models.Model):
     #                          verbose_name=u"专业")
     project = models.ForeignKey(ProjectSingle, blank=True)
 
-
     def get_sex_display(self):
         if sex == 'male':
             return u"男"
         else:
             return u"女"
+    def get_telephone_display(self):
+        return '%s(%s)' % (self.telephone, self.studentName)
     class Meta:
         verbose_name = "参赛学生信息"
         verbose_name_plural = "参赛学生信息"

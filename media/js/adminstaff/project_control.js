@@ -44,10 +44,6 @@ function change_overstatus_callback(data){
   var target = "#overstatus_" + glo_project_id;
   $(target).html(data.res);
 }
-function change_projectuniquecode_callback(data){
-  var target = "#ProjectUniqueCode_" + glo_project_id;
-  $(target).html(data.res);
-}
 
 $('[rel="isover"]').click(function(){
   var pid = $(this).attr("pid");
@@ -93,8 +89,10 @@ function set_recommend_rate_callback(data){
     if(data.message == "wrong input"){
         $("#warning_bar").show();
     }
-    else{
-        $("#current_rate").html('项目推荐比例管理（当前比例:' + $("#id_rec_setting").val() + '%)');
         $("#success_bar").show();
     }
+}
+function change_projectuniquecode_callback(data){
+  var target = "#ProjectUniqueCode_" + glo_project_id;
+  $(target).html(data.res);
 }
