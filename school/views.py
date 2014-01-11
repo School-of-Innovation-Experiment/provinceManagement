@@ -65,6 +65,9 @@ def member_change(request, pid):
 
         student_group = Student_Group.objects.filter(project = project)
 
+        readonly = not get_schooluser_project_modify_status(project)
+        
+
         for s in student_group:
             s.sex = s.get_sex_display()
 
@@ -74,7 +77,8 @@ def member_change(request, pid):
                       {"pid": pid,
                        "student_group": student_group,
                        "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form})
+                       "student_group_info_form": student_group_info_form,
+                       "readonly": readonly})
 
 
 @csrf.csrf_protect
@@ -95,9 +99,10 @@ def final_report_view(request, pid=None):
         is_finishing = check_finishingyear(project)
         over_status = project.over_status
 
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        # readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
-        readonly = False
+        # readonly = False
+        readonly = not get_schooluser_project_modify_status(project)
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
@@ -132,13 +137,18 @@ def application_report_view(request, pid=None):
             is_show determined by identity
             is_innovation determined by project_category
         """
-        is_expired=False
+
         # loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 
+
+        readonly = not get_schooluser_project_modify_status(project)
+        #if ok : readonly = False
+        #else readonly = True
+
+
         is_currentyear = check_year(project)
         is_applying = check_applycontrol(project)
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
-        readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
         if project.project_category.category == CATE_INNOVATION:
@@ -411,7 +421,7 @@ def funds_manage(request):
 def funds_change(request,pid):
     project = ProjectSingle.objects.get(project_id = pid)
     ret = CFundManage.get_form_tabledata(project)
-    ret['is_addFundDetail'] = get_addFundDetail_status(project)
+    ret['is_addFundDetail'] = get_schooluser_project_modify_status(project)
     return render(request,"school/funds_change.html",ret)
 @csrf.csrf_protect
 @login_required
