@@ -24,7 +24,11 @@
                {%if userauth.is_adminstaff  %}
                    <td><a data-toggle="modal" href="/adminStaff/fundschange/{{item.project_id}}" >添加帐目</td>
                {%elif userauth.is_schooler %}
-                   <td><a data-toggle="modal" href="/school/fundschange/{{item.project_id}}" >查看帐目</td>
+                   {% if item.is_addFundDetail%}
+                      <td><a data-toggle="modal" href="/school/fundschange/{{item.project_id}}" >添加帐目</td>
+                   {%else%}
+                      <td><a data-toggle="modal" href="/school/fundschange/{{item.project_id}}" >查看帐目</td>
+                   {%endif%}
                {%elif userauth.is_teacher %}
                    <td><a data-toggle="modal" href="/teacher/fundsview/{{item.project_id}}" >查看帐目</td>
                {%endif%}

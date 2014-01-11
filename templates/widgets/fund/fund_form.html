@@ -6,7 +6,7 @@
             <span class="span1 offset2" > <legend id="funds_total"> 经费总额:  {{project.funds_total}} </legend></span>
             <span class="span1 offset2" > <legend id="funds_remain">经费余额:  {{project.funds_remain}}</legend>l</span>
         </div>
-       {%if userauth.is_adminstaff or userauth.is_schooler %}
+       {%if userauth.is_adminstaff or is_addFundDetail %}
             <ol>
                 <li>只需在第一次添加帐目时填入经费总额</li>
                 <li>经费总额如需修改则填写数额，不需更改数额则不需填写</li>
