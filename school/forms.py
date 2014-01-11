@@ -35,10 +35,10 @@ class InfoForm(ModelForm):
         Project Basic info
     """
     def __init__(self, *args, **kwargs):
-        pid = kwargs.pop('pid', None)
-        if not pid:
+        self.pid = kwargs.pop('pid', None)
+        if not self.pid:
             return
-        project = ProjectSingle.objects.get(project_id=pid)
+        project = ProjectSingle.objects.get(project_id=self.pid)
         student_group = Student_Group.objects.filter(project = project)
         member = []
         for temp_student in student_group:
@@ -57,8 +57,9 @@ class InfoForm(ModelForm):
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  }
     def clean_title(self):
+        print self.pid, "*"*1000
         title = self.cleaned_data['title']
-        if ProjectSingle.objects.filter(title=title).count():
+        if ProjectSingle.objects.filter(title=title).exclude(project_id=self.pid).count():
             raise forms.ValidationError("标题已存在")
         return title
     def get_absolute_url(self):
