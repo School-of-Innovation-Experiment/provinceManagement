@@ -706,7 +706,7 @@ class AdminStaffService(object):
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
                     'project_manage_form':project_manage_form
-                    }
+                  }
         return context
     @staticmethod
     @csrf.csrf_protect
