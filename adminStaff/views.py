@@ -964,30 +964,21 @@ class AdminStaffService(object):
 		"""
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
-<<<<<<< HEAD
-        project = ProjectSingle.objects.get(project_id = pid) 
-=======
-
         project = ProjectSingle.objects.get(project_id = pid)
         # isIN =  get_schooluser_project_modify_status(project)
->>>>>>> 4f55980... 权限修改
+
         student_group = Student_Group.objects.filter(project = project)
         
-
         for s in student_group :
             s.sex = s.get_sex_display()
             student_group_form = StudentGroupForm()
             student_group_info_form = StudentGroupInfoForm()
 
-<<<<<<< HEAD
-=======
         student_group_form = StudentGroupForm()
         student_group_info_form = StudentGroupInfoForm()
 
-
-
         readonly = False
->>>>>>> 4f55980... 权限修改
+
         return render(request, "adminStaff/member_change.html",
                       {"pid": pid,
                        "student_group": student_group,
