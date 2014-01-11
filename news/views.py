@@ -16,6 +16,7 @@ from backend.utility import getContext
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
+from adminStaff.models import HomePagePic
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
@@ -30,10 +31,16 @@ def get_news(news_id = None):
 def index(request):
     the_latest_news = get_news()
     the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
+    homepage_pic = HomePagePic.objects.all()
+    for pic in homepage_pic:
+        pic.active = False
+    if homepage_pic.count():
+        homepage_pic[0].active = True
     context = {
         'the_latest_news': the_latest_news,
         'IS_DLUT_SCHOOL': IS_DLUT_SCHOOL,
         'IS_MINZU_SCHOOL': IS_MINZU_SCHOOL,
+        'homepage_pic': homepage_pic,
     }
     context.update(
         getContext(
