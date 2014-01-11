@@ -40,7 +40,6 @@ def getProject(request):
     return project
 
 
-
 @dajaxice_register
 def MemberChangeInfo(request, form, origin):
     # try:
