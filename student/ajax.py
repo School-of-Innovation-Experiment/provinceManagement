@@ -19,6 +19,8 @@ from backend.decorators import check_auth
 from const import MEMBER_NUM_LIMIT
 from const import *
 
+from django.shortcuts import get_object_or_404
+
 def getProject(request):
     ok = check_auth(request.user, ADMINSTAFF_USER)
     ok = ok or check_auth(request.user, SCHOOL_USER)

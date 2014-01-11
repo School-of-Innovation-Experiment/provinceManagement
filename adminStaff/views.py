@@ -34,7 +34,7 @@ from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign
+from school.utility import check_project_is_assign, split_name
 #liuzhuo add
 import datetime
 import os
@@ -68,6 +68,8 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+
+from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
@@ -987,3 +989,35 @@ class AdminStaffService(object):
         elif exceltype == 2:
             file_path = info_xls_expertscore(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def homepage_import_view(request):
+        """
+        project group member change
+        """
+        if request.method == "POST":
+            try:
+                f = request.FILES["file"]
+                wrapper_f = UploadedFile(f)
+                size = wrapper_f.file.size
+                name, filetype = split_name(wrapper_f.name)
+
+                new_pic = HomePagePic()
+                name, filetype = split_name(wrapper_f.name)
+                new_pic.pic_obj = f
+                new_pic.name = name
+                new_pic.file_type = filetype
+                new_pic.file_type = filetype if filetype != " " else "unknown"
+                new_pic.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+                new_pic.file_size = size
+                new_pic.save()
+            except:
+                pass
+
+        file_history = HomePagePic.objects.all()
+        data = {'files': file_history,
+        }
+        return render(request, 'adminStaff/homepage_pic_import.html', data)

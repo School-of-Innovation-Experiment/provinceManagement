@@ -4,7 +4,7 @@ Created on 2013-3-29
 
 @author: sytmac
 '''
-
+from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -30,6 +30,8 @@ from django.db.models import Q
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+
+from adminStaff.models import HomePagePic
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList(request)
@@ -451,3 +453,20 @@ def refresh_funds_table(request,pid):
     return render_to_string("widgets/fund/fund_table.html",
                             context)
 
+@dajaxice_register
+def FileDeleteConsistence(request, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(HomePagePic, id=fid)
+
+    if request.method == "POST":
+        f.delete()
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})

@@ -8,6 +8,7 @@ Desc: Province Admin staff
 '''
 
 import uuid
+import os, sys
 
 from django.db import models
 
@@ -17,6 +18,8 @@ from school.models import *
 from users.models import *
 
 from django.contrib.auth.models import User
+
+import settings
 
 
 class ProjectControl(models.Model):
@@ -81,3 +84,25 @@ class TemplateNoticeMessage(models.Model):
     noticeId    = models.DecimalField(blank =False,max_digits=19, decimal_places=2)
     title       = models.CharField(blank=False,max_length=30)
     message     = models.CharField(blank=True,max_length=600)
+
+class HomePagePic(models.Model):
+    """
+    """
+    pic_obj = models.FileField(upload_to=settings.HOMEPAGE_PIC_PATH,
+                               verbose_name="文件对象")
+    name = models.CharField(max_length=100, blank=False,
+                            verbose_name="文件名称")
+    uploadtime = models.DateTimeField(blank=True, null=True,
+                                      verbose_name="上传时间")
+    file_size = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name="文件大小")
+    file_type = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name="文件类型")
+    class Meta:
+        verbose_name = "首页图片上传"
+        verbose_name_plural = "首页图片上传"
+
+    def __unicode__(self):
+        return self.name
+    def file_name(self):
+        return os.path.basename(self.file_obj.name)
