@@ -15,7 +15,7 @@ from django.http import HttpResponse, Http404
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 from backend.utility import getContext, convert2media_url
 import datetime, os
-from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
+from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, STATIC_URL, MEDIA_URL
 from adminStaff.models import HomePagePic
 
 def get_news(news_id = None):
@@ -29,14 +29,19 @@ def get_news(news_id = None):
     return news_content
 
 def index(request):
+    def convert_url(raw_url):
+        return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
     the_latest_news = get_news()
     the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
     homepage_pic = HomePagePic.objects.all()
+    flag = True
     for pic in homepage_pic:
-        pic.url = convert2media_url(pic.pic_obj.url)
-        pic.active = False
-    if homepage_pic.count():
-        homepage_pic[0].active = True
+        pic.url = convert_url(pic.pic_obj.url)
+        print pic.url
+        if flag:
+            pic.active = True
+            flag = False
+        else: pic.active = False
     context = {
         'the_latest_news': the_latest_news,
         'IS_DLUT_SCHOOL': IS_DLUT_SCHOOL,
