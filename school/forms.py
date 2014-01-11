@@ -56,7 +56,11 @@ class InfoForm(ModelForm):
                    'year', 'project_grade', 'project_status', 'expert','project_code',"funds_total","funds_remain", "over_status", "file_application", "file_interimchecklist", "file_summary", "file_projectcompilation", "score_application", "recommend", "is_past", "over_status", "funds_total", "funds_remain", "project_code", )
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  }
-
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if ProjectSingle.objects.filter(title=title).count():
+            raise forms.ValidationError("标题已存在")
+        return title
     def get_absolute_url(self):
         return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
 
