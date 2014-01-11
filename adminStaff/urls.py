@@ -43,7 +43,8 @@ urlpatterns = patterns('',
     url(r'^NoticeMessageSettings$',AdminStaffService.NoticeMessageSetting),
     url(r'^project_control$',AdminStaffService.project_control),
     url(r'^project_informationexport$',AdminStaffService.project_informationexport),
-    (r'^news_release$', AdminStaffService.NewsRelease),
+    url(r'^news_release$', AdminStaffService.NewsRelease),
+    url(r'^homepage_import$', AdminStaffService.homepage_import_view),
 
 )
 urlpatterns += staticfiles_urlpatterns()
