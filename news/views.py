@@ -12,7 +12,7 @@ from django.shortcuts import render #, render_to_response
 from news.models import News
 from django.template import Context #, loader
 from django.http import HttpResponse, Http404
-from backend.utility import getContext
+from backend.utility import getContext, convert2media_url
 import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 from adminStaff.models import HomePagePic
@@ -32,6 +32,7 @@ def index(request):
     the_latest_news = the_latest_news or News(id =  -1, news_title = '...', news_content = '无最新内容', news_date = datetime.datetime.today)
     homepage_pic = HomePagePic.objects.all()
     for pic in homepage_pic:
+        pic.url = convert2media_url(pic.pic_obj.url)
         pic.active = False
     if homepage_pic.count():
         homepage_pic[0].active = True
