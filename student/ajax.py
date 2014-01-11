@@ -47,6 +47,7 @@ def MemberChangeInfo(request, form, origin):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    #sdfasdf
     
     project = getProject(request)
 
