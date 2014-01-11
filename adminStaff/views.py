@@ -70,8 +70,10 @@ from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 
 from django.core.files.uploadedfile import UploadedFile
-
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+
+
+
 
 class AdminStaffService(object):
     @staticmethod
@@ -839,6 +841,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
+        
         """
             readonly determined by time
             is_show determined by identity
@@ -851,6 +854,7 @@ class AdminStaffService(object):
         is_currentyear = check_year(project)
         is_applying = check_applycontrol(project)
         #readonly= is_expired or (not is_currentyear) or (not is_applying)
+        
         readonly = False
         is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
@@ -924,9 +928,11 @@ class AdminStaffService(object):
         is_finishing = check_finishingyear(project)
         over_status = project.over_status
 
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        # readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
 
+        
         readonly = False
+
         if request.method == "POST" and readonly is not True:
             final_form = FinalReportForm(request.POST, instance=final)
             # techcompetition_form =
@@ -959,21 +965,34 @@ class AdminStaffService(object):
         """
         project group member change
 		"""
-        #student_account = StudentProfile.objects.get(userid = request.user)
-        #project = ProjectSingle.objects.get(student=student_account)
-        project = ProjectSingle.objects.get(project_id = pid) 
-        student_group = Student_Group.objects.filter(project = project)
+        # student_account = StudentProfile.objects.get(userid = request.user)
+        project = ProjectSingle.objects.get(project_id = pid)
 
-        for s in student_group :
+        
+
+        # isIN =  get_schooluser_project_modify_status(project)
+        student_group = Student_Group.objects.filter(project = project)
+        
+
+        for s in student_group:
             s.sex = s.get_sex_display()
             student_group_form = StudentGroupForm()
             student_group_info_form = StudentGroupInfoForm()
 
+        student_group_form = StudentGroupForm()
+        student_group_info_form = StudentGroupInfoForm()
+
+
+
+
+        readonly = False
         return render(request, "adminStaff/member_change.html",
                       {"pid": pid,
                        "student_group": student_group,
                        "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form})
+                       "student_group_info_form": student_group_info_form,
+                       'readonly': readonly,
+                       })
     @staticmethod
     @csrf.csrf_protect
     @login_required
