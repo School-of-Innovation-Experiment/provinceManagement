@@ -76,8 +76,12 @@
       <td><strong>专业</strong></td>
       <td><strong>年级</strong></td>
       <td><strong>班级</strong></td>
+
+      {% if not readonly %}
       <td><strong>更新信息</strong></td>
       <td><strong>人员变更</strong></td>
+      {% endif %}
+
     </tr>
   </thead>
   <tbody>
@@ -94,7 +98,9 @@
           <td val={{student.major.id}}>{{student.major}}</td>
           <td>{{student.grade}}</td>
           <td disabled>{{student.classInfo}}</td>
+          {% if not readonly %}
           <td>
+
             {% if lock %}
             已申报，无法修改
             {% else %}
@@ -108,6 +114,8 @@
             <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
             {% endif %}
           </td>
+
+          {% endif %}
         </tr>
       {%endfor%}
     {% endif %}
