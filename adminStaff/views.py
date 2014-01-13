@@ -70,8 +70,8 @@ from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 
 from django.core.files.uploadedfile import UploadedFile
-from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 
 
@@ -79,6 +79,7 @@ class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
+
         #expert多重身份特殊处理
         if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
             expert_obj = ExpertProfile.objects.get(userid__email = email)
@@ -577,6 +578,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NoticeMessageSetting(request):
+        message_role_choice =list(MESSAGE_ROLE_CHOICES)
         if request.POST.get("message_content", False):
             datemessage = ""
             if request.POST.get('message_checkbox', False):
@@ -584,16 +586,10 @@ class AdminStaffService(object):
             else:
                 datemessage = "0"
             # TODO: 前台控制角色选择验证
-            if request.POST["message_role"] == '1':
-                rolemessage = MESSAGE_EXPERT_HEAD
-            elif request.POST["message_role"] == '2':
-                rolemessage = MESSAGE_SCHOOL_HEAD
-            elif request.POST["message_role"] == '3':
-                rolemessage = MESSAGE_STUDENT_HEAD
-            elif request.POST["message_role"] == '4':
-                rolemessage = MESSAGE_TEACHER_HEAD
-            elif request.POST["message_role"] == '5':
-                rolemessage = MESSAGE_ALL_HEAD
+            for item in message_role_choice:
+                if request.POST["message_role"] == item[0]:
+                    rolemessage = item[2]
+                    break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
@@ -606,7 +602,8 @@ class AdminStaffService(object):
             _range += 1
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
-                     "templatenotice_group_form": templatenotice_group_form})
+                       "templatenotice_group_form": templatenotice_group_form,
+                       "message_role_choice":message_role_choice })
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -710,6 +707,7 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
+                    'pro_list_count':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
@@ -964,24 +962,20 @@ class AdminStaffService(object):
     def member_change(request, pid):
         """
         project group member change
-		"""
-        # student_account = StudentProfile.objects.get(userid = request.user)
+        """
+        #student_account = StudentProfile.objects.get(userid = request.user)
+        #project = ProjectSingle.objects.get(student=student_account)
+
         project = ProjectSingle.objects.get(project_id = pid)
-
-        
-
         # isIN =  get_schooluser_project_modify_status(project)
         student_group = Student_Group.objects.filter(project = project)
         
 
         for s in student_group:
             s.sex = s.get_sex_display()
-            student_group_form = StudentGroupForm()
-            student_group_info_form = StudentGroupInfoForm()
 
         student_group_form = StudentGroupForm()
         student_group_info_form = StudentGroupInfoForm()
-
 
 
 
@@ -998,14 +992,13 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def get_xls_path(request,exceltype):
-        if exceltype == EXCEL_TYPE_BASEINFORMATION:
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+        if exceltype == 1:
             file_path = info_xls_baseinformation(request)
-        elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
+        elif exceltype == 2:
             file_path = info_xls_expertscore(request)
-        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
-            file_path = info_xls_summaryinnovate(request)
-        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
-            file_path = info_xls_summaryentrepreneuship(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod
@@ -1035,11 +1028,7 @@ class AdminStaffService(object):
             except:
                 pass
 
-        def convert_url(raw_url):
-            return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
         file_history = HomePagePic.objects.all()
-        for pic in file_history:
-            pic.url = convert_url(pic.pic_obj.url)
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
