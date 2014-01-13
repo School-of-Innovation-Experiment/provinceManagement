@@ -707,6 +707,7 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
+                    'pro_list_size':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
@@ -1026,6 +1027,7 @@ class AdminStaffService(object):
                 new_pic.save()
             except:
                 pass
+
         def convert_url(raw_url):
             return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
         file_history = HomePagePic.objects.all()
