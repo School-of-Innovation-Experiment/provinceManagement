@@ -38,7 +38,6 @@ def info_xls_baseinformation_gen():
     worksheet.col(9).width = len('是否结题') * 300
     return worksheet, workbook
 
-
 def info_xls_baseinformation(request):
     """
     """
