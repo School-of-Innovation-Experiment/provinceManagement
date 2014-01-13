@@ -46,7 +46,7 @@ from adminStaff.views import AdminStaffService
 from adminStaff.forms import FundsChangeForm,StudentNameForm
 from student.models import Funds_Group
 
-from settings import IS_MINZU_SCHOOL
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
@@ -211,6 +211,11 @@ def application_report_view(request, pid=None):
 @authority_required(SCHOOL_USER)
 def home_view(request):
     context = projectListInfor(request)
+<<<<<<< HEAD
+=======
+    context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
+    context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
+>>>>>>> 77f6cc03a178cf84482d1e0ecc23ac41c3d724f9
     context["pro_list"] = is_showoverstatus(context["pro_list"])#添加是否显示结题的属性以及文件下载链接
     return render(request, "school/school_home.html",context)
 

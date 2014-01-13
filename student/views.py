@@ -33,6 +33,8 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
+
+from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
 #from student.utility import checkidentity
 
 @csrf.csrf_protect
@@ -320,7 +322,9 @@ def files_important_view(request):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
-            'show_other':show_other
+            'show_other':show_other,
+            'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
+            'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
     return render(request, 'student/fileimportant.html', data)
 
