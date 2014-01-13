@@ -21,7 +21,6 @@ def info_xls_baseinformation_gen():
     # generate header
     worksheet.write_merge(0, 0, 0, 19, '大连民族学院创新创业项目基本信息统计表')
 
-
     # generate body
     worksheet.write_merge(1, 1, 0, 0, '项目申报编号')
     worksheet.col(0).width = len('项目申报编号') * 200
