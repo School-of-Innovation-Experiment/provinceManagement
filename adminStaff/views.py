@@ -1034,8 +1034,11 @@ class AdminStaffService(object):
                 new_pic.save()
             except:
                 pass
-
+        def convert_url(raw_url):
+            return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
         file_history = HomePagePic.objects.all()
+        for pic in file_history:
+            pic.url = convert_url(pic.pic_obj.url)
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
