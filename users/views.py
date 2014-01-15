@@ -13,7 +13,7 @@ import os
 import sys
 
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -81,7 +81,17 @@ def base_profile_view(request, authority=None):
             return None
 
     return form
-
+def get_redirect_urls(request):
+    if check_auth(user=request.user, authority=SCHOOL_USER):
+        return "/school"
+    elif check_auth(user=request.user, authority=EXPERT_USER):
+        return "/expert"
+    elif check_auth(user=request.user, authority=ADMINSTAFF_USER):
+        return "/adminStaff"
+    elif check_auth(user=request.user, authority=TEACHER_USER):
+        return "/teacher"
+    else:
+        return  "/settings/profile"
 
 @login_required
 @csrf.csrf_protect
@@ -94,12 +104,14 @@ def profile_view(request):
     adminstaff_form = base_profile_view(request, authority=ADMINSTAFF_USER)
     teacher_form =  base_profile_view(request,authority=TEACHER_USER)
 
-    data = {"school_form": school_form,
+    if request.method == "POST":
+        return redirect(get_redirect_urls(request))
+    else:
+        data = {"school_form": school_form,
             "expert_form": expert_form,
             "adminstaff_form": adminstaff_form,
             "teacher_form":teacher_form,}
-
-    return render(request, "settings/profile.html", data)
+        return render(request, "settings/profile.html", data)
 
 
 @login_required

@@ -29,8 +29,19 @@
     </div>
     <legend id="current_rate">项目推荐比例管理（当前比例:{{recommend_rate.rate}}%）</legend>
     <input type="text" class="input-medium" id="id_rec_setting" placeholder="设定比例值(0-100)...">
-    <br />
+    <br \>
     <input type="button" class="btn btn-warning" value="设定比例" onclick="set_recommend_rate();">
+  </fieldset>
+  <hr \>
+  <fieldset>
+    <legend>项目自动编号</legend>
+    <div class="alert alert-success" style="display:none" id="success_bar_2">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        编号成功！
+    </div>
+
+  </fieldset>
+    <input type="button" class="btn btn-warning" value="自动编号" onclick="auto_ranking();">
   </fieldset>
 </form>
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
