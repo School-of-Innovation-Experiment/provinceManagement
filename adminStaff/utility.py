@@ -140,6 +140,8 @@ def info_xls_expertscore(request):
     workbook.save(save_path)
     return save_path
 
+def project_excel():
+    pass
 
 def get_manager(project):
     """
