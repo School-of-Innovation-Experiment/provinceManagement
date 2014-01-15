@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block settings_content %}
+  
   <form method="post" action=".">
     {% csrf_token %}
     {%if userauth.is_schooler%}
@@ -51,6 +52,10 @@
       </div><!--end adminstaff  profile modal-->
     {%endif%}
     {%if userauth.is_teacher%}
+      <div class="alert alert-info">
+	<a class="close" data-dismiss="alert">×</a>
+	<strong>注意:</strong>需要填写完成以下信息，点击保存修改，可进入系统平台进行相关操作
+      </div>
       <div class="modal modal-fixed ">
         <div class="modal-header">
           <h3><b>教师</b></h3>
