@@ -1,34 +1,35 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
 <div class="row-fluid show-grid">
-  <div class="span3">
+  <div class="span4">
     <button class="btn btn-large btn-large id_export_button" type="button" >
       <a href="#" id="releaseexcel_baseinformation" onclick="Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'baseinformation'});" >下载项目基本信息统计表</a>
     </button>
-  </div>
-  <div class="span3">
     <button class="btn btn-large id_export_button" type="button">
-      <a href="#" id="releaseexcel_expertscore" onclick="Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'applicationscore'})" >下载项目评分统计表</a>
+          <a href="#" id="releaseexcel_projectsummary" onclick="releaseexcel_projectsummary()" >下载项目汇总统计表</a>
     </button>
   </div>
-  <div class="span3">
+  <div class="span4">
     <button class="btn btn-large id_export_button" type="button">
       <a href="#" id="releaseexcel_expertscore" onclick="Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'summary_innovate'})" >创新训练项目汇总表</a>
     </button>
-  </div>
-  <div class="span3">
     <button class="btn btn-large id_export_button" type="button">
       <a href="#" id="releaseexcel_expertscore" onclick="Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'summary_entrepreneuship'})" >创业训练项目汇总表</a>
     </button>
   </div>
+  <div class="span4">
+    <button class="btn btn-large id_export_button" type="button">
+      <a href="#" id="releaseexcel_expertscore" onclick="Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'applicationscore'})" >下载项目评分统计表</a>
+    </button>
+  </div>
 </div>
-
+    
 
 <div class="modal hide fade" id="excelprogress" style="text-align:center;background-color:#f2dede;border: 1px solid #fc6;">
-        <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        </div>
-  <img src="{{STATIC_URL}}images/loading.gif" style="width:100px;height:100px;"><h4>正在生成统计表请耐心等待</h4>
+	<div class="modal-header">
+    	<a class="close" data-dismiss="modal">×</a>
+    </div>
+  	<img src="{{STATIC_URL}}images/loading.gif" style="width:100px;height:100px;"><h4>正在生成统计表请耐心等待</h4>
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_informationexport.js"></script>
 {%endblock%}
