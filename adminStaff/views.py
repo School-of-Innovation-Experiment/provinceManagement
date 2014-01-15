@@ -999,6 +999,8 @@ class AdminStaffService(object):
             file_path = info_xls_baseinformation(request)
         elif exceltype == 2:
             file_path = info_xls_expertscore(request)
+        elif exceltype == 3:
+            file_path = info_xls_projectsummary(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod

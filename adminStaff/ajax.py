@@ -238,7 +238,6 @@ def change_project_unique_code(request, project_id,project_unique_code):
 
 @dajaxice_register
 def Release_Excel(request,exceltype):
-    print "hehe"*100
     path = AdminStaffService.get_xls_path(request,exceltype)
     loginfo(p=path,label="path")
     return simplejson.dumps({'path':path})
