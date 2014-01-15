@@ -72,7 +72,7 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-
+from student.views import application_report_view_work, final_report_view_work
 
 
 class AdminStaffService(object):
@@ -668,8 +668,7 @@ class AdminStaffService(object):
         for pro_obj in context["pro_list"]:
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-                add_fileurl(pro_obj)
-
+            add_fileurl(pro_obj)
         context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
         context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
@@ -839,74 +838,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
-        
-        """
-            readonly determined by time
-            is_show determined by identity
-            is_innovation determined by project_category
-        """        
-
-        is_expired=False
-        loginfo(p=pid+str(is_expired), label="in application")
-        project = get_object_or_404(ProjectSingle, project_id=pid) 
-        is_currentyear = check_year(project)
-        is_applying = check_applycontrol(project)
-        #readonly= is_expired or (not is_currentyear) or (not is_applying)
-        
-        readonly = False
-        is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
-        if project.project_category.category == CATE_INNOVATION:
-            iform = ApplicationReportForm
-            pre = get_object_or_404(PreSubmit, project_id=pid)
-            teacher_enterprise=None
-            is_innovation = True
-        else:
-            iform = EnterpriseApplicationReportForm
-            pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
-            teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
-            is_innovation = False
-
-        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        if request.method == "POST" and readonly is not True:
-            info_form = InfoForm(request.POST,pid=pid,instance=project)
-            application_form = iform(request.POST, instance=pre)
-            if is_innovation == True:
-                if info_form.is_valid() and application_form.is_valid():
-                    if save_application(project, pre, info_form, application_form, request.user):
-                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                        project.save()
-                else:
-                    pass
-                    # logger.info(" info  application Form Valid Failed"+"**"*10)
-                    # logger.info(info_form.errors)
-                    # logger.info(application_form.errors)
-                    # logger.info("--"*10)
-            else :
-                teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
-                if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
-                    if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
-                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                        project.save()
-                else:
-                    pass                    
-                    # logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                    # logger.info(info_form.errors)
-                    # logger.info(application_form.errors)
-                    # logger.info(teacher_enterpriseform.errors)
-                    # logger.info("--"*10)
-        else:
-            info_form = InfoForm(instance=project,pid=pid)
-            application_form = iform(instance=pre)
-            # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        data = {'pid': pid,
-                'info': info_form,
-                'application': application_form,
-                'teacher_enterpriseform':teacher_enterpriseform,
-                'readonly': readonly,
-                'is_innovation':is_innovation,
-                'is_show':is_show,
-                }
+        data = application_report_view_work(request, pid)
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -914,44 +846,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        """
-        student final report
-        Arguments:
-            In: id, it is project id
-        """
-        loginfo(p=pid+str(is_expired), label="in application")
-        final = get_object_or_404(FinalSubmit, project_id=pid)
-        project = get_object_or_404(ProjectSingle, project_id=pid)
-        #techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
-        is_finishing = check_finishingyear(project)
-        over_status = project.over_status
-
-        # readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
-
-        
-        readonly = False
-
-        if request.method == "POST" and readonly is not True:
-            final_form = FinalReportForm(request.POST, instance=final)
-            # techcompetition_form =
-            if final_form.is_valid():
-                final_form.save()
-                project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
-                project.save()
-                #return HttpResponseRedirect(reverse('student.views.home_view'))
-            else:
-                pass            
-                # logger.info("Final Form Valid Failed"+"**"*10)
-                # logger.info(final_form.errors)
-                # logger.info("--"*10)
-        final_form = FinalReportForm(instance=final)
-        #techcompetition_form = TechCompetitionForm(instance=techcompetition)
-
-        data = {'pid': pid,
-                'final': final_form,
-              #   'techcompetition':techcompetition,
-                'readonly':readonly,
-                }
+        data = final_report_view_work(request, pid, is_expired = False)
         return render(request, 'adminStaff/final.html', data)
 
 
@@ -960,6 +855,10 @@ class AdminStaffService(object):
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
     def member_change(request, pid):
+
+        data = member_change_work(request, pid)
+        return render(request, "adminStaff/member_change.html", data)
+
         """
         project group member change
         """
@@ -1038,3 +937,46 @@ class AdminStaffService(object):
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
+
+
+
+
+
+
+
+
+
+
+
+def member_change_work(request, pid):
+    """
+    project group member change
+    """    
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    #project = ProjectSingle.objects.get(student=student_account)
+
+    project = ProjectSingle.objects.get(project_id = pid)
+    # isIN =  get_schooluser_project_modify_status(project)
+    student_group = Student_Group.objects.filter(project = project)
+            
+
+    for s in student_group:
+        s.sex = s.get_sex_display()
+
+    student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
+
+    if check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+
+    else:
+        readonly = False
+
+
+    data = {"pid": pid,
+            "student_group": student_group,
+            "student_group_form": student_group_form,
+            "student_group_info_form": student_group_info_form,
+            'readonly': readonly,
+            }
+    return  data        

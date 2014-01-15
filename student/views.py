@@ -117,25 +117,104 @@ def techcompetition_detail(request,pid=None):
                   {"techcompetition": techcompetition,
                    "techcompetition_form": techcompetition_form})
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
+def final_report_view(request, pid=None,is_expired=False):
+    data = final_report_view_work(request, pid, is_expired)
+    return render(request, 'student/final.html', data)
+
+
+def final_report_view_work(request, pid=None,is_expired=False):
+
+    """
+    student final report
+    Arguments:
+        In: id, it is project id
+    """
+    loginfo(p=pid+str(is_expired), label="in application")
+    final = get_object_or_404(FinalSubmit, project_id=pid)
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else :
+        readonly = False
+
+    
+    if request.method == "POST" and readonly is not True:
+        final_form = FinalReportForm(request.POST, instance=final)
+        if final_form.is_valid():
+            final_form.save()
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.save()
+            # return HttpResponseRedirect(reverse('student.views.home_view'))
+        else:
+            pass
+            logger.info("Final Form Valid Failed"+"**"*10)
+            logger.info(final_form.errors)
+
+    final_form = FinalReportForm(instance=final)
+    # techcompetition_form = TechCompetitionForm(instance=techcompetition)
+
+    data = {'pid': pid,
+            'final': final_form,
+            # 'techcompetition':techcompetition,
+            'readonly':readonly,
+            }
+    return data
+
+
 @csrf.csrf_protect
 @login_required
 #@authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
+    data = application_report_view_work(request, pid, is_expired)
+    return render(request, 'student/application.html', data)
+
+
+def application_report_view_work(request, pid=None, is_expired=False):
     """
         readonly determined by time
         is_show determined by identity 
         is_innovation determined by project_category
     """
-
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)
+
     is_applying = check_applycontrol(project)
-    readonly= not is_applying or project.is_past
+
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else:
+        readonly = False  
+        
+
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-    logger.info(readonly)
+
+
+
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -156,27 +235,23 @@ def application_report_view(request,pid=None,is_expired=False):
                 if save_application(project, pre, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
-                    return HttpResponseRedirect(reverse('student.views.home_view'))
+                    # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
-                pass                
-                # logger.info(" info  application Form Valid Failed"+"**"*10)
-                # logger.info(info_form.errors)
-                # logger.info(application_form.errors)
-                # logger.info("--"*10)
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
         else :
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
                 if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
-                    return HttpResponseRedirect(reverse('student.views.home_view'))
+                    # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
-                pass
-                # logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                # logger.info(info_form.errors)
-                # logger.info(application_form.errors)
-                # logger.info(teacher_enterpriseform.errors)
-                # logger.info("--"*10)
+                logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info(teacher_enterpriseform.errors)
 
     else:
         info_form = InfoForm(instance=project,pid=pid)
@@ -191,53 +266,8 @@ def application_report_view(request,pid=None,is_expired=False):
             'is_innovation':is_innovation,
             'is_show':is_show
             }
-    return render(request, 'student/application.html', data)
+    return data
 
-
-@csrf.csrf_protect
-@login_required
-@authority_required(STUDENT_USER)
-@only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
-def final_report_view(request, pid=None,is_expired=False):
-    """
-    student final report
-    Arguments:
-        In: id, it is project id
-    """
-    loginfo(p=pid+str(is_expired), label="in application")
-    final = get_object_or_404(FinalSubmit, project_id=pid)
-    project = get_object_or_404(ProjectSingle, project_id=pid)
-    # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
-    is_finishing = check_finishingyear(project)
-    over_status = project.over_status
-    try:
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
-    except:
-        readonly = false
-    if request.method == "POST" and readonly is not True:
-        final_form = FinalReportForm(request.POST, instance=final)
-        # techcompetition_form =
-        if final_form.is_valid():
-            final_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
-            project.save()
-            return HttpResponseRedirect(reverse('student.views.home_view'))
-        else:
-            pass
-            # logger.info("Final Form Valid Failed"+"**"*10)
-            # logger.info(final_form.errors)
-            # logger.info("--"*10)
-
-    final_form = FinalReportForm(instance=final)
-    # techcompetition_form = TechCompetitionForm(instance=techcompetition)
-
-    data = {'pid': pid,
-            'final': final_form,
-            # 'techcompetition':techcompetition,
-            'readonly':readonly,
-            }
-    return render(request, 'student/final.html', data)
 
 @csrf.csrf_protect
 @login_required
