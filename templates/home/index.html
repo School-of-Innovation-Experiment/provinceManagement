@@ -46,7 +46,7 @@
             <li><a>角色选择</a></li>
             {%if userauth.is_schooler %}
             <li>
-              <a  href={% url school.views.home_view %} >---参赛学院</a>
+              <a  href={% url school.views.home_view %} >---学院管理员</a>
             </li>
             {%endif%}
             {%if userauth.is_adminstaff %}
