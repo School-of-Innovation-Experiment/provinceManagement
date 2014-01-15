@@ -18,6 +18,7 @@ import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, STATIC_URL, MEDIA_URL
 from adminStaff.models import HomePagePic
 from const import *
+from const.models import *
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
@@ -48,6 +49,25 @@ def index_context(request):
 def index_new(request):
     # names = getSchoolsPic()
     # context = {"schools_name_list": names}
+    context = {}
+    def convert_url(raw_url):
+        return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
+    homepage_pic = HomePagePic.objects.all()
+    flag = True
+    for pic in homepage_pic:
+        pic.url = convert_url(pic.pic_obj.url)
+        print pic.url
+        if flag:
+            pic.active = True
+            flag = False
+        else: pic.active = False
+    context.update({
+        'homepage_pic': homepage_pic,
+    })
+    context.update(
+        getContext(
+            News.objects.exclude(news_document=u'')[:5], \
+                1, 'homepage_docs'))
     context.update(index_context(request))
     news_cate = {}
     news_cate["news_category_announcement"] = NEWS_CATEGORY_ANNOUNCEMENT
@@ -63,8 +83,12 @@ def read_news(request, news_id):
     context = Context({
         'news': news,
         'news_cate':news_cate,
+        'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
+        'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
     })
-    return render(request, 'home/news-content.html', context)
+
+    html = 'home/news-content.html' if IS_MINZU_SCHOOL else 'home/news-content-new.html'
+    return render(request, html, context)
 
 def list_news_by_cate(request, news_cate):
     try:
@@ -79,7 +103,7 @@ def list_news_by_cate(request, news_cate):
                   Context(context))
 
 def index(request):
-    if IS_DLUT_SCHOOL: return index_news(request)
+    if IS_DLUT_SCHOOL: return index_new(request)
     def convert_url(raw_url):
         return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
     the_latest_news = get_news()
