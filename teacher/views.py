@@ -34,8 +34,8 @@ from backend.fund import CFundManage
 def home_view(request, is_expired = False):
     limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
     project_list = get_running_project_query_set().filter(adminuser__userid = request.user)
-    #project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
-    #                                            Q(over_status__status = OVER_STATUS_NOTOVER))
+    for pro_obj in project_list:
+        add_fileurl(pro_obj)
     data = {
         "project_list": project_list,
         "limited_num": limited_num,
