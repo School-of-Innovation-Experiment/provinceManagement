@@ -1,92 +1,92 @@
-      body {
-        padding-top: 20px;
-        padding-bottom: 60px;
-      }
+body {
+    padding-top: 20px;
+    padding-bottom: 60px;
+}
 
-      /* Custom container */
-      .container {
-        margin: 0 auto;
-        max-width: 1050px;
-      }
-      .container > hr {
-        margin: 60px 0;
-      }
+/* Custom container */
+.container {
+    margin: 0 auto;
+    max-width: 1050px;
+}
+.container > hr {
+    margin: 60px 0;
+}
 
-      /* Main marketing message and sign up button */
-      .jumbotron {
-        margin: 80px 0;
-        text-align: center;
-      }
-      .jumbotron h1 {
-        font-size: 100px;
-        line-height: 1;
-      }
-      .jumbotron .lead {
-        font-size: 24px;
-        line-height: 1.25;
-      }
-      .jumbotron .btn {
-        font-size: 21px;
-        padding: 14px 24px;
-      }
+/* Main marketing message and sign up button */
+.jumbotron {
+    margin: 80px 0;
+    text-align: center;
+}
+.jumbotron h1 {
+    font-size: 100px;
+    line-height: 1;
+}
+.jumbotron .lead {
+    font-size: 24px;
+    line-height: 1.25;
+}
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
 
-      /* Supporting marketing content */
-      .marketing {
-        margin: 60px 0;
-      }
-      .marketing p + h4 {
-        margin-top: 28px;
-      }
+/* Supporting marketing content */
+.marketing {
+    margin: 60px 0;
+}
+.marketing p + h4 {
+    margin-top: 28px;
+}
 
 
-      /* Customize the navbar links to be fill the entire space of the .navbar */
-      .navbar {
-        margin-top: 20px;
-      }
-      .navbar .navbar-inner {
-        padding: 0;
-      }
-      .navbar .nav {
-        margin: 0;
-        display: table;
-        width: 100%;
-      }
-      .navbar .nav li {
-        display: table-cell;
-        width: 1%;
-        float: none;
-      }
-      .navbar .nav li a {
-        font-weight: bold;
-        text-align: center;
-        border-left: 1px solid rgba(255,255,255,.75);
-        border-right: 1px solid rgba(0,0,0,.1);
-      }
-      .navbar .nav li:first-child a {
-        border-left: 0;
-        border-radius: 3px 0 0 3px;
-      }
-      .navbar .nav li:last-child a {
-        border-right: 0;
-        border-radius: 0 3px 3px 0;
-      }
+/* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar {
+    margin-top: 20px;
+}
+.navbar .navbar-inner {
+    padding: 0;
+}
+.navbar .nav {
+    margin: 0;
+    display: table;
+    width: 100%;
+}
+.navbar .nav li {
+    display: table-cell;
+    width: 1%;
+    float: none;
+}
+.navbar .nav li a {
+    font-weight: bold;
+    text-align: center;
+    border-left: 1px solid rgba(255,255,255,.75);
+    border-right: 1px solid rgba(0,0,0,.1);
+}
+.navbar .nav li:first-child a {
+    border-left: 0;
+    border-radius: 3px 0 0 3px;
+}
+.navbar .nav li:last-child a {
+    border-right: 0;
+    border-radius: 0 3px 3px 0;
+}
 
-      .home_menu {
-        display: none;
-      }
+.home_menu {
+    display: none;
+}
 
-      .news_frame {
-        margin-top: 20px;
-        height: 300px;
-      }
+.news_frame {
+    margin-top: 20px;
+    height: 300px;
+}
 
-      #show-pictures{
-        height: 300px;
-      }
+#show-pictures{
+    height: 300px;
+}
 
-      #head-title{
-        color: #5480b0;
-      }
+#head-title{
+    color: #5480b0;
+}
 
 .front-wrap {
     height: 290px;
@@ -107,8 +107,8 @@
 }
 
 .width-table{
-  width: 100%;
-  display: table;
+    width: 100%;
+    display: table;
 
 }
 
@@ -176,7 +176,7 @@ table.documents td {
     float: left;
     height: 100%;
     width: 95%;
-    /* border-right: 1px solid #0064b9; */
+/* border-right: 1px solid #0064b9; */
 }
 
 .usoft-listview-header
@@ -209,16 +209,16 @@ table.documents td {
 }
 
 .usoft-listview-header h3 {
-float: left;
+    float: left;
 }
 
 .usoft-listview-more a {
-float: right;
-color: #999999;
-font-weight: normal;
-font-size: 13px;
-margin: 0px 15px 0px 0px;
-text-align: right;
+    float: right;
+    color: #999999;
+    font-weight: normal;
+    font-size: 13px;
+    margin: 0px 15px 0px 0px;
+    text-align: right;
 }
 
 .news-list-important {
@@ -231,39 +231,39 @@ text-align: right;
 }
 
 #photocontainer{
-  width: 1050px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  margin-top: 15px;
-  background: white;
+    width: 1050px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    background: white;
 }
 
 /*photobanner*/
 
 .photobanner {
-        height: 80px;
-        width: 3280px;
+    height: 80px;
+    width: 3280px;
 }
 
 .photobanner img {
-        -webkit-transition: all 1s ease;
-        -moz-transition: all 1s ease;
-        -o-transition: all 1s ease;
-        -ms-transition: all 1s ease;
-        transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
 }
 
 .photobanner img:hover {
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -o-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        transform: scale(1.1);
-        cursor: pointer;
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    cursor: pointer;
 
-        -webkit-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
-        box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
 }
 
 .usoft-container-section ul
@@ -273,58 +273,58 @@ text-align: right;
 
 /*keyframe animations*/
 .first {
-        -webkit-animation: bannermove 30s linear infinite;
-        -moz-animation: bannermove 30s linear infinite;
-        -ms-animation: bannermove 30s linear infinite;
-        animation: bannermove 30s linear infinite;
+    -webkit-animation: bannermove 30s linear infinite;
+    -moz-animation: bannermove 30s linear infinite;
+    -ms-animation: bannermove 30s linear infinite;
+    animation: bannermove 30s linear infinite;
 }
 
 @keyframes "bannermove" {
- 0% {
-    margin-left: 0px;
- }
- 100% {
-    margin-left: -2125px;
- }
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
 
 }
 
 @-moz-keyframes bannermove {
- 0% {
-   margin-left: 0px;
- }
- 100% {
-   margin-left: -2125px;
- }
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
 
 }
 
 @-webkit-keyframes "bannermove" {
- 0% {
-   margin-left: 0px;
- }
- 100% {
-   margin-left: -2125px;
- }
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
 
 }
 
 @-ms-keyframes "bannermove" {
- 0% {
-   margin-left: 0px;
- }
- 100% {
-   margin-left: -2125px;
- }
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
 
 }
 
 @-o-keyframes "bannermove" {
- 0% {
-   margin-left: 0px;
- }
- 100% {
-   margin-left: -2125px;
- }
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
 
 }
