@@ -3,7 +3,7 @@ import datetime, os, sys, uuid
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -33,16 +33,20 @@ from school.views import application_report_view_work, final_report_view_work
 @login_required
 @authority_required(TEACHER_USER)
 def home_view(request, is_expired = False):
-    limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
-    project_list = get_running_project_query_set().filter(adminuser__userid = request.user)
-    #project_list = ProjectSingle.objects.filter(Q(adminuser__userid = request.user) & \
-    #                                            Q(over_status__status = OVER_STATUS_NOTOVER))
-    data = {
-        "project_list": project_list,
-        "limited_num": limited_num,
-        "remaining_activation_times": remaining_activation_times,
-        }
-    return render(request, "teacher/home.html", data)
+    teacher_profile = TeacherProfile.objects.get(userid = request.user)
+    if len(teacher_profile.name.strip()) == 0 or len(teacher_profile.telephone.strip()) == 0 or len(teacher_profile.titles.strip()) == 0:
+        return redirect("/settings/profile")
+    else:
+        limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
+        project_list = get_running_project_query_set().filter(adminuser__userid = request.user)
+        for pro_obj in project_list:
+            add_fileurl(pro_obj)
+        data = {
+            "project_list": project_list,
+            "limited_num": limited_num,
+            "remaining_activation_times": remaining_activation_times,
+            }
+        return render(request, "teacher/home.html", data)
 
 @csrf.csrf_protect
 @login_required
