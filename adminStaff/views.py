@@ -839,8 +839,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
-        data = application_report_view_work(request, pid, is_expired = False, 
-            isSetReadonly = True, readonly=False)
+        data = application_report_view_work(request, pid)
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -848,16 +847,19 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        data = final_report_view_work(request, pid, is_expired = False, 
-            isSetReadonly = True, readonly=False)
+        data = final_report_view_work(request, pid, is_expired = False)
         return render(request, 'adminStaff/final.html', data)
-        
+
 
     @staticmethod
     @csrf.csrf_protect
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
     def member_change(request, pid):
+
+        data = member_change_work(request, pid)
+        return render(request, "adminStaff/member_change.html", data)
+
         """
         project group member change
         """
@@ -934,3 +936,46 @@ class AdminStaffService(object):
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
+
+
+
+
+
+
+
+
+
+
+
+def member_change_work(request, pid):
+    """
+    project group member change
+    """    
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    #project = ProjectSingle.objects.get(student=student_account)
+
+    project = ProjectSingle.objects.get(project_id = pid)
+    # isIN =  get_schooluser_project_modify_status(project)
+    student_group = Student_Group.objects.filter(project = project)
+            
+
+    for s in student_group:
+        s.sex = s.get_sex_display()
+
+    student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
+
+    if check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+
+    else:
+        readonly = False
+
+
+    data = {"pid": pid,
+            "student_group": student_group,
+            "student_group_form": student_group_form,
+            "student_group_info_form": student_group_info_form,
+            'readonly': readonly,
+            }
+    return  data        
