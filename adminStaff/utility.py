@@ -456,4 +456,3 @@ def get_memberlist(manager_studentid,student_Group):
     memberlist=','.join(memberlist)
     return memberlist,count
 
->>>>>>> ba267fd... minzu project summary excel
