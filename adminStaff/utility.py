@@ -352,7 +352,7 @@ def info_xls_province_gen():
     worksheet = workbook.add_sheet('sheet1')
 
     # generate header
-    worksheet.write_merge(0, 0, 0, 19, '大连民族学院大学生创新创业训练计划项目信息汇总表')
+    worksheet.write_merge(0, 0, 0, 19, '大连理工大学大学生创新创业训练计划项目信息汇总表')
 
     # generate body
     worksheet.write_merge(1, 4, 0, 0, '序号')
@@ -405,7 +405,8 @@ def info_xls_projectsummary(request):
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
-        xls_obj.write(row, 1, unicode(proj_obj.school))
+        xls_obj.write(row, 1, unicode(proj_obj.school.school))
+        loginfo(p=proj_obj.school.school,label="school")
         xls_obj.write(row, 2, unicode(proj_obj.project_code))
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
@@ -423,7 +424,7 @@ def info_xls_projectsummary(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院大学生创新创业训练计划项目信息汇总表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新创业训练计划项目信息汇总表"))
     workbook.save(save_path)
     return save_path
 
@@ -455,5 +456,3 @@ def get_memberlist(manager_studentid,student_Group):
     count=len(memberlist)+1
     memberlist=','.join(memberlist)
     return memberlist,count
-
->>>>>>> ba267fd... minzu project summary excel

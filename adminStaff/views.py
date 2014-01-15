@@ -894,11 +894,15 @@ class AdminStaffService(object):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
-        if exceltype == 1:
+        if exceltype == EXCEL_TYPE_BASEINFORMATION:
             file_path = info_xls_baseinformation(request)
-        elif exceltype == 2:
+        elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
             file_path = info_xls_expertscore(request)
-        elif exceltype == 3:
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
+            file_path = info_xls_summaryinnovate(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
+            file_path  = info_xls_summaryentrepreneuship(request)       
+        elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
             file_path = info_xls_projectsummary(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
