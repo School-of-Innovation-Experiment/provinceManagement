@@ -41,6 +41,11 @@ def index_context(request):
     context.update(getContext(news_policy, 1, "news_policy"))
     context.update(getContext(news_outstanding, 1, "news_outstanding"))
     context.update(getContext(news_others, 1, "news_others"))
+
+    context.update(
+        getContext(
+            News.objects.exclude(news_document=u'').order_by('-news_date'), \
+                1, 'news_docs'))
     return context
     # return render(request, 'home/index.html', context)
 
@@ -53,6 +58,7 @@ def index_new(request):
     news_cate["news_category_policy"] = NEWS_CATEGORY_POLICY
     news_cate["news_category_others"] = NEWS_CATEGORY_OTHERS
     news_cate["news_category_outstanding"] = NEWS_CATEGORY_OUTSTANDING
+    news_cate["news_category_documents"] = NEWS_CATEGORY_DOCUMENTS
     context.update(news_cate)
     return render(request, "home/new-homepage.html", context)
 
@@ -63,9 +69,27 @@ def read_news(request, news_id):
         'news': news,
         'news_cate':news_cate,
     })
-    return render(request, 'home/news-content.html', context)
+
+    html = 'home/news-content.html' if IS_MINZU_SCHOOL else 'home/news-content-new.html'
+    return render(request, html, context)
+
+def list_news_by_cate_document(request):
+    news_cate = "文件下载"
+    news_cate_small = "documents"
+    try:
+        news_list = News.objects.exclude(news_document=u'').order_by('-news_date')
+    except:
+        raise Http404
+    news_page = request.GET.get('news_page')
+    context = getContext(news_list, news_page, 'docs')
+    context["news_cate"] = news_cate
+    context["news_cate_small"] = news_cate_small
+    return render(request, 'home/news-list-by-cate-documents.html', \
+                  Context(context))
 
 def list_news_by_cate(request, news_cate):
+    if news_cate == NEWS_CATEGORY_DOCUMENTS:
+        return list_news_by_cate_document(request)
     try:
         news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
         news_cate = NewsCategory.objects.get(category=news_cate)
