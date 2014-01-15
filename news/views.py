@@ -16,6 +16,7 @@ from backend.utility import getContext, convert2media_url
 import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, STATIC_URL, MEDIA_URL
 from adminStaff.models import HomePagePic
+from const import *
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
@@ -27,7 +28,57 @@ def get_news(news_id = None):
         news_content = (News.objects.count() and News.objects.order_by('-news_date')[0]) or None
     return news_content
 
+
+def index_context(request):
+    '''
+    for index_new
+    '''
+    news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT).order_by('-news_date')
+    news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
+    news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING).order_by('-news_date')
+    news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS).order_by('-news_date')
+    context = getContext(news_announcement, 1, "news_announcement")
+    context.update(getContext(news_policy, 1, "news_policy"))
+    context.update(getContext(news_outstanding, 1, "news_outstanding"))
+    context.update(getContext(news_others, 1, "news_others"))
+    return context
+    # return render(request, 'home/index.html', context)
+
+def index_new(request):
+    # names = getSchoolsPic()
+    # context = {"schools_name_list": names}
+    context.update(index_context(request))
+    news_cate = {}
+    news_cate["news_category_announcement"] = NEWS_CATEGORY_ANNOUNCEMENT
+    news_cate["news_category_policy"] = NEWS_CATEGORY_POLICY
+    news_cate["news_category_others"] = NEWS_CATEGORY_OTHERS
+    news_cate["news_category_outstanding"] = NEWS_CATEGORY_OUTSTANDING
+    context.update(news_cate)
+    return render(request, "home/new-homepage.html", context)
+
+def read_news(request, news_id):
+    news = get_news(news_id)
+    news_cate = news.news_category
+    context = Context({
+        'news': news,
+        'news_cate':news_cate,
+    })
+    return render(request, 'home/news-content.html', context)
+
+def list_news_by_cate(request, news_cate):
+    try:
+        news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
+        news_cate = NewsCategory.objects.get(category=news_cate)
+    except:
+        raise Http404
+    news_page = request.GET.get('news_page')
+    context = getContext(news_list, news_page, 'news')
+    context["news_cate"] = news_cate
+    return render(request, 'home/news-list-by-cate.html', \
+                  Context(context))
+
 def index(request):
+    if IS_DLUT_SCHOOL: return index_news(request)
     def convert_url(raw_url):
         return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
     the_latest_news = get_news()
@@ -60,12 +111,6 @@ def index(request):
         getContext(news_list, \
                    1, 'homepage_news'))
     return render(request, 'home/index.html', context)
-
-def read_news(request, news_id):
-    context = Context({
-            'news': get_news(news_id),
-            })
-    return render(request, 'home/news-content.html', context)
 
 def list_news(request):
     news_list = News.objects.order_by('-news_date')
