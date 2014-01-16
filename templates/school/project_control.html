@@ -25,9 +25,11 @@
     <input type="button" id="finish_button"  onclick="finish_control()" {%if is_finishing %}value="关闭结题" class="btn btn-warning"{%endif%}{%if not is_finishing%} class="btn btn-primary" value="打开结题"{%endif%}>
     <span> 项目结题过程管理开关</span>
     <br>
+    <span class="label label-important {% if not is_finishing %} hide {% endif%}" id = "finishing-information">
     {% if is_finishing %}
-    <span class="label label-important" id = "finishing-information">点击“关闭结题按钮”会取消所有结题年份</span>
+    点击“关闭结题按钮”会取消所有结题年份
     {% endif %}
+    </span>
     {% else %}
     目前没有未结题项目或未到结题阶段
     {% endif %}
