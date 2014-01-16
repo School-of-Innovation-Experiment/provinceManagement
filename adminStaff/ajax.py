@@ -25,13 +25,13 @@ from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
-from school.utility import get_recommend_limit,get_schooluser_project_modify_status
+from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year
 from django.db.models import Q
 
 from const import *
 import datetime
 from backend.logging import logger, loginfo
-
+from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
 
 def refresh_mail_table(request):
@@ -340,11 +340,13 @@ def change_temnotice(request, temnotice_form, origin):
 
 @dajaxice_register
 def finish_control(request,year_list):
+    print 'haha'
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"})
     user = User.objects.get(id=adminObj.userid_id)
+    year_finishing_list = []
     if adminObj.is_finishing ==False:
         if year_list != []:
             for temp in year_list:
@@ -355,6 +357,12 @@ def finish_control(request,year_list):
             adminObj.is_finishing=True
             adminObj.save()
             flag = True
+
+            projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+            for finishtemp in projectfinish :
+                if finishtemp.project_year not in year_finishing_list:
+                    year_finishing_list.append(finishtemp.project_year)
+            year_finishing_list = sorted(year_finishing_list)
         else:
             return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"})
     else:
@@ -363,7 +371,7 @@ def finish_control(request,year_list):
         adminObj.is_finishing=False
         adminObj.save()
     flag = adminObj.is_finishing
-    return simplejson.dumps({'flag': flag})
+    return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
 def FundsDelete(request,delete_id,pid):
@@ -408,7 +416,7 @@ def set_recommend_rate(request, set_val):
     recommend_rate_obj = SchoolRecommendRate.load()
     recommend_rate_obj.rate = set_val
     recommend_rate_obj.save()
-    return simplejson.dumps({'message': message})
+    return simplejson.dumps({'message': message, 'set_val': str(set_val)})
 
 def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
@@ -472,3 +480,19 @@ def FileDeleteConsistence(request, fid):
     else:
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
+@dajaxice_register
+def auto_ranking(request):
+    message = ""
+    project_set = list(get_current_project_query_set())
+    project_set.sort(key = lambda x: (x.school.school.schoolName,
+                                      x.adminuser.name,
+                                      x.project_category.category))
+    
+    def auto_completion(x):
+        return "%04d" % x
+
+    for i, project in enumerate(project_set):
+        project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
+        project.save()
+        print project.project_unique_code
+    return simplejson.dumps({"message": message})

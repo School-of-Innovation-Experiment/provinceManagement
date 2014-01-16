@@ -128,7 +128,7 @@ def final_report_view(request, pid=None,is_expired=False):
     return render(request, 'student/final.html', data)
 
 
-def final_report_view_work(request, pid=None,is_expired=False, isSetReadonly=False,readonly=False):
+def final_report_view_work(request, pid=None,is_expired=False):
 
     """
     student final report
@@ -138,16 +138,23 @@ def final_report_view_work(request, pid=None,is_expired=False, isSetReadonly=Fal
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    # techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status
 
-    if not isSetReadonly:
+    if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else :
+        readonly = False
+
     
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
-        # techcompetition_form =
         if final_form.is_valid():
             final_form.save()
             project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
@@ -155,9 +162,8 @@ def final_report_view_work(request, pid=None,is_expired=False, isSetReadonly=Fal
             # return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
             pass
-            # logger.info("Final Form Valid Failed"+"**"*10)
-            # logger.info(final_form.errors)
-            # logger.info("--"*10)
+            logger.info("Final Form Valid Failed"+"**"*10)
+            logger.info(final_form.errors)
 
     final_form = FinalReportForm(instance=final)
     # techcompetition_form = TechCompetitionForm(instance=techcompetition)
@@ -180,7 +186,7 @@ def application_report_view(request,pid=None,is_expired=False):
     return render(request, 'student/application.html', data)
 
 
-def application_report_view_work(request, pid=None,is_expired=False, isSetReadonly=False,readonly=False):
+def application_report_view_work(request, pid=None, is_expired=False):
     """
         readonly determined by time
         is_show determined by identity 
@@ -189,14 +195,26 @@ def application_report_view_work(request, pid=None,is_expired=False, isSetReadon
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     is_currentyear = check_year(project)
+
     is_applying = check_applycontrol(project)
 
 
-    if not isSetReadonly:
+    if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else:
+        readonly = False  
         
 
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+
+
+
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
@@ -219,11 +237,9 @@ def application_report_view_work(request, pid=None,is_expired=False, isSetReadon
                     project.save()
                     # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
-                pass                
-                # logger.info(" info  application Form Valid Failed"+"**"*10)
-                # logger.info(info_form.errors)
-                # logger.info(application_form.errors)
-                # logger.info("--"*10)
+                logger.info("Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
         else :
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
@@ -232,12 +248,10 @@ def application_report_view_work(request, pid=None,is_expired=False, isSetReadon
                     project.save()
                     # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
-                pass
-                # logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                # logger.info(info_form.errors)
-                # logger.info(application_form.errors)
-                # logger.info(teacher_enterpriseform.errors)
-                # logger.info("--"*10)
+                logger.info("info  application teacher Form Valid Failed"+"**"*10)
+                logger.info(info_form.errors)
+                logger.info(application_form.errors)
+                logger.info(teacher_enterpriseform.errors)
 
     else:
         info_form = InfoForm(instance=project,pid=pid)

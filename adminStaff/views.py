@@ -614,6 +614,7 @@ class AdminStaffService(object):
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
+
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
@@ -621,6 +622,20 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+        #查看正在结题的年份
+        year_finishing_list = []
+        adminObj = AdminStaffProfile.objects.get(userid = request.user)
+        user = User.objects.get(id=adminObj.userid_id)
+        projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+        for finishtemp in projectfinish :
+            if finishtemp.project_year not in year_finishing_list:
+                year_finishing_list.append(finishtemp.project_year)
+
+        year_list = sorted(year_list)       
+        year_finishing_list = sorted(year_finishing_list)
+
+        loginfo(p=year_finishing_list,label="year_finishing_list")
+
 
         recommend_rate_obj = SchoolRecommendRate.load()
 
@@ -630,6 +645,7 @@ class AdminStaffService(object):
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
+                        "year_finishing_list":year_finishing_list,
                     })
 
     @staticmethod
@@ -838,8 +854,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
-        data = application_report_view_work(request, pid, is_expired = False, 
-            isSetReadonly = True, readonly=False)
+        data = application_report_view_work(request, pid)
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -847,16 +862,19 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        data = final_report_view_work(request, pid, is_expired = False, 
-            isSetReadonly = True, readonly=False)
+        data = final_report_view_work(request, pid, is_expired = False)
         return render(request, 'adminStaff/final.html', data)
-        
+
 
     @staticmethod
     @csrf.csrf_protect
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
     def member_change(request, pid):
+
+        data = member_change_work(request, pid)
+        return render(request, "adminStaff/member_change.html", data)
+
         """
         project group member change
         """
@@ -892,10 +910,16 @@ class AdminStaffService(object):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
-        if exceltype == 1:
+        if exceltype == EXCEL_TYPE_BASEINFORMATION:
             file_path = info_xls_baseinformation(request)
-        elif exceltype == 2:
+        elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
             file_path = info_xls_expertscore(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
+            file_path = info_xls_summaryinnovate(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
+            file_path  = info_xls_summaryentrepreneuship(request)       
+        elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
+            file_path = info_xls_projectsummary(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod
@@ -929,3 +953,46 @@ class AdminStaffService(object):
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
+
+
+
+
+
+
+
+
+
+
+
+def member_change_work(request, pid):
+    """
+    project group member change
+    """    
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    #project = ProjectSingle.objects.get(student=student_account)
+
+    project = ProjectSingle.objects.get(project_id = pid)
+    # isIN =  get_schooluser_project_modify_status(project)
+    student_group = Student_Group.objects.filter(project = project)
+            
+
+    for s in student_group:
+        s.sex = s.get_sex_display()
+
+    student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
+
+    if check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+
+    else:
+        readonly = False
+
+
+    data = {"pid": pid,
+            "student_group": student_group,
+            "student_group_form": student_group_form,
+            "student_group_info_form": student_group_info_form,
+            'readonly': readonly,
+            }
+    return  data        
