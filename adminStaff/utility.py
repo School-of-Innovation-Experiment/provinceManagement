@@ -252,7 +252,7 @@ def info_xls_projectsummary(request):
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
-        xls_obj.write(row, 1, unicode(proj_obj.school))
+        xls_obj.write(row, 1, unicode(proj_obj.school.school))
         xls_obj.write(row, 2, unicode(proj_obj.project_code))
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
