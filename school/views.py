@@ -137,8 +137,7 @@ def application_report_view(request, pid=None):
             readonly determined by time
             is_show determined by identity
             is_innovation determined by project_category
-        """        
-
+        """
         is_expired=False
         loginfo(p=pid+str(is_expired), label="in application")
         project = get_object_or_404(ProjectSingle, project_id=pid) 

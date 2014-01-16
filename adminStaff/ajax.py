@@ -25,7 +25,7 @@ from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
-from school.utility import get_recommend_limit
+from school.utility import get_recommend_limit,get_schooluser_project_modify_status
 from django.db.models import Q
 
 from const import *
@@ -378,7 +378,7 @@ def FundsDelete(request,delete_id,pid):
             project.funds_remain = project.funds_remain + funds.funds_amount
             funds.delete()
             project.save()
-            table = refresh_funds_table(request,pid)
+            table = refresh_funds_table(request,project)
             ret = {'status': '0', 'message': u"条目删除成功", 'table':table,
                             "funds_total":project.funds_total,
                             "funds_remain":project.funds_remain}
@@ -405,7 +405,6 @@ def set_recommend_rate(request, set_val):
     except:
         message = "wrong input"
         return simplejson.dumps({'message': message})
-    
     recommend_rate_obj = SchoolRecommendRate.load()
     recommend_rate_obj.rate = set_val
     recommend_rate_obj.save()
@@ -438,18 +437,18 @@ def new_or_update_funds(request,pid,funds_form,name):
         new_funds.save()
         project.funds_remain = project.funds_total - cost
         project.save()
-        table = refresh_funds_table(request,pid)
+        table = refresh_funds_table(request,project)
         ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table,
                             "funds_total":project.funds_total,
                             "funds_remain":project.funds_remain}
     else:
         ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"}
     return ret
-def refresh_funds_table(request,pid):
-    funds_list    = Funds_Group.objects.filter(project_id = pid)
-    
+def refresh_funds_table(request,project):
+    funds_list = Funds_Group.objects.filter(project_id = project.project_id)
     context = userauth_settings(request)
     context["project_funds_list"] = funds_list
+    context['is_addFundDetail'] = get_schooluser_project_modify_status(project)
     return render_to_string("widgets/fund/fund_table.html",
                             context)
 
