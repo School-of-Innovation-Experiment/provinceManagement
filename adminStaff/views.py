@@ -614,6 +614,7 @@ class AdminStaffService(object):
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
+
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
@@ -621,6 +622,20 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+        #查看正在结题的年份
+        year_finishing_list = []
+        adminObj = AdminStaffProfile.objects.get(userid = request.user)
+        user = User.objects.get(id=adminObj.userid_id)
+        projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+        for finishtemp in projectfinish :
+            if finishtemp.project_year not in year_finishing_list:
+                year_finishing_list.append(finishtemp.project_year)
+
+        year_list = sorted(year_list)       
+        year_finishing_list = sorted(year_finishing_list)
+
+        loginfo(p=year_finishing_list,label="year_finishing_list")
+
 
         recommend_rate_obj = SchoolRecommendRate.load()
 
@@ -630,6 +645,7 @@ class AdminStaffService(object):
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
+                        "year_finishing_list":year_finishing_list,
                     })
 
     @staticmethod
