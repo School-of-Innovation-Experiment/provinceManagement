@@ -340,11 +340,13 @@ def change_temnotice(request, temnotice_form, origin):
 
 @dajaxice_register
 def finish_control(request,year_list):
+    print 'haha'
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"})
     user = User.objects.get(id=adminObj.userid_id)
+    year_finishing_list = []
     if adminObj.is_finishing ==False:
         if year_list != []:
             for temp in year_list:
@@ -355,6 +357,12 @@ def finish_control(request,year_list):
             adminObj.is_finishing=True
             adminObj.save()
             flag = True
+
+            projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+            for finishtemp in projectfinish :
+                if finishtemp.project_year not in year_finishing_list:
+                    year_finishing_list.append(finishtemp.project_year)
+            year_finishing_list = sorted(year_finishing_list)
         else:
             return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"})
     else:
@@ -363,7 +371,7 @@ def finish_control(request,year_list):
         adminObj.is_finishing=False
         adminObj.save()
     flag = adminObj.is_finishing
-    return simplejson.dumps({'flag': flag})
+    return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
 def FundsDelete(request,delete_id,pid):

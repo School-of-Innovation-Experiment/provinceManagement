@@ -273,12 +273,26 @@ def project_control(request):
     for pro_obj in pro_list :
         if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
+
+
+    year_finishing_list = []
+    schoolObj = SchoolProfile.objects.get(userid = request.user)    
+    user = User.objects.get(id=schoolObj.userid_id)
+    projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+    for finishtemp in projectfinish :
+        if finishtemp.project_year not in year_finishing_list:
+            year_finishing_list.append(finishtemp.project_year)
+
+    year_list = sorted(year_list)       
+    year_finishing_list = sorted(year_finishing_list)
+
     havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
                     "year_list":year_list,
                     "havedata_p":havedata_p,
+                    "year_finishing_list":year_finishing_list,
                 })
 
 

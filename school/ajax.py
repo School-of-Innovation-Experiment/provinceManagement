@@ -214,6 +214,7 @@ def finish_control(request,year_list):
     except SchoolProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
     user = User.objects.get(id=schoolObj.userid_id)
+    year_finishing_list = []
     if schoolObj.is_finishing ==False:
         if year_list != []:            
             for temp in year_list:
@@ -224,6 +225,12 @@ def finish_control(request,year_list):
             schoolObj.is_finishing=True
             schoolObj.save()
             flag = True
+
+            projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+            for finishtemp in projectfinish :
+                if finishtemp.project_year not in year_finishing_list:
+                    year_finishing_list.append(finishtemp.project_year)
+            year_finishing_list = sorted(year_finishing_list)
         else:
             return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
     else:
@@ -232,7 +239,7 @@ def finish_control(request,year_list):
         schoolObj.is_finishing=False
         schoolObj.save()
     flag = schoolObj.is_finishing 
-    return simplejson.dumps({'flag': flag})
+    return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
 def change_project_overstatus(request, project_id, changed_overstatus):
