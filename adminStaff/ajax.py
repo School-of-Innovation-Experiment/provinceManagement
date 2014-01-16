@@ -25,13 +25,13 @@ from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
-from school.utility import get_recommend_limit
+from school.utility import get_recommend_limit, get_current_year
 from django.db.models import Q
 
 from const import *
 import datetime
 from backend.logging import logger, loginfo
-
+from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
 
 def refresh_mail_table(request):
@@ -409,7 +409,7 @@ def set_recommend_rate(request, set_val):
     recommend_rate_obj = SchoolRecommendRate.load()
     recommend_rate_obj.rate = set_val
     recommend_rate_obj.save()
-    return simplejson.dumps({'message': message})
+    return simplejson.dumps({'message': message, 'set_val': str(set_val)})
 
 def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
@@ -473,3 +473,19 @@ def FileDeleteConsistence(request, fid):
     else:
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
+@dajaxice_register
+def auto_ranking(request):
+    message = ""
+    project_set = list(get_current_project_query_set())
+    project_set.sort(key = lambda x: (x.school.school.schoolName,
+                                      x.adminuser.name,
+                                      x.project_category.category))
+    
+    def auto_completion(x):
+        return "%04d" % x
+
+    for i, project in enumerate(project_set):
+        project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
+        project.save()
+        print project.project_unique_code
+    return simplejson.dumps({"message": message})

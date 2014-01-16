@@ -80,7 +80,7 @@ function get_project_unique_code(caller){
 }
 
 function set_recommend_rate(){
-    var set_val = $("#id_rec_setting").val()
+    set_val = $("#id_rec_setting").val()
     $("#warning_bar").hide();
     $("#success_bar").hide();
     Dajaxice.adminStaff.set_recommend_rate(set_recommend_rate_callback, {'set_val': set_val})
@@ -89,10 +89,20 @@ function set_recommend_rate_callback(data){
     if(data.message == "wrong input"){
         $("#warning_bar").show();
     }
+    else{
+        $("#current_rate").html("项目推荐比例管理（当前比例:" + data.set_val + "%）");
         $("#success_bar").show();
     }
 }
 function change_projectuniquecode_callback(data){
   var target = "#ProjectUniqueCode_" + glo_project_id;
   $(target).html(data.res);
+}
+function auto_ranking(){
+    $("#success_bar_2").hide();
+    if(confirm("将对当届所有项目编号，若存在项目原有编号，本次操作后将覆盖，是否继续？"))
+        Dajaxice.adminStaff.auto_ranking(auto_ranking_callback, {});
+}
+function auto_ranking_callback(data){
+    $("#success_bar_2").show();
 }
