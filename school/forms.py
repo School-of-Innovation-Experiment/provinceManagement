@@ -251,7 +251,7 @@ class TeacherNumLimitForm(forms.Form):
         if not request:
             return
         school = SchoolProfile.objects.get(userid=request.user)
-        TEACHER_CHOICE_list = []
+        TEACHER_CHOICE_list = [(-1, "所有指导教师")]
         teacher_list        = TeacherProfile.objects.filter(school=school)
         for obj in teacher_list:
             TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
