@@ -63,6 +63,33 @@ def teacherProjNumLimit(request, form):
     # dajax = Dajax()
     form = TeacherNumLimitForm(deserialize_form(form), request = request)
     if form.is_valid():
+
+        if form.cleaned_data['teacher_name'] == '-1': #特殊处理所有指导教师的批量处理问题
+            limited_num = form.cleaned_data['limited_num']
+            num_and_remaining = get_project_num_and_remaining(request)
+            test_sum = 0
+            
+            for teacher in TeacherProfile.objects.filter(school__userid = request.user):
+                if TeacherProjectPerLimits.objects.filter(teacher = teacher).count() == 0:
+                    test_sum += limited_num
+                else:
+                    minnum = ProjectSingle.objects.filter(Q(adminuser = teacher) & Q(is_past = False)).count()
+                    test_sum += max(minnum, limited_num)
+            if test_sum > num_and_remaining['projects_remaining']:
+                return simplejson.dumps({'id': 'limited_num', 'message': u"分配数量剩余不足"})
+            for teacher in TeacherProfile.objects.filter(school__userid = request.user):
+                if TeacherProjectPerLimits.objects.filter(teacher = teacher).count() == 0:
+                    projLimit_obj = TeacherProjectPerLimits(teacher = teacher, number = limited_num)
+                    projLimit_obj.save()
+                else:
+                    projLimit_obj = TeacherProjectPerLimits.objects.get(teacher = teacher)
+                    minnum = ProjectSingle.objects.filter(Q(adminuser = teacher) & Q(is_past = False)).count()
+                    projLimit_obj.number = max(minnum, limited_num)
+                    projLimit_obj.save()
+            table = refresh_numlimit_table(request)
+            projects_remaining = get_project_num_and_remaining(request)['projects_remaining']
+            return simplejson.dumps({'message': "批量更新成功", 'status': "1", "table": table, 'projects_remaining': projects_remaining})
+            
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
         num_and_remaining = get_project_num_and_remaining(request)
