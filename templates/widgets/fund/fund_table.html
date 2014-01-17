@@ -14,7 +14,7 @@
 	      <td>{{project_funds.funds_datetime}}</td>
 	      <td>{{project_funds.funds_amount}}</td> 
               <td>{{project_funds.funds_detail}}</td>
-              {%if userauth.is_adminstaff or userauth.is_schooler or is_admin %}
+              {%if userauth.is_adminstaff or is_addFundDetail and userauth.is_schooler %}
                   <td><button class="btn btn-success" id="fund_delete">删除</button></td>
               {%endif%}
             </tr>

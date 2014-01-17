@@ -13,10 +13,9 @@ from users.models import *
 from django.db.models import Q
 from backend.logging import loginfo
 from adminStaff.models import NoticeMessage, ProjectControl
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD,IS_DLUT_SCHOOL,IS_MINZU_SCHOOL
 
 all_required = ('WEB_TITLE',)
-
 
 def application_settings(request):
     """The context processor function"""
@@ -115,7 +114,14 @@ def userauth_settings(request):
         userauth["notice_message"] = ""
 
     context = {"userauth": userauth}
-
+    if IS_DLUT_SCHOOL:
+        context["IS_DLUT_SCHOOL"] = True
+    else:
+        context["IS_DLUT_SCHOOL"] = False
+    if IS_MINZU_SCHOOL:
+        context["IS_MINZU_SCHOOL"] = True
+    else:
+        context["IS_MINZU_SCHOOL"] = False
     return context
 
 def notice_message_settings(request):
