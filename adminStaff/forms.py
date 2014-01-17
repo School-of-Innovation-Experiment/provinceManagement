@@ -137,7 +137,10 @@ class NumLimitForm(forms.Form):
                            ) )
     def __init__(self, *args, **kwargs):
         super(NumLimitForm, self).__init__(*args, **kwargs)
-        SCHOOL_CHOICE_list = []
+        
+        SCHOOL_CHOICE_list = [(-1, "所有学部学院")]
+        #学院项目数量设定特殊添加，待debug
+
         school_list        = SchoolProfile.objects.all()
         for obj in school_list:
             SCHOOL_CHOICE_list.append((obj.id, obj.school))

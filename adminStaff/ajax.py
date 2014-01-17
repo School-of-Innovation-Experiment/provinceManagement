@@ -49,6 +49,21 @@ def NumLimit(request, form):
     if form.is_valid():
         #school = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
+        
+        print form.cleaned_data['school_name']
+        if form.cleaned_data["school_name"] == "-1": #处理所有学院的情况
+            for school_obj in SchoolProfile.objects.all():
+                if ProjectPerLimits.objects.filter(school = school_obj).count() == 0:
+                    projectlimit = ProjectPerLimits(school = school_obj, number = limited_num)
+                    projectlimit.save()
+                else:
+                    object = ProjectPerLimits.objects.get(school = school_obj)
+                    minnum = ProjectSingle.objects.filter(Q(school = school_obj) & Q(is_past = False)).count()
+                    object.number = max(limited_num, minnum)
+                    object.save()
+            table = refresh_numlimit_table(request)
+            return simplejson.dumps({'status': '1', 'table': table, 'message': u'批量更新成功'})
+
         try:
             school_obj = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
