@@ -75,10 +75,6 @@ def application_report_view(request, pid=None):
     data = application_report_view_work(request, pid)
     return render(request, 'school/application.html', data)
 
-
-
-
-
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
