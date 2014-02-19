@@ -772,7 +772,7 @@ class AdminStaffService(object):
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        q6 = (project_teacher_student_name and (Q(adminuser__name = project_teacher_student_name) | Q(student__name = project_teacher_student_name))) or None
+        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
         qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
         return qset
 
