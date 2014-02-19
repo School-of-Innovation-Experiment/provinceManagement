@@ -735,8 +735,10 @@ class AdminStaffService(object):
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
+            project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+            loginfo(project_teacher_student_name)
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication,project_school)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -751,7 +753,7 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication,project_school):
+    def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -770,7 +772,8 @@ class AdminStaffService(object):
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5])
+        q6 = (project_teacher_student_name and (Q(adminuser__name = project_teacher_student_name) | Q(student__name = project_teacher_student_name))) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
         return qset
 
     @staticmethod

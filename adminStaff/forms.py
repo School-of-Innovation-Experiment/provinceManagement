@@ -261,7 +261,9 @@ class ProjectManageForm(forms.Form):
         SCHOOL_CHOICE_list.append((object.id, object.school))
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     project_school = forms.ChoiceField(choices=SCHOOL_CHOICE)
-
+    teacher_student_name = forms.CharField(max_length = 20,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2','id':'name','placeholder':u"输入需要筛选的老师或学生名字"}),)
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
         project_list = ProjectSingle.objects.all()

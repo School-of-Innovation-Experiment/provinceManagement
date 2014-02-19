@@ -352,7 +352,8 @@ def projectFilterList(request,project_manage_form,school):
         project_grade = project_manage_form.cleaned_data["project_grade"]
         project_year =  project_manage_form.cleaned_data["project_year"]
         project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
-        qset = get_filter(project_grade,project_year,project_overstatus)
+        project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+        qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name)
         if qset :
            qset = reduce(lambda x, y: x & y, qset)
            pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
@@ -360,15 +361,3 @@ def projectFilterList(request,project_manage_form,school):
            pro_list = ProjectSingle.objects.filter(Q(school_id=school))
     pro_list = pro_list.order_by('adminuser')
     return pro_list
-def get_filter(project_grade,project_year,project_overstatus):
-    if project_grade == "-1":
-        project_grade=''
-    if project_year == '-1':
-        project_year=''
-    if project_overstatus == '-1':
-        project_overstatus=''
-    q1 = (project_year and Q(year=project_year)) or None
-    q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
-    q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-    qset = filter(lambda x: x != None, [q1, q2, q3])
-    return qset
