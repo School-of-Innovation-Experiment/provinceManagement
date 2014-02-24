@@ -1,0 +1,23 @@
+{% extends "base/base_home.html" %}
+
+{% block home_content %}
+  <div class="news-body">
+    <div class="news-list">
+      <div>
+        <div class="search">
+          <form action="#" method="get">
+            <input id="news-search-input" class="search-input" type="text" size="16" alt="Search.">
+            <input id="search-news" type="image" src="{{ STATIC_URL }}/images/go_button.gif" value="Go" alt="Go." title="Go." cate="{{news_cate.category}}">
+          </form>
+        </div>
+        <h3>{{news_cate}} <small>{{news_cate_small}}</small></h3>
+      </div>
+      {% include "home/ajax/_docs_list.html" %}
+    </div> <!-- news-list -->
+  </div> <!-- news-main -->
+  <hr />
+
+{% endblock %}
+{% block endjs %}
+  <script type="text/javascript" src="{{STATIC_URL}}/js/home/ajax_get_list.js"></script>
+{% endblock %}

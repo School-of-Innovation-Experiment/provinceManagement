@@ -19,6 +19,8 @@ from backend.decorators import check_auth
 from const import MEMBER_NUM_LIMIT
 from const import *
 
+from django.shortcuts import get_object_or_404
+
 def getProject(request):
     ok = check_auth(request.user, ADMINSTAFF_USER)
     ok = ok or check_auth(request.user, SCHOOL_USER)
@@ -45,6 +47,7 @@ def MemberChangeInfo(request, form, origin):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    #sdfasdf
     
     project = getProject(request)
 
@@ -102,12 +105,15 @@ def MemberDelete(request, deleteId):
 
 @dajaxice_register
 def MemberChange(request, form, origin):
+    print "hehe" 
 
     stugroup_form = StudentGroupForm(deserialize_form(form))
     if not stugroup_form.is_valid():
+        print 'sb'
         ret = {'status': '2',
                'error_id': stugroup_form.errors.keys(),
                'message': u"输入有误，请重新输入"}
+        print stugroup_form["student_id"]
     elif not origin: # 添加或更新成员
         ret = new_or_update_member(request, stugroup_form)
     else:  # 更换成员
@@ -179,6 +185,8 @@ def new_or_update_member(request, stugroup_form):
     else: # new student
         if group.count() == MEMBER_NUM_LIMIT[project.project_category.category]:
             ret = {'status': '1', 'message': u"人员已满，不可添加"}
+        elif sum(student_id in [student.studentId for student in project.student_group_set.all()] for project in get_running_project_query_set()):
+            ret = {'status': '1', 'message': u"相同学号已存在于其它正在进行的项目中"}
         else:
             new_student = Student_Group(studentId = student_id,
                                         studentName = student_name,

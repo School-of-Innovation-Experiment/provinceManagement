@@ -35,10 +35,10 @@ class InfoForm(ModelForm):
         Project Basic info
     """
     def __init__(self, *args, **kwargs):
-        pid = kwargs.pop('pid', None)
-        if not pid:
+        self.pid = kwargs.pop('pid', None)
+        if not self.pid:
             return
-        project = ProjectSingle.objects.get(project_id=pid)
+        project = ProjectSingle.objects.get(project_id=self.pid)
         student_group = Student_Group.objects.filter(project = project)
         member = []
         for temp_student in student_group:
@@ -56,7 +56,12 @@ class InfoForm(ModelForm):
                    'year', 'project_grade', 'project_status', 'expert','project_code',"funds_total","funds_remain", "over_status", "file_application", "file_interimchecklist", "file_summary", "file_projectcompilation", "score_application", "recommend", "is_past", "over_status", "funds_total", "funds_remain", "project_code", )
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  }
-
+    def clean_title(self):
+        print self.pid, "*"*1000
+        title = self.cleaned_data['title']
+        if ProjectSingle.objects.filter(title=title).exclude(project_id=self.pid).count():
+            raise forms.ValidationError("标题已存在")
+        return title
     def get_absolute_url(self):
         return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
 
@@ -246,7 +251,7 @@ class TeacherNumLimitForm(forms.Form):
         if not request:
             return
         school = SchoolProfile.objects.get(userid=request.user)
-        TEACHER_CHOICE_list = []
+        TEACHER_CHOICE_list = [(-1, "所有指导教师")]
         teacher_list        = TeacherProfile.objects.filter(school=school)
         for obj in teacher_list:
             TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
@@ -265,7 +270,9 @@ class ProjectManageForm(forms.Form):
     project_year = forms.ChoiceField() 
     # project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
-
+    teacher_student_name = forms.CharField(max_length = 20,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2','id':'name','placeholder':u"输入需要筛选的老师或学生名字"}),)
     def __init__(self, *args, **kwargs):
         school = kwargs.pop('school', None)
         super(ProjectManageForm, self).__init__(*args, **kwargs)

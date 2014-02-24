@@ -1,0 +1,69 @@
+{% extends "adminStaff/administrator.html" %}
+
+{%block nav_admin_content%}
+<h3>文件列表</h3>
+<table class="table table-hover table-striped" >
+  <thead>
+    <tr>
+      <td>名称</td>
+      <td>类型</td>
+      <td>大小</td>
+      <td>上传时间</td>
+    </tr>
+  </thead>
+  <tbody>
+    {%for item in files%}
+    <tr id="{{item.id}}">
+      <td>{{item.name}}</td>
+      <td>{{item.file_type}}</td>
+      <td>{{item.file_size}}</td>
+      <td>{{item.uploadtime}}</td>
+      <td>
+        <span><a href="{{item.url}}" class='btn btn-primary' target="_blank">下载</a></span>
+        <button class="btn btn-danger" rel="file_delete" fid="{{item.id}}">
+              <i class="icon-trash icon-white"></i>
+              <span>删除</span>
+        </button>
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table><!--end history list table-->
+<div class="alert fade in" id="delete-error-panel">
+  <a class="close" data-dismiss="alert" href="#">x</a>
+  <strong>
+    <p id="delete-message"></p>
+  </strong>
+</div>
+    {% if show_other %}
+    <div class="alert alert-error">
+      <a class="close" data-dismiss="alert">x</a>
+      <h4 class="alert-heading">系统提示！</h4>
+      <p>你上传的文件名不符合要求，请确认后再上传</p>
+    </div>
+    {%endif%}
+  <br/>
+  <div class="span4" style="margin-left:10px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+    <form method="POST"  action="homepage_import" enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>图片上传</h4></span>
+      <p>上传首页轮播图片</p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="jpg/png"/>
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+<div class="alert alert-success" id="filesupload-tips" >
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <h3><strong>文件上传提示!</strong></h3>
+    <br/>
+    <ul>
+        <li>只有文件格式为 <strong> (JPG,PNG) </strong>的文件才被允许上传.</li>
+        <li>文件大小不要超过<strong>50M</strong></li>
+    </ul>
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/home_page_pic.js"></script>
+{% endblock %}

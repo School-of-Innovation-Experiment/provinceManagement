@@ -4,14 +4,9 @@
   项目列表
 </h3>
 {% if havedata_p %}
-<form id="project_manage_form" method="POST" action="/school/" >
-  {% csrf_token %}
-  {{project_manage_form.project_grade}}
-  {{project_manage_form.project_year}}
-  <!-- {{project_manage_form.project_isover}} -->
-  {{project_manage_form.project_overstatus}}
-  <input type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button" value="检索"/>
-</form>
+   <form id="project_manage_form" method="POST" action="/school/" >
+      {%include "widgets/project_filter_form.html"%}
+   </form>
 <div>
   <table class="table table-hover">
     <thead>
@@ -32,34 +27,41 @@
     <tbody>
       {% for item in pro_list%}
       <tr>
-	<td>{{item.title|truncatechars:15}}</td>  
+	<td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:15}} </a></td>
+  
 	<td>{{item.project_code}}</td>
 	<td>{{item.project_grade}}</td>
-	<td>{{item.adminuser}}</td>
-  <td>
-    {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-    {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
-  </td>
-  <td>
-    {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-    {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
-  </td>
-  <td>
-    {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-    {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
-  </td>
-  <td>
-    {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-    {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
-  </td>
-  <td>{{item.telephone}}</td> 
-<td>
+	<td>{{item.adminuser.get_name}}</td>
+        <td>
+          {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_projectcompilation %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>{{item.telephone}}</td>
+        <td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
- 
+          {% if IS_DLUT_SCHOOL %}
           {%if item.is_showoverstatus%}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"  pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
+          {% else %}
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
           {% endif %}
-	</td>
+          {% endif%}
+          {% if IS_MINZU_SCHOOL %}
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
+          {% endif %}
+        </td>
 	<td>
       	  <span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
   	</td>
@@ -67,6 +69,7 @@
       {%endfor%}
     </tbody>
   </table>
+  {% if IS_DLUT_SCHOOL %}
   <div class="modal hide fade" style="display: none;" id="overstatus_choice">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>
@@ -80,6 +83,9 @@
       <a class="btn btn-primary" data-dismiss="modal" onclick="project_overstatus();">保存更新</a>
     </div>
   </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  {% endif %}
 </div>
 {% else %}
 目前没有进行中的项目或者项目未分级，请在查看项目等级设定界面查看是否有未分级项目<br>

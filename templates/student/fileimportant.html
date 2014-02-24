@@ -1,6 +1,6 @@
-{% extends "student/base/_content.html" %}
+{% extends "student/base/report_base.html" %}
 
-{% block calculate-content %}
+{% block report-content %}
 <h3>历史文件列表</h3>
 <table class="table table-hover table-striped" >
   <thead>
@@ -118,6 +118,7 @@
       </button>
     </form>
   </div>
+  {% if IS_DLUT_SCHOOL %}
   <br>
   <div class="span4" style="margin-left:0px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
     <form method="POST"  action={% url student.views.file_projectcompilation_view pid%} enctype="multipart/form-data">
@@ -131,7 +132,15 @@
       </button>
     </form>
   </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  {% endif %}
+  {% if IS_DLUT_SCHOOL%}
   <div class="span4" style="margin-left:10px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  <div class="span4" style="margin-left:0px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% endif %}
     <form method="POST"  action={% url student.views.file_scoreapplication_view pid%} enctype="multipart/form-data">
       {% csrf_token %}
       <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>学分申请表上传</h4></span>
@@ -143,7 +152,8 @@
       </button>
     </form>
   </div>
-    <div class="span4" style="margin-left:10px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% if IS_DLUT_SCHOOL %}
+  <div class="span4" style="margin-left:10px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
     <form method="POST"  action={% url student.views.file_other_view pid%} enctype="multipart/form-data">
       {% csrf_token %}
       <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>其他附件上传</h4></span>
@@ -155,17 +165,30 @@
       </button>
     </form>
   </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  {% endif %}
 <div class="alert alert-success" id="filesupload-tips" >
     <button type="button" class="close" data-dismiss="alert">x</button>
     <h3><strong>文件上传提示!</strong></h3>
     <br/>
+    {% if IS_MINZU_SCHOOL %}
     <ul>
         <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
-        <li>对于申报书，中期检查表，结题验收表，项目汇编和学分申请表五个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
-        <li>其他附件上传入口，用来上传与项目有关的介绍图片等，命名时不能与<strong>前五个入口</strong>的<strong>名字相同</strong>，不能为“申报书“，”中期检查表“，”结题验收表“，”项目汇编“和”学分申请表”五个关键字段</li>
+        <li>对于申报书，中期检查表，结题验收表和学分申请表四个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
         <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
         <li>文件大小不要超过<strong>50M</strong></li>
     </ul>
+    {% endif %}
+    {% if IS_DLUT_SCHOOL%}
+    <ul>
+        <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
+        <li>对于申报书，中期检查表，结题验收表，项目汇编和学分申请表五个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
+        <li>其他附件上传入口，用来上传与项目有关的介绍图片等，命名时不能与<strong>前五个入口</strong>的<strong>名字相同</strong>，不能为“申报书”，“中期检查表”，“结题验收表”，“项目汇编”和“学分申请表”五个关键字段</li>
+        <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
+        <li>文件大小不要超过<strong>50M</strong></li>
+    </ul>
+    {% endif %}
 </div>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/student/delete.js"></script>

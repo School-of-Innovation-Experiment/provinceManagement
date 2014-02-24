@@ -7,13 +7,6 @@
 	<a class="close" data-dismiss="alert">×</a>
 	<strong>警告:</strong>项目数量重置将设置所有学院项目数量上限为0。用于开启新的一届项目，重新设置项目上限
       </div>
-      <div class="alert alert-info">
-	<a class="close" data-dismiss="alert">×</a>
-	<strong>注意:</strong>针对不同学校可以有不同的上传数量限制，如果没有限制可以不用填写或者更改以前的限制数量为0即可
-      </div>
-      <div>
-	<label>学校选择</label>
-	{{num_limit_form.school_name}}
 	<label>可供上传项目数量</label>
 	{{num_limit_form.limited_num}}
 	<input type="button" class="btn btn-primary" value="保存更改" onclick="send_num_limit();">

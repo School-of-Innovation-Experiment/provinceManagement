@@ -29,13 +29,12 @@ from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
 from django.db.models import Q
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD
 from backend.decorators import *
 from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign
+from school.utility import check_project_is_assign, split_name
 #liuzhuo add
 import datetime
 import os
@@ -70,12 +69,17 @@ from backend.decorators import *
 from student.models import Student_Group,StudentWeeklySummary,Funds_Group
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 
+from django.core.files.uploadedfile import UploadedFile
+
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+from student.views import application_report_view_work, final_report_view_work
+
 
 class AdminStaffService(object):
     @staticmethod
     def sendemail(request,username,password,email,identity, **kwargs):
         #判断用户名是否存在存在直接返回
+
         #expert多重身份特殊处理
         if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
             expert_obj = ExpertProfile.objects.get(userid__email = email)
@@ -100,7 +104,7 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
+
     @staticmethod
     def filter_display(email, auth_list, host_email):
         """
@@ -524,15 +528,15 @@ class AdminStaffService(object):
         return render(request, "adminStaff/subject_rating.html", context)
 
     @staticmethod
-    def GetSubjectReviewList(project_id):
-        review_obj_list = Re_Project_Expert.objects.filter(project=project_id).all()
+    def GetSubjectReviewList(project_id, identity):
+        flag = (identity == 'adminStaff')
+        review_obj_list = Re_Project_Expert.objects.filter(Q(project=project_id)&Q(is_assign_by_adminStaff=flag))
         review_list = []
         for obj in review_obj_list:
             obj_list = [obj.comments, obj.score_significant,
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
-            print obj_list
             obj_list.append(sum(map(float, obj_list[1:])))
 
             review_list.append(obj_list)
@@ -574,6 +578,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def NoticeMessageSetting(request):
+        message_role_choice =list(MESSAGE_ROLE_CHOICES)
         if request.POST.get("message_content", False):
             datemessage = ""
             if request.POST.get('message_checkbox', False):
@@ -581,14 +586,10 @@ class AdminStaffService(object):
             else:
                 datemessage = "0"
             # TODO: 前台控制角色选择验证
-            if request.POST["message_role"] == '1':
-                rolemessage = MESSAGE_EXPERT_HEAD
-            elif request.POST["message_role"] == '2':
-                rolemessage = MESSAGE_SCHOOL_HEAD
-            elif request.POST["message_role"] == '3':
-                rolemessage = MESSAGE_STUDENT_HEAD
-            elif request.POST["message_role"] == '4':
-                rolemessage = MESSAGE_TEACHER_HEAD
+            for item in message_role_choice:
+                if request.POST["message_role"] == item[0]:
+                    rolemessage = item[2]
+                    break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
                 message = NoticeMessage(noticemessage = _message)
@@ -601,7 +602,8 @@ class AdminStaffService(object):
             _range += 1
         return render(request, "adminStaff/noticeMessageSettings.html",
                       {"templatenotice_group": templatenotice_group,
-                     "templatenotice_group_form": templatenotice_group_form})
+                       "templatenotice_group_form": templatenotice_group_form,
+                       "message_role_choice":message_role_choice })
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -612,6 +614,7 @@ class AdminStaffService(object):
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
+
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
@@ -619,6 +622,20 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+        #查看正在结题的年份
+        year_finishing_list = []
+        adminObj = AdminStaffProfile.objects.get(userid = request.user)
+        user = User.objects.get(id=adminObj.userid_id)
+        projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+        for finishtemp in projectfinish :
+            if finishtemp.project_year not in year_finishing_list:
+                year_finishing_list.append(finishtemp.project_year)
+
+        year_list = sorted(year_list)       
+        year_finishing_list = sorted(year_finishing_list)
+
+        loginfo(p=year_finishing_list,label="year_finishing_list")
+
 
         recommend_rate_obj = SchoolRecommendRate.load()
 
@@ -628,6 +645,7 @@ class AdminStaffService(object):
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
+                        "year_finishing_list":year_finishing_list,
                     })
 
     @staticmethod
@@ -666,8 +684,7 @@ class AdminStaffService(object):
         for pro_obj in context["pro_list"]:
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-                add_fileurl(pro_obj)
-
+            add_fileurl(pro_obj)
         context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
         context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
@@ -705,8 +722,9 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
+                    'pro_list_count':pro_list.count(),
                     'project_manage_form':project_manage_form
-                    }
+                  }
         return context
     @staticmethod
     @csrf.csrf_protect
@@ -717,8 +735,10 @@ class AdminStaffService(object):
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
+            project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+            loginfo(project_teacher_student_name)
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication,project_school)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -733,7 +753,7 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication,project_school):
+    def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -752,7 +772,8 @@ class AdminStaffService(object):
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5])
+        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
         return qset
 
     @staticmethod
@@ -836,72 +857,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
-        """
-            readonly determined by time
-            is_show determined by identity
-            is_innovation determined by project_category
-        """        
-
-        is_expired=False
-        loginfo(p=pid+str(is_expired), label="in application")
-        project = get_object_or_404(ProjectSingle, project_id=pid) 
-        is_currentyear = check_year(project)
-        is_applying = check_applycontrol(project)
-        #readonly= is_expired or (not is_currentyear) or (not is_applying)
-        readonly = False
-        is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
-        if project.project_category.category == CATE_INNOVATION:
-            iform = ApplicationReportForm
-            pre = get_object_or_404(PreSubmit, project_id=pid)
-            teacher_enterprise=None
-            is_innovation = True
-        else:
-            iform = EnterpriseApplicationReportForm
-            pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
-            teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
-            is_innovation = False
-
-        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        if request.method == "POST" and readonly is not True:
-            info_form = InfoForm(request.POST,pid=pid,instance=project)
-            application_form = iform(request.POST, instance=pre)
-            if is_innovation == True:
-                if info_form.is_valid() and application_form.is_valid():
-                    if save_application(project, pre, info_form, application_form, request.user):
-                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                        project.save()
-                else:
-                    pass
-                    # logger.info(" info  application Form Valid Failed"+"**"*10)
-                    # logger.info(info_form.errors)
-                    # logger.info(application_form.errors)
-                    # logger.info("--"*10)
-            else :
-                teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
-                if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
-                    if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
-                        project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
-                        project.save()
-                else:
-                    pass                    
-                    # logger.info("info  application teacher Form Valid Failed"+"**"*10)
-                    # logger.info(info_form.errors)
-                    # logger.info(application_form.errors)
-                    # logger.info(teacher_enterpriseform.errors)
-                    # logger.info("--"*10)
-        else:
-            info_form = InfoForm(instance=project,pid=pid)
-            application_form = iform(instance=pre)
-            # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-        data = {'pid': pid,
-                'info': info_form,
-                'application': application_form,
-                'teacher_enterpriseform':teacher_enterpriseform,
-                'readonly': readonly,
-                'is_innovation':is_innovation,
-                'is_show':is_show,
-                }
+        data = application_report_view_work(request, pid)
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -909,42 +865,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        """
-        student final report
-        Arguments:
-            In: id, it is project id
-        """
-        loginfo(p=pid+str(is_expired), label="in application")
-        final = get_object_or_404(FinalSubmit, project_id=pid)
-        project = get_object_or_404(ProjectSingle, project_id=pid)
-        #techcompetition=get_object_or_404(TechCompetition,project_id=final.content_id)
-        is_finishing = check_finishingyear(project)
-        over_status = project.over_status
-
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
-
-        readonly = False
-        if request.method == "POST" and readonly is not True:
-            final_form = FinalReportForm(request.POST, instance=final)
-            # techcompetition_form =
-            if final_form.is_valid():
-                final_form.save()
-                project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
-                project.save()
-                #return HttpResponseRedirect(reverse('student.views.home_view'))
-            else:
-                pass            
-                # logger.info("Final Form Valid Failed"+"**"*10)
-                # logger.info(final_form.errors)
-                # logger.info("--"*10)
-        final_form = FinalReportForm(instance=final)
-        #techcompetition_form = TechCompetitionForm(instance=techcompetition)
-
-        data = {'pid': pid,
-                'final': final_form,
-              #   'techcompetition':techcompetition,
-                'readonly':readonly,
-                }
+        data = final_report_view_work(request, pid, is_expired = False)
         return render(request, 'adminStaff/final.html', data)
 
 
@@ -953,24 +874,37 @@ class AdminStaffService(object):
     #@login_required
     #@authority_required(ADMINSTAFF_USER)    
     def member_change(request, pid):
+
+        data = member_change_work(request, pid)
+        return render(request, "adminStaff/member_change.html", data)
+
         """
         project group member change
-		"""
+        """
         #student_account = StudentProfile.objects.get(userid = request.user)
         #project = ProjectSingle.objects.get(student=student_account)
-        project = ProjectSingle.objects.get(project_id = pid) 
+
+        project = ProjectSingle.objects.get(project_id = pid)
+        # isIN =  get_schooluser_project_modify_status(project)
         student_group = Student_Group.objects.filter(project = project)
+        
 
-        for s in student_group :
+        for s in student_group:
             s.sex = s.get_sex_display()
-            student_group_form = StudentGroupForm()
-            student_group_info_form = StudentGroupInfoForm()
 
+        student_group_form = StudentGroupForm()
+        student_group_info_form = StudentGroupInfoForm()
+
+
+
+        readonly = False
         return render(request, "adminStaff/member_change.html",
                       {"pid": pid,
                        "student_group": student_group,
                        "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form})
+                       "student_group_info_form": student_group_info_form,
+                       'readonly': readonly,
+                       })
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -979,8 +913,89 @@ class AdminStaffService(object):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
-        if exceltype == 1:
+        if exceltype == EXCEL_TYPE_BASEINFORMATION:
             file_path = info_xls_baseinformation(request)
-        elif exceltype == 2:
+        elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
             file_path = info_xls_expertscore(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
+            file_path = info_xls_summaryinnovate(request)
+        elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
+            file_path  = info_xls_summaryentrepreneuship(request)       
+        elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
+            file_path = info_xls_projectsummary(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def homepage_import_view(request):
+        """
+        project group member change
+        """
+        if request.method == "POST":
+            try:
+                f = request.FILES["file"]
+                wrapper_f = UploadedFile(f)
+                size = wrapper_f.file.size
+                name, filetype = split_name(wrapper_f.name)
+
+                new_pic = HomePagePic()
+                name, filetype = split_name(wrapper_f.name)
+                new_pic.pic_obj = f
+                new_pic.name = name
+                new_pic.file_type = filetype
+                new_pic.file_type = filetype if filetype != " " else "unknown"
+                new_pic.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+                new_pic.file_size = size
+                new_pic.save()
+            except:
+                pass
+
+        file_history = HomePagePic.objects.all()
+        data = {'files': file_history,
+        }
+        return render(request, 'adminStaff/homepage_pic_import.html', data)
+
+
+
+
+
+
+
+
+
+
+
+def member_change_work(request, pid):
+    """
+    project group member change
+    """    
+    #student_account = StudentProfile.objects.get(userid = request.user)
+    #project = ProjectSingle.objects.get(student=student_account)
+
+    project = ProjectSingle.objects.get(project_id = pid)
+    # isIN =  get_schooluser_project_modify_status(project)
+    student_group = Student_Group.objects.filter(project = project)
+            
+
+    for s in student_group:
+        s.sex = s.get_sex_display()
+
+    student_group_form = StudentGroupForm()
+    student_group_info_form = StudentGroupInfoForm()
+
+    if check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+
+    else:
+        readonly = False
+
+
+    data = {"pid": pid,
+            "student_group": student_group,
+            "student_group_form": student_group_form,
+            "student_group_info_form": student_group_info_form,
+            'readonly': readonly,
+            }
+    return  data        

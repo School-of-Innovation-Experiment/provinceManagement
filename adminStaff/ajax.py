@@ -4,7 +4,8 @@ Created on 2013-3-29
 
 @author: sytmac
 '''
-
+import os, sys
+from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -24,12 +25,14 @@ from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
-from school.utility import get_recommend_limit
+from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year
 from django.db.models import Q
 
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+from school.utility import get_current_project_query_set
+from adminStaff.models import HomePagePic
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList(request)
@@ -46,6 +49,21 @@ def NumLimit(request, form):
     if form.is_valid():
         #school = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
+        
+        print form.cleaned_data['school_name']
+        if form.cleaned_data["school_name"] == "-1": #处理所有学院的情况
+            for school_obj in SchoolProfile.objects.all():
+                if ProjectPerLimits.objects.filter(school = school_obj).count() == 0:
+                    projectlimit = ProjectPerLimits(school = school_obj, number = limited_num)
+                    projectlimit.save()
+                else:
+                    object = ProjectPerLimits.objects.get(school = school_obj)
+                    minnum = ProjectSingle.objects.filter(Q(school = school_obj) & Q(is_past = False)).count()
+                    object.number = max(limited_num, minnum)
+                    object.save()
+            table = refresh_numlimit_table(request)
+            return simplejson.dumps({'status': '1', 'table': table, 'message': u'批量更新成功'})
+
         try:
             school_obj = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
             if  ProjectPerLimits.objects.filter(school=school_obj).count() == 0 :
@@ -161,11 +179,11 @@ def judge_is_assigned(request, school):
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
-def get_subject_review_list(request, project_id):
+def get_subject_review_list(request, project_id, identity):
     '''
     to get subject evaluate list through project_id
     '''
-    review_list = AdminStaffService.GetSubjectReviewList(project_id)
+    review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
 
     cnt_of_list = len(review_list)
 
@@ -235,7 +253,6 @@ def change_project_unique_code(request, project_id,project_unique_code):
 
 @dajaxice_register
 def Release_Excel(request,exceltype):
-    print "hehe"*100
     path = AdminStaffService.get_xls_path(request,exceltype)
     loginfo(p=path,label="path")
     return simplejson.dumps({'path':path})
@@ -338,11 +355,13 @@ def change_temnotice(request, temnotice_form, origin):
 
 @dajaxice_register
 def finish_control(request,year_list):
+    print 'haha'
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"AdminStaffProfile 数据不完全，请联系管理员更新数据库"})
     user = User.objects.get(id=adminObj.userid_id)
+    year_finishing_list = []
     if adminObj.is_finishing ==False:
         if year_list != []:
             for temp in year_list:
@@ -353,6 +372,12 @@ def finish_control(request,year_list):
             adminObj.is_finishing=True
             adminObj.save()
             flag = True
+
+            projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+            for finishtemp in projectfinish :
+                if finishtemp.project_year not in year_finishing_list:
+                    year_finishing_list.append(finishtemp.project_year)
+            year_finishing_list = sorted(year_finishing_list)
         else:
             return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"})
     else:
@@ -361,7 +386,7 @@ def finish_control(request,year_list):
         adminObj.is_finishing=False
         adminObj.save()
     flag = adminObj.is_finishing
-    return simplejson.dumps({'flag': flag})
+    return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
 def FundsDelete(request,delete_id,pid):
@@ -376,7 +401,7 @@ def FundsDelete(request,delete_id,pid):
             project.funds_remain = project.funds_remain + funds.funds_amount
             funds.delete()
             project.save()
-            table = refresh_funds_table(request,pid)
+            table = refresh_funds_table(request,project)
             ret = {'status': '0', 'message': u"条目删除成功", 'table':table,
                             "funds_total":project.funds_total,
                             "funds_remain":project.funds_remain}
@@ -403,11 +428,10 @@ def set_recommend_rate(request, set_val):
     except:
         message = "wrong input"
         return simplejson.dumps({'message': message})
-    
     recommend_rate_obj = SchoolRecommendRate.load()
     recommend_rate_obj.rate = set_val
     recommend_rate_obj.save()
-    return simplejson.dumps({'message': message})
+    return simplejson.dumps({'message': message, 'set_val': str(set_val)})
 
 def new_or_update_funds(request,pid,funds_form,name):
     funds_studentname   = name#funds_form.cleaned_data["student_choice"]
@@ -436,18 +460,54 @@ def new_or_update_funds(request,pid,funds_form,name):
         new_funds.save()
         project.funds_remain = project.funds_total - cost
         project.save()
-        table = refresh_funds_table(request,pid)
+        table = refresh_funds_table(request,project)
         ret = {'status': '0', 'message': u"经费信息添加成功", 'table':table,
                             "funds_total":project.funds_total,
                             "funds_remain":project.funds_remain}
     else:
         ret = {'status': '1', 'message': u"无经费余额，无法添加经费明细，或经费总额不对"}
     return ret
-def refresh_funds_table(request,pid):
-    funds_list    = Funds_Group.objects.filter(project_id = pid)
-    
+def refresh_funds_table(request,project):
+    funds_list = Funds_Group.objects.filter(project_id = project.project_id)
     context = userauth_settings(request)
     context["project_funds_list"] = funds_list
+    context['is_addFundDetail'] = get_schooluser_project_modify_status(project)
     return render_to_string("widgets/fund/fund_table.html",
                             context)
 
+@dajaxice_register
+def FileDeleteConsistence(request, fid):
+    """
+    Delete files in history file list
+    """
+    logger.info("sep delete files"+"**"*10)
+    # check mapping relation
+    f = get_object_or_404(HomePagePic, id=fid)
+
+    if request.method == "POST":
+        try:
+            os.remove(f.pic_obj.url)
+            f.delete()
+        except: pass
+        return simplejson.dumps({"is_deleted": True,
+                                 "message": "delete it successfully!",
+                                 "fid": str(fid)})
+    else:
+        return simplejson.dumps({"is_deleted": False,
+                                 "message": "Warning! Only POST accepted!"})
+@dajaxice_register
+def auto_ranking(request):
+    message = ""
+    project_set = list(get_current_project_query_set())
+    project_set.sort(key = lambda x: (x.school.school.schoolName,
+                                      x.adminuser.name,
+                                      x.project_category.category))
+    
+    def auto_completion(x):
+        return "%04d" % x
+
+    for i, project in enumerate(project_set):
+        project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
+        project.save()
+        print project.project_unique_code
+    return simplejson.dumps({"message": message})
