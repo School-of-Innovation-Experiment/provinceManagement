@@ -16,15 +16,15 @@
 
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#studentRecord" data-toggle="tab"><strong>学生过程记录</strong></a></li>
-            <li><a href="#teacherComment" data-toggle="tab"><strong>教师评语记录</strong></a></li>
+            <li class="active"><a href="#teacherComment" data-toggle="tab"><strong>教师评语记录</strong></a></li>
+            <li><a href="#studentRecord" data-toggle="tab"><strong>学生过程记录</strong></a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="studentRecord">
-                {% include "student/widgets/record_group_table.html" %}
-            </div>
-            <div class="tab-pane" id="teacherComment">
+           <div class="tab-pane active" id="teacherComment">
                 {% include "teacher/widgets/comment_group_table.html" %}
+            </div>
+            <div class="tab-pane" id="studentRecord">
+                {% include "student/widgets/record_group_table.html" %}
             </div>
         </div>
     </div>
