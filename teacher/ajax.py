@@ -18,6 +18,7 @@ from const.models import SchoolDict
 from adminStaff.views import AdminStaffService
 from const import *
 import datetime
+from backend.logging import logger, loginfo
 
 def refresh_project_table(request):
     teacher_profile = TeacherProfile.objects.get(userid = request.user)
@@ -136,9 +137,14 @@ def StudentDispatch(request, form):
 def commentChange(request, form, pid):
     comment_form = MonthCommentForm(deserialize_form(form))
     if not comment_form.is_valid():
+        message = u"";
+        if "commenttext" in  comment_form.errors.keys():
+            message += u"过程记录字数超过限制!"
+        if "monthId" in comment_form.errors.keys():
+            message += u"请填写月次！"
         ret = {'status': '2',
                'error_id': comment_form.errors.keys(),
-               'message': u"输入有误，请重新输入"}
+               'message': message}
     else:
         ret = new_or_update_comment(request,comment_form,pid)
     return simplejson.dumps(ret)
