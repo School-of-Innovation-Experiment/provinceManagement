@@ -868,7 +868,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        # data = final_report_view_work(request, pid, is_expired = False)
+        data = final_report_view_work(request, pid, is_expired = False)
 
         # if data['isRedirect'] :
         #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
