@@ -21,14 +21,23 @@ function finish_control_callback(data){
   if (data.flag == 0){
     $('#finish_button').attr("class","btn btn-primary");
     $('#finish_button').val("打开结题");
-    alert("已经关闭结题，学生现在不能填报结题报告");
+    $('#year_finishing_span').text("目前没有打开结题开关");
+    //alert("已经关闭结题，学生现在不能填报结题报告");
+    $('#finishing-information').hide();
   }
   else if(data.flag == 1)
   {
     //警告样式，只可筛选
     $('#finish_button').attr("class","btn btn-warning");
     $('#finish_button').val("关闭结题");
-    alert("已经打开结题，学生现在能填报结题报告");
+    var content = "结题开关已开启，目前处于结题状态的项目年份是：";
+    for (var i = 0; i < data.year_finishing_list.length; i++) {
+      content += ("( "+ data.year_finishing_list[i] + " )");
+    };
+    $('#year_finishing_span').text(content);
+    //alert("已经打开结题，学生现在能填报结题报告");
+    $('#finishing-information').show();
+    $('#finishing-information').text("点击“关闭结题按钮”会取消所有结题年份");
   }
   else
   {

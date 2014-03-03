@@ -614,6 +614,7 @@ class AdminStaffService(object):
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
         year_list=[]
+
         for pro_obj in pro_list :
             if pro_obj.year not in year_list :
                 year_list.append(pro_obj.year)
@@ -621,6 +622,20 @@ class AdminStaffService(object):
             havedata_p = True
         else:
             havedata_p = False
+        #查看正在结题的年份
+        year_finishing_list = []
+        adminObj = AdminStaffProfile.objects.get(userid = request.user)
+        user = User.objects.get(id=adminObj.userid_id)
+        projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+        for finishtemp in projectfinish :
+            if finishtemp.project_year not in year_finishing_list:
+                year_finishing_list.append(finishtemp.project_year)
+
+        year_list = sorted(year_list)       
+        year_finishing_list = sorted(year_finishing_list)
+
+        loginfo(p=year_finishing_list,label="year_finishing_list")
+
 
         recommend_rate_obj = SchoolRecommendRate.load()
 
@@ -630,6 +645,7 @@ class AdminStaffService(object):
                         "is_finishing":is_finishing,
                         "year_list":year_list,
                         "havedata_p":havedata_p,
+                        "year_finishing_list":year_finishing_list,
                     })
 
     @staticmethod
@@ -719,8 +735,10 @@ class AdminStaffService(object):
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
+            project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+            loginfo(project_teacher_student_name)
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication,project_school)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -735,7 +753,7 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication,project_school):
+    def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -754,7 +772,8 @@ class AdminStaffService(object):
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5])
+        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
         return qset
 
     @staticmethod
@@ -905,6 +924,8 @@ class AdminStaffService(object):
             file_path = info_xls_baseinformation(request)
         elif exceltype == 2:
             file_path = info_xls_expertscore(request)
+        elif exceltype == 3:
+            file_path = info_xls_projectsummary(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod

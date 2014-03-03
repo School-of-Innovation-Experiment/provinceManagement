@@ -75,9 +75,6 @@ def application_report_view(request, pid=None):
     data = application_report_view_work(request, pid)
     return render(request, 'school/application.html', data)
 
-
-
-
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
@@ -272,12 +269,26 @@ def project_control(request):
     for pro_obj in pro_list :
         if pro_obj.year not in year_list :
             year_list.append(pro_obj.year)
+
+
+    year_finishing_list = []
+    schoolObj = SchoolProfile.objects.get(userid = request.user)    
+    user = User.objects.get(id=schoolObj.userid_id)
+    projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+    for finishtemp in projectfinish :
+        if finishtemp.project_year not in year_finishing_list:
+            year_finishing_list.append(finishtemp.project_year)
+
+    year_list = sorted(year_list)       
+    year_finishing_list = sorted(year_finishing_list)
+
     havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
                     "is_finishing":is_finishing,
                     "year_list":year_list,
                     "havedata_p":havedata_p,
+                    "year_finishing_list":year_finishing_list,
                 })
 
 
@@ -337,7 +348,8 @@ def projectFilterList(request,project_manage_form,school):
         project_grade = project_manage_form.cleaned_data["project_grade"]
         project_year =  project_manage_form.cleaned_data["project_year"]
         project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
-        qset = get_filter(project_grade,project_year,project_overstatus)
+        project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+        qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name)
         if qset :
            qset = reduce(lambda x, y: x & y, qset)
            pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
@@ -345,15 +357,3 @@ def projectFilterList(request,project_manage_form,school):
            pro_list = ProjectSingle.objects.filter(Q(school_id=school))
     pro_list = pro_list.order_by('adminuser')
     return pro_list
-def get_filter(project_grade,project_year,project_overstatus):
-    if project_grade == "-1":
-        project_grade=''
-    if project_year == '-1':
-        project_year=''
-    if project_overstatus == '-1':
-        project_overstatus=''
-    q1 = (project_year and Q(year=project_year)) or None
-    q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
-    q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-    qset = filter(lambda x: x != None, [q1, q2, q3])
-    return qset

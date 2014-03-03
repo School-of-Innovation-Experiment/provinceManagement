@@ -63,6 +63,33 @@ def teacherProjNumLimit(request, form):
     # dajax = Dajax()
     form = TeacherNumLimitForm(deserialize_form(form), request = request)
     if form.is_valid():
+
+        if form.cleaned_data['teacher_name'] == '-1': #特殊处理所有指导教师的批量处理问题
+            limited_num = form.cleaned_data['limited_num']
+            num_and_remaining = get_project_num_and_remaining(request)
+            test_sum = 0
+            
+            for teacher in TeacherProfile.objects.filter(school__userid = request.user):
+                if TeacherProjectPerLimits.objects.filter(teacher = teacher).count() == 0:
+                    test_sum += limited_num
+                else:
+                    minnum = ProjectSingle.objects.filter(Q(adminuser = teacher) & Q(is_past = False)).count()
+                    test_sum += max(minnum, limited_num)
+            if test_sum > num_and_remaining['projects_remaining']:
+                return simplejson.dumps({'id': 'limited_num', 'message': u"分配数量剩余不足"})
+            for teacher in TeacherProfile.objects.filter(school__userid = request.user):
+                if TeacherProjectPerLimits.objects.filter(teacher = teacher).count() == 0:
+                    projLimit_obj = TeacherProjectPerLimits(teacher = teacher, number = limited_num)
+                    projLimit_obj.save()
+                else:
+                    projLimit_obj = TeacherProjectPerLimits.objects.get(teacher = teacher)
+                    minnum = ProjectSingle.objects.filter(Q(adminuser = teacher) & Q(is_past = False)).count()
+                    projLimit_obj.number = max(minnum, limited_num)
+                    projLimit_obj.save()
+            table = refresh_numlimit_table(request)
+            projects_remaining = get_project_num_and_remaining(request)['projects_remaining']
+            return simplejson.dumps({'message': "批量更新成功", 'status': "1", "table": table, 'projects_remaining': projects_remaining})
+            
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
         num_and_remaining = get_project_num_and_remaining(request)
@@ -214,6 +241,7 @@ def finish_control(request,year_list):
     except SchoolProfile.DoesNotExist:
         return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
     user = User.objects.get(id=schoolObj.userid_id)
+    year_finishing_list = []
     if schoolObj.is_finishing ==False:
         if year_list != []:            
             for temp in year_list:
@@ -224,6 +252,12 @@ def finish_control(request,year_list):
             schoolObj.is_finishing=True
             schoolObj.save()
             flag = True
+
+            projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
+            for finishtemp in projectfinish :
+                if finishtemp.project_year not in year_finishing_list:
+                    year_finishing_list.append(finishtemp.project_year)
+            year_finishing_list = sorted(year_finishing_list)
         else:
             return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
     else:
@@ -232,7 +266,7 @@ def finish_control(request,year_list):
         schoolObj.is_finishing=False
         schoolObj.save()
     flag = schoolObj.is_finishing 
-    return simplejson.dumps({'flag': flag})
+    return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
 def change_project_overstatus(request, project_id, changed_overstatus):

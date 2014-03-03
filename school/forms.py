@@ -251,7 +251,7 @@ class TeacherNumLimitForm(forms.Form):
         if not request:
             return
         school = SchoolProfile.objects.get(userid=request.user)
-        TEACHER_CHOICE_list = []
+        TEACHER_CHOICE_list = [(-1, "所有指导教师")]
         teacher_list        = TeacherProfile.objects.filter(school=school)
         for obj in teacher_list:
             TEACHER_CHOICE_list.append((obj.id, obj.userid.username))
@@ -270,7 +270,9 @@ class ProjectManageForm(forms.Form):
     project_year = forms.ChoiceField() 
     # project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
-
+    teacher_student_name = forms.CharField(max_length = 20,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2','id':'name','placeholder':u"输入需要筛选的老师或学生名字"}),)
     def __init__(self, *args, **kwargs):
         school = kwargs.pop('school', None)
         super(ProjectManageForm, self).__init__(*args, **kwargs)
