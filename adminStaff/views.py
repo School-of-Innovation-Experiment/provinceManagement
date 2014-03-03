@@ -866,6 +866,7 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
         data = final_report_view_work(request, pid, is_expired = False)
+
         return render(request, 'adminStaff/final.html', data)
 
 
