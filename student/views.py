@@ -193,7 +193,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
         is_innovation determined by project_category
     """
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     is_currentyear = check_year(project)
 
     is_applying = check_applycontrol(project)
@@ -208,12 +208,9 @@ def application_report_view_work(request, pid=None, is_expired=False):
     elif check_auth(user = request.user, authority = SCHOOL_USER):
         readonly = not get_schooluser_project_modify_status(project)
     else:
-        readonly = False  
-        
+        readonly = False
 
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
-
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -296,7 +293,7 @@ def file_view(request, pid=None,is_expired = False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(STUDENT_USER)
+# @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):
@@ -325,22 +322,25 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
-def files_important_view(request):
+def files_important_view(request,pid=None,is_expired=False):
     """
     project group member change
     """
+    data = files_important_view_work(request,pid)
+    return render(request, 'student/fileimportant.html', data)
+
+
+def files_important_view_work(request,pid):
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
-    student_account = StudentProfile.objects.get(userid = request.user)
-    project = ProjectSingle.objects.get(student=student_account)
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
     logger.info("**"*10)
     logger.info(file_history)
-    pid=project.project_id
     file_history=enabledelete_file(file_history)
     data = {'pid': pid,
             'files': file_history,
@@ -354,7 +354,7 @@ def files_important_view(request):
             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
-    return render(request, 'student/fileimportant.html', data)
+    return data
 
 @csrf.csrf_protect
 @login_required
@@ -562,6 +562,9 @@ def file_scoreapplication_view(request,pid):
 @authority_required(STUDENT_USER)
 @only_user_required
 def file_other_view(request,pid):
+    data = file_other_view_work(request,pid)
+    return render(request, 'student/fileimportant.html', data)
+def file_other_view_work(request,pid):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     show_applicationwarn = False
     show_interimchecklist = False
@@ -591,7 +594,7 @@ def file_other_view(request,pid):
             'show_scoreapplication':show_scoreapplication,
             'show_other':show_other
             }
-    return render(request, 'student/fileimportant.html', data)
+    return data
 
 @csrf.csrf_protect
 @login_required

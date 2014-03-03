@@ -67,7 +67,7 @@ urlpatterns = patterns('',
         student_views.file_other_view,
     ),
     url(
-        r'^files_important$',
+        r'^files_important/(?P<pid>.{36})$',
         student_views.files_important_view,
     ),
     url(
