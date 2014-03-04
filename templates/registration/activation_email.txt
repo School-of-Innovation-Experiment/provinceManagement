@@ -5,4 +5,4 @@
 密码:{{password}}
 http://{{ site }}{% url registration.views.active activation_key %}
 
-{% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
+{% blocktrans %}激活链接有效期 {{ expiration_days }} 天.{% endblocktrans %}

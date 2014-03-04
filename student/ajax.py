@@ -119,9 +119,16 @@ def MemberChange(request, form, origin):
 def recordChange(request, form):
     record_form = ProcessRecordForm(deserialize_form(form))
     if not record_form.is_valid():
+        message = u"";
+        if "weekId" in record_form.errors.keys():
+            message += u"请填写周次！"
+        if "recorder" in record_form.errors.keys():
+            message += u"请填写项目记录人!"
+        if "recordtext" in record_form.errors.keys():
+            message += u"过程记录字数超过限制!"
         ret = {'status' : '2',
                'error_id':record_form.errors.keys(),
-               'message': u"输入有误，请重新输入"}
+               'message': message}
     else:
         ret = new_or_update_record(request,record_form)
     return simplejson.dumps(ret)
