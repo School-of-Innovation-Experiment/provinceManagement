@@ -722,7 +722,6 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
-                    'pro_list_count':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
