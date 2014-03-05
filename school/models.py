@@ -217,7 +217,58 @@ class PreSubmitEnterprise(models.Model):
     def __unicode__(self):
         return self.project_id.title
 
+class OpenSubmit(models.Model):
+    """
+    Mid submit
+    """
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
+                                  verbose_name="开题检查表唯一ID")
+    project_id = models.ForeignKey(ProjectSingle)
 
+    content = models.TextField(blank=False, null=True,
+                               verbose_name="研究内容")
+    study_achievement = models.TextField(blank=False, null=True,
+                                           verbose_name="前期研究和成果")
+    next_plan_target = models.TextField(blank=False, null=True,
+                                 verbose_name="下一阶段计划及目标")
+    inspector_comments = models.TextField(blank=True, null=True,
+                                          verbose_name="指导教师意见")
+
+    class Meta:
+        verbose_name = "项目开题检查表"
+        verbose_name_plural = "项目开题检查表"
+
+    def __unicode__(self):
+        return self.project_id.title
+
+
+class MidSubmit(models.Model):
+    """
+    Mid submit
+    """
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
+                                  verbose_name="中期检查表唯一ID")
+    project_id = models.ForeignKey(ProjectSingle)
+
+    process = models.TextField(blank=False, null=True,
+                               verbose_name="项目进展情况")
+    achievement_summary = models.TextField(blank=False, null=True,
+                                           verbose_name="研究成果概述")
+    next_plan = models.TextField(blank=False, null=True,
+                                 verbose_name="下一阶段工作计划")
+    achievement = models.TextField(blank=False, null=True,
+                                   verbose_name="主要成果")
+    inspector_comments = models.TextField(blank=True, null=True,
+                                          verbose_name="指导教师意见")
+
+    class Meta:
+        verbose_name = "项目中期检查表"
+        verbose_name_plural = "项目中期检查表"
+
+    def __unicode__(self):
+        return self.project_id.title
 
 class FinalSubmit(models.Model):
     """

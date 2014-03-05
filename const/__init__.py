@@ -109,11 +109,13 @@ PROJECT_STATUS_CHOICES = (
 )
 
 OVER_STATUS_NOTOVER = "notover"
+OVER_STATUS_OPENCHECK = "opencheck"
 OVER_STATUS_MIDCHECK = "midcheck"
 OVER_STATUS_FINCHECK = "fincheck"
 OVER_STATUS_NORMAL = "normal"
 OVER_STATUS_CHOICES = (
     (OVER_STATUS_NOTOVER, u"没有结束"),
+    (OVER_STATUS_MIDCHECK, u"开题不通过"),
     (OVER_STATUS_MIDCHECK, u"中期检查不通过"),
     (OVER_STATUS_FINCHECK, u"结题检查不通过"),
     (OVER_STATUS_NORMAL, u"正常结题"),

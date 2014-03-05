@@ -858,6 +858,9 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
         data = application_report_view_work(request, pid)
+        # if data['isRedirect'] :
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
+        # else:
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -865,7 +868,15 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
+
         data = final_report_view_work(request, pid, is_expired = False)
+
+
+
+
+        # if data['isRedirect'] :
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
+        # else: 
 
         return render(request, 'adminStaff/final.html', data)
 
