@@ -25,7 +25,7 @@ from news.models import News
 from student.models import Funds_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
-from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year
+from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year, get_running_project_query_set
 from django.db.models import Q
 
 from const import *
@@ -33,6 +33,7 @@ import datetime
 from backend.logging import logger, loginfo
 from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList(request)
@@ -510,5 +511,20 @@ def auto_ranking(request):
     for i, project in enumerate(project_set):
         project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
         project.save()
-        print project.project_unique_code
     return simplejson.dumps({"message": message})
+
+@dajaxice_register
+def student_code_project_query(request, student_code):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    message = ""
+    project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)]
+    if project:
+        #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
+        message = 'ok'
+        table_html = render_to_string("adminStaff/widgets/project_table.html", {"item": project[0], "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        return simplejson.dumps({"message": message, "table": table_html})
+    else:
+        message = "not found"
+        return simplejson.dumps({"message": message})

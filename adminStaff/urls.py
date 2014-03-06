@@ -16,8 +16,8 @@ urlpatterns = patterns('',
     url(r'^application/(?P<pid>.{36})$', AdminStaffService.application_report_view),
     url(r'^final/(?P<pid>.{36})$', AdminStaffService.final_report_view),
     url(r'^memberchange/(?P<pid>.{36})$', AdminStaffService.member_change),
-    #url(r'^memberchange$', AdminStaffService.member_change),
-
+    url(r'^files_important/(?P<pid>.{36})$', AdminStaffService.files_important_view),
+    url(r'^file_other_view/(?P<pid>.{36})$',AdminStaffService.file_other_view),
 
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^project_informationexport$',AdminStaffService.project_informationexport),
     url(r'^news_release$', AdminStaffService.NewsRelease),
     url(r'^homepage_import$', AdminStaffService.homepage_import_view),
-
+    
+    url(r'^project_assistant$', AdminStaffService.project_assistant_view),
 )
 urlpatterns += staticfiles_urlpatterns()
