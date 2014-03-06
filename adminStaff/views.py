@@ -965,8 +965,13 @@ class AdminStaffService(object):
         return render(request, 'adminStaff/homepage_pic_import.html', data)
 
 
-
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_assistant_view(request):
+        data = {}
+        return render(request, 'adminStaff/project_assistant.html', data)
 
 
 
