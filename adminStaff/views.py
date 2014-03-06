@@ -72,7 +72,7 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-from student.views import application_report_view_work, final_report_view_work
+from student.views import application_report_view_work, final_report_view_work,files_important_view_work,file_other_view_work
 
 
 class AdminStaffService(object):
@@ -722,7 +722,6 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
-                    'pro_list_count':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
@@ -868,11 +867,16 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
-        # data = final_report_view_work(request, pid, is_expired = False)
+
+        data = final_report_view_work(request, pid, is_expired = False)
+
+
+
 
         # if data['isRedirect'] :
         #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
         # else: 
+
         return render(request, 'adminStaff/final.html', data)
 
 
@@ -912,6 +916,22 @@ class AdminStaffService(object):
                        "student_group_info_form": student_group_info_form,
                        'readonly': readonly,
                        })
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def files_important_view(request,pid=None):
+        data = files_important_view_work(request,pid)
+        return render(request,'adminStaff/fileimportant.html',data)
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def file_other_view(request,pid=None):
+        data = file_other_view_work(request,pid)
+        return render(request,'adminStaff/fileimportant.html',data)
+
     @staticmethod
     @csrf.csrf_protect
     @login_required
@@ -989,7 +1009,6 @@ def member_change_work(request, pid):
     project = ProjectSingle.objects.get(project_id = pid)
     # isIN =  get_schooluser_project_modify_status(project)
     student_group = Student_Group.objects.filter(project = project)
-            
 
     for s in student_group:
         s.sex = s.get_sex_display()
@@ -1010,4 +1029,4 @@ def member_change_work(request, pid):
             "student_group_info_form": student_group_info_form,
             'readonly': readonly,
             }
-    return  data        
+    return  data
