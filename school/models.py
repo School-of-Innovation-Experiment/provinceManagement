@@ -67,7 +67,7 @@ class ProjectSingle(models.Model):
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
     file_opencheck = models.BooleanField(null=False, default=False,
-                                verbose_name=u"中期检查表")
+                                verbose_name=u"开题检查表")
     file_interimchecklist = models.BooleanField(null=False, default=False,
                                   verbose_name=u"中期检查表")
     file_summary = models.BooleanField(null=False, default=False,
