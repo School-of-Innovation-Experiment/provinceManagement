@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from school.models import TeacherProjectPerLimits
 from users.models import StudentProfile, TeacherProfile
-from school.models import ProjectSingle, PreSubmit, FinalSubmit, PreSubmitEnterprise, Teacher_Enterprise
+from school.models import *
 from const import *
 from const.models import *
 from school.utility import get_current_year
@@ -52,6 +52,16 @@ def create_newproject(request, new_user, category):
 
             pre_interprise.enterpriseTeacher = teacher_enterprise
             pre_interprise.save()
+        
+        open = OpenSubmit()
+        open.content_id = uuid.uuid4()
+        open.project_id = project
+        open.save()
+
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
 
         final = FinalSubmit()
         final.content_id = uuid.uuid4()
