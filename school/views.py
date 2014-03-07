@@ -357,3 +357,12 @@ def projectFilterList(request,project_manage_form,school):
            pro_list = ProjectSingle.objects.filter(Q(school_id=school))
     pro_list = pro_list.order_by('adminuser')
     return pro_list
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def project_informationexport(request):
+    return render(request, "school/project_informationexport.html",
+                {
+
+                })
