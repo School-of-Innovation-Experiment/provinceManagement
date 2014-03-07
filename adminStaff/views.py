@@ -935,7 +935,7 @@ class AdminStaffService(object):
     @staticmethod
     @csrf.csrf_protect
     @login_required
-    @authority_required(ADMINSTAFF_USER)
+    # @authority_required(ADMINSTAFF_USER)
     def get_xls_path(request,exceltype):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
