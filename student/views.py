@@ -123,11 +123,11 @@ def techcompetition_detail(request,pid=None):
 @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def final_report_view(request, pid=None,is_expired=False):    
+def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important' ) 
-    else :         
+        return HttpResponseRedirect( '/student/files_important' )
+    else :
         return render(request, 'student/final.html', data)
 
 
