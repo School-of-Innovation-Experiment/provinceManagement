@@ -722,7 +722,6 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
-                    'pro_list_size':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
@@ -979,6 +978,21 @@ class AdminStaffService(object):
         data = {'files': file_history,
         }
         return render(request, 'adminStaff/homepage_pic_import.html', data)
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_assistant_view(request):
+        data = {}
+        return render(request, 'adminStaff/project_assistant.html', data)
+
+
+
+
+
+
 
 def member_change_work(request, pid):
     """

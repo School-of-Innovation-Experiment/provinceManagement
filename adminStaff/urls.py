@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^project_informationexport$',AdminStaffService.project_informationexport),
     url(r'^news_release$', AdminStaffService.NewsRelease),
     url(r'^homepage_import$', AdminStaffService.homepage_import_view),
-
+    
+    url(r'^project_assistant$', AdminStaffService.project_assistant_view),
 )
 urlpatterns += staticfiles_urlpatterns()
