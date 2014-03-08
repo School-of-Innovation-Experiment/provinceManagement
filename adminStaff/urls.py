@@ -14,6 +14,7 @@ dajaxice_autodiscover()
 urlpatterns = patterns('',
 
     url(r'^application/(?P<pid>.{36})$', AdminStaffService.application_report_view),
+    url(r'^open/(?P<pid>.{36})$', AdminStaffService.open_report_view),
     url(r'^final/(?P<pid>.{36})$', AdminStaffService.final_report_view),
     url(r'^memberchange/(?P<pid>.{36})$', AdminStaffService.member_change),
     url(r'^files_important/(?P<pid>.{36})$', AdminStaffService.files_important_view),
