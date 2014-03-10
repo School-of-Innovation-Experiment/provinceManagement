@@ -179,6 +179,54 @@ class Teacher_EnterpriseForm(ModelForm):
     def get_absolute_url(self):
         return reverse('student.views.application_report_view', args=(str(self.instance.project_id),))
 
+class MidReportForm(ModelForm):
+    """
+        Mid Form
+    """
+    class Meta:
+        model = MidSubmit
+        exclude = {"project_id", "content_id"}
+        widgets = {"process": forms.Textarea(attrs={'rows': 13, 'cols': 100,
+                                                                'placeholder':'项目进展情况，写1000字就行...',
+                                                                'class':"fill-form"},),
+                   "achievement_summary": forms.Textarea(attrs={'rows': 13, 'cols': 100,
+                                                                'placeholder':'研究成果概述，写1000字就行...',
+                                                                'class':"fill-form"},),
+                   "next_plan": forms.Textarea(attrs={'rows': 13, 'cols': 100,
+                                                                'placeholder':'下一阶段工作计划，写1000字就行...',
+                                                                'class':"fill-form"},),
+                   "achievement": forms.Textarea(attrs={'rows': 13, 'cols': 100,
+                                                                'placeholder':'主要成果（成果名称，参与者，发表时间，发表刊物等）',
+                                                                'class':"fill-form"},),
+                   "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder': '指导教师推荐语',
+                                                                'class': "fill-form"}),
+                 }
+    def get_absolute_url(self):
+        return reverse('student.views.mid_report_view', args=(str(self.instance.project_id),))
+class OpenReportForm(ModelForm):
+    """
+      open form
+    """
+    class Meta:
+        model = OpenSubmit
+        exclude = ('project_id', 'content_id', )
+        widgets = {"content": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'研究内容，写1000字就行...',
+                                                                'class':"fill-form"},),
+                   "study_achievement": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder': '已完成的前期研究工作和成果, 写1000字就行...',
+                                                                'class': "fill-form"}),
+                   "next_plan_target": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'下一阶段计划及预期达到目标, 写1000字就行...',
+                                                                'class': "fill-form"}),
+                   "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                       'placeholder':'指导教师意见,  写200字就行...',
+                                                       'class': "fill-form"}),
+                   }
+
+
+
 class FinalReportForm(ModelForm):
     """
         Final Form

@@ -51,7 +51,7 @@ from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
-from student.views import application_report_view_work, final_report_view_work
+from student.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
 from adminStaff.views import member_change_work
 @csrf.csrf_protect
 @login_required
@@ -60,6 +60,16 @@ def member_change(request, pid):
     data = member_change_work(request, pid)
     return render(request, "school/member_change.html",data)
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def open_report_view(request, pid=None):
+    data = open_report_view_work(request, pid)
+    return render(request, 'school/open.html', data)
+
+
+
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
@@ -67,6 +77,12 @@ def final_report_view(request, pid=None):
     data = final_report_view_work(request, pid)
     return render(request, 'school/final.html', data)
 
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def mid_report_view(request, pid = None):
+    data = mid_report_view_work(request, pid)
+    return render(request, 'school/mid.html', data)
 
 @csrf.csrf_protect
 @login_required
