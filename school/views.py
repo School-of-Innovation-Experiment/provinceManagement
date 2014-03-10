@@ -51,7 +51,7 @@ from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
-from student.views import application_report_view_work, final_report_view_work
+from student.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
 from adminStaff.views import member_change_work
 @csrf.csrf_protect
 @login_required
@@ -60,6 +60,16 @@ def member_change(request, pid):
     data = member_change_work(request, pid)
     return render(request, "school/member_change.html",data)
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def open_report_view(request, pid=None):
+    data = open_report_view_work(request, pid)
+    return render(request, 'school/open.html', data)
+
+
+
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
@@ -67,6 +77,12 @@ def final_report_view(request, pid=None):
     data = final_report_view_work(request, pid)
     return render(request, 'school/final.html', data)
 
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def mid_report_view(request, pid = None):
+    data = mid_report_view_work(request, pid)
+    return render(request, 'school/mid.html', data)
 
 @csrf.csrf_protect
 @login_required
@@ -74,9 +90,6 @@ def final_report_view(request, pid=None):
 def application_report_view(request, pid=None):        
     data = application_report_view_work(request, pid)
     return render(request, 'school/application.html', data)
-
-
-
 
 @csrf.csrf_protect
 @login_required
@@ -351,7 +364,8 @@ def projectFilterList(request,project_manage_form,school):
         project_grade = project_manage_form.cleaned_data["project_grade"]
         project_year =  project_manage_form.cleaned_data["project_year"]
         project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
-        qset = get_filter(project_grade,project_year,project_overstatus)
+        project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+        qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name)
         if qset :
            qset = reduce(lambda x, y: x & y, qset)
            pro_list = ProjectSingle.objects.filter(Q(school_id=school)).filter(qset)
@@ -359,15 +373,12 @@ def projectFilterList(request,project_manage_form,school):
            pro_list = ProjectSingle.objects.filter(Q(school_id=school))
     pro_list = pro_list.order_by('adminuser')
     return pro_list
-def get_filter(project_grade,project_year,project_overstatus):
-    if project_grade == "-1":
-        project_grade=''
-    if project_year == '-1':
-        project_year=''
-    if project_overstatus == '-1':
-        project_overstatus=''
-    q1 = (project_year and Q(year=project_year)) or None
-    q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
-    q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-    qset = filter(lambda x: x != None, [q1, q2, q3])
-    return qset
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def project_informationexport(request):
+    return render(request, "school/project_informationexport.html",
+                {
+
+                })

@@ -1,0 +1,13 @@
+<!-- pre application proposal page -->
+{% extends "teacher/base/report_base.html" %}
+
+{%block report-content%}
+  <form method="post" action={% url teacher.views.open_report_view pid %}>
+    {% csrf_token %}
+    <!--Project Content-->
+    {% include "student/widgets/open.html" %}
+    <br/>
+    <!--submit button-->
+    {% include "student/widgets/commit_button.html" %}
+  </form>
+{%endblock%}

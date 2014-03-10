@@ -4,22 +4,45 @@
 {%block calculate-content%}
 <!--Project Choice-->
 <div class="row">
-  <div class="span4">
+  {% if IS_MINZU_SCHOOL%}
+    <div class="span2">
+  {%else%}
+    <div class="span2">
+  {%endif%}
     <div class="alert alert-info" style=" text-align:center;">
       <h4>
           {#<a href="{% url adminstaff_home.AdminStaffService.application_report_view pid%}">#}
           <a href="/adminStaff/application/{{pid}}">
           {#<a href="{% url student.views.application_report_view pid%}">#}
-
-
           申请表</a>
-
       </h4>
-
-
     </div><!--end alert-->
   </div><!--end left span-->
-  <div class="span4">
+{% if IS_MINZU_SCHOOL%}
+    <div class="span2">
+  {%else%}
+    <div class="span2">
+  {%endif%}
+    <div class="alert alert-error" style=" text-align:center;">
+      <h4><a href= "/adminStaff/open/{{pid}}"> 开题检查表</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+ {% if IS_MINZU_SCHOOL %}
+<div class="span2">
+ {% else %}
+ <div class="span2">
+ {% endif %}
+    <div class="alert alert-success" style=" text-align:center;">
+      <h4><a>中期检查表</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+
+
+  {% if IS_MINZU_SCHOOL%}
+    <div class="span2">
+  {%else%}
+    <div class="span2">
+  {%endif%}
     <div class="alert alert-important" style=" text-align:center;">
       <h4>
         {#<a href="{% url student.views.final_report_view pid%}">#}
@@ -28,17 +51,27 @@
         结题验收表</a></h4>
     </div><!--end alert-->
   </div><!--mid right span--> 
-  <div class="span4">
+  {% if IS_MINZU_SCHOOL%}
+    <div class="span2">
+  {%else%}
+    <div class="span2">
+  {%endif%}
     <div class="alert alert-success" style=" text-align:center;">
       <h4>
          {#<a href="{% url student.views.files_important_view%}"> #}
          <a href="/adminStaff/memberchange/{{pid}}">
-
-
          队员变更
       </a></h4>
     </div><!--end alert-->
-  </div><!--end right span--> 
+  </div><!--end right span-->
+  {% if IS_MINZU_SCHOOL%}
+    <div class="span2">
+      <div class="alert alert-success" style=" text-align:center;">
+        <h4><a href="/adminStaff/files_important/{{pid}}">
+               成果上传</a></h4>
+      </div><!--end alert-->
+    </div><!--end right span-->
+  {%endif%}
 </div><!--end row-->
 <!--Notice Messager-->
 {% if readonly %}

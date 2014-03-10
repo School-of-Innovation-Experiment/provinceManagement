@@ -1,0 +1,15 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+<form id="project_control_form" class="bs-docs-example">
+  <fieldset>
+    <legend>学号／项目查询</legend>
+    <div class="form-inline">
+        <input type="text" id="student_code_input" class="input-query" placeholder="输入你需要检索的学号">
+        <input type="button" value="检索" onclick="student_code_project_query();">
+    </form>
+    <div id="result_table">
+    </div>
+  </fieldset>
+</form>
+<script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_assistant.js"></script>
+{%endblock%}

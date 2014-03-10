@@ -1,0 +1,63 @@
+<div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>项目申报编号</th>
+        <th>名称</th>
+        <th>项目编号</th>
+        {% if IS_MINZU_SCHOOL %}
+        <th>项目类型</th>
+        {% endif %}
+        <th>项目级别</th>
+        <th>指导教师</th>
+        <th>申报书</th>
+        <th>中期检查表</th>
+        <th>结题验收表</th>
+        {% if IS_DLUT_SCHOOL %}
+        <th>项目汇编</th>
+        {% endif %}
+        <th>申请学分</th>
+        <th>是否结题</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
+        <td>{{item.title|truncatechars:15}}</td>
+        <td>
+           <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
+        </td>
+        {% if IS_MINZU_SCHOOL %}
+        <td>{{item.project_category}}</td>
+        {% endif %}
+        <td>{{item.project_grade}}</td>
+        <td>{{item.adminuser.get_name}}</td>
+        <td>
+          {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        {% if IS_DLUT_SCHOOL %}
+        <td>
+          {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
+        </td>
+        {% endif %}
+        <td>
+          {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
+        </td>
+        <td>
+          <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"   pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

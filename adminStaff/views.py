@@ -73,11 +73,16 @@ from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 <<<<<<< HEAD
+<<<<<<< HEAD
 from student.views import application_report_view_work, final_report_view_work
 =======
 from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
 >>>>>>> b9d8020... rewrite upload function
 
+=======
+from student.views import application_report_view_work, final_report_view_work,files_important_view_work,file_other_view_work
+from student.views import open_report_view_work
+>>>>>>> 6e737ec4f1056a804c8534dc4ef790e8ea3388ef
 
 class AdminStaffService(object):
     @staticmethod
@@ -726,7 +731,6 @@ class AdminStaffService(object):
         context = {
                     'havedata_p': havedata_p,
                     'pro_list': pro_list,
-                    'pro_list_size':pro_list.count(),
                     'project_manage_form':project_manage_form
                   }
         return context
@@ -739,8 +743,10 @@ class AdminStaffService(object):
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
+            project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+            loginfo(project_teacher_student_name)
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_scoreapplication,project_school)
+            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -755,7 +761,7 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_scoreapplication,project_school):
+    def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -774,7 +780,8 @@ class AdminStaffService(object):
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5])
+        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
         return qset
 
     @staticmethod
@@ -844,14 +851,13 @@ class AdminStaffService(object):
             context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
-    #liuzhuo write
-    # @csrf.csrf_protect
-    # @login_required
-    # @authority_required(ADMINSTAFF_USER)
-    # def showProject(request, pid):
-
-        # return render(request,"adminStaff/project_view.html", None)
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def open_report_view(request, pid=None):
+        data = open_report_view_work(request, pid)    
+        return render(request, 'adminStaff/open.html', data)
 
     @staticmethod
     @csrf.csrf_protect
@@ -859,6 +865,9 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
         data = application_report_view_work(request, pid)
+        # if data['isRedirect'] :
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
+        # else:
         return render(request, 'adminStaff/application.html', data)
 
     @staticmethod
@@ -867,6 +876,10 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def final_report_view(request, pid=None,is_expired=False):
         data = final_report_view_work(request, pid, is_expired = False)
+
+        # if data['isRedirect'] :
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
+        # else: 
         return render(request, 'adminStaff/final.html', data)
 
 
@@ -906,16 +919,12 @@ class AdminStaffService(object):
                        "student_group_info_form": student_group_info_form,
                        'readonly': readonly,
                        })
-<<<<<<< HEAD
-=======
 
->>>>>>> b9d8020... rewrite upload function
+
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-<<<<<<< HEAD
-=======
     def files_upload_view(request,pid=None):
         data = files_upload_view_work(request,pid)
         if data[0]:
@@ -928,7 +937,6 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     # @authority_required(ADMINSTAFF_USER)
->>>>>>> b9d8020... rewrite upload function
     def get_xls_path(request,exceltype):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
@@ -978,8 +986,13 @@ class AdminStaffService(object):
         return render(request, 'adminStaff/homepage_pic_import.html', data)
 
 
-
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_assistant_view(request):
+        data = {}
+        return render(request, 'adminStaff/project_assistant.html', data)
 
 
 
@@ -997,7 +1010,6 @@ def member_change_work(request, pid):
     project = ProjectSingle.objects.get(project_id = pid)
     # isIN =  get_schooluser_project_modify_status(project)
     student_group = Student_Group.objects.filter(project = project)
-            
 
     for s in student_group:
         s.sex = s.get_sex_display()
@@ -1018,4 +1030,4 @@ def member_change_work(request, pid):
             "student_group_info_form": student_group_info_form,
             'readonly': readonly,
             }
-    return  data        
+    return  data

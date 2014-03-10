@@ -20,8 +20,15 @@ urlpatterns = patterns(
         r'^application/(?P<pid>.{36})$',
         school_views.application_report_view,
         ),
+    url(r'^open/(?P<pid>.{36})$',
+        school_views.open_report_view,
+        ),
+
     url(r'^final/(?P<pid>.{36})$',
         school_views.final_report_view,
+        ),
+    url(r'^mid/(?P<pid>.{36})$',
+        school_views.mid_report_view,
         ),
 
     url(r'^memberchange/(?P<pid>.{36})$', 

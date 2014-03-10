@@ -4,12 +4,23 @@
 {%block calculate-content%}
 <!--Project Choice-->
 <div class="row">
-  <div class="span4">
+  <div class="span3">
     <div class="alert alert-info" style=" text-align:center;">
       <h4><a href="{% url teacher.views.application_report_view pid%}">申请表</a></h4>
     </div><!--end alert-->
   </div><!--end left span-->
-  <div class="span4">
+<div class="span3">
+    <div class="alert alert-error" style=" text-align:center;">
+      <h4><a href="{% url teacher.views.open_report_view pid%}">开题检查表</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+<div class="span3">
+    <div class="alert alert-success" style=" text-align:center;">
+      <h4><a href="{% url teacher.views.mid_report_view pid%}">中期检查表</a></h4>
+    </div><!--end alert-->
+  </div><!--end left span-->
+
+  <div class="span3">
     <div class="alert alert-important" style=" text-align:center;">
       <h4><a href="{% url teacher.views.final_report_view pid%}">结题验收表</a></h4>
     </div><!--end alert-->

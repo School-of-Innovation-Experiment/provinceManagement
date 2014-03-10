@@ -18,11 +18,11 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition
+from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition, OpenSubmit
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+from school.forms import *
 from backend.fund import CFundManage
 
 from const.models import *
@@ -117,15 +117,151 @@ def techcompetition_detail(request,pid=None):
                   {"techcompetition": techcompetition,
                    "techcompetition_form": techcompetition_form})
 
-
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def final_report_view(request, pid=None,is_expired=False):
+def open_report_view(request, pid = None, is_expired = False):
+    data = open_report_view_work(request, pid, is_expired)
+    if data['isRedirect'] :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) )
+    else:
+        
+        return render(request, 'student/open.html', data)
+
+def open_report_view_work(request, pid = None, is_expired = False):
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    try:
+        open_data = OpenSubmit.objects.get(project_id=pid)
+    except:
+        open_data = OpenSubmit(project_id=project)
+
+    #open_data = get_object_or_404(OpenSubmit, project_id=pid)
+
+    is_currentyear = check_year(project)
+
+    is_applying = check_applycontrol(project)
+
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+
+    
+    isRedirect = False
+    
+    if request.method == "POST" and readonly is not True:
+        open_form = OpenReportForm(request.POST, instance=open_data)
+        if open_form.is_valid():
+            open_form.save()
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.save()
+
+            isRedirect = True
+            # return HttpResponseRedirect(reverse('student.views.home_view'))
+        else:
+            logger.info(final_form.errors)
+    open_form = OpenReportForm(instance=open_data)
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    
+
+    data = {'pid': pid,
+            'open': open_form,
+            'is_show': is_show,
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            }
+    return data
+
+
+
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def mid_report_view(request, pid = None, is_expired = False):
+    data = mid_report_view_work(request, pid, is_expired)
+    print data
+    if data["isRedirect"]:
+        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+    else:
+        return render(request, "student/mid.html", data)
+
+def mid_report_view_work(request, pid = None, is_expired = False):
+    """
+    student mid report
+    """
+    mid = get_object_or_404(MidSubmit, project_id = pid)
+    project = get_object_or_404(ProjectSingle, project_id = pid)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+
+    is_currentyear = check_year(project)
+
+    is_applying = check_applycontrol(project)
+
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+
+    # readonly = False
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    isRedirect = False
+    if request.method == "POST" and readonly is not True:
+        mid_form = MidReportForm(request.POST, instance = mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            #project.project_status = ProjectStatus.objects.get(status=STATUS_MIDSUBMIT)
+            project.save()
+
+            isRedirect = True
+        else:
+            pass
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+
+    mid_form = MidReportForm(instance = mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            'is_show': is_show,
+            }
+    return data
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
+def final_report_view(request, pid=None,is_expired=False):    
     data = final_report_view_work(request, pid, is_expired)
-    return render(request, 'student/final.html', data)
+    if data['isRedirect'] :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+    else :         
+        return render(request, 'student/final.html', data)
 
 
 def final_report_view_work(request, pid=None,is_expired=False):
@@ -135,12 +271,14 @@ def final_report_view_work(request, pid=None,is_expired=False):
     Arguments:
         In: id, it is project id
     """
+
+    print 'final_report' + str(pid)
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     is_finishing = check_finishingyear(project)
-    over_status = project.over_status
-
+    over_status = project.over_status.status
+   
     if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
     elif check_auth(user=request.user,authority=TEACHER_USER):
@@ -152,13 +290,16 @@ def final_report_view_work(request, pid=None,is_expired=False):
     else :
         readonly = False
 
-    
+    isRedirect = False
+
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
             project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.save()
+
+            isRedirect = True
             # return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
             pass
@@ -172,6 +313,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
             'final': final_form,
             # 'techcompetition':techcompetition,
             'readonly':readonly,
+            'isRedirect': isRedirect,
             }
     return data
 
@@ -181,9 +323,12 @@ def final_report_view_work(request, pid=None,is_expired=False):
 #@authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_PRESUBMIT)
-def application_report_view(request,pid=None,is_expired=False):
+def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
-    return render(request, 'student/application.html', data)
+    if data['isRedirect'] :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+    else :         
+        return render(request, 'student/application.html', data)
 
 
 def application_report_view_work(request, pid=None, is_expired=False):
@@ -193,7 +338,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
         is_innovation determined by project_category
     """
     loginfo(p=pid+str(is_expired), label="in application")
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     is_currentyear = check_year(project)
 
     is_applying = check_applycontrol(project)
@@ -208,12 +353,9 @@ def application_report_view_work(request, pid=None, is_expired=False):
     elif check_auth(user = request.user, authority = SCHOOL_USER):
         readonly = not get_schooluser_project_modify_status(project)
     else:
-        readonly = False  
-        
+        readonly = False
 
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-
-
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -226,6 +368,8 @@ def application_report_view_work(request, pid=None, is_expired=False):
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
 
+    isRedirect = False
+
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
@@ -235,6 +379,8 @@ def application_report_view_work(request, pid=None, is_expired=False):
                 if save_application(project, pre, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+
+                    isRedirect = True
                     # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
@@ -246,6 +392,8 @@ def application_report_view_work(request, pid=None, is_expired=False):
                 if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+
+                    isRedirect = True
                     # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
                 logger.info("info  application teacher Form Valid Failed"+"**"*10)
@@ -264,7 +412,9 @@ def application_report_view_work(request, pid=None, is_expired=False):
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
             'is_innovation':is_innovation,
-            'is_show':is_show
+            'is_show':is_show, 
+            #lz add
+            'isRedirect':isRedirect, 
             }
     return data
 
@@ -296,7 +446,7 @@ def file_view(request, pid=None,is_expired = False):
 
 @csrf.csrf_protect
 @login_required
-@authority_required(STUDENT_USER)
+# @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):
@@ -352,22 +502,30 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
 @login_required
 @authority_required(STUDENT_USER)
 <<<<<<< HEAD
+<<<<<<< HEAD
 def files_important_view(request):
+=======
+def files_important_view(request,pid=None,is_expired=False):
+>>>>>>> 6e737ec4f1056a804c8534dc4ef790e8ea3388ef
     """
     project group member change
     """
+    data = files_important_view_work(request,pid)
+    return render(request, 'student/fileimportant.html', data)
+
+
+def files_important_view_work(request,pid):
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
-    student_account = StudentProfile.objects.get(userid = request.user)
-    project = ProjectSingle.objects.get(student=student_account)
+    show_thesis_view = False
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
     logger.info("**"*10)
     logger.info(file_history)
-    pid=project.project_id
     file_history=enabledelete_file(file_history)
     data = {'pid': pid,
             'files': file_history,
@@ -381,7 +539,7 @@ def files_important_view(request):
             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
-    return render(request, 'student/fileimportant.html', data)
+    return data
 
 @csrf.csrf_protect
 @login_required
@@ -395,6 +553,7 @@ def file_application_view(request,pid):
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
+    show_thesis_view = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
@@ -420,6 +579,7 @@ def file_application_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -436,6 +596,7 @@ def file_interimchecklist_view(request,pid):
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
+    show_thesis_view = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
@@ -460,6 +621,7 @@ def file_interimchecklist_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -468,25 +630,26 @@ def file_interimchecklist_view(request,pid):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-def file_summary_view(request,pid):
+def file_thesis_view(request,pid):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
+    show_thesis_view = False
     show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"结题验收表"
+                des_name=u"开题检查表"
                 check_uploadfile_exist(des_name,pid)
                 if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
-                    project.file_summary = True
+                    project.file_opencheck = True
                     project.save()
                 else:
-                    show_summary = True
+                    show_thesis_view = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
     file_history=enabledelete_file(file_history)
@@ -500,9 +663,9 @@ def file_summary_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
-=======
 @only_user_required
 def file_upload_view(request,errortype=None,pid=None,is_expired=False):
     """
@@ -513,45 +676,16 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
         return data[1]
     else:
         data = data[1]
->>>>>>> b9d8020... rewrite upload function
+
     return render(request, 'student/fileimportant.html', data)
 
 
 def files_upload_view_work(request,pid,errortype):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
+    
 
-<<<<<<< HEAD
-    file_history = UploadedFiles.objects.filter(project_id=pid)
-    file_history=enabledelete_file(file_history)
-    logger.info("**"*10)
-    logger.info(file_history)
-    data = {'pid': pid,
-            'files': file_history,
-            'readonly': False,
-            'show_applicationwarn':show_applicationwarn,
-            'show_interimchecklist':show_interimchecklist,
-            'show_summary':show_summary,
-            'show_projectcompilation':show_projectcompilation,
-            'show_scoreapplication':show_scoreapplication,
-            'show_other':show_other
-            }
-    return render(request, 'student/fileimportant.html', data)
 
-@csrf.csrf_protect
-@login_required
-@authority_required(STUDENT_USER)
-@only_user_required
-def file_other_view(request,pid):
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
-    show_applicationwarn = False
-    show_interimchecklist = False
-    show_summary = False
-    show_projectcompilation = False
-    show_scoreapplication = False
-    show_other = False
-=======
->>>>>>> b9d8020... rewrite upload function
     if request.method == "POST" :
         if request.FILES != {}:
             des_name=check_filename(errortype,error_flagset)
@@ -574,11 +708,8 @@ def file_other_view(request,pid):
             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
-<<<<<<< HEAD
-    return render(request, 'student/fileimportant.html', data)
-=======
     return (0,data)
->>>>>>> b9d8020... rewrite upload function
+
 
 @csrf.csrf_protect
 @login_required

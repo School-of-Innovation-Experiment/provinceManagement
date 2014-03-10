@@ -27,12 +27,10 @@
         <td>{{item.project_grade}}</td>
         <td>
           <span><a href="{% url student.views.application_report_view item.project_id%}" class='btn btn-primary'>申请表</a></span>
+          <span><a href="{% url student.views.open_report_view item.project_id%}" class="btn btn-primary">开题检查表</a></span>
+          <span><a href="{% url student.views.mid_report_view item.project_id%}" class="btn btn-primary">中期检查表</a></span>
           <span><a href="{% url student.views.final_report_view item.project_id%}" class='btn btn-primary'>结题验收表</a></span>
-<<<<<<< HEAD
-          <span><a href="{% url student.views.files_important_view %}" class='btn btn-primary'>文件上传</a></span>
-=======
           <span><a href="{% url student.views.file_upload_view item.project_id %}" class='btn btn-primary'>文件上传</a></span>
->>>>>>> b9d8020... rewrite upload function
         </td>
       </tr>
       {%  endfor %}
