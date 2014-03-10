@@ -221,7 +221,7 @@ class PreSubmitEnterprise(models.Model):
 
 class OpenSubmit(models.Model):
     """
-    Mid submit
+    Open submit
     """
     content_id = models.CharField(max_length=50,
                                   primary_key=True, default=lambda: str(uuid.uuid4()),

@@ -19,9 +19,19 @@ urlpatterns = patterns('',
         teacher_views.application_report_view,
     ),
     url(
+        r'^open/(?P<pid>.{36})$',
+        teacher_views.open_report_view,
+    ),
+
+    url(
         r'^final/(?P<pid>.{36})$',
         teacher_views.final_report_view,
     ),
+    url(
+        r'^mid/(?P<pid>.{36})$',
+        teacher_views.mid_report_view,
+    ),
+
     url(
         r'^files/(?P<pid>.{36})$',
         teacher_views.file_view,

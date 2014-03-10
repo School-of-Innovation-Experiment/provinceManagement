@@ -74,6 +74,7 @@ from django.core.files.uploadedfile import UploadedFile
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
 
+from student.views import open_report_view_work
 
 class AdminStaffService(object):
     @staticmethod
@@ -842,14 +843,13 @@ class AdminStaffService(object):
             context.update({"newsform": NewsForm()})
             return render(request, "adminStaff/news_release.html", context)
 
-    #liuzhuo write
-    # @csrf.csrf_protect
-    # @login_required
-    # @authority_required(ADMINSTAFF_USER)
-    # def showProject(request, pid):
-
-        # return render(request,"adminStaff/project_view.html", None)
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def open_report_view(request, pid=None):
+        data = open_report_view_work(request, pid)    
+        return render(request, 'adminStaff/open.html', data)
 
     @staticmethod
     @csrf.csrf_protect

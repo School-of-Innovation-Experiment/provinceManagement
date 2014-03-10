@@ -10,18 +10,25 @@ from student import views as student_views
 
 urlpatterns = patterns('',
     # Examples:
+
     url(
         r'^$',
         student_views.home_view,
-    ),
+    ),    
     url(
         r'^memberchange$',
         student_views.member_change,
     ),
     url(
-    r'^techcompetition$',
+        r'^techcompetition$',
         student_views.techcompetition,
     ),
+
+    url(
+        r'^open/(?P<pid>.{36})$',
+        student_views.open_report_view,
+    ), 
+
     url(
         r'^application/(?P<pid>.{36})$',
         student_views.application_report_view,name = "student_application_report_view"
@@ -29,6 +36,10 @@ urlpatterns = patterns('',
     url(
         r'^final/(?P<pid>.{36})$',
         student_views.final_report_view,name = "student_final_report_view"
+    ),
+    url(
+        r'^mid/(?P<pid>.{36})$',
+        student_views.mid_report_view,
     ),
     url(
         r'^files/(?P<pid>.{36})$',
