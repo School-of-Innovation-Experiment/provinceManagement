@@ -72,7 +72,11 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+<<<<<<< HEAD
 from student.views import application_report_view_work, final_report_view_work
+=======
+from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
+>>>>>>> b9d8020... rewrite upload function
 
 
 class AdminStaffService(object):
@@ -902,10 +906,29 @@ class AdminStaffService(object):
                        "student_group_info_form": student_group_info_form,
                        'readonly': readonly,
                        })
+<<<<<<< HEAD
+=======
+
+>>>>>>> b9d8020... rewrite upload function
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+<<<<<<< HEAD
+=======
+    def files_upload_view(request,pid=None):
+        data = files_upload_view_work(request,pid)
+        if data[0]:
+            return data[1]
+        else:
+            data = data[1]
+        return render(request,'adminStaff/fileimportant.html',data)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    # @authority_required(ADMINSTAFF_USER)
+>>>>>>> b9d8020... rewrite upload function
     def get_xls_path(request,exceltype):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None

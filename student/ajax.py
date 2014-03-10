@@ -262,6 +262,7 @@ def FileDeleteConsistence(request, pid, fid):
 
     if request.method == "POST":
         f.delete()
+        check_scoreaplication(p,pid)
         return simplejson.dumps({"is_deleted": True,
                                  "message": "delete it successfully!",
                                  "fid": str(fid)})
@@ -269,5 +270,16 @@ def FileDeleteConsistence(request, pid, fid):
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
 
-
+def check_scoreaplication(project,pid):
+    uploadfiles = UploadedFiles.objects.filter(project_id = pid) 
+    loginfo(p=uploadfiles,label="uploadfiles")
+    for file_temp in uploadfiles:
+        loginfo(p=file_temp,label="file_temp")
+        loginfo(p=file_temp.name,label="file_temp.name")
+        if u'学分申请表' in file_temp.name:
+            break
+    else:
+        project.score_application = False
+    project.save()
+    loginfo(p=project.score_application,label="project.score_application")
     

@@ -17,6 +17,7 @@ RegisterClass = (ProjectSingle,
                  UploadedFiles,
                  PreSubmitEnterprise,
                  Teacher_Enterprise,
+                 OpenSubmit,
                  TeacherProjectPerLimits,
                  ProjectFinishControl)
 

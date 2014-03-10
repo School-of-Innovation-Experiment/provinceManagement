@@ -16,8 +16,12 @@ urlpatterns = patterns('',
     url(r'^application/(?P<pid>.{36})$', AdminStaffService.application_report_view),
     url(r'^final/(?P<pid>.{36})$', AdminStaffService.final_report_view),
     url(r'^memberchange/(?P<pid>.{36})$', AdminStaffService.member_change),
+<<<<<<< HEAD
     #url(r'^memberchange$', AdminStaffService.member_change),
 
+=======
+    url(r'^files_upload_view/(?P<pid>.{36})$',AdminStaffService.files_upload_view),
+>>>>>>> b9d8020... rewrite upload function
 
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),

@@ -1,0 +1,169 @@
+<h3>历史文件列表</h3>
+<table class="table table-hover table-striped" >
+  <thead>
+    <tr>
+      <td>名称</td>
+      <td>类型</td>
+      <td>大小</td>
+      <td>上传时间</td>
+    </tr>
+  </thead>
+  <tbody>
+    {%for item in files|dictsort:"enabledelete"%}
+    <tr id="{{item.file_id}}">
+      <td>{{item.name}}</td>
+      <td>{{item.file_type}}</td>
+      <td>{{item.file_size}}</td>
+      <td>{{item.uploadtime}}</td>
+      <td>
+        <span><a href="{{item.file_obj.url}}" class='btn btn-primary' target="_blank">下载</a></span>
+        {% if item.enabledelete %}
+        <button class="btn btn-danger" rel="file_delete" pid="{{pid}}" fid="{{item.file_id}}">
+              <i class="icon-trash icon-white"></i>
+              <span>删除</span>
+        </button>
+        {% endif %}
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table><!--end history list table-->
+  {% for error in error_flagset %}
+    {% if error.error_flag %}
+    <div class="alert alert-error">
+      <a class="close" data-dismiss="alert">x</a>
+      <h4 class="alert-heading">系统提示！</h4>
+      {% ifnotequal error.error_type 'show_other' %}
+      <p>你上传的文件名不包含{{error.error_message}}字段，请确认后再上传</p>
+      {% else %}
+      <p>你上传的文件名不符合要求，请确认后再上传</p>
+      {% endifnotequal%}
+    </div>
+    {% endif %}
+  {% endfor %}
+  <br/>
+<div class="row span12" style="margin-left:0px;"> 
+  <div class="span4 student_file_upload" >
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_applicationwarn'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>申报书上传</h4></span>
+      <p>上传的文件请命名为<strong>“申报书”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+
+  </div>
+  <div class="span4 student_file_upload" >
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_interimchecklist'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>中期检查表上传</h4></span>
+      <p>上传的文件请命名为<strong>“中期检查表”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+
+ <div class="span4 student_file_upload" >
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_summary'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>结题验收表上传</h4></span>
+      <p>上传的文件请命名为<strong>“结题验收表”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+ {% if IS_DLUT_SCHOOL%}
+  <br>
+  <div class="span4 student_file_upload">
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_projectcompilation' %} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>项目汇编上传</h4></span>
+      <p>上传的文件请命名为<strong>“项目汇编”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  {% endif %}
+  {% if IS_DLUT_SCHOOL %}
+  {%else%}
+  {% endif %}
+  <div class="span4 student_file_upload">
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_scoreapplication'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>学分申请表上传</h4></span>
+      <p>上传的文件请命名为<strong>“学分申请表”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+  {% if IS_DLUT_SCHOOL %}
+  <div class="span4 student_file_upload">
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_opensubmit'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>开题报告上传</h4></span>
+      <p>上传的文件请命名为<strong>“开题报告”</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+  <br>
+  <div class="span4 student_file_upload">
+    <form method="POST"  action={% url student.views.file_upload_view pid 'show_other'%} enctype="multipart/form-data">
+      {% csrf_token %}
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>其他附件上传</h4></span>
+      <p>上传的文件不能命名为<strong>前五个入口要求的名称</strong></p>
+      <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+      <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+        <i class="icon-upload icon-white"></i>
+        <span>上传</span>
+      </button>
+    </form>
+  </div>
+  {% endif %}
+  {% if IS_MINZU_SCHOOL %}
+  {% endif %}    
+</div>
+<div class="alert alert-success" id="filesupload-tips" >
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <h3><strong>文件上传提示!</strong></h3>
+    <br/>
+    {% if IS_MINZU_SCHOOL %}
+    <ul>
+        <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
+        <li>对于申报书，中期检查表，结题验收表和学分申请表四个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
+        <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
+        <li>文件大小不要超过<strong>50M</strong></li>
+    </ul>
+    {% endif %}
+    {% if IS_DLUT_SCHOOL%}
+    <ul>
+        <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
+        <li>对于申报书，中期检查表，结题验收表，项目汇编和学分申请表五个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
+        <li>其他附件上传入口，用来上传与项目有关的介绍图片等，命名时不能与<strong>前五个入口</strong>的<strong>名字相同</strong>，不能为“申报书”，“中期检查表”，“结题验收表”，“项目汇编”和“学分申请表”五个关键字段</li>
+        <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
+        <li>文件大小不要超过<strong>50M</strong></li>
+    </ul>
+    {% endif %}
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/student/delete.js"></script>
