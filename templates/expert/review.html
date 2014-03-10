@@ -6,31 +6,51 @@
 <div class="tab-content">
   <div class="tab-pane fade active in" id="review-page">
     <ul class="nav nav-tabs">
+
       <li class="active">
+        <a href="#open-report" data-toggle="tab">开题检查表</a>
+      </li>
+
+      <li>
         <a href="#content-section" data-toggle="tab">项目内容</a>
       </li>
+
       <li>
         <a href="#docs-section" data-toggle="tab">附件下载</a>
       </li>
+
       <li>
         <a href="#review-section" data-toggle="tab">项目评价</a>
       </li>
+
     </ul><!--end ul title-->
+
     <div class="tab-content">
-      <div class="tab-pane fade active in" id="content-section">
+
+      <div class="tab-pane fade active in" id="open-report">
+        <!--Basic Infomation-->
+        {% include "student/widgets/open.html" %}
+        <!--Application Infomation-->
+        <a type="button" class="btn btn-primary" data-toggle="tab" href="#review-section">前往打分</a>
+      </div><!--end content section-->
+
+      <div class="tab-pane fade " id="content-section">
         <!--Basic Infomation-->
         {% include "student/widgets/project_infoform.html" %}
         <!--Application Infomation-->
         {% include "student/widgets/application.html" %}
         <a type="button" class="btn btn-primary" data-toggle="tab" href="#review-section">前往打分</a>
       </div><!--end content section-->
+
       <div class="tab-pane fade " id="docs-section">
         {% include "expert/widgets/_doc_list.html" %}
       </div>
+
       <div class="tab-pane fade " id="review-section">
         <!--Expert Review-->
         {% include "expert/widgets/score_review.html" %}
       </div><!--end review section-->
+
     </div><!--end tab content-->
   </div><!--end tab pane-->
 </div><!--end tab content-->

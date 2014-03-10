@@ -18,11 +18,11 @@ from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
-from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition
+from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition, OpenSubmit
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+from school.forms import *
 from backend.fund import CFundManage
 
 from const.models import *
@@ -117,7 +117,123 @@ def techcompetition_detail(request,pid=None):
                   {"techcompetition": techcompetition,
                    "techcompetition_form": techcompetition_form})
 
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+@time_controller(phase=STATUS_FINSUBMIT)
+def open_report_view(request, pid = None, is_expired = False):
+    data = open_report_view_work(request, pid, is_expired)
+    if data['isRedirect'] :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) )
+    else:
+        
+        return render(request, 'student/open.html', data)
 
+def open_report_view_work(request, pid = None, is_expired = False):
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    try:
+        open_data = OpenSubmit.objects.get(project_id=pid)
+    except:
+        open_data = OpenSubmit(project_id=project)
+
+    #open_data = get_object_or_404(OpenSubmit, project_id=pid)
+
+    is_currentyear = check_year(project)
+
+    is_applying = check_applycontrol(project)
+
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+
+    
+    isRedirect = False
+    
+    if request.method == "POST" and readonly is not True:
+        open_form = OpenReportForm(request.POST, instance=open_data)
+        if open_form.is_valid():
+            open_form.save()
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.save()
+
+            isRedirect = True
+            # return HttpResponseRedirect(reverse('student.views.home_view'))
+        else:
+            logger.info(final_form.errors)
+    open_form = OpenReportForm(instance=open_data)
+    
+
+    data = {'pid': pid,
+            'open': open_form,
+    
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            }
+    return data
+
+
+
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def mid_report_view(request, pid = None, is_expired = False):
+    data = mid_report_view_work(request, pid, is_expired)
+    print data
+    if data["isRedirect"]:
+        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+    else:
+        return render(request, "student/mid.html", data)
+
+def mid_report_view_work(request, pid = None, is_expired = False):
+    """
+    student mid report
+    """
+    mid = get_object_or_404(MidSubmit, project_id = pid)
+    project = get_object_or_404(ProjectSingle, project_id = pid)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    readonly = False
+    #
+    #TODO: 等待填写确定只读的判断逻辑
+    #
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    isRedirect = False
+    if request.method == "POST" and readonly is not True:
+        mid_form = MidReportForm(request.POST, instance = mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            #project.project_status = ProjectStatus.objects.get(status=STATUS_MIDSUBMIT)
+            project.save()
+
+            isRedirect = True
+        else:
+            pass
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+
+    mid_form = MidReportForm(instance = mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            'is_show': is_show,
+            }
+    return data
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -126,7 +242,7 @@ def techcompetition_detail(request,pid=None):
 def final_report_view(request, pid=None,is_expired=False):    
     data = final_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important' ) 
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
     else :         
         return render(request, 'student/final.html', data)
 
@@ -138,6 +254,8 @@ def final_report_view_work(request, pid=None,is_expired=False):
     Arguments:
         In: id, it is project id
     """
+
+    print 'final_report' + str(pid)
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
@@ -191,7 +309,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important' ) 
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
 

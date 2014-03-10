@@ -13,6 +13,9 @@ RegisterClass = (ProjectSingle,
                  Project_Is_Assigned,
                  Re_Project_Expert,
                  PreSubmit,
+
+                 OpenSubmit,
+                 
                  FinalSubmit,
                  UploadedFiles,
                  PreSubmitEnterprise,
