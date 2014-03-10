@@ -36,7 +36,7 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
-
+from student.views import open_report_view_work
 """
 About the decorators sequence, it will impact the the function squeneces,
 the top will be called first!
@@ -79,7 +79,7 @@ def review_report_view(request):
     # get or check authorities
     pid = request.GET.get('pid')
     flag = request.GET.get('flag') == 'True'
-    print pid, flag, "*"*100
+    
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project, is_assign_by_adminStaff = flag)
@@ -108,6 +108,9 @@ def review_report_view(request):
         review_form = ReviewForm(instance=re_project)
     for i, doc in enumerate(doc_list):
         doc.index = i + 1
+
+
+    open_data = open_report_view_work(request, pid)
     data = {
             "is_innovation": is_innovation,
             "pid": pid,
@@ -116,6 +119,8 @@ def review_report_view(request):
             "application": application_form,
             "review": review_form,
             "doc_list": doc_list,
+            "open":open_data['open'],
+            "readonly": open_data['readonly'],
             }
 
     return render(request, 'expert/review.html', data)
