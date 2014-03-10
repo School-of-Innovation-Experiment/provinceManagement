@@ -363,8 +363,4 @@ FileList={
     'show_scoreapplication' : u"学分申请表",
     'show_opensubmit':u'开题报告',
     'show_other':u'其他附件',
-<<<<<<< HEAD
 } 
-=======
-} 
->>>>>>> dbacfb3... fix some bug

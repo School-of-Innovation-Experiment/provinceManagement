@@ -497,13 +497,10 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
 #             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
 #                         }
 #     return data
-<<<<<<< HEAD
 
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
-=======
->>>>>>> dbacfb3... fix some bug
 @only_user_required
 def file_upload_view(request,errortype=None,pid=None,is_expired=False):
     """
@@ -516,12 +513,8 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
         data = data[1]
     return render(request, 'student/fileimportant.html', data)
 
-<<<<<<< HEAD
-def files_upload_view_work(request,pid,errortype):
-=======
 
 def files_upload_view_work(request,pid=None,errortype=None):
->>>>>>> dbacfb3... fix some bug
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
     if request.method == "POST" :
@@ -545,7 +538,6 @@ def files_upload_view_work(request,pid=None,errortype=None):
             'error_flagset':error_flagset,
             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
-            'show_thesis_view':show_thesis_view,
             }
     return (0,data)
 
