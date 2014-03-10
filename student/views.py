@@ -172,11 +172,12 @@ def open_report_view_work(request, pid = None, is_expired = False):
         else:
             logger.info(final_form.errors)
     open_form = OpenReportForm(instance=open_data)
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     
 
     data = {'pid': pid,
             'open': open_form,
-    
+            'is_show': is_show,
             'readonly':readonly,
             'isRedirect': isRedirect,
             }
@@ -206,10 +207,26 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id = pid)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
-    readonly = False
-    #
-    #TODO: 等待填写确定只读的判断逻辑
-    #
+
+    is_currentyear = check_year(project)
+
+    is_applying = check_applycontrol(project)
+
+
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = not is_applying or project.is_past    
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+
+    # readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     isRedirect = False
     if request.method == "POST" and readonly is not True:
