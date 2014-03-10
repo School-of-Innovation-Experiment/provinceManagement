@@ -1,6 +1,6 @@
 # coding: UTF-8
 from django.db import models
-from school.models import ProjectSingle
+from school.models import ProjectSingle, UploadedFiles
 from const.models import *
 from const import SEX_CHOICES, SEX_MALE, DEFAULT_NATION, MAJOR_CHOICES
 import datetime
@@ -27,6 +27,8 @@ class Student_Group(models.Model):
     # major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES,
     #                          verbose_name=u"专业")
     project = models.ForeignKey(ProjectSingle, blank=True)
+
+    scoreFile = models.ForeignKey(UploadedFiles, blank=True, null=True, verbose_name=u"学分申请表")
 
     def get_sex_display(self):
         if sex == 'male':
