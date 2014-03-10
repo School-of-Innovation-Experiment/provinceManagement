@@ -58,37 +58,8 @@ urlpatterns = patterns('',
         student_views.file_upload_view,
     ),
     url(
-<<<<<<< HEAD
-        r'^file_interimchecklist/(?P<pid>.{36})$',
-        student_views.file_interimchecklist_view,
-    ),
-    url(
-        r'^file_summary/(?P<pid>.{36})$',
-        student_views.file_summary_view,
-    ),
-    url(
-        r'^file_projectcompilation/(?P<pid>.{36})$',
-        student_views.file_projectcompilation_view,
-    ),
-    url(
-        r'^file_scoreapplication_view/(?P<pid>.{36})$',
-        student_views.file_scoreapplication_view,
-    ),
-    url(
-        r'^file_other_view/(?P<pid>.{36})$',
-        student_views.file_other_view,
-    ),
-    url(
-        r'^file_thesis_view/(?P<pid>.{36})$',
-        student_views.file_thesis_view,
-    ),
-    url(
-        r'^files_important/(?P<pid>.{36})$',
-        student_views.files_important_view,
-=======
         r'^file_upload_view/(?P<pid>.{36})$',
         student_views.file_upload_view, name="student_file_upload_view"
->>>>>>> b9d8020... rewrite upload function
     ),
     url(
         r'^processrecord$',

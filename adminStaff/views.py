@@ -72,17 +72,9 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-<<<<<<< HEAD
-<<<<<<< HEAD
 from student.views import application_report_view_work, final_report_view_work
-=======
 from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
->>>>>>> b9d8020... rewrite upload function
-
-=======
-from student.views import application_report_view_work, final_report_view_work,files_important_view_work,file_other_view_work
 from student.views import open_report_view_work
->>>>>>> 6e737ec4f1056a804c8534dc4ef790e8ea3388ef
 
 class AdminStaffService(object):
     @staticmethod
@@ -925,10 +917,13 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def files_upload_view(request,pid=None):
-        data = files_upload_view_work(request,pid)
+    def files_upload_view(request,errortype=None,pid=None,is_expired=False):
+        data = files_upload_view_work(request,pid,errortype)
+        loginfo(p=data[0],label="data[0]")
+        loginfo(p=errortype,label=errortype)
         if data[0]:
-            return data[1]
+            loginfo('hahaha')
+            return HttpResponseRedirect('/adminStaff/')
         else:
             data = data[1]
         return render(request,'adminStaff/fileimportant.html',data)

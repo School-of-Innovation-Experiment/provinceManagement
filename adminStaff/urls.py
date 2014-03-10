@@ -20,7 +20,10 @@ urlpatterns = patterns('',
     #url(r'^memberchange$', AdminStaffService.member_change),
 
     url(r'^files_upload_view/(?P<pid>.{36})$',AdminStaffService.files_upload_view),
-
+    url(
+        r'^file_upload_view/(?P<pid>.{36})&(?P<errortype>\w+)$',
+        AdminStaffService.files_upload_view,name="adminStaff_uploadfile_errortype",
+    ),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$',AdminStaffService.home_view),
     url(r'^processrecord$',AdminStaffService.processrecord),

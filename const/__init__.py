@@ -339,8 +339,6 @@ PROGRESS_RECORD_MAX = 20
 if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
 elif IS_DLUT_SCHOOL: DUT_code = "10141"
 # DUT_code = "10141"
-<<<<<<< HEAD
-=======
 
 EXCEL_TYPE_BASEINFORMATION = "baseinformation"
 EXCEL_TYPE_APPLICATIONSCORE = "applicationscore"
@@ -364,4 +362,3 @@ FileList={
     'show_opensubmit':u'开题报告',
     'show_other':u'其他附件',
 } 
->>>>>>> b9d8020... rewrite upload function
