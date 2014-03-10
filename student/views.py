@@ -190,6 +190,54 @@ def open_report_view_work(request, pid = None, is_expired = False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
+def mid_report_view(request, pid = None, is_expired = False):
+    data = mid_report_view_work(request, pid, is_expired)
+    print data
+    if data["isRedirect"]:
+        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+    else:
+        return render(request, "student/mid.html", data)
+
+def mid_report_view_work(request, pid = None, is_expired = False):
+    """
+    student mid report
+    """
+    mid = get_object_or_404(MidSubmit, project_id = pid)
+    project = get_object_or_404(ProjectSingle, project_id = pid)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    readonly = False
+    #
+    #TODO: 等待填写确定只读的判断逻辑
+    #
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    isRedirect = False
+    if request.method == "POST" and readonly is not True:
+        mid_form = MidReportForm(request.POST, instance = mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            #project.project_status = ProjectStatus.objects.get(status=STATUS_MIDSUBMIT)
+            project.save()
+
+            isRedirect = True
+        else:
+            pass
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+
+    mid_form = MidReportForm(instance = mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            'is_show': is_show,
+            }
+    return data
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
@@ -425,6 +473,7 @@ def files_important_view_work(request,pid):
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
+    show_thesis_view = False
     project = get_object_or_404(ProjectSingle, project_id=pid)
     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
     logger.info("**"*10)
@@ -456,6 +505,7 @@ def file_application_view(request,pid):
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
+    show_thesis_view = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
@@ -481,6 +531,7 @@ def file_application_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -497,6 +548,7 @@ def file_interimchecklist_view(request,pid):
     show_projectcompilation = False
     show_scoreapplication = False
     show_other = False
+    show_thesis_view = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
@@ -521,6 +573,7 @@ def file_interimchecklist_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -529,25 +582,26 @@ def file_interimchecklist_view(request,pid):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-def file_summary_view(request,pid):
+def file_thesis_view(request,pid):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     show_applicationwarn = False
     show_interimchecklist = False
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
+    show_thesis_view = False
     show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
                 loginfo(p=request.FILES,label="request.FILES")
-                des_name=u"结题验收表"
+                des_name=u"开题检查表"
                 check_uploadfile_exist(des_name,pid)
                 if check_uploadfile_name(request,des_name):
                     upload_response(request, pid)
-                    project.file_summary = True
+                    project.file_opencheck = True
                     project.save()
                 else:
-                    show_summary = True
+                    show_thesis_view = True
 
     file_history = UploadedFiles.objects.filter(project_id=pid)
     file_history=enabledelete_file(file_history)
@@ -561,6 +615,7 @@ def file_summary_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -576,6 +631,7 @@ def file_projectcompilation_view(request,pid):
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
+    show_thesis_view = False
     show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
@@ -601,6 +657,7 @@ def file_projectcompilation_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
@@ -616,6 +673,7 @@ def file_scoreapplication_view(request,pid):
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
+    show_thesis_view = False
     show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
@@ -641,10 +699,51 @@ def file_scoreapplication_view(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return render(request, 'student/fileimportant.html', data)
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def file_summary_view(request,pid):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    show_applicationwarn = False
+    show_interimchecklist = False
+    show_summary = False
+    show_projectcompilation = False
+    show_scoreapplication = False
+    show_thesis_view = False
+    show_other = False
+    if request.method == "POST" :
+            if request.FILES != {}:
+                loginfo(p=request.FILES,label="request.FILES")
+                des_name=u"结题验收表"
+                check_uploadfile_exist(des_name,pid)
+                if check_uploadfile_name(request,des_name):
+                    upload_response(request, pid)
+                    project.file_summary = True
+                    project.save()
+                else:
+                    show_summary = True
 
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    logger.info("**"*10)
+    logger.info(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'show_applicationwarn':show_applicationwarn,
+            'show_interimchecklist':show_interimchecklist,
+            'show_summary':show_summary,
+            'show_projectcompilation':show_projectcompilation,
+            'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
+            'show_other':show_other
+            }
+    return render(request, 'student/fileimportant.html', data)
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -659,6 +758,7 @@ def file_other_view_work(request,pid):
     show_summary = False
     show_projectcompilation = False
     show_scoreapplication = False
+    show_thesis_view = False
     show_other = False
     if request.method == "POST" :
             if request.FILES != {}:
@@ -680,6 +780,7 @@ def file_other_view_work(request,pid):
             'show_summary':show_summary,
             'show_projectcompilation':show_projectcompilation,
             'show_scoreapplication':show_scoreapplication,
+            'show_thesis_view':show_thesis_view,
             'show_other':show_other
             }
     return data

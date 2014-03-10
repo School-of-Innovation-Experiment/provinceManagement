@@ -27,7 +27,7 @@ from teacher.utility import *
 from school.utility import *
 from adminStaff.views import AdminStaffService
 from backend.fund import CFundManage
-from school.views import application_report_view_work, final_report_view_work, open_report_view_work
+from school.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
 
 @csrf.csrf_protect
 @login_required
@@ -78,6 +78,14 @@ def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     return render(request, 'teacher/final.html', data)
 
+@csrf.csrf_protect
+@login_required
+@authority_required(TEACHER_USER)
+@only_user_required
+def mid_report_view(request,pid=None, is_expired=False):
+    data = mid_report_view_work(request, pid, is_expired)
+    return render(request, 'teacher/mid.html', data)
+    
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
