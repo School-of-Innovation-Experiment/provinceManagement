@@ -122,8 +122,12 @@
       </button>
     </form>
   </div>
+  {% if IS_DLUT_SCHOOL %}
   <br>
   <div class="span4" style="margin-left:0px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% elif IS_MINZU_SCHOOL%}
+  <div class="span4" style="margin-left:10px;border: solid #3a87ad 1px;">
+  {% endif %}
     <form method="POST"  action={% url student.views.file_summary_view pid%} enctype="multipart/form-data">
       {% csrf_token %}
       <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>结题验收表上传</h4></span>
@@ -149,7 +153,13 @@
     </form>
   </div>
   {% endif %}
+  {% if IS_DLUT_SCHOOL %}
   <div class="span4" style="margin-left:10px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% elif IS_MINZU_SCHOOL%}
+  <br>
+  <div class="span4" style="margin-left:0px;margin-top:10px;margin-bottom:20px;border: solid #3a87ad 1px;">
+  {% endif %}
+
     <form method="POST"  action={% url student.views.file_scoreapplication_view pid%} enctype="multipart/form-data">
       {% csrf_token %}
       <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>学分申请表上传</h4></span>
