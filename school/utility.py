@@ -403,7 +403,7 @@ def check_uploadfile_exist(des_name,pid):
         return False
 
 def enabledelete_file(file_list):
-    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+    important_filelist=[u"申报书",u"开题检查表",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
     for temp in file_list:
         if temp.name in important_filelist:
             temp.enabledelete = False
