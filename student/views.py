@@ -122,10 +122,14 @@ def techcompetition_detail(request,pid=None):
 @authority_required(STUDENT_USER)
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
-def open_report_view(request, pid = None, is_expired = False):    
+def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
+    if data['isRedirect'] :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) )
+    else:
+        
+        return render(request, 'student/open.html', data)
 
-    return render(request, 'student/open.html', data)
 def open_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     try:
@@ -148,11 +152,13 @@ def open_report_view_work(request, pid = None, is_expired = False):
         readonly = False
     elif check_auth(user = request.user, authority = SCHOOL_USER):
         readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
     else:
         readonly = False
 
     
-
+    isRedirect = False
     
     if request.method == "POST" and readonly is not True:
         open_form = OpenReportForm(request.POST, instance=open_data)
@@ -172,7 +178,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
             'open': open_form,
     
             'readonly':readonly,
-            # 'isRedirect': isRedirect,
+            'isRedirect': isRedirect,
             }
     return data
 
@@ -188,8 +194,8 @@ def open_report_view_work(request, pid = None, is_expired = False):
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important' )
-    else :
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+    else :         
         return render(request, 'student/final.html', data)
 
 
@@ -255,7 +261,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important' ) 
+        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
 
