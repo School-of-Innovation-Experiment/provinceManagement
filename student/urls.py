@@ -67,6 +67,10 @@ urlpatterns = patterns('',
         student_views.file_other_view,
     ),
     url(
+        r'^file_thesis_view/(?P<pid>.{36})$',
+        student_views.file_thesis_view,
+    ),
+    url(
         r'^files_important/(?P<pid>.{36})$',
         student_views.files_important_view,
     ),
