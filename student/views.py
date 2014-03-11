@@ -125,7 +125,7 @@ def techcompetition_detail(request,pid=None):
 def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) )
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
     else:
         
         return render(request, 'student/open.html', data)
@@ -195,7 +195,7 @@ def mid_report_view(request, pid = None, is_expired = False):
     data = mid_report_view_work(request, pid, is_expired)
     print data
     if data["isRedirect"]:
-        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + pid ) 
     else:
         return render(request, "student/mid.html", data)
 
@@ -259,7 +259,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 def final_report_view(request, pid=None,is_expired=False):    
     data = final_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/final.html', data)
 
@@ -326,7 +326,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
 
