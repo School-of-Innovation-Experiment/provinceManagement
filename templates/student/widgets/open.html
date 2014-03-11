@@ -1,0 +1,67 @@
+    <div class="page-header">
+      <h3> 研究内容 </h3>
+    </div>
+    <blockquote>
+      <div class="control-group form-inline {% if open.content.errors %}error{% endif %}">
+        {{open.content}} 
+        {% if open.content.errors %}
+        <div class="row alert alert-error school-display">
+          <button class="close" data-dismiss="alert">×</button>
+          {{ open.content.errors }}
+        </div>
+        {% endif %}  
+      </div>
+    </blockquote>
+
+
+
+    <div class="page-header">
+      <h3> 前期研究和成果 </h3>
+    </div>
+    <blockquote>
+      <div class="control-group form-inline {% if open.study_achievement.errors %}error{% endif %}">
+        {{open.study_achievement}} 
+        {% if open.study_achievement.errors %}
+        <div class="row alert alert-error school-display">
+          <button class="close" data-dismiss="alert">×</button>
+          {{ open.study_achievement.errors }}
+        </div>
+        {% endif %}  
+      </div>
+    </blockquote>
+
+
+
+    <div class="page-header">
+      <h3> 下一阶段计划及目标 </h3>
+    </div>
+    <blockquote>
+      <div class="control-group form-inline {% if open.next_plan_target.errors %}error{% endif %}">
+        {{open.next_plan_target}} 
+        {% if open.next_plan_target.errors %}
+        <div class="row alert alert-error school-display">
+          <button class="close" data-dismiss="alert">×</button>
+          {{ open.next_plan_target.errors }}
+        </div>
+        {% endif %}  
+      </div>
+    </blockquote>
+
+
+
+   {% if not is_show %} 
+   <div class="page-header">
+      <h3>指导教师意见 </h3>
+    </div>
+    <blockquote>
+      <div class="control-group form-inline {% if open.inspector_comments.errors %}error{% endif %}">
+        {{open.inspector_comments}} 
+        {% if open.inspector_comments.errors %}
+        <div class="row alert alert-error school-display">
+          <button class="close" data-dismiss="alert">×</button>
+          {{ open.inspector_comments.errors }}
+        </div>
+        {% endif %}  
+      </div>
+    </blockquote>
+    {% endif %}
