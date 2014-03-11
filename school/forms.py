@@ -204,6 +204,28 @@ class MidReportForm(ModelForm):
                  }
     def get_absolute_url(self):
         return reverse('student.views.mid_report_view', args=(str(self.instance.project_id),))
+class OpenReportForm(ModelForm):
+    """
+      open form
+    """
+    class Meta:
+        model = OpenSubmit
+        exclude = ('project_id', 'content_id', )
+        widgets = {"content": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'研究内容，写1000字就行...',
+                                                                'class':"fill-form"},),
+                   "study_achievement": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder': '已完成的前期研究工作和成果, 写1000字就行...',
+                                                                'class': "fill-form"}),
+                   "next_plan_target": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                                'placeholder':'下一阶段计划及预期达到目标, 写1000字就行...',
+                                                                'class': "fill-form"}),
+                   "inspector_comments": forms.Textarea(attrs={'rows': 8, 'cols': 100,
+                                                       'placeholder':'指导教师意见,  写200字就行...',
+                                                       'class': "fill-form"}),
+                   }
+
+
 
 class FinalReportForm(ModelForm):
     """
