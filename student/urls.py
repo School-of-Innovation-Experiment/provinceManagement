@@ -31,6 +31,10 @@ urlpatterns = patterns('',
         student_views.final_report_view,
     ),
     url(
+        r'^mid/(?P<pid>.{36})$',
+        student_views.mid_report_view,
+    ),
+    url(
         r'^files/(?P<pid>.{36})$',
         student_views.file_view,
     ),

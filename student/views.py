@@ -22,7 +22,7 @@ from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition
 from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+from school.forms import *
 from backend.fund import CFundManage
 
 from const.models import *
@@ -118,6 +118,54 @@ def techcompetition_detail(request,pid=None):
                    "techcompetition_form": techcompetition_form})
 
 
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def mid_report_view(request, pid = None, is_expired = False):
+    data = mid_report_view_work(request, pid, is_expired)
+    print data
+    if data["isRedirect"]:
+        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+    else:
+        return render(request, "student/mid.html", data)
+
+def mid_report_view_work(request, pid = None, is_expired = False):
+    """
+    student mid report
+    """
+    mid = get_object_or_404(MidSubmit, project_id = pid)
+    project = get_object_or_404(ProjectSingle, project_id = pid)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    readonly = False
+    #
+    #TODO: 等待填写确定只读的判断逻辑
+    #
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    isRedirect = False
+    if request.method == "POST" and readonly is not True:
+        mid_form = MidReportForm(request.POST, instance = mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            #project.project_status = ProjectStatus.objects.get(status=STATUS_MIDSUBMIT)
+            project.save()
+
+            isRedirect = True
+        else:
+            pass
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+
+    mid_form = MidReportForm(instance = mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly':readonly,
+            'isRedirect': isRedirect,
+            'is_show': is_show,
+            }
+    return data
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
