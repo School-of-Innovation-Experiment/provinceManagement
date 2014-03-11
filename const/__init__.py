@@ -354,3 +354,13 @@ EXCEL_TYPE_CHOICES = (
     (EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP, u"创业项目汇总表"),
     (EXCEL_TYPE_PROJECTSUMMARY,u"项目基本信息汇总表"),
 )
+
+FileList={
+    'show_applicationwarn' : u"申报书",
+    'show_interimchecklist' : u"中期检查表",
+    'show_summary' : u"结题验收表",
+    'show_projectcompilation' : u"项目汇编",
+    'show_scoreapplication' : u"学分申请表",
+    'show_opensubmit':u'开题检查表',
+    'show_other':u'其他附件',
+} 

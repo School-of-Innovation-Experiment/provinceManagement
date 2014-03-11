@@ -72,7 +72,8 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-from student.views import application_report_view_work, final_report_view_work,files_important_view_work,file_other_view_work
+
+from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
 from student.views import open_report_view_work
 
 class AdminStaffService(object):
@@ -920,15 +921,13 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def files_important_view(request,pid=None):
-        data = files_important_view_work(request,pid)
-        return render(request,'adminStaff/fileimportant.html',data)
-    @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
-    def file_other_view(request,pid=None):
-        data = file_other_view_work(request,pid)
+    def files_upload_view(request,errortype=None,pid=None,is_expired=False):
+        data = files_upload_view_work(request,pid,errortype)
+
+        if data[0]:
+            return HttpResponseRedirect('/adminStaff/')
+        else:
+            data = data[1]
         return render(request,'adminStaff/fileimportant.html',data)
 
     @staticmethod

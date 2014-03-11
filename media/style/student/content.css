@@ -93,3 +93,11 @@ div.school-display{
     text-overflow:ellipsis;
     white-space:nowrap;
 }*/
+
+div.student_file_upload{
+  margin-right:15px!important;
+  margin-left:0px!important;
+  margin-top:10px;
+  margin-bottom: 10px;
+  border: solid #3a87ad 1px;
+}

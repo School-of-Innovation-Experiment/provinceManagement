@@ -12,14 +12,12 @@ from school.models import *
 RegisterClass = (
                  Project_Is_Assigned,
                  Re_Project_Expert,
-                 PreSubmit,
-
-                 OpenSubmit,
-                 
+                 PreSubmit,             
                  FinalSubmit,
                  UploadedFiles,
                  PreSubmitEnterprise,
                  Teacher_Enterprise,
+                 OpenSubmit,
                  TeacherProjectPerLimits,
                  ProjectFinishControl)
 
