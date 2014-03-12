@@ -127,8 +127,10 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
+                if ExpertProfile.objects.filter(userid = oldUserObj).count() == 0 \
+                    and TeacherProfile.objects.filter(userid = oldUserObj).count() == 0:
+                    oldUserObj.delete() #删除被覆盖用户
 
-                oldUserObj.delete() #删除被覆盖的user
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
             teacherProfileObj.save()
