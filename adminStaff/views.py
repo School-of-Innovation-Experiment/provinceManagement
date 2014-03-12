@@ -921,25 +921,26 @@ class AdminStaffService(object):
                        'readonly': readonly,
                        })
 
-    @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
-    def files_important_view(request,pid=None):
-        data = files_important_view_work(request,pid)
-        return render(request,'adminStaff/fileimportant.html',data)
-    @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
-    def file_other_view(request,pid=None):
-        data = file_other_view_work(request,pid)
-        return render(request,'adminStaff/fileimportant.html',data)
 
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def files_upload_view(request,errortype=None,pid=None,is_expired=False):
+        data = files_upload_view_work(request,pid,errortype)
+        loginfo(p=data[0],label="data[0]")
+        loginfo(p=errortype,label=errortype)
+        if data[0]:
+            loginfo('hahaha')
+            return HttpResponseRedirect('/adminStaff/')
+        else:
+            data = data[1]
+        return render(request,'adminStaff/fileimportant.html',data)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    # @authority_required(ADMINSTAFF_USER)
     def get_xls_path(request,exceltype):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
