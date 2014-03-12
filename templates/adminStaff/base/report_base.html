@@ -19,15 +19,13 @@
       </h4>
     </div><!--end alert-->
   </div><!--end left span-->
-{% if IS_MINZU_SCHOOL%}
+{% if not IS_MINZU_SCHOOL%}
     <div class="span2">
-  {%else%}
-    <div class="span2">
-  {%endif%}
     <div class="alert alert-error" style=" text-align:center;">
       <h4><a href= "/adminStaff/open/{{pid}}"> 开题检查表</a></h4>
     </div><!--end alert-->
   </div><!--end left span-->
+{% endif %}
  {% if IS_MINZU_SCHOOL %}
 <div class="span2">
  {% else %}
