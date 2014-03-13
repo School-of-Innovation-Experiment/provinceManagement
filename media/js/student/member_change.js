@@ -67,3 +67,10 @@ function change_member_info()
                                 {'form': $('#member_change_info_form').serialize(true),
                                  'origin': change_id});
 }
+
+function show_upload_input (studentid) {
+  // body...
+  var actionstr= $("#score_upload_form").attr('action').split("?",1);
+  var new_actionurl = actionstr + '?student_id=' + studentid;
+  $("#score_upload_form").attr('action',new_actionurl);
+}
