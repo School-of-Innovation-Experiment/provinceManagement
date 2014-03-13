@@ -16,6 +16,7 @@
 	<th>项目级别</th>
 	<th>指导教师</th>
 	<th>申报书</th>
+    <th>开题报告</th>
 	<th>中期检查表</th>
 	<th>结题验收</th>
 	<th>项目汇编</th>
@@ -36,6 +37,11 @@
           {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
         </td>
+        <td>
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opensubmit }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+
         <td>
           {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}

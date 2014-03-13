@@ -22,12 +22,13 @@
           <th>项目级别</th>
           <th>指导教师</th>
           <th>申报书</th>
+          <th>开题报告</th>
           <th>中期检查表</th>
           <th>结题验收表</th>
           {% if IS_DLUT_SCHOOL %}
           <th>项目汇编</th>
           {% endif %}
-          <th>申请学分</th>
+          <!--th>申请学分</th!-->
           <th>是否结题</th>
         </tr>
       </thead>
@@ -49,6 +50,12 @@
             {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
           </td>
           <td>
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opensubmit }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+
+
+          <td>
             {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
           </td>
@@ -62,9 +69,9 @@
             {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
           </td>
           {% endif %}
-          <td>
-            {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
-          </td>
+          <!--td>
+            {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %} 
+          </td!-->
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
             <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"   pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>

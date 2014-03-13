@@ -144,19 +144,24 @@ def open_report_view_work(request, pid = None, is_expired = False):
 
     is_applying = check_applycontrol(project)
 
+    if check_auth(user=request.user,authority=STUDENT_USER) or \
+    check_auth(user=request.user,authority=TEACHER_USER) :
+        readonly = False
+    else :
+        readonly = True
 
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
-    elif check_auth(user = request.user, authority = SCHOOL_USER):
-        readonly = not get_schooluser_project_modify_status(project)
-    elif check_auth(user = request.user, authority = EXPERT_USER):
-        readonly = False
-    else:
-        readonly = False
+    # if check_auth(user=request.user,authority=STUDENT_USER):
+    #     readonly = not is_applying or project.is_past    
+    # elif check_auth(user=request.user,authority=TEACHER_USER):
+    #     readonly = not is_applying or project.is_past    
+    # elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+    #     readonly = False
+    # elif check_auth(user = request.user, authority = SCHOOL_USER):
+    #     readonly = not get_schooluser_project_modify_status(project)
+    # elif check_auth(user = request.user, authority = EXPERT_USER):
+    #     readonly = False
+    # else:
+    #     readonly = False
 
     
     isRedirect = False
