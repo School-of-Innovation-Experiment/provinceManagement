@@ -55,11 +55,15 @@ urlpatterns = patterns('',
     ),
     url(
         r'^file_upload_view/(?P<pid>.{36})&(?P<errortype>\w+)$',
-        student_views.file_upload_view,
+        student_views.file_upload_view,name="student_file_upload_errortype_view",
     ),
     url(
         r'^file_upload_view/(?P<pid>.{36})$',
-        student_views.file_upload_view, name="student_file_upload_view"
+        student_views.file_upload_view, name="student_file_upload_view",
+    ),
+    url(
+        r'^score_upload_view/(?P<pid>.{36})$',
+        student_views.score_upload_view, name="score_upload_view",
     ),
     url(
         r'^processrecord$',

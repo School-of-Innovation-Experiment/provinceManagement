@@ -383,6 +383,10 @@ def get_yearlist(object_list):
     return year_list
 
 def check_uploadfile_name(request,des_name=None):
+    """
+        des_name:上传入口对应的文件要求类型
+        functions:将上传文件的类型与上传入口要求的类型比较
+    """
     f = request.FILES["file"]    
     wrapper_f = UploadedFile(f)
     name, filetype = split_name(wrapper_f.name)
@@ -405,7 +409,7 @@ def check_uploadfile_exist(des_name,pid):
         return False
 
 def enabledelete_file(file_list):
-    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告']
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题检查表']
     for temp in file_list:
         if temp.name in important_filelist:
             temp.enabledelete = False
@@ -464,6 +468,8 @@ def add_fileurl(project):
             project.fileurl_projectcompilation = filetemp.file_obj.url
         elif filetemp.name == u"学分申请表":
             project.scoreurl_application = filetemp.file_obj.url
+        elif filetemp.name == u"开题检查表":
+            project.fileurl_opensubmit = filetemp.file_obj.url
 
 class error_flag(object):
     """
@@ -504,6 +510,9 @@ def get_errorflag_object(errortype,error_flagset):
         return None
     
 def check_filename(errortype,error_flagset):
+    """
+        返回上传文件对应类型的中文名称
+    """
     for error_temp in error_flagset:
         if error_temp.error_type == errortype:
             return error_temp.error_message

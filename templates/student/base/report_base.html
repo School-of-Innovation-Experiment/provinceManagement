@@ -10,12 +10,14 @@
     </div><!--end alert-->
   </div><!--end left span-->
 
+{% if not IS_MINZU_SCHOOL %}
 <div class="span2">
     <div class="alert alert-error" style=" text-align:center;">
       <h4><a href="{% url student.views.open_report_view pid%}" >开题检查表</a></h4>
 
     </div><!--end alert-->
   </div><!--end left span-->
+{% endif %}
 <div class="span2">
     <div class="alert alert-success" style=" text-align:center;">
       <h4><a href="{% url student.views.mid_report_view pid%}">中期检查表</a></h4>

@@ -69,6 +69,7 @@ def member_change(request):
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"lock": lock,
+                    "pid": project.project_id,
                    "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
@@ -518,13 +519,13 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
         data = data[1]
     return render(request, 'student/fileimportant.html', data)
 
-def files_upload_view_work(request,pid,errortype):
+
+def files_upload_view_work(request,pid=None,errortype=None):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
     if request.method == "POST" :
         if request.FILES != {}:
             des_name=check_filename(errortype,error_flagset)
-            loginfo(p=des_name,label="des_name")
             if check_uploadfile_name(request,des_name):
                 if errortype != 'show_other':
                    check_uploadfile_exist(des_name,pid)
@@ -542,7 +543,49 @@ def files_upload_view_work(request,pid,errortype):
             'error_flagset':error_flagset,
             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
-            'show_thesis_view':show_thesis_view,
+            }
+    return (0,data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def score_upload_view(request,errortype=None,pid=None,is_expired=False):
+    """
+    project group member change
+    """
+    data = files_upload_view_work(request,pid,errortype)
+    print "student_id=" + str(request.GET['student_id'])
+    if data[0]:
+        return data[1]
+    else:
+        data = data[1]
+    return render(request, 'student/fileimportant.html', data)
+
+
+def files_upload_view_work(request,pid=None,errortype=None):
+    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    error_flagset = fileupload_flag_init()
+    if request.method == "POST" :
+        if request.FILES != {}:
+            des_name=check_filename(errortype,error_flagset)
+            if check_uploadfile_name(request,des_name):
+                if errortype != 'show_other':
+                   check_uploadfile_exist(des_name,pid)
+                upload_response(request, pid)
+                project_fileupload_flag(project,errortype)
+                return (1,HttpResponseRedirect(reverse('student.views.home_view')))
+            else:
+                set_error(error_flagset,errortype,True)
+
+    file_history = UploadedFiles.objects.filter(project_id=pid)
+    file_history=enabledelete_file(file_history)
+    data = {'pid': pid,
+            'files': file_history,
+            'readonly': False,
+            'error_flagset':error_flagset,
+            'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
+            'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
     return (0,data)
 
