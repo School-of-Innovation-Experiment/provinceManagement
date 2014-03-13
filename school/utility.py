@@ -403,6 +403,10 @@ def check_uploadfile_exist(des_name,pid):
     """
     try:
         check_obj=UploadedFiles.objects.get(project_id_id = pid,name=des_name)
+        loginfo(p=des_name,label="des_name")
+        loginfo(p=check_obj.name,label="check_obj.name")
+        project=ProjectSingle.objects.get(project_id=pid)
+        delete_file(check_obj,project)
         check_obj.delete()
         return True
     except:
@@ -535,3 +539,64 @@ def fileupload_flag_init():
     for errorkey in FileList :
         error_flagset.add(error_flag(errorkey,FileList[errorkey]))
     return error_flagset 
+
+
+def upload_score_save_process(request, pid,des_name):
+    """
+        save score file into local storage
+    """
+    f = request.FILES["file"]
+    wrapper_f = UploadedFile(f)
+    size = wrapper_f.file.size
+    name, filetype = split_name(wrapper_f.name)
+    filename = des_name + '.' + filetype
+
+    obj = UploadedFiles()
+    obj.name = des_name
+    obj.project_id = ProjectSingle.objects.get(project_id=pid)
+    obj.file_id = uuid.uuid4()
+    obj.file_obj.save(filename,f,save=False) 
+    obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+    obj.file_type = filetype
+    obj.file_size = size
+
+    #TODO: we will check file type
+    obj.file_type = filetype if filetype != " " else "unknown"
+    obj.save()
+
+    loginfo(p=f,label="f")
+    loginfo(p=obj.file_obj,label="file_obj")
+    return obj
+
+def delete_file(uploadfile,project=None):
+    """
+        delete  uploadfileobject and local file 
+    """
+    currenturl = os.path.dirname(os.path.abspath('__file__'))
+    fileurl = str(uploadfile.file_obj)
+    url = currenturl+'/media/'+fileurl
+    student_set = Student_Group.objects.filter(scoreFile = uploadfile)
+
+    if student_set:
+        student=student_set[0]
+        loginfo(p=student,label="student")
+        student.scoreFile = None
+        student.save()
+
+
+    uploadfile.delete()
+    os.remove(url)
+    check_scoreaplication(project,project.project_id)
+
+def check_scoreaplication(project,pid):
+    uploadfiles = UploadedFiles.objects.filter(project_id = pid) 
+    loginfo(p=uploadfiles,label="uploadfiles")
+    for file_temp in uploadfiles:
+        loginfo(p=file_temp,label="file_temp")
+        loginfo(p=file_temp.name,label="file_temp.name")
+        if u'学分申请表' in file_temp.name:
+            break
+    else:
+        project.score_application = False
+    project.save()
+    loginfo(p=project.score_application,label="project.score_application")
