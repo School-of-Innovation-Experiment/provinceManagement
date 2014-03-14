@@ -22,6 +22,9 @@
           <th>项目级别</th>
           <th>指导教师</th>
           <th>申报书</th>
+          {% if IS_DLUT_SCHOOL %}
+          <th>开题报告</th>
+          {% endif %}
           <th>中期检查表</th>
           <th>结题验收表</th>
           {% if IS_DLUT_SCHOOL %}
@@ -48,6 +51,12 @@
             {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
           </td>
+          {% if IS_DLUT_SCHOOL %}
+          <td>
+            {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+          {% endif %}
           <td>
             {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
@@ -63,7 +72,7 @@
           </td>
           {% endif %}
           <td>
-            {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
+            {% if item.score_application %}<span class="label label-important"><a href="/adminStaff/files_upload_view/{{item.project_id}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
           </td>
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
