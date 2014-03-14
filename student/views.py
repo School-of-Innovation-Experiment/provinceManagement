@@ -69,7 +69,11 @@ def member_change(request):
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"lock": lock,
+<<<<<<< HEAD
                     "pid": project.project_id,
+=======
+                    "pid":project.project_id,
+>>>>>>> 71cd920... chang name
                    "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
@@ -478,6 +482,34 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
+<<<<<<< HEAD
+=======
+# @csrf.csrf_protect
+# @login_required
+# @authority_required(STUDENT_USER)
+# def files_important_view(request,pid=None,is_expired=False):
+#     """
+#     project group member change
+#     """
+#     data = files_important_view_work(request,pid)
+#     return render(request, 'student/fileimportant.html', data)
+
+
+# def files_important_view_work(request,pid):
+#     error_flagset = fileupload_flag_init()
+
+#     project = get_object_or_404(ProjectSingle, project_id=pid)
+#     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
+#     file_history=enabledelete_file(file_history)
+#     data = {'pid': pid,
+#             'files': file_history,
+#             'readonly': False,
+#             'error_flagset':error_flagset,
+#             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
+#             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
+#                         }
+#     return data
+>>>>>>> 71cd920... chang name
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -497,6 +529,10 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
 def files_upload_view_work(request,pid=None,errortype=None):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71cd920... chang name
     if request.method == "POST" :
         if request.FILES != {}:
             des_name=check_filename(errortype,error_flagset)
@@ -541,15 +577,19 @@ def score_upload_view(request,pid=None):
         raise Http404
 
     loginfo(p=student,label="student")
-    des_name = student.studentName + u'学分申请'
+    des_name = student.studentName + u'学分申请表'
     if request.method == "POST" :
         check_uploadfile_exist(des_name,pid)
         obj=upload_score_save_process(request,pid,des_name)
         student.scoreFile = obj
         student.save()
-        project_fileupload_flag(project,'score_application')
+        project_fileupload_flag(project,'show_scoreapplication')
         return HttpResponseRedirect('/student/file_upload_view/'+str(pid))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71cd920... chang name
 
 
 @csrf.csrf_protect

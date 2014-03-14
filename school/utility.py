@@ -390,10 +390,17 @@ def check_uploadfile_name(request,des_name=None):
     f = request.FILES["file"]    
     wrapper_f = UploadedFile(f)
     name, filetype = split_name(wrapper_f.name)
+    loginfo(p=des_name,label="des_name")
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告',u'学分申请表']
     if des_name == name:
         return True
-    elif des_name == u'其他附件':
-        return True
+    elif des_name == u'其他附件' :
+        for temp in important_filelist:
+            if temp in  name:
+                return False
+        else:
+            return True
+ 
     else :
         return False
 
@@ -413,9 +420,13 @@ def check_uploadfile_exist(des_name,pid):
         return False
 
 def enabledelete_file(file_list):
+<<<<<<< HEAD
     important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题检查表']
+=======
+    undelete_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告']
+>>>>>>> 71cd920... chang name
     for temp in file_list:
-        if temp.name in important_filelist:
+        if temp.name in undelete_filelist:
             temp.enabledelete = False
         else :
             temp.enabledelete = True
@@ -470,7 +481,7 @@ def add_fileurl(project):
             project.fileurl_file_summary = filetemp.file_obj.url
         elif filetemp.name == u"项目汇编":
             project.fileurl_projectcompilation = filetemp.file_obj.url
-        elif filetemp.name == u"学分申请表":
+        elif filetemp.name == u"开题报告":
             project.scoreurl_application = filetemp.file_obj.url
         elif filetemp.name == u"开题检查表":
             project.fileurl_opensubmit = filetemp.file_obj.url
@@ -532,6 +543,8 @@ def project_fileupload_flag(project,errortype):
         project.file_projectcompilation = True
     elif errortype == 'show_scoreapplication':
         project.score_application = True
+    elif errortype == 'show_opensubmit':
+        project.file_opensubmit = True
     project.save()
     
 def fileupload_flag_init():
@@ -591,12 +604,14 @@ def delete_file(uploadfile,project=None):
 def check_scoreaplication(project,pid):
     uploadfiles = UploadedFiles.objects.filter(project_id = pid) 
     loginfo(p=uploadfiles,label="uploadfiles")
+    loginfo(p=project.score_application,label="project.score_application")
     for file_temp in uploadfiles:
         loginfo(p=file_temp,label="file_temp")
         loginfo(p=file_temp.name,label="file_temp.name")
-        if u'学分申请表' in file_temp.name:
+        if u'学分申请' in file_temp.name:
             break
     else:
         project.score_application = False
+    loginfo(p=project.score_application,label="project.score_application")
     project.save()
     loginfo(p=project.score_application,label="project.score_application")
