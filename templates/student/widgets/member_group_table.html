@@ -113,19 +113,42 @@
             {% else %}
             <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
             {% endif %}
-<<<<<<< HEAD
-          </td> 
-=======
           </td>
->>>>>>> 71cd920... chang name
           {% endif %} 
           <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td>              
         </tr>
         {% endfor %}
     {% endif %}
   </tbody>
-<<<<<<< HEAD
+
 </table>
-=======
-</table>
->>>>>>> 71cd920... chang name
+{%if userauth.is_student%}
+<h3>学分申请名单</h3>
+<table class="table table-hover table-striped" >
+  <thead>
+    <tr>
+      <td>名称</td>
+      <td>类型</td>
+      <td>大小</td>
+      <td>上传时间</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in files %}
+    <tr id="{{item.file_id}}">
+      <td>{{item.name}}</td>
+      <td>{{item.file_type}}</td>
+      <td>{{item.file_size}}</td>
+      <td>{{item.uploadtime}}</td>
+      <td>
+        <span><a href="{{item.file_obj.url}}" class='btn btn-primary' target="_blank">下载</a></span>
+        <button class="btn btn-danger" rel="file_delete" pid="{{pid}}" fid="{{item.file_id}}">
+              <i class="icon-trash icon-white"></i>
+              <span>删除</span>
+        </button>
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table><!--end history list table-->
+{% endif %}

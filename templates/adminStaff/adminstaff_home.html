@@ -22,19 +22,16 @@
           <th>项目级别</th>
           <th>指导教师</th>
           <th>申报书</th>
-<<<<<<< HEAD
-          <th>开题报告</th>
-=======
+
           {% if IS_DLUT_SCHOOL %}
           <th>开题报告</th>
           {% endif %}
->>>>>>> 71cd920... chang name
           <th>中期检查表</th>
           <th>结题验收表</th>
           {% if IS_DLUT_SCHOOL %}
           <th>项目汇编</th>
           {% endif %}
-          <!--th>申请学分</th!-->
+          <th>申请学分</th>
           <th>是否结题</th>
         </tr>
       </thead>
@@ -42,7 +39,7 @@
         {% for item in pro_list%}
         <tr>
           <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
-          <td>{{item.title|truncatechars:15}}</td>
+          <td>{{item.title|truncatechars:10}}</td>
           <td>
              <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
           </td>
@@ -57,16 +54,10 @@
           </td>
           {% if IS_DLUT_SCHOOL %}
           <td>
-            {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-            {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
-          </td>
-          {% endif %}
-          <td>
-            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opensubmit }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
           </td>
-
-
+          {% endif %}
           <td>
             {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
@@ -81,15 +72,10 @@
             {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
           </td>
           {% endif %}
-<<<<<<< HEAD
-          <!--td>
-            {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %} 
-          </td!-->
-=======
+
           <td>
-            {% if item.score_application %}<span class="label label-important"><a href="/adminStaff/files_upload_view/{{item.project_id}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
+            {% if item.score_application %}<span class="label label-important"><a href="/adminStaff/memberchange/{{item.project_id}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
           </td>
->>>>>>> 71cd920... chang name
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
             <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"   pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>

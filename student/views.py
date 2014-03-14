@@ -60,8 +60,10 @@ def member_change(request):
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
     lock = project.recommend or (project.project_grade.grade != GRADE_UN)
-
+    files = set()
     for s in student_group:
+        if s.scoreFile:
+            files.add(s.scoreFile)
         s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
@@ -69,11 +71,8 @@ def member_change(request):
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"lock": lock,
-<<<<<<< HEAD
-                    "pid": project.project_id,
-=======
                     "pid":project.project_id,
->>>>>>> 71cd920... chang name
+                    "files":files,
                    "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
@@ -482,8 +481,7 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
-<<<<<<< HEAD
-=======
+
 # @csrf.csrf_protect
 # @login_required
 # @authority_required(STUDENT_USER)
@@ -509,7 +507,7 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
 #             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
 #                         }
 #     return data
->>>>>>> 71cd920... chang name
+
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -529,10 +527,6 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
 def files_upload_view_work(request,pid=None,errortype=None):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
-<<<<<<< HEAD
-=======
-
->>>>>>> 71cd920... chang name
     if request.method == "POST" :
         if request.FILES != {}:
             des_name=check_filename(errortype,error_flagset)
@@ -541,7 +535,7 @@ def files_upload_view_work(request,pid=None,errortype=None):
                    check_uploadfile_exist(des_name,pid)
                 upload_response(request, pid)
                 project_fileupload_flag(project,errortype)
-                return (1,HttpResponseRedirect(reverse('student.views.home_view')))
+                return (1,HttpResponseRedirect('/student/file_upload_view/' + str(pid)))
             else:
                 set_error(error_flagset,errortype,True)
 
@@ -584,12 +578,9 @@ def score_upload_view(request,pid=None):
         student.scoreFile = obj
         student.save()
         project_fileupload_flag(project,'show_scoreapplication')
-        return HttpResponseRedirect('/student/file_upload_view/'+str(pid))
+        return HttpResponseRedirect('/student/memberchange')
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 71cd920... chang name
 
 
 @csrf.csrf_protect

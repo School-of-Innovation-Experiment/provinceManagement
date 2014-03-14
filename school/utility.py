@@ -193,12 +193,14 @@ def upload_save_process(request, pid):
     wrapper_f = UploadedFile(f)
     size = wrapper_f.file.size
     name, filetype = split_name(wrapper_f.name)
+    project = ProjectSingle.objects.get(project_id=pid)
+    filename = project.title + name + '.' + filetype
 
     obj = UploadedFiles()
     obj.name = name
     obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
-    obj.file_obj = f
+    obj.file_obj.save(filename,f,save=False) 
     obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
     obj.file_type = filetype
     obj.file_size = size
@@ -420,11 +422,8 @@ def check_uploadfile_exist(des_name,pid):
         return False
 
 def enabledelete_file(file_list):
-<<<<<<< HEAD
-    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题检查表']
-=======
+
     undelete_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告']
->>>>>>> 71cd920... chang name
     for temp in file_list:
         if temp.name in undelete_filelist:
             temp.enabledelete = False
@@ -482,9 +481,7 @@ def add_fileurl(project):
         elif filetemp.name == u"项目汇编":
             project.fileurl_projectcompilation = filetemp.file_obj.url
         elif filetemp.name == u"开题报告":
-            project.scoreurl_application = filetemp.file_obj.url
-        elif filetemp.name == u"开题检查表":
-            project.fileurl_opensubmit = filetemp.file_obj.url
+            project.fileurl_opencheck = filetemp.file_obj.url
 
 class error_flag(object):
     """
@@ -543,8 +540,8 @@ def project_fileupload_flag(project,errortype):
         project.file_projectcompilation = True
     elif errortype == 'show_scoreapplication':
         project.score_application = True
-    elif errortype == 'show_opensubmit':
-        project.file_opensubmit = True
+    elif errortype == 'show_opencheck':
+        project.file_opencheck = True
     project.save()
     
 def fileupload_flag_init():
