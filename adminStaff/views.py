@@ -891,35 +891,9 @@ class AdminStaffService(object):
     def member_change(request, pid):
 
         data = member_change_work(request, pid)
+
         return render(request, "adminStaff/member_change.html", data)
 
-        """
-        project group member change
-        """
-        #student_account = StudentProfile.objects.get(userid = request.user)
-        #project = ProjectSingle.objects.get(student=student_account)
-
-        project = ProjectSingle.objects.get(project_id = pid)
-        # isIN =  get_schooluser_project_modify_status(project)
-        student_group = Student_Group.objects.filter(project = project)
-        
-
-        for s in student_group:
-            s.sex = s.get_sex_display()
-
-        student_group_form = StudentGroupForm()
-        student_group_info_form = StudentGroupInfoForm()
-
-
-
-        readonly = False
-        return render(request, "adminStaff/member_change.html",
-                      {"pid": pid,
-                       "student_group": student_group,
-                       "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form,
-                       'readonly': readonly,
-                       })
 
 
     @staticmethod
@@ -1014,8 +988,11 @@ def member_change_work(request, pid):
     project = ProjectSingle.objects.get(project_id = pid)
     # isIN =  get_schooluser_project_modify_status(project)
     student_group = Student_Group.objects.filter(project = project)
+    files = set()
 
     for s in student_group:
+        if s.scoreFile:
+            files.add(s.scoreFile)
         s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
@@ -1029,6 +1006,7 @@ def member_change_work(request, pid):
 
 
     data = {"pid": pid,
+            "files":files,
             "student_group": student_group,
             "student_group_form": student_group_form,
             "student_group_info_form": student_group_info_form,
