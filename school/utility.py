@@ -193,12 +193,14 @@ def upload_save_process(request, pid):
     wrapper_f = UploadedFile(f)
     size = wrapper_f.file.size
     name, filetype = split_name(wrapper_f.name)
+    project = ProjectSingle.objects.get(project_id=pid)
+    filename = project.title + name + '.' + filetype
 
     obj = UploadedFiles()
     obj.name = name
     obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
-    obj.file_obj = f
+    obj.file_obj.save(filename,f,save=False) 
     obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
     obj.file_type = filetype
     obj.file_size = size
@@ -382,44 +384,58 @@ def get_yearlist(object_list):
             year_list.append(pro_obj.project_year)
     return year_list
 
-def check_uploadfile_name(request,des_name):
+def check_uploadfile_name(request,des_name=None):
     f = request.FILES["file"]    
     wrapper_f = UploadedFile(f)
     name, filetype = split_name(wrapper_f.name)
+    loginfo(p=des_name,label="des_name")
+    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告',u'学分申请表']
     if des_name == name:
         return True
-    else:
+    elif des_name == u'其他附件' :
+        for temp in important_filelist:
+            if temp in  name:
+                return False
+        else:
+            return True
+ 
+    else :
         return False
 
 def check_uploadfile_exist(des_name,pid):
     """
-    检查上传的文件中是否已存在相同名称的文件
+    检查上传的文件中是否已存在相同名称的文件,如果有先删除
     """
     try:
         check_obj=UploadedFiles.objects.get(project_id_id = pid,name=des_name)
+        loginfo(p=des_name,label="des_name")
+        loginfo(p=check_obj.name,label="check_obj.name")
+        project=ProjectSingle.objects.get(project_id=pid)
+        delete_file(check_obj,project)
         check_obj.delete()
         return True
     except:
         return False
 
 def enabledelete_file(file_list):
-    important_filelist=[u"申报书",u"开题检查表",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+
+    undelete_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告']
     for temp in file_list:
-        if temp.name in important_filelist:
+        if temp.name in undelete_filelist:
             temp.enabledelete = False
         else :
             temp.enabledelete = True
     return file_list
 
-def check_othername(request):
-    f = request.FILES["file"]    
-    wrapper_f = UploadedFile(f)
-    name, filetype = split_name(wrapper_f.name)
-    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
-    if name in important_filelist:
-        return False
-    else:
-        return True
+# def check_othername(request):
+#     f = request.FILES["file"]    
+#     wrapper_f = UploadedFile(f)
+#     name, filetype = split_name(wrapper_f.name)
+#     important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
+#     if name in important_filelist:
+#         return False
+#     else:
+#         return True
 
 def is_showoverstatus(project_list):
     """
@@ -433,6 +449,7 @@ def is_showoverstatus(project_list):
         add_fileurl(temp)
         add_telephone(temp)
     return project_list
+
 def add_telephone(project):
     student_groups = Student_Group.objects.filter(project = project)
     for student_group in student_groups:
@@ -459,5 +476,132 @@ def add_fileurl(project):
             project.fileurl_file_summary = filetemp.file_obj.url
         elif filetemp.name == u"项目汇编":
             project.fileurl_projectcompilation = filetemp.file_obj.url
-        elif filetemp.name == u"学分申请表":
-            project.scoreurl_application = filetemp.file_obj.url
+        elif filetemp.name == u"开题报告":
+            project.fileurl_opencheck = filetemp.file_obj.url
+
+class error_flag(object):
+    """
+        docstring for error_flag
+    """
+    error_type = ''
+    error_flag = False
+    error_message = ''
+    def __init__(self, error_type,error_message):
+        super(error_flag, self).__init__()
+        self.error_type = error_type
+        self.error_message = error_message
+
+    def show_error(self):
+        self.error_flag = True
+
+    def unshow_error(self):
+        self.error_flag = False
+
+def set_error(error_flagset,error_type,set_false = False):
+    """
+    When set_false is True, show error
+                   is False, do not show error
+    """
+    for error_temp in error_flagset:
+        if error_temp.error_type == error_type:
+            if set_false :
+                error_temp.show_error()
+            else :
+                error_temp.unshow_error()
+
+
+def get_errorflag_object(errortype,error_flagset):
+    for error_temp in error_flagset:
+        if errortype == error_temp.error_type:
+            return error_temp
+    else:
+        return None
+    
+def check_filename(errortype,error_flagset):
+    for error_temp in error_flagset:
+        if error_temp.error_type == errortype:
+            return error_temp.error_message
+
+def project_fileupload_flag(project,errortype):
+    if errortype == "show_applicationwarn":
+        project.file_application = True
+    elif errortype == 'show_interimchecklist':
+        project.file_interimchecklist = True
+    elif errortype == 'show_summary':
+        project.file_summary = True
+    elif errortype == 'show_projectcompilation':
+        project.file_projectcompilation = True
+    elif errortype == 'show_scoreapplication':
+        project.score_application = True
+    elif errortype == 'show_opencheck':
+        project.file_opencheck = True
+    project.save()
+    
+def fileupload_flag_init():
+    error_flagset = set()
+    for errorkey in FileList :
+        error_flagset.add(error_flag(errorkey,FileList[errorkey]))
+    return error_flagset 
+
+
+def upload_score_save_process(request, pid,des_name):
+    """
+        save score file into local storage
+    """
+    f = request.FILES["file"]
+    wrapper_f = UploadedFile(f)
+    size = wrapper_f.file.size
+    name, filetype = split_name(wrapper_f.name)
+    filename = des_name + '.' + filetype
+
+    obj = UploadedFiles()
+    obj.name = des_name
+    obj.project_id = ProjectSingle.objects.get(project_id=pid)
+    obj.file_id = uuid.uuid4()
+    obj.file_obj.save(filename,f,save=False) 
+    obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
+    obj.file_type = filetype
+    obj.file_size = size
+
+    #TODO: we will check file type
+    obj.file_type = filetype if filetype != " " else "unknown"
+    obj.save()
+
+    loginfo(p=f,label="f")
+    loginfo(p=obj.file_obj,label="file_obj")
+    return obj
+
+def delete_file(uploadfile,project=None):
+    """
+        delete  uploadfileobject and local file 
+    """
+    currenturl = os.path.dirname(os.path.abspath('__file__'))
+    fileurl = str(uploadfile.file_obj)
+    url = currenturl+'/media/'+fileurl
+    student_set = Student_Group.objects.filter(scoreFile = uploadfile)
+
+    if student_set:
+        student=student_set[0]
+        loginfo(p=student,label="student")
+        student.scoreFile = None
+        student.save()
+
+
+    uploadfile.delete()
+    os.remove(url)
+    check_scoreaplication(project,project.project_id)
+
+def check_scoreaplication(project,pid):
+    uploadfiles = UploadedFiles.objects.filter(project_id = pid) 
+    loginfo(p=uploadfiles,label="uploadfiles")
+    loginfo(p=project.score_application,label="project.score_application")
+    for file_temp in uploadfiles:
+        loginfo(p=file_temp,label="file_temp")
+        loginfo(p=file_temp.name,label="file_temp.name")
+        if u'学分申请' in file_temp.name:
+            break
+    else:
+        project.score_application = False
+    loginfo(p=project.score_application,label="project.score_application")
+    project.save()
+    loginfo(p=project.score_application,label="project.score_application")

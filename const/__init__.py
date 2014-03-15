@@ -339,3 +339,26 @@ PROGRESS_RECORD_MAX = 20
 if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
 elif IS_DLUT_SCHOOL: DUT_code = "10141"
 # DUT_code = "10141"
+
+EXCEL_TYPE_BASEINFORMATION = "baseinformation"
+EXCEL_TYPE_APPLICATIONSCORE = "applicationscore"
+EXCEL_TYPE_SUMMARYSHEET_INNOVATE = "summary_innovate"
+EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP = "summary_entrepreneuship"
+EXCEL_TYPE_PROJECTSUMMARY = "projectsummary"
+EXCEL_TYPE_CHOICES = (
+    (EXCEL_TYPE_BASEINFORMATION, u"基本状态表"),
+    (EXCEL_TYPE_APPLICATIONSCORE, u"初期评分表"),
+    (EXCEL_TYPE_SUMMARYSHEET_INNOVATE, u"创新项目汇总表"),
+    (EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP, u"创业项目汇总表"),
+    (EXCEL_TYPE_PROJECTSUMMARY,u"项目基本信息汇总表"),
+)
+
+FileList={
+    'show_applicationwarn' : u"申报书",
+    'show_interimchecklist' : u"中期检查表",
+    'show_summary' : u"结题验收表",
+    'show_projectcompilation' : u"项目汇编",
+    'show_scoreapplication' : u"学分申请表",
+    'show_opencheck':u'开题报告',
+    'show_other':u'其他附件',
+} 

@@ -31,11 +31,11 @@ urlpatterns = patterns('',
 
     url(
         r'^application/(?P<pid>.{36})$',
-        student_views.application_report_view,
+        student_views.application_report_view,name = "student_application_report_view"
     ),
     url(
         r'^final/(?P<pid>.{36})$',
-        student_views.final_report_view,
+        student_views.final_report_view,name = "student_final_report_view"
     ),
     url(
         r'^mid/(?P<pid>.{36})$',
@@ -54,36 +54,16 @@ urlpatterns = patterns('',
         student_views.new_techcompetition,
     ),
     url(
-        r'^file_application/(?P<pid>.{36})$',
-        student_views.file_application_view,
+        r'^file_upload_view/(?P<pid>.{36})&(?P<errortype>\w+)$',
+        student_views.file_upload_view,
     ),
     url(
-        r'^file_interimchecklist/(?P<pid>.{36})$',
-        student_views.file_interimchecklist_view,
+        r'^file_upload_view/(?P<pid>.{36})$',
+        student_views.file_upload_view, name="student_file_upload_view"
     ),
     url(
-        r'^file_summary/(?P<pid>.{36})$',
-        student_views.file_summary_view,
-    ),
-    url(
-        r'^file_projectcompilation/(?P<pid>.{36})$',
-        student_views.file_projectcompilation_view,
-    ),
-    url(
-        r'^file_scoreapplication_view/(?P<pid>.{36})$',
-        student_views.file_scoreapplication_view,
-    ),
-    url(
-        r'^file_other_view/(?P<pid>.{36})$',
-        student_views.file_other_view,
-    ),
-    url(
-        r'^file_thesis_view/(?P<pid>.{36})$',
-        student_views.file_thesis_view,
-    ),
-    url(
-        r'^files_important/(?P<pid>.{36})$',
-        student_views.files_important_view,
+        r'^score_upload_view/(?P<pid>.{36})$',
+        student_views.score_upload_view, name="student_score_upload_view"
     ),
     url(
         r'^processrecord$',

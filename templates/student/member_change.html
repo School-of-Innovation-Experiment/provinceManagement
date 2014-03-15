@@ -29,8 +29,32 @@
       {% include "student/widgets/member_group_table.html" %}
     </div>
   </div>
+<!-- Modal -->
+<div id="score_upload" class="modal hide fade" >
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="score_uploadLabel">学分申请</h3>
+  </div>
+  <div class="modal-body">
+   <div class="span4 student_file_upload">
+      <form method="POST" id="score_upload_form" action="/student/score_upload_view/{{pid}}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>学分申请表上传</h4></span>
+        <p>上传的文件请命名为<strong>“学分申请表”</strong></p>
+        <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
+        <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
+          <i class="icon-upload icon-white"></i>
+          <span>上传</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+</div>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
   <!-- dajax-->
   <script type='text/javascript' src="{{STATIC_URL}}js/student/member_change.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/student/delete.js"></script>
 {% endblock %}

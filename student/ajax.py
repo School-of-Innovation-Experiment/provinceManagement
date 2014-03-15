@@ -1,4 +1,6 @@
-# coding: UTF-8
+#coding=utf-8
+import os, sys
+from os.path import join
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -15,6 +17,7 @@ from school.utility import *
 
 from backend.logging import logger, loginfo
 from backend.decorators import check_auth
+from backend.utility import *
 
 from const import MEMBER_NUM_LIMIT
 from const import *
@@ -89,10 +92,15 @@ def MemberDelete(request, deleteId):
     #     project = ProjectSingle.objects.get(student__userid=request.user)
     # except:
     #     raise Http404
+    loginfo(deleteId)
     project = getProject(request)
     group = project.student_group_set
     for student in group.all():
         if student.studentId == deleteId:
+            scorefile = student.scoreFile
+            loginfo(p=scorefile,label="scorefile")
+            if scorefile:
+                delete_file(scorefile,project)
             student.delete()
             table = refresh_member_table(request)
             ret = {'status': '0', 'message': u"人员变更成功", 'table':table}
@@ -208,7 +216,7 @@ def refresh_member_table(request):
     for student in student_group:
         student.sex_val = student.sex
         student.sex = student.get_sex_display()
-
+    loginfo(p=student_group_info_form,label ="test")
     return render_to_string("student/widgets/member_group_table.html",
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
@@ -268,13 +276,12 @@ def FileDeleteConsistence(request, pid, fid):
                                  "message": "Authority Failed!!!"})
 
     if request.method == "POST":
-        f.delete()
+        delete_file(f,p)
         return simplejson.dumps({"is_deleted": True,
                                  "message": "delete it successfully!",
                                  "fid": str(fid)})
     else:
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
-
 
     

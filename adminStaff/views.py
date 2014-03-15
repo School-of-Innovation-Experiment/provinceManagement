@@ -72,8 +72,9 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-from student.views import application_report_view_work, final_report_view_work,files_important_view_work,file_other_view_work
-from student.views import open_report_view_work
+
+from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
+from student.views import open_report_view_work, mid_report_view_work
 
 class AdminStaffService(object):
     @staticmethod
@@ -854,6 +855,15 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
+    def mid_report_view(request, pid=None):
+        data = mid_report_view_work(request, pid)    
+        return render(request, 'adminStaff/mid.html', data)
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
     def application_report_view(request, pid=None):
         data = application_report_view_work(request, pid)
         # if data['isRedirect'] :
@@ -881,55 +891,30 @@ class AdminStaffService(object):
     def member_change(request, pid):
 
         data = member_change_work(request, pid)
+
         return render(request, "adminStaff/member_change.html", data)
 
-        """
-        project group member change
-        """
-        #student_account = StudentProfile.objects.get(userid = request.user)
-        #project = ProjectSingle.objects.get(student=student_account)
 
-        project = ProjectSingle.objects.get(project_id = pid)
-        # isIN =  get_schooluser_project_modify_status(project)
-        student_group = Student_Group.objects.filter(project = project)
-        
-
-        for s in student_group:
-            s.sex = s.get_sex_display()
-
-        student_group_form = StudentGroupForm()
-        student_group_info_form = StudentGroupInfoForm()
-
-
-
-        readonly = False
-        return render(request, "adminStaff/member_change.html",
-                      {"pid": pid,
-                       "student_group": student_group,
-                       "student_group_form": student_group_form,
-                       "student_group_info_form": student_group_info_form,
-                       'readonly': readonly,
-                       })
 
     @staticmethod
     @csrf.csrf_protect
     @login_required
     @authority_required(ADMINSTAFF_USER)
-    def files_important_view(request,pid=None):
-        data = files_important_view_work(request,pid)
-        return render(request,'adminStaff/fileimportant.html',data)
-    @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
-    def file_other_view(request,pid=None):
-        data = file_other_view_work(request,pid)
+    def files_upload_view(request,errortype=None,pid=None,is_expired=False):
+        data = files_upload_view_work(request,pid,errortype)
+        loginfo(p=data[0],label="data[0]")
+        loginfo(p=errortype,label=errortype)
+        if data[0]:
+            loginfo('hahaha')
+            return HttpResponseRedirect('/adminStaff/')
+        else:
+            data = data[1]
         return render(request,'adminStaff/fileimportant.html',data)
 
     @staticmethod
     @csrf.csrf_protect
     @login_required
-    @authority_required(ADMINSTAFF_USER)
+    # @authority_required(ADMINSTAFF_USER)
     def get_xls_path(request,exceltype):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
@@ -1003,8 +988,11 @@ def member_change_work(request, pid):
     project = ProjectSingle.objects.get(project_id = pid)
     # isIN =  get_schooluser_project_modify_status(project)
     student_group = Student_Group.objects.filter(project = project)
+    files = set()
 
     for s in student_group:
+        if s.scoreFile:
+            files.add(s.scoreFile)
         s.sex = s.get_sex_display()
 
     student_group_form = StudentGroupForm()
@@ -1018,6 +1006,7 @@ def member_change_work(request, pid):
 
 
     data = {"pid": pid,
+            "files":files,
             "student_group": student_group,
             "student_group_form": student_group_form,
             "student_group_info_form": student_group_info_form,
