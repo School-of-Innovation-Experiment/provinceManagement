@@ -126,7 +126,7 @@ def techcompetition_detail(request,pid=None):
 def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) )
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
     else:
         
         return render(request, 'student/open.html', data)
@@ -201,7 +201,7 @@ def mid_report_view(request, pid = None, is_expired = False):
     data = mid_report_view_work(request, pid, is_expired)
     print data
     if data["isRedirect"]:
-        return HttpResponseRedirect( '/student/files_important/' + pid ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + pid ) 
     else:
         return render(request, "student/mid.html", data)
 
@@ -265,7 +265,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/final.html', data)
 
@@ -332,7 +332,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/files_important/' + str(pid) ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
 
@@ -478,39 +478,13 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
-# @csrf.csrf_protect
-# @login_required
-# @authority_required(STUDENT_USER)
-# def files_important_view(request,pid=None,is_expired=False):
-#     """
-#     project group member change
-#     """
-#     data = files_important_view_work(request,pid)
-#     return render(request, 'student/fileimportant.html', data)
-
-
-# def files_important_view_work(request,pid):
-#     error_flagset = fileupload_flag_init()
-
-#     project = get_object_or_404(ProjectSingle, project_id=pid)
-#     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
-#     file_history=enabledelete_file(file_history)
-#     data = {'pid': pid,
-#             'files': file_history,
-#             'readonly': False,
-#             'error_flagset':error_flagset,
-#             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
-#             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
-#                         }
-#     return data
-
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
 def file_upload_view(request,errortype=None,pid=None,is_expired=False):
     """
-    project group member change
+        file_upload_view
     """
     data = files_upload_view_work(request,pid,errortype)
     if data[0]:
@@ -550,44 +524,33 @@ def files_upload_view_work(request,pid=None,errortype=None):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-def score_upload_view(request,errortype=None,pid=None,is_expired=False):
+def score_upload_view(request,pid=None):
     """
-    project group member change
+    score file upload
     """
-    data = files_upload_view_work(request,pid,errortype)
     print "student_id=" + str(request.GET['student_id'])
-    if data[0]:
-        return data[1]
+    student_id = request.GET['student_id']
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    student_set = Student_Group.objects.filter(project = project)
+
+    for student_temp in student_set:
+        if str(student_temp.id) == student_id:
+            student = student_temp
+            break
     else:
-        data = data[1]
-    return render(request, 'student/fileimportant.html', data)
+        raise Http404
 
-
-def files_upload_view_work(request,pid=None,errortype=None):
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
-    error_flagset = fileupload_flag_init()
+    loginfo(p=student,label="student")
+    des_name = student.studentName + u'学分申请'
     if request.method == "POST" :
-        if request.FILES != {}:
-            des_name=check_filename(errortype,error_flagset)
-            if check_uploadfile_name(request,des_name):
-                if errortype != 'show_other':
-                   check_uploadfile_exist(des_name,pid)
-                upload_response(request, pid)
-                project_fileupload_flag(project,errortype)
-                return (1,HttpResponseRedirect(reverse('student.views.home_view')))
-            else:
-                set_error(error_flagset,errortype,True)
+        check_uploadfile_exist(des_name,pid)
+        obj=upload_score_save_process(request,pid,des_name)
+        student.scoreFile = obj
+        student.save()
+        project_fileupload_flag(project,'score_application')
+        return HttpResponseRedirect('/student/file_upload_view/'+str(pid))
 
-    file_history = UploadedFiles.objects.filter(project_id=pid)
-    file_history=enabledelete_file(file_history)
-    data = {'pid': pid,
-            'files': file_history,
-            'readonly': False,
-            'error_flagset':error_flagset,
-            'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
-            'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
-            }
-    return (0,data)
+
 
 @csrf.csrf_protect
 @login_required
