@@ -32,14 +32,15 @@ def info_xls_baseinformation_gen():
     worksheet.write_merge(1, 1, 3, 3, '指导教师')
     worksheet.col(3).width = len('指导教师') * 200
     worksheet.write_merge(1, 1, 4, 4, '申报书')
-    worksheet.write_merge(1, 1, 5, 5, '中期检查表')
-    worksheet.write_merge(1, 1, 6, 6, '结题验收表')
-    worksheet.write_merge(1, 1, 7, 7, '项目汇编')
-    worksheet.write_merge(1, 1, 8, 8, '申请学分')
-    worksheet.write_merge(1, 1, 9, 9, '是否结题')
-    worksheet.col(9).width = len('是否结题') * 300
-    worksheet.write_merge(1, 1, 10, 10, '负责人电话')
-    worksheet.col(10).width = len('负责人电话') * 200
+    worksheet.write_merge(1, 1, 5, 5, '开题报告')
+    worksheet.write_merge(1, 1, 6, 6, '中期检查表')
+    worksheet.write_merge(1, 1, 7, 7, '结题验收表')
+    worksheet.write_merge(1, 1, 8, 8, '项目汇编')
+    worksheet.write_merge(1, 1, 9, 9, '申请学分')
+    worksheet.write_merge(1, 1, 10, 10, '是否结题')
+    worksheet.col(10).width = len('是否结题') * 300
+    worksheet.write_merge(1, 1, 11, 11, '负责人电话')
+    worksheet.col(11).width = len('负责人电话') * 200
     return worksheet, workbook
 
 def info_xls_baseinformation(request):
@@ -62,6 +63,7 @@ def info_xls_baseinformation(request):
         proj_obj.file_summary = check_fileupload(proj_obj.file_summary)
         proj_obj.file_projectcompilation = check_fileupload(proj_obj.file_projectcompilation)
         proj_obj.score_application = check_scoreapplication(proj_obj.score_application)
+        proj_obj.file_opencheck = check_fileupload(proj_obj.file_opencheck)
         get_expertscore(proj_obj)
         teammember = get_manager(proj_obj)
 
@@ -70,13 +72,14 @@ def info_xls_baseinformation(request):
         xls_obj.write(row, 1, unicode(proj_obj.title)) 
         xls_obj.write(row, 2, unicode(proj_obj.project_grade)) 
         xls_obj.write(row, 3, unicode(proj_obj.adminuser.get_name())) 
-        xls_obj.write(row, 4, unicode(proj_obj.file_application)) 
-        xls_obj.write(row, 5, unicode(proj_obj.file_interimchecklist)) 
-        xls_obj.write(row, 6, unicode(proj_obj.file_summary))
-        xls_obj.write(row, 7, unicode(proj_obj.file_projectcompilation)) 
-        xls_obj.write(row, 8, unicode(proj_obj.score_application))  
-        xls_obj.write(row, 9, unicode(proj_obj.over_status)) 
-        xls_obj.write(row, 10, unicode(teammember['telephone']))
+        xls_obj.write(row, 4, unicode(proj_obj.file_application))
+        xls_obj.write(row, 5, unicode(proj_obj.file_opencheck))  
+        xls_obj.write(row, 6, unicode(proj_obj.file_interimchecklist)) 
+        xls_obj.write(row, 7, unicode(proj_obj.file_summary))
+        xls_obj.write(row, 8, unicode(proj_obj.file_projectcompilation)) 
+        xls_obj.write(row, 9, unicode(proj_obj.score_application))  
+        xls_obj.write(row, 10, unicode(proj_obj.over_status)) 
+        xls_obj.write(row, 11, unicode(teammember['telephone']))
 
 
         # _index += 1
