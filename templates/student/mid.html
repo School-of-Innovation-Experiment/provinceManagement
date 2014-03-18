@@ -10,9 +10,10 @@
     <!--Project Content-->
     {% include "student/widgets/mid.html" %}
     <br/>
+    {% include "teacher/widgets/comments_info.html" %}
     <!--submit button-->
     {% include "student/widgets/commit_button.html" %}
   </form>
 
-
+  <script type="text/javascript" src="{{STATIC_URL}}js/student/comment_display.js" onload="comment_show_checker('{{ is_show }}');"></script>
 {%endblock%}
