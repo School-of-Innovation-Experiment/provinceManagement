@@ -1,5 +1,5 @@
 #coding=utf-8
-import os, sys
+import os, sys,re
 from os.path import join
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -182,7 +182,8 @@ def new_or_update_member(request, stugroup_form):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
     loginfo(request.user)
-    
+    if not re.match('^[0-9]+$',student_id):
+        return {'status': '1', 'message': u"学号只能输入数字"}
     project = getProject(request)
     group = project.student_group_set
     for student in group.all():
