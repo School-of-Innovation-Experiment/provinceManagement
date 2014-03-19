@@ -6,7 +6,7 @@ from const.models import *
 class StudentGroupForm(forms.Form):
     student_id = forms.CharField(max_length=20,
                                  required=True,
-                                 widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_id",'placeholder':u"学号"}),)
+                                 widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_id",'placeholder':u"学号","onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),)
     student_name = forms.CharField(max_length=100,
                                    required=True,
                                    widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_name",'placeholder':u"姓名"}),)
@@ -53,8 +53,7 @@ class StudentGroupInfoForm(forms.Form):
 class ProcessRecordForm(forms.Form):
     weekId    = forms.IntegerField(max_value=50,
                                        required=True,
-                                       widget=forms.DateInput(attrs={'class':'studentchange span2 ','id':"weekId","onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,
-                                                                     'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                                       widget=forms.DateInput(attrs={'class':'studentchange span2 ','id':"weekId","onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
         )
     recorder    = forms.CharField( max_length=30,
                                    required=True,
