@@ -19,7 +19,7 @@
     <tbody>
       {% for item in item_list %}
       <tr>
-        <td>{{item.title}}</td>
+        <td>{{item.title|truncatechars:15}}</td>
         <td>{{item.project_category}}</td>
         <td>{{item.adminuser.get_name}}</td>
         <td>{{item.school}}</td>
