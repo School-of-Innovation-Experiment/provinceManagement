@@ -62,6 +62,10 @@ class ProjectSingle(models.Model):
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
                                verbose_name="参赛年份")
+    is_past = models.BooleanField(null=False, blank=True, default=False,
+                                  verbose_name=u"往届项目")
+    is_over = models.BooleanField(null=False, blank=True, default=False,
+                                  verbose_name=u"是否结束")
     keywords = models.CharField(blank=True, max_length=300,
                                 verbose_name=u"关键字")
     project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
