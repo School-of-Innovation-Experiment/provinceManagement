@@ -204,7 +204,7 @@ def Release_News(request):
     Release_News
     '''
     unsubjected = False
-    subject_list = ProjectSingle.objects.all().order_by('school')
+    subject_list = ProjectSingle.objects.all().order_by('school').exclude(school__schoolName=u'测试用学校')
     for project in subject_list:
         if project.project_grade.grade == GRADE_UN:
             unsubjected = False

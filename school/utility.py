@@ -220,7 +220,7 @@ def check_history_readonly(pid):
         readonly = False
     else:
         readonly = True
-
+    readonly = False
     return readonly
 
 def get_current_gradecount(user,des_type):
