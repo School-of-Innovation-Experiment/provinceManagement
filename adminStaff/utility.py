@@ -49,6 +49,8 @@ def info_xls_province_gen():
     worksheet.write_merge(1, 4, 15, 15, '项目所属一级学科')
     worksheet.col(15).width = len('项目所属一级学科') * 256
     worksheet.write_merge(1, 4, 16, 18, '项目简介（100字以内）')
+    
+
 
     return worksheet, workbook
 
@@ -68,7 +70,7 @@ def info_xls(request):
     # name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     # school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = ProjectSingle.objects.all().order_by('school','financial_category')
+    proj_set = ProjectSingle.objects.all().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
     xls_obj, workbook = info_xls_province_gen()
 
     # _index = 1
