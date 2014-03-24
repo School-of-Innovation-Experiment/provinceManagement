@@ -21,6 +21,8 @@ urlpatterns = patterns('',
     (r'^subject_rating/$',AdminStaffService.SubjectRating),
     #(r'^subject_grade_change /$',AdminStaffService.SubjectGradeChange),
 
+    url(r'^ProjectLimitNumReset$', AdminStaffService.ProjectLimitNumReset),
+
     (r'^dispatch/$',AdminStaffService.Dispatch),
     (r'^dispatch/(?P<page>\d+)$',AdminStaffService.Dispatch),
     (r'^expert_dispatch/$',AdminStaffService.expertDispatch),
