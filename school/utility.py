@@ -460,6 +460,12 @@ def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CA
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()
+        
+        # create midsubmit
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
 
         #create final report
         final = FinalSubmit()

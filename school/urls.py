@@ -23,6 +23,10 @@ urlpatterns = patterns('',
         school_views.final_report_view,
     ),
     url(
+        r'^mid/(?P<pid>.{36})$',
+        school_views.mid_report_view,
+    ),
+    url(
         r'^files/(?P<pid>.{36})$',
         school_views.file_view,
     ),

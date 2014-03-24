@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm,EnterpriseApplicationReportForm,Teacher_EnterpriseForm
+from school.forms import *
 
 from adminStaff.models import ProjectPerLimits
 
@@ -107,8 +107,8 @@ def home_view(request, is_expired=False):
     """
     school home management page
     """
-    current_list = ProjectSingle.objects.filter(adminuser=request.user,
-                                               year=get_current_year)
+    current_list = ProjectSingle.objects.filter(adminuser=request.user, is_over = False)
+                                               #year=get_current_year)
     readonly=is_expired
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
@@ -209,6 +209,49 @@ def application_report_view(request, pid=None, is_expired=False):
 
     return render(request, 'school/application.html', data)
 
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER, STUDENT_USER)
+@only_user_required
+#@time_controller(phase=STATUS_MIDSUBMIT)
+#TODO add time controller
+def mid_report_view(request, pid = None, is_expired = False):
+    """
+    school mid report
+    Arguments:
+        In: id, it is project id
+    """
+    loginfo(p=pid+str(is_expired), label="in applicatioan")
+    try:
+        mid = get_object_or_404(MidSubmit, project_id=pid)
+    except:
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = ProjectSingle.objects.get(project_id = pid)
+        mid.save()
+
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    readonly = check_history_readonly(pid) or is_expired
+    if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=mid,checkuser=SCHOOL_USER)
+        mid_form = MidReportForm(request.POST, instance=mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            return HttpResponseRedirect(reverse('school.views.%s_view' % role))
+        else:
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+            logger.info("--"*10)
+
+    mid_form = MidReportForm(instance=mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly': readonly,
+            'is_show':is_show,
+            }
+
+    return render(request, 'school/mid.html', data)
 
 @csrf.csrf_protect
 @login_required
@@ -285,6 +328,12 @@ def new_report_view(request, is_expired=False):
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()
+        
+        #create mid report
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
 
         #create final report
         final = FinalSubmit()
