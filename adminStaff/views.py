@@ -282,15 +282,16 @@ class AdminStaffService(object):
         if request.method == "GET":
             page = request.GET.get('page')
             subject_insitute_form = forms.SubjectInsituteForm()
-            subject_list =  AdminStaffService.GetSubject_list()
+            #subject_list =  AdminStaffService.GetSubject_list()
+            subject_list = get_current_project_query_set()
             context = getContext(subject_list, page, 'subject', 0) 
 
         else:
             subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             if subject_insitute_form.is_valid():
                 category = subject_insitute_form.cleaned_data["insitute_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(category=category)
-
+                #subject_list =  AdminStaffService.GetSubject_list(category=category)
+                subject_list = get_current_project_query_set().filter(category=category)
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
@@ -365,14 +366,16 @@ class AdminStaffService(object):
             page = request.GET.get('page')
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
-            subject_list = AdminStaffService.GetSubject_list(school = school_name)
+            #subject_list = AdminStaffService.GetSubject_list(school = school_name)
+            subject_list = get_running_project_query_set().filter(school = school_name)
             context = getContext(subject_list, page, 'subject', 0) 
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+                #subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+                subject_list = get_running_project_query_set().filter(school = school_name)
                 context = getContext(subject_list, 1, 'subject', 0)
         context.update({'school_category_form':school_category_form, 
                         'subject_grade_form':subject_grade_form,

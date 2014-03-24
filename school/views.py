@@ -107,8 +107,7 @@ def home_view(request, is_expired=False):
     """
     school home management page
     """
-    current_list = ProjectSingle.objects.filter(adminuser=request.user, is_over = False)
-                                               #year=get_current_year)
+    current_list = get_running_project_query_set().filter(adminuser = request.user)
     readonly=is_expired
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)

@@ -42,6 +42,19 @@ from settings import TMP_FILES_PATH
 from django.contrib.auth.models import User
 from student.models import Student_Group
 
+def get_current_project_query_set():
+    """
+    得到当前数据库中当前届的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_past = False)
+def get_running_project_query_set():
+    """
+    得到当前数据库中正在进行的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_over = False)
+
 def check_limits(user):
     """
     Check school limits of quota
