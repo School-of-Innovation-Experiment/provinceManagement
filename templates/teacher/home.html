@@ -13,6 +13,7 @@
   <table class="table table-hover">
     <thead>
       <tr>
+        <th>项目编号</th>
         <th>名称</th>
         <th>项目类型</th>
         <!--th>当前状态</th!-->
@@ -30,7 +31,8 @@
     <tbody>
       {% for project in project_list %}
       <tr>
-	<td>{{ project.title }}</td>
+        <td>{{project.project_unique_code}}</td>
+	<td>{{ project.title|truncatechars:15}}</td>
 	<td>{{ project.project_category }}</td>
 	<!--td>
 	  <span class="label label-warning">{{ project.project_status }}</span>
