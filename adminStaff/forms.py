@@ -94,10 +94,10 @@ class NumLimitForm(forms.Form):
     SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
     school_name   = forms.ChoiceField(choices=SCHOOL_CHOICE)
     a_limited_num   = forms.IntegerField(required=True,
-                                         widget=forms.TextInput(attrs={'id':"a_limited_num"}
+                                         widget=forms.TextInput(attrs={'id':"a_limited_num", 'class': 'span2'}
                            ))
     b_limited_num   = forms.IntegerField(required=True,
-                                         widget=forms.TextInput(attrs={'id':"b_limited_num"}
+                                         widget=forms.TextInput(attrs={'id':"b_limited_num", 'class': 'span2'}
                                                           ))
 
 class SubjectCategoryForm(forms.Form):

@@ -253,6 +253,24 @@ class AdminStaffService(object):
             context = getContext(school_limit_num_list, page, 'school_limit', 0)
             context.update({'num_limit_form':num_limit_form})
             return render(request, "adminStaff/projectlimitnumSettings.html", context)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def ProjectLimitNumReset(request):
+        '''
+        学校上传数量重置
+        '''
+        num_limit_form = forms.NumLimitForm()
+        school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+        ProjectPerLimits.objects.all().delete()
+        for p in ProjectSingle.objects.filter(is_past=False):
+            p.is_past = True
+            p.save()
+        return HttpResponseRedirect('ProjectLimitNumSettings')
+        # return render_to_response("adminStaff/projectlimitnumSettings.html", {'num_limit_form': num_limit_form, 'school_limit_list':school_limit_num_list}, context_instance=RequestContext(request))
+
     @staticmethod
     def SchoolLimitNumList():
         '''
