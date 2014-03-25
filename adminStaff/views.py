@@ -18,11 +18,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
-
+from school.utility import get_running_project_query_set, get_current_project_query_set
 from registration.models import *
 from registration.models import RegistrationProfile
 
