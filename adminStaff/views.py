@@ -310,7 +310,7 @@ class AdminStaffService(object):
             if subject_insitute_form.is_valid():
                 category = subject_insitute_form.cleaned_data["insitute_choice"]
                 #subject_list =  AdminStaffService.GetSubject_list(category=category)
-                subject_list = get_current_project_query_set().filter(category=category)
+                subject_list = get_current_project_query_set().filter(insitute_id=category)
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
