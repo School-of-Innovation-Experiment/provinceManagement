@@ -109,6 +109,7 @@ def home_view(request, is_expired=False):
     """
     current_list = get_running_project_query_set().filter(adminuser = request.user)
     readonly=is_expired
+    readonly=False
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
@@ -450,12 +451,16 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
 def Count_email_already_exist(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
-    num = StudentProfile.objects.filter(school = school_profile).count()
+    num = StudentProfile.objects.filter(school = school_profile).filter(projectsingle__is_past = False).count()
     return num
 
 
 def school_limit_num(request):
-    limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    try:
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    except:
+        school = SchoolProfile.objects.get(userid=request.user)
+        limits = ProjectPerLimits(school=school, number=0, a_cate_number=0)
     limit_num = limits.number
     return limit_num
 
