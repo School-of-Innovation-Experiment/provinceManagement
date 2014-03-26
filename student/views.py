@@ -60,8 +60,10 @@ def member_change(request):
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
     lock = project.recommend or (project.project_grade.grade != GRADE_UN)
-
+    files = set()
     for s in student_group:
+        if s.scoreFile:
+            files.add(s.scoreFile)
         s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
@@ -69,6 +71,8 @@ def member_change(request):
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"lock": lock,
+                    "pid":project.project_id,
+                    "files":files,
                    "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
@@ -135,7 +139,10 @@ def open_report_view_work(request, pid = None, is_expired = False):
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
-        open_data = OpenSubmit(project_id=project)
+        open_data = OpenSubmit()
+        open_data.content_id = uuid.uuid4()
+        open_data.project_id = project
+        open_data.save()
 
     #open_data = get_object_or_404(OpenSubmit, project_id=pid)
 
@@ -143,19 +150,24 @@ def open_report_view_work(request, pid = None, is_expired = False):
 
     is_applying = check_applycontrol(project)
 
+    if check_auth(user=request.user,authority=STUDENT_USER) or \
+    check_auth(user=request.user,authority=TEACHER_USER) :
+        readonly = False
+    else :
+        readonly = True
 
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
-    elif check_auth(user = request.user, authority = SCHOOL_USER):
-        readonly = not get_schooluser_project_modify_status(project)
-    elif check_auth(user = request.user, authority = EXPERT_USER):
-        readonly = False
-    else:
-        readonly = False
+    # if check_auth(user=request.user,authority=STUDENT_USER):
+    #     readonly = not is_applying or project.is_past    
+    # elif check_auth(user=request.user,authority=TEACHER_USER):
+    #     readonly = not is_applying or project.is_past    
+    # elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+    #     readonly = False
+    # elif check_auth(user = request.user, authority = SCHOOL_USER):
+    #     readonly = not get_schooluser_project_modify_status(project)
+    # elif check_auth(user = request.user, authority = EXPERT_USER):
+    #     readonly = False
+    # else:
+    #     readonly = False
 
     
     isRedirect = False
@@ -203,8 +215,15 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     """
     student mid report
     """
-    mid = get_object_or_404(MidSubmit, project_id = pid)
     project = get_object_or_404(ProjectSingle, project_id = pid)
+    try:
+        mid = get_object_or_404(MidSubmit, project_id = pid)
+    except:
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
+
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
 
@@ -497,10 +516,14 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
 #             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
 #                         }
 #     return data
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
 @only_user_required
 def file_upload_view(request,errortype=None,pid=None,is_expired=False):
     """
-    project group member change
+        file_upload_view
     """
     data = files_upload_view_work(request,pid,errortype)
     if data[0]:
@@ -514,19 +537,16 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
 def files_upload_view_work(request,pid=None,errortype=None):
     project = get_object_or_404(ProjectSingle, project_id=pid) 
     error_flagset = fileupload_flag_init()
-    
-
 
     if request.method == "POST" :
         if request.FILES != {}:
             des_name=check_filename(errortype,error_flagset)
-            loginfo(p=des_name,label="des_name")
             if check_uploadfile_name(request,des_name):
                 if errortype != 'show_other':
                    check_uploadfile_exist(des_name,pid)
                 upload_response(request, pid)
                 project_fileupload_flag(project,errortype)
-                return (1,HttpResponseRedirect(reverse('student.views.home_view')))
+                return (1,HttpResponseRedirect('/student/file_upload_view/' + str(pid)))
             else:
                 set_error(error_flagset,errortype,True)
 
@@ -540,6 +560,38 @@ def files_upload_view_work(request,pid=None,errortype=None):
             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
             }
     return (0,data)
+
+@csrf.csrf_protect
+@login_required
+@authority_required(STUDENT_USER)
+@only_user_required
+def score_upload_view(request,pid=None):
+    """
+    score file upload
+    """
+    print "student_id=" + str(request.GET['student_id'])
+    student_id = request.GET['student_id']
+    project = get_object_or_404(ProjectSingle, project_id=pid)
+    student_set = Student_Group.objects.filter(project = project)
+
+    for student_temp in student_set:
+        if str(student_temp.id) == student_id:
+            student = student_temp
+            break
+    else:
+        raise Http404
+
+    loginfo(p=student,label="student")
+    des_name = student.studentName + u'学分申请表'
+    if request.method == "POST" :
+        check_uploadfile_exist(des_name,pid)
+        obj=upload_score_save_process(request,pid,des_name)
+        student.scoreFile = obj
+        student.save()
+        project_fileupload_flag(project,'show_scoreapplication')
+        return HttpResponseRedirect('/student/memberchange')
+
+
 
 
 @csrf.csrf_protect
