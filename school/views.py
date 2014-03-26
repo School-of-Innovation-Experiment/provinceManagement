@@ -109,6 +109,7 @@ def home_view(request, is_expired=False):
     """
     current_list = get_running_project_query_set().filter(adminuser = request.user)
     readonly=is_expired
+    readonly=False
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
