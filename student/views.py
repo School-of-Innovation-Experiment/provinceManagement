@@ -139,7 +139,10 @@ def open_report_view_work(request, pid = None, is_expired = False):
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
-        open_data = OpenSubmit(project_id=project)
+        open_data = OpenSubmit()
+        open_data.content_id = uuid.uuid4()
+        open_data.project_id = project
+        open_data.save()
 
     #open_data = get_object_or_404(OpenSubmit, project_id=pid)
 
@@ -212,8 +215,15 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     """
     student mid report
     """
-    mid = get_object_or_404(MidSubmit, project_id = pid)
     project = get_object_or_404(ProjectSingle, project_id = pid)
+    try:
+        mid = get_object_or_404(MidSubmit, project_id = pid)
+    except:
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
+
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
 
