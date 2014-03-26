@@ -450,7 +450,7 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
 def Count_email_already_exist(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
-    num = StudentProfile.objects.filter(school = school_profile).count()
+    num = StudentProfile.objects.filter(is_past=False).filter(school = school_profile).count()
     return num
 
 
