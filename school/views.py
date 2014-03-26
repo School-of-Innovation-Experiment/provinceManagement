@@ -455,7 +455,11 @@ def Count_email_already_exist(request):
 
 
 def school_limit_num(request):
-    limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    try:
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    except:
+        school = SchoolProfile.objects.get(userid=request.user)
+        limits = ProjectPerLimits(school=school, number=0, a_cate_number=0)
     limit_num = limits.number
     return limit_num
 
