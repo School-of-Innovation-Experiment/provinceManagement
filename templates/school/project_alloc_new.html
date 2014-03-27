@@ -29,27 +29,27 @@
 					<thead>
 						<tr>
 						  <th>选择</th>
-							<th>项目申报编号</th>
-							<th>发布题目名称</th>
-							<th>所属学院</th>
-							<th>所属分类</th>
-							<th>题目状态</th>
-							<th>操作</th>
+						  <th>项目编号</th>
+						  <th>发布题目名称</th>
+						  <th>所属学院</th>
+						  <th>所属分类</th>
+						  <th>题目状态</th>
+						  <th>操作</th>
 						</tr>
 					</thead>
 						<tbody id="unalloced_subject_table_body">
 						{% for subject in unalloced_subject_list%}
 							<tr id="tr_{{subject.project_id}}">
 							  <td><label class="checkbox">
-					           <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}" teacher_email="{{ subject.adminuser.userid }}">
-				            </label>
-				        </td>
-								<td>{{subject.project_code}}</td>
-								<td>{{subject.title}}</td>
-								<td>{{subject.school}}</td>
-								<td>{{subject.project_category}}</td>
-								<td>{{subject.project_status}}</td>
-								<td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="single_storage('{{subject.project_id}}', '{{subject.adminuser.userid}}');">指派专家</a></td>
+					                       <input type="checkbox" name="checkbox_project" value="{{ subject.project_id }}" teacher_email="{{ subject.adminuser.userid }}">
+				                              </label>
+				                          </td>
+							  <td>{{subject.project_unique_code}}</td>
+							  <td>{{subject.title}}</td>
+							  <td>{{subject.school}}</td>
+							  <td>{{subject.project_category}}</td>
+							  <td>{{subject.project_status}}</td>
+							  <td><a data-toggle="modal" href="#alloc_choice" id="allocid_{{subject.project_id}}" onclick="single_storage('{{subject.project_id}}', '{{subject.adminuser.userid}}');">指派专家</a></td>
 							</tr>
 						{%endfor%}
 					</tbody>

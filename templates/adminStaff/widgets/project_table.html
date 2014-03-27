@@ -2,7 +2,6 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>项目申报编号</th>
         <th>名称</th>
         <th>项目编号</th>
         {% if IS_MINZU_SCHOOL %}
@@ -23,8 +22,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>  <a href="/adminStaff/application/{{item.project_id}}">  {{item.project_code}}  </a>    </td>
-        <td>{{item.title|truncatechars:15}}</td>
+        <td><a href="/adminStaff/application/{{item.project_id}}">{{item.title|truncatechars:15}}</td>
         <td>
            <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
         </td>

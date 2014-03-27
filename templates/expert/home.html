@@ -30,7 +30,7 @@
         <table class="table table-hover">     
         <thead>
           <tr>
-            <th>项目申报编号</th>
+            <th>项目编号</th>
             <th>名称</th>
             <th>项目类型</th>
             <th>学院</th>
@@ -42,7 +42,7 @@
         <tbody>
           {%for item in school_list%}
           <tr>
-            <td>{{item.project.project_code}}</td>
+            <td>{{item.project.project_unique_code}}</td>
             <td>{{item.project.title}}</td>
             <td>{{item.project.project_category}}</td>
             <td>{{item.project.school}}</td>

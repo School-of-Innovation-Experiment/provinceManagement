@@ -3,7 +3,7 @@
         <table class="table table-condensed" id="subject_table">
            <thead>
              <tr>
-               <th>项目申报编号</th>
+               <th>项目编号</th>
                <th>项目名称</th>
                <th>指导教师</th>
                <th>项目负责人</th>
@@ -15,7 +15,7 @@
            <tbody id="subject_table_body">
              {% for item in pro_list%}
              <tr>
-               <td>{{item.project_code}}</td>
+               <td>{{item.project_unique_code}}</td>
                <td>{{item.title|truncatechars:15}}</td>
                <td>{{item.adminuser.get_name}}</td>
                <td>{{item.student.get_name}}</td>
