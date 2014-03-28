@@ -24,6 +24,7 @@
   <table class="table table-hover">
     <thead>
       <tr>
+        <th>项目编号</th>
         <th>名称</th>
         <th>项目类型</th>
         <th>当前状态</th>
@@ -34,6 +35,7 @@
     <tbody>
       {%for item in current_list%}
       <tr>
+        <td>{{item.project_unique_code}}</td>
         <td>{{item.title}}</td>
         <td>{{item.project_category}}</td>
         <td>{{item.project_status}}</td>

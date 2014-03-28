@@ -34,7 +34,7 @@
 	  <table class="table table-condensed" id="undefined_subject_table">
 	    <thead>
 	      <tr>
-		<th>项目申报编号</th>
+		<th>项目编号</th>
 		<th>发布题目名称</th>
 		<th>指导教师</th>
 		<th>项目成员</th>
@@ -45,7 +45,7 @@
 	    <tbody id="subject_table_body">
 	      {% for subject in nrec.subject_list%}
 	      <tr>
-		<td>{{subject.project_code}}</td>
+		<td>{{subject.project_unique_code}}</td>
 		<td>{{subject.title}}</td>
 		<td>{{subject.adminuser}}</td>
 		<td>{{subject.members}}</td>
@@ -86,7 +86,7 @@
 	  <table class="table table-condensed" id="defined_subject_table">
 	    <thead>
 	      <tr>
-		<th>项目申报编号</th>
+		<th>项目编号</th>
 		<th>发布题目名称</th>
 		<th>指导教师</th>
 		<th>项目成员</th>
@@ -97,7 +97,7 @@
 	    <tbody id="defined_subject_table_body">
 	      {% for subject in rec.subject_list%}
 	      <tr>
-		<td>{{subject.project_code}}</td>
+		<td>{{subject.project_unique_code}}</td>
 		<td>{{subject.title}}</td>
 		<td>{{subject.adminuser}}</td>
 		<td>{{subject.members}}</td>

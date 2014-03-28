@@ -60,8 +60,10 @@ def member_change(request):
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
     lock = project.recommend or (project.project_grade.grade != GRADE_UN)
-
+    files = set()
     for s in student_group:
+        if s.scoreFile:
+            files.add(s.scoreFile)
         s.sex_val = s.sex
         s.sex = s.get_sex_display()
 
@@ -69,7 +71,8 @@ def member_change(request):
     student_group_info_form = StudentGroupInfoForm()
     return render(request, "student/member_change.html",
                   {"lock": lock,
-                    "pid": project.project_id,
+                    "pid":project.project_id,
+                    "files":files,
                    "student_group": student_group,
                    "student_group_form": student_group_form,
                    "student_group_info_form": student_group_info_form})
@@ -136,7 +139,10 @@ def open_report_view_work(request, pid = None, is_expired = False):
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
-        open_data = OpenSubmit(project_id=project)
+        open_data = OpenSubmit()
+        open_data.content_id = uuid.uuid4()
+        open_data.project_id = project
+        open_data.save()
 
     #open_data = get_object_or_404(OpenSubmit, project_id=pid)
 
@@ -209,8 +215,15 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     """
     student mid report
     """
-    mid = get_object_or_404(MidSubmit, project_id = pid)
     project = get_object_or_404(ProjectSingle, project_id = pid)
+    try:
+        mid = get_object_or_404(MidSubmit, project_id = pid)
+    except:
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
+
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
 
@@ -478,6 +491,33 @@ def file_delete_view(request, pid=None, fid=None, is_expired=False):
     else:
         return HttpResponseBadRequest("Warning! Only POST accepted!")
 
+
+# @csrf.csrf_protect
+# @login_required
+# @authority_required(STUDENT_USER)
+# def files_important_view(request,pid=None,is_expired=False):
+#     """
+#     project group member change
+#     """
+#     data = files_important_view_work(request,pid)
+#     return render(request, 'student/fileimportant.html', data)
+
+
+# def files_important_view_work(request,pid):
+#     error_flagset = fileupload_flag_init()
+
+#     project = get_object_or_404(ProjectSingle, project_id=pid)
+#     file_history = UploadedFiles.objects.filter(project_id=project.project_id)
+#     file_history=enabledelete_file(file_history)
+#     data = {'pid': pid,
+#             'files': file_history,
+#             'readonly': False,
+#             'error_flagset':error_flagset,
+#             'IS_DLUT_SCHOOL':IS_DLUT_SCHOOL,
+#             'IS_MINZU_SCHOOL':IS_MINZU_SCHOOL,
+#                         }
+#     return data
+
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -505,7 +545,7 @@ def files_upload_view_work(request,pid=None,errortype=None):
                    check_uploadfile_exist(des_name,pid)
                 upload_response(request, pid)
                 project_fileupload_flag(project,errortype)
-                return (1,HttpResponseRedirect(reverse('student.views.home_view')))
+                return (1,HttpResponseRedirect('/student/file_upload_view/' + str(pid)))
             else:
                 set_error(error_flagset,errortype,True)
 
@@ -541,14 +581,15 @@ def score_upload_view(request,pid=None):
         raise Http404
 
     loginfo(p=student,label="student")
-    des_name = student.studentName + u'学分申请'
+    des_name = student.studentName + u'学分申请表'
     if request.method == "POST" :
         check_uploadfile_exist(des_name,pid)
         obj=upload_score_save_process(request,pid,des_name)
         student.scoreFile = obj
         student.save()
-        project_fileupload_flag(project,'score_application')
-        return HttpResponseRedirect('/student/file_upload_view/'+str(pid))
+        project_fileupload_flag(project,'show_scoreapplication')
+        return HttpResponseRedirect('/student/memberchange')
+
 
 
 

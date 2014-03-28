@@ -361,6 +361,6 @@ FileList={
     'show_summary' : u"结题验收表",
     'show_projectcompilation' : u"项目汇编",
     'show_scoreapplication' : u"学分申请表",
-    'show_opensubmit':u'开题检查表',
+    'show_opencheck':u'开题报告',
     'show_other':u'其他附件',
 } 

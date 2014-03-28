@@ -66,6 +66,10 @@ urlpatterns = patterns('',
         student_views.score_upload_view, name="score_upload_view",
     ),
     url(
+        r'^score_upload_view/(?P<pid>.{36})$',
+        student_views.score_upload_view, name="student_score_upload_view"
+    ),
+    url(
         r'^processrecord$',
         student_views.processrecord_view,
     ),
