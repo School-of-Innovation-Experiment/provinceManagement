@@ -170,7 +170,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
         open_form = OpenReportForm(request.POST, instance=open_data)
         if open_form.is_valid():
             open_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.save()
 
             isRedirect = True
