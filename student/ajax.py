@@ -44,6 +44,13 @@ def getProject(request):
 
 
 @dajaxice_register
+def empty_file_set_check(request):
+    status = "ok"
+    if UploadedFiles.objects.filter(project_id__student__userid = request.user).count() == 0:
+        status = 'empty'
+    return simplejson.dumps({"status": status})
+
+@dajaxice_register
 def MemberChangeInfo(request, form, origin):
     # try:
     #     project = ProjectSingle.objects.get(student__userid=request.user)
