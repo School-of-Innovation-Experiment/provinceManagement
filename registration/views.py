@@ -85,5 +85,7 @@ def login_redirect(request):
         return HttpResponseRedirect('/adminStaff/')
     elif check_auth(request.user, STUDENT_USER):
         return HttpResponseRedirect('/student/')
+    elif check_auth(request.user, TEACHER_USER):
+        return HttpResponseRedirect('/teacher/')
     else:
         return HttpResponseRedirect('/')
