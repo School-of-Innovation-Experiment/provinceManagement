@@ -17,6 +17,7 @@ from django.utils import simplejson
 from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit,TechCompetition, OpenSubmit
 from school.models import UploadedFiles
@@ -44,10 +45,24 @@ def home_view(request):
     """
     display project at the current year
     """
+    delete_bad_files(request)
     item_list = get_current_project_query_set().filter(student__userid=request.user)
     #item_list = ProjectSingle.objects.filter(student__userid=request.user)
     return render(request, "student/student_home.html", {"item_list": item_list})
 
+
+def delete_bad_files(request):
+    """
+    临时检查文件是否在服务器端已损毁
+    若已损毁，则删除数据库对应记录
+    """
+    warning = False
+    project = get_current_project_query_set().get(student__userid = request.user)   
+    file_set = UploadedFiles.objects.filter(project_id = project)
+    for f in file_set:
+        if not default_storage.exists(f.file_obj.path):
+            f.delete()
+   
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -176,7 +191,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
         open_form = OpenReportForm(request.POST, instance=open_data)
         if open_form.is_valid():
             open_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.save()
 
             isRedirect = True
