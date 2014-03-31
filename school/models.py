@@ -24,7 +24,7 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import OVER_STATUS_NOTOVER
 # from const import YEAR_CHOICES
-import datetime
+import datetime, os
 
 class ProjectSingle(models.Model):
     """
