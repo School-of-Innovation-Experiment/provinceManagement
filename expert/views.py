@@ -79,7 +79,6 @@ def review_report_view(request):
     # get or check authorities
     pid = request.GET.get('pid')
     flag = request.GET.get('flag') == 'True'
-    
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     project = get_object_or_404(ProjectSingle, project_id=pid)
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project, is_assign_by_adminStaff = flag)
@@ -139,7 +138,6 @@ def download_view(request, file_id=None):
             else:
                 break
         f.close()
-    
     doc = UploadedFiles.objects.get(file_id = file_id)
     doc_path = doc.file_obj.path
     response = HttpResponse(read_file(doc_path), content_type='application/vnd.ms-excel')  
