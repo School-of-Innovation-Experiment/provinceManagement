@@ -1,19 +1,12 @@
-<div class="commentrecord">
+<div class="commentrecord" id="comment_table">
     {% if comment_group %}
       {%for comment in comment_group%}
-        <div class="well form">
-            <div class="body">
-              <div class="title">
-                <strong>第{{comment.monthId}}月评阅记录</strong>
-              </div>
-              <div class="time">
-                <strong>&nbsp;{{comment.date}}&nbsp;填写完成</strong>
-              </div> 
-              <div class="details">
-                {{comment.comment}}
-              </div>  
-            </div>
+        <div class="alert fade in"  >
+          <button type="button" class="close" onclick="delete_comment(this)">×</button>
+          <h4 val={{comment.monthId}}>第{{comment.monthId}}月评阅记录</h4>
+          <p><strong>&nbsp;{{comment.date}}&nbsp;填写完成</strong></p>
+          <p id="comment_summary">{{comment.comment}}</p>
         </div>
-      {%endfor%}
-    {% endif %}
+     {%endfor%}
+   {% endif %}
 </div>
