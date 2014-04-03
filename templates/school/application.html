@@ -4,13 +4,33 @@
 {%block report-content%}
   <form method="post" action={% url school.views.application_report_view pid%}>
     {% csrf_token %}
-    <!--Basic Infomation-->
-    {% include "school/widgets/project_infoform.html" %}
-    {% include "school/widgets/teacher_enterprise.html" %}
-    <!--Application Infomation-->
-    {% include "school/widgets/application.html" %}
-    <!--Comments info-->
-    {% include "school/widgets/comments_info.html" %}
+    <!-- Basic Infomation -->
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#project_infoform" data-toggle="tab"><strong>基本信息</strong></a></li>
+        {% if not is_innovation %}
+          <li><a href="#enterprise" data-toggle="tab"><strong>企业导师</strong></a></li>
+        {%endif%}
+        <li><a href="#project_brief" data-toggle="tab"><strong>项目简介</strong></a></li>
+        {% if is_innovation %}
+           <li><a href="#project_plan" data-toggle="tab"><strong>项目计划</strong></a></li>
+        {%else%}
+           <li><a href="#team_product" data-toggle="tab"><strong>团队产品介绍</strong></a></li>
+           <li><a href="#project_plan" data-toggle="tab"><strong>项目预测</strong></a></li>
+        {%endif%}
+        <li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li>
+      </ul>
+      <div class="tab-content">
+        {% include "school/widgets/project_infoform.html" %} 
+        {% include "school/widgets/teacher_enterprise.html" %}
+        <!--Application Infomation-->
+        {% include "school/widgets/project_brief.html" %}
+        <!--Application Infomation-->
+        {% include "school/widgets/project_plan.html" %}
+        <!--Comments info-->
+        {% include "school/widgets/comments_info.html" %}
+      </div>
+    </div>
     <!--submit button-->
     {% include "school/widgets/commit_button.html" %}
   </form>

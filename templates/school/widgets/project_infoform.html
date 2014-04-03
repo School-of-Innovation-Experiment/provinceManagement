@@ -1,11 +1,9 @@
     <!--Project Basic Infomation-->
     <!--Basic Infomation-->
-    <div class="page-header">
-      <h3>基本信息</h3>
-    </div>
+<div class="tab-pane active" id="project_infoform">
     <div class="row-fluid show-grid">
       <div class="span4">
-        <div class="control-group {% if info.title.errors %}error{% endif %}">
+         <div class="control-group {% if info.title.errors %}error{% endif %}">
             <label class="school-display"><i class="icon-book"></i>{{info.title.label}}</span></label>
             {{info.title}}
             {% if info.title.errors %}
@@ -14,22 +12,22 @@
               {{ info.title.errors }}
             </div>
             {% endif %}
-          </div>
-        <hr class="school-display"/>
-      <div class="control-group {% if info.memberlist.errors %}error{% endif %}">
-        <label class="school-display"><i class="icon-th-large"></i>团队成员
-          {% if userauth.is_student %}
-          <small style="font-size:11px;">(在“团队成员”中添加团队成员)</small>
-          {% endif %}
-        </label>
-        {{info.memberlist}}
-        {% if info.memberlist.errors %}
-        <div class="row alert alert-error school-display">
-          <button class="close" data-dismiss="alert">×</button>
-          {{ info.memberlist.errors }}
         </div>
-        {% endif %}
-      </div>
+        <hr class="school-display"/>
+        <div class="control-group {% if info.memberlist.errors %}error{% endif %}">
+          <label class="school-display"><i class="icon-th-large"></i>团队成员
+            {% if userauth.is_student %}
+            <small style="font-size:11px;">(在“团队成员”中添加团队成员)</small>
+            {% endif %}
+          </label>
+          {{info.memberlist}}
+          {% if info.memberlist.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ info.memberlist.errors }}
+          </div>
+          {% endif %}
+        </div>
         <hr class="school-display"/>
         <div class="control-group {% if info.im.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-leaf"></i>{{info.im.label}}</span></label>
@@ -41,8 +39,8 @@
           </div>
           {% endif %}
         </div><!--end im-->
-      </div>
-      <div class="span4">
+    </div>
+    <div class="span4">
         <div class="control-group {% if info.telephone.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-road"></i>{{info.telephone.label}}</span></label>
           {{info.telephone}}
@@ -75,8 +73,8 @@
           </div>
           {% endif %}
         </div><!--end im-->
-      </div>
-      <div class="span4">
+   </div>
+   <div class="span4">
         <div class="control-group {% if info.info.project_category.errors.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-book"></i>{{info.insitute.label}}</span></label>
           {{info.insitute}}
@@ -97,6 +95,7 @@
               {{ info.inspector.errors }}
           </div>
           {% endif %}
+        </div>
         <hr class="school-display"/>
         <div class="control-group {% if info.inspector_title.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-bookmark"></i>{{info.inspector_title.label}}</span></label>
@@ -109,4 +108,5 @@
           {% endif %}
         </div><!--end inspector-->
       </div>
-    </div><!--Info Form-->
+   </div>
+</div>

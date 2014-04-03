@@ -1,0 +1,153 @@
+{% if is_innovation %}
+<div class="tab-pane" id="project_plan">
+   <fieldset>
+     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+       <legend>项目创新之处</legend>
+       {{application.innovation}}
+       {% if application.innovation.errors %}
+       <div class="row alert alert-error school-display">
+         <button class="close" data-dismiss="alert">×</button>
+         {{ application.innovation.errors }}
+       </div>
+       {% endif %}
+     </div>
+   </fieldset><!--end Innovation points-->
+
+   </br>
+   <fieldset>
+     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+       <legend>项目进度安排</legend>
+       {{application.progress_plan}}
+       {% if application.progress_plan.errors %}
+       <div class="row alert alert-error school-display">
+         <button class="close" data-dismiss="alert">×</button>
+         {{ application.progress_plan.errors }}
+       </div>
+       {% endif %}
+     </div>
+   </fieldset><!--end plans-->
+
+   </br>
+   <fieldset>
+     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+       <legend>项目经费预算</legend>
+       {{application.funds_plan}}
+       {% if application.funds_plan.errors %}
+       <div class="row alert alert-error school-display">
+         <button class="close" data-dismiss="alert">×</button>
+         {{ application.funds_plan.errors }}
+       </div>
+       {% endif %}
+     </div>
+   </fieldset><!--end payments-->
+
+   </br>
+   <fieldset>
+     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+       <legend>预期研究成果</legend>
+       {{application.pre_results}}
+       {% if application.pre_results.errors %}
+       <div class="row alert alert-error school-display">
+         <button class="close" data-dismiss="alert">×</button>
+         {{ application.pre_results.errors }}
+       </div>
+       {% endif %}
+     </div>
+   </fieldset>
+   </br>
+</div>
+{%else%}
+<div class="tab-pane" id="team_product">
+   <fieldset>
+     <legend>创业团队介绍</legend>
+       <div class="control-group form-inline {% if application.background.errors %}error{% endif %}">
+         {{application.background}}
+         {% if application.background.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.background.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+   </br>
+   <fieldset>
+     <legend>行业及市场前景</legend>
+       <div class="control-group form-inline {% if application.industry.errors %}error{% endif %}">
+         {{application.industry}}
+         {% if application.industry.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.industry.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+   </br>
+   <fieldset>
+     <legend>产品制造</legend>
+       <div class="control-group form-inline {% if application.product.errors %}error{% endif %}">
+         {{application.product}}
+         {% if application.product.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.product.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+</div>
+<div class="tab-pane" id="project_plan">
+   <fieldset>
+     <legend>项目投资预算及融资计划</legend>
+       <div class="control-group form-inline {% if application.funds_plan.errors %}error{% endif %}">
+         {{application.funds_plan}}
+         {% if application.funds_plan.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.funds_plan.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+   </br>
+   <fieldset>
+     <legend>项目运营模式</legend>
+       <div class="control-group form-inline {% if application.operating_mode.errors %}error{% endif %}">
+         {{application.operating_mode}}
+         {% if application.operating_mode.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.operating_mode.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+   </br>
+   <fieldset>
+     <legend>项目风险预测及应对措施</legend>
+       <div class="control-group form-inline {% if application.risk_managementrisk_managementrisk_management.errors %}error{% endif %}">
+         {{application.risk_management}}
+         {% if application.risk_managementrisk_management.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.risk_management.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+   </br>
+   <fieldset>
+     <legend>财务预测</legend>
+       <div class="control-group form-inline {% if application.financial_pred.errors %}error{% endif %}">
+         {{application.financial_pred}}
+         {% if application.financial_pred.errors %}
+         <div class="row alert alert-error school-display">
+             <button class="close" data-dismiss="alert">×</button>
+             {{ application.financial_pred.errors }}
+         </div>
+         {% endif %}
+       </div><!--end form line, for choice-->
+   </fieldset><!--Project origin-->
+</div>
+{%endif%}
