@@ -150,7 +150,16 @@ def application_report_view(request, pid=None, is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
+    teammember=get_studentmessage(project)
+    pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+    fin_type = ("15000", "5000", "10000") if project.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
+    try:
+        innovation = pro_type.objects.get(project_id=project.project_id)
+    except Exception, err:
+        loginfo(p=err, label="get innovation")
+        loginfo(p=project.project_category.category, label="project category")
 
+    loginfo(p=teammember, label="in teammember")
     readonly = check_history_readonly(pid) or is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if project.project_category.category == CATE_INNOVATION:
@@ -204,7 +213,12 @@ def application_report_view(request, pid=None, is_expired=False):
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
             'is_innovation':is_innovation,
-            'is_show':is_show
+            'is_show':is_show,
+            'project':project,
+            'teammember':teammember,
+            'pro_type':pro_type,
+            'fin_type':fin_type,
+            'innovation':innovation
             }
 
     return render(request, 'school/application.html', data)
