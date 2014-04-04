@@ -99,7 +99,7 @@ class ApplicationReportForm(ModelForm):
                                                           'class': "fill-form"}),
                    "proj_introduction":forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                           'placeholder':
-                                                          '项目内容简介（100字以内）',
+                                                          '项目内容简介（80-100字以内）',
                                                           'class': "fill-form"}),
                    }
 
@@ -154,8 +154,8 @@ class EnterpriseApplicationReportForm(ModelForm):
                                                             'class': "fill-form"}),
                    "proj_introduction":forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                           'placeholder':
-                                                          '项目内容简介（100字以内）',
-                                                          'class': "fill-form"}),                   
+                                                          '项目内容简介（80-100字以内）',
+                                                          'class': "fill-form"}),
                    }
 
     def get_absolute_url(self):
