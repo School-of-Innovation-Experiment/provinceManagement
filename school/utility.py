@@ -545,8 +545,7 @@ def info_xls(request):
 
     _index = 1
     for proj_obj in proj_set:
-        manager_name,manager_id = get_manager(proj_obj)
-        memberlist,count = get_memberlist(manager_name,proj_obj)
+        teammember = get_studentmessage(proj_obj)
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
@@ -568,10 +567,10 @@ def info_xls(request):
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
-        xls_obj.write(row, 4, unicode(manager_name))# 负责人
-        xls_obj.write(row, 5, unicode(manager_id)) # 学号
-        xls_obj.write(row, 6, unicode(count)) # 学生人数
-        xls_obj.write(row, 7, unicode(memberlist)) # 项目其他成员
+        xls_obj.write(row, 4, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 5, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 6, unicode(teammember['member_number'])) # 学生人数
+        xls_obj.write(row, 7, unicode(teammember['othermember'])) # 项目其他成员
         xls_obj.write(row, 8, unicode(proj_obj.inspector))
         xls_obj.write(row, 9, unicode(proj_obj.inspector_title)) # 指导老师职称
         xls_obj.write(row, 10, fin_type[0]) # 经费
@@ -602,20 +601,28 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
     teacher.telephone = telephones[1]
     teacher_enterpriseform.save()
 
+# def get_manager(project):
+#     """
+#         old version get teammanager's name and student_id
+#     """
+#     managerid=StudentProfile.objects.get(id=project.student_id)
+#     teammanager = User.objects.get(id=managerid.user_id)
+#     manager_name = teammanager.first_name
+#     manager_studentid = ""
+#     group = project.student_group_set
+#     for student in group.all():
+#         if student.studentName == manager_name:
+#             manager_studentid = student.studentId
+#             loginfo(p=manager_studentid,label="manager_studentid")
+#     return manager_name , manager_studentid
+
 def get_manager(project):
     """
         get teammanager's name and student_id
     """
-    managerid=StudentProfile.objects.get(id=project.student_id)
-    teammanager = User.objects.get(id=managerid.user_id)
-    manager_name = teammanager.first_name
-    manager_studentid = ""
-    group = project.student_group_set
-    for student in group.all():
-        if student.studentName == manager_name:
-            manager_studentid = student.studentId
-            loginfo(p=manager_studentid,label="manager_studentid")
-    return manager_name , manager_studentid
+    teammanager = project.student_group_set.all()[0]
+    return teammanager
+
 def get_memberlist(manager_name,project):
     """
         get other members
@@ -629,6 +636,33 @@ def get_memberlist(manager_name,project):
     count=len(memberlist)+1
     memberlist=','.join(memberlist)
     return memberlist,count
+
+def get_studentmessage(project):
+    """
+        get  manager and student message
+    """
+    memberlist=[]
+    # teammember = {'manager_name':'None','manager_studentid':'None','memberlist':'None','count':0,'telephone':'',}
+    teammember={'manager_name':'','manager_studentid':'','member_number':'','othermember':''}
+    if project.student_group_set.all().count()>0:
+        group=project.student_group_set
+        loginfo(p=group,label="group")
+        manager = group.all()[0]
+        loginfo(p=manager,label="manager")
+        teammember['manager_name']=manager.studentName
+        teammember['manager_studentid']=manager.studentId
+        teammember['member_number'] = project.student_group_set.count()
+        for student in group.all():
+            group=project.student_group_set
+            loginfo(p=student.studentName,label="student")
+            if student.studentName != manager.studentName:
+                member=student.studentName+"("+student.studentId+")"
+                memberlist.append(member)
+        teammember['othermember']=','.join(memberlist)
+    return teammember
+
+
+
 # def get_memberlist(members):
 #     """
 #         get all members in project

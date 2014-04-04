@@ -62,6 +62,8 @@ def home_view(request):
     remaining_b = limitnum_b - really_b
 
     for item in re_project:
+        if len(item.project.title) > 15:
+            item.project.title = item.project.title[:15] + "..."
         item.pass_p = u"国家级" if item.pass_p else u"省级"
         item.financial_category = item.project.financial_category
     # loginfo(p=re_project, label="EXPERT HOME")
