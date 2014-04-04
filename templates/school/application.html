@@ -1,8 +1,53 @@
 <!-- pre application proposal page -->
 {% extends "school/base/report_base.html" %}
-
+{% load admin_static%}{% load url from future %}
 {%block report-content%}
-  <form method="post" action={% url school.views.application_report_view pid%}>
+<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/school/news_edit.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
+<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+<script>function gettext(txt){return txt}</script>
+<script type="text/javascript">
+  $(function(){
+  function initToolbarBootstrapBindings() {
+  var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+  'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+  'Times New Roman', 'Verdana'],
+  fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+  $.each(fonts, function (idx, fontName) {
+  fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
+  });
+  $('a[title]').tooltip({container:'body'});
+  $('.dropdown-menu input').click(function() {return false;})
+  .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
+  .keydown('esc', function () {this.value='';$(this).change();});
+
+  $('[data-role=magic-overlay]').each(function () {
+  var overlay = $(this), target = $(overlay.data('target'));
+  overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+  });
+  if ("onwebkitspeechchange"  in document.createElement("input")) {
+  var editorOffset = $('#editor').offset();
+  $('#voiceBtn').css('position','absolute').offset({top: editorOffset.top, left: editorOffset.left+$('#editor').innerWidth()-35});
+  } else {
+  $('#voiceBtn').hide();
+  }
+  };
+  function showErrorAlert (reason, detail) {
+  var msg='';
+  if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
+  else {
+  console.log("error uploading file", reason, detail);
+  }
+  $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>'+
+    '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
+  };
+  initToolbarBootstrapBindings();
+  $('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
+  window.prettyPrint && prettyPrint();
+  });
+</script>
+  <form method="post" action="/school/application_report_view/{{pid}}"  enctype="multipart/form-data">
     {% csrf_token %}
     <!-- Basic Infomation -->
     <div class="tabbable">
@@ -34,4 +79,12 @@
     <!--submit button-->
     {% include "school/widgets/commit_button.html" %}
   </form>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/news_release.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>
+
+  <script type="text/javascript" src="/admin/jsi18n/"></script>
+  <script type="text/javascript" src="/static/admin/js/core.js"></script>
+  <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 {%endblock%}

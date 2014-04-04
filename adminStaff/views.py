@@ -52,7 +52,6 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
     @staticmethod
     def GetRegisterSchoolList():
         res_list = []
@@ -157,7 +156,7 @@ class AdminStaffService(object):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
             email_list = AdminStaffService.GetRegisterExpertList()
-            
+
             page = request.GET.get('page')
             context = getContext(email_list, page, 'email', 0)
             context.update({'expert_form': expert_form})
@@ -477,6 +476,7 @@ class AdminStaffService(object):
                                 news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
                                 # news_document = request.FILES["news_document"],)
                 new_news.save()
+                loginfo(newsform.cleaned_data["news_content"])
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
             return redirect('/newslist/%d' % new_news.id)

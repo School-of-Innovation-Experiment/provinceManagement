@@ -31,7 +31,12 @@
         <fieldset>
           <div class="control-group {% if application.background.errors %}error{% endif %}">
             <legend>项目背景及研究意义</legend>
-            {{application.background}}
+               <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+                 {% include "news/news_toolbar.html" %}
+              </div>
+              <div id="editor">
+                "在此编写项目背景及研究意义..."
+              </div>
             {% if application.background.errors %}
             <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
               <button class="close" data-dismiss="alert">×</button>
@@ -44,7 +49,13 @@
         <fieldset>
           <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
             <legend>研究内容和拟解决的关键问题</legend>
-            {{application.key_notes}}
+            <div class="btn-toolbar" data-role="editor-toolbar" data-target="#key_notes">
+                 {% include "news/news_toolbar.html" %}
+              </div>
+              <div id="key_notes">
+                "在此编写项目背景及研究意义..."
+              </div>
+            {#{{application.key_notes}#}
             {% if application.key_notes.errors %}
             <div class="row alert alert-error school-display">
               <button class="close" data-dismiss="alert">×</button>
