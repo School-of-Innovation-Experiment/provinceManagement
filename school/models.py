@@ -53,7 +53,7 @@ class ProjectSingle(models.Model):
                                  verbose_name=u"联系方式")
     inspector = models.CharField(max_length=200, blank=False,
                                  verbose_name=u"指导教师")
-    inspector_title = models.CharField(blank=False, null=True, max_length=10,
+    inspector_title = models.CharField(blank=False,max_length=10,
                                        verbose_name=u"指导老师职称")
     members = models.CharField(max_length=400, blank=False,
                                verbose_name=u"团队成员")
