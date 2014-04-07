@@ -149,6 +149,7 @@ INSTALLED_APPS = (
     'analysis',
     'backend',
     'student',
+    'rpc',
     #Add-on
     'south',
     'dajaxice',

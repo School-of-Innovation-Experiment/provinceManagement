@@ -81,6 +81,11 @@ urlpatterns = patterns('',
         r'^analysis/',
         include("analysis.urls")
     ),
+    url(
+        r'^rpc/',
+        include('rpc.urls'),
+        name="rpc",
+    ),
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)
