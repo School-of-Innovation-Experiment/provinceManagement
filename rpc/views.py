@@ -1,6 +1,10 @@
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCDispatcher
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+import simplejson
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+import base64
 
 dispatcher = SimpleJSONRPCDispatcher(encoding=None)
 
@@ -17,6 +21,21 @@ def rpc_handler(request):
     response['Content-length'] = str(len(response.content))
     return response
 
+def sync_proj(poj):
+    pass
+
+def SyncProjects(json_obj):
+    proj_singles = simplejson.loads(json_obj)
+    username = base64.b64decode(proj_singles['username'])
+    password = base64.b64decode(proj_singles['password'])
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        return "Username or Password error!"
+    return "login sucess! %s %s" % (username, password)
+    for poj in proj_singles['pojects']:
+        sync_proj(poj)
+
 def test(s):
     """
     test
@@ -24,3 +43,4 @@ def test(s):
     return "Hello %s" % s
 
 dispatcher.register_function(test, "test")
+dispatcher.register_function(SyncProjects, "SyncProjects")
