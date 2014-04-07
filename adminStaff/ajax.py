@@ -34,6 +34,8 @@ from backend.logging import logger, loginfo
 from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+from adminStaff.utility import get_average_score_list
+from backend.decorators import check_auth
 
 def refresh_mail_table(request):
     email_list  = AdminStaffService.GetRegisterList(request)
@@ -180,15 +182,17 @@ def judge_is_assigned(request, school):
     return simplejson.dumps({'flag':obj.is_assigned})
 
 @dajaxice_register
-def get_subject_review_list(request, project_id, identity):
+def get_subject_review_list(request, project_id):
     '''
     to get subject evaluate list through project_id
     '''
+    if check_auth(user = request.user, authority = SCHOOL_USER):
+        identity = 'school'
+    else:
+        identity = 'adminstaff'
+
     review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
-
-    cnt_of_list = len(review_list)
-
-    average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    average_list = get_average_score_list(review_list)
     return simplejson.dumps({'review_list':review_list, 'average_list': average_list})
 
 @dajaxice_register
