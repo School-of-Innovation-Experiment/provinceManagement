@@ -38,7 +38,7 @@
     <tbody>
       {%for item in current_list%}
       <tr>
-        <td>{{item.project.title}}</td>
+        <td title="{{item.project}}">{{item.project.title|truncatechars:15}}</td>
         <td>{{item.project.project_category}}</td>
         <td>{{item.financial_category}}</td>
         <td>{{item.project.school}}</td>

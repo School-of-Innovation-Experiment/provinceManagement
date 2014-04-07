@@ -235,6 +235,20 @@ def MemberChange(request, form, origin):
         ret = change_member(request, stugroup_form, origin)
     return simplejson.dumps(ret)
 
+@dajaxice_register
+def change_project_code(request, pid, project_code):
+    message = ""
+    project = ProjectSingle.objects.get(project_id = pid)
+    try:
+        if ProjectSingle.objects.filter(project_code = project_code).count(): 
+            raise
+        project.project_code = project_code
+        project.save()
+    except:
+        message = "error"
+        return simplejson.dumps({"message": message})
+    return simplejson.dumps({"message": message, "res": project_code})
+
 def change_member(request, stugroup_form, origin):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
@@ -315,3 +329,4 @@ def refresh_member_table(request):
     return render_to_string("school/widgets/member_group_table.html",
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
+

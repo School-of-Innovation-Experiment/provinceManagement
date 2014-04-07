@@ -29,12 +29,14 @@
       <span class="label label-info">甲类剩余数量:{{info.applications_a_remaining}}</span>
     </h3>
     <a href="get_xls/" class="btn btn-primary">下载信息统计表</a>
+    <a href="auto_index/" class="btn btn-primary">项目自动编号</a>
   </div><!--end page header-->
   <table class="table table-hover studenttable">
     <thead>
       <tr>
+        <th>项目编号</th>
         <th>名称</th>
-        <th>注册邮箱</th>
+        <!--th>注册邮箱</th-->
         <th>项目类型</th>
         <th>类型(甲/乙类)</th>
         <th>初期报告审核</th>
@@ -48,8 +50,9 @@
     <tbody>
       {%for item in current_list%}
       <tr>
+        <td><a data-toggle="modal" onclick="get_element(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}">{{item.project_code}}</a></td>
         <td title="{{item.title}}">{{item.title|truncatechars:15}}</td>
-        <td>{{item.reg_email}}</td>
+        <!--td>{{item.reg_email}}</td-->
         <td>{{item.project_category}}</td>
         <td>
           <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">
@@ -79,6 +82,19 @@
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
+  <div class="modal hide fade" style="display: none;" id="project_code_add">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>项目编号</h3>
+    </div>
+    <div class="modal-body">
+      <input class="span2" id="project_code" type="text">
+    </div>
+    <div class="modal-footer">
+      <a class="btn" data-dismiss="modal">关闭</a>
+      <a class="btn btn-primary" data-dismiss="modal" onclick="project_code_add()">保存更新</a>
+   </div>
+ </div>
 </div><!--end current list content-->
 <script type='text/javascript' src="{{STATIC_URL}}js/school/school_home.js"></script>
 {% endblock %}
