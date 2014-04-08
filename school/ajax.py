@@ -21,7 +21,7 @@ from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 from django.db.models import Q
 from school.utility import *
-
+from backend.decorators import check_auth
 def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
@@ -125,8 +125,8 @@ def teacherProjNumLimit(request, form):
         loginfo(form.errors)
         return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
 @dajaxice_register
-def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
-    flag = (user_grade == 'adminStaff')
+def Alloc_Project_to_Expert(request, expert_list, project_list):
+    flag = check_auth(user = request.user, authority = ADMINSTAFF_USER)
     message = ''
 
     if len(expert_list) == 0:
@@ -153,9 +153,10 @@ def Alloc_Project_to_Expert(request, expert_list, project_list, user_grade):
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
-def Query_Alloced_Expert(request, project_id, user_grade):
-    flag = (user_grade == 'adminStaff')
+def Query_Alloced_Expert(request, project_id):
+    flag = check_auth(user = request.user, authority = ADMINSTAFF_USER)
     message = ''
+
     project = get_object_or_404(ProjectSingle, project_id = project_id)
     expert_list = [item.expert for item in Re_Project_Expert.objects.filter(Q(project = project) & Q(is_assign_by_adminStaff = flag))]
 
@@ -166,9 +167,10 @@ def Query_Alloced_Expert(request, project_id, user_grade):
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
-def Cancel_Alloced_Experts(request, project_list, user_grade):
-    flag = (user_grade == 'adminStaff')
+def Cancel_Alloced_Experts(request, project_list):
+    flag = check_auth(user = request.user, authority = ADMINSTAFF_USER)
     message = ''
+
     if len(project_list) == 0:
         message = 'no project input'
     for project_id in project_list:
