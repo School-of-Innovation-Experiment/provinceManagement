@@ -108,8 +108,13 @@ function set_recommend_rate_callback(data){
     }
 }
 function change_projectuniquecode_callback(data){
-  var target = "#ProjectUniqueCode_" + glo_project_id;
-  $(target).html(data.res);
+    if(data.res == "error"){
+        alert("格式不合法或相同编号已存在");
+    }
+    else{
+        var target = "#ProjectUniqueCode_" + glo_project_id;
+        $(target).html(data.res);
+    }
 }
 function auto_ranking(){
     $("#success_bar_2").hide();
