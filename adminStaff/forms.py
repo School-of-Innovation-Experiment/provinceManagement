@@ -279,4 +279,15 @@ class ProjectManageForm(forms.Form):
         for object in school_list:
             SCHOOL_CHOICE_list.append((object.id, object.school))
         SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-        self.fields["project_school"].choices = SCHOOL_CHOICE
+        self.fields["project_school"].choices = SCHOOL_CHOICE  
+
+
+# class Sync_form(forms.Form):
+#     Sync_username =forms.CharField(
+#                             required=True,widget=forms.TextInput(attrs={'id':"Sync_username"}),)
+#     Sync_passeword =forms.CharField(
+# 							required=True,
+#                             widget=forms.TextInput(attrs={'id':"Sync_password"}),)
+class Sync_form(forms.Form):
+    Sync_username = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"Sync_username"}),)
+    Sync_passeword = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"Sync_password"}),)
