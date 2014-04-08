@@ -246,7 +246,7 @@ def new_or_update_record(request, record_form):
             table = refresh_record_table(request)
             ret = {'status': '0', 'message': u"过程记录更新成功", 'table':table}
             break
-    else: 
+    else:
         if group.count() == PROGRESS_RECORD_MAX:
             ret = {'status': '1', 'message': u"过程记录已满，不可添加"}
         else:
@@ -259,14 +259,27 @@ def new_or_update_record(request, record_form):
             ret = {'status': '0', 'message': u"过程记录添加成功", 'table':table}
     return ret
 def refresh_record_table(request):
-
-    #student_account = StudentProfile.objects.get(userid = request.user)
     project = getProject(request)
     record_group    = StudentWeeklySummary.objects.filter(project = project).order_by("weekId")
     record_group_info_form = ProcessRecordForm()
 
     return render_to_string("student/widgets/record_group_table.html",
                             {"record_group": record_group})
+@dajaxice_register
+def RecordDelete(request,deleteWeekId):
+    project = getProject(request)
+    group = project.studentweeklysummary_set
+    deleteWeekId = int(deleteWeekId)
+    for weekSummary in group.all():
+        loginfo(deleteWeekId)
+        if weekSummary.weekId == deleteWeekId:
+            weekSummary.delete()
+            table = refresh_record_table(request)
+            ret = {'status': '0', 'message': u"过程记录删除成功", 'table':table}
+            break
+    else:
+        ret = {'status': '1', 'message': u"所要删除过程记录不存在，请刷新页面"}
+    return simplejson.dumps(ret)
 @dajaxice_register
 def FileDeleteConsistence(request, pid, fid):
     """
