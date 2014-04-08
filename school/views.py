@@ -535,7 +535,7 @@ def auto_index(request):
     project_set = get_current_project_query_set().filter(adminuser = request.user)
     print project_set.count()
     for i in xrange(len(project_set)):
-        project_set[i].project_code = "%d%s%04d" % (get_current_year(), request.user, i)
+        project_set[i].project_code = "%d%s000%03d" % (get_current_year(), request.user, i)
         project_set[i].save()
 
     return HttpResponseRedirect(reverse('school.views.home_view'))
