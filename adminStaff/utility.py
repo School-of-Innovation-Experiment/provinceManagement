@@ -14,6 +14,9 @@ from users.models import *
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 
+def get_average_score_list(review_list):
+    cnt_of_list = len(review_list)
+    return [sum(a) / (cnt_of_list - a.count(0)) for a in zip(*review_list)[1:]]
 def info_xls_baseinformation_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
@@ -311,3 +314,14 @@ def get_memberlist(manager_studentid,student_Group):
     memberlist=','.join(memberlist)
     return memberlist,count
 
+def get_projectlist(request):
+    """
+    根据身份筛选项目
+    返回：QuerySet对象
+    """
+    if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+        proj_set = ProjectSingle.objects.all()
+    elif check_auth(user=request.user, authority=SCHOOL_USER):
+        school = SchoolProfile.objects.get(userid=request.user)
+        proj_set = ProjectSingle.objects.filter(school_id=school)
+    return proj_set

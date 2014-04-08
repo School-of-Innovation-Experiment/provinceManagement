@@ -2,11 +2,11 @@ var glo_project_id;
 function get_subject_id(project_id){
   glo_project_id = project_id;
 }
-function get_review_list(project_id, identity){
+function get_review_list(project_id){
   $("#review_table").empty();
   var project_id = project_id;
 
-  Dajaxice.adminStaff.get_subject_review_list(review_list_callback,{'project_id':project_id, 'identity':identity});
+  Dajaxice.adminStaff.get_subject_review_list(review_list_callback,{'project_id':project_id});
 }
 
 function review_list_callback(data){

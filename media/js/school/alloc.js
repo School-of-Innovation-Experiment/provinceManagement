@@ -1,7 +1,6 @@
 var project_list = [];
 var project_teacher_email_list = [];
 var glo_project_id;
-var glo_user_grade;
 
 if(!String.prototype.format) {
     String.prototype.format = function() {
@@ -13,9 +12,6 @@ if(!String.prototype.format) {
     };
 }
 
-function get_user(user_grade){
-    glo_user_grade = user_grade;
-}
 function remove_expert_check(){
     $("[name='checkbox_expert']").removeAttr("checked");
     $("[name='checkbox_label']").removeAttr("style");
@@ -61,7 +57,7 @@ function bulk_cancel(){
 function query_or_cancel(project_id){
     project_list = [];
     project_list.push(project_id);
-	Dajaxice.school.Query_Alloced_Expert(Query_Alloced_Expert_callback,{'project_id': project_id, 'user_grade': glo_user_grade});
+	Dajaxice.school.Query_Alloced_Expert(Query_Alloced_Expert_callback,{'project_id': project_id});
 }
 function Query_Alloced_Expert_callback(data){
 	$("#alloc_expert_list").html(data.expert_list_html);
@@ -71,7 +67,7 @@ function save(){
 	$("input[name='checkbox_expert']:checkbox:checked").each(function(){ 
 		expert_list.push($(this).val());
 	}) 
-	Dajaxice.school.Alloc_Project_to_Expert(Alloc_Project_to_Expert_callback,{'expert_list': expert_list, 'project_list': project_list, 'user_grade': glo_user_grade});
+	Dajaxice.school.Alloc_Project_to_Expert(Alloc_Project_to_Expert_callback,{'expert_list': expert_list, 'project_list': project_list});
 }
 function Alloc_Project_to_Expert_callback(data){
 	if(data.message == "no expert input"){
@@ -94,7 +90,7 @@ function Alloc_Project_to_Expert_callback(data){
 	remove_project_check();
 }
 function cancel_this(){
-	Dajaxice.school.Cancel_Alloced_Experts(Cancel_Alloced_Experts_callback,{'project_list': project_list, 'user_grade': glo_user_grade});
+	Dajaxice.school.Cancel_Alloced_Experts(Cancel_Alloced_Experts_callback,{'project_list': project_list});
 }
 
 function Cancel_Alloced_Experts_callback(data){
