@@ -12,12 +12,19 @@ function project_sync(){
   {
       project_sync_list[j]=checkBoxs[i].value;
       j++;
-      alert(checkBoxs[i].value)
   }
   Dajaxice.adminStaff.project_sync(project_sync_callback,{"project_sync_list":project_sync_list,'username':sync_username,'password':sync_password});
 }
 
 function project_sync_callback(data){
   if(data.status=="1")
-    alert("haha");
+  {
+    $("#myModal").modal('hide');
+    $("#sync_success_modal").modal('show');  
+  }
+  else if(data.status=="0")
+  {
+    $("#myModal").modal('hide');
+    $("#sync_fail_modal").modal('show');
+  }
 }

@@ -316,11 +316,10 @@ def TemNoticeDelete(request, deleteId):
 
 @dajaxice_register
 def project_sync(request,project_sync_list,username,password):
-    print username
-    print password
-    for tmp in project_sync_list:
-        print tmp
-    print 'haha'
+    """
+        if project synchronization success return status:1,fail status:0
+    """
+
     return simplejson.dumps({'status':'1'})
 
 def new_temnotice(request,temnotice_form):
