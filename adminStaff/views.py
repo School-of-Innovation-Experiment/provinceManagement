@@ -567,12 +567,14 @@ class AdminStaffService(object):
         project_obj = ProjectSingle.objects.get(project_id = project_id)
         loginfo(project_obj)
         try:
+            if ProjectSingle.objects.filter(project_code = project_code).count():
+                raise
             project_obj.project_unique_code = project_unique_code
             project_obj.save()
             if len(project_unique_code.strip()) == 0:
                project_unique_code = "无"
         except:
-            project_unique_code = "操作失败，请重试"
+            project_unique_code = "error"
         return project_unique_code
     @staticmethod
     @csrf.csrf_protect
