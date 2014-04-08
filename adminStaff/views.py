@@ -59,6 +59,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+from adminStaff.forms import Sync_form
 
 from const.models import *
 from const import *
@@ -974,7 +975,41 @@ class AdminStaffService(object):
         data = {}
         return render(request, 'adminStaff/project_assistant.html', data)
 
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_sync(request):
 
+        current_project_list=ProjectSingle.objects.filter((Q(project_grade__grade=GRADE_NATION)|Q(project_grade__grade=GRADE_PROVINCE)) & \
+                                                          Q(is_past = False))
+#        if request.method == "POST":
+#            sync_form = Sync_form(request.POST)
+#            loginfo(p=request,label="request")
+#            if sync_form.is_valid():
+#                username = sync_form.cleaned_data['Sync_username']
+#                password = sync_form.cleaned_data['Sync_passeword']
+#                loginfo(p=username,label="username")
+#                loginfo(p=password,label="password")
+#                check_box_list = request.POST.getlist("check_box")
+#                loginfo(p=check_box_list,label="checkbox_temp")     
+#                for checkbox_temp in check_box_list:
+#                    loginfo(p=checkbox_temp,label="checkbox_temp")
+#                    if checkbox_temp.checked:
+#                        loginfo(p=checkbox_temp.value,label="checkbox_temp.value")
+#                return HttpResponse('success')
+#        else:
+        sync_form = Sync_form()
+
+        logger.info("sync_form Valid Failed"+"**"*10)
+        logger.info(sync_form.errors)
+
+        data = {
+           'current_project_list':current_project_list,
+            'sync_form':sync_form,
+        }
+        return render(request, 'adminStaff/project_sync.html', data)
+        
 
 
 
