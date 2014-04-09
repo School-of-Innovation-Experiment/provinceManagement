@@ -27,3 +27,10 @@ function add_or_update_comment_callback(data) {
   }
   $("#comment_error_message").append("<strong>"+data.message+"</strong>");
 };
+function delete_comment(caller){
+    $("#comment_error_message").empty();
+    monthId = $(caller).parent().children("h4").attr("val");
+    Dajaxice.teacher.CommentDelete(add_or_update_comment_callback,
+                                 {'deleteMonthId':monthId,
+                                 'pid':pid});
+}
