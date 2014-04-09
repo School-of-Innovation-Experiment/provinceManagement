@@ -21,5 +21,8 @@ DATABASES = {
     }
 }
 
+# RPC site
+RPC_SITE = "http://192.168.2.77:8000/rpc/"
+
 # Website settings
 WEB_TITLE = "School Management Dev"
