@@ -21,6 +21,12 @@ ERROR_PROJ_EXIST = 1
 ERROR_CANT_CREATE_USER = 2
 ERROR_PROJ_SINGLE = 3
 ERROR_PROJ_SUBMIT = 4
+error_message = ['Success message',
+                 'Project %s already exist!',
+                 "Can't create user for Project %s",
+                 'Some attribute error, please ensure all attributes of the project %s is filled!',
+                 'Some error about the presubmit of project %s']
+
 @csrf_exempt
 def rpc_handler(request):
     global Global_Request
@@ -157,11 +163,6 @@ def SyncProjects(json_obj):
         """
         Return the error message according to the `status`
         """
-        error_message = ['Success message',
-                         "Can't create user for Project %s",
-                         'Project %s already exist!',
-                         'Some attribute error, please ensure all attributes of the project %s is filled!',
-                         'Some error about the presubmit of project %s']
         try:
             status = int(status)
             return error_message[status] % proj['title']
