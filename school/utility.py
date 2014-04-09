@@ -42,6 +42,8 @@ from settings import TMP_FILES_PATH
 from django.contrib.auth.models import User
 from student.models import Student_Group
 
+from django.db.models import Q
+
 def get_current_project_query_set():
     """
     得到当前数据库中当前届的项目集合
@@ -67,7 +69,7 @@ def check_limits(user):
     except:
         limits = None
 
-    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year).count()
+    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year()).count()
     total = limits.number if limits is not None else 0
 
     return True if total > currents else False
@@ -250,9 +252,9 @@ def get_categorycount(user,des_type,current):
             return history categorycount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year()).count()
     else:
-        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year).count()
+        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year()).count()
     return statistics_number
 
 def get_gradecount(user,des_type,current):
@@ -263,10 +265,12 @@ def get_gradecount(user,des_type,current):
             return history gradecount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year()).count()
         return statistics_number
     else:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type).exclude(year=get_current_year()).count()
+        grade = ProjectGrade.objects.get(grade=des_type)
+        statistics_proj=ProjectSingle.objects.filter(adminuser=user, project_grade__grade=des_type).exclude(year=get_current_year())
+        statistics_number = statistics_proj.count()
         return statistics_number
 
 def get_real_category(category):
@@ -354,11 +358,11 @@ def get_statistics_from_user(user):
 
     trend_lines = get_trend_lines(user)
     grade_lines = get_grade_lines(user)
-    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year))
+    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year()))
     currentnation_numbers = get_gradecount(user, GRADE_NATION, True)
     currentprovince_numbers = get_gradecount(user, GRADE_PROVINCE, True)
 
-    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year))
+    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year()))
     historynation_numbers = get_gradecount(user, GRADE_NATION, False)
     historyprovince_numbers = get_gradecount(user, GRADE_PROVINCE, False)
 
