@@ -19,10 +19,10 @@ from const.models import SchoolDict, ProjectGrade
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle,ProjectFinishControl
-from users.models import SchoolProfile, AdminStaffProfile
+from school.models import Project_Is_Assigned, InsituteCategory, ProjectSingle,ProjectFinishControl, PreSubmit, PreSubmitEnterprise
+from users.models import SchoolProfile, AdminStaffProfile, StudentProfile
 from news.models import News
-from student.models import Funds_Group
+from student.models import Funds_Group, Student_Group
 from django.contrib.auth.models import User
 from context import userauth_settings
 from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year, get_running_project_query_set
@@ -314,13 +314,6 @@ def TemNoticeDelete(request, deleteId):
         ret = {'status': '1', 'message': u"待删除模版消息不存在，请刷新页面"}
     return simplejson.dumps(ret)
 
-@dajaxice_register
-def project_sync(request,project_sync_list,username,password):
-    """
-        if project synchronization success return status:1,fail status:0
-    """
-
-    return simplejson.dumps({'status':'1'})
 
 def new_temnotice(request,temnotice_form):
     title = temnotice_form.cleaned_data["title"]
@@ -539,3 +532,79 @@ def student_code_project_query(request, student_code):
     else:
         message = "not found"
         return simplejson.dumps({"message": message})
+
+from base64 import b64encode as b64en
+from adminStaff.utility import get_manager
+import jsonrpclib
+import simplejson
+from settings_dev import RPC_SITE
+@dajaxice_register
+def project_sync(request,project_sync_list,username,password):
+    def get_projsingle_dict(proj_single):
+        ret = {}
+        student_user = proj_single.student.userid
+        ret['student_username'] = b64en(student_user.username)
+        # ret['student_username'] = b64en('lpyiou@qq.com')
+        ret['student_person_firstname'] = b64en(student_user.first_name)
+        ret['student_email'] = b64en(student_user.email)
+        # ret['student_email'] = b64en('lpyiou@qq.com') #test
+        ret['student_password'] = b64en(student_user.email.split('@')[0])
+        # ret['student_password'] = b64en('lpyiou')
+        ret['project_category'] = proj_single.project_category.category
+
+        team = get_manager(proj_single)
+        ret['email'] = student_user.email
+        ret['project_code'] = proj_single.project_unique_code
+        ret['telephone'] = team['telephone']
+        ret['im'] = ''
+        ret['inspector'] = proj_single.adminuser.name
+        ret['inspector_title'] = proj_single.adminuser.titles
+        ret['members'] = team['memberlist']
+        for attr in projsingle_attrs:
+            ret[attr] = getattr(proj_single, attr)
+        return ret
+    def get_presubmit_dict(proj_single):
+        presubmit = PreSubmit.objects.get(project_id=proj_single)
+        ret = {}
+        ret['origin'] = presubmit.original.origin
+        for attr in presubmit_attrs:
+            ret[attr] = getattr(presubmit, attr)
+        return ret
+    def get_presubmitenterprise_dict(proj_single):
+        presubmitenterprise = PreSubmitEnterprise.objects.get(project_id=proj_single)
+        ret = {}
+        ret['origin'] = presubmitenterprise.original.origin
+        ret['maturity'] = presubmitenterprise.maturity.maturity
+        ret['enterprise_teacher_name'] = presubmitenterprise.enterpriseTeacher.name
+        ret['enterprise_teacher_telephone'] = presubmitenterprise.enterpriseTeacher.telephone
+        ret['enterprise_teacher_titles'] = presubmitenterprise.enterpriseTeacher.titles
+        ret['enterprise_teacher_jobs'] = presubmitenterprise.enterpriseTeacher.jobs
+        for attr in presubmitenterprise_attrs:
+            ret[attr] = getattr(presubmitenterprise, attr)
+        return ret
+    projsingle_attrs = ['project_id', 'title', 'year']
+    # fk: project_id, original, maturity, enterpriseTeacher
+    presubmitenterprise_attrs = ['background', 'innovation', 'industry', 'product', 'funds_plan',
+                                 'operating_mode', 'risk_management', 'financial_pred', 'inspector_comments',
+                                 'school_comments']
+    # fk: project_id, original
+    presubmit_attrs = ['background', 'key_notes', 'innovation', 'progress_plan', 'funds_plan',
+                       'pre_results', 'inspector_comments', 'school_comments']
+    dict_obj = {'username': b64en(username), 'password': b64en(password), 'projects': []}
+    for proj in project_sync_list:
+        try:
+            proj_single = ProjectSingle.objects.get(project_id=proj)
+        except:
+            print "proj %s not exist!" % proj
+            return simplejson.dumps({'status':'1', 'result': "proj %s not exist!" % proj})
+        proj_dict = get_projsingle_dict(proj_single)
+        if proj_single.project_category.category == CATE_INNOVATION:
+            proj_dict['presubmit_type'] = 'presubmit'
+            proj_dict.update(get_presubmit_dict(proj_single))
+        else:
+            proj_dict['presubmit_type'] = 'presubmitenterprise'
+            proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        dict_obj['projects'].append(proj_dict)
+    server = jsonrpclib.Server(RPC_SITE)
+    result = server.SyncProjects(simplejson.dumps(dict_obj))
+    return simplejson.dumps({'status':'1', 'result': result})
