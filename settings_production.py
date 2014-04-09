@@ -20,8 +20,6 @@ DATABASES = {
         'PORT': '3306',                           # Set to empty string for default. Not used with sqlite3.
     }
 }
-# RPC site
-RPC_SITE = "http://202.118.67.200:9003/rpc/"
 
 WEB_TITLE = "School Management Pro"
 

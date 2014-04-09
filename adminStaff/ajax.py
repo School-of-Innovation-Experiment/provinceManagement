@@ -537,7 +537,7 @@ from base64 import b64encode as b64en
 from adminStaff.utility import get_manager
 import jsonrpclib
 import simplejson
-from settings_dev import RPC_SITE
+from settings import RPC_SITE
 @dajaxice_register
 def project_sync(request,project_sync_list,username,password):
     def get_projsingle_dict(proj_single):
