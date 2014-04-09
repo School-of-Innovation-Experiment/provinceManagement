@@ -1,11 +1,9 @@
 <!-- pre application proposal page -->
 {% extends "school/base/report_base.html" %}
-{% load admin_static%}{% load url from future %}
 {%block report-content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ STATIC_URL }}style/school/news_edit.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
-<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
 <script>function gettext(txt){return txt}</script>
 <script type="text/javascript">
   $(function(){
@@ -47,7 +45,19 @@
   window.prettyPrint && prettyPrint();
   });
 </script>
-  <form method="post" action="/school/application_report_view/{{pid}}"  enctype="multipart/form-data">
+  <div class="modal hide fade" style="display: none;" id="Richtext_edit">
+     <div class="modal-header">
+       <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+         {% include "news/news_toolbar.html" %}
+       </div>
+     </div>
+     <div class="modal-body" id="editor">
+     </div>
+     <div class="modal-footer">
+       <a class="btn btn-primary" data-dismiss="modal" onclick="">保存更新</a>
+     </div>
+</div>
+  <form method="post"   enctype="multipart/form-data" id="form_application" action = {% url school.views.application_report_view pid%}>
     {% csrf_token %}
     <!-- Basic Infomation -->
     <div class="tabbable">
@@ -81,7 +91,7 @@
     <!--submit button-->
     {% include "school/widgets/commit_button.html" %}
   </form>
-  <script type='text/javascript' src="{{STATIC_URL}}js/news/news_release.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/school/application.js"></script>
   <script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
   <script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
   <script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>

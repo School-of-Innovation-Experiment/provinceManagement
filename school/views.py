@@ -161,14 +161,17 @@ def application_report_view(request, pid=None, is_expired=False):
 
     loginfo(p=teammember, label="in teammember")
     readonly = check_history_readonly(pid) or is_expired
+    readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
+        imodel = PreSubmit
         pre = get_object_or_404(PreSubmit, project_id=pid)
         teacher_enterprise=None
         is_innovation = True
     else:
         iform = EnterpriseApplicationReportForm
+        imodel = PreSubmitEnterprise
         pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
@@ -178,6 +181,7 @@ def application_report_view(request, pid=None, is_expired=False):
         role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         info_form = InfoForm(request.POST, pid=pid,instance=project)
         application_form = iform(request.POST, instance=pre)
+        loginfo(p=application_form,label='test')
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
@@ -206,9 +210,17 @@ def application_report_view(request, pid=None, is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
-
+    application_content = imodel.objects.get(project_id = pid)
+    content_dict = application_content._meta.get_all_field_names()
+    for item in content_dict:
+        if getattr(application_content,item) == None:
+            try:
+                setattr(application_content,item,"")
+            except:
+                pass
     data = {'pid': pid,
             'info': info_form,
+            'application_content':application_content,
             'application': application_form,
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
