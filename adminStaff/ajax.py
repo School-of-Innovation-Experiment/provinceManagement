@@ -315,6 +315,14 @@ def TemNoticeDelete(request, deleteId):
         ret = {'status': '1', 'message': u"待删除模版消息不存在，请刷新页面"}
     return simplejson.dumps(ret)
 
+@dajaxice_register
+def project_sync(request,project_sync_list,username,password):
+    """
+        if project synchronization success return status:1,fail status:0
+    """
+
+    return simplejson.dumps({'status':'1'})
+
 def new_temnotice(request,temnotice_form):
     title = temnotice_form.cleaned_data["title"]
     message = temnotice_form.cleaned_data["message"]

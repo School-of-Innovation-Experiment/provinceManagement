@@ -51,5 +51,6 @@ urlpatterns = patterns('',
     url(r'^homepage_import$', AdminStaffService.homepage_import_view),
     
     url(r'^project_assistant$', AdminStaffService.project_assistant_view),
+    url(r'^project_sync$', AdminStaffService.project_sync),
 )
 urlpatterns += staticfiles_urlpatterns()
