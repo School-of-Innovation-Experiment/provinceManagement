@@ -138,7 +138,7 @@ class PreSubmit(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=make_uuid,
                                   verbose_name=u"初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,

@@ -6,14 +6,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 from school.models import ProjectSingle, PreSubmit, PreSubmitEnterprise, Teacher_Enterprise
+from school.utility import create_newproject
 from adminStaff.models import ProjectPerLimits
 from const.models import ProjectOrigin, ProjectEnterpriseMaturity, ProjectEnterpriseOrigin, ProjectCategory, FinancialCategory
-from const import FINANCIAL_CATE_UN
+from const import FINANCIAL_CATE_UN, STUDENT_USER
 from registration.models import RegistrationManager
 from base64 import b64decode as b64de
+from users.models import SchoolProfile, StudentProfile
+from backend.logging import logger, loginfo
 
 dispatcher = SimpleJSONRPCDispatcher(encoding=None)
 Global_Request = None
+ERROR_PROJ_EXIST = 1
+ERROR_CANT_CREATE_USER = 2
+ERROR_PROJ_SINGLE = 3
+ERROR_PROJ_SUBMIT = 4
 @csrf_exempt
 def rpc_handler(request):
     global Global_Request
@@ -33,90 +40,108 @@ def sync_proj(proj, user, schoolprofile):
     """
     Create ProjectSingle and Presubmit if it not exist in db
     """
-    def create_proj_single():
+    def create_proj_single(request, student_user):
         """
         create project single
         """
-        newproj_single = ProjectSingle()
-        newproj_single.adminuser = user
-        newproj_single.school = schoolprofile.school
-        global Global_Request
-        request = Global_Request
-        request.user = user
-        #TODO: new student_profile
-        student_user, _ = RegistrationManager().create_inactive_user(request, b64de(proj['student_username']),
-                                                                     b64de(proj['student_person_firstname']),
-                                                                     b64de(proj['student_password']),
-                                                                     b64de(proj['student_email']),
-                                                                     STUDENT_USER)
-        student_profile = StudentProfile.objects.get(user = student_user)
-        newproj_single.student = student_profile
+        newproj_single = ProjectSingle.objects.get(project_id=proj['project_id'])
+        # newproj_single.adminuser = user
+        # newproj_single.school = schoolprofile.school
+        # student_profile = StudentProfile.objects.get(user = student_user)
+        # newproj_single.student = student_profile
+
         proj_cate = ProjectCategory.objects.get(category=proj['project_category'])
         newproj_single.project_category = proj_cate
         financial_cate = FinancialCategory.objects.get(category=FINANCIAL_CATE_UN)
         newproj_single.financial_category = financial_cate
         for attr in projsingle_attrs:
             setattr(newproj_single, attr, proj[attr])
+        newproj_single.save()
         return newproj_single
 
-    def create_presubmit():
+    def create_presubmit(proj_single):
         """
         create presubmit
         """
-        newpresubmit = PreSubmit()
-        newpresubmit.project_id = proj_single
+        newpresubmit = PreSubmit.objects.get(project_id=proj_single)
+        # newpresubmit.project_id = proj_single
+
         origin = ProjectOrigin.objects.get(origin=proj['origin'])
+        newpresubmit.content_id = newpresubmit.content_id
         newpresubmit.original = origin
         for attr in presubmit_attrs:
             setattr(newpresubmit, attr, proj[attr])
-        return newpresubmit
+        newpresubmit.save()
+        # return newpresubmit
 
-    def create_presubmitenterprise():
+    def create_presubmitenterprise(proj_single):
         """
         create presubmitenterprise
         """
-        newpresubmitenterprise = PreSubmitEnterprise()
-        newpresubmitenterprise.project_id = proj_single
+        newpresubmitenterprise = PreSubmitEnterprise.objects.get(project_id=proj_single)
+        # newpresubmitenterprise.project_id = proj_single
         origin = ProjectEnterpriseOrigin.objects.get(origin=proj['origin'])
         newpresubmitenterprise.original = origin
         maturity = ProjectEnterpriseMaturity.objects.get(maturity=proj['maturity'])
         # enterprise teacher
-        enterprise_teacher = Teacher_Enterprise()
+        enterprise_teacher = newpresubmitenterprise.enterpriseTeacher
         enterprise_teacher.name = proj['enterprise_teacher_name']
         enterprise_teacher.telephone = proj['enterprise_teacher_telephone']
         enterprise_teacher.titles = proj['enterprise_teacher_titles']
         enterprise_teacher.jobs = proj['enterprise_teacher_jobs']
         enterprise_teacher.save()
-        newpresubmitenterprise.enterpriseTeacher = enterprise_teacher
+        # newpresubmitenterprise.enterpriseTeacher = enterprise_teacher
         # end
         for attr in PreSubmitEnterprise_attrs:
             setattr(newpresubmitenterprise, attr, proj[attr])
-        return newpresubmitenterprise
+        newpresubmitenterprise.save()
+        # return newpresubmitenterprise
 
-    if ProjectSingle.objects.get(project_id=proj['project_id']).count():
-        return 1, False
-    projsingle_attrs = ['project_id', 'title', 'project_category',
-                        'email', 'telephone', 'inspector',
+    if ProjectSingle.objects.filter(project_id=proj['project_id']).count():
+        return ERROR_PROJ_EXIST, False
+    projsingle_attrs = ['project_id', 'title', 'email', 'telephone', 'inspector',
                         'inspector_title', 'members', 'im', 'year', 'project_code']
     # fk: project_id, original, maturity, enterpriseTeacher
-    presubmitenterprise_attrs = ['content_id', 'background', 'innovation', 'industry', 'product', 'funds_plan',
+    presubmitenterprise_attrs = ['background', 'innovation', 'industry', 'product', 'funds_plan',
                                  'operating_mode', 'risk_management', 'financial_pred', 'inspector_comments',
                                  'school_comments']
     # fk: project_id, original
-    presubmit_attrs = ['content_id', 'background', 'key_notes', 'innovation', 'progress_plan', 'funds_plan',
+    presubmit_attrs = ['background', 'key_notes', 'innovation', 'progress_plan', 'funds_plan',
                        'pre_results', 'inspector_comments', 'school_comments']
+    student_user = None
     try:
-        proj_single = create_proj_single()
-    except:
-        return 2, False
+        global Global_Request
+        request = Global_Request
+        request.user = user
+        student_user, _ = RegistrationManager().create_inactive_user(request, b64de(proj['student_username']),
+                                                                     b64de(proj['student_person_firstname']),
+                                                                     b64de(proj['student_password']),
+                                                                     b64de(proj['student_email']),
+                                                                     STUDENT_USER)
+        result = create_newproject(request=request, new_user=student_user,
+                                   financial_cate=FINANCIAL_CATE_UN,
+                                   managername=b64de(proj['student_person_firstname']),
+                                   pid=proj['project_id'])
+    except Exception, err:
+        if student_user:
+            student_user.delete()
+        logger.info(err)
+        return ERROR_CANT_CREATE_USER, False
+    try:
+        proj_single = create_proj_single(request, student_user)
+    except Exception, err:
+        logger.info(err)
+        return ERROR_PROJ_SINGLE, False
     try:
         if proj['presubmit_type'] == 'presubmit':
-            presubmit = create_presubmit()
-        else: presubmit = create_presubmitenterprise()
-    except:
-        return 3, False
-    proj_single.save()
-    presubmit.save()
+            create_presubmit(proj_single)
+        else: create_presubmitenterprise(proj_single)
+    except Exception, err:
+        logger.info(err)
+        # newpresubmitenterprise = PreSubmitEnterprise.objects.get(project_id=proj_single)
+        # newpresubmitenterprise.enterpriseTeacher.delete()
+        proj_single.student.user.delete()
+        return ERROR_PROJ_SUBMIT, False
     return 0, True
 
 def CheckSyncProjects(project_id):
@@ -133,9 +158,15 @@ def SyncProjects(json_obj):
         Return the error message according to the `status`
         """
         error_message = ['Success message',
+                         "Can't create user for Project %s",
                          'Project %s already exist!',
-                         'Some attribute error, please ensure all attributes of the project %s is filled!']
-        return error_message[status] % proj['title']
+                         'Some attribute error, please ensure all attributes of the project %s is filled!',
+                         'Some error about the presubmit of project %s']
+        try:
+            status = int(status)
+            return error_message[status] % proj['title']
+        except:
+            return str(status)
 
     proj_singles = simplejson.loads(json_obj)
     username = b64de(proj_singles['username'])
@@ -146,7 +177,7 @@ def SyncProjects(json_obj):
     try:
         schoolprofile = SchoolProfile.objects.get(userid=user)
     except:
-        return "The account is not a school manager!"
+        return "The account is not a school manager! %s %s" % (user.username, user.email)
     try:
         projlimits = ProjectPerLimits.objects.get(school=schoolprofile)
         projlimits_number = projlimits.number

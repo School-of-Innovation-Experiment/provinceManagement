@@ -435,7 +435,7 @@ def get_province_trend_lines():
 
 
 
-def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CATE_UN):
+def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CATE_UN, pid=None):
     """
     create a new project for this usr, it is student profile
     """
@@ -444,7 +444,8 @@ def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CA
     student = get_object_or_404(StudentProfile, user=new_user)
 
     try:
-        pid = uuid.uuid4()
+        if pid == None:
+            pid = uuid.uuid4()
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
