@@ -14,7 +14,7 @@ $().ready(function(){
 function form_application_submit(){
   $('.richtext_div').each(function(){
     var div_id = $(this).attr('id');
-    var application_content = $("<input>").attr("type", "text").attr("name", div_id).val($(this).html());
+    var application_content = $("<input>").attr("type", "hidden").attr("name", div_id).val($(this).html());
     $('#form_application').append($(application_content));
   })
 
