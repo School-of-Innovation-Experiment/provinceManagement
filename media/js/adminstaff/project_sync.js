@@ -18,5 +18,14 @@ function project_sync(){
 
 function project_sync_callback(data){
   if(data.status=="1")
+  {
     alert(data.result);
+    $("#myModal").modal('hide');
+    $("#sync_success_modal").modal('show');  
+  }
+  else if(data.status=="0")
+  {
+    $("#myModal").modal('hide');
+    $("#sync_fail_modal").modal('show');
+  }
 }
