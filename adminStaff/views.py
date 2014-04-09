@@ -1005,22 +1005,22 @@ class AdminStaffService(object):
 
         logger.info("sync_form Valid Failed"+"**"*10)
         logger.info(sync_form.errors)
-
+        import jsonrpclib
+        from settings import RPC_SITE
+        server = jsonrpclib.Server(RPC_SITE)
+        for proj in current_project_list:
+            proj.is_synced = server.CheckSyncProjects(proj.project_id)
         data = {
            'current_project_list':current_project_list,
             'sync_form':sync_form,
         }
         return render(request, 'adminStaff/project_sync.html', data)
-        
-
-
-
 
 
 def member_change_work(request, pid):
     """
     project group member change
-    """    
+    """
     #student_account = StudentProfile.objects.get(userid = request.user)
     #project = ProjectSingle.objects.get(student=student_account)
 
