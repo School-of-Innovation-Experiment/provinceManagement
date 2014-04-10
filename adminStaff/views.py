@@ -59,6 +59,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
+from adminStaff.forms import Sync_form
 
 from const.models import *
 from const import *
@@ -567,12 +568,14 @@ class AdminStaffService(object):
         project_obj = ProjectSingle.objects.get(project_id = project_id)
         loginfo(project_obj)
         try:
+            if ProjectSingle.objects.filter(project_code = project_code).count():
+                raise
             project_obj.project_unique_code = project_unique_code
             project_obj.save()
             if len(project_unique_code.strip()) == 0:
                project_unique_code = "无"
         except:
-            project_unique_code = "操作失败，请重试"
+            project_unique_code = "error"
         return project_unique_code
     @staticmethod
     @csrf.csrf_protect
@@ -972,16 +975,52 @@ class AdminStaffService(object):
         data = {}
         return render(request, 'adminStaff/project_assistant.html', data)
 
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def project_sync(request):
 
+        current_project_list=ProjectSingle.objects.filter((Q(project_grade__grade=GRADE_NATION)|Q(project_grade__grade=GRADE_PROVINCE)) & \
+                                                          Q(is_past = False))
+#        if request.method == "POST":
+#            sync_form = Sync_form(request.POST)
+#            loginfo(p=request,label="request")
+#            if sync_form.is_valid():
+#                username = sync_form.cleaned_data['Sync_username']
+#                password = sync_form.cleaned_data['Sync_passeword']
+#                loginfo(p=username,label="username")
+#                loginfo(p=password,label="password")
+#                check_box_list = request.POST.getlist("check_box")
+#                loginfo(p=check_box_list,label="checkbox_temp")     
+#                for checkbox_temp in check_box_list:
+#                    loginfo(p=checkbox_temp,label="checkbox_temp")
+#                    if checkbox_temp.checked:
+#                        loginfo(p=checkbox_temp.value,label="checkbox_temp.value")
+#                return HttpResponse('success')
+#        else:
+        sync_form = Sync_form()
 
-
-
+        logger.info("sync_form Valid Failed"+"**"*10)
+        logger.info(sync_form.errors)
+        import jsonrpclib
+        from settings import RPC_SITE
+        try:
+            server = jsonrpclib.Server(RPC_SITE)
+            for proj in current_project_list:
+                proj.is_synced = server.CheckSyncProjects(proj.project_id)
+        except: pass
+        data = {
+           'current_project_list':current_project_list,
+            'sync_form':sync_form,
+        }
+        return render(request, 'adminStaff/project_sync.html', data)
 
 
 def member_change_work(request, pid):
     """
     project group member change
-    """    
+    """
     #student_account = StudentProfile.objects.get(userid = request.user)
     #project = ProjectSingle.objects.get(student=student_account)
 

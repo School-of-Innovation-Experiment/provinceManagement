@@ -258,3 +258,8 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 #school information
 IS_MINZU_SCHOOL = True
 IS_DLUT_SCHOOL = False
+
+# RPC_SITE
+RPC_SITE_TEST = "http://192.168.2.77:8000/rpc/"
+RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"
+RPC_SITE = RPC_SITE_TEST

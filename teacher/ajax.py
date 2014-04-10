@@ -28,7 +28,6 @@ def refresh_project_table(request):
 
 def delete_project_ralated(project):
     category = project.project_category.category
-    
     if category == CATE_INNOVATION:
         pre = PreSubmit.objects.get(project_id = project)
         pre.delete()
@@ -98,7 +97,6 @@ def brute_delete(request, email):
     except:
         pass
     user.delete()
-    
     return simplejson.dumps({"message": message})
 
 @dajaxice_register
@@ -179,10 +177,25 @@ def new_or_update_comment(request,comment_form,pid):
 def refresh_comment_table(request,pid):
     project = ProjectSingle.objects.get(project_id=pid)
     comment_group  = TeacherMonthComment.objects.filter(project=pid).order_by("monthId")
-    
     return render_to_string("teacher/widgets/comment_group_table.html",
                             {"comment_group": comment_group})
-
+@dajaxice_register
+def CommentDelete(request,deleteMonthId,pid):
+    try:
+        project = ProjectSingle.objects.get(project_id=pid)
+    except:
+        raise Http404
+    group = project.teachermonthcomment_set
+    deleteMonthId = int(deleteMonthId)
+    for monthComment in group.all():
+        if monthComment.monthId == deleteMonthId:
+            monthComment.delete()
+            table = refresh_comment_table(request,pid)
+            ret = {'status': '0', 'message': u"评语记录删除成功", 'table':table}
+            break
+    else:
+        ret = {'status': '1', 'message': u"所要删除评语记录不存在，请刷新页面"}
+    return simplejson.dumps(ret)
 
 
 
