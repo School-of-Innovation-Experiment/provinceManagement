@@ -35,7 +35,7 @@ def getProject(request):
             project = ProjectSingle.objects.get(project_id = pid)
         except:
             raise Http404
-    else :        
+    else :
         try:
             project = ProjectSingle.objects.get(student__userid=request.user)
         except:
@@ -271,7 +271,6 @@ def RecordDelete(request,deleteWeekId):
     group = project.studentweeklysummary_set
     deleteWeekId = int(deleteWeekId)
     for weekSummary in group.all():
-        loginfo(deleteWeekId)
         if weekSummary.weekId == deleteWeekId:
             weekSummary.delete()
             table = refresh_record_table(request)
