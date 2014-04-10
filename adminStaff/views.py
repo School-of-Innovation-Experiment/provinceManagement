@@ -531,7 +531,7 @@ class AdminStaffService(object):
 
     @staticmethod
     def GetSubjectReviewList(project_id, identity):
-        flag = (identity == 'adminStaff')
+        flag = (identity == ADMINSTAFF_USER)
         review_obj_list = Re_Project_Expert.objects.filter(Q(project=project_id)&Q(is_assign_by_adminStaff=flag))
         review_list = []
         for obj in review_obj_list:
