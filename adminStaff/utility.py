@@ -16,7 +16,7 @@ from settings import TMP_FILES_PATH
 
 def get_average_score_list(review_list):
     cnt_of_list = len(review_list)
-    return [sum(a) / (cnt_of_list - a.count(0)) for a in zip(*review_list)[1:]]
+    return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)[1:]]
 def info_xls_baseinformation_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
@@ -181,7 +181,7 @@ def get_expertscore(proj_obj):
 
     cnt_of_list = len(review_list)
     # average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
-    average_list = [sum(map(float, a)) / len(filter(bool, a)) for a in zip(*review_list)[1:]]
+    average_list = [sum(map(float, a)) / len(filter(bool, a)) if len(filter(bool, a)) else 0 for a in zip(*review_list)[1:]]
     loginfo(p=average_list,label="average_list")
     return average_list
 
