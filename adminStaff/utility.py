@@ -100,20 +100,31 @@ def info_xls_expertscore_gen():
     worksheet.write_merge(0, 0, 0, 10, '大连理工大学创新创业项目评分统计表',style)
 
     # generate body
+<<<<<<< HEAD
     worksheet.write_merge(1, 1, 0, 0, '项目编号')
     worksheet.col(0).width = len('项目编号') * 300
     worksheet.write_merge(1, 1, 1, 1, '项目名称')
     worksheet.col(1).width = len('项目名称') * 800
     worksheet.write_merge(1, 1, 2, 2, '项目级别')
     worksheet.write_merge(1, 1, 3, 3, '指导教师')
+=======
+    worksheet.write_merge(1, 1, 0, 0, '项目申报编号')
+    worksheet.col(0).width = len('项目申报编号') * 200
+    worksheet.write_merge(1, 1, 1, 1, '名称')
+    worksheet.col(1).width = len('名称') * 800
+    worksheet.write_merge(1, 1, 2, 2, '学院')
+    worksheet.col(2).width = len('学院') * 800
+    worksheet.write_merge(1, 1, 3, 3, '项目级别')
+    worksheet.write_merge(1, 1, 4, 4, '指导教师')
+>>>>>>> 9090199... add college name in export excel
     worksheet.col(3).width = len('指导教师') * 200
-    worksheet.write_merge(1, 1, 4, 4, '项目选题意义')
-    worksheet.write_merge(1, 1, 5, 5, '科技研究价值')
-    worksheet.write_merge(1, 1, 6, 6, '项目创新之处')
-    worksheet.write_merge(1, 1, 7, 7, '项目可行性')
-    worksheet.write_merge(1, 1, 8, 8, '预期成果')
-    worksheet.write_merge(1, 1, 9, 9, '指导教师科研能力')
-    worksheet.write_merge(1, 1,10, 10, '总分')
+    worksheet.write_merge(1, 1, 5, 5, '项目选题意义')
+    worksheet.write_merge(1, 1, 6, 6, '科技研究价值')
+    worksheet.write_merge(1, 1, 7, 7, '项目创新之处')
+    worksheet.write_merge(1, 1, 8, 8, '项目可行性')
+    worksheet.write_merge(1, 1, 9, 9, '预期成果')
+    worksheet.write_merge(1, 1, 10, 10, '指导教师科研能力')
+    worksheet.write_merge(1, 1,11, 11, '总分')
     return worksheet, workbook
 
 def info_xls_expertscore(request):
@@ -133,6 +144,7 @@ def info_xls_expertscore(request):
         scorelist=get_expertscore(proj_obj)
 
         row = 1 + _number
+<<<<<<< HEAD
         xls_obj.write(row, 0, unicode(proj_obj.project_unique_code)) 
         xls_obj.write(row, 1, unicode(proj_obj.title)) 
         xls_obj.write(row, 2, unicode(proj_obj.project_grade)) 
@@ -144,6 +156,20 @@ def info_xls_expertscore(request):
         xls_obj.write(row, 8, unicode(scorelist[4]))  
         xls_obj.write(row, 9, unicode(scorelist[5])) 
         xls_obj.write(row, 10, unicode(scorelist[6])) 
+=======
+        xls_obj.write(row, 0, unicode(proj_obj.project_code)) 
+        xls_obj.write(row, 1, unicode(proj_obj.title))
+        xls_obj.write(row, 2, unicode(proj_obj.school.school))
+        xls_obj.write(row, 3, unicode(proj_obj.project_grade)) 
+        xls_obj.write(row, 4, unicode(proj_obj.adminuser.get_name())) 
+        xls_obj.write(row, 5, unicode(scorelist[0])) 
+        xls_obj.write(row, 6, unicode(scorelist[1])) 
+        xls_obj.write(row, 7, unicode(scorelist[2]))
+        xls_obj.write(row, 8, unicode(scorelist[3])) 
+        xls_obj.write(row, 9, unicode(scorelist[4]))  
+        xls_obj.write(row, 10, unicode(scorelist[5])) 
+        xls_obj.write(row, 11, unicode(scorelist[6])) 
+>>>>>>> 9090199... add college name in export excel
 
 
         # _index += 1
