@@ -318,7 +318,8 @@ def get_expertscore(proj_obj):
     review_list = getSubjectReviewList(project_id)
 
     cnt_of_list = len(review_list)
-    average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    # average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    average_list = [sum(map(float, a)) / len(filter(bool, a)) for a in zip(*review_list)[1:]]
     loginfo(p=average_list,label="average_list")
     return average_list
 
