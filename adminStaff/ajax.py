@@ -605,6 +605,9 @@ def project_sync(request,project_sync_list,username,password):
             proj_dict['presubmit_type'] = 'presubmitenterprise'
             proj_dict.update(get_presubmitenterprise_dict(proj_single))
         dict_obj['projects'].append(proj_dict)
-    server = jsonrpclib.Server(RPC_SITE)
-    result = server.SyncProjects(simplejson.dumps(dict_obj))
-    return simplejson.dumps({'status':'1', 'result': result})
+    try:
+        server = jsonrpclib.Server(RPC_SITE)
+        result = server.SyncProjects(simplejson.dumps(dict_obj))
+    except:
+        return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
+    return simplejson.dumps({'status':'0', 'result': result})
