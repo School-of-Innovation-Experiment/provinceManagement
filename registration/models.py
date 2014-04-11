@@ -106,9 +106,12 @@ class RegistrationManager(models.Manager):
             new_user = User.objects.get(email=email)
 
         #对用户权限写入数据库
-        new_authority = UserIdentity.objects.get(identity=Identity)
-        new_authority.auth_groups.add(new_user)
-        new_authority.save()
+        try:
+            new_authority = UserIdentity.objects.get(identity=Identity)
+            new_authority.auth_groups.add(new_user)
+            new_authority.save()
+        except:
+            pass
 
         #如果是学校注册 添加学校注册姓名
         if kwargs.has_key('school_name'):
