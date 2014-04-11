@@ -31,10 +31,8 @@
         <fieldset>
           <div class="control-group {% if application.background.errors %}error{% endif %}">
             <legend>项目背景及研究意义</legend>
+            {{application.background}}
             <div class="richtext_div" id="background">
-              {% autoescape off %}
-              {{application_content.background}}
-              {% endautoescape%}
             </div>
             {% if application.background.errors %}
             <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
@@ -48,10 +46,8 @@
         <fieldset>
           <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
             <legend>研究内容和拟解决的关键问题</legend>
+            {{application.key_notes}}
             <div class="richtext_div" id="key_notes">
-              {% autoescape off %}
-              {{application_content.key_notes}}
-              {% endautoescape %}
             </div>
             {% if application.key_notes.errors %}
             <div class="row alert alert-error school-display">
@@ -106,10 +102,8 @@
         <fieldset>
           <div class="control-group form-inline {% if application.innovation.errors %}error{% endif %}">
             <legend>项目的基本情况及创新内容</legend>
+            {{application.innovation}}
             <div class="richtext_div" id="innovation">
-               {% autoescape off %}
-               {{application_content.innovation}}
-               {% endautoescape %}
             </div>
             {% if application.innovation.errors %}
             <div class="row alert alert-error school-display">

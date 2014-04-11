@@ -1,4 +1,8 @@
 $().ready(function(){
+  $('.richtext_div').each(function(){
+    var div_id = $(this).attr('id');
+    $(this).html($('textarea[name='+div_id+']').val());
+  })
   var div_edit;
   var edit = $('#Richtext_edit').find('#editor');
   $('.richtext_div').on("click",function(){

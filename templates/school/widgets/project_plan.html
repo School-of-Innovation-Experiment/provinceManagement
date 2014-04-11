@@ -3,10 +3,8 @@
   <fieldset>
     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
       <legend>项目创新之处</legend>
+      {{application.innovation}}
       <div class="richtext_div" id="innovation">
-        {% autoescape off %}
-        {{application_content.innovation}}
-        {% endautoescape %}
       </div>
       {% if application.innovation.errors %}
       <div class="row alert alert-error school-display">
@@ -21,10 +19,8 @@
    <fieldset>
      <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
        <legend>项目进度安排</legend>
+       {{application.progress_plan}}
        <div class="richtext_div" id="progress_plan">
-         {% autoescape off %}
-         {{application_content.progress_plan}}
-         {% endautoescape %}
        </div>
        {% if application.progress_plan.errors %}
        <div class="row alert alert-error school-display">
@@ -39,10 +35,8 @@
    <fieldset>
      <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
        <legend>项目经费预算</legend>
+       {{application.funds_plan}}
        <div class="richtext_div" id="funds_plan">
-         {% autoescape off %}
-         {{application_content.funds_plan}}
-         {% endautoescape %}
        </div>
        {% if application.funds_plan.errors %}
        <div class="row alert alert-error school-display">
@@ -57,10 +51,8 @@
    <fieldset>
      <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
        <legend>预期研究成果</legend>
+       {{application.pre_results}}
        <div class="richtext_div" id="pre_results">
-         {% autoescape off %}
-         {{application_content.pre_results}}
-         {% endautoescape %}
        </div>
        {% if application.pre_results.errors %}
        <div class="row alert alert-error school-display">
@@ -77,10 +69,8 @@
   <fieldset>
     <legend>创业团队介绍</legend>
     <div class="control-group form-inline {% if application.background.errors %}error{% endif %}">
+      {{application.background}}
       <div class="richtext_div" id="background">
-        {% autoescape off %}
-        {{application_content.background}}
-        {% endautoescape %}
       </div>
       {% if application.background.errors %}
       <div class="row alert alert-error school-display">
@@ -94,10 +84,8 @@
    <fieldset>
      <legend>行业及市场前景</legend>
      <div class="control-group form-inline {% if application.industry.errors %}error{% endif %}">
+       {{application.industry}}
        <div class="richtext_div" id="industry">
-         {% autoescape off %}
-         {{application_content.industry}}
-         {% endautoescape %}
        </div>
        {% if application.industry.errors %}
        <div class="row alert alert-error school-display">
@@ -111,10 +99,8 @@
    <fieldset>
      <legend>产品制造</legend>
      <div class="control-group form-inline {% if application.product.errors %}error{% endif %}">
+       {{application.product}}
        <div class="richtext_div" id="product">
-         {% autoescape off%}
-         {{application_content.product}}
-         {% endautoescape %}
        </div>
        {% if application.product.errors %}
        <div class="row alert alert-error school-display">
@@ -129,10 +115,8 @@
   <fieldset>
     <legend>项目投资预算及融资计划</legend>
     <div class="control-group form-inline {% if application.funds_plan.errors %}error{% endif %}">
+      {{application.funds_plan}}
       <div class="richtext_div" id="funds_plan">
-        {% autoescape off %}
-        {{application_content.funds_plan}}
-        {% endautoescape %}
       </div>
       {% if application.funds_plan.errors %}
       <div class="row alert alert-error school-display">
@@ -146,10 +130,8 @@
    <fieldset>
      <legend>项目运营模式</legend>
      <div class="control-group form-inline {% if application.operating_mode.errors %}error{% endif %}">
+       {{application.operating_mode}}
        <div class="richtext_div" id="operating_mode">
-         {% autoescape off %}
-         {{application_content.operating_mode}}
-         {% endautoescape %}
        </div>
        {% if application.operating_mode.errors %}
        <div class="row alert alert-error school-display">
@@ -163,10 +145,8 @@
    <fieldset>
      <legend>项目风险预测及应对措施</legend>
      <div class="control-group form-inline {% if application.risk_managementrisk_managementrisk_management.errors %}error{% endif %}">
+       {{application.risk_management}}
        <div class="richtext_div" id="risk_management">
-         {% autoescape off %}
-         {{application_content.risk_management}}
-         {% endautoescape %}
        </div>
        {% if application.risk_managementrisk_management.errors %}
        <div class="row alert alert-error school-display">
@@ -180,10 +160,8 @@
    <fieldset>
      <legend>财务预测</legend>
      <div class="control-group form-inline {% if application.financial_pred.errors %}error{% endif %}">
+       {{application.financial_pred}}
        <div class="richtext_div" id="financial_pred">
-         {% autoescape off %}
-         {{application_content.financial_pred}}
-         {% endautoescape %}
        </div>
        {% if application.financial_pred.errors %}
        <div class="row alert alert-error school-display">

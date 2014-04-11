@@ -210,17 +210,8 @@ def application_report_view(request, pid=None, is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
-    application_content = imodel.objects.get(project_id = pid)
-    content_dict = application_content._meta.get_all_field_names()
-    for item in content_dict:
-        if getattr(application_content,item) == None:
-            try:
-                setattr(application_content,item,"")
-            except:
-                pass
     data = {'pid': pid,
             'info': info_form,
-            'application_content':application_content,
             'application': application_form,
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
