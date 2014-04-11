@@ -187,13 +187,18 @@ def get_subject_review_list(request, project_id):
     to get subject evaluate list through project_id
     '''
     if check_auth(user = request.user, authority = SCHOOL_USER):
-        identity = 'school'
+        identity = SCHOOL_USER
     else:
-        identity = 'adminstaff'
+        identity = ADMINSTAFF_USER
 
     review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
     average_list = get_average_score_list(review_list)
-    return simplejson.dumps({'review_list':review_list, 'average_list': average_list})
+    
+    data = {"review_list": review_list,
+            "average_list": average_list,
+            }
+    table = render_to_string("adminStaff/widgets/review_table.html", data)
+    return simplejson.dumps({"table": table})
 
 @dajaxice_register
 def change_subject_recommend(request, project_id, changed_grade):

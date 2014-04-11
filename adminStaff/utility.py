@@ -16,7 +16,7 @@ from settings import TMP_FILES_PATH
 
 def get_average_score_list(review_list):
     cnt_of_list = len(review_list)
-    return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)[1:]]
+    return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)]
 def info_xls_baseinformation_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
