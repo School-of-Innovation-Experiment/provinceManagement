@@ -1,0 +1,102 @@
+<div class="tab-pane" id="project_brief">
+  {% if is_innovation %}
+  <fieldset>
+    <legend>项目来源</legend>
+    <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+      {{application.original}}
+      {% if application.original.errors %}
+      <div class="row alert alert-error school-display">
+        <button class="close" data-dismiss="alert">×</button>
+        {{ application.original.errors }}
+      </div>
+      {% endif %}
+    </div><!--end form line, for choice-->
+  </fieldset><!--Project origin-->
+  <br/>
+     <fieldset>
+        <div class="control-group {% if application.background.errors %}error{% endif %}">
+          <legend>项目背景及研究意义</legend>
+          {{application.background}}
+          <div class="richtext_div" id="background">
+          </div>
+          {% if application.background.errors %}
+          <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.background.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset><!--end background-->
+      </br>
+      <fieldset>
+        <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+          <legend>研究内容和拟解决的关键问题</legend>
+          {{application.key_notes}}
+          <div class="richtext_div" id="key_notes">
+          </div>
+          {% if application.key_notes.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.key_notes.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset><!--end key points-->
+      {%else%}
+      <div class="row-fluid show-grid">
+        <div class="span4">
+          <div class="control-group {% if application.original.errors %}error{% endif %}">
+            <legend>项目来源</legend>
+            {{application.original}}
+            {% if application.original.errors %}
+            <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ application.original.errors }}
+            </div>
+            {% endif %}
+          </div><!--end form line, for choice-->
+        </div>
+        <div class="span4">
+          <div class="control-group  {% if application.maturity.errors %}error{% endif %}">
+            <legend>项目技术成熟程度</legend>
+            {{application.maturity}}
+            {% if application.maturity.errors %}
+            <div class="row alert alert-error school-display">
+              <button class="close" data-dismiss="alert">×</button>
+              {{ application.maturity.errors }}
+            </div>
+            {% endif %}
+          </div><!--end form line, for choice-->
+        </div>
+      </div>
+      {% if userauth.is_student %}
+      <fieldset>
+        <div class="control-group {% if application.proj_introduction.errors %}error{% endif %}">
+          <legend>项目内容简介</legend>
+          {{application.proj_introduction}}
+          {% if application.proj_introduction.errors %}
+          <div style="margin:0px;width:250px;font-size:16px;" class="row alert alert-error">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.proj_introduction.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset><!--end background-->
+      {% endif %}
+      <br/>
+      <fieldset>
+        <div class="control-group form-inline {% if application.innovation.errors %}error{% endif %}">
+          <legend>项目的基本情况及创新内容</legend>
+          {{application.innovation}}
+          <div class="richtext_div" id="innovation">
+          </div>
+          {% if application.innovation.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ application.innovation.errors }}
+          </div>
+          {% endif %}
+        </div><!--end form line, for choice-->
+      </fieldset><!--Project origin-->
+    {%endif%}
+</div>
