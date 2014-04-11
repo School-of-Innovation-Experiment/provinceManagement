@@ -187,13 +187,18 @@ def get_subject_review_list(request, project_id):
     to get subject evaluate list through project_id
     '''
     if check_auth(user = request.user, authority = SCHOOL_USER):
-        identity = 'school'
+        identity = SCHOOL_USER
     else:
-        identity = 'adminstaff'
+        identity = ADMINSTAFF_USER
 
     review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
     average_list = get_average_score_list(review_list)
-    return simplejson.dumps({'review_list':review_list, 'average_list': average_list})
+    
+    data = {"review_list": review_list,
+            "average_list": average_list,
+            }
+    table = render_to_string("adminStaff/widgets/review_table.html", data)
+    return simplejson.dumps({"table": table})
 
 @dajaxice_register
 def change_subject_recommend(request, project_id, changed_grade):
@@ -537,7 +542,7 @@ from base64 import b64encode as b64en
 from adminStaff.utility import get_manager
 import jsonrpclib
 import simplejson
-from settings_dev import RPC_SITE
+from settings import RPC_SITE
 @dajaxice_register
 def project_sync(request,project_sync_list,username,password):
     def get_projsingle_dict(proj_single):
@@ -605,6 +610,9 @@ def project_sync(request,project_sync_list,username,password):
             proj_dict['presubmit_type'] = 'presubmitenterprise'
             proj_dict.update(get_presubmitenterprise_dict(proj_single))
         dict_obj['projects'].append(proj_dict)
-    server = jsonrpclib.Server(RPC_SITE)
-    result = server.SyncProjects(simplejson.dumps(dict_obj))
-    return simplejson.dumps({'status':'1', 'result': result})
+    try:
+        server = jsonrpclib.Server(RPC_SITE)
+        result = server.SyncProjects(simplejson.dumps(dict_obj))
+    except:
+        return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
+    return simplejson.dumps({'status':'0', 'result': result})
