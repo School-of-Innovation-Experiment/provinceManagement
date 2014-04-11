@@ -161,7 +161,6 @@ def application_report_view(request, pid=None, is_expired=False):
 
     loginfo(p=teammember, label="in teammember")
     readonly = check_history_readonly(pid) or is_expired
-    readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
