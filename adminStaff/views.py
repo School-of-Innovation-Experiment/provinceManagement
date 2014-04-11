@@ -531,17 +531,24 @@ class AdminStaffService(object):
 
     @staticmethod
     def GetSubjectReviewList(project_id, identity):
+        class ReviewItem(list):
+            def __init__(self, review_list, name, comments):
+                super(ReviewItem, self).__init__()
+                self.name = name
+                self.comments = comments
+                self.extend(review_list)
+
         flag = (identity == ADMINSTAFF_USER)
         review_obj_list = Re_Project_Expert.objects.filter(Q(project=project_id)&Q(is_assign_by_adminStaff=flag))
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.comments, obj.score_significant,
+            obj_list = [obj.score_significant,
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
-            obj_list.append(sum(map(float, obj_list[1:])))
-
-            review_list.append(obj_list)
+            obj_list.append(sum(map(float, obj_list)))
+            review_obj = ReviewItem(obj_list, obj.expert.name, obj.comments)
+            review_list.append(review_obj)
         return review_list
 
     @staticmethod
