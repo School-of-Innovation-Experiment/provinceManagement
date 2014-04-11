@@ -3,13 +3,206 @@
 {% block content %}
 
 <!-- index style -->
+
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+<!-- <link href="{{ STATIC_URL }}bootstrap/assets/css/docs_for_features.css" rel="stylesheet"> -->
+<link href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}bootstrap/assets/css/bootstrap.min.css" rel="stylesheet">
+
+
+<!-- <link rel="stylesheet" type="text/css" media="screen" 
+href="{{ STATIC_URL }}bootsrap/accounts_form.css" > -->
   
-<div class="container form-container " align="center">
- <img src="{{STATIC_URL}}images/show/province.jpg">
+  
+<div class="container form-container " align="left">
+
+<div class="row">
+       
+        <div class="span3 bs-docs-sidebar">
+        
+        <ul class="nav nav-list bs-docs-sidenav affix">
+          <li><a href="#province"><i class="icon-chevron-right"></i> 省级管理员</a></li>
+          <li><a href="#school"><i class="icon-chevron-right"></i> 校级管理员</a></li>
+          <li><a href="#expert"><i class="icon-chevron-right"></i> 专家</a></li>
+          <li><a href="#student"><i class="icon-chevron-right"></i> 学生 </a></li>
+          <li><a href="#show"><i class="icon-chevron-right"></i> 成果展示</a></li>
+          <!-- <li><a href="#overview5"><i class="icon-chevron-right"></i> 概览</a></li> -->
+        </ul>
+
+      </div>
+
+      <div class="span9">
+        <!-- Overview
+        ================================================== -->
+        <section id="province">
+       <!--    <div class="page-header">
+            <h1>Bootstrap中的JavaScript</h1>
+          </div> -->
+          
+          <h3>1.省级管理员</h3>
+          <img src="{{STATIC_URL}}images/show/1.jpg">
+
+          <h5>  1) 投稿数量设定</h5>
+          <p> 当新的一届项目开始时，点击“项目数量重置”按钮，将所有学校的甲类、乙类项目数量上限设置为0。再设置各类学校本届项目数量，项目数量的设定分为甲类、乙类两种项目。只有完成设置完成学校的项目数量，校级管理员才可以激活学生帐。
+          </p>
+          <img src="{{STATIC_URL}}images/show/1.1.jpg">
+
+          <h5>2) 项目分配 </h5>
+          <p> 当各学校的学生完成项目申请资料的填写，省级管理员可以按照“哲学”，“经济学”等12类学科的项目，分配给对应学科的专家。项目一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
+          </p>
+          <img src="{{STATIC_URL}}images/show/1.2.jpg">
+
+
+          <h5> 3) 项目等级设定 </h5>
+          <p> 专家完成评审打分和等级设定意见。省级管理员可以点击“察看专家审核果”链接察看专家评分结果，省级管理员点击“未指定”设置项目的等级为“国家级”或“省级”。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.3.jpg">
+
+          <h5>4) 截止日期设定 </h5>
+          <p> 省级管理员设置项目“初期提交起止时间”、“结题报告起止时间”、“项目初审起止时间”和“项目终审起止时间”。学生只能在初期、结题、项目初审、项目终审对应的时间，完成相应项目内容填写和文件上传。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.4.jpg">
+
+          <h5>5) 邮件激活</h5>
+          <p> 省级管理员为各学校的校级管理员发送邮件激活，校级管理员接收到激活邮件，点击激活后，以邮箱名为用户名，默认以邮箱@前面的字符为密码，例如邮箱名 “province@qq.com”，登录名为“province@qq.com”，默认密码为“province”。可以使用本系统。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.5.jpg">
+
+          <h5>6) 专家导入</h5>
+          <p> 省级管理员为专家发送邮件激活，选择相应的学科。专家接收到激活邮件，点击激活后，以邮箱名为用户名，默认以邮箱@前面的为密码，例如邮箱名 “province@qq.com”，登录名为“province@qq.com”，默认密码为“province”。可以使用本系统。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.6.jpg">
+
+          <h5>7) 下载信息统计表</h5>
+          <p> 点击“下载统计信息表”，下载本届项目的项目信息统计表。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.7.jpg">
+
+          <h5>8) 提醒信息设置</h5>
+          <p>省级管理员在“角色选择”选择“专家”、“学生”，填写“提醒消息”后。在对应“专家”、“学生”账户的上方会滚动显示“提醒消息”，只会显示最近的一条消息。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.8.jpg">
+
+          <h5>9) 发布新闻</h5>
+          <p>省级管理员可以发布新闻，新闻类行为“通知公告”，“政策规章”，“优秀项目”和“文件下载”四类，在主页的对应板块显示新闻内容。
+          </p>  
+          <img src="{{STATIC_URL}}images/show/1.9.jpg">
+        </section>  
+
+
+        <section id="school">
+          <!--  <div class="page-header">
+            <h1>Bootstrap中的JavaScript</h1>
+           </div> -->
+          <h3>2.校级管理员</h3>
+
+          <h5>1) 项目管理 </h5>
+          <p> 校级管理员查看本校的当届的所有项目，设置项目的类型“甲/乙类”，查看项目的申请，中期，结题和文件上传，对项目进行审查。
+          </p>
+          <img src="{{STATIC_URL}}images/show/2.1.jpg">
+
+          <h5>2) 统计信息 </h5>
+          <p> 查看本校历史项目统计信息。
+          </p>
+          <img src="{{STATIC_URL}}images/show/2.2.jpg">
+
+          <h5>3) 学生帐号激活 </h5>
+          <p> 校级管理员为各学校的校级管理员发送邮件激活，学生接收到激活邮件，点击激活后，以邮箱名为用户名，默认以邮箱@前面的为密码，例如邮箱名 “province@qq.com”，登录名为“province@qq.com”，默认密码为“province”。可以使用本系统。
+          </p>
+          <img src="{{STATIC_URL}}images/show/2.3.jpg">
+
+          <h5>4) 历史列表 </h5>
+          <p> 查看本校的往届项目的名称和详细内容。
+          </p>
+          <img src="{{STATIC_URL}}images/show/2.4.jpg">
+        </section>  
+
+
+
+        <section id="expert">
+          <!-- <div class="page-header">
+            <h1>Bootstrap中的JavaScript</h1>
+          </div> -->
+          <h3>3.专家</h3>
+
+          <h5>1) 项目列表</h5>
+          <p> 专家查看当届项目需要评审的项目列表。查看项目的基本信息概要和评审状态，点击“审阅”按钮，查看项目的详细信息，完成“审阅”工作。当“审阅”完成后，“评审状态”显示为“已审核”。
+          </p>
+          <img src="{{STATIC_URL}}images/show/3.1.jpg">
+
+          <h5>2) 审阅</h5>
+          <p> 专家查看项目详细信息，根据项目信息，确定项目是否通过审核。当项目审核完成时，点击“项目审核”，点击“通过”和“不通过”完成该项目审核工作。
+          </p>
+          <img src="{{STATIC_URL}}images/show/3.2.1.jpg">
+          <img src="{{STATIC_URL}}images/show/3.2.2.jpg">
+
+          <h5>3) 级别设定</h5>
+          <p> 项目通过审核后，根据项目评审结果，专家点击“国家级”或“省级”按钮设置项目的推荐级别。
+          </p>
+          <img src="{{STATIC_URL}}images/show/3.3.jpg">
+
+
+        </section>  
+
+
+        <section id="student">
+          
+          <h3>4.学生</h3>
+
+          <h5>1) 项目管理</h5>
+          <p> 学生填写创新项目的“项目类型”和“学科类型”，查看项目当前状态。
+          </p>
+          <img src="{{STATIC_URL}}images/show/4.1.jpg">
+
+          <h5>2) 团队成员</h5>
+          <p> 学生添加或删除项目的团队成员，修改团队成员的邮箱、学号、电话和班级。
+          </p>
+          <img src="{{STATIC_URL}}images/show/4.2.jpg">
+
+          <h5>3) 申请、中期、结题</h5>
+          <p> 学生网上填写申请书、中期和结题项目书内容，填写的内容与电子版申请书内容相同。
+          </p>
+          <img src="{{STATIC_URL}}images/show/4.3.jpg">
+
+          <h5>4) 成果上传</h5>
+          <p> 学生上传申请书、中期检查、结题报告和成果展示（如图片、研究成果等）等文件。
+          </p>
+          <img src="{{STATIC_URL}}images/show/4.4.jpg">
+        </section>  
+
+
+        <section id="show">
+          
+          <h3>5.成果展示</h3>          
+
+          <p> 当届项目结题时，学生在“成果上传”中上传项目的成果图片。成果图片将在成果展示中展示出来。
+          </p>
+          <img src="{{STATIC_URL}}images/show/5.jpg">
+          
+
+        </section>  
+
+
+
+
+
+      </div>
+
+
+ <!-- <img src="{{STATIC_URL}}images/show/province.jpg"> -->
 
 </div>
+
+
+
+
+
+
+</div>
+
+
+
 
 {% endblock %}
