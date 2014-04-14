@@ -238,7 +238,7 @@ FILE_DELETE_URL = '/student/delete/'
 HOMEPAGE_PIC_PATH = join(MEDIA_ROOT, "homepage_pic")
 
 # news documents path
-NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
+NEWS_DOCUMENTS_PATH = "news-documents/%Y/%m/%d"
 
 # tmp files path
 TMP_FILES_PATH = join(MEDIA_ROOT, "tmp")
