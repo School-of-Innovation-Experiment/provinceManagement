@@ -612,3 +612,27 @@ def check_scoreaplication(project,pid):
     loginfo(p=project.score_application,label="project.score_application")
     project.save()
     loginfo(p=project.score_application,label="project.score_application")
+
+def get_studentmessage(project):
+    """
+        get  manager and student message
+    """
+    memberlist=[]
+    # teammember = {'manager_name':'None','manager_studentid':'None','memberlist':'None','count':0,'telephone':'',}
+    teammember={'manager_name':'','manager_studentid':'','member_number':'','othermember':''}
+    if project.student_group_set.all().count()>0:
+        group=project.student_group_set
+        loginfo(p=group,label="group")
+        manager = group.all()[0]
+        loginfo(p=manager,label="manager")
+        teammember['manager_name']=manager.studentName
+        teammember['manager_studentid']=manager.studentId
+        teammember['member_number'] = project.student_group_set.count()
+        for student in group.all():
+            group=project.student_group_set
+            loginfo(p=student.studentName,label="student")
+            if student.studentName != manager.studentName:
+                member=student.studentName+"("+student.studentId+")"
+                memberlist.append(member)
+        teammember['othermember']=','.join(memberlist)
+    return teammember

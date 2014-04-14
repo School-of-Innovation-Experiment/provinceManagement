@@ -1,0 +1,31 @@
+<thead>
+  <tr>
+    <th>姓名</th>
+    <th>评价</th>
+    <th>项目选题意义</th>
+    <th>科技研究价值</th>
+    <th>项目创新之处</th>
+    <th>项目可行性</th>
+    <th>预期成果</th>
+    <th>指导教师科研能力</th>
+    <th>总分</th>
+  </tr>
+</thead>
+<tbody>
+{% for item in review_list %}
+  <tr>
+  <td>{{item.name}}</td>
+  <td title="{{item.comments}}">{{item.comments|truncatechars:15}}</td>
+  {% for element in item %}
+    <td>{{ element|floatformat:1 }}</td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+  <tr>
+  <td><strong>平均</strong></td>
+  <td></td>
+  {% for element in average_list %}
+    <td>{{element|floatformat:1}}</td>
+  {% endfor %}
+  </tr>
+</tbody>

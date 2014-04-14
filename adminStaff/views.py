@@ -531,17 +531,24 @@ class AdminStaffService(object):
 
     @staticmethod
     def GetSubjectReviewList(project_id, identity):
-        flag = (identity == 'adminStaff')
+        class ReviewItem(list):
+            def __init__(self, review_list, name, comments):
+                super(ReviewItem, self).__init__()
+                self.name = name
+                self.comments = comments
+                self.extend(review_list)
+
+        flag = (identity == ADMINSTAFF_USER)
         review_obj_list = Re_Project_Expert.objects.filter(Q(project=project_id)&Q(is_assign_by_adminStaff=flag))
         review_list = []
         for obj in review_obj_list:
-            obj_list = [obj.comments, obj.score_significant,
+            obj_list = [obj.score_significant,
                         obj.score_value, obj.score_innovation,
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
-            obj_list.append(sum(map(float, obj_list[1:])))
-
-            review_list.append(obj_list)
+            obj_list.append(sum(map(float, obj_list)))
+            review_obj = ReviewItem(obj_list, obj.expert.name, obj.comments)
+            review_list.append(review_obj)
         return review_list
 
     @staticmethod
@@ -1005,22 +1012,24 @@ class AdminStaffService(object):
 
         logger.info("sync_form Valid Failed"+"**"*10)
         logger.info(sync_form.errors)
-
+        import jsonrpclib
+        from settings import RPC_SITE
+        try:
+            server = jsonrpclib.Server(RPC_SITE)
+            for proj in current_project_list:
+                proj.is_synced = server.CheckSyncProjects(proj.project_id)
+        except: pass
         data = {
            'current_project_list':current_project_list,
             'sync_form':sync_form,
         }
         return render(request, 'adminStaff/project_sync.html', data)
-        
-
-
-
 
 
 def member_change_work(request, pid):
     """
     project group member change
-    """    
+    """
     #student_account = StudentProfile.objects.get(userid = request.user)
     #project = ProjectSingle.objects.get(student=student_account)
 
