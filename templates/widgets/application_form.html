@@ -1,0 +1,31 @@
+{% csrf_token %}
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#project_review" data-toggle="tab"><strong>信息预览</strong></a></li>
+        <li><a href="#project_infoform" data-toggle="tab"><strong>基本信息</strong></a></li>
+        {% if not is_innovation %}
+          <li><a href="#enterprise" data-toggle="tab"><strong>企业导师</strong></a></li>
+        {%endif%}
+        <li><a href="#project_brief" data-toggle="tab"><strong>项目简介</strong></a></li>
+        {% if is_innovation %}
+           <li><a href="#project_plan" data-toggle="tab"><strong>项目计划</strong></a></li>
+        {%else%}
+           <li><a href="#team_product" data-toggle="tab"><strong>团队产品介绍</strong></a></li>
+           <li><a href="#project_plan" data-toggle="tab"><strong>项目预测</strong></a></li>
+        {%endif%}
+        <li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li>
+      </ul>
+      <div class="tab-content">
+        {% include "student/widgets/project_review.html" %}
+        {% include "student/widgets/project_infoform.html" %}
+        {% include "student/widgets/teacher_enterprise.html" %}
+        <!--Application Infomation-->
+        {% include "student/widgets/project_brief.html" %}
+        <!--Application Infomation-->
+        {% include "student/widgets/project_plan.html" %}
+        <!--Comments info-->
+        {% include "student/widgets/comments_info.html" %}
+      </div>
+    </div>
+    <!--submit button-->
+    {% include "student/widgets/commit_button.html" %}
