@@ -13,8 +13,6 @@
                   <th>教师</th>
                   <th>职称</th>
                   <th>总经费</th>
-                  <th>财政拨款</th>
-                  <th>校拨</th>
                   <th>所属学科</th>
                   <th>项目简介</th>
                 </tr>
@@ -29,13 +27,11 @@
                   <td>{{teammember.manager_studentid}}</td>
                   <td>{{teammember.member_number}}</td>
                   <td>{{teammember.othermember}}</td>
-                  <td>{{project.inspector}}</td>
-                  <td>{{project.inspector_title}}</td>
-                  {% for fin_tmp in fin_type %}
-                  <td>{{fin_tmp}}</td>
-                  {% endfor %}
-                  <td>{{project.insitute}}</td>
-                  <td>{{innovation.innovation}}</td>
+                  <td>{{project.adminuser.name}}</td>
+                  <td>{{project.adminuser.titles}}</td>
+				  <td>{{project.funds_total}}</td>
+                  <td>{{project.school.school}}</td>
+                  <td class="span4">{{innovation.innovation}}</td>
                 </tr>
               </tbody>
             </table>
