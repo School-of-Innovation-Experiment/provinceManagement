@@ -146,7 +146,6 @@ def open_report_view(request, pid = None, is_expired = False):
     if data['isRedirect'] :
         return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
     else:
-        
         return render(request, 'student/open.html', data)
 
 def open_report_view_work(request, pid = None, is_expired = False):
