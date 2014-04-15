@@ -3,24 +3,22 @@
 {% extends "expert/base/_content.html" %}
 
 {% block calculate-content%}
+{%include "widgets/richtext_toolbar.html"%}
 <div class="tab-content">
   <div class="tab-pane fade active in" id="review-page">
     <ul class="nav nav-tabs">
 
       <li class="active">
-        <a href="#open-report" data-toggle="tab">开题检查表</a>
+        <a href="#open-report" data-toggle="tab"><strong>开题检查表</strong></a>
+      </li>
+      {%include "widgets/application_tab.html"%}
+
+      <li>
+        <a href="#docs-section" data-toggle="tab"><strong>附件下载</strong></a>
       </li>
 
       <li>
-        <a href="#content-section" data-toggle="tab">项目内容</a>
-      </li>
-
-      <li>
-        <a href="#docs-section" data-toggle="tab">附件下载</a>
-      </li>
-
-      <li>
-        <a href="#review-section" data-toggle="tab">项目评价</a>
+        <a href="#review-section" data-toggle="tab"><strong>项目评价</strong></a>
       </li>
 
     </ul><!--end ul title-->
@@ -34,13 +32,15 @@
         <a type="button" class="btn btn-primary" data-toggle="tab" href="#review-section">前往打分</a>
       </div><!--end content section-->
 
-      <div class="tab-pane fade " id="content-section">
-        <!--Basic Infomation-->
-        {% include "student/widgets/project_infoform.html" %}
-        <!--Application Infomation-->
-        {% include "student/widgets/application.html" %}
-        <a type="button" class="btn btn-primary" data-toggle="tab" href="#review-section">前往打分</a>
-      </div><!--end content section-->
+      {% include "student/widgets/project_review.html" %}
+      {% include "student/widgets/project_infoform.html" %}
+      {% include "student/widgets/teacher_enterprise.html" %}
+      <!--Application Infomation-->
+      {% include "student/widgets/project_brief.html" %}
+      <!--Application Infomation-->
+      {% include "student/widgets/project_plan.html" %}
+      <!--Comments info-->
+      {% include "student/widgets/comments_info.html" %}
 
       <div class="tab-pane fade " id="docs-section">
         {% include "expert/widgets/_doc_list.html" %}
