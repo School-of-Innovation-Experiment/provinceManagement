@@ -1,80 +1,14 @@
 <!-- pre application proposal page -->
 {% extends "school/base/report_base.html" %}
 {%block report-content%}
-<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{ STATIC_URL }}style/school/news_edit.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
-<script>function gettext(txt){return txt}</script>
-<script type="text/javascript">
-  $(function(){
-  function initToolbarBootstrapBindings() {
-  var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-  'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
-  'Times New Roman', 'Verdana'],
-  fontTarget = $('[title=Font]').siblings('.dropdown-menu');
-  $.each(fonts, function (idx, fontName) {
-  fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
-  });
-  $('a[title]').tooltip({container:'body'});
-  $('.dropdown-menu input').click(function() {return false;})
-  .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
-  .keydown('esc', function () {this.value='';$(this).change();});
-
-  $('[data-role=magic-overlay]').each(function () {
-  var overlay = $(this), target = $(overlay.data('target'));
-  overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
-  });
-  if ("onwebkitspeechchange"  in document.createElement("input")) {
-  var editorOffset = $('#editor').offset();
-  $('#voiceBtn').css('position','absolute').offset({top: editorOffset.top, left: editorOffset.left+$('#editor').innerWidth()-35});
-  } else {
-  $('#voiceBtn').hide();
-  }
-  };
-  function showErrorAlert (reason, detail) {
-  var msg='';
-  if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
-  else {
-  console.log("error uploading file", reason, detail);
-  }
-  $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>'+
-    '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
-  };
-  initToolbarBootstrapBindings();
-  $('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
-  window.prettyPrint && prettyPrint();
-  });
-</script>
-  <div class="modal hide fade" style="display: none;" id="Richtext_edit">
-     <div class="modal-header">
-       <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
-         {% include "news/news_toolbar.html" %}
-       </div>
-     </div>
-     <div class="modal-body" id="editor">
-     </div>
-     <div class="modal-footer">
-       <a class="btn btn-primary" data-dismiss="modal" onclick="">保存更新</a>
-     </div>
-</div>
+  {% include "widgets/richtext_toolbar.html"%}
   <form method="post"   enctype="multipart/form-data" id="form_application" action = {% url school.views.application_report_view pid%}>
     {% csrf_token %}
     <!-- Basic Infomation -->
     <div class="tabbable">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#project_review" data-toggle="tab"><strong>信息预览</strong></a></li>
-        <li><a href="#project_infoform" data-toggle="tab"><strong>基本信息</strong></a></li>
-        {% if not is_innovation %}
-          <li><a href="#enterprise" data-toggle="tab"><strong>企业导师</strong></a></li>
-        {%endif%}
-        <li><a href="#project_brief" data-toggle="tab"><strong>项目简介</strong></a></li>
-        {% if is_innovation %}
-           <li><a href="#project_plan" data-toggle="tab"><strong>项目计划</strong></a></li>
-        {%else%}
-           <li><a href="#team_product" data-toggle="tab"><strong>团队产品介绍</strong></a></li>
-           <li><a href="#project_plan" data-toggle="tab"><strong>项目预测</strong></a></li>
-        {%endif%}
-        <li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li>
+        {% include "widgets/application_tab.html"%}
       </ul>
       <div class="tab-content">
         {% include "school/widgets/project_review.html" %} 
@@ -91,12 +25,4 @@
     <!--submit button-->
     {% include "school/widgets/commit_button.html" %}
   </form>
-  <script type='text/javascript' src="{{STATIC_URL}}js/school/application.js"></script>
-  <script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
-  <script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
-  <script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>
-
-  <script type="text/javascript" src="/admin/jsi18n/"></script>
-  <script type="text/javascript" src="/static/admin/js/core.js"></script>
-  <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 {%endblock%}

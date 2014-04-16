@@ -1,0 +1,18 @@
+{% if userauth.is_experter %}
+ <li class="active">
+{% else %}
+ <li>
+{% endif%}
+
+  <a href="#project_infoform" data-toggle="tab"><strong>基本信息</strong></a></li>
+{% if not is_innovation %}
+  <li><a href="#enterprise" data-toggle="tab"><strong>企业导师</strong></a></li>
+{%endif%}
+<li><a href="#project_brief" data-toggle="tab"><strong>项目简介</strong></a></li>
+{% if is_innovation %}
+   <li><a href="#project_plan" data-toggle="tab"><strong>项目计划</strong></a></li>
+{%else%}
+   <li><a href="#team_product" data-toggle="tab"><strong>团队产品介绍</strong></a></li>
+   <li><a href="#project_plan" data-toggle="tab"><strong>项目预测</strong></a></li>
+{%endif%}
+<li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li>

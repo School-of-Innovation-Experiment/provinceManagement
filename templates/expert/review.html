@@ -3,37 +3,34 @@
 {% extends "expert/base/_content.html" %}
 
 {% block calculate-content%}
+{% include "widgets/richtext_toolbar.html"%}
+<div class="alert alert-info">
+  <a class="close" data-dismiss="alert">×</a>
+  <strong>提示:</strong>审核按钮在该页面最下方，或可点击上方的“<strong>项目审核</strong>”标签直接前往审核
+</div>
 <div class="tab-content">
   <div class="tab-pane fade active in" id="review-page">
     <ul class="nav nav-tabs">
-      <li class="active">
-        <a href="#content-section" data-toggle="tab">项目内容</a>
+      {% include "widgets/application_tab.html"%}
+      <li>
+        <a href="#docs-section" data-toggle="tab"><strong>附件下载</strong></a>
       </li>
       <li>
-        <a href="#docs-section" data-toggle="tab">附件下载</a>
-      </li>
-      <li>
-        <a href="#pass-check">项目审核</a>
+        <a href="#pass-check" data-toggle="tab"><strong>项目审核</strong></a>
       </li>
       <!-- <li> -->
       <!--   <a href="#review-section" data-toggle="tab">项目评价</a> -->
       <!-- </li> -->
     </ul><!--end ul title-->
     <div class="tab-content">
-      <div class="tab-pane fade active in" id="content-section">
-        <div class="alert alert-info">
-	  <a class="close" data-dismiss="alert">×</a>
-	  <strong>提示:</strong>审核按钮在该页面最下方，或可点击上方的“<strong>项目审核</strong>”标签直接前往审核
-        </div>
-        <!--Basic Infomation-->
-        {% include "school/widgets/project_infoform.html" %}
-        <!--Application Infomation-->
-        {% include "school/widgets/application.html" %}
-        <div class="form-actions" id="pass-check">
-          <a href="{{pid}}/1" class="btn btn-primary">通过</a>
-          <a href="{{pid}}/0" class="btn">不通过</a>
-        </div>
-      </div><!--end content section-->
+      {% include "school/widgets/project_infoform.html" %} 
+      {% include "school/widgets/teacher_enterprise.html" %}
+      <!--Application Infomation-->
+      {% include "school/widgets/project_brief.html" %}
+      <!--Application Infomation-->
+      {% include "school/widgets/project_plan.html" %}
+      <!--Comments info-->
+      {% include "school/widgets/comments_info.html" %}
       <div class="tab-pane fade " id="docs-section">
         {% include "expert/widgets/_doc_list.html" %}
       </div>
@@ -41,6 +38,10 @@
         <!--Expert Review-->
         {% include "expert/widgets/score_review.html" %}
       </div><!--end review section-->
+      <div class="form-actions" id="pass-check">
+          <a href="{{pid}}/1" class="btn btn-primary">通过</a>
+          <a href="{{pid}}/0" class="btn">不通过</a>
+      </div>
     </div><!--end tab content-->
   </div><!--end tab pane-->
 </div><!--end tab content-->

@@ -89,7 +89,7 @@ def review_report_view(request, pid=None):
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
-    info_form = InfoForm(instance=re_project.project)
+    info_form = InfoForm(instance=re_project.project,pid=pid)
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
         application = get_object_or_404(PreSubmit, project_id = pid)

@@ -1,7 +1,11 @@
     <!--Project Basic Infomation-->
     <!--Basic Infomation-->
+{% if userauth.is_experter %}
+<div class="tab-pane active" id="project_infoform">
+{% else %}
 <div class="tab-pane" id="project_infoform">
-    <div class="row-fluid show-grid">
+{% endif %}
+   <div class="row-fluid show-grid">
       <div class="span4">
          <div class="control-group {% if info.title.errors %}error{% endif %}">
             <label class="school-display"><i class="icon-book"></i>{{info.title.label}}</span></label>
