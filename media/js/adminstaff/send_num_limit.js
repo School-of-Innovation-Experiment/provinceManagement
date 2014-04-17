@@ -12,6 +12,9 @@ function limitednum_callback(data){
   if (data.status == "1"){
     $("#limited_num").css("background","white");
     $("#num_limit_error_message").append("<strong>"+data.message+"</strong>");
+
+    $("#projectlimitnumsettingsTable").html(data.table);
+
   }
   else
   {

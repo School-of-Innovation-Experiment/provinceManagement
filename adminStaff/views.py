@@ -244,6 +244,7 @@ class AdminStaffService(object):
         '''
         学校上传数量限制
         '''
+        print "LLLLLLLLLLLLLLLZZZZZZZZZZZZZZZZZ"
         if request.method == "GET":
             #timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()

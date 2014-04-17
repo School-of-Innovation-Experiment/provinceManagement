@@ -43,11 +43,25 @@ def NumLimit(request, form):
                 object.number = a_limited_num + b_limited_num
                 object.a_cate_number = a_limited_num
                 object.save()
-            return simplejson.dumps({'status':'1','message':u'更新成功'})
+
+            # num_limit_form = forms.NumLimitForm()
+            school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+            page = request.GET.get('page')
+
+            context = getContext(school_limit_num_list, page, 'school_limit', 0)
+            table = render_to_string("adminStaff/widgets/projectlimitnumsettingsTable.html",
+                           context)
+            return simplejson.dumps(
+                {'status':'1',
+                 'table': table, 
+                 'message':u'更新成功'})
         except SchoolProfile.DoesNotExist:
-            return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
+            return simplejson.dumps({'status':'0','message':u'更新失败，选定的学校没有进行注册'})
     else:
-        return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
+        return simplejson.dumps({'status':'0', 'id':form.errors.keys(),'message':u'输入错误'})
+
+
+
 
 @dajaxice_register
 def DeadlineSettings(request, form):
