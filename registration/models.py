@@ -81,7 +81,6 @@ class RegistrationManager(models.Manager):
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
                                            {'site':get_current_site(request),
-                                            'year':get_current_year(),
                                             'school_name':SCHOOL_NAME,
                                             'username':username,
                                             'password':password})
@@ -91,9 +90,11 @@ class RegistrationManager(models.Manager):
                 message = render_to_string('registration/activation_email.txt',
                                            {'activation_key':registration_profile.activation_key,
                                             'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
+                                            'school_name':SCHOOL_NAME,
+                                            'year':get_current_year(),
                                             'site':site_domain,
-                                           'username':username,
-                                           'password':password}
+                                            'username':username,
+                                            'password':password}
                                            )
                 logger.error(message)
                 send_mail(subject,
@@ -121,7 +122,6 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj = SchoolProfile.objects.get(school=schoolObj)
 
                 oldUserObj = schoolProfileObj.userid
-                
                 for obj in ProjectFinishControl.objects.filter(userid = oldUserObj):
                     obj.userid = new_user
                     obj.save()
