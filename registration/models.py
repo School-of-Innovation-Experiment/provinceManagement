@@ -23,6 +23,7 @@ from const import *
 from backend.logging import logger,loginfo
 from users.models import *
 from const.models import SchoolDict, InsituteCategory
+from school.utility import get_current_year
 from school.models import *
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
@@ -80,6 +81,8 @@ class RegistrationManager(models.Manager):
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
                                            {'site':get_current_site(request),
+                                            'year':get_current_year(),
+                                            'school_name':SCHOOL_NAME,
                                             'username':username,
                                             'password':password})
 
