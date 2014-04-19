@@ -43,6 +43,7 @@ function get_student_info(caller)
   // alert($(tr_parent).children("td:eq(4)").html());
 
   $("input[name='student_id']").val($(tr_parent).children("td:eq(0)").html());
+  // $("#student_id").html($(tr_parent).children("td:eq(0)").html());
   $("input[name='email']").val($(tr_parent).children("td:eq(2)").html());
   $("input[name='telephone']").val($(tr_parent).children("td:eq(3)").html());
   $("input[name='classInfo']").val($(tr_parent).children("td:eq(4)").html());
