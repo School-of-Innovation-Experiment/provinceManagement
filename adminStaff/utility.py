@@ -421,7 +421,11 @@ def info_xls_projectsummary(request):
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         loginfo(p=proj_obj.title, label="project category") 
-        innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
