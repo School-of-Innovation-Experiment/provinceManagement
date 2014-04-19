@@ -211,7 +211,7 @@ def info_xls_summaryinnovate(request):
         print row_project_start
         xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
-        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_ob>j.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
         xls_obj.write_merge(row_project_start,row,6,10)
         # _index += 1  
     # write xls file
