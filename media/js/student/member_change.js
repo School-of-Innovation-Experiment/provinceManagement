@@ -35,9 +35,19 @@ function delete_member(caller)
                                 {'deleteId': delete_id});
 }
 
-function get_student_info(studentId)
+function get_student_info(caller)
 {
-  $("#change_info_student_id").html(studentId);
+  var  tr_parent= $(caller).parent().parent();
+  $("#change_info_student_id").html($(tr_parent).children("td:eq(0)").html());
+  // $(tr_parent).children("td:eq(0)").html();
+  // alert($(tr_parent).children("td:eq(4)").html());
+
+  $("input[name='student_id']").val($(tr_parent).children("td:eq(0)").html());
+  $("input[name='email']").val($(tr_parent).children("td:eq(2)").html());
+  $("input[name='telephone']").val($(tr_parent).children("td:eq(3)").html());
+  $("input[name='classInfo']").val($(tr_parent).children("td:eq(4)").html());
+  
+
   change_id = studentId;
 }
 

@@ -93,7 +93,14 @@ def member_change(request):
     student_group = Student_Group.objects.filter(project = project)
 
     student_group_form = StudentGroupForm()
+    print 'IIIIIIII'
+    print student_group.count()
+
     student_group_info_form = StudentGroupInfoForm()
+
+    # student_group_info_form.email = student_group[0].email
+
+
     return render(request, "school/member_change.html",
                   {"student_group": student_group,
                    "student_group_form": student_group_form,
