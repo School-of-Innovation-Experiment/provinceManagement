@@ -149,7 +149,148 @@ def info_xls_expertscore(request):
         # _index += 1
         _number+= 1
     # write xls file
+<<<<<<< HEAD
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院创新创业项目评分统计表"))
+=======
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学创新创业项目评分统计表"))
+    workbook.save(save_path)
+    return save_path
+
+def info_xls_summaryinnovate_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+    style = cell_style(horizontal=True,vertical=True)
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 10, '大连理工大学大学生创新训练项目汇总表(%s年)' % str(datetime.date.today().year),style)
+
+    # generate body
+    worksheet.write_merge(1, 1, 0, 0, '学生姓名')
+    worksheet.col(0).width = len('学生姓名')*200
+    worksheet.write_merge(1, 1, 1, 1, '学号')
+    worksheet.col(1).width = len('学号')*400
+    worksheet.write_merge(1, 1, 2, 2, '班级')
+    worksheet.col(2).width = len('班级')*300
+    worksheet.write_merge(1, 1, 3, 3, '项目名称')
+    worksheet.col(3).width = len('项目名称')*800
+    worksheet.write_merge(1, 1, 4, 4, '指导教师')
+    worksheet.col(4).width = len('指导教师')*200
+    worksheet.write_merge(1, 1, 5, 5, '职称')
+    worksheet.write_merge(1, 1, 6, 10, '备注')
+    return worksheet, workbook
+
+def info_xls_summaryinnovate(request):
+    """
+    """
+    def _format_number(i):
+        i = str(i)
+        i = '0' * (4-len(i)) + i
+        return i
+    print CATE_INNOVATION
+    proj_set = get_projectlist(request)
+    proj_set = proj_set.filter(project_category__category = CATE_INNOVATION)
+    xls_obj, workbook = info_xls_summaryinnovate_gen()
+    style = cell_style(horizontal=True,vertical=True)
+
+    # _index = 1
+    row = 1
+    for proj_obj in proj_set:
+        studentlist=get_students(proj_obj)
+        row_project_start = row + 1
+        print row
+        for student in studentlist:
+            row += 1
+            xls_obj.write(row, 0, unicode(student.studentName)) 
+            xls_obj.write(row, 1, unicode(student.studentId)) 
+            xls_obj.write(row, 2, unicode(student.classInfo)) 
+        if row_project_start > row :
+            row = row_project_start
+        print row 
+        print row_project_start
+        xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
+        xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,6,10)
+        # _index += 1  
+    # write xls file
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新训练项目汇总表"))
+    workbook.save(save_path)
+    return save_path
+
+def info_xls_summaryentrepreneuship_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+    style = cell_style(horizontal=True,vertical=True)
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 13, '大连理工大学大学生创业训练项目汇总表(%s年)' % str(datetime.date.today().year),style)
+
+    # generate body
+    worksheet.write_merge(1, 1, 0, 0, '排序')
+    worksheet.write_merge(1, 1, 1, 1, '学生姓名')
+    worksheet.col(1).width = len('学生姓名')*200
+    worksheet.write_merge(1, 1, 2, 2, '学号')
+    worksheet.col(2).width = len('学号')*400
+    worksheet.write_merge(1, 1, 3, 3, '班级')
+    worksheet.col(3).width = len('班级')*300
+    worksheet.write_merge(1, 1, 4, 4, '项目名称')
+    worksheet.col(4).width = len('项目名称') * 800
+    worksheet.write_merge(1, 1, 5, 5, '项目类别（创业训练或创业实践）')
+    worksheet.write_merge(1, 1, 6, 6, '指导教师')
+    worksheet.col(6).width = len('指导教师')*200
+    worksheet.write_merge(1, 1, 7, 7, '职称')
+    worksheet.write_merge(1, 1, 8, 8, '企业导师')
+    worksheet.col(8).width = len('企业导师')*200
+    worksheet.write_merge(1, 1, 9, 9, '单位/职称')
+    worksheet.write_merge(1, 1, 10, 13, '备注')
+    return worksheet, workbook
+
+def info_xls_summaryentrepreneuship(request):
+    """
+    """
+    def _format_number(i):
+        i = str(i)
+        i = '0' * (4-len(i)) + i
+        return i
+    proj_set = get_projectlist(request)
+    proj_set = proj_set.exclude(project_category__category = CATE_INNOVATION)
+    xls_obj, workbook = info_xls_summaryentrepreneuship_gen()
+    style = cell_style(horizontal=True,vertical=True)
+
+    # _index = 1
+    row = 1
+    number = 0
+    for proj_obj in proj_set:
+        row_project_start = row + 1
+        number += 1
+        studentlist=get_students(proj_obj)
+        try:
+            pre = PreSubmitEnterprise.objects.get(project_id=proj_obj.project_id)
+            teacher_enterprise = Teacher_Enterprise.objects.filter(id=pre.enterpriseTeacher_id)
+        except Exception, e:
+            print e
+        finally:
+            teacher_enterprise = Teacher_Enterprise()
+        for student in studentlist:
+            row += 1
+            xls_obj.write(row, 1, unicode(student.studentName)) 
+            xls_obj.write(row, 2, unicode(student.studentId)) 
+            xls_obj.write(row, 3, unicode(student.classInfo)) 
+        if row_project_start > row :
+            row = row_project_start
+            
+        xls_obj.write_merge(row_project_start,row,0,0,unicode(number),style)
+        xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.title),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.project_category),style)
+        xls_obj.write_merge(row_project_start,row,6,6,unicode(proj_obj.adminuser.get_name()),style)
+        xls_obj.write_merge(row_project_start,row,7,7,unicode(proj_obj.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,8,8,unicode(teacher_enterprise.name),style)
+        xls_obj.write_merge(row_project_start,row,9,9,unicode(teacher_enterprise.jobs)+'/'+unicode(teacher_enterprise.titles),style)
+        xls_obj.write_merge(row_project_start,row,10,13)
+        # _index += 1  
+    # write xls file
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创业训练项目汇总表"))
+>>>>>>> edd4073... fix display bug in scholl
     workbook.save(save_path)
     return save_path
 
