@@ -24,7 +24,7 @@ def info_xls_baseinformation_gen():
     worksheet = workbook.add_sheet('sheet1')
     style = cell_style(horizontal=True,vertical=True)
     # generate header
-    worksheet.write_merge(0, 0, 0, 10, '大连理工大学创新创业项目基本信息统计表',style)
+    worksheet.write_merge(0, 0, 0, 10, SCHOOL_NAME+'创新创业项目基本信息统计表',style)
 
     # generate body
     worksheet.write_merge(1, 1, 0, 0, '项目编号')
@@ -88,7 +88,7 @@ def info_xls_baseinformation(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学创新创业项目基本信息统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年"+SCHOOL_NAME+"创新创业项目基本信息统计表"))
     workbook.save(save_path)
     return save_path
 

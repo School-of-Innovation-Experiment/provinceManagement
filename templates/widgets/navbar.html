@@ -15,9 +15,11 @@
               <ul class="nav">
                 <li class="active"><a href="/">主页</a></li>
                 <li><a href="/features/">平台介绍</a></li>
-                <li><a href="/show/">成果展示</a></li>
+				<li><a href="/show/">成果展示</a></li>
+				{% if not IS_SCHOOL_BASIC %}
                 <li><a href="/feedback/">反馈中心</a></li>
-              </ul>
+				{% endif %}
+			  </ul>
       		  <ul class="nav pull-right  ">
       		  	{% if request.user.is_authenticated %}
       		  		<li class="nav-li"><a href="/settings/profile" ><i class="icon-user icon-white"> </i></a></li>
