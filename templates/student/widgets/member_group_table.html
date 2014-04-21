@@ -81,7 +81,9 @@
       <td><strong>更新信息</strong></td>
       <td><strong>人员变更</strong></td>
       {% endif %}
+      {% if not IS_SCHOOL_BASIC %} 
       <td><strong>学分申请</strong></td>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -114,8 +116,9 @@
             <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
             {% endif %}
           </td>
-          {% endif %} 
-          <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td>              
+          {% endif %}
+          {% if not IS_SCHOOL_BASIC %} 
+          <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td> {% endif %}             
         </tr>
         {% endfor %}
     {% endif %}
@@ -151,4 +154,5 @@
     {%endfor%}
   </tbody>
 </table><!--end history list table-->
+<script type='text/javascript' src="{{STATIC_URL}}js/student/member_change.js"></script>
 {% endif %}
