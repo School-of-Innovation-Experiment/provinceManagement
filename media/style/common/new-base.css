@@ -5,13 +5,13 @@ body {
     background-repeat:round;
     background-size: 100%;
 }
-#head-title {
+.head-title {
     font-family:黑体;
     font-weight:bold;
     color: white;
     font-size:54px;
 }
-#head-title-low {
+.head-title-low {
     font-family:黑体;
     font-size: 20px;
     color: white;
@@ -21,7 +21,28 @@ body {
     border-radius: 0px;
     opacity:0.7;
 }
-#head-hr {
+.head-hr {
     opacity:0.7;
     border-top-width: 0px;
+}
+.main-content-container {
+    background-color: white;
+}
+#footer-links {
+    background: rgb(72, 65, 231);
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+.item-title {
+    font-size: 18px;
+    line-height: 0px;
+    font-weight: bold;
+    color: white;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    margin-top: 5px;
 }
