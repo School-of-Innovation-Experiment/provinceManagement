@@ -11,7 +11,7 @@
 <div class="body">
 
     <!-- showcss: ~/document/django/InnovationManagement/media/style/homepage.css -->
-  {% if IS_DLUT_SCHOOL %}
+  {% if IS_DLUT_SCHOOL or IS_SCHOOL_BASIC %}
   <div class="home-title">
     <p>欢迎使用<span style="color: #fff;"> 大连理工大学创新创业项目管理平台</span></p>
   </div>
@@ -83,7 +83,7 @@
           </ul>
         </div>
         <div class="home-link">
-          {% if IS_DLUT_SCHOOL %}
+          {% if IS_DLUT_SCHOOL or IS_SCHOOL_BASIC%}
           <h6>相关链接:</h6>
           <ul>
             <li><a href="http://www.dlut.edu.cn" >大连理工大学</a></li>
@@ -150,7 +150,7 @@
 
         </div><!-- /.carousel -->
         {% endif %}
-        {% if IS_DLUT_SCHOOL %}
+        {% if IS_DLUT_SCHOOL or IS_SCHOOL_BASIC %}
         <!-- Carousel  ================================================== -->
         <div id="myCarousel" class="carousel slide">
           <div class="carousel-inner">

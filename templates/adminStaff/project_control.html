@@ -37,17 +37,18 @@
     <br \>
     <input type="button" class="btn btn-warning" value="设定比例" onclick="set_recommend_rate();">
   </fieldset>
-  <hr \>
-  <fieldset>
-    <legend>项目自动编号</legend>
-    <div class="alert alert-success" style="display:none" id="success_bar_2">
-        <button type="button" class="close" data-dismiss="alert">x</button>
-        编号成功！
-    </div>
-
-  </fieldset>
-    <input type="button" class="btn btn-warning" value="自动编号" onclick="auto_ranking();">
-  </fieldset>
+  {% if not IS_SCHOOL_BASIC%}
+      <hr \>
+      <fieldset>
+        <legend>项目自动编号</legend>
+        <div class="alert alert-success" style="display:none" id="success_bar_2">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            编号成功！
+        </div>
+      </fieldset>
+        <input type="button" class="btn btn-warning" value="自动编号" onclick="auto_ranking();">
+      </fieldset>
+ {% endif%}
 </form>
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}
