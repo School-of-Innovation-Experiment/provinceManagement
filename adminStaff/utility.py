@@ -211,7 +211,7 @@ def info_xls_summaryinnovate(request):
         print row_project_start
         xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
-        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_ob>j.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
         xls_obj.write_merge(row_project_start,row,6,10)
         # _index += 1  
     # write xls file
@@ -421,7 +421,11 @@ def info_xls_projectsummary(request):
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         loginfo(p=proj_obj.title, label="project category") 
-        innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
