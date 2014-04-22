@@ -175,8 +175,8 @@ table.documents td {
     height: 35px;
 }
 .usoft-listview-header div {
-    text-de
     padding-left: 10px;
+    margin-left:-15px;
     background-color:rgb(245,79,81);
     height: 35px;
     width: 250px;

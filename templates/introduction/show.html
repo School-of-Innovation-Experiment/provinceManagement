@@ -11,11 +11,11 @@
     <a href="#" id="show-search-tools-bar">隐藏</a>
     <form class="form-inline" action="." method="GET" id="search-tools-bar" >
       <select name="search_school">
-	      <option selected="true" value="">学校名</option>
+	 <option selected="true" value="">学校名</option>
 	      {% for school in schools %}
-	      <option value="{{ school.id }}" {% if school.id|add:"0" == search_school|add:"0" %}
-                  selected="true"
-          {% endif %}>{{ school }}</option>
+	         <option value="{{ school.id }}" {% if school.id|add:"0" == search_school|add:"0" %}
+                    selected="true"
+              {% endif %}>{{ school }}</option>
 	      {% endfor %}
       </select>
       <select name="search_year">
@@ -37,7 +37,7 @@
       <input type="text" name="search_keywords" value="{{keywords}}" placeholder="关键字">
       <button id="search-submit" type="submit" class="btn">检索</button>
     </form>
-    <div style="margin-left:0px;" class="clearfix" id="flow_container">
+    <div style="margin-left:0px;" class="container" id="flow_list_container">
       {% include "introduction/ajax/_show_list.html" %}
     </div>
     <i class="icon-search" style="top: 150px; bottom: auto; left: auto; right: 0; position: fixed;"></i>

@@ -16,6 +16,8 @@ body{
      -moz-border-radius: 5px;
           border-radius: 5px;
 }
+#flow_list_container{
+}
 
 .centered { margin: 0 auto; }
 
@@ -215,9 +217,9 @@ body{
 
 /**** Flow stlye****/
 .flow-style {
-  	padding-top: 100px;
-	  padding-bottom: 100px;
-    margin-left:75px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    margin-left:285px;
     margin-right:auto;
     text-align:left;
 }
@@ -231,6 +233,15 @@ body{
 }
 
 .title{
-  text-align:center;
-  margin-top:15px;
+  text-align:left;
+  margin-top:10px;
+  margin-bottom:2px;
+  color:rgb(72, 65, 231);
+}
+#flow_container hr{
+   margin-top: 2px;
+   margin-bottom: 10px;
+}
+#flow_container p{
+   margin: 2px;
 }
