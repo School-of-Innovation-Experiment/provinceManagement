@@ -69,5 +69,10 @@ body {
 }
 .alert_position{
     margin-top:20px;
-    margin-right:10px
+}
+.container{
+    width:1150px;
+}
+.news_display_div{
+    display:inline-block;
 }

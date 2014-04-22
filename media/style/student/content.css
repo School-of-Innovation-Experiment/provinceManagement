@@ -103,3 +103,9 @@ select.studispatch{
   width:100px;
   height: 31px;
 }
+#report_span{
+    margin-top:10px;
+}
+#report_span .span3{
+    width:22%;
+}

@@ -4,50 +4,52 @@
 
 {% block calculate-content%}
 <!--Project Status-->
-<div class="page-header">
-	<h3>项目状态</h3>
-</div><!--end project status-->
-<table class="table table-hover studenttable">
-  <thead>
-    <tr>
-      <th>名称</th>
-      <th>项目类型</th>
-      <th>学科类型</th>
-      <th>指导教师</th>
-      <th>当前状态</th>
-      <th>评审级别</th>
-      <th>详情</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td title="{{project.title}}">{{project.title|truncatechars:20}}</td>
-      <!-- <td>{{project.project_category}}</td> -->
-      <td>
-        <select id="proj_cate_select">
-          {% for choice in proj_cate_choice %}
-          <option {%if choice.0 == project_cate %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
-          {% endfor %}
-        </select><span id="error_message"></span>
-      </td>
-      <td>
-        <select id="proj_insitute_select">
-          {% for choice in proj_insitute_choice %}
-          <option {%if choice.0 == project_insitute %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
-          {% endfor %}
-        </select><span id="insitute_error_message"></span>
-      </td>
-      <td>{{project.inspector}}</td>
-      <td>{{project.project_status}}</td>
-      <td>{{project.project_grade}}</td>
-      <td>
-        <span><a href="{% url school.views.application_report_view project.project_id%}" class='btn btn-primary'>申请</a></span>
-        <span><a href="{% url school.views.mid_report_view project.project_id%}" class='btn btn-primary'>中期</a></span>
-        <span><a href="{% url school.views.final_report_view project.project_id%}" class='btn btn-primary'>结题</a></span>
-        <span><a href="{% url school.views.file_view project.project_id%}" class='btn btn-primary'>文件操作</a></span>
-      </td>
-    </tr>
-  </tbody>
-</table><!--end current_list table-->
+<div class="container">
+   <div class="page-header">
+   	<h3>项目状态</h3>
+   </div><!--end project status-->
+   <table class="table table-hover studenttable">
+     <thead>
+       <tr>
+         <th>名称</th>
+         <th>项目类型</th>
+         <th>学科类型</th>
+         <th>指导教师</th>
+         <th>当前状态</th>
+         <th>评审级别</th>
+         <th>详情</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <td title="{{project.title}}">{{project.title|truncatechars:20}}</td>
+         <!-- <td>{{project.project_category}}</td> -->
+         <td>
+           <select id="proj_cate_select">
+             {% for choice in proj_cate_choice %}
+             <option {%if choice.0 == project_cate %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+             {% endfor %}
+           </select><span id="error_message"></span>
+         </td>
+         <td>
+           <select id="proj_insitute_select">
+             {% for choice in proj_insitute_choice %}
+             <option {%if choice.0 == project_insitute %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+             {% endfor %}
+           </select><span id="insitute_error_message"></span>
+         </td>
+         <td>{{project.inspector}}</td>
+         <td>{{project.project_status}}</td>
+         <td>{{project.project_grade}}</td>
+         <td>
+           <span><a href="{% url school.views.application_report_view project.project_id%}" class='btn btn-primary'>申请</a></span>
+           <span><a href="{% url school.views.mid_report_view project.project_id%}" class='btn btn-primary'>中期</a></span>
+           <span><a href="{% url school.views.final_report_view project.project_id%}" class='btn btn-primary'>结题</a></span>
+           <span><a href="{% url school.views.file_view project.project_id%}" class='btn btn-primary'>文件操作</a></span>
+         </td>
+       </tr>
+     </tbody>
+   </table><!--end current_list table-->
+</div>
 <script type='text/javascript' src="{{STATIC_URL}}js/school/student_home.js"></script>
 {%endblock%}

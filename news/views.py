@@ -35,10 +35,10 @@ def index(request):
     news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
     news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING).order_by('-news_date')
     news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS).order_by('-news_date')
-    context = getContext(news_announcement, 1, "news_announcement")
-    context.update(getContext(news_policy, 1, "news_policy"))
-    context.update(getContext(news_outstanding, 1, "news_outstanding"))
-    context.update(getContext(news_others, 1, "news_others"))
+    context = getContext(news_announcement, 1, "news_announcement", page_elems=7)
+    context.update(getContext(news_policy, 1, "news_policy", page_elems=7))
+    context.update(getContext(news_outstanding, 1, "news_outstanding", page_elems=7))
+    context.update(getContext(news_others, 1, "news_others", page_elems=7))
     return context
     # return render(request, 'home/index.html', context)
 

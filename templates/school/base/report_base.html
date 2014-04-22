@@ -3,47 +3,46 @@
 
 {%block calculate-content%}
 <!--Project Choice-->
-<div class="row">
-  <div class="span3">
-    <div class="alert alert-info" style=" text-align:center;">
-      <h4><a href={% url school.views.application_report_view pid%}>申请报告</a></h4>
-    </div><!--end alert-->
-  </div><!--end left span-->
-   <div class="span3">
-    <div class="alert alert-error" style=" text-align:center;">
-      <h4><a href={% url school.views.mid_report_view pid%}>中期报告</a></h4>
-    </div>
-  </div> 
-  <div class="span3">
-    <div class="alert alert-important" style=" text-align:center;">
-      <h4><a href={% url school.views.final_report_view pid%}>结题报告</a></h4>
-    </div>
-  </div> 
-  <div class="span3">
-    <div class="alert alert-success" style=" text-align:center;">
-      <h4><a href={% url school.views.file_view pid%}>成果上传</a></h4>
-    </div><!--end alert-->
-  </div><!--end right span--> 
-</div><!--end row-->
-{% if not is_show%}
-<div class="alert alert-error" style="margin-top:20px;">
-  <a class="close" data-dismiss="alert">x</a>
-  <h4 class="alert-heading">敬爱的校级管理员</h4>
-  <p>请您仔细审阅每个创新创业项目的初期报告、结题报告以及成果上传的内容，避免出现违反法律法规以及相关规定的内容!</p>
-</div>
-{% endif %}
-<!--Notice Messager-->
-{% if readonly %}
-  <div class="alert alert-error alert_position">
-    <a class="close" data-dismiss="alert">x</a> 
-    <h4 class="alert-heading">系统提示！</h4>
-    <p>目前此文档编辑权限已被系统锁定，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
-  </div><!--end alert block-->
-{%endif%}
-
 <div class="container">
-  {%block report-content%}
-  {%endblock%}
+    <div class="row" id="report_span">
+      <div class="span3">
+        <div class="alert alert-info" style=" text-align:center;">
+          <h4><a href={% url school.views.application_report_view pid%}>申请报告</a></h4>
+        </div><!--end alert-->
+      </div><!--end left span-->
+       <div class="span3">
+        <div class="alert alert-error" style=" text-align:center;">
+          <h4><a href={% url school.views.mid_report_view pid%}>中期报告</a></h4>
+        </div>
+      </div> 
+      <div class="span3">
+        <div class="alert alert-important" style=" text-align:center;">
+          <h4><a href={% url school.views.final_report_view pid%}>结题报告</a></h4>
+        </div>
+      </div> 
+      <div class="span3">
+        <div class="alert alert-success" style=" text-align:center;">
+          <h4><a href={% url school.views.file_view pid%}>成果上传</a></h4>
+        </div><!--end alert-->
+      </div><!--end right span--> 
+    </div><!--end row-->
+    {% if not is_show%}
+    <div class="alert alert-error" style="margin-top:20px;">
+      <a class="close" data-dismiss="alert">x</a>
+      <h4 class="alert-heading">敬爱的校级管理员</h4>
+      <p>请您仔细审阅每个创新创业项目的初期报告、结题报告以及成果上传的内容，避免出现违反法律法规以及相关规定的内容!</p>
+    </div>
+    {% endif %}
+    <!--Notice Messager-->
+    {% if readonly %}
+      <div class="alert alert-error alert_position">
+        <a class="close" data-dismiss="alert">x</a> 
+        <h4 class="alert-heading">系统提示！</h4>
+        <p>目前此文档编辑权限已被系统锁定，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+      </div><!--end alert block-->
+    {%endif%}
+    {%block report-content%}
+    {%endblock%}
 </div>
 
 
