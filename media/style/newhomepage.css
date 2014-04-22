@@ -91,9 +91,9 @@ body {
     height: 290px;
     overflow: hidden;
     padding: 0 15px;
-    background: #fff;
     color: #333;
-    border: 1px solid #eaeaea;
+    /* border: 1px solid #eaeaea; */
+    border: 0px solid #eaeaea;
 }
 
 .home-news {
@@ -104,6 +104,8 @@ body {
     padding: 0 1.5%;
     display: inline;
 }
+
+
 
 .width-table{
     width: 100%;
@@ -167,12 +169,21 @@ table.documents td {
 
 .usoft-listview-header
 {
-    background: url(../images/bg0.png) 0px 0px no-repeat; 
+    /* background: url(../images/bg0.png) 0px 0px no-repeat;  */
     margin: 0px;
     line-height: 35px;
     height: 35px;
 }
-
+.usoft-listview-header div {
+    text-de
+    padding-left: 10px;
+    background-color:rgb(245,79,81);
+    height: 35px;
+    width: 250px;
+}
+.usoft-listview-header small {
+    color: white;
+}
 .usoft-listview-item-date
 {
     color: #999999;
@@ -188,14 +199,19 @@ table.documents td {
     margin: 0px;
     line-height: 2em;
 }
+.usoft-listview-basic a {
+    color: rgb(72,63,210);
+}
 .front-wrap ul
 {
-    list-style: url(../images/arrow.gif);
+    /* list-style: url(../images/arrow.gif); */
+    list-style-type: none;
     margin-left: 5px;
 }
 
 .usoft-listview-header h3 {
     float: left;
+    color: white;
 }
 
 .usoft-listview-more a {
