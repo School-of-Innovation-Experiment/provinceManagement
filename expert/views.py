@@ -66,14 +66,17 @@ def home_view(request):
         item.financial_category = item.project.financial_category
     # loginfo(p=re_project, label="EXPERT HOME")
 
-    data = {'current_list': re_project,
-            'limitnum': limitnum,
+    page = request.GET.get('page')
+    context = getContext(re_project, page, 'item', 0)
+
+    data = {'limitnum': limitnum,
             'really': really,
             'remaining': remaining,
             'limitnum_b': limitnum_b,
             'really_b': really_b,
             'remaining_b': remaining_b}
-    return render(request, 'expert/home.html', data)
+    context.update(data)
+    return render(request, 'expert/home.html', context)
 
 
 @csrf.csrf_protect

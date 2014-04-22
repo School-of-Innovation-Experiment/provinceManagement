@@ -128,7 +128,7 @@ class AdminStaffService(object):
             email_list  = AdminStaffService.GetRegisterSchoolList()
             page = request.GET.get('page')
             loginfo(p=page, label="current page num")
-            context = getContext(email_list, page, 'email', 0)
+            context = getContext(email_list, page, 'item', 0)
             context['school_form'] = school_form
 
             #loginfo(p=email_list, label="news email_list ")
@@ -158,7 +158,7 @@ class AdminStaffService(object):
             email_list = AdminStaffService.GetRegisterExpertList()
 
             page = request.GET.get('page')
-            context = getContext(email_list, page, 'email', 0)
+            context = getContext(email_list, page, 'item', 0)
             context.update({'expert_form': expert_form})
             return render(request, "adminStaff/ImportExpert.html", context)
 
@@ -250,7 +250,7 @@ class AdminStaffService(object):
             num_limit_form = forms.NumLimitForm()
             school_limit_num_list = AdminStaffService.SchoolLimitNumList()
             page = request.GET.get('page')
-            context = getContext(school_limit_num_list, page, 'school_limit', 0)
+            context = getContext(school_limit_num_list, page, 'item', 0)
             context.update({'num_limit_form':num_limit_form})
             return render(request, "adminStaff/projectlimitnumSettings.html", context)
 
@@ -391,7 +391,7 @@ class AdminStaffService(object):
             if school_name == "None": school_name = None
             #subject_list = AdminStaffService.GetSubject_list(school = school_name)
             subject_list = get_running_project_query_set().filter(school = school_name)
-            context = getContext(subject_list, page, 'subject', 0) 
+            context = getContext(subject_list, page, 'item', 0) 
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
@@ -399,7 +399,7 @@ class AdminStaffService(object):
                 school_name = school_category_form.cleaned_data["school_choice"]
                 #subject_list =  AdminStaffService.GetSubject_list(school=school_name)
                 subject_list = get_running_project_query_set().filter(school = school_name)
-                context = getContext(subject_list, 1, 'subject', 0)
+                context = getContext(subject_list, 1, 'item', 0)
         context.update({'school_category_form':school_category_form, 
                         'subject_grade_form':subject_grade_form,
                         'school_name':school_name,

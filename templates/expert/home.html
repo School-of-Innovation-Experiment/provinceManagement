@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in current_list%}
+      {%for item in item_list%}
       <tr>
         <td title="{{item.project}}">{{item.project.title|truncatechars:15}}</td>
         <td>{{item.project.project_category}}</td>
@@ -60,5 +60,6 @@
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
+  {% include "adminStaff/widgets/paginator.html" %}
 </div><!--end current list content-->
 {% endblock %}

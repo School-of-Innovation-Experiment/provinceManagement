@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in history_list%}
+      {%for item in item_list%}
       <tr>
         <td>{{item.year}}</td>
         <td><a href="{% url school.views.application_report_view item.project_id%}">{{item.title}}</a></td>
@@ -31,6 +31,7 @@
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
+  {% include "adminStaff/widgets/paginator.html" %}
 </div><!--end current list content-->
 
 {% endblock %}
