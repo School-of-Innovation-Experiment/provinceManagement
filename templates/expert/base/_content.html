@@ -13,10 +13,10 @@
   <div class="container form-container">
 	  {% include "widgets/userinfo_basicbar.html" %}
     {% include "expert/widgets/features_item_navbar.html" %}
-    {% block calculate-content %}
-
-    {% endblock %}
-
+    <div class="contain main-content-container">
+       {% block calculate-content %}
+       {% endblock %}
+    </div>
   </div>
   {% block footer-content %}
   {% endblock %}
