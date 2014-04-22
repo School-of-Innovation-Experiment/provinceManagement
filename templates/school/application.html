@@ -3,23 +3,8 @@
 
 
 {%block report-content%}
-  <form method="post" action= "/school/application/{{pid}}" >
-
-
-    {% csrf_token %}
-    <!--Basic Infomation-->
-
-    {% include "student/widgets/project_infoform.html" %}
-
-    {% include "student/widgets/teacher_enterprise.html" %}
-
-    <!--Application Infomation-->
-    {% include "student/widgets/application.html" %}
-    <!--Comments info-->
-    {% include "student/widgets/comments_info.html" %}
-    <!--submit button-->
-    {% include "student/widgets/commit_button.html" %}
-
-
+  {%include "widgets/richtext_toolbar.html"%}
+  <form method="post"  enctype="multipart/form-data" id="form_application" action= "/school/application/{{pid}}" >
+    {%include "widgets/application_form.html"%}
   </form>
 {%endblock%}

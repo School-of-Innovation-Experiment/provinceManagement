@@ -56,13 +56,15 @@ def delete_bad_files(request):
     临时检查文件是否在服务器端已损毁
     若已损毁，则删除数据库对应记录
     """
-    warning = False
-    project = get_current_project_query_set().get(student__userid = request.user)   
-    file_set = UploadedFiles.objects.filter(project_id = project)
-    for f in file_set:
-        if not default_storage.exists(f.file_obj.path):
-            f.delete()
-   
+    try:
+        project = get_current_project_query_set().get(student__userid = request.user)   
+        file_set = UploadedFiles.objects.filter(project_id = project)
+        for f in file_set:
+            if not default_storage.exists(f.file_obj.path):
+                f.delete()
+    except:
+        pass
+
 @csrf.csrf_protect
 @login_required
 @authority_required(STUDENT_USER)
@@ -146,7 +148,6 @@ def open_report_view(request, pid = None, is_expired = False):
     if data['isRedirect'] :
         return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
     else:
-        
         return render(request, 'student/open.html', data)
 
 def open_report_view_work(request, pid = None, is_expired = False):
@@ -374,9 +375,14 @@ def application_report_view_work(request, pid=None, is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     is_currentyear = check_year(project)
-
+    teammember=get_studentmessage(project)
     is_applying = check_applycontrol(project)
-
+    pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+    try:
+        innovation = pro_type.objects.get(project_id=project.project_id)
+    except Exception, err:
+        loginfo(p=err, label="get innovation")
+        loginfo(p=project.project_category.category, label="project category")
 
     if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = not is_applying or project.is_past    
@@ -446,7 +452,10 @@ def application_report_view_work(request, pid=None, is_expired=False):
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
             'is_innovation':is_innovation,
-            'is_show':is_show, 
+            'is_show':is_show,
+            'project':project,
+            'teammember':teammember,
+            'innovation':innovation,
             #lz add
             'isRedirect':isRedirect, 
             }

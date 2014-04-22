@@ -1,6 +1,6 @@
 {% extends "teacher/base/_content.html" %}
 {% block calculate-content %}
-    <form class="well form" id="process_record_info_form" method="POST" action="">
+    <form class="well form" id="comment_info_form" method="POST" action="">
         {% csrf_token %}
         <div class="input-prepend ">
             <span class="add-on ">月   次</span>{{monthcomment_form.monthId}}

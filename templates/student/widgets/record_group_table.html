@@ -1,20 +1,13 @@
-<div class="processrecord"  >
+<div class="processrecord" id="record_table">
     {% if record_group %}
       {%for record in record_group%}
-        <div class="well form">
-          <div class="body">
-            <div class="title">
-              <strong>第{{record.weekId}}周过程记录</strong>
-            </div>
-             <div class="time">
-              <strong>{{record.recorder}}&nbsp;于&nbsp;{{record.date}}&nbsp;填写完成</strong>
-            </div> 
-            <div class="details">
-              {{record.summary}}
-            </div>  
-          </div>
+        <div class="alert fade in" >
+          <button type="button" class="close" onclick="delete_record(this)">×</button>
+            <h4 val={{record.weekId}}>第{{record.weekId}}周过程记录</h4>
+            <p val={{record.recorder}}><strong>{{record.recorder}}&nbsp;于&nbsp;{{record.date}}&nbsp;填写完成</strong></p>
+            <p id="record_summary">{{record.summary}}</p>
         </div>
       {%endfor%}
     {% endif %}
-</div> 
+</div>
 

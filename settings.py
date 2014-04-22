@@ -238,7 +238,7 @@ FILE_DELETE_URL = '/student/delete/'
 HOMEPAGE_PIC_PATH = join(MEDIA_ROOT, "homepage_pic")
 
 # news documents path
-NEWS_DOCUMENTS_PATH = join(MEDIA_ROOT, "news-documents/%Y/%m/%d")
+NEWS_DOCUMENTS_PATH = "news-documents/%Y/%m/%d"
 
 # tmp files path
 TMP_FILES_PATH = join(MEDIA_ROOT, "tmp")
@@ -258,3 +258,9 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 #school information
 IS_MINZU_SCHOOL = False
 IS_DLUT_SCHOOL = True
+IS_SCHOOL_BASIC = False
+
+# RPC_SITE
+RPC_SITE_TEST = "http://192.168.2.77:8000/rpc/"
+RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"
+RPC_SITE = RPC_SITE_TEST

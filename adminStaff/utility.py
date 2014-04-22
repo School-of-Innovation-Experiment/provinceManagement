@@ -16,6 +16,9 @@ from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 from const import *
 
+def get_average_score_list(review_list):
+    cnt_of_list = len(review_list)
+    return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)]
 def info_xls_baseinformation_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
@@ -97,20 +100,23 @@ def info_xls_expertscore_gen():
     worksheet.write_merge(0, 0, 0, 10, '大连理工大学创新创业项目评分统计表',style)
 
     # generate body
-    worksheet.write_merge(1, 1, 0, 0, '项目编号')
-    worksheet.col(0).width = len('项目编号') * 300
-    worksheet.write_merge(1, 1, 1, 1, '项目名称')
-    worksheet.col(1).width = len('项目名称') * 800
-    worksheet.write_merge(1, 1, 2, 2, '项目级别')
-    worksheet.write_merge(1, 1, 3, 3, '指导教师')
+
+    worksheet.write_merge(1, 1, 0, 0, '项目申报编号')
+    worksheet.col(0).width = len('项目申报编号') * 200
+    worksheet.write_merge(1, 1, 1, 1, '名称')
+    worksheet.col(1).width = len('名称') * 800
+    worksheet.write_merge(1, 1, 2, 2, '学院')
+    worksheet.col(2).width = len('学院') * 800
+    worksheet.write_merge(1, 1, 3, 3, '项目级别')
+    worksheet.write_merge(1, 1, 4, 4, '指导教师')
     worksheet.col(3).width = len('指导教师') * 200
-    worksheet.write_merge(1, 1, 4, 4, '项目选题意义')
-    worksheet.write_merge(1, 1, 5, 5, '科技研究价值')
-    worksheet.write_merge(1, 1, 6, 6, '项目创新之处')
-    worksheet.write_merge(1, 1, 7, 7, '项目可行性')
-    worksheet.write_merge(1, 1, 8, 8, '预期成果')
-    worksheet.write_merge(1, 1, 9, 9, '指导教师科研能力')
-    worksheet.write_merge(1, 1,10, 10, '总分')
+    worksheet.write_merge(1, 1, 5, 5, '项目选题意义')
+    worksheet.write_merge(1, 1, 6, 6, '科技研究价值')
+    worksheet.write_merge(1, 1, 7, 7, '项目创新之处')
+    worksheet.write_merge(1, 1, 8, 8, '项目可行性')
+    worksheet.write_merge(1, 1, 9, 9, '预期成果')
+    worksheet.write_merge(1, 1, 10, 10, '指导教师科研能力')
+    worksheet.write_merge(1, 1,11, 11, '总分')
     return worksheet, workbook
 
 def info_xls_expertscore(request):
@@ -130,17 +136,19 @@ def info_xls_expertscore(request):
         scorelist=get_expertscore(proj_obj)
 
         row = 1 + _number
-        xls_obj.write(row, 0, unicode(proj_obj.project_unique_code)) 
-        xls_obj.write(row, 1, unicode(proj_obj.title)) 
-        xls_obj.write(row, 2, unicode(proj_obj.project_grade)) 
-        xls_obj.write(row, 3, unicode(proj_obj.adminuser.get_name())) 
-        xls_obj.write(row, 4, unicode(scorelist[0])) 
-        xls_obj.write(row, 5, unicode(scorelist[1])) 
-        xls_obj.write(row, 6, unicode(scorelist[2]))
-        xls_obj.write(row, 7, unicode(scorelist[3])) 
-        xls_obj.write(row, 8, unicode(scorelist[4]))  
-        xls_obj.write(row, 9, unicode(scorelist[5])) 
-        xls_obj.write(row, 10, unicode(scorelist[6])) 
+        xls_obj.write(row, 0, unicode(proj_obj.project_code)) 
+        xls_obj.write(row, 1, unicode(proj_obj.title))
+        xls_obj.write(row, 2, unicode(proj_obj.school.school))
+        xls_obj.write(row, 3, unicode(proj_obj.project_grade)) 
+        xls_obj.write(row, 4, unicode(proj_obj.adminuser.get_name())) 
+        xls_obj.write(row, 5, unicode(scorelist[0])) 
+        xls_obj.write(row, 6, unicode(scorelist[1])) 
+        xls_obj.write(row, 7, unicode(scorelist[2]))
+        xls_obj.write(row, 8, unicode(scorelist[3])) 
+        xls_obj.write(row, 9, unicode(scorelist[4]))  
+        xls_obj.write(row, 10, unicode(scorelist[5])) 
+        xls_obj.write(row, 11, unicode(scorelist[6])) 
+
 
 
         # _index += 1
@@ -315,7 +323,8 @@ def get_expertscore(proj_obj):
     review_list = getSubjectReviewList(project_id)
 
     cnt_of_list = len(review_list)
-    average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    # average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
+    average_list = [sum(map(float, a)) / len(filter(bool, a)) if len(filter(bool, a)) else 0 for a in zip(*review_list)[1:]]
     loginfo(p=average_list,label="average_list")
     return average_list
 
@@ -412,7 +421,11 @@ def info_xls_projectsummary(request):
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         loginfo(p=proj_obj.title, label="project category") 
-        innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
