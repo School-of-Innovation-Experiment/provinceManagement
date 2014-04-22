@@ -7,7 +7,9 @@
         <li class="divider-vertical"></li>
 		<li><a href="/teacher">项目管理</a></li>
 		<li class="divider-vertical"></li>
+		{% if not IS_SCHOOL_BASIC %}
 		<li><a href="/teacher/funds_manage">经费查看</a></li>
+		{% endif %}
 		</div>
 	</div>	
 

@@ -24,7 +24,9 @@
                   <option value="2">学院</option>
                   <option value="3">学生</option>
                   <option value="4">教师</option>
-                  <option value="5">全部</option>
+                  {% if not IS_SCHOOL_BASIC %}
+                    <option value="5">全部</option>
+                  {% endif%}
                 </select>
               </div>
             </div>
@@ -40,12 +42,13 @@
             </div>
           </form>
         </div>
-        <div class="bs-docs-example span8">
-          <span><a class="btn btn-primary" data-toggle="modal" href="#notice_profile_info" 
-  onclick="empty_notice_profile_info()">添加新模版消息</a></span>
-<span id="template_notice_error_message"></span>
-          {% include "adminStaff/widgets/notice_message_table.html" %}
-        </div>
+        {% if not IS_SCHOOL_BASIC %}
+           <div class="bs-docs-example span8">
+             <span><a class="btn btn-primary" data-toggle="modal" href="#notice_profile_info" onclick="empty_notice_profile_info()">添加新模版消息</a></span>
+              <span id="template_notice_error_message"></span>
+             {% include "adminStaff/widgets/notice_message_table.html" %}
+           </div>
+        {% endif %}
       </div>
     </fieldset>
   </div><!--End FORM2-->

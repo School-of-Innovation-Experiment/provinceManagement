@@ -1,5 +1,7 @@
 <!-- pre application proposal page -->
+
 {% extends "student/base/report_base.html" %}
+
 {%block report-content%}
   {%include "widgets/richtext_toolbar.html"%}
   <form method="post"  enctype="multipart/form-data" id="form_application"  action={% url student.views.application_report_view pid %}>

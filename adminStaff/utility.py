@@ -24,7 +24,7 @@ def info_xls_baseinformation_gen():
     worksheet = workbook.add_sheet('sheet1')
     style = cell_style(horizontal=True,vertical=True)
     # generate header
-    worksheet.write_merge(0, 0, 0, 10, '大连理工大学创新创业项目基本信息统计表',style)
+    worksheet.write_merge(0, 0, 0, 10, SCHOOL_NAME+'创新创业项目基本信息统计表',style)
 
     # generate body
     worksheet.write_merge(1, 1, 0, 0, '项目编号')
@@ -88,7 +88,7 @@ def info_xls_baseinformation(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学创新创业项目基本信息统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年"+SCHOOL_NAME+"创新创业项目基本信息统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -421,8 +421,11 @@ def info_xls_projectsummary(request):
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         loginfo(p=proj_obj.title, label="project category") 
-        innovation = pro_type.objects.get(project_id=proj_obj.project_id)
-
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
         xls_obj.write(row, 1, unicode(proj_obj.school.school))
