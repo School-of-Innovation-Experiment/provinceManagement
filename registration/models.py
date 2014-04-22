@@ -137,8 +137,11 @@ class RegistrationManager(models.Manager):
         elif kwargs.get('teacher_school', False):
             teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
             teacherProfileObj.save()
+            #teacherProjLimit = TeacherProjectPerLimits(teacher=teacherProfileObj,
+            #                                           number=0)
             teacherProjLimit = TeacherProjectPerLimits(teacher=teacherProfileObj,
-                                                       number=0)
+                                                       number=10000)
+
             teacherProjLimit.save()
 
         elif kwargs.get("expert_user", False):
