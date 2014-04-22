@@ -7,8 +7,7 @@
       <a href="#" id="releaseexcel_baseinformation" onclick="  $('#excelprogress').modal('show');Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'baseinformation'});" >下载项目基本状态统计表</a>
     </button>
   </div>
-  {% endif %}
-  {% if not  IS_SCHOOL_BASIC %}
+  {% else %}
   <div class="span4">
     <button class="btn btn-large btn-large id_export_button" type="button" >
       <a href="#" id="releaseexcel_baseinformation" onclick="  $('#excelprogress').modal('show');Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':'baseinformation'});" >下载项目基本状态统计表</a>
