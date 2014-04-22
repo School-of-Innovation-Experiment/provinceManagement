@@ -18,6 +18,8 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import get_current_site,Site
 from django.db import models
+
+from adminStaff.models import ProjectPerLimits
 from const.models import UserIdentity
 from const import *
 from backend.logging import logger,loginfo
@@ -116,6 +118,10 @@ class RegistrationManager(models.Manager):
                 loginfo("person_name:"+kwargs["person_name"])
                 schoolProfileObj = SchoolProfile(school=schoolObj, userid =new_user,name = kwargs["person_name"])
                 schoolProfileObj.save()
+
+                ProjLimit = ProjectPerLimits(school = schoolProfileObj, number = 10000)
+                ProjLimit.save()
+
                 project_is_assigned = Project_Is_Assigned(school=schoolProfileObj)
                 project_is_assigned.save()
             else:
@@ -130,6 +136,11 @@ class RegistrationManager(models.Manager):
                 schoolProfileObj.userid = new_user
                 schoolProfileObj.name  = kwargs["person_name"]
                 schoolProfileObj.save()
+                
+                if ProjectPerLimits.objects.filter(school = schoolProfileObj).count() == 0:
+                    ProjLimit = ProjectPerLimits(school = schoolProfileObj, number = 10000)
+                    ProjLimit.save()
+
                 if ExpertProfile.objects.filter(userid = oldUserObj).count() == 0 \
                     and TeacherProfile.objects.filter(userid = oldUserObj).count() == 0:
                     oldUserObj.delete() #删除被覆盖用户
