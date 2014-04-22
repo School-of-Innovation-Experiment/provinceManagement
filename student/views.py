@@ -56,12 +56,14 @@ def delete_bad_files(request):
     临时检查文件是否在服务器端已损毁
     若已损毁，则删除数据库对应记录
     """
-    warning = False
-    project = get_current_project_query_set().get(student__userid = request.user)   
-    file_set = UploadedFiles.objects.filter(project_id = project)
-    for f in file_set:
-        if not default_storage.exists(f.file_obj.path):
-            f.delete()
+    try:
+        project = get_current_project_query_set().get(student__userid = request.user)   
+        file_set = UploadedFiles.objects.filter(project_id = project)
+        for f in file_set:
+            if not default_storage.exists(f.file_obj.path):
+                f.delete()
+    except:
+        pass
    
 @csrf.csrf_protect
 @login_required
