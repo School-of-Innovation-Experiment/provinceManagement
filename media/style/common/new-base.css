@@ -5,6 +5,13 @@ body {
     background-repeat:round;
     background-size: 100%;
 }
+a, h1, h2, h3 {
+    color: rgb(72, 65, 231);
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, STHeiti, "LiHei Pro Medium", SimSun, SumHei;
+}
+a:hover, a:focus, a:active {
+    color: black;
+}
 .head-title {
     font-family:黑体;
     font-weight:bold;

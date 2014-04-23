@@ -141,8 +141,8 @@ table.documents {
     width: 100%;
 }
 div.documents-list {
-    height: 60%;
-    overflow： hidden;
+    height: 100%;
+    overflow: hidden;
 }
 table.documents td {
     white-space:nowrap;
@@ -153,6 +153,40 @@ table.documents td {
 .news-body {
     height: 100%;
     overflow: hidden;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.news-content-nav {
+    background-color: transparent;
+    width: 1060px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 0 auto;
+}
+.news-content-nav .nav {
+    margin-bottom: 0px !important;
+}
+.news-content-nav .nav li {
+    line-height: 16px;
+}
+.news-content-nav .nav li a {
+    font-size: 16px;
+    line-height: 15px;
+    font-weight: bold;
+    color: #fff !important;
+    padding-left:20px;
+    padding-right:20px;
+    border-top: 0px solid transparent !important;
+    border-left: 0px solid transparent !important;
+    border-right: 0px solid transparent !important;
+    border-radius: 0px;
+}
+.news-content-nav .nav li a:hover,
+.news-content-nav .nav li a:focus,
+.news-content-nav .nav li a:active,
+.news-content-nav .nav li.active a {
+    background-color: rgb(31, 60, 92) !important;
+    border-bottom: 3px solid rgb(245, 81, 84);
 }
 .news-list {
     margin: 0;
@@ -224,6 +258,13 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
 .usoft-listview-basic a {
     color: rgb(72,63,210);
 }
+.usoft-listview-basic li {
+    list-style-type: none;
+}
+.usoft-listview-basic ul,
+.usoft-listview-basic ol {
+    margin-left: 5px;
+}
 .front-wrap ul
 {
     /* list-style: url(../images/arrow.gif); */
@@ -251,7 +292,11 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     padding: 0 15px;
 }
 .news-documents {
-    height: 75% !important;
+    padding-top: 15px;
+    height: 100% !important;
+}
+.news-body .news-documents {
+    padding-top: 0px;
 }
 .news-documents table {
 }
