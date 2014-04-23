@@ -141,7 +141,6 @@ table.documents {
     width: 100%;
 }
 div.documents-list {
-    padding-top: 15px;
     height: 100%;
     overflow: hidden;
 }
@@ -154,6 +153,8 @@ table.documents td {
 .news-body {
     height: 100%;
     overflow: hidden;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .news-content-nav {
     background-color: transparent;
@@ -228,6 +229,13 @@ input[type="text"], input[type="button"] {
 .usoft-listview-basic a {
     color: rgb(72,63,210);
 }
+.usoft-listview-basic li {
+    list-style-type: none;
+}
+.usoft-listview-basic ul,
+.usoft-listview-basic ol {
+    margin-left: 5px;
+}
 .front-wrap ul
 {
     /* list-style: url(../images/arrow.gif); */
@@ -255,7 +263,11 @@ input[type="text"], input[type="button"] {
     padding: 0 15px;
 }
 .news-documents {
+    padding-top: 15px;
     height: 100% !important;
+}
+.news-body .news-documents {
+    padding-top: 0px;
 }
 .news-documents table {
 }

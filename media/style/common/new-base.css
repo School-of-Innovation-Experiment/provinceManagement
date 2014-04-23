@@ -5,6 +5,12 @@ body {
     background-repeat:round;
     background-size: 100%;
 }
+a {
+    color: rgb(72, 65, 231);
+}
+a:hover, a:focus, a:active {
+    color: black;
+}
 .head-title {
     font-family:黑体;
     font-weight:bold;

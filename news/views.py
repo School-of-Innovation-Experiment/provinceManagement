@@ -32,11 +32,13 @@ def index(request):
     for index_new
     '''
     news_announcement = News.objects.filter(news_category__category=NEWS_CATEGORY_ANNOUNCEMENT).order_by('-news_date')
-    news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
+    # news_policy = News.objects.filter(news_category__category=NEWS_CATEGORY_POLICY).order_by('-news_date')
+    news_dynamic = News.objects.filter(news_category__category=NEWS_CATEGORY_DYNAMIC).order_by('-news_date')
     news_outstanding = News.objects.filter(news_category__category=NEWS_CATEGORY_OUTSTANDING).order_by('-news_date')
     news_others = News.objects.filter(news_category__category=NEWS_CATEGORY_OTHERS).order_by('-news_date')
     context = getContext(news_announcement, 1, "news_announcement", page_elems=8)
-    context.update(getContext(news_policy, 1, "news_policy", page_elems=8))
+    # context.update(getContext(news_policy, 1, "news_policy", page_elems=8))
+    context.update(getContext(news_dynamic, 1, "news_dynamic", page_elems=8))
     context.update(getContext(news_outstanding, 1, "news_outstanding", page_elems=8))
     context.update(getContext(news_others, 1, "news_others", page_elems=8))
     return context
@@ -49,7 +51,8 @@ def index_new(request):
     context.update(index(request))
     news_cate = {}
     news_cate["news_category_announcement"] = NEWS_CATEGORY_ANNOUNCEMENT
-    news_cate["news_category_policy"] = NEWS_CATEGORY_POLICY
+    news_cate["news_category_dynamic"] = NEWS_CATEGORY_DYNAMIC
+    # news_cate["news_category_policy"] = NEWS_CATEGORY_POLICY
     news_cate["news_category_others"] = NEWS_CATEGORY_OTHERS
     news_cate["news_category_outstanding"] = NEWS_CATEGORY_OUTSTANDING
     context.update(news_cate)

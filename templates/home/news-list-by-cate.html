@@ -2,6 +2,22 @@
 
 {% block home_content %}
   <div class="news-body">
+    <div class="news-content-nav">
+      <ul class="nav nav-tabs nav-justified">
+        <li class="{{announcement_active}}">
+          <a href="/newslist/news_cate=announcement">通知公告</a>
+        </li>
+        <li class="{{announcement_active}}">
+          <a href="/newslist/news_cate=dynamic">高校动态</a>
+        </li>
+        <li class="{{announcement_active}}">
+          <a href="/newslist/news_cate=outstanding">优秀作品</a>
+        </li>
+        <li class="{{announcement_active}}">
+          <a href="/newslist/news_cate=others">他山之石</a>
+        </li>
+      </ul>
+    </div>
     <div class="news-list">
       <div>
         <div class="search">
@@ -10,7 +26,6 @@
             <input id="search-news" type="button" value="Go!" alt="Go." title="Go." cate="{{news_cate.category}}">
           </form>
         </div>
-        <h3>{{news_cate}} <small>{{news_cate.category}}</small></h3>
       </div>
       {% include "home/ajax/_news_list.html" %}
     </div> <!-- news-list -->
