@@ -20,17 +20,6 @@
         <div class="container">
           <ul class="nav">
             <li class=""><a href="/">首页</a></li>
-<!--             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                新闻栏目<b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu home_menu" role="menu">
-                <li><a href="/newslist/news_cate=announcement">通知公告</a></li>
-                <li><a href="/newslist/news_cate=policy">政策规章</a></li>
-                <li><a href="/newslist/news_cate=outstanding">优秀作品</a></li>
-                <li><a href="/newslist/news_cate=others">他山之石</a></li>
-              </ul>
-            </li> -->
             <li class=""><a href="/show/">成果展示</a></li>
             <li class=""><a href="/analysis/school">历史数据</a></li>
             {% if request.user.is_authenticated %}
@@ -97,9 +86,11 @@
 </div><!--end whole container-->
 
   <!--different page content-->
+  {%block before_home_content%}{%endblock%}
   <div class="container main-content-container">
   {%block home_content%}{%endblock%}
   </div>
+  {%block after_home_content%}{%endblock%}
 {%endblock%}
 {% block bottom_js %}
   {{ block.super }}

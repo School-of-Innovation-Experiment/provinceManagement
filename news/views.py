@@ -16,6 +16,7 @@ from backend.utility import getContext, getSchoolsPic
 import datetime, os
 from const import *
 from const.models import *
+from backend.logging import logger, loginfo
 
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
@@ -65,6 +66,7 @@ def read_news(request, news_id):
     context = Context({
         'news': news,
         'news_cate':news_cate,
+        '%s_active' % news_cate.category: 'active',
     })
     return render(request, 'home/news-content.html', context)
 
@@ -77,6 +79,7 @@ def list_news_by_cate(request, news_cate):
     news_page = request.GET.get('news_page')
     context = getContext(news_list, news_page, 'news')
     context["news_cate"] = news_cate
+    context['%s_active' % news_cate.category] = 'active'
     return render(request, 'home/news-list-by-cate.html', \
                   Context(context))
 

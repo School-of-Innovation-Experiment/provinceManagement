@@ -1,24 +1,26 @@
 {% extends 'base/base_home.html' %}
 
+{% block before_home_content%}
+<div class="news-content-nav">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="{{announcement_active}}">
+      <a href="/newslist/news_cate=announcement">通知公告</a>
+    </li>
+    <li class="{{dynamic_active}}">
+      <a href="/newslist/news_cate=dynamic">高校动态</a>
+    </li>
+    <li class="{{outstanding_active}}">
+      <a href="/newslist/news_cate=outstanding">优秀作品</a>
+    </li>
+    <li class="{{other_active}}">
+      <a href="/newslist/news_cate=others">他山之石</a>
+    </li>
+  </ul>
+</div>
+{% endblock%}
 {% block home_content %}
 <div class="news-body">
   <div class="news-main">
-    <div class="news-content-nav">
-      <ul class="nav nav-tabs nav-justified">
-        <li class="{{announcement_active}}">
-          <a>通知公告</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a>高校动态</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a>优秀项目</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a>他山之石</a>
-        </li>
-      </ul>
-    </div>
     <div>
       <h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
       <h6><a href="/newslist/news_cate={{news_cate.category}}"><<更多</a></h6>

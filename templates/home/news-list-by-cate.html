@@ -1,38 +1,40 @@
 {% extends "base/base_home.html" %}
 
+{% block before_home_content%}
+<div class="news-content-nav">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="{{announcement_active}}">
+      <a href="/newslist/news_cate=announcement">通知公告</a>
+    </li>
+    <li class="{{dynamic_active}}">
+      <a href="/newslist/news_cate=dynamic">高校动态</a>
+    </li>
+    <li class="{{outstanding_active}}">
+      <a href="/newslist/news_cate=outstanding">优秀作品</a>
+    </li>
+    <li class="{{other_active}}">
+      <a href="/newslist/news_cate=others">他山之石</a>
+    </li>
+  </ul>
+</div>
+{% endblock%}
 {% block home_content %}
-  <div class="news-body">
-    <div class="news-content-nav">
-      <ul class="nav nav-tabs nav-justified">
-        <li class="{{announcement_active}}">
-          <a href="/newslist/news_cate=announcement">通知公告</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a href="/newslist/news_cate=dynamic">高校动态</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a href="/newslist/news_cate=outstanding">优秀作品</a>
-        </li>
-        <li class="{{announcement_active}}">
-          <a href="/newslist/news_cate=others">他山之石</a>
-        </li>
-      </ul>
-    </div>
-    <div class="news-list">
-      <div>
-        <div class="search">
-          <form action="#" method="get">
-            <input id="news-search-input" class="search-input" type="text" size="16" alt="Search.">
-            <input id="search-news" type="button" value="Go!" alt="Go." title="Go." cate="{{news_cate.category}}">
-          </form>
-        </div>
+<div class="news-body">
+  <div class="news-list">
+    <div>
+      <div class="search">
+        <form action="#" method="get">
+          <input id="news-search-input" class="search-input" type="text" size="16" alt="Search.">
+          <input id="search-news" type="button" value="Go!" alt="Go." title="Go." cate="{{news_cate.category}}">
+        </form>
       </div>
-      {% include "home/ajax/_news_list.html" %}
-    </div> <!-- news-list -->
-  </div> <!-- news-main -->
-  <hr />
+    </div>
+    {% include "home/ajax/_news_list.html" %}
+  </div> <!-- news-list -->
+</div> <!-- news-main -->
+<hr />
 
 {% endblock %}
 {% block endjs %}
-  <script type="text/javascript" src="{{STATIC_URL}}/js/home/ajax_get_list.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}/js/home/ajax_get_list.js"></script>
 {% endblock %}
