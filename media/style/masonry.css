@@ -17,6 +17,7 @@ body{
           border-radius: 5px;
 }
 #flow_list_container{
+    margin-left: 0px;
 }
 
 .centered { margin: 0 auto; }
@@ -38,7 +39,6 @@ body{
   font-weight: 200;
 }
 
-.box img,
 #tumblelog img {
   display: block;
   width: 100%;
@@ -52,11 +52,11 @@ body{
 
 
 
-.col1 { width: 80px; }
-.col2 { width: 180px; }
-.col3 { width: 280px; }
-.col4 { width: 380px; }
-.col5 { width: 480px; }
+.col1 { width: 80px;height:300px; }
+.col2 { width: 180px;height:300px; }
+.col3 { width: 280px;height:300px; }
+.col4 { width: 380px;height:300px; }
+.col5 { width: 480px;height:300px; }
 
 .col1 img { max-width: 80px; }
 .col2 img { max-width: 180px; }
