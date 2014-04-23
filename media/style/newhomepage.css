@@ -141,8 +141,9 @@ table.documents {
     width: 100%;
 }
 div.documents-list {
-    height: 60%;
-    overflow： hidden;
+    padding-top: 15px;
+    height: 100%;
+    overflow: hidden;
 }
 table.documents td {
     white-space:nowrap;
@@ -153,6 +154,9 @@ table.documents td {
 .news-body {
     height: 100%;
     overflow: hidden;
+}
+.news-content-nav {
+    background-color: transparent;
 }
 .news-list {
     margin: 0;
@@ -251,7 +255,7 @@ input[type="text"], input[type="button"] {
     padding: 0 15px;
 }
 .news-documents {
-    height: 75% !important;
+    height: 100% !important;
 }
 .news-documents table {
 }
