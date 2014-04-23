@@ -48,7 +48,7 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in current_list%}
+      {%for item in item_list%}
       <tr>
         <td><a data-toggle="modal" onclick="get_element(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}">{{item.project_code}}</a></td>
         <td title="{{item.title}}">{{item.title|truncatechars:15}}</td>
@@ -82,6 +82,7 @@
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
+  {% include "adminStaff/widgets/paginator.html" %}
   <div class="modal hide fade" style="display: none;" id="project_code_add">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>

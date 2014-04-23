@@ -132,16 +132,19 @@ def home_view(request, is_expired=False):
         a_remainings = 0
     add_current_list = current_list_add(list=current_list)
 
+    page = request.GET.get('page')
+    context = getContext(add_current_list, page, "item", 0)
+
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
-    data = {"current_list": add_current_list,
-            "financial_cate_choice": FINANCIAL_CATE_CHOICES,
+    data = {"financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings,
                      "applications_a_remaining": a_remainings,
                      }
             }
-    return render(request, 'school/home.html', data)
+    context.update(data)
+    return render(request, 'school/home.html', context)
 
 
 @csrf.csrf_protect
@@ -379,9 +382,9 @@ def history_view(request):
 
     history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year)
 
-    data = {"history_list": history_list}
-
-    return render(request, 'school/history.html', data)
+    page = request.GET.get('page')
+    context = getContext(history_list, page, 'item', 0)
+    return render(request, 'school/history.html', context)
 
 
 @csrf.csrf_protect
@@ -503,7 +506,12 @@ def StudentDispatch(request):
         email_num = Count_email_already_exist(request)
         limited_num = school_limit_num(request)
         remaining_activation_times = limited_num-email_num
-        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))
+
+        page = request.GET.get('page')
+        context = getContext(email_list, page, 'item', 0)
+
+        context.update({'student_form':student_form,'remaining_activation_times':remaining_activation_times})
+        return render(request, "school/dispatch.html", context)
 
 def check_is_audited(user,presubmit,checkuser):
     if check_auth(user=user, authority=checkuser):
