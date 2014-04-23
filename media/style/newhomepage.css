@@ -161,7 +161,7 @@ table.documents td {
     width: 95%;
 /* border-right: 1px solid #0064b9; */
 }
-input[type="text"], input[type="button"] {
+input[type="text"], input[type="button"] ,input[type="submit"],select{
     border-radius: 0px;
 }
 .search-input:hover,

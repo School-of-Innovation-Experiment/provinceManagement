@@ -26,4 +26,4 @@ class SearchForm(forms.Form):
         Search form for school statistics
     """
     SCHOOL_CHOICE = tuple([(o.school.id, o.school.schoolName) for o in SchoolProfile.objects.all()])
-    schoolName = forms.ChoiceField(choices=SCHOOL_CHOICE)
+    schoolName = forms.ChoiceField(choices=SCHOOL_CHOICE,widget=forms.Select(attrs={'class':'search-input'}))

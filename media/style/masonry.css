@@ -1,8 +1,4 @@
 
-body{
-  margin:0px auto;
-  text-align: center;
-}
 
 /**** Demos ****/
 
@@ -18,7 +14,10 @@ body{
 }
 #flow_list_container{
     margin-left: 0px;
+    max-height:950px;
+    overflow:auto;
 }
+
 
 .centered { margin: 0 auto; }
 
@@ -52,11 +51,11 @@ body{
 
 
 
-.col1 { width: 80px;height:300px; }
-.col2 { width: 180px;height:300px; }
-.col3 { width: 280px;height:300px; }
-.col4 { width: 380px;height:300px; }
-.col5 { width: 480px;height:300px; }
+.col1 { width: 80px;height:285px; }
+.col2 { width: 180px;height:285px; }
+.col3 { width: 280px;height:285px; }
+.col4 { width: 380px;height:285px; }
+.col5 { width: 480px;height:285px; }
 
 .col1 img { max-width: 80px; }
 .col2 img { max-width: 180px; }
@@ -244,4 +243,8 @@ body{
 }
 #flow_container p{
    margin: 2px;
+}
+#search-tools-bar{
+    margin-top:20px;
+    margin-left:15px;
 }
