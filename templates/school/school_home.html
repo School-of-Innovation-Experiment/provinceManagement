@@ -16,13 +16,19 @@
 	<th>项目级别</th>
 	<th>指导教师</th>
 	<th>申报书</th>
-    <th>开题报告</th>
+	{% if not IS_SCHOOL_BASIC %}
+	<th>开题报告</th>
+	{% endif %}
 	<th>中期检查表</th>
 	<th>结题验收</th>
+	{% if not IS_SCHOOL_BASIC%}
 	<th>项目汇编</th>
-        <th>联系方式</th>
+	{% endif %}
+	<th>联系方式</th>
 	<th>是否结题</th>
+	{% if not IS_SCHOOL_BASIC %}
 	<th>查看过程记录</th>
+	{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -35,12 +41,13 @@
         <td>
           {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
+	  </td>
+	  {% if not IS_SCHOOL_BASIC %}
         <td>
             {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opensubmit }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
         </td>
-
+		{% endif %}
         <td>
           {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
@@ -48,11 +55,13 @@
         <td>
           {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
+	  </td>
+	  {% if not IS_SCHOOL_BASIC %}
         <td>
           {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_projectcompilation %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
+	  </td>
+	  {% endif %}
         <td>{{item.telephone}}</td>
         <td>
 	  <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}>  -->
@@ -65,11 +74,13 @@
           {% endif%}
           {% if IS_MINZU_SCHOOL %}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
-          {% endif %}
-        </td>
+		  {% endif %}
+	  </td>
+	  {% if not IS_SCHOOL_BASIC %}
 	<td>
       	  <span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
-  	</td>
+	  </td>
+	  {% endif %}
       </tr>
       {%endfor%}
     </tbody>

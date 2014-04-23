@@ -19,12 +19,15 @@
         <!--th>当前状态</th!-->
         <th>评审级别</th>
 
-        <th>申报书</th>
-        <th>开题报告</th>
+		<th>申报书</th>
+		{% if not IS_SCHOOL_BASIC %}
+		<th>开题报告</th>
+		{% endif  %}
         <th>中期检查表</th>
-        <th>结题验收表</th>
+		<th>结题验收表</th>
+		{% if not IS_SCHOOL_BASIC %}
         <th>项目汇编</th>
-
+		{% endif %}
         <th>详情</th>
       </tr>
     </thead>
@@ -44,12 +47,13 @@
         <td>
           {% if project.file_application %}<span class="label label-success"><a href="{{project.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not project.file_application %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
+	  </td>
+	  	{% if not IS_SCHOOL_BASIC %}
         <td>
             {% if project.file_opencheck %}<span class="label label-success"><a href="{{project.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not project.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
           </td>
-
+		{% endif %}
         <td>
           {% if project.file_interimchecklist %}<span class="label label-success"><a href="{{project.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not project.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
@@ -57,12 +61,13 @@
         <td>
           {% if project.file_summary %}<span class="label label-success"><a href="{{project.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not project.file_summary %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
+	  </td>
+	  {% if not IS_SCHOOL_BASIC %}
         <td>
           {% if project.file_projectcompilation %}<span class="label label-success"><a href="{{project.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not project.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
         </td>
-
+		{% endif %}
 	<td>
 	  <span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>申报表</a></span>
       {% if not IS_MINZU_SCHOOL %} <span><a  href="{% url teacher.views.open_report_view project.project_id%}" class="btn btn-primary">开题检查表</a></span> {% endif %}

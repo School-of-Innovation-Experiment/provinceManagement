@@ -8,7 +8,7 @@ from dajaxice.utils import deserialize_form
 from django.http import Http404
 from django.utils import simplejson
 from django.template.loader import render_to_string
-
+from django.shortcuts import render
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 from student.models import Student_Group,StudentWeeklySummary
 from school.models import ProjectSingle
@@ -21,7 +21,7 @@ from backend.utility import *
 
 from const import MEMBER_NUM_LIMIT
 from const import *
-
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL,IS_SCHOOL_BASIC
 from django.shortcuts import get_object_or_404
 
 def getProject(request):
@@ -228,6 +228,7 @@ def refresh_member_table(request):
     loginfo(p=student_group_info_form,label ="test")
     return render_to_string("student/widgets/member_group_table.html",
                             {"student_group": student_group,
+                            "IS_SCHOOL_BASIC":IS_SCHOOL_BASIC,
                              "student_group_info_form": student_group_info_form})
 
 def new_or_update_record(request, record_form):
