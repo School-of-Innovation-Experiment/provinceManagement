@@ -1,49 +1,18 @@
-{% extends "base/base.html" %}
+{% extends 'base/base_home.html' %}
 
-{% block content %}
+{% block home_content %}
   <!-- index style -->
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/masonry.css" >
   <link rel="stylesheet" href="{{STATIC_URL}}showtime/css/showtime.css" type="text/css" media="screen" />
-  <div  class="flow-style">
-    <!--header-->
-    <a href="#" id="show-search-tools-bar">隐藏</a>
-    <form class="form-inline" action="." method="GET" id="search-tools-bar" >
-      <select name="search_school">
-	 <option selected="true" value="">学校名</option>
-	      {% for school in schools %}
-	         <option value="{{ school.id }}" {% if school.id|add:"0" == search_school|add:"0" %}
-                    selected="true"
-              {% endif %}>{{ school }}</option>
-	      {% endfor %}
-      </select>
-      <select name="search_year">
-	      <option selected="true" value="">年份</option>
-        {% for year in years %}
-	      <option value="{{ year }}" {% if year|add:"0" == search_year|add:"0" %}
-                  selected="true"
-          {% endif %} >{{ year }}</option>
-	      {% endfor %}
-      </select>
-      <select name="search_grade">
-	      <option selected="true" value="">等级</option>
-	      {% for grade in grades %}
-	      <option value="{{ grade.id }}" {% if grade.id|add:"0" == search_grade|add:"0" %}
-                  selected="true"
-          {% endif %}>{{ grade }}</option>
-	      {% endfor %}
-      </select>
-      <input type="text" name="search_keywords" value="{{keywords}}" placeholder="关键字">
-      <button id="search-submit" type="submit" class="btn">检索</button>
-    </form>
+    {%include "introduction/widgets/show_search_form.html"%}
     <div  class="container" id="flow_list_container">
       {% include "introduction/ajax/_show_list.html" %}
     </div>
-    <i class="icon-search" style="top: 150px; bottom: auto; left: auto; right: 0; position: fixed;"></i>
-  {% endblock %}
-  {% block bottom_js %}
+{% endblock %}
+{% block bottom_js %}
     {{ block.super }}
     <script type="text/javascript" src="{{STATIC_URL}}/js/infinitescroll/jquery.infinitescroll.min.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}/js/show/ajax_get_page.js"></script>
-  {% endblock %}
+{% endblock %}

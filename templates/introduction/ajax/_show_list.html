@@ -10,7 +10,7 @@
         </div>
         {% endifequal %}
         <a href="{% url showtime.views.show_project project.project_id %}" title="{{ project.title }}"><img src="{{ project.img }}"  /></a>
-        <h4 class="title">{{ project.title }}</h4>
+        <h4 class="title">{{ project.title|truncatechars:16 }}</h4>
         <hr/>
         <p><strong>参赛团队:</strong>&nbsp;&nbsp;{{ project.members }}</p>
         <p><strong>{{ project.project_status }}</strong></p>
