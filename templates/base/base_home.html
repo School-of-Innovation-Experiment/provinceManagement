@@ -98,8 +98,12 @@
 
   <!--different page content-->
   <div class="container main-content-container">
-  {%block home_content%}{%endblock%}
+    {%block home_content%}{%endblock%}
+    <div id="footer-links">
+        {% include "home/widgets/links.html" %}
+    </div>
   </div>
+  
 {%endblock%}
 {% block bottom_js %}
   {{ block.super }}
