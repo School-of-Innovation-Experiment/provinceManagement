@@ -95,7 +95,7 @@ def show_index_get_search_context(request, project_page):
     else:
         project_list = ProjectSingle.objects.all()
 
-    context = getContext(project_list, project_page, 'project', 8)
+    context = getContext(project_list, project_page, 'project', page_elems=9)
     context["search_school"] = search_school
     context["search_year"] = search_year
     context["search_grade"] = search_grade

@@ -45,7 +45,6 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
         #{name}_page:Page对象,默认"context_page"
         #{name}_list:第page页元素集合,默认"context_list"
     """
-    
     paginator = Paginator(contentList, page_elems)
     try:
         _page = paginator.page(page)

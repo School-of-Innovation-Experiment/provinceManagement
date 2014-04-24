@@ -12,6 +12,13 @@ a, h1, h2, h3 {
 a:hover, a:focus, a:active {
     color: black;
 }
+footer p {
+    width:620px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 100;
+}
 .head-title {
     font-family:黑体;
     font-weight:bold;
