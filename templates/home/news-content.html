@@ -12,7 +12,7 @@
     <li class="{{outstanding_active}}">
       <a href="/newslist/news_cate=outstanding">优秀作品</a>
     </li>
-    <li class="{{other_active}}">
+    <li class="{{others_active}}">
       <a href="/newslist/news_cate=others">他山之石</a>
     </li>
   </ul>
@@ -21,9 +21,10 @@
 {% block home_content %}
 <div class="news-body">
   <div class="news-main">
-    <div>
       <h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
-      <h6><a href="/newslist/news_cate={{news_cate.category}}"><<更多</a></h6>
+      <span class="usoft-listview-more">
+        <h6><a href="/newslist/news_cate={{news_cate.category}}"><sub>《</sub>更多 More</a></h6>
+      </span>
       <div class="news-content">
         <div>
           {% autoescape off %}
