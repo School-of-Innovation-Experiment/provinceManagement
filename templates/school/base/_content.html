@@ -9,20 +9,18 @@
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/jquery.fileupload-ui.css">
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/student/content.css" >
-
-<div class="container form-container">
-	<!-- user information bar -->
-	{% include "widgets/userinfo_basicbar.html" %}
-	<!-- important features nav-bar -->
-	{% include "school/widgets/features_item_navbar.html" %}
-	<!-- calculate content details -->
-        <div class="contain main-content-container">
-	{%block calculate-content%}
-        {% endblock %}
-        </div>
+  <div class="container form-container" >
+      <!-- user information bar -->
+      {% include "widgets/userinfo_basicbar.html" %}
+      <!-- important features nav-bar -->
+      {% include "school/widgets/features_item_navbar.html" %}
+      <!-- calculate content details -->
+  </div>
+  <div class="container main-content-container">
+       {%block calculate-content%}
+       {% endblock %}
+  </div>
   
-</div>
-
 {% endblock %}
 {% block footer-alert-bar %}
   {% if school_notice_message %}
