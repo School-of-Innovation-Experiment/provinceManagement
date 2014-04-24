@@ -150,6 +150,12 @@ table.documents td {
 }
 #news-list {
 }
+.news-content {
+    min-height:700px;
+    max-height:800px;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
 .news-content-nav {
     background-color: transparent;
     width: 1060px;
@@ -309,6 +315,14 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     opacity: 0.7;
 }
 
+.usoft-listview-more h6 a {
+    float: left;
+    font-size: 10px;
+}
+.usoft-listview-more h6 a sub {
+    font-size: 20px;
+}
+
 .news-list-important {
     margin: 0;
     height: 100%;
@@ -321,6 +335,11 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
 }
 .news-body .news-documents {
     padding-top: 0px;
+}
+.news-main {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-rightf: 20px;
 }
 .news-documents table {
 }
