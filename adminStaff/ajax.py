@@ -48,7 +48,7 @@ def NumLimit(request, form):
             school_limit_num_list = AdminStaffService.SchoolLimitNumList()
             page = request.GET.get('page')
 
-            context = getContext(school_limit_num_list, page, 'school_limit', 0)
+            context = getContext(school_limit_num_list, page, 'item', 0)
             table = render_to_string("adminStaff/widgets/projectlimitnumsettingsTable.html",
                            context)
             return simplejson.dumps(
@@ -268,7 +268,7 @@ def refresh_to_table(page,school_name):
     print page,school_name
     if school_name == "None": school_name = None
     subject_list = AdminStaffService.GetSubject_list(school = school_name)
-    context = getContext(subject_list, page, 'subject', 0) 
+    context = getContext(subject_list, page, 'item', 0) 
 
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 

@@ -93,8 +93,6 @@ def member_change(request):
     student_group = Student_Group.objects.filter(project = project)
 
     student_group_form = StudentGroupForm()
-    print 'IIIIIIII'
-    print student_group.count()
 
     student_group_info_form = StudentGroupInfoForm()
 

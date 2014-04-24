@@ -26,7 +26,6 @@ a:hover, a:focus, a:active {
 }
 .navbar-inner {
     border-radius: 0px;
-    opacity:0.7;
 }
 .head-hr {
     opacity:0.7;
@@ -45,9 +44,11 @@ a:hover, a:focus, a:active {
 }
 #footer-links {
     background: rgb(72, 65, 231);
-    padding-left: 13px;
-    padding-right: 13px;
     height:150px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 1030px;
+    margin: 0 auto;
 }
 
 .item-title-white {
@@ -81,7 +82,7 @@ a:hover, a:focus, a:active {
     margin-top:20px;
 }
 .container{
-    width:1150px;
+    width:1060px;
 }
 .news_display_div{
     display:inline-block;
