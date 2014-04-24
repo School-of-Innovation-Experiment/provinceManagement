@@ -38,6 +38,7 @@ function delete_member(caller)
 function get_student_info(caller)
 {
   var  tr_parent= $(caller).parent().parent();
+  studentId = $(tr_parent).children("td:eq(0)").html();
   $("#change_info_student_id").html($(tr_parent).children("td:eq(0)").html());
   // $(tr_parent).children("td:eq(0)").html();
   // alert($(tr_parent).children("td:eq(4)").html());
@@ -48,7 +49,6 @@ function get_student_info(caller)
   $("input[name='telephone']").val($(tr_parent).children("td:eq(3)").html());
   $("input[name='classInfo']").val($(tr_parent).children("td:eq(4)").html());
   
-
   change_id = studentId;
 }
 
