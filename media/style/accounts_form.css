@@ -16,22 +16,22 @@
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
 	margin-bottom: 10px;
-	} 
-	 
-.form-signin input[type="text"],
-  .form-signin input[type="password"] {
+	}
+.form-signin input[type="text"], .form-signin input[type="password"] {
     font-size: 18px;
     height: auto;
     margin-bottom: 15px;
     padding: 7px 9px;
     width: 350px;
     margin-left: -120px;
-  }   
+  } 
 .form-container{
 	padding-top: 100px;
   min-width: 1060px;
-}   
-
+}
+.form-container .span3{
+    width:220px;
+}
 .form-resetform{
   margin-top: 40px;
 } 
@@ -116,4 +116,7 @@ h2.login{
 
 p.forget-text{
   margin-top:30px;
+}
+#setting_div .span3{
+    width:240px;
 }
