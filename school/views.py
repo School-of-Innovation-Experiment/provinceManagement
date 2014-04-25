@@ -278,8 +278,9 @@ def project_control(request):
     # try
     over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
     grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
+    grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
     grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(over_status=over_notover_status)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
+    pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(over_status=over_notover_status)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade = grade_insitute)))
     loginfo(p=pro_list,label="pro_list in school %s" % request.user)
     year_list=[]
     for pro_obj in pro_list :
