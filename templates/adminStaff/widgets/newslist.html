@@ -11,7 +11,7 @@
     <tbody>
       {%for news in news_list%}
       <tr id="{{news.id}}">
-        <td>{{news.news_title}}</td>
+        <td>{{news.news_title|truncatechars:25}}</td>
         <td>{{news.news_category}}</td>
         <td>{{news.news_date}}</td>
         <td>
