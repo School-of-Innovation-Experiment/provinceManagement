@@ -1,13 +1,15 @@
 {% extends "base/base_home.html" %}
 
-{% block home_content %}
+{% block before_home_content%}
 <!--pictures and import news-->
-<div class="row-fluid news_frame">
+
+<div class="row-fluid news_frame homepage-picture">
   <div class="span12">
     {% include "home/widgets/new_pictures.html" %}
   </div><!--end pictures-->
 </div>
-<br/>
+{% endblock %}
+{% block home_content %}
 <!--other news item -->
 <div class="row-fluid news_frame">
   <div class="span6">

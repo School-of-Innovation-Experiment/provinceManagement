@@ -67,11 +67,49 @@ body {
 .home_menu {
     display: none;
 }
-
+.homepage-picture {
+    margin: 0 auto;
+    width: 1060px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    min-height:330px;
+}
+#myCarousel {
+    width: 1020px !important;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+.my-carousel-control {
+    position: absolute;
+    top:20px;
+    width:20px;
+    height: 260px;
+    font-size: 60px;
+    font-weight: 100;
+    line-height: 50px;
+    background-color:rgb(31, 60, 92);
+    text-align: center;
+    border: 0 solid transparent;
+}
+.my-carousel-control a {
+    top:100px;
+    text-decoration: none !important;
+    color: rgb(248,248,248);
+    background-color:rgb(244,82,85);
+}
+.my-carousel-control.left {
+    margin-left: -40px;
+    left: 20px;
+    right: auto;
+}
+.my-carousel-control.right {
+    margin-right: -40px;
+    left: auto;
+    right: 20px;
+}
 .news_frame {
     height: 300px;
 }
-
 #show-pictures{
     height: 300px;   
 }
