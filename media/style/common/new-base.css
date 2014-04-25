@@ -19,7 +19,9 @@ footer p {
     margin-right: auto;
     font-weight: 100;
 }
-
+.masthead a{
+    text-decoration:none !important;
+}
 .head-title-low {
     font-family:黑体;
     font-size: 20px;
