@@ -1,8 +1,10 @@
 {% extends "school/base/_content.html" %}
 {% block calculate-content%}
-<div class="alert fade in">
-  <a class="close" data-dismiss="alert" href="#">×</a>
-  <strong>警告！您还剩下<span id="remaining_activation_times">{{remaining_activation_times}}</span>次发送激活邮件的机会</strong>
+<div>
+   <div class="alert alert_block alert_position">
+     <a class="close" data-dismiss="alert" href="#">×</a>
+     <strong>警告！您还剩下<span id="remaining_activation_times">{{remaining_activation_times}}</span>次发送激活邮件的机会</strong>
+   </div>
 </div>
 <div>
   <form class="well form-inline" id="student_email_send_form" method="POST" action="">
