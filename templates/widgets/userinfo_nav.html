@@ -1,6 +1,5 @@
 <ul class="nav pull-right  ">
   {% if request.user.is_authenticated %}
-  <li class="nav-li"><a href="/settings/profile" ><i class="icon-user icon-white"> </i></a></li>
   <li class="nav-li-username"><a href="/settings/profile">{{ request.user.username }}</a></li>
   {%if userauth.is_schooler %}
   <li class="nav-li"><a href={% url school.views.home_view %} rel="tooltip" data-placement="bottom"
