@@ -27,21 +27,21 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{project.project_code}}</td>
-                  <td>{{project.title}}</td>
+                  <td width="10%">{{project.project_code}}</td>
+                  <td width="15%">{{project.title|truncatechars:15}}</td>
                   <td>{{project.financial_category}}</td>
                   <td>{{project.project_category}}</td>
                   <td>{{teammember.manager_name}}</td>
                   <td>{{teammember.manager_studentid}}</td>
                   <td>{{teammember.member_number}}</td>
-                  <td>{{teammember.othermember}}</td>
+                  <td width="10%">{{teammember.othermember}}</td>
                   <td>{{project.inspector}}</td>
                   <td>{{project.inspector_title}}</td>
                   {% for fin_tmp in fin_type %}
                   <td>{{fin_tmp}}</td>
                   {% endfor %}
                   <td>{{project.insitute}}</td>
-                  <td>{{innovation.innovation}}</td>
+                  <td width="20%">{{innovation.proj_introduction}}</td>
                 </tr>
               </tbody>
             </table>

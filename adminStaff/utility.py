@@ -111,7 +111,7 @@ def info_xls(request):
         xls_obj.write(row, 13, fin_type[1]) # 经费
         xls_obj.write(row, 14, fin_type[2]) # 经费
         xls_obj.write(row, 15, unicode(proj_obj.insitute))
-        xls_obj.write_merge(row, row, 16, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+        xls_obj.write_merge(row, row, 16, 18, unicode(innovation.proj_introduction)) # both enterprise and innovation has innovation attr
 
         # _index += 1
         _number+= 1
