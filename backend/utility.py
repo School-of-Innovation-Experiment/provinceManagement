@@ -11,7 +11,8 @@ import uuid
 from settings import STATIC_URL, MEDIA_URL
 from settings import SCHOOLS_ROOT, SCHOOLS_AB
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from const.__init__ import PAGE_ELEMENTS
+from const.__init__ import PAGE_ELEMENTS, School_Code
+from backend.logging import logger, loginfo
 def search_tuple(src, target):
     """
     search value in tuple
@@ -83,4 +84,15 @@ def getSchoolsPic():
     get schools pictures name
     """
     files = os.listdir(SCHOOLS_ROOT)
-    return [SCHOOLS_AB+item for item in files]
+    school_list = sorted(School_Code.iteritems(),key=lambda d:d[0])
+    school_group = []
+    for school_temp in school_list:
+		for file in files:
+			filename = file.split('.')[0]
+			if school_temp[1] == filename:
+				school_group.append(file)
+    print school_group
+    for tmp in school_group:
+        print tmp
+    loginfo(p=files,label="files")
+    return [SCHOOLS_AB+item for item in school_group ]
