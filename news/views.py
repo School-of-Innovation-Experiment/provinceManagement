@@ -134,7 +134,7 @@ def index(request):
     context.update(
         getContext(news_list, \
                    1, 'homepage_news'))
-    return render(request, 'home/index.html', context)
+    return render(request, 'home/new-homepage.html', context)
 
 def list_news(request):
     news_list = News.objects.order_by('-news_date')
