@@ -1,107 +1,96 @@
 {% extends "base/base.html" %}
-
-{%block top-nav-bar%}
-{%endblock%}
-
-{%block content%}
 <!--Css Style-->
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/newhomepage.css" >
-<div class="container">
-  <!--head content-->
-  <div class="masthead">
-    <!--Head title-->
-    <h1 class="muted" id="head-title">大连理工大学创新创业项目管理平台</h1>
-    <!--nav bar like as menu-->
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <ul class="nav">
-            <li class=""><a href="/">首页</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                新闻栏目<b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu home_menu" role="menu">
-                <li><a href="/newslist/news_cate=announcement">通知公告</a></li>
-                <li><a href="/newslist/news_cate=policy">政策规章</a></li>
-                <li><a href="/newslist/news_cate=outstanding">优秀作品</a></li>
-                <li><a href="/newslist/news_cate=documents">文件下载</a></li>
-              </ul>
-            </li>
-            <li class=""><a href="/show/">成果展示</a></li>
-            {% if request.user.is_authenticated %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理系统
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu home_menu" role="menu" >
-                <li>
-                  <a href="/settings/profile">用户信息: {{ request.user.username }}</a>
-                </li>
-                {%if userauth.is_adminstaff %}
-                <li>
-                  <a href="/adminStaff/" >校级管理员</a>
-                </li>
-                {%endif%}
-                {%if userauth.is_schooler %}
-                <li>
-                  <a href={% url school.views.home_view %} >学院管理员</a>
-                </li>
-                {%endif%}
-                {%if userauth.is_teacher %}
-                <li>
-                  <a href={% url teacher.views.home_view %} >指导老师</a>
-                </li>
-                {%endif%}
-                {%if userauth.is_experter %}
-                <li>
-                  <a href={% url expert.views.home_view %} >评审专家</a>
-                </li>
-                {%endif%}
-                {%if userauth.is_student%}
-                <li>
-                  <a href={% url student.views.home_view %} >参赛学生</a>
-                </li>
-                {%endif%}
-                {%if request.user.is_superuser%}
-                <li>
-                  <a href="/admin/" >超级用户</a>
-                </li>
-                {%endif%}
-                <li>
-                  <a href="/accounts/logout">注销</a>
-                </li>
-              </ul>
-            </li><!--end dropdown div-->
-            {% else %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">登录入口
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu home_menu" role="menu">
-                <li><a href="/accounts/login">校级管理员</a></li>
-                <li><a href="/accounts/login">学院管理员</a></li>
-                <li><a href="/accounts/login">指导老师</a></li>
-                <li><a href="/accounts/login">评审专家</a></li>
-                <li><a href="/accounts/login">参赛学生</a></li>
-              </ul>
-            </li>
-            {% endif %}
-            <li class=""><a href="/features/">平台指南</a></li>
-            <li class=""><a href="/feedback/">反馈中心</a></li>
-          </ul>
-        </div><!--end container-->
-      </div><!--end narbar inner-->
-    </div><!--end navbar-->
-  </div><!--end mashhead-->
-</div><!--end whole container-->
+{% block before_css %}
+   {{ block.super }}
+   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/newhomepage.css" >
+{% endblock  %}
 
-<!--different page content-->
-<div class="container">
-  {%block home_content%}{%endblock%}
-</div>
+{% block nav_content%}
+   <div class="container">
+     <div class="navbar">
+       <div class="navbar-inner">
+         <div class="container">
+           <ul class="nav">
+             <li class=""><a href="/">首页</a></li>
+             <li class=""><a href="/show/">成果展示</a></li>
+             {% if request.user.is_authenticated %}
+             <li class="dropdown">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理系统
+                 <b class="caret"></b>
+               </a>
+               <ul class="dropdown-menu home_menu" role="menu" >
+                 <li>
+                   <a href="/settings/profile">用户信息: {{ request.user.username }}</a>
+                 </li>
+                 {%if userauth.is_adminstaff %}
+                 <li>
+                   <a href="/adminStaff/" >校级管理员</a>
+                 </li>
+                 {%endif%}
+                 {%if userauth.is_schooler %}
+                 <li>
+                   <a href={% url school.views.home_view %} >学院管理员</a>
+                 </li>
+                 {%endif%}
+                 {%if userauth.is_teacher %}
+                 <li>
+                   <a href={% url teacher.views.home_view %} >指导老师</a>
+                 </li>
+                 {%endif%}
+                 {%if userauth.is_experter %}
+                 <li>
+                   <a href={% url expert.views.home_view %} >评审专家</a>
+                 </li>
+                 {%endif%}
+                 {%if userauth.is_student%}
+                 <li>
+                   <a href={% url student.views.home_view %} >参赛学生</a>
+                 </li>
+                 {%endif%}
+                 {%if request.user.is_superuser%}
+                 <li>
+                   <a href="/admin/" >超级用户</a>
+                 </li>
+                 {%endif%}
+                 <li>
+                   <a href="/accounts/logout">注销</a>
+                 </li>
+               </ul>
+             </li><!--end dropdown div-->
+             {% else %}
+             <li class="dropdown">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">登录入口
+                 <b class="caret"></b>
+               </a>
+               <ul class="dropdown-menu home_menu" role="menu">
+                 <li><a href="/accounts/login">校级管理员</a></li>
+                 <li><a href="/accounts/login">学院管理员</a></li>
+                 <li><a href="/accounts/login">指导老师</a></li>
+                 <li><a href="/accounts/login">评审专家</a></li>
+                 <li><a href="/accounts/login">参赛学生</a></li>
+               </ul>
+             </li>
+             {% endif %}
+             <li class=""><a href="/features/">平台指南</a></li>
+             <li class=""><a href="/feedback/">反馈中心</a></li>
+             <li class=""><a href="/newslist/news_cate=policy">资料下载 </a> </li>
+           </ul>
+         </div><!--end container-->
+       </div><!--end narbar inner-->
+     </div><!--end navbar-->
+   </div><!--end whole container-->
+
+  {%block before_home_content%}{%endblock%}
+  <div class="container main-content-container">
+    {%block home_content%}{%endblock%}
+  </div>
+  {%block after_home_content%}
+    <div id="footer-links">
+        {% include "home/widgets/links.html" %}
+    </div>
+  {%endblock%}
 {%endblock%}
 {% block bottom_js %}
-{{ block.super }}
-<script type='text/javascript' src="{{ STATIC_URL }}js/features.js"></script>
+  {{ block.super }}
+  <script type='text/javascript' src="{{ STATIC_URL }}js/features.js"></script>
 {% endblock %}
