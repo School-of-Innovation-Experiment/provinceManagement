@@ -1,35 +1,6 @@
 {% extends "school/base/_content.html" %}
 {% block school_content %}
-  <div class="container">
-    <div class="navbar ">
-      <div class="navbar-inner">
-        <ul class="nav">
-          <li><a href="/school/">项目管理</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="/school/dispatch">邮件激活</a></li>
-          <li class="divider-vertical"></li>
-          <!--li><a href="/school/subject_alloc">初审项目分配</a></li-->
-          <!--li class="divider-vertical"></li-->
-          <li><a href="/school/subject_alloc_new">初审项目分配</a></li><!--手动分配><-->
-          <li class="divider-vertical"></li>
-          <li><a href="/school/subject_rating">项目等级设定</a></li>
-          <li class="divider-vertical"></li>
-          {%if IS_DLUT_SCHOOL%}
-              <li><a href="/school/fundsmanage">经费管理</a></li>
-              <li class="divider-vertical"></li>
-          {%endif%}
-          <!--li><a href="/school/project_limitnumSettings">申请数量设定</a></li-->
-          <!--li class="divider-vertical"></li-->
-          <li><a href="/school/project_control">项目控制管理</a></li>
-          <li><a href="/school/project_informationexport">项目信息表导出</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container">
-      {%block nav_admin_content%}{%endblock%}
-    </div>
-  </div>
-
+{%block nav_admin_content%}{%endblock%}
 {%block calculate-content%}
 {% endblock %}
 
