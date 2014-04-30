@@ -23,13 +23,11 @@
 
   <body >
     <div class="github-fork-ribbon-wrapper right">
-    <div class="github-fork-ribbon">
-      <a href="/">创新创业＊校级版</a>
+      <div class="github-fork-ribbon">
+        <a href="/">创新创业＊校级版</a>
+      </div>
     </div>
-  </div>
-    {# navigator bar#}
-    {% block top-nav-bar %}
-    {%if IS_DLUT_SCHOOL%}
+
     <div class="container" id="nav-container">
        <!--head content-->
        <div class="masthead">
@@ -41,10 +39,6 @@
         {% endblock %}
        </div><!--end mashhead-->
     </div><!--end whole container-->
-    {%elif IS_MINZU_SCHOOL%}
-      {% include "widgets/navbar.html" %}
-    {% endif%}
-    {% endblock %}
 
     {# Main-Content Section #}
     {% block content %}{% endblock %}

@@ -1,15 +1,15 @@
 <!--important news-->
 {% extends "home/widgets/base_new_content.html" %}
 {%block title%}
-优秀项目
+他山之石
 {%endblock%}
 
 {%block title-sub%}
-outstanding
+others
 {%endblock%}
 
 {%block news-list-items%}
-{% for news in news_outstanding_list %}
+{% for news in news_others_list %}
 <div class="usoft-listview-basic">
   <ul>
     <li>
@@ -22,5 +22,5 @@ outstanding
 {%endblock%}
 
 {%block more%}
-<strong><a href="newslist/news_cate={{ news_category_outstanding }}">更多 More <sub>》<sub></a></strong>
+<strong><a href="newslist/news_cate={{ news_category_others }}">更多 More <sub>》<sub></a></strong>
 {%endblock%}

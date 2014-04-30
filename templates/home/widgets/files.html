@@ -1,15 +1,19 @@
-<!--important news-->
+<!--files news-->
 {% extends "home/widgets/base_new_content.html" %}
 {%block title%}
-优秀项目
+政策规章
 {%endblock%}
 
 {%block title-sub%}
-outstanding
+<small>policy</small>
+{%endblock%}
+
+{%block new-list-style%}
+news-list
 {%endblock%}
 
 {%block news-list-items%}
-{% for news in news_outstanding_list %}
+{% for news in news_policy_list %}
 <div class="usoft-listview-basic">
   <ul>
     <li>
@@ -19,8 +23,9 @@ outstanding
   </ul>
 </div>
 {% endfor %}
+
 {%endblock%}
 
 {%block more%}
-<strong><a href="newslist/news_cate={{ news_category_outstanding }}">更多 More <sub>》<sub></a></strong>
+<strong><a href="newslist/news_cate={{ news_category_policy }}">更多 More <sub>》<sub></a></strong>
 {%endblock%}
