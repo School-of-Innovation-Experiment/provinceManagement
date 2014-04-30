@@ -360,7 +360,13 @@ label.settings-label{
 span.form-error{
   color:red;
 }
-
+#analysis_div .span6{
+    margin-top:20px;
+    width:40%;
+}
+#platform_intro .span9{
+    width:60%;
+}
 
 /* Example page
 ------------------------- */
