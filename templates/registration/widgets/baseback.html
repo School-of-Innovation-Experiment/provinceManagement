@@ -1,11 +1,11 @@
-{% extends "base/base.html" %}
+{% extends "base/base_home.html" %}
 {% load i18n %}
 
-{% block content %}
+{% block home_content %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
 <div id='login'>
 	<div id='content'>
-		<div class='login-image'></div>
+		<!-- <div class='login-image'></div> -->
 		<div id="login-form-wrap">
 			{%block form-content%}
   			{%endblock%}
