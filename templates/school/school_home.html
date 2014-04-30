@@ -74,7 +74,10 @@
           {% endif%}
           {% if IS_MINZU_SCHOOL %}
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
-		  {% endif %}
+          {% endif %}
+          {% if IS_SCHOOL_BASIC %}
+          <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
+          {% endif %}
 	  </td>
 	  {% if not IS_SCHOOL_BASIC %}
 	<td>
@@ -101,6 +104,8 @@
   </div>
   {% endif %}
   {% if IS_MINZU_SCHOOL %}
+  {% endif %}
+  {% if IS_SCHOOL_BASIC %}
   {% endif %}
 </div>
 {% else %}
