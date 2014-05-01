@@ -125,7 +125,7 @@
   </tbody>
 
 </table>
-{%if userauth.is_student%}
+{%if not IS_SCHOOL_BASIC and userauth.is_student%}
 <h3>学分申请名单</h3>
 <table class="table table-hover table-striped" >
   <thead>
