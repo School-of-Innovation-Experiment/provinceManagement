@@ -1,16 +1,18 @@
 <!--calculated features navigator bar-->
+<div class="navbar ">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><a href="/teacher/dispatch">学生帐号激活</a></li>
+      <li class="divider-vertical"></li>
+      <li><a href="/teacher">项目管理</a></li>
+      {% if not IS_SCHOOL_BASIC %}
+      <li class="divider-vertical"></li>
+      <li><a href="/teacher/funds_manage">经费查看</a></li>
+      {% endif %}
+    </ul>
+    {% include "widgets/userinfo_nav.html"%}
+  </div>
+</div>	
 
-	<div class="navbar ">
-		<div class="navbar-inner">
-        <ul class="nav">
-        <li><a href="/teacher/dispatch">学生帐号激活</a></li>
-        <li class="divider-vertical"></li>
-		<li><a href="/teacher">项目管理</a></li>
-		<li class="divider-vertical"></li>
-		{% if not IS_SCHOOL_BASIC %}
-		<li><a href="/teacher/funds_manage">经费查看</a></li>
-		{% endif %}
-		</div>
-	</div>	
 
 
