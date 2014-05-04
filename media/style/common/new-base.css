@@ -6,7 +6,7 @@ body {
     background-size: 100%;
 }
 a, h1,h2, h3 {
-    color: rgb(72, 65, 231);
+    color: rgb(32, 183, 240);
     font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, STHeiti, "LiHei Pro Medium", SimSun, SumHei;
 }
 a:hover, a:focus, a:active {
@@ -32,7 +32,7 @@ footer p {
     font-family:黑体;
     font-weight:bold;
     color: white;
-    font-size:54px;
+    font-size:44px;
     !important;
 }
 .navbar-inner {
@@ -66,7 +66,7 @@ footer p {
 }
 
 #footer-links {
-    background: rgb(72, 65, 231);
+    background: rgb(32, 183, 240);
     height:150px;
     padding-left: 15px;
     padding-right: 15px;
