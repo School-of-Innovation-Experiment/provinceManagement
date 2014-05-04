@@ -120,6 +120,8 @@ def list_news_by_cate(request, news_cate):
     news_page = request.GET.get('news_page')
     context = getContext(news_list, news_page, 'news')
     context["news_cate"] = news_cate
+    context["news_cate"] = news_cate
+    context['%s_active' % news_cate.category] = 'active'
     return render(request, 'home/news-list-by-cate.html', \
                   Context(context))
 
