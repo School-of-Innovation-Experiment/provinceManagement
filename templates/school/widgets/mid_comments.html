@@ -1,0 +1,20 @@
+<!--Project Reviews-->
+{% if not is_show %}
+    <div class="page-header">
+      <h3>推荐意见</h3>  
+    </div>
+    <blockquote>
+      <fieldset>
+        <div class="control-group form-inline {% if mid.original.errors %}error{% endif %}">
+          <legend>指导教师推荐语</legend>
+          {{mid.inspector_comments}} 
+          {% if mid.inspector_comments.errors %}
+          <div class="row alert alert-error school-display">
+            <button class="close" data-dismiss="alert">×</button>
+            {{ mid.inspector_comments.errors }}
+          </div>
+          {% endif %}
+        </div>
+      </fieldset>
+    </blockquote>
+{% endif %}

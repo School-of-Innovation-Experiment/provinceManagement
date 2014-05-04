@@ -53,7 +53,7 @@ class ProjectSingle(models.Model):
                                  verbose_name=u"联系方式")
     inspector = models.CharField(max_length=200, blank=False,
                                  verbose_name=u"指导教师")
-    inspector_title = models.CharField(blank=False, null=True, max_length=10,
+    inspector_title = models.CharField(blank=False,max_length=10,
                                        verbose_name=u"指导老师职称")
     members = models.CharField(max_length=400, blank=False,
                                verbose_name=u"团队成员")
@@ -62,9 +62,13 @@ class ProjectSingle(models.Model):
     year = models.IntegerField(blank=False, null=False, max_length=4,
                                default=lambda: datetime.datetime.today().year,
                                verbose_name="参赛年份")
+    is_past = models.BooleanField(null=False, blank=True, default=False,
+                                  verbose_name=u"往届项目")
+    is_over = models.BooleanField(null=False, blank=True, default=False,
+                                  verbose_name=u"是否结束")
     keywords = models.CharField(blank=True, max_length=300,
                                 verbose_name=u"关键字")
-    project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
+    project_code = models.CharField(blank=False, null=True, max_length=20, verbose_name=u"项目编号")
 
     class Meta:
         verbose_name = u"参赛项目"
@@ -134,7 +138,7 @@ class PreSubmit(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=make_uuid,
                                   verbose_name=u"初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,
@@ -201,7 +205,33 @@ class PreSubmitEnterprise(models.Model):
     def __unicode__(self):
         return self.project_id.title
 
+class MidSubmit(models.Model):
+    """
+    Mid submit
+    """
+    content_id = models.CharField(max_length=50,
+                                  primary_key=True, default=lambda: str(uuid.uuid4()),
+                                  verbose_name="中期检查表唯一ID")
+    project_id = models.ForeignKey(ProjectSingle)
 
+    process = models.TextField(blank=False, null=True,
+                               verbose_name="项目进展情况")
+    achievement_summary = models.TextField(blank=False, null=True,
+                                           verbose_name="研究成果概述")
+    next_plan = models.TextField(blank=False, null=True,
+                                 verbose_name="下一阶段工作计划")
+    achievement = models.TextField(blank=False, null=True,
+                                   verbose_name="主要成果")
+    inspector_comments = models.TextField(blank=True, null=True,
+                                          verbose_name="指导教师意见")
+    is_audited = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "项目中期检查表"
+        verbose_name_plural = "项目中期检查表"
+
+    def __unicode__(self):
+        return self.project_id.title
 
 class FinalSubmit(models.Model):
     """

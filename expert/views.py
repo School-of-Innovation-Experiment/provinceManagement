@@ -52,7 +52,6 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
-
     limitnum = expert.numlimit
     really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A).filter(pass_p=True).count()
     remaining = limitnum - really
@@ -60,20 +59,22 @@ def home_view(request):
     limitnum_b = expert.numlimit_b
     really_b = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
     remaining_b = limitnum_b - really_b
-
-    for item in re_project:
+    # loginfo(p=re_project, label="EXPERT HOME")
+    
+    page = request.GET.get('page')
+    context = getContext(re_project, page, 'item', 0)
+    for item in context["item_list"]:
         item.pass_p = u"国家级" if item.pass_p else u"省级"
         item.financial_category = item.project.financial_category
-    # loginfo(p=re_project, label="EXPERT HOME")
 
-    data = {'current_list': re_project,
-            'limitnum': limitnum,
+    data = {'limitnum': limitnum,
             'really': really,
             'remaining': remaining,
             'limitnum_b': limitnum_b,
             'really_b': really_b,
             'remaining_b': remaining_b}
-    return render(request, 'expert/home.html', data)
+    context.update(data)
+    return render(request, 'expert/home.html', context)
 
 
 @csrf.csrf_protect
@@ -89,7 +90,7 @@ def review_report_view(request, pid=None):
     re_project = get_object_or_404(Re_Project_Expert, expert=expert, project=project)
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
-    info_form = InfoForm(instance=re_project.project)
+    info_form = InfoForm(instance=re_project.project,pid=pid)
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
         application = get_object_or_404(PreSubmit, project_id = pid)

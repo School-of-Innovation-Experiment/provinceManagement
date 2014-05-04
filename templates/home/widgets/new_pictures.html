@@ -1,16 +1,16 @@
-<script type='text/javascript' src="{{ STATIC_URL }}js/home/swfobject.js"></script>
-<script type='text/javascript' src="{{ STATIC_URL }}js/home/flash.js"></script>
-<div>
-    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="800" height="600" id="myFlashContent">
-        <param name="movie" value="{{STATIC_URL}}images/slide/new.swf" />
-        <!--[if !IE]>-->
-        <object type="application/x-shockwave-flash" data="{{STATIC_URL}}images/slide/new.swf" width="1050" height="300">
-        <!--<![endif]-->
-            <a href="http://www.adobe.com/go/getflashplayer">
-                <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
-            </a>
-        <!--[if !IE]>-->
-        </object>
-                <!--<![endif]-->
-    </object>
-</div>
+<div id="myCarousel" class="carousel slide" style="width:100%; height:300px">
+  <div class="carousel-inner" style="height:100%">
+    <div class="item  active">
+      <img src="{{ STATIC_URL }}homepage_pic/3.jpg" alt="">
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}homepage_pic/1.jpg" alt="">
+    </div>
+  </div>
+  <div class="left my-carousel-control">
+    <a class="" href="/#myCarousel" data-slide="prev">‹</a>
+  </div>
+  <div class="right my-carousel-control">
+    <a class="" href="/#myCarousel" data-slide="next">›</a>
+  </div>
+</div><!-- /.carousel -->

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# coding: UTF-8
 '''
 Created on 2012-11-5
 
@@ -12,8 +12,11 @@ from users.models import *
 RegisterClass = (SchoolProfile,
                  ExpertProfile,
                  AdminStaffProfile,
-                 StudentProfile,
+                 # StudentProfile,
                  )
+class StudentProfileAdmin(admin.ModelAdmin):
+    search_fields = ['user__email']
 
+admin.site.register(StudentProfile, StudentProfileAdmin)
 for item in RegisterClass:
     admin.site.register(item)

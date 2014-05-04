@@ -1,16 +1,27 @@
 <!-- pre application proposal page -->
 {% extends "school/base/report_base.html" %}
-
 {%block report-content%}
-  <form method="post" action={% url school.views.application_report_view pid%}>
+  {% include "widgets/richtext_toolbar.html"%}
+  <form method="post"   enctype="multipart/form-data" id="form_application" action = {% url school.views.application_report_view pid%}>
     {% csrf_token %}
-    <!--Basic Infomation-->
-    {% include "school/widgets/project_infoform.html" %}
-    {% include "school/widgets/teacher_enterprise.html" %}
-    <!--Application Infomation-->
-    {% include "school/widgets/application.html" %}
-    <!--Comments info-->
-    {% include "school/widgets/comments_info.html" %}
+    <!-- Basic Infomation -->
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#project_review" data-toggle="tab"><strong>信息预览</strong></a></li>
+        {% include "widgets/application_tab.html"%}
+      </ul>
+      <div class="tab-content">
+        {% include "school/widgets/project_review.html" %} 
+        {% include "school/widgets/project_infoform.html" %} 
+        {% include "school/widgets/teacher_enterprise.html" %}
+        <!--Application Infomation-->
+        {% include "school/widgets/project_brief.html" %}
+        <!--Application Infomation-->
+        {% include "school/widgets/project_plan.html" %}
+        <!--Comments info-->
+        {% include "school/widgets/comments_info.html" %}
+      </div>
+    </div>
     <!--submit button-->
     {% include "school/widgets/commit_button.html" %}
   </form>

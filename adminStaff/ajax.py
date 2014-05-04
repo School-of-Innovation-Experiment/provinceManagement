@@ -43,11 +43,25 @@ def NumLimit(request, form):
                 object.number = a_limited_num + b_limited_num
                 object.a_cate_number = a_limited_num
                 object.save()
-            return simplejson.dumps({'status':'1','message':u'更新成功'})
+
+            # num_limit_form = forms.NumLimitForm()
+            school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+            page = request.GET.get('page')
+
+            context = getContext(school_limit_num_list, page, 'item', 0)
+            table = render_to_string("adminStaff/widgets/projectlimitnumsettingsTable.html",
+                           context)
+            return simplejson.dumps(
+                {'status':'1',
+                 'table': table, 
+                 'message':u'更新成功'})
         except SchoolProfile.DoesNotExist:
-            return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
+            return simplejson.dumps({'status':'0','message':u'更新失败，选定的学校没有进行注册'})
     else:
-        return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
+        return simplejson.dumps({'status':'0', 'id':form.errors.keys(),'message':u'输入错误'})
+
+
+
 
 @dajaxice_register
 def DeadlineSettings(request, form):
@@ -204,7 +218,7 @@ def Release_News(request):
     Release_News
     '''
     unsubjected = False
-    subject_list = ProjectSingle.objects.all().order_by('school')
+    subject_list = ProjectSingle.objects.all().order_by('school').exclude(school__schoolName=u'测试用学校')
     for project in subject_list:
         if project.project_grade.grade == GRADE_UN:
             unsubjected = False
@@ -254,7 +268,7 @@ def refresh_to_table(page,school_name):
     print page,school_name
     if school_name == "None": school_name = None
     subject_list = AdminStaffService.GetSubject_list(school = school_name)
-    context = getContext(subject_list, page, 'subject', 0) 
+    context = getContext(subject_list, page, 'item', 0) 
 
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 

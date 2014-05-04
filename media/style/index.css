@@ -82,20 +82,14 @@ body {
 }
 .carousel img {
   position: absolute;
-  top: 0;
   left: 0;
   min-width: 100%;
   /* height: 310px; */
   height: 100%;
 }
-
-/* .carousel-caption { */
-/*   background-color: transparent; */
-/*   position: static; */
-/*   max-width: 550px; */
-/*   padding: 0 20px; */
-/*   margin-top: 160px; */
-/* }  */
+#myCarousel .carousel-inner {
+    top: -20px;
+}
 .carousel-caption h1,
 .carousel-caption .lead {
   margin: 0;
@@ -106,8 +100,6 @@ body {
 .carousel-caption .btn {
   margin-top: 10px;
 }
-
-
 
 /* MARKETING CONTENT
 -------------------------------------------------- */

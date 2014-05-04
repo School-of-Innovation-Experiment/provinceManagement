@@ -1,6 +1,9 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-  <div><!--FORM2 DIV-->
+
+
+
+<div><!--FORM2 DIV-->
     <form class="well form-inline" method="POST" id="num_limit_form" action="">
       {% csrf_token %}
       <div class="alert alert-info">
@@ -10,67 +13,22 @@
       <div>
 	<label>学校选择</label>
 	{{num_limit_form.school_name}}
-	<label>甲类项目数量上限</label>
+	<label>甲类数量上限</label>
 	{{num_limit_form.a_limited_num}}
-        <label>乙类项目数量上限</label>
+        <label>乙类数量上限</label>
 	{{num_limit_form.b_limited_num}}
 	<input type="button" class="btn btn-primary" value="保存更改" onclick="send_num_limit();">
+        <input type="button" class="btn btn-danger pull-right" rel="project_limit_num_reset" value="项目数量重置"/>
 	<span id="num_limit_error_message"><span>
       </div>
     </form>
-    <div><!--End FORM2-->
-      <div class="well">
-	<table class="table table-striped">
-	  <thead>
-	    <tr>
-	      <td>
-		<strong>学校名称</strong>
-	      </td>
-	      <td>
-		<strong>甲类项目数目上限</strong>
-	      </td>
-              <td>
-		<strong>乙类项目数目上限</strong>
-	      </td>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    {%for limitnum in school_limit_list%}
-	      <tr>
-		<td>{{limitnum.school}}</td>
-		<td>{{limitnum.a_cate_number}}</td>
-                <td>{{limitnum.b_cate_number}}</td>
-	      </tr>
-	    {%endfor%}
-	  </tbody>
-	</table>
+</div><!--End FORM2-->
 
-	<div class="pagination pagination-right">
-		<ul>
-		{% if school_limit_page.has_previous %}
-      <li><a href="?page={{ school_limit_page.previous_page_number }}" id="email-previous-page" arg="{{school_limit_page.previous_page_number}}"><上一页</a></li>
-		{% endif %}
-		{% if not contain_begin %}
-		<li><a href="?page=1">1</a></li>
-	  <li><span>...</span></li>
-		{% endif %}
-		{% for index in index_list %}
-			{% ifequal index school_limit_page.number %}
-				<li><span>{{ index }}</span></li>
-			{% else %}
-				<li><a href="?page={{ index }}">{{ index }}</a></li>
-			{% endifequal %}
-		{% endfor %}
-		{% if not contain_end %}
-    <li><span>...</span></li>
-		<li><a href="?page={{ school_limit_page.paginator.num_pages }}">{{ school_limit_page.paginator.num_pages }}</a></li>
-		{% endif %}
-		{% if school_limit_page.has_next %}
-    <li><a href="?page={{ school_limit_page.next_page_number }}" id="email-next-page" arg="{{school_limit_page.next_page_number}}">下一页></a></li>
-    {% endif %}
-		</ul>
-	</div>
-      </div>
+<div id="projectlimitnumsettingsTable">
+    {% include "adminStaff/widgets/projectlimitnumsettingsTable.html" %}
+</div>
+
+
       <!--adminstaff -->
       <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/send_num_limit.js"></script>
       <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/time_settings.js"></script>

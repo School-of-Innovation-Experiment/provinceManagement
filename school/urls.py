@@ -23,6 +23,10 @@ urlpatterns = patterns('',
         school_views.final_report_view,
     ),
     url(
+        r'^mid/(?P<pid>.{36})$',
+        school_views.mid_report_view,
+    ),
+    url(
         r'^files/(?P<pid>.{36})$',
         school_views.file_view,
     ),
@@ -64,6 +68,10 @@ urlpatterns = patterns('',
         r'get_xls/$',
         school_views.get_xls,
     ), 
+    url(
+        r'auto_index/$',
+        school_views.auto_index,
+    ),
     url(
         r'^memberchange$',
         school_views.member_change,
