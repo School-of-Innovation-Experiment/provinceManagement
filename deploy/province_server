@@ -26,7 +26,7 @@ server {
 	# Make site accessible from http://localhost/
 	server_name 20130520.project.upln.cn;
     client_max_body_size 120m;
-    client_body_temp_path /home/dlnu/mysites/tmp;
+    client_body_temp_path /home/sie/mysites/tmp;
 
 	location / {
 		# First attempt to serve request as file, then
@@ -34,7 +34,7 @@ server {
 		# try_files $uri $uri/ /index.html;
 		# Uncomment to enable naxsi on this location
 		# include /etc/nginx/naxsi.rules
-        root /home/dlnu/mysites/provinceManagement;
+        root /home/sie/mysites/provinceManagement;
         uwsgi_pass 192.168.20.100:8080;
         include uwsgi_params;
         access_log off;
@@ -48,7 +48,7 @@ server {
 	}
 
     location /static {
-       alias /home/dlnu/mysites/provinceManagement/static/; 
+       alias /home/sie/mysites/provinceManagement/static/; 
        access_log off;  
     }
 
@@ -58,7 +58,7 @@ server {
     }
 
     location /media {
-        root  /home/dlnu/mysites/provinceManagement/media/; 
+        root  /home/sie/mysites/provinceManagement/media/; 
         break;
     }
 
