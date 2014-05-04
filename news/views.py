@@ -71,18 +71,19 @@ def read_news(request, news_id):
     return render(request, 'home/news-content.html', context)
 
 def list_news_by_cate(request, news_cate):
-    try:
+    if news_cate == NEWS_CATEGORY_DOCUMENTS:
+        news_list = News.objects.exclude(news_document=u'').order_by('-news_date')
+        loginfo(news_list.count())
+    else:
         news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
         news_cate = NewsCategory.objects.get(category=news_cate)
-    except:
-        raise Http404
     news_page = request.GET.get('news_page')
     context = getContext(news_list, news_page, 'news')
-    context["news_cate"] = news_cate
-    context['%s_active' % news_cate.category] = 'active'
+    if not news_cate == NEWS_CATEGORY_DOCUMENTS:
+        context["news_cate"] = news_cate
+        context['%s_active' % news_cate.category] = 'active'
     return render(request, 'home/news-list-by-cate.html', \
                   Context(context))
-
 def list_news(request):
     news_list = News.objects.order_by('-news_date')
     news_page = request.GET.get('news_page')
