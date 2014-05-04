@@ -101,3 +101,6 @@ div.student_file_upload{
   margin-bottom: 10px;
   border: solid #3a87ad 1px;
 }
+#form_application fieldset{
+    width:900px;
+}
