@@ -24,7 +24,7 @@ footer p {
 }
 .head-title-low {
     font-family:黑体;
-    font-size: 20px;
+    font-size: 22px;
     color: white;
     opacity:0.8;
 }
@@ -32,7 +32,7 @@ footer p {
     font-family:黑体;
     font-weight:bold;
     color: white;
-    font-size:54px;
+    font-size:50px;
     !important;
 }
 .navbar-inner {
