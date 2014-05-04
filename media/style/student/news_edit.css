@@ -18,7 +18,7 @@
 .richtext_div{
     max-height: 250px;
     height: 170px;
-    width: 1060px;
+    width: 1000px;
     background-color: white;
     border-collapse: separate;
     border: 1px solid rgb(204, 204, 204);
@@ -49,4 +49,7 @@
     cursor: pointer;
     box-shadow: none;
     -webkit-box-shadow: none;
+}
+#project_review{
+    width:1000px;
 }

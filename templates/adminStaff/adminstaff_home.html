@@ -1,7 +1,7 @@
 
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-<div>
+<div class="well form">
   <h3>
     项目列表
   </h3>
@@ -14,7 +14,7 @@
       <thead>
         <tr>
           <th>项目编号</th>
-          <th>名称</th>          
+          <th>名称</th>
           {% if IS_MINZU_SCHOOL %}
           <th>项目类型</th>
           {% endif %}
