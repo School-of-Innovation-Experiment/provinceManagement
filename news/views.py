@@ -74,7 +74,6 @@ def list_news_by_cate(request, news_cate):
     try:
         if news_cate == NEWS_CATEGORY_DOCUMENTS:
             news_list = News.objects.exclude(news_document=u'').order_by('-news_date')
-            loginfo(news_list.count())
         else:
             news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
             news_cate = NewsCategory.objects.get(category=news_cate)
