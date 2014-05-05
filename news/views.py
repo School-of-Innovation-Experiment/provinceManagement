@@ -17,7 +17,7 @@ import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, STATIC_URL, MEDIA_URL
 from adminStaff.models import HomePagePic
 from const import *
-
+from const.models import *
 def get_news(news_id = None):
     if news_id: #get news which id equal to news_id
         try:
