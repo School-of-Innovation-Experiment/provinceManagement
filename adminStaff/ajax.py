@@ -601,18 +601,22 @@ def project_sync(request,project_sync_list,username,password):
             proj_single = ProjectSingle.objects.get(project_id=proj)
         except:
             print "proj %s not exist!" % proj
-            return simplejson.dumps({'status':'1', 'result': "proj %s not exist!" % proj})
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 不存在" % proj_single.title})
         proj_dict = get_projsingle_dict(proj_single)
-        if proj_single.project_category.category == CATE_INNOVATION:
-            proj_dict['presubmit_type'] = 'presubmit'
-            proj_dict.update(get_presubmit_dict(proj_single))
-        else:
-            proj_dict['presubmit_type'] = 'presubmitenterprise'
-            proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        try:
+            if proj_single.project_category.category == CATE_INNOVATION:
+                proj_dict['presubmit_type'] = 'presubmit'
+                proj_dict.update(get_presubmit_dict(proj_single))
+            else:
+                proj_dict['presubmit_type'] = 'presubmitenterprise'
+                proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        except:
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 申请书存在问题 !" % proj_single.title})
         dict_obj['projects'].append(proj_dict)
     try:
         server = jsonrpclib.Server(RPC_SITE)
         result = server.SyncProjects(simplejson.dumps(dict_obj))
+        loginfo(result)
     except:
         return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
     return simplejson.dumps({'status':'0', 'result': result})
