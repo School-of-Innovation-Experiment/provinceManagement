@@ -1010,7 +1010,6 @@ class AdminStaffService(object):
 #        else:
         sync_form = Sync_form()
 
-        logger.info("sync_form Valid Failed"+"**"*10)
         logger.info(sync_form.errors)
         import jsonrpclib
         from settings import RPC_SITE
