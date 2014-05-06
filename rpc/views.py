@@ -98,7 +98,7 @@ def sync_proj(proj, user, schoolprofile):
         enterprise_teacher.save()
         # newpresubmitenterprise.enterpriseTeacher = enterprise_teacher
         # end
-        for attr in PreSubmitEnterprise_attrs:
+        for attr in presubmitenterprise_attrs:
             setattr(newpresubmitenterprise, attr, proj[attr])
         newpresubmitenterprise.save()
         # return newpresubmitenterprise
