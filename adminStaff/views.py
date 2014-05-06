@@ -478,8 +478,8 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES.get("news_document", None),)
                 new_news.save()
                 loginfo(newsform.cleaned_data["news_content"])
             else:
