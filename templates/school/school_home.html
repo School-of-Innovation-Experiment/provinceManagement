@@ -30,15 +30,15 @@
         {% for item in pro_list%}
         <tr>
           <td>{{item.project_unique_code}}</td>
-	  <td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:10}} </a></td>
-	  <td>{{item.project_grade}}</td>
-	  <td>{{item.adminuser.get_name}}</td>
+	        <td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:10}} </a></td>
+	        <td>{{item.project_grade}}</td>
+	        <td>{{item.adminuser.get_name}}</td>
           <td>
             {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
           </td>
           <td>
-            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opensubmit }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
           </td>
 
@@ -68,9 +68,9 @@
             <a data-toggle="modal" id="overstatus_{{item.project_id}}" class="btn btn-inverse">{{item.over_status}}</a>
             {% endif %}
           </td>
-	  <td>
+	        <td>
       	    <span><a href="/school/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
-  	  </td>
+  	      </td>
         </tr>
         {%endfor%}
       </tbody>
