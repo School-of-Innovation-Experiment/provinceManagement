@@ -23,12 +23,13 @@
     <!--content-->
   {% endif %}
 </div>
-<div id="page-nav" style="display=none;">
+<div id="page-nav" >
   {% if project_page %}
-    {% if project_page.has_next %}
-      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
-    {% else %}
-      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page=-1">下一页</a>
-    {% endif %}
+  {% if project_page.has_previous %}
+  <a class="search-news" href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.previous_page_number }}">上一页</a>
+  {% endif %}
+  {% if project_page.has_next %}
+  <a class="search-news" href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
+  {% endif %}
   {% endif %}
 </div>

@@ -1,0 +1,36 @@
+<ul class="nav pull-right  ">
+  {% if request.user.is_authenticated %}
+  <li class="nav-li-username"><a href="/settings/profile">{{ request.user.username }}</a></li>
+  {%if userauth.is_schooler %}
+  <li class="nav-li"><a href={% url school.views.home_view %} rel="tooltip" data-placement="bottom"
+                        data-original-title = "学院管理员管理页面">
+      <i class="icon-plus-sign icon-black"> </i></a>
+  </li>
+  {%endif%}
+
+  {%if userauth.is_adminstaff %}
+  <li class="nav-li"><a href="/adminStaff/" rel="tooltip" data-placement="bottom"
+                        data-original-title = "校级管理员管理界面">
+      <i class="icon-th-list icon-black"> </i></a>
+  </li>
+  {%endif%}
+
+  {%if userauth.is_experter %}
+  <li class="nav-li"><a href={% url expert.views.home_view %}  rel="tooltip" data-placement="bottom"
+                        data-original-title = "专家管理页面">
+      <i class="icon-camera icon-black"> </i></a>
+  </li>
+  {%endif%}
+  {%if request.user.is_superuser%}
+  <li class="nav-li"><a href="/admin/" rel="tooltip" data-placement="bottom"
+                        data-original-title = "超级用户登录页面">
+      <i class="icon-briefcase icon-black"> </i></a>
+  </li>
+  {%endif%}
+  <li class="nav-li"><a href="/accounts/logout" rel="tooltip" data-placement="bottom"
+                        data-original-title = "离开">
+      <i class="icon-share icon-black"> </i></a></li>
+  {% else %}
+  <li ><a href="/accounts/login">登陆</a></li>
+  {% endif %}
+</ul>
