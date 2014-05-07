@@ -1,5 +1,6 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
+
 <div class="well form">
 <h3>
   项目列表
@@ -19,7 +20,6 @@
 	<th>申报书</th>
 	<th>中期检查表</th>
 	<th>结题验收</th>
-	<th>项目汇编</th>
         <th>联系方式</th>
 	<th>是否结题</th>
 	<th>查看过程记录</th>
@@ -39,10 +39,6 @@
         <td>
           {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
-        <td>
-          {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-          {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
         </td>
         <td>
           {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
