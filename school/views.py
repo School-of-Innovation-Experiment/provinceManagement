@@ -184,6 +184,9 @@ def application_report_view(request, pid=None, is_expired=False):
         is_innovation = False
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+
+    isRedirect = False
+
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         info_form = InfoForm(request.POST, pid=pid,instance=project)
@@ -194,6 +197,7 @@ def application_report_view(request, pid=None, is_expired=False):
                 if save_application(project, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+                    isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
@@ -207,6 +211,7 @@ def application_report_view(request, pid=None, is_expired=False):
                 if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+                    isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
@@ -217,6 +222,8 @@ def application_report_view(request, pid=None, is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
+        isRedirect = True
+
     data = {'pid': pid,
             'info': info_form,
             'application': application_form,
@@ -228,7 +235,8 @@ def application_report_view(request, pid=None, is_expired=False):
             'teammember':teammember,
             'pro_type':pro_type,
             'fin_type':fin_type,
-            'innovation':innovation
+            'innovation':innovation,
+            'isRedirect':isRedirect,
             }
 
     return render(request, 'school/application.html', data)
