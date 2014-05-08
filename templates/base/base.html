@@ -23,16 +23,21 @@
   </head>
 
   <body >
+    <div class="github-fork-ribbon-wrapper right">
+      <div class="github-fork-ribbon">
+        <a href="/">创新创业＊省级版</a>
+      </div>
+    </div>
     <div class="container" id="nav-container">
-       <!--head content-->
-       <div class="masthead">
-         <!--Head title-->
-         <a href="/"><h1 class="muted head-title">辽宁省大学生创新创业网</h1></a>
-         <p class="head-title-low">Liao Ning the University Students' Innovation Undertaking Network</p>
-         <hr class="head-hr">
+      <!--head content-->
+      <div class="masthead">
+        <!--Head title-->
+        <a href="/"><h1 class="muted head-title">校级基本版大学生创新创业网</h1></a>
+        <p class="head-title-low">Liao Ning the University Students' Innovation Undertaking Network</p>
+        <hr class="head-hr">
         {% block nav_content %}
         {% endblock %}
-       </div><!--end mashhead-->
+      </div><!--end mashhead-->
     </div><!--end whole container-->
 
     {# Main-Content Section #}
@@ -40,10 +45,10 @@
 
     {# Footer Section #}
     {% block home-footer %}
-      {% include "widgets/footer.html" %}
+    {% include "widgets/footer.html" %}
     {% endblock %}
     {% block bottom_js %}
-      {% include "meta/bottom_scripts.html" %}
+    {% include "meta/bottom_scripts.html" %}
     {% endblock %}
     {% block endjs %}{% endblock %}
     {% block footer-alert-bar %}
