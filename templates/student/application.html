@@ -4,6 +4,184 @@
 
 {%block report-content%}
   {%include "widgets/richtext_toolbar.html"%}
+
+
+  <!--  <div class="alert alert-error">
+    <a class="close" data-dismiss="alert">x</a> 
+    <h4 class="alert-heading">系统提示！</h4>
+    <p>目前此文档编辑权限已被系统锁定，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+  </div>
+   -->
+
+
+
+
+{%if not isRedirect %}
+  
+  <div class="alert alert-error">
+    <button class="close" data-dismiss="alert">×</button>
+
+    {% if info.title.errors or info.memberlist.errors %}
+      <p>
+      “基本信息“ 标签下的 
+      {%if info.title.errors %} “参赛题目“  &nbsp; {% endif %}
+      {%if info.memberlist.errors %} “团队成员“ &nbsp;  {% endif %}
+      字段没有填写
+      </p>
+    {%endif%}
+
+    {% if not is_innovation %}
+    
+      {% if teacher_enterpriseform.name.errors or teacher_enterpriseform.telephone.errors or teacher_enterpriseform.titles.errors or teacher_enterpriseform.jobs.errors %}
+
+          <p>
+           “企业导师“ 标签下的 
+           {% if teacher_enterpriseform.name.errors %} “姓名“ {% endif %}
+           {% if teacher_enterpriseform.jobs.errors %} “职称“ {% endif %}
+           {% if teacher_enterpriseform.titles.errors %} “工作单位“ {% endif %}
+           {% if teacher_enterpriseform.telephone.errors %} “联系电话“ {% endif %}
+
+           字段没有填写
+         </p>
+         {%endif%}
+    {% endif %}
+
+
+
+
+
+  {% if is_innovation %}
+    {% if application.original.errors or application.background.errors or application.key_notes.errors %}
+      <p>
+       “项目简介“标签下的 
+        {% if application.original.errors %}   “项目来源“ {%endif%}
+        {% if application.background.errors %}   “项目背景及研究意义“ {%endif%}
+        {% if application.key_notes.errors %}   “研究内容和拟解决的关键问题“ {%endif%}
+
+       字段没有填写
+      </p>
+    {% endif %}
+
+
+  {% else %}
+      
+
+    {% if application.original.errors or application.maturity.errors or application.proj_introduction.errors or application.innovation.errors%}
+            <p>
+              “项目简介“标签下的 
+              {% if application.original.errors %}“项目来源“ {%endif%}
+              {% if application.maturity.errors %}“项目技术成熟程度“ {%endif%}
+              {% if application.proj_introduction.errors %}“项目内容简介“ {%endif%}
+              {% if application.innovation.errors %}“项目的基本情况及创新内容“ {%endif%}
+
+              字段没有填写
+            </p>
+    {% endif %}               
+        
+  {%endif%}
+
+
+  {% if is_innovation %}
+    {% if application.innovation.errors or application.progress_plan.errors or application.funds_plan.errors or application.pre_results.errors%}
+      <p>
+        “项目计划“ 标签下的 
+        {% if application.innovation.errors %}  “项目创新之处“ {%endif%}
+        {% if application.progress_plan.errors %}  “项目进度安排“ {%endif%}
+        {% if application.funds_plan.errors %}  “项目经费预算“ {%endif%}
+        {% if application.pre_results.errors %}  “预期研究成果“ {%endif%}
+
+        字段没有填写
+      </p>
+      {% endif %}
+
+    
+    
+  {%else%}
+
+    {% if application.background.errors or application.industry.errors or application.product.errors  %}
+      <p>
+        “团队产品介绍“ 标签下的
+        {% if application.background.errors %} “创业团队介绍“ {%endif%}
+        {% if application.industry.errors %} “行业及市场前景“ {%endif%}
+        {% if application.product.errors %} “产品制造“ {%endif%}
+        字段没有填写
+      </p>
+    {% endif %}
+    
+
+    {% if application.funds_plan.errors or application.operating_mode.errors or application.risk_managementrisk_management.errors or application.financial_pred.errors%}
+     <p>
+        “项目预测“ 标签下的 
+        {% if application.funds_plan.errors %}“项目投资预算及融资计划“ {%endif%}
+        {% if application.operating_mode.errors %}“项目运营模式“ {%endif%}
+        {% if application.risk_managementrisk_management.errors %}“项目风险预测及应对措施“ {%endif%}
+        {% if application.financial_pred.errors %}“财务预测“ {%endif%}
+        字段没有填写
+      </p>
+    {% endif %}
+   
+
+ 
+  {%endif%}
+
+
+
+
+  </div>
+
+{%endif%}
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <form method="post"  enctype="multipart/form-data" id="form_application"  action={% url student.views.application_report_view pid %}>
     {%include "widgets/application_form.html"%}
   </form>
