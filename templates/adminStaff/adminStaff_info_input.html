@@ -1,0 +1,114 @@
+{% extends "adminStaff/administrator.html" %}
+
+{%block nav_admin_content%}
+
+
+
+
+
+<!-- <div class="well form"> -->
+<form class="well form-horizontal" id="adminStaff_info_form" method="POST" action="">
+
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="english_name">学校中文名:</label>
+    <div class="controls">
+      <!-- <input type="text" id="inputEmail" placeholder="Email"> -->
+      {{adminStaff_info_form.chinese_name}}
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="english_name">学校英文名:</label>
+    <div class="controls">
+      <!-- <input type="password" id="inputPassword" placeholder="Password"> -->
+      {{adminStaff_info_form.english_name}}
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="index">学校标号:</label>
+    <div class="controls">
+      <!-- <input type="password" id="inputPassword" placeholder="Password"> -->
+      {{adminStaff_info_form.index}}
+    </div>
+  </div>
+
+
+  <div class="control-group">
+    <div class="controls">
+<!--       <label class="checkbox">
+        <input type="checkbox"> Remember me
+      </label>
+ -->      
+        <!-- <button type="submit" class="btn">Sign in</button> -->
+        <span class=" pull-down"><a data-toggle="modal" href="#is_dispatching" class="btn btn-primary" id="adminStaff_info" onclick="save_adminStaff_info();">保存学校信息</a></span>
+    </div>
+  </div>
+</form>
+
+
+
+
+<form class="well form-horizontal" id="school_name_form" method="POST" action="">
+
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="name">学院:</label>
+    <div class="controls">
+      <!-- <input type="text" id="inputEmail" placeholder="Email"> -->
+      {{school_name_form.name}}
+    </div>
+  </div>
+
+
+
+
+  <div class="control-group">
+    <div class="controls">
+
+        <span class=" pull-down"><a data-toggle="modal" href="#is_dispatching" class="btn btn-primary" id="school_name" onclick="save_school_name();">保存学院名称</a></span>
+    </div>
+  </div>
+</form>
+
+
+
+
+<form class="well form-horizontal" id="major_name_form" method="POST" action="">
+
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="name">专业:</label>
+    <div class="controls">
+      <!-- <input type="text" id="inputEmail" placeholder="Email"> -->
+      {{major_name_form.name}}
+    </div>
+  </div>
+
+
+
+
+  <div class="control-group">
+    <div class="controls">
+
+        <span class=" pull-down"><a data-toggle="modal" href="#is_dispatching" class="btn btn-primary" id="major_name" onclick="save_major_name();">保存专业名称</a></span>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+  <script type='text/javascript' src="{{ STATIC_URL }}js/adminstaff/save_adminStaff.js"></script>
+
+
+{%endblock%}

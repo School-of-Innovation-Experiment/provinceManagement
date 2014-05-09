@@ -59,7 +59,7 @@ from school.models import UploadedFiles
 from adminStaff.models import ProjectPerLimits
 from users.models import StudentProfile
 from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,EnterpriseApplicationReportForm,TechCompetitionForm,Teacher_EnterpriseForm
-from adminStaff.forms import Sync_form
+from adminStaff.forms import Sync_form, AdminStaffInfoForm, SchoolNameForm, MajorNameForm
 
 from const.models import *
 from const import *
@@ -668,6 +668,25 @@ class AdminStaffService(object):
                     {
 
                     })
+
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def adminStaff_info_input_view(request, is_expired = False):
+
+        if request.method == 'GET':
+            adminStaff_info_form = AdminStaffInfoForm()
+            school_name_form = SchoolNameForm()
+            major_name_form = MajorNameForm()
+            data = {'adminStaff_info_form' : adminStaff_info_form ,
+                    'school_name_form' : school_name_form ,
+                    'major_name_form' :major_name_form,
+            }
+
+            return render(request, "adminStaff/adminStaff_info_input.html", data)
+
 
     @staticmethod
     @csrf.csrf_protect

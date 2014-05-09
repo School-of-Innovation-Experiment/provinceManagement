@@ -291,3 +291,14 @@ class ProjectManageForm(forms.Form):
 class Sync_form(forms.Form):
     Sync_username = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"Sync_username"}),)
     Sync_passeword = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"Sync_password"}),)
+
+class AdminStaffInfoForm(forms.Form):
+    chinese_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"chinese_name"}),)
+    english_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"english_name"}),)    
+    index = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"index"}),)
+
+class SchoolNameForm(forms.Form):
+    name = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"name"}),)
+
+class MajorNameForm(forms.Form):
+    name = forms.CharField(required=True,widget=forms.TextInput(attrs={'id':"name"}),)
