@@ -122,6 +122,59 @@ def DeadlineSettings(request, form):
     else:
         return simplejson.dumps({'field':form.data.keys(),'error_id':form.errors.keys(),'message':u"输入有误"})
 
+
+
+
+@dajaxice_register
+def  SaveAdminStaffInfo(request, form):
+    #dajax = Dajax()
+    adminStaff_form =  AdminStaffInfoForm(deserialize_form(form))
+    if adminStaff_form.is_valid():
+        print "AdminStaffInfoForm:"
+        print adminStaff_form.cleaned_data['chinese_name']
+        print adminStaff_form.cleaned_data['english_name']
+        print adminStaff_form.cleaned_data['index']
+    else :
+        print "error in SaveAdminStaffInfo" 
+    #     password = expert_form.cleaned_data["expert_password"]
+    #     email = expert_form.cleaned_data["expert_email"]
+    #     name = email
+    #     person_name = expert_form.cleaned_data["expert_personname"]
+    #     if password == "":
+    #         password = email.split('@')[0]
+    #     flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True,person_name=person_name)
+    #     if flag:
+    #         message = u"发送邮件成功"
+    #         table = refresh_mail_table(request)
+    #         return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table':table})
+    #     else:
+    #         message = u"相同邮件已经发送，中断发送"
+    #         return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
+    # else:
+    #     return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误"})
+@dajaxice_register
+def  SaveSchoolName(request, form):
+    #dajax = Dajax()
+    school_name_form = SchoolNameForm(deserialize_form(form))
+    if school_name_form.is_valid():
+        print "school_name_form:"
+        print school_name_form.cleaned_data['name']        
+    else :
+        print "error in SaveSchoolName"
+
+
+@dajaxice_register
+def  SaveMajorName(request, form):
+    #dajax = Dajax()
+    major_name_form = MajorNameForm(deserialize_form(form))
+    if major_name_form.is_valid():
+        print "major_name_form:"
+        print major_name_form.cleaned_data['name']        
+    else :
+        print "error in SaveSchoolName"
+
+
+
 @dajaxice_register
 def  ExpertDispatch(request, form):
     #dajax = Dajax()
