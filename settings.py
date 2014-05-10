@@ -166,15 +166,19 @@ LOGIN_REDIRECT_URL = '/'
 # DEFAULT_FROM_EMAIL = 'dut200921049@gmail.com'
 # EMAIL_USE_TLS = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
-EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
-EMAIL_HOST = 'mail.dlut.edu.cn'
-EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_HOST_PASSWORD = '9683096830'
-DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_USE_TLS = False
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
+# EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+# EMAIL_HOST = 'mail.dlut.edu.cn'
+# EMAIL_PORT = '25'
+# EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
+# EMAIL_HOST_PASSWORD = '9683096830'
+# DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
+# EMAIL_USE_TLS = False
+
+
+
+
 
 # EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 # SERVER_EMAIL = "757289247@qq.com"
