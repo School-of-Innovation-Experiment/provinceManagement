@@ -176,6 +176,15 @@ EMAIL_HOST_PASSWORD = '9683096830'
 DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
 EMAIL_USE_TLS = False
 
+# EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+# SERVER_EMAIL = "757289247@qq.com"
+# EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+# EMAIL_HOST = 'smtp.qq.com'
+# EMAIL_PORT = '465'
+# EMAIL_HOST_USER = '757289247@qq.com'
+# EMAIL_HOST_PASSWORD = ''
+# DEFAULT_FROM_EMAIL = '757289247@qq.com'
+
 
 #########################
 # File Transfer settings
