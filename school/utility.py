@@ -636,3 +636,6 @@ def get_studentmessage(project):
                 memberlist.append(member)
         teammember['othermember']=','.join(memberlist)
     return teammember
+def get_student_member(project):
+    student_group = Student_Group.objects.filter(project = project)
+    return ','.join([student.studentName for student in student_group])
