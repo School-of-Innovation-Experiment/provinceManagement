@@ -91,9 +91,6 @@ class ProjectSingle(models.Model):
 
     def __unicode__(self):
         return self.title
-    def __getMembers__(self):
-        student_group = Student_Group.objects.filter(project = self)
-        return ','.join([student.studentName for student in student_group])
 
 
 class Project_Is_Assigned(models.Model):
