@@ -162,6 +162,13 @@ def  SaveSchoolName(request, form):
     else :
         print "error in SaveSchoolName"
 
+@dajaxice_register
+def DeleteSchoolName(request, deleted_school_name):
+    #dajax = Dajax()
+
+
+    print "ajax in DeleteSchoolName :" + str(deleted_school_name)
+
 
 @dajaxice_register
 def  SaveMajorName(request, form):
@@ -173,6 +180,12 @@ def  SaveMajorName(request, form):
     else :
         print "error in SaveSchoolName"
 
+@dajaxice_register
+def DeleteMajorName(request, deleted_major_name):
+    #dajax = Dajax()
+
+
+    print "ajax in DeleteSchoolName :" + str(deleted_major_name)
 
 
 @dajaxice_register

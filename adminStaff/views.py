@@ -676,16 +676,25 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def adminStaff_info_input_view(request, is_expired = False):
 
-        if request.method == 'GET':
-            adminStaff_info_form = AdminStaffInfoForm()
-            school_name_form = SchoolNameForm()
-            major_name_form = MajorNameForm()
-            data = {'adminStaff_info_form' : adminStaff_info_form ,
-                    'school_name_form' : school_name_form ,
-                    'major_name_form' :major_name_form,
-            }
+        adminStaff_info_form = AdminStaffInfoForm()
+        school_name_form = SchoolNameForm()
+        major_name_form = MajorNameForm()
+        school_dict = SchoolDict.objects.all()
+        major_dict = MajorDict.objects.all()
+        print "major_dict" + str(major_dict)
 
-            return render(request, "adminStaff/adminStaff_info_input.html", data)
+        data = {'adminStaff_info_form' : adminStaff_info_form ,
+                'school_name_form' : school_name_form ,
+                'major_name_form' :major_name_form,
+                'school_dict' :school_dict,                
+                'major_dict' : major_dict,
+        }
+
+        checkbox_list = request.REQUEST.getlist("_selected_action")
+        print '^^^^^' + str(checkbox_list)
+        return render(request, "adminStaff/adminStaff_info_input.html", data)
+
+            
 
 
     @staticmethod
