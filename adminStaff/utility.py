@@ -3,10 +3,13 @@
 import os
 import sys
 import xlwt
+import mimetypes
 
 from const import *
 
 from django.contrib.auth.models import User
+from django.core.servers.basehttp import FileWrapper  
+from django.http import HttpResponse, Http404
 from student.models import Student_Group
 from school.models import *
 from users.models import *
@@ -493,3 +496,24 @@ def get_projectlist(request):
         school = SchoolProfile.objects.get(userid=request.user)
         proj_set = ProjectSingle.objects.filter(school_id=school)
     return proj_set
+def file_download_gen(request,fileid = None,filename = None):
+    """
+    按照前台的文件名，在下载文件时对文件名进行修改，不改变存储文件的名称
+    """
+    try:
+        uploadfile = UploadedFiles.objects.get(file_id = fileid)
+        currenturl = os.path.dirname(os.path.abspath('__file__'))
+        fileurl = str(uploadfile.file_obj)
+        filepath = currenturl+'/media/'+fileurl
+        filename =  filename.encode('gb2312') 
+        wrapper = FileWrapper(open(filepath,'rb'))
+    except UploadedFiles.DoesNotExist,err:
+        loginfo(p = err , label = "err")
+        raise Http404
+
+    filetype = "." + uploadfile.file_type
+    content_type = mimetypes.guess_type(filepath)[0]  
+    loginfo(p=content_type,label = "content_type")
+    response = HttpResponse(wrapper, mimetype='content_type')  
+    response['Content-Disposition'] = "attachment; filename= %s%s" % (filename,str(filetype))
+    return response

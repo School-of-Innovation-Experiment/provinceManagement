@@ -668,6 +668,13 @@ class AdminStaffService(object):
                     {
 
                     })
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def file_download(request,fileid = None,filename = None):
+        response = file_download_gen(request,fileid,filename)
+        return response
 
     @staticmethod
     @csrf.csrf_protect

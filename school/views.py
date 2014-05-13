@@ -53,6 +53,7 @@ from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,Enterp
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 from student.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
 from adminStaff.views import member_change_work
+from adminStaff.utility import file_download_gen
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
@@ -382,3 +383,9 @@ def project_informationexport(request):
                 {
 
                 })
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def file_download(request,fileid = None,filename = None):
+    response = file_download_gen(request,fileid,filename)
+    return response
