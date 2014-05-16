@@ -10,6 +10,8 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict, NewsCategory
 from const import *
@@ -272,4 +274,12 @@ def refresh_to_table(page,school_name):
 
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 
- 
+@dajaxice_register
+def ResetSchoolPassword(request):
+    for register in SchoolProfile.objects.all():
+        user = User.objects.get(username__exact = register.userid.username)
+        if user:
+            user.set_password('1')
+            user.save()
+    message = u"重置密码成功"
+    return simplejson.dumps({'status':'1', 'message':message})
