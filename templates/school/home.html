@@ -31,6 +31,8 @@
     <a href="get_xls/" class="btn btn-primary">下载信息统计表</a>
     <a href="auto_index/" class="btn btn-primary">项目自动编号</a>
   </div><!--end page header-->
+  <div class="alert" id="error_message" style="display:none">
+  </div>
   <table class="table table-hover studenttable">
     <thead>
       <tr>
@@ -59,7 +61,8 @@
             {% for choice in financial_cate_choice %}
             <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
             {% endfor %}
-          </select><span id="error_message{{item.project_id}}"></span>
+          </select>
+          <span id="error_message{{item.project_id}}"></span>
         </td>
         <td>
           {% if item.pre_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
