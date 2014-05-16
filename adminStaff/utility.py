@@ -71,7 +71,7 @@ def info_xls(request):
     # name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     # school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = ProjectSingle.objects.all().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
+    proj_set = get_current_project_query_set().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
     xls_obj, workbook = info_xls_province_gen()
 
     # _index = 1

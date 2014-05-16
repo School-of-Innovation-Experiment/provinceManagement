@@ -24,7 +24,7 @@ from django.utils import simplejson
 from django.views.decorators import csrf
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-
+from school.forms import *
 from school.models import *
 from adminStaff.models import *
 from users.models import *
@@ -97,9 +97,10 @@ def review_report_view(request, pid=None):
         application_form = ApplicationReportForm(instance=application)
     else:
         is_innovation = False
-        application = get_object_or_404(PreSubmitEnterprise, project_id = pid)
-        application_form = EnterpriseApplicationReportForm(instance=application)
-
+        pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        application_form = EnterpriseApplicationReportForm(instance=pre)
+        teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
+    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=re_project)
         if review_form.is_valid():
@@ -119,6 +120,7 @@ def review_report_view(request, pid=None):
             "application": application_form,
             "review": review_form,
             "doc_list": doc_list,
+            'teacher_enterpriseform':teacher_enterpriseform,
             }
 
     return render(request, 'expert/review.html', data)
