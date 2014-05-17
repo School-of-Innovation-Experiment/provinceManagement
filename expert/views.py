@@ -64,7 +64,7 @@ def home_view(request):
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
     for item in context["item_list"]:
-        item.pass_p = u"国家级" if item.pass_p else u"省级"
+        item.pass_p = u"通过" if item.pass_p else u"未通过"
         item.financial_category = item.project.financial_category
 
     data = {'limitnum': limitnum,
