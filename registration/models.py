@@ -101,7 +101,6 @@ class RegistrationManager(models.Manager):
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
-                send_mail_flag = False
         else:
             new_user = User.objects.get(email=email)
 
