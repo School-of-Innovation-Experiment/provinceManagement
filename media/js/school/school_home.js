@@ -7,7 +7,9 @@ function financial_cate_select_onchange(pid)
                                       , {"cate": $(target).val(), "pid": pid});
 }
 function financial_cate_change_callback(data){
-  var error = $("#error_message" + glo_pid);
+  //var error = $("#error_message" + glo_pid);
+  var error = $("#error_message");
+  error.show();
   error.empty();
   error.append(data.message);
 }
