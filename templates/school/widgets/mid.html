@@ -1,62 +1,60 @@
 <div class="page-header">
   <h3> 项目进展情况 </h3>
+</div>
+<blockquote>
+  <div class="control-group form-inline {% if mid.process.errors %}error{% endif %}">
+    {{mid.process}} 
+    {% if mid.process.errors %}
+    <div class="row alert alert-error school-display">
+      <button class="close" data-dismiss="alert">×</button>
+      {{ mid.process.errors }}
     </div>
-    <blockquote>
-      <div class="control-group form-inline {% if mid.process.errors %}error{% endif %}">
-        {{mid.process}} 
-        {% if mid.process.errors %}
-        <div class="row alert alert-error school-display">
-          <button class="close" data-dismiss="alert">×</button>
-          {{ mid.process.errors }}
-        </div>
-        {% endif %}  
-      </div>
-    </blockquote><!--end project content-->
-    
-    <br/>
-
-    <div class="page-header">
-      <h3> 项目成果概述 </h3>
+    {% endif %}  
+  </div>
+</blockquote><!--end project content-->
+<br/>
+<div class="page-header">
+  <h3> 项目成果概述 </h3>
+</div>
+<blockquote>
+  <div class="control-group form-inline {% if mid.achievement_summary.errors %}error{% endif %}">
+    {{mid.achievement_summary}} 
+    {% if mid.achievement_summary.errors %}
+    <div class="row alert alert-error school-display">
+      <button class="close" data-dismiss="alert">×</button>
+      {{ mid.achievement_summary.errors }}
     </div>
-    <blockquote>
-      <div class="control-group form-inline {% if mid.achievement_summary.errors %}error{% endif %}">
-        {{mid.achievement_summary}} 
-        {% if mid.achievement_summary.errors %}
-        <div class="row alert alert-error school-display">
-          <button class="close" data-dismiss="alert">×</button>
-          {{ mid.achievement_summary.errors }}
-        </div>
-        {% endif %}  
-      </div>
-    </blockquote><!--end project content-->
-    <br/>
-    <div class="page-header">
-      <h3> 下一阶段工作计划 </h3>
+    {% endif %}  
+  </div>
+</blockquote><!--end project content-->
+<br/>
+<div class="page-header">
+  <h3> 下一阶段工作计划 </h3>
+</div>
+<blockquote>
+  <div class="control-group form-inline {% if mid.next_plan.errors %}error{% endif %}">
+    {{mid.next_plan}} 
+    {% if mid.next_plan.errors %}
+    <div class="row alert alert-error school-display">
+      <button class="close" data-dismiss="alert">×</button>
+      {{ mid.next_plan.errors }}
     </div>
-    <blockquote>
-      <div class="control-group form-inline {% if mid.next_plan.errors %}error{% endif %}">
-        {{mid.next_plan}} 
-        {% if mid.next_plan.errors %}
-        <div class="row alert alert-error school-display">
-          <button class="close" data-dismiss="alert">×</button>
-          {{ mid.next_plan.errors }}
-        </div>
-        {% endif %}  
-      </div>
-    </blockquote><!--end project content-->
-    <br/>
-    <div class="page-header">
-      <h3> 主要成果 </h3>
+    {% endif %}  
+  </div>
+</blockquote><!--end project content-->
+<br/>
+<div class="page-header">
+  <h3> 主要成果 </h3>
+</div>
+<blockquote>
+  <div class="control-group form-inline {% if mid.achievement.errors %}error{% endif %}">
+    {{mid.achievement}} 
+    {% if mid.achievement.errors %}
+    <div class="row alert alert-error school-display">
+      <button class="close" data-dismiss="alert">×</button>
+      {{ mid.achievement.errors }}
     </div>
-    <blockquote>
-      <div class="control-group form-inline {% if mid.achievement.errors %}error{% endif %}">
-        {{mid.achievement}} 
-        {% if mid.achievement.errors %}
-        <div class="row alert alert-error school-display">
-          <button class="close" data-dismiss="alert">×</button>
-          {{ mid.achievement.errors }}
-        </div>
-        {% endif %}  
-      </div>
-    </blockquote><!--end project content-->
-    <br/>
+    {% endif %}  
+  </div>
+</blockquote><!--end project content-->
+<br/>
