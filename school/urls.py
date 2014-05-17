@@ -77,4 +77,6 @@ urlpatterns = patterns(
         r'^project_informationexport$',
         school_views.project_informationexport
         ),
+    url(r'^file_download/(?P<fileid>.{36})&(?P<filename>\w+)$',
+        school_views.file_download,name="school_downloadfile"),
 )
