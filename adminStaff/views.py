@@ -315,6 +315,8 @@ class AdminStaffService(object):
                 category = subject_insitute_form.cleaned_data["insitute_choice"]
                 #subject_list =  AdminStaffService.GetSubject_list(category=category)
                 subject_list = get_current_project_query_set().filter(insitute_id=category)
+                page = request.GET.get('page')
+                context = getContext(subject_list, page, 'subject', 0)
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
@@ -334,7 +336,6 @@ class AdminStaffService(object):
                             re_dict = AdminStaffService.Assign_Expert_For_Subject(extra_subject_list, expert_list, done_num)
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
-                                    print subject, expert
                                     Re_Project_Expert(project=subject, expert=expert).save()
 
                     #没有指派专家，则进行专家指派
