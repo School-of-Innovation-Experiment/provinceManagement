@@ -14,6 +14,7 @@
           {% endif %}
         </div>
       </fieldset>
+      {% if not is_show %}
       <fieldset>
         <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
           <legend>学校推荐语</legend>
@@ -26,5 +27,6 @@
           {% endif %}
         </div>
       </fieldset> 
+     {% endif %}
     </blockquote>
 </div>
