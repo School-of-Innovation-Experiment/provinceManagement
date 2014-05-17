@@ -44,7 +44,7 @@
         <td><button class="btn btn-warning">已发送，尚未激活</button></td>
         {%endif%}
         <td>
-          <button class="btn btn-danger" rel="student_delete" uid="{{user.id}}">
+          <button class="btn btn-danger" rel="student_delete" uid="{{user.id}}" arg="{{user.is_active}}">
                 <i class="icon-trash icon-white"></i>
                 <span>删除</span>
           </button>
