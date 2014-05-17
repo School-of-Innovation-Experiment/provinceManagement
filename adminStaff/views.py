@@ -98,7 +98,7 @@ class AdminStaffService(object):
 
         if not AdminStaffService.AuthUserExist(email, identity, **kwargs):
             # if kwargs.has_key('school_name'):
-            #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
+           #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             # elif kwargs.has_key('expert_user'):
             #     RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
             # elif kwargs.has_key('teacher_school'):
@@ -700,9 +700,9 @@ class AdminStaffService(object):
     def home_view(request):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
+            add_fileurl(pro_obj)
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-            add_fileurl(pro_obj)
         context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
         context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
