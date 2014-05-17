@@ -102,7 +102,8 @@ def RemoveExpert(request, email):
     """
     Remove the exist expert user from database
     """
-    ExpertProfile.objects.get(userid__email = email).delete()
+    User.objects.get(email = email).delete()
+    #ExpertProfile.objects.get(userid__email = email).delete()
     return simplejson.dumps({"status":"1"})
 
 @dajaxice_register
