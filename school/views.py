@@ -75,15 +75,12 @@ def open_report_view(request, pid=None):
 @authority_required(SCHOOL_USER)
 def final_report_view(request, pid=None):
     data = final_report_view_work(request, pid)
-    project = get_object_or_404(ProjectSingle, project_id = pid)
-    data['readonly'] = not get_schooluser_project_modify_status(project);
     return render(request, 'school/final.html', data)
 
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
 def mid_report_view(request, pid = None):
-    loginfo(request.method)
     data = mid_report_view_work(request, pid)
     return render(request, 'school/mid.html', data)
 
@@ -92,8 +89,6 @@ def mid_report_view(request, pid = None):
 @authority_required(SCHOOL_USER)
 def application_report_view(request, pid=None):
     data = application_report_view_work(request, pid)
-    project = get_object_or_404(ProjectSingle, project_id = pid)
-    data['readonly'] = not get_schooluser_project_modify_status(project);
     return render(request, 'school/application.html', data)
 
 @csrf.csrf_protect
