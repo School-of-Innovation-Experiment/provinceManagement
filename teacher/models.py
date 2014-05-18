@@ -9,3 +9,6 @@ class TeacherMonthComment(models.Model):
                                verbose_name=u"项目月评")
     date = models.DateField(default=datetime.datetime.today)
     monthId  = models.IntegerField(blank=False, verbose_name="月次", default=0)
+    class Meta:
+        verbose_name = "教师项目月评"
+        verbose_name_plural = "教师项目月评"
