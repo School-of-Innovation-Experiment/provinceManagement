@@ -22,55 +22,12 @@
         {%endif%}
         {{exist_message}}
       </form><!--end category form -->
-      <table class="table table-condensed" id="subject_table">
-        <thead>
-	  <tr>
-	    <th>发布题目名称</th>
-	    <th>所属学校</th>
-	    <th>所属分类</th>
-	    <th>所属学科</th>
-	    <th>题目状态</th>
-	  </tr>
-        </thead>
-        <tbody id="subject_table_body">
-	  {% for subject in subject_list%}
-	  <tr>
-	    <td>{{subject.title}}</td>
-	    <td>{{subject.school}}</td>
-	    <td>{{subject.project_category}}</td>
-	    <td>{{subject.insitute}}</td>
-	    <td>{{subject.project_status}}</td>
-	  </tr>
-	  {%endfor%}
-        </tbody>
-      </table>
-      <div class="pagination pagination-right">
-	<ul>
-	  {% if subject_page.has_previous %}
-          <li><a href="?page={{ subject_page.previous_page_number }}" id="subject-previous-page" arg="{{subject_page.previous_page_number}}"><上一页</a></li>
-		                                                                                                                                {% endif %}
-		                                                                                                                                {% if not contain_begin %}
-		                                                                                                                                <li><a href="?page=1">1</a></li>
-	  <li><span>...</span></li>
-	  {% endif %}
-	  {% for index in index_list %}
-	  {% ifequal index subject_page.number %}
-	  <li><span>{{ index }}</span></li>
-	  {% else %}
-	  <li><a href="?page={{ index }}">{{ index }}</a></li>
-	  {% endifequal %}
-	  {% endfor %}
-	  {% if not contain_end %}
-          <li><span>...</span></li>
-	  <li><a href="?page={{ subject_page.paginator.num_pages }}">{{ subject_page.paginator.num_pages }}</a></li>
-	  {% endif %}
-	  {% if subject_page.has_next %}
-          <li><a href="?page={{ subject_page.next_page_number }}" id="subject-next-page" arg="{{subject_page.next_page_number}}">下一页></a></li>
-          {% endif %}
-	</ul>
+      <div id="subjectalloc_table">
+        {% include "adminStaff/widgets/subjectalloc_table.html" %}
       </div>
   </div><!-- end the whole form -->
 </div>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/refresh_table.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/is_assigned.js" onload="is_assigned();"></script>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>

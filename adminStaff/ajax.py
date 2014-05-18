@@ -269,6 +269,13 @@ def get_news_list(request,uid):
     except Exception, err:
         logger.info(err)
 
+@dajaxice_register
+def refresh_alloc_table(request, insitute):
+    subject_list = get_current_project_query_set().filter(insitute_id=insitute)
+    page = request.GET.get("page")
+    context = getContext(subject_list, page, 'subject', 0)
+    table_html = render_to_string("adminStaff/widgets/subjectalloc_table.html", context)
+    return simplejson.dumps({"table": table_html})
 def refresh_to_table(page,school_name):
     if school_name == "None": school_name = None
    # subject_list = AdminStaffService.GetSubject_list(school = school_name)
