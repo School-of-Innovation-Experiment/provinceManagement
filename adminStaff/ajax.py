@@ -24,6 +24,7 @@ import datetime
 from backend.logging import logger, loginfo
 from django.template.loader import render_to_string
 from backend.utility import getContext
+from school.utility import *
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -212,6 +213,7 @@ def change_subject_grade(request, project_id, changed_grade,page,school_name):
     '''
     change subject grade secretly
     '''
+    
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     table = refresh_to_table(page,school_name)
     return simplejson.dumps({'status':'1','table':table})
@@ -268,11 +270,11 @@ def get_news_list(request,uid):
         logger.info(err)
 
 def refresh_to_table(page,school_name):
-    print page,school_name
     if school_name == "None": school_name = None
-    subject_list = AdminStaffService.GetSubject_list(school = school_name)
+   # subject_list = AdminStaffService.GetSubject_list(school = school_name)
+    subject_list = get_current_project_query_set().filter(school = school_name)
     context = getContext(subject_list, page, 'item', 0) 
-
+    context.update({"school_name": school_name})
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 
 @dajaxice_register
