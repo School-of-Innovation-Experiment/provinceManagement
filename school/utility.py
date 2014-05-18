@@ -487,28 +487,30 @@ def check_flagtofile(project):
 	if project.file_application:
 		if not check_flieexistflag(project,u"申报书"):
 			project.file_application = False
-	elif project.file_opencheck:
+	if project.file_opencheck:
 		if not check_flieexistflag(project,u"开题报告"):
 			project.file_opencheck = False
-	elif project.file_interimchecklist:
+	if project.file_interimchecklist:
 		if not  check_flieexistflag(project,u"中期检查表"):
 			project.file_interimchecklist = False
-	elif project.file_summary:		
+	if project.file_summary:		
 		if not check_flieexistflag(project,u"结题验收表"):
 			project.file_summary = False
-	elif project.file_projectcompilation:
+	if project.file_projectcompilation:
 		if not check_flieexistflag(project,u"项目汇编"):
 			project.file_projectcompilation = False
 
 def check_flieexistflag(project,filekeyname):
-	"""
-	文件存在返回 True ,不存在返回False
-	"""
-	uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
-	if len(uploadfiles) == 0:
-		return False
-	else:
-		return True
+    """
+    文件存在返回 True ,不存在返回False
+    """
+    uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
+    loginfo(p = filekeyname,label="filekeyname")
+    print len(uploadfiles)
+    if len(uploadfiles) == 0:
+        return False
+    else:
+        return True
 
 class error_flag(object):
     """
