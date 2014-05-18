@@ -503,12 +503,14 @@ def check_flagtofile(project):
     if project.file_projectcompilation:
         if not check_flieexistflag(project,u"项目汇编"):
              project.file_projectcompilation = False
+	project.save()
              
 def check_flieexistflag(project,filekeyname):
     """
     文件存在返回 True ,不存在返回False
     """
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
+    loginfo(p=filekeyname,label=project.title)
     if len(uploadfiles) == 0:
          return False
     else:
