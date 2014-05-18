@@ -1,5 +1,6 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
+<div class="well form">
 <h3>
   项目列表
 </h3>
@@ -33,14 +34,15 @@
         <td>{{item.adminuser.get_name}}</td>
         <td>
             <span><a href="/adminStaff/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
-        </td>
-      </tr>
-      {%endfor%}
-    </tbody>
-  </table>
+          </td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  目前没有正在进行的项目
+  {% endif %}
 </div>
-{% else %}
-目前没有正在进行的项目
-{% endif %}
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}

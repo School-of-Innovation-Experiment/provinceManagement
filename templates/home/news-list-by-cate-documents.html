@@ -1,5 +1,22 @@
 {% extends "base/base_home.html" %}
-
+{% block before_home_content%}
+<div class="news-content-nav">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="{{announcement_active}}">
+      <a href="/newslist/news_cate=announcement">通知公告</a>
+    </li>
+    <li class="{{dynamic_active}}">
+      <a href="/newslist/news_cate=dynamic">政策规章</a>
+    </li>
+    <li class="{{outstanding_active}}">
+      <a href="/newslist/news_cate=outstanding">优秀作品</a>
+    </li>
+    <li class="{{others_active}}">
+      <a href="/newslist/news_cate=others">他山之石</a>
+    </li>
+  </ul>
+</div>
+{% endblock%}
 {% block home_content %}
   <div class="news-body">
     <div class="news-list">

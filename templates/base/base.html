@@ -11,8 +11,8 @@
     <meta name="keywords" content="" />
     <meta name="author" content="" />
     <!-- CSS Config. -->
-    {% block before_css %}{% endblock  %}
     {% include "meta/html_head_stylesheets.html" %}
+    {% block before_css %}{% endblock  %}
     <!-- JavaScript Config. -->
     {% block forestyle %}{% endblock %}
     {% include "meta/html_head_javascript.html" %}
@@ -23,14 +23,22 @@
 
   <body >
     <div class="github-fork-ribbon-wrapper right">
-    <div class="github-fork-ribbon">
-      <a href="/">创新创业＊校级版</a>
+      <div class="github-fork-ribbon">
+        <a href="/">创新创业＊校级版</a>
+      </div>
     </div>
-  </div>
-    {# navigator bar#}
-    {% block top-nav-bar %}
-      {% include "widgets/navbar.html" %}
-    {% endblock %}
+
+    <div class="container" id="nav-container">
+       <!--head content-->
+       <div class="masthead">
+         <!--Head title-->
+         <a href="/"><h1 class="muted head-title">{{SCHOOL_NAME}}创新创业项目管理平台</h1></a>
+         <p class="head-title-low">{{SCHOOL_NAME_ENGLISH}} Innovative Undertaking Management Platform</p>
+         <hr class="head-hr">
+        {% block nav_content %}
+        {% endblock %}
+       </div><!--end mashhead-->
+    </div><!--end whole container-->
 
     {# Main-Content Section #}
     {% block content %}{% endblock %}

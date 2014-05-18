@@ -1,5 +1,7 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
+
+<div class="well form">
 <h3>
   项目列表
 </h3>
@@ -18,7 +20,6 @@
 	<th>申报书</th>
 	<th>中期检查表</th>
 	<th>结题验收</th>
-	<th>项目汇编</th>
         <th>联系方式</th>
 	<th>是否结题</th>
 	<th>查看过程记录</th>
@@ -38,10 +39,6 @@
         <td>
           {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
-        </td>
-        <td>
-          {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
-          {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
         </td>
         <td>
           {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
@@ -81,14 +78,14 @@
       <a class="btn" data-dismiss="modal">关闭</a>
       <a class="btn btn-primary" data-dismiss="modal" onclick="project_overstatus();">保存更新</a>
     </div>
+    {% endif %}
+    {% if IS_MINZU_SCHOOL %}
+    {% endif %}
   </div>
-  {% endif %}
-  {% if IS_MINZU_SCHOOL %}
+  {% else %}
+  目前没有进行中的项目或者项目未分级，请在查看项目等级设定界面查看是否有未分级项目<br>
+  <a type="button" class="btn btn-primary" href="/school/subject_rating">项目等级设定</a>
   {% endif %}
 </div>
-{% else %}
-目前没有进行中的项目或者项目未分级，请在查看项目等级设定界面查看是否有未分级项目<br>
-<a type="button" class="btn btn-primary" href="/school/subject_rating">项目等级设定</a>
-{% endif %}
 <script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
 {%endblock%}
