@@ -307,7 +307,6 @@ def final_report_view_work(request, pid=None,is_expired=False):
         In: id, it is project id
     """
 
-    print 'final_report' + str(pid)
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
@@ -326,7 +325,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
         readonly = False
 
     isRedirect = False
-
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
@@ -349,6 +348,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
             # 'techcompetition':techcompetition,
             'readonly':readonly,
             'isRedirect': isRedirect,
+            'is_show': is_show,
             }
     return data
 
