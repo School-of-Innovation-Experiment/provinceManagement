@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'djangocms_admin_style',
     'django.contrib.admin',
     #Project
+    'teacher',
     'registration',
     'users',
     'const',
@@ -143,7 +144,6 @@ INSTALLED_APPS = (
     'adminStaff',
     'news',
     'showtime',
-    'teacher',
     'student',
     #Add-on
     'south',
