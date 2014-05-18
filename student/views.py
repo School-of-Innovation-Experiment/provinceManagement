@@ -152,6 +152,7 @@ def open_report_view(request, pid = None, is_expired = False):
 
 def open_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
+    readonly = get_opencheck_readonly(request,project)
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
@@ -159,35 +160,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
         open_data.content_id = uuid.uuid4()
         open_data.project_id = project
         open_data.save()
-
-    #open_data = get_object_or_404(OpenSubmit, project_id=pid)
-
-    is_currentyear = check_year(project)
-
-    is_applying = check_applycontrol(project)
-
-    if check_auth(user=request.user,authority=STUDENT_USER) or \
-    check_auth(user=request.user,authority=TEACHER_USER) :
-        readonly = False
-    else :
-        readonly = True
-
-    # if check_auth(user=request.user,authority=STUDENT_USER):
-    #     readonly = not is_applying or project.is_past    
-    # elif check_auth(user=request.user,authority=TEACHER_USER):
-    #     readonly = not is_applying or project.is_past    
-    # elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-    #     readonly = False
-    # elif check_auth(user = request.user, authority = SCHOOL_USER):
-    #     readonly = not get_schooluser_project_modify_status(project)
-    # elif check_auth(user = request.user, authority = EXPERT_USER):
-    #     readonly = False
-    # else:
-    #     readonly = False
-
-    
     isRedirect = False
-    
     if request.method == "POST" and readonly is not True:
         open_form = OpenReportForm(request.POST, instance=open_data)
         if open_form.is_valid():
@@ -199,10 +172,9 @@ def open_report_view_work(request, pid = None, is_expired = False):
             # return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
             logger.info(open_form.errors)
-    open_form = OpenReportForm(instance=open_data)
+    else:
+        open_form = OpenReportForm(instance=open_data)
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
-    
-
     data = {'pid': pid,
             'open': open_form,
             'is_show': is_show,
@@ -210,10 +182,6 @@ def open_report_view_work(request, pid = None, is_expired = False):
             'isRedirect': isRedirect,
             }
     return data
-
-
-
-
 
 @csrf.csrf_protect
 @login_required
@@ -232,6 +200,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     student mid report
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
+    readonly = get_opencheck_readonly(request,project)
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -239,45 +208,19 @@ def mid_report_view_work(request, pid = None, is_expired = False):
         mid.content_id = uuid.uuid4()
         mid.project_id = project
         mid.save()
-
-    is_finishing = check_finishingyear(project)
-    over_status = project.over_status.status
-
-    is_currentyear = check_year(project)
-
-    is_applying = check_applycontrol(project)
-
-
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
-    elif check_auth(user = request.user, authority = SCHOOL_USER):
-        readonly = not get_schooluser_project_modify_status(project)
-    elif check_auth(user = request.user, authority = EXPERT_USER):
-        readonly = False
-    else:
-        readonly = False
-
-    # readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     isRedirect = False
     if request.method == "POST" and readonly is not True:
         mid_form = MidReportForm(request.POST, instance = mid)
         if mid_form.is_valid():
             mid_form.save()
-            #project.project_status = ProjectStatus.objects.get(status=STATUS_MIDSUBMIT)
             project.save()
-
             isRedirect = True
         else:
-            pass
             logger.info("Mid Form Valid Failed"+"**"*10)
             logger.info(mid_form.errors)
-
-    mid_form = MidReportForm(instance = mid)
+    else:
+        mid_form = MidReportForm(instance = mid)
 
     data = {'pid': pid,
             'mid': mid_form,
@@ -650,5 +593,18 @@ def funds_view(request):
     ret = CFundManage.get_form_tabledata(project)
     return render(request, 'student/funds_change.html',ret)
 
-
+def get_opencheck_readonly(request,project):
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = project.is_past
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = project.is_past
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+    return readonly
 
