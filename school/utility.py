@@ -632,3 +632,17 @@ def get_studentmessage(project):
 def get_student_member(project):
     student_group = Student_Group.objects.filter(project = project)
     return ','.join([student.studentName for student in student_group])
+def get_opencheck_readonly(request,project):
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = project.is_past
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = project.is_past
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+    return readonly
