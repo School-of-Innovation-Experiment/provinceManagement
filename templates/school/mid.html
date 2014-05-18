@@ -5,7 +5,7 @@
 {%block report-content%}
 
 
-  <form method="post" action={% url teacher.views.mid_report_view pid %}>
+  <form method="post" action={% url school.views.mid_report_view pid %}>
     {% csrf_token %}
     <!--Project Content-->
     {% include "student/widgets/mid.html" %}
