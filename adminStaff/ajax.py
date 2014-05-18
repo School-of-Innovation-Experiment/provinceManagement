@@ -289,7 +289,7 @@ def ResetSchoolPassword(request):
     for register in SchoolProfile.objects.all():
         user = User.objects.get(username__exact = register.userid.username)
         if user:
-            user.set_password('1')
+            user.set_password('465689')
             user.save()
     message = u"重置密码成功"
     return simplejson.dumps({'status':'1', 'message':message})
