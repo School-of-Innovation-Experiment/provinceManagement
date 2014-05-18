@@ -146,7 +146,8 @@ def review_report_pass_p(request, pid, pass_p):
         limitnum = expert.numlimit_b
         really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
 
-    if pass_p and (limitnum > really):
+    if pass_p:
+   # if pass_p and (limitnum > really):
         proj.pass_p = True
     else:
         proj.pass_p = False
