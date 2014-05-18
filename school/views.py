@@ -274,8 +274,8 @@ def mid_report_view(request, pid = None, is_expired = False):
             logger.info("Mid Form Valid Failed"+"**"*10)
             logger.info(mid_form.errors)
             logger.info("--"*10)
-
-    mid_form = MidReportForm(instance=mid)
+    else:
+        mid_form = MidReportForm(instance=mid)
 
     data = {'pid': pid,
             'mid': mid_form,

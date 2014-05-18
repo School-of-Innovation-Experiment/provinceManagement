@@ -11,7 +11,14 @@ $().ready(function(){
     $('#Richtext_edit').modal('show');
   })
   $('#Richtext_edit').on('hide',function(){
-    $(div_edit).html($(edit).html());
+    div_text = $(edit).html();
+    var div_textspilt = div_text.split('<div><br></div>');
+    div_text = div_textspilt.join('');
+    if( div_text == ''){
+     $(div_edit).html('');
+    }else{
+      $(div_edit).html($(edit).html());
+    }
   })
 })
 
