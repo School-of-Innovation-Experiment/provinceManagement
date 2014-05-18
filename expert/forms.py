@@ -32,17 +32,16 @@ class ReviewForm(ModelForm):
         exclude = ('project', 'expert', 'is_assign_by_adminStaff', )
         widgets = {'comments': forms.Textarea(attrs={'class': "fill-form", 'rows': "6", 
                                                       'placeholder': "给这个项目提点意见或建议吧。。。"}),
-                   'score_significant': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_value': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_innovation': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_practice': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_achievement': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
-                   'score_capacity': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分'}),
+                   'score_significant': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                   'score_value': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                   'score_innovation': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                   'score_practice': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                   'score_achievement': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
+                   'score_capacity': forms.TextInput(attrs={'class':'input-small', 'placeholder':'0-100分',"onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
                    }
     def clean(self):
         #TODO still have several bug
         clean_data = super(ReviewForm, self).clean()
-        
         msg = u"得分输入有误(为负数或超过上限)，请重新输入"
         if 0 > clean_data.get('score_significant') or clean_data.get('score_significant') > 15:
             self._errors["score_significant"] = self.error_class([msg])
