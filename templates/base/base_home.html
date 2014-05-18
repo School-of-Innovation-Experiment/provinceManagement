@@ -88,7 +88,8 @@
     <div id="footer-links">
         {% include "home/widgets/links.html" %}
     </div>
-  {%endblock%}
+   {%endblock%}
+   {% include "base/checkbrowser.html" %}
 {%endblock%}
 {% block bottom_js %}
   {{ block.super }}

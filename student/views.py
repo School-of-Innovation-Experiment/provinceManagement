@@ -198,7 +198,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
             isRedirect = True
             # return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
-            logger.info(final_form.errors)
+            logger.info(open_form.errors)
     open_form = OpenReportForm(instance=open_data)
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     
@@ -307,7 +307,6 @@ def final_report_view_work(request, pid=None,is_expired=False):
         In: id, it is project id
     """
 
-    print 'final_report' + str(pid)
     loginfo(p=pid+str(is_expired), label="in application")
     final = get_object_or_404(FinalSubmit, project_id=pid)
     project = get_object_or_404(ProjectSingle, project_id=pid)
@@ -326,7 +325,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
         readonly = False
 
     isRedirect = False
-
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
@@ -349,6 +348,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
             # 'techcompetition':techcompetition,
             'readonly':readonly,
             'isRedirect': isRedirect,
+            'is_show': is_show,
             }
     return data
 
@@ -360,10 +360,12 @@ def final_report_view_work(request, pid=None,is_expired=False):
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
-    if data['isRedirect'] :
+    if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
+
+
 
 
 def application_report_view_work(request, pid=None, is_expired=False):
@@ -409,6 +411,10 @@ def application_report_view_work(request, pid=None, is_expired=False):
         is_innovation = False
 
     isRedirect = False
+    # print "^^^pre ^^^^^ " + str(pre.key_notes)
+    
+
+
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
@@ -419,9 +425,10 @@ def application_report_view_work(request, pid=None, is_expired=False):
                 if save_application(project, pre, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
-
                     isRedirect = True
-                    # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
+                    # print "lzlzlzlzl " + str(pre.key_notes)
+                    # isRedirect = True
+                    
             else:
                 logger.info("Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
@@ -432,8 +439,8 @@ def application_report_view_work(request, pid=None, is_expired=False):
                 if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
-
                     isRedirect = True
+                    # isRedirect = True
                     # return (0, HttpResponseRedirect(reverse('student.views.home_view')))
             else:
                 logger.info("info  application teacher Form Valid Failed"+"**"*10)
@@ -444,7 +451,10 @@ def application_report_view_work(request, pid=None, is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
+        isRedirect = True
         # teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+
+
 
     data = {'pid': pid,
             'info': info_form,
