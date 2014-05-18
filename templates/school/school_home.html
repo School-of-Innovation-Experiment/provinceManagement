@@ -1,5 +1,49 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
+<<<<<<< HEAD
+=======
+<div class="well form">
+  <h3>
+    项目列表
+  </h3>
+  <form id="project_manage_form" method="POST" action="/school/" >
+    {%include "widgets/project_filter_form.html"%}
+  </form>
+  {% if havedata_p %}
+  <div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>项目编号</th>
+	  <th>名称</th>
+	  <th>项目级别</th>
+	  <th>指导教师</th>
+	  <th>申报书</th>
+          <th>开题报告</th>
+	  <th>中期检查表</th>
+	  <th>结题验收</th>
+	  <th>项目汇编</th>
+          <th>联系方式</th>
+	  <th>是否结题</th>
+	  <th>查看过程记录</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in pro_list%}
+        <tr>
+          <td>{{item.project_unique_code}}</td>
+	        <td> <a href="/school/application/{{item.project_id}}"> {{item.title|truncatechars:10}} </a></td>
+	        <td>{{item.project_grade}}</td>
+	        <td>{{item.adminuser.get_name}}</td>
+          <td>
+            {% if item.file_application %}<span class="label label-success"><a href="{% url school_downloadfile item.fileid_application  item.applicationfilename %} " target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+          <td>
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+>>>>>>> a16580e... add hide finish year
 
 <div class="well form">
 <h3>
