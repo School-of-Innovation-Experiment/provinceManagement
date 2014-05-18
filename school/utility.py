@@ -467,6 +467,7 @@ def get_schooluser_project_modify_status(project):
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
+    check_flagtofile(project)
     for filetemp in uploadfiles:
         if filetemp.name == u"申报书":
             project.fileurl_application = filetemp.file_obj.url 
@@ -478,6 +479,36 @@ def add_fileurl(project):
             project.fileurl_projectcompilation = filetemp.file_obj.url
         elif filetemp.name == u"开题报告":
             project.fileurl_opencheck = filetemp.file_obj.url
+
+def check_flagtofile(project):
+	"""
+	检查文件上传标志与存在的文件是否对应
+	"""
+	if project.file_application:
+		if not check_flieexistflag(project,u"申报书"):
+			project.file_application = False
+	elif project.file_opencheck:
+		if not check_flieexistflag(project,u"开题报告"):
+			project.file_opencheck = False
+	elif project.file_interimchecklist:
+		if not  check_flieexistflag(project,u"中期检查表"):
+			project.file_interimchecklist = False
+	elif project.file_summary:		
+		if not check_flieexistflag(project,u"结题验收表"):
+			project.file_summary = False
+	elif project.file_projectcompilation:
+		if not check_flieexistflag(project,u"项目汇编"):
+			project.file_projectcompilation = False
+
+def check_flieexistflag(project,filekeyname):
+	"""
+	文件存在返回 True ,不存在返回False
+	"""
+	uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
+	if len(uploadfiles) == 0:
+		return False
+	else:
+		return True
 
 class error_flag(object):
     """
