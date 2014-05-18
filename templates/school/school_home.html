@@ -4,10 +4,10 @@
   <h3>
     项目列表
   </h3>
-  {% if havedata_p %}
   <form id="project_manage_form" method="POST" action="/school/" >
     {%include "widgets/project_filter_form.html"%}
   </form>
+  {% if havedata_p %}
   <div>
     <table class="table table-hover">
       <thead>
