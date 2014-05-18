@@ -493,6 +493,7 @@ def check_flagtofile(project):
 	if project.file_application:
 		if not check_flieexistflag(project,u"申报书"):
 			project.file_application = False
+<<<<<<< HEAD
 	if project.file_opencheck:
 		if not check_flieexistflag(project,u"开题报告"):
 			project.file_opencheck = False
@@ -503,10 +504,23 @@ def check_flagtofile(project):
 		if not check_flieexistflag(project,u"结题验收表"):
 			project.file_summary = False
 	if project.file_projectcompilation:
+=======
+	elif project.file_opencheck:
+		if not check_flieexistflag(project,u"开题报告"):
+			project.file_opencheck = False
+	elif project.file_interimchecklist:
+		if not  check_flieexistflag(project,u"中期检查表"):
+			project.file_interimchecklist = False
+	elif project.file_summary:		
+		if not check_flieexistflag(project,u"结题验收表"):
+			project.file_summary = False
+	elif project.file_projectcompilation:
+>>>>>>> 6202057... add filexiet flag func
 		if not check_flieexistflag(project,u"项目汇编"):
 			project.file_projectcompilation = False
 
 def check_flieexistflag(project,filekeyname):
+<<<<<<< HEAD
     """
     文件存在返回 True ,不存在返回False
     """
@@ -517,6 +531,16 @@ def check_flieexistflag(project,filekeyname):
         return False
     else:
         return True
+=======
+	"""
+	文件存在返回 True ,不存在返回False
+	"""
+	uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
+	if len(uploadfiles) == 0:
+		return False
+	else:
+		return True
+>>>>>>> 6202057... add filexiet flag func
 
 class error_flag(object):
     """
