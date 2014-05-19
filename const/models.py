@@ -25,7 +25,7 @@ from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
 class MajorDict(models.Model):
-    major = models.CharField(blank=True, null=True, max_length=100, choices=MAJOR_CHOICES, unique=True,
+    major = models.CharField(blank=True, null=True, max_length=100, unique=True,
                              verbose_name=u"专业")
     class Meta:
         verbose_name = "专业列表"
@@ -224,3 +224,18 @@ class SchoolRecommendRate(models.Model):
         """
         try: return cls.objects.get()
         except: return cls()
+
+class SchoolInformation(models.Model):
+	"""
+	学校信息
+	"""
+	school_chiname = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校中文名")
+	school_engname = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校英文名")
+	school_code = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校编号")
+	class Meta:
+		verbose_name = "学校信息"
+		verbose_name_plural = "学校信息"
+	
+	def __unicode__(self):
+		return self.school_code + "(" + self.school_chiname + ")"
+
