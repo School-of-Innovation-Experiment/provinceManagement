@@ -125,11 +125,13 @@ class AdminStaffService(object):
     def Dispatch(request):
         if request.method == "GET":
             school_form = forms.SchoolDispatchForm()
+            resetSchoolPasswd_form = forms.ResetSchoolPasswordForm()
             email_list  = AdminStaffService.GetRegisterSchoolList()
             page = request.GET.get('page')
             loginfo(p=page, label="current page num")
             context = getContext(email_list, page, 'item', 0)
             context['school_form'] = school_form
+            context['resetSchoolPasswd_form'] = resetSchoolPasswd_form
 
             #loginfo(p=email_list, label="news email_list ")
             return render(request, "adminStaff/dispatch.html", context)

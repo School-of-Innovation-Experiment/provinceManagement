@@ -127,4 +127,7 @@ class SchoolCategoryForm(forms.Form):
 class SubjectGradeForm(forms.Form):
     subject_grade_choice =   PROJECT_GRADE_CHOICES
     subject_grade   = forms.ChoiceField(choices=subject_grade_choice)
-
+class ResetSchoolPasswordForm(forms.Form):
+    reset_password = forms.CharField(max_length=20, required=True,
+                                     widget=forms.TextInput(attrs={'class':'span2','id':"reset_school_password",'placeholder':u"请输入要重置的密码",'id':'reset_password_text'}
+                                    ),)

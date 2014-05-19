@@ -4,7 +4,7 @@ function send_email_to_expert(){
 }
 function reset_school_password(){
   $("#reset_school_password_error_message").empty();
-  Dajaxice.adminStaff.ResetSchoolPassword(ResetSchoolPassword_callback,{});
+  Dajaxice.adminStaff.ResetSchoolPassword(ResetSchoolPassword_callback,{'form':$('#reset_password').serialize(true)});
 }
 function ResetSchoolPassword_callback(data){
   if (data.status == "1"){
@@ -15,15 +15,14 @@ function ResetSchoolPassword_callback(data){
       $("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
   }
 }
-
 function remove_expert(email){
-	var email = email
-	Dajaxice.adminStaff.RemoveExpert(remove_expert_callback,{'email':email});
+  var email = email
+  Dajaxice.adminStaff.RemoveExpert(remove_expert_callback,{'email':email});
 }
 
 function remove_expert_callback(data){
 	window.location.reload();
-}	
+}
 function import_expert(){
   $("#expert_email_error_message").empty();
   Dajaxice.adminStaff.ExpertImport(ExpertImport_callback,{'form':$('#expert_email_send_form').serialize(true)});
@@ -52,8 +51,6 @@ function ExpertImport_callback(data){
     $("#expert_email_error_message").append("<strong>"+data.message+"</strong>")
   }
 }
-
-
 function send_email_to_school(){
   $("#school_email_error_message").empty();
   Dajaxice.adminStaff.SchoolDispatch(SchoolDispatch_callback,{'form':$('#school_email_send_form').serialize(true)});

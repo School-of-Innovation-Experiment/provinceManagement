@@ -9,7 +9,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm, ResetSchoolPasswordForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
@@ -62,9 +62,6 @@ def NumLimit(request, form):
             return simplejson.dumps({'status':'0','message':u'更新失败，选定的学校没有进行注册'})
     else:
         return simplejson.dumps({'status':'0', 'id':form.errors.keys(),'message':u'输入错误'})
-
-
-
 
 @dajaxice_register
 def DeadlineSettings(request, form):
@@ -285,11 +282,15 @@ def refresh_to_table(page,school_name):
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 
 @dajaxice_register
-def ResetSchoolPassword(request):
-    for register in SchoolProfile.objects.all():
-        user = User.objects.get(username__exact = register.userid.username)
-        if user:
-            user.set_password('465689')
-            user.save()
-    message = u"重置密码成功"
-    return simplejson.dumps({'status':'1', 'message':message})
+def ResetSchoolPassword(request, form):
+    resetSchoolPassword_form = ResetSchoolPasswordForm(deserialize_form(form))
+    if resetSchoolPassword_form.is_valid():
+        password = resetSchoolPassword_form.cleaned_data["reset_password"]
+        for register in SchoolProfile.objects.all():
+            user = User.objects.get(username__exact = register.userid.username)
+            if user:
+                user.set_password(password)
+                user.save()
+        return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
+    else:
+        return simplejson.dumps({'status':'1', 'message':u"密码不能为空"})
