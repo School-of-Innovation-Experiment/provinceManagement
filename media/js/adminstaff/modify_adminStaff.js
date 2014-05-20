@@ -1,32 +1,29 @@
 function save_adminStaff_info(){
-  // $("#expert_email_error_message").empty();
+  $("#adminStaff_info_error_message").empty();
   Dajaxice.adminStaff.SaveAdminStaffInfo(SaveAdminStaffInfo_callback,{'form':$('#adminStaff_info_form').serialize(true)});
 };
 function SaveAdminStaffInfo_callback(data){
-  // if (data.status == "1"){
-  //   // if success all field background turn into white
-  //   $.each(data.field,function(i,item){
-  //     object = $('#'+item);
-  //     object.css("background","white");
-  //     $("#send_mail_table").html(data.table);
-  //   });
-  //   //$("#time_settings_form").css("background","white");
-  //   $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
-  // }
-  // else
-  // {
-  //   $.each(data.field,function(i,item){
-  //     object = $('#'+item);
-  //     object.css("background","white");
-  //   });
-  //   //error field background turn into red
-  //   $.each(data.error_id,function(i,item){
-  //     object = $('#'+item);
-  //     object.css("background","red");
-  //   });
-  //   $("#expert_email_error_message").append("<strong>"+data.message+"</strong>");
-  // }
-  // $("#close_is_dispatching").trigger('click');
+	if(data.status == "1"){
+		$.each(data.field,function(i,item){
+				object = $('#'+item);
+				object.css("background","white");
+				});
+		$("#adminStaff_info_error_message").append("<strong>" + data.message + "</strong>");
+		alert("保存成功");
+	}
+	else
+	{
+		$.each(data.field,function(i,item){
+			object = $('#'+item);
+			object.css("background","white");
+		});
+		//error field background turn into red
+		$.each(data.error_id,function(i,item){
+			object = $('#'+item);
+			object.css("background","red");
+		});
+		$("#adminStaff_info_error_message").append("<strong>" + data.message + "</strong>");	
+	}
 }
 
 
@@ -36,6 +33,19 @@ function save_school_name(){
   Dajaxice.adminStaff.SaveSchoolName(SaveSchoolName_callback,{'form':$('#school_name_form').serialize(true)});
 };
 function SaveSchoolName_callback(data){
+	if(data.status == "1")
+	{
+		$("#info_schoolname").html(data.table);
+		alert(data.message)
+	}
+	else if(data.status == "2")
+	{
+		alert(data.message)
+	}
+	else 
+	{
+		alert(data.message)
+	}
 }
 
 function delete_school_name(){
@@ -61,6 +71,16 @@ function delete_school_name(){
 
 
 function DeleteSchoolName_callback(data){
+	if(data.status == "1")
+	{
+		alert(data.message);
+		$("#info_schoolname").html(data.table);
+	}
+	else
+	{
+		alert("删除失败"+data.message);
+		$("#info_schoolname").html(data.table);
+	}
 }
 
 
@@ -71,6 +91,19 @@ function save_major_name(){
   Dajaxice.adminStaff.SaveMajorName(SaveMajorName_callback,{'form':$('#major_name_form').serialize(true)});
 };
 function SaveMajorName_callback(data){
+	if(data.status == "1")
+	{
+		$("#info_majorname").html(data.table);
+		alert(data.message)
+	}
+	else if(data.status == "2")
+	{
+		alert(data.message)
+	}
+	else 
+	{
+		alert(data.message)
+	}
 }
 
 function delete_major_name(){
@@ -100,4 +133,14 @@ function delete_major_name(){
 
 
 function DeleteMajorName_callback(data){
+	if(data.status == "1")
+	{
+		alert(data.message);
+		$("#info_majorname").html(data.table);
+	}
+	else
+	{
+		alert("删除失败"+data.message);
+		$("#info_majorname").html(data.table);
+	}
 }

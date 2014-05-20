@@ -24,7 +24,7 @@ from const import *
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
-from const.models import UserIdentity, InsituteCategory, ProjectGrade
+from const.models import UserIdentity, InsituteCategory, ProjectGrade,SchoolInformation
 from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
@@ -675,19 +675,23 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def adminStaff_info_input_view(request, is_expired = False):
-
         adminStaff_info_form = AdminStaffInfoForm()
+        schoolinformation = SchoolInformation.objects.all()		
+        if len(schoolinformation) > 0:
+            schoolinformation = schoolinformation[0]
+            adminStaff_info_form = AdminStaffInfoForm({'chinese_name':schoolinformation.school_chiname,'english_name':schoolinformation.school_engname,'index':schoolinformation.school_code})
         school_name_form = SchoolNameForm()
         major_name_form = MajorNameForm()
         school_dict = SchoolDict.objects.all()
         major_dict = MajorDict.objects.all()
         print "major_dict" + str(major_dict)
-
+        schoolinformation = SchoolInformation.objects.all()
         data = {'adminStaff_info_form' : adminStaff_info_form ,
                 'school_name_form' : school_name_form ,
                 'major_name_form' :major_name_form,
                 'school_dict' :school_dict,                
                 'major_dict' : major_dict,
+				'schoolinformation':schoolinformation,
         }
 
         checkbox_list = request.REQUEST.getlist("_selected_action")

@@ -10,7 +10,9 @@
 
 <form class="well form-horizontal" id="adminStaff_info_form">
 
-  {% csrf_token %}
+	{% csrf_token %}
+<div class = "row">
+<div class = "span6">
   <div class="control-group">
     <label class="control-label" for="english_name">学校中文名:</label>
     <div class="controls">
@@ -38,168 +40,86 @@
 
   <div class="control-group">
     <div class="controls">
-        <span class=" pull-down"><a data-toggle="modal" href="#is_dispatching" class="btn btn-primary" id="adminStaff_info" onclick="save_adminStaff_info();">保存学校信息</a></span>
+		<span class=" pull-down"><a data-toggle="modal" href="#is_dispatching" class="btn btn-primary" id="adminStaff_info" onclick="save_adminStaff_info();">保存学校信息</a></span>
+		<span id="adminStaff_info_error_message"></span>
     </div>
   </div>
+</div>
+{% comment %}
+<div class = "span4">
+	{% if schoolinformation %}
+	{% for schooltemp in schoolinformation %}
+	<div class="control-group">
+		<h4><strong>已保存学校信息</strong></h4>
+		<span class = "span3 label">学校中文名:<strong>{{schooltemp.school_chiname}}</strong></span>
+		<br>
+		<span class = "span3 label">学校英文名:<strong>{{schooltemp.school_engname}}</strong></span>
+		<br>
+		<span class = "span3 label">学校标号:<strong>{{schooltemp.school_code}}</strong></span>
+	</div>
+	{% endfor %}
+	{% else %}
+	<div class="control-group">
+		<h4><strong>请及时保存学校信息</strong></h4>
+	</div>
+
+  	{% endif %}
+</div>
+{% endcomment %}
+</div>
 </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="well">
 
-<ul class="nav nav-tabs" id="myTab">
-  <li class="active"><a href="#school">学院更改</a></li>
-  <li><a href="#major">专业更改</a></li>
-</ul>
+	<ul class="nav nav-tabs" id="myTab">
+		<li class="active"><a href="#school">学院更改</a></li>
+		<li><a href="#major">专业更改</a></li>
+	</ul>
  
-<div class="tab-content">
-  <div class="tab-pane fade active in" id="school">
+	<div class="tab-content">
+		<div class="tab-pane fade active in" id="school">
 
-    <form class="form-inline" id="school_name_form">
-      <label class="control-label" for="name">学院:</label>
-      {{school_name_form.name}}    
-      <span class="btn btn-primary" id="school_name" onclick="save_school_name();" >保存学院名称</span>    
-    </form> 
+			<form class="form-inline" id="school_name_form">
+				<label class="control-label" for="name">学院:</label>
+				{{school_name_form.name}}    
+				<span class="btn btn-primary" id="school_name" onclick="save_school_name();" >保存学院名称</span>    
+			</form> 
 
-    <p></p>
+			<p></p>
 
-    <div class="btn btn-primary" title="运行选中的动作" onclick="delete_school_name()">
-      删除所选学院 
-    </div>  
-    <p></p>
+			<div class="btn btn-primary" title="运行选中的动作" onclick="delete_school_name()">
+			      删除所选学院 
+			  </div>  
+			  <p></p>
 
-    <div>
+			  <div id="info_schoolname">
+				{% include "adminStaff/widgets/adminstaff_info_schoolname.html"  %}
+			  </div>
 
-      <table class="table table-bordered">
-      <thead>
-      <tr>
-      <th scope="col" class="action-checkbox-column">  
-       <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
-      </th>
-      <th scope="col"> <div class="text"><span>学院列表</span></div> </th>
-      </tr>
-      </thead>
+		  </div>
+		  <div class="tab-pane fade" id="major">
 
-      <tbody>
+			  <form class="form-inline" id="major_name_form">
+				  <label class="control-label" for="name">专业:</label>
+				  {{major_name_form.name}}    
+				  <span class="btn btn-primary" id="major_name" onclick="save_major_name();" >保存专业名称</span>    
+			  </form> 
 
-      {%for element in school_dict %}
-      <tr class="success">
-        <td class="action-checkbox">
-          <input type="checkbox" class="action-select" value= "{{element.id }}" name="_selected_action">
-        </td>
-          <th> {{element.schoolName}} </th>
-      </tr>
-    {%endfor%}
+			  <p></p>
 
-    </tbody>
-    </table>
-    </div>
+			  <div class="btn btn-primary" title="运行选中的动作" onclick="delete_major_name()">
+				      删除所选专业 
+				  </div>  
+				  <p></p>
 
-    </div>
+				  <div id="info_majorname">
+					{% include "adminStaff/widgets/adminstaff_info_majorname.html"  %}
+				  </div>
 
+			  </div>
 
+		  </div>  
 
-
-
-  <div class="tab-pane fade" id="major">
-
-    <form class="form-inline" id="major_name_form">
-      <label class="control-label" for="name">专业:</label>
-      {{major_name_form.name}}    
-      <span class="btn btn-primary" id="major_name" onclick="save_major_name();" >保存专业名称</span>    
-    </form> 
-
-    <p></p>
-
-    <div class="btn btn-primary" title="运行选中的动作" onclick="delete_major_name()">
-      删除所选专业 
-    </div>  
-    <p></p>
-
-    <div>
-
-      <table class="table table-bordered">
-      <thead>
-      <tr>
-      <th scope="col" class="action-checkbox-column">  
-       <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
-      </th>
-      <th scope="col"> <div class="text"><span>专业列表</span></div> </th>
-      </tr>
-      </thead>
-
-      <tbody>
-
-      {%for element in major_dict %}
-      <tr class="success">
-        <td class="action-checkbox">
-          <input type="checkbox" class="action-select" value= "{{element.id }}" name="_selected_action">
-        </td>
-          <th> {{element}} </th>
-      </tr>
-    {%endfor%}
-
-    </tbody>
-    </table>
-    </div>
-
-    </div>
-
-  </div>  
-
-</div>
- 
+ </div>  
 <script>
   $('#myTab a').click(function (e) {
   e.preventDefault();

@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 #from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
 from adminStaff.forms import *
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
-from const.models import SchoolDict, ProjectGrade
+from const.models import SchoolDict, ProjectGrade, SchoolInformation,MajorDict
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -130,44 +130,56 @@ def  SaveAdminStaffInfo(request, form):
     #dajax = Dajax()
     adminStaff_form =  AdminStaffInfoForm(deserialize_form(form))
     if adminStaff_form.is_valid():
-        print "AdminStaffInfoForm:"
-        print adminStaff_form.cleaned_data['chinese_name']
-        print adminStaff_form.cleaned_data['english_name']
-        print adminStaff_form.cleaned_data['index']
-    else :
-        print "error in SaveAdminStaffInfo" 
-    #     password = expert_form.cleaned_data["expert_password"]
-    #     email = expert_form.cleaned_data["expert_email"]
-    #     name = email
-    #     person_name = expert_form.cleaned_data["expert_personname"]
-    #     if password == "":
-    #         password = email.split('@')[0]
-    #     flag = AdminStaffService.sendemail(request, name, password, email,EXPERT_USER, expert_user=True,person_name=person_name)
-    #     if flag:
-    #         message = u"发送邮件成功"
-    #         table = refresh_mail_table(request)
-    #         return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message, 'table':table})
-    #     else:
-    #         message = u"相同邮件已经发送，中断发送"
-    #         return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
-    # else:
-    #     return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误"})
+        chinese_name = adminStaff_form.cleaned_data['chinese_name']
+        english_name = adminStaff_form.cleaned_data['english_name']
+        index = adminStaff_form.cleaned_data['index']
+        schoolinformation = SchoolInformation.objects.all()
+        if schoolinformation:
+            schoolinformation[0].school_chiname = chinese_name
+            schoolinformation[0].school_engname = english_name
+            schoolinformation[0].school_code = index
+            schoolinformation[0].save()
+        else:#没有信息时，创建对象
+            schoolinformation = SchoolInformation(school_chiname = chinese_name, school_engname = english_name,school_code=index )
+            schoolinformation.save()
+        return simplejson.dumps({'status':1,'message':u"保存成功",'field':adminStaff_form.data.keys(),'error_id':adminStaff_form.errors.keys()})
+    else:
+        return simplejson.dumps({'status':0,'field':adminStaff_form.data.keys(),'error_id':adminStaff_form.errors.keys(),'message':u"输入有误"})
+
 @dajaxice_register
 def  SaveSchoolName(request, form):
     #dajax = Dajax()
     school_name_form = SchoolNameForm(deserialize_form(form))
     if school_name_form.is_valid():
         print "school_name_form:"
-        print school_name_form.cleaned_data['name']        
-    else :
-        print "error in SaveSchoolName"
+        schoolname = school_name_form.cleaned_data['name']
+        try:
+            newschool = SchoolDict(schoolName = schoolname)
+            newschool.save()
+            schooldict = SchoolDict.objects.all()
+            table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
+            return simplejson.dumps({'status':1,'message':u"保存成功",'table':table})
+        except Exception, err:
+            loginfo(p=err,label="error")
+            return simplejson.dumps({'status':2,'message':u"保存失败，学院名已存在"})
+    else:
+        return simplejson.dumps({'status':0,'message':u"保存失败，输入不正确"})
 
 @dajaxice_register
 def DeleteSchoolName(request, deleted_school_name):
     #dajax = Dajax()
-
-
-    print "ajax in DeleteSchoolName :" + str(deleted_school_name)
+    for temp_schoolid in deleted_school_name:
+        try:
+            temp_school = SchoolDict.objects.get(id = temp_schoolid)
+            temp_school.delete()
+        except Exception,err:
+            loginfo(p=err,label="err DeleteSchoolName")
+            schooldict = SchoolDict.objects.all()
+            table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
+            return simplejson.dumps({'status':0,'message':str(err),'table':table})
+    schooldict = SchoolDict.objects.all()
+    table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
+    return simplejson.dumps({'status':1,'message':u'删除成功','table':table})
 
 
 @dajaxice_register
@@ -175,17 +187,34 @@ def  SaveMajorName(request, form):
     #dajax = Dajax()
     major_name_form = MajorNameForm(deserialize_form(form))
     if major_name_form.is_valid():
-        print "major_name_form:"
-        print major_name_form.cleaned_data['name']        
-    else :
-        print "error in SaveSchoolName"
-
+        print "school_name_form:"
+        majorname = major_name_form.cleaned_data['name']
+        try:
+            newsmajor = MajorDict(major = majorname)
+            newsmajor.save()
+            majordict = MajorDict.objects.all()
+            table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
+            return simplejson.dumps({'status':1,'message':u"保存成功",'table':table})
+        except Exception, err:
+            loginfo(p=err,label="error")
+            return simplejson.dumps({'status':2,'message':u"保存失败，专业名已存在"})  
+    else:
+        return simplejson.dumps({'status':0})
 @dajaxice_register
 def DeleteMajorName(request, deleted_major_name):
     #dajax = Dajax()
-
-
-    print "ajax in DeleteSchoolName :" + str(deleted_major_name)
+    for temp_majorid in deleted_major_name:
+        try:
+            temp_major = MajorDict.objects.get(id = temp_majorid)
+            temp_major.delete()
+        except Exception,err:
+            loginfo(p=err,label="err DeleteSchoolName")
+            majordict = MajorDict.objects.all()
+            table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
+            return simplejson.dumps({'status':0,'message':str(err),'table':table})
+    majordict = MajorDict.objects.all()
+    table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
+    return simplejson.dumps({'status':1,'message':u'删除成功','table':table})
 
 
 @dajaxice_register

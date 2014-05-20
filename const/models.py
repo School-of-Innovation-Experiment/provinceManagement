@@ -32,7 +32,7 @@ class MajorDict(models.Model):
         verbose_name_plural = "专业列表"
 
     def __unicode__(self):
-        return self.get_major_display()
+        return self.major
 
 class SchoolDict(models.Model):
     """
@@ -229,9 +229,9 @@ class SchoolInformation(models.Model):
 	"""
 	学校信息
 	"""
-	school_chiname = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校中文名")
-	school_engname = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校英文名")
-	school_code = models.CharField(blank=True, null=True, max_length=100, verbose_name=u"学校编号")
+	school_chiname = models.CharField(blank=False, null=True, max_length=100, verbose_name=u"学校中文名")
+	school_engname = models.CharField(blank=False, null=True, max_length=100, verbose_name=u"学校英文名")
+	school_code = models.CharField(blank=False, null=True, max_length=100, verbose_name=u"学校编号")
 	class Meta:
 		verbose_name = "学校信息"
 		verbose_name_plural = "学校信息"

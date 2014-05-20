@@ -1,0 +1,23 @@
+<table class="table table-bordered">
+    <thead>
+  	  <tr>
+  		  <th scope="col" class="action-checkbox-column">  
+  			  <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+  		  </th>
+  		  <th scope="col"> <div class="text"><span>专业列表</span></div> </th>
+  	  </tr>
+    </thead>
+
+    <tbody>
+
+  	  {%for element in major_dict %}
+  	  <tr class="success">
+  		  <td class="action-checkbox">
+  			  <input type="checkbox" class="action-select" value= "{{element.id }}" name="_selected_action">
+  		  </td>
+  		  <th> {{element}} </th>
+  	  </tr>
+  	  {%endfor%}
+
+    </tbody>
+</table>
