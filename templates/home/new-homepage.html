@@ -1,5 +1,8 @@
 {% extends "base/base_home.html" %}
-
+{% block forejs %}
+{{ block.super }}
+<script type='text/javascript' src="{{STATIC_URL}}js/home/checkbrowser.js"></script>
+{% endblock %}
 {% block before_home_content%}
 <!--pictures and import news-->
 

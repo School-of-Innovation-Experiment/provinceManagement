@@ -1,5 +1,4 @@
-function getOs()
-{
+$(function getOs(){
   var checkerror=false;
   var u_agent = navigator.userAgent;
   if(u_agent.indexOf("Safari")>-1 || u_agent.indexOf("Firefox")>-1 || window.opera){
@@ -8,5 +7,4 @@ function getOs()
   }else{
     $('#myModal').modal('show');
   }
-}
-window.onload = getOs;
+})
