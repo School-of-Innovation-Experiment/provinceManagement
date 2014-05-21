@@ -6,7 +6,7 @@ Created on 2013-03-27
 
 Desc: const defination
 '''
-
+import os,pickle
 from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL, IS_SCHOOL_BASIC
 
 UNDIFINED = "undifined"
@@ -326,6 +326,20 @@ if IS_MINZU_SCHOOL: SCHOOL_NAME = MINZU_SCHOOL_NAME
 elif IS_DLUT_SCHOOL: SCHOOL_NAME = DLUT_SCHOOL_NAME
 elif IS_SCHOOL_BASIC:
     SCHOOL_NAME = ""
+    SCHOOL_EngName = ""
+    SCHOOL_CODE = ""
+
+currenturl = os.path.dirname(os.path.abspath('__file__'))
+mediaurl = os.path.join(currenturl,"media")
+infotxt_path = os.path.join(mediaurl,"adminStaffinfo.txt")
+if os.path.exists(infotxt_path):
+	data = pickle.load(open(infotxt_path,"r"))
+	SCHOOL_NAME = data["chinese_name"]
+	SCHOOL_EngName = data["english_name"]
+	SCHOOL_CODE = data["index"]
+	print SCHOOL_NAME
+	print SCHOOL_EngName
+	print SCHOOL_CODE
 
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {

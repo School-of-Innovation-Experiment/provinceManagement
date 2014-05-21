@@ -54,3 +54,6 @@ nosetests.xml
 .orig
 *#
 */migrations/
+
+# adminStaffinfo_settings
+adminStaffinfo.txt

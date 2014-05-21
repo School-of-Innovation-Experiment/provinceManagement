@@ -4,7 +4,7 @@ Created on 2013-3-29
 
 @author: sytmac
 '''
-import os, sys
+import os, sys,pickle
 from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -24,7 +24,7 @@ from users.models import SchoolProfile, AdminStaffProfile, StudentProfile
 from news.models import News
 from student.models import Funds_Group, Student_Group
 from django.contrib.auth.models import User
-from context import userauth_settings
+from context import userauth_settings,adminStaffinfo_settings
 from school.utility import get_recommend_limit,get_schooluser_project_modify_status,get_current_year, get_running_project_query_set
 from django.db.models import Q
 
@@ -33,7 +33,7 @@ import datetime
 from backend.logging import logger, loginfo
 from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
-from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL,MEDIA_URL
 from adminStaff.utility import get_average_score_list
 from backend.decorators import check_auth
 
@@ -142,6 +142,13 @@ def  SaveAdminStaffInfo(request, form):
         else:#没有信息时，创建对象
             schoolinformation = SchoolInformation(school_chiname = chinese_name, school_engname = english_name,school_code=index )
             schoolinformation.save()
+        currenturl = os.path.dirname(os.path.abspath('__file__'))
+        mediaurl = os.path.join(currenturl,"media")
+        infotxt_path = os.path.join(mediaurl,"adminStaffinfo.txt")
+        data = adminStaffinfo_settings(request)
+        loginfo(p=data["SCHOOL_CODE"],label="SCHOOL_CODE")
+        data = {"chinese_name":chinese_name,"english_name":english_name,"index":index}
+        pickle.dump(data,open(infotxt_path,"w"))
         return simplejson.dumps({'status':1,'message':u"保存成功",'field':adminStaff_form.data.keys(),'error_id':adminStaff_form.errors.keys()})
     else:
         return simplejson.dumps({'status':0,'field':adminStaff_form.data.keys(),'error_id':adminStaff_form.errors.keys(),'message':u"输入有误"})
@@ -156,11 +163,8 @@ def  SaveSchoolName(request, form):
         try:
             newschool = SchoolDict(schoolName = schoolname)
             newschool.save()
-            schooldict = SchoolDict.objects.all()
-            table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
-            return simplejson.dumps({'status':1,'message':u"保存成功",'table':table})
-        except Exception, err:
-            loginfo(p=err,label="error")
+            return simplejson.dumps({'status':1,'message':u"保存成功"})
+        except:
             return simplejson.dumps({'status':2,'message':u"保存失败，学院名已存在"})
     else:
         return simplejson.dumps({'status':0,'message':u"保存失败，输入不正确"})
@@ -168,18 +172,9 @@ def  SaveSchoolName(request, form):
 @dajaxice_register
 def DeleteSchoolName(request, deleted_school_name):
     #dajax = Dajax()
-    for temp_schoolid in deleted_school_name:
-        try:
-            temp_school = SchoolDict.objects.get(id = temp_schoolid)
-            temp_school.delete()
-        except Exception,err:
-            loginfo(p=err,label="err DeleteSchoolName")
-            schooldict = SchoolDict.objects.all()
-            table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
-            return simplejson.dumps({'status':0,'message':str(err),'table':table})
-    schooldict = SchoolDict.objects.all()
-    table = render_to_string("adminStaff/widgets/adminstaff_info_schoolname.html", {'school_dict':schooldict})
-    return simplejson.dumps({'status':1,'message':u'删除成功','table':table})
+
+
+    print "ajax in DeleteSchoolName :" + str(deleted_school_name)
 
 
 @dajaxice_register
@@ -192,29 +187,17 @@ def  SaveMajorName(request, form):
         try:
             newsmajor = MajorDict(major = majorname)
             newsmajor.save()
-            majordict = MajorDict.objects.all()
-            table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
-            return simplejson.dumps({'status':1,'message':u"保存成功",'table':table})
-        except Exception, err:
-            loginfo(p=err,label="error")
-            return simplejson.dumps({'status':2,'message':u"保存失败，专业名已存在"})  
+            return simplejson.dumps({'status':1})
+        except:
+            return simplejson.dumps({'status':2})
     else:
         return simplejson.dumps({'status':0})
 @dajaxice_register
 def DeleteMajorName(request, deleted_major_name):
     #dajax = Dajax()
-    for temp_majorid in deleted_major_name:
-        try:
-            temp_major = MajorDict.objects.get(id = temp_majorid)
-            temp_major.delete()
-        except Exception,err:
-            loginfo(p=err,label="err DeleteSchoolName")
-            majordict = MajorDict.objects.all()
-            table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
-            return simplejson.dumps({'status':0,'message':str(err),'table':table})
-    majordict = MajorDict.objects.all()
-    table = render_to_string("adminStaff/widgets/adminstaff_info_majorname.html", {'major_dict':majordict})
-    return simplejson.dumps({'status':1,'message':u'删除成功','table':table})
+
+
+    print "ajax in DeleteSchoolName :" + str(deleted_major_name)
 
 
 @dajaxice_register

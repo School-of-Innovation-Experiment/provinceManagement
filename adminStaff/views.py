@@ -73,7 +73,7 @@ from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordFo
 from django.core.files.uploadedfile import UploadedFile
 
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-
+from context import userauth_settings,adminStaffinfo_settings
 from student.views import application_report_view_work, final_report_view_work,files_upload_view_work
 from student.views import open_report_view_work, mid_report_view_work
 
@@ -675,24 +675,24 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def adminStaff_info_input_view(request, is_expired = False):
-        adminStaff_info_form = AdminStaffInfoForm()
-        schoolinformation = SchoolInformation.objects.all()		
-        if len(schoolinformation) > 0:
-            schoolinformation = schoolinformation[0]
-            adminStaff_info_form = AdminStaffInfoForm({'chinese_name':schoolinformation.school_chiname,'english_name':schoolinformation.school_engname,'index':schoolinformation.school_code})
+        schoolinformation = adminStaffinfo_settings(request)
+        adminStaff_info_form = AdminStaffInfoForm({'chinese_name':schoolinformation["SCHOOL_CHINAME"],'english_name':schoolinformation["SCHOOL_ENGNAME"],'index':schoolinformation["SCHOOL_CODE"]})
+       #通过数据库的方式读取学校信息
+       # schoolinformation = SchoolInformation.objects.all()		
+       # if len(schoolinformation) > 0:
+       #     schoolinformation = schoolinformation[0]
+       #     adminStaff_info_form = AdminStaffInfoForm({'chinese_name':schoolinformation.school_chiname,'english_name':schoolinformation.school_engname,'index':schoolinformation.school_code})
         school_name_form = SchoolNameForm()
         major_name_form = MajorNameForm()
         school_dict = SchoolDict.objects.all()
         major_dict = MajorDict.objects.all()
         print "major_dict" + str(major_dict)
-        schoolinformation = SchoolInformation.objects.all()
         data = {'adminStaff_info_form' : adminStaff_info_form ,
                 'school_name_form' : school_name_form ,
                 'major_name_form' :major_name_form,
                 'school_dict' :school_dict,                
                 'major_dict' : major_dict,
-				'schoolinformation':schoolinformation,
-        }
+	    }
 
         checkbox_list = request.REQUEST.getlist("_selected_action")
         print '^^^^^' + str(checkbox_list)

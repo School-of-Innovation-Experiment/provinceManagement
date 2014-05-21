@@ -33,6 +33,7 @@ def userauth_settings(request):
     The context processor will add user authorities variables
     into all template
     """
+    context = {}
     userauth = {"is_schooler": False,
                 "is_adminstaff": False,
                 "is_experter": False,
@@ -112,8 +113,8 @@ def userauth_settings(request):
         userauth["notice_message"] = teacher_message
     if userauth["is_adminstaff"]:
         userauth["notice_message"] = ""
-
-    context = {"userauth": userauth}
+   
+	context = {"userauth": userauth}
 
     context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
     context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
@@ -126,4 +127,24 @@ def notice_message_settings(request):
     return context
 
 
-
+def adminStaffinfo_settings(request):
+    context = {}
+    currenturl = os.path.dirname(os.path.abspath('__file__'))
+    mediaurl = os.path.join(currenturl,"media")
+    infotxt_path = os.path.join(mediaurl,"adminStaffinfo.txt")
+    if os.path.exists(infotxt_path):
+        print "file exist"
+        data = pickle.load(open(infotxt_path,"r"))
+        SCHOOL_CHINAME = data["chinese_name"]
+        SCHOOL_ENGNAME = data["english_name"]
+        SCHOOL_CODE = data["index"]
+    else:
+        print "file not exist"
+        SCHOOL_CHINAME = ""
+        SCHOOL_ENGNAME = ""
+        SCHOOL_CODE = ""
+    context["SCHOOL_CHINAME"] = SCHOOL_CHINAME
+    context["SCHOOL_ENGNAME"] = SCHOOL_ENGNAME
+    context["SCHOOL_CODE"] = SCHOOL_CODE
+    loginfo(p=context["SCHOOL_CHINAME"],label="SCHOOL_CHINAME")
+    return context

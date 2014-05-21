@@ -122,6 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
     'context.notice_message_settings',
+	'context.adminStaffinfo_settings',
 )
 
 INSTALLED_APPS = (
