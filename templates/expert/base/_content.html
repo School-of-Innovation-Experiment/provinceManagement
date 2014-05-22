@@ -19,13 +19,13 @@
       </div>
     </div>
   {% endblock %} 
+
 {% block footer-alert-bar %}
-  {% if expert_notice_message %}
+  {% if notice_message %}
     <div class="alert footer-alert-bar">
       <marquee scrollamount="2">
-          {{ expert_notice_message }}
+          {{ notice_message }}
       </marquee>
     </div>
   {% endif %}
 {% endblock %}
-

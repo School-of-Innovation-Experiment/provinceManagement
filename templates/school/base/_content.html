@@ -24,10 +24,10 @@
   {% endblock %}
 
 {% block footer-alert-bar %}
-  {% if school_notice_message %}
+  {% if notice_message %}
     <div class="alert footer-alert-bar">
       <marquee scrollamount="2">
-          {{ school_notice_message }}
+          {{ notice_message }}
       </marquee>
     </div>
   {% endif %}
