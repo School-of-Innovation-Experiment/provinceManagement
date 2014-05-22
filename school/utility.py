@@ -568,7 +568,7 @@ def info_xls(request):
         project_temp.project_code = pro_code
         project_temp.save()
 
-        xls_obj.write(row, 0, unicode(pro_code))
+        xls_obj.write(row, 0, unicode(proj_obj.project_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
