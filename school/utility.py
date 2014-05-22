@@ -561,12 +561,12 @@ def info_xls(request):
             loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _index
-        pro_code = name_code+_format_index(_index)
+        # pro_code = name_code+_format_index(_index)
 
         #保存项目编号
-        project_temp = ProjectSingle.objects.get(project_id = proj_obj.project_id)
-        project_temp.project_code = pro_code
-        project_temp.save()
+        # project_temp = ProjectSingle.objects.get(project_id = proj_obj.project_id)
+        # project_temp.project_code = pro_code
+        # project_temp.save()
 
         xls_obj.write(row, 0, unicode(proj_obj.project_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
