@@ -603,7 +603,7 @@ class AdminStaffService(object):
                     break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
-                message = NoticeMessage(noticemessage = _message)
+                message = NoticeMessage(noticemessage = _message)                
                 message.save()
         templatenotice_group_form = forms.TemplateNoticeForm()
         templatenotice_group = TemplateNoticeMessage.objects.all()
