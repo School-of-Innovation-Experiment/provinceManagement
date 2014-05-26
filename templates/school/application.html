@@ -30,7 +30,7 @@
      {% endif %}
   {% endif %}
   {% if is_innovation %}
-     {% if application.original.errors or application.background.errors or application.key_notes.errors %}
+     {% if application.original.errors or application.background.errors or application.key_notes.errors or application.proj_introduction.errors or application.proj_introduction.errors%}
      <p>
        “项目简介“标签下的
        {% if application.original.errors %}   “项目来源“ {%endif%}
