@@ -84,7 +84,6 @@
             </div><!--end form line, for choice-->
           </div>
         </div>
-        {% if userauth.is_student %}
         <fieldset>
           <div class="control-group {% if application.proj_introduction.errors %}error{% endif %}">
             <legend>项目内容简介</legend>
@@ -97,7 +96,6 @@
             {% endif %}
           </div>
         </fieldset><!--end background-->
-        {% endif %}
         <br/>
         <fieldset>
           <div class="control-group form-inline {% if application.innovation.errors %}error{% endif %}">
