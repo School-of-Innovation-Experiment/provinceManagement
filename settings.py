@@ -135,8 +135,8 @@ INSTALLED_APPS = (
     'djangocms_admin_style',
     'django.contrib.admin',
     #Project
-    'teacher',
     'registration',
+    'teacher',
     'users',
     'const',
     'expert',
@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'dajax',
     'chartit',
 )
+
 
 #Add support  to user profile
 ACCOUNT_ACTIVATION_DAYS = 30
