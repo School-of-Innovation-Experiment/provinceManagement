@@ -38,7 +38,9 @@ def userauth_settings(request):
                 "is_experter": False,
                 "is_teacher": False,
                 "is_student": False,
+                "notice_message": "",
                 }
+
 
     if check_auth(user=request.user, authority=SCHOOL_USER):
         userauth["is_schooler"] = True
@@ -113,7 +115,14 @@ def userauth_settings(request):
     if userauth["is_adminstaff"]:
         userauth["notice_message"] = ""
 
-    context = {"userauth": userauth}
+    # notice_message = userauth["notice_message"]
+    context = {"userauth": userauth,
+               "notice_message": userauth["notice_message"],
+    }
+
+
+    # print "KKIOIOIO " + str(context['notice_message'])
+
 
     context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
     context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
