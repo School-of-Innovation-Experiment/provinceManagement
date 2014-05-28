@@ -538,6 +538,21 @@ def student_code_project_query(request, student_code):
         message = "not found"
         return simplejson.dumps({"message": message})
 
+def student_code_project_query(request, student_code):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    message = ""
+    project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)]
+    if project:
+        #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
+        message = 'ok'
+        table_html = render_to_string("adminStaff/widgets/project_table.html", {"item": project[0], "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        return simplejson.dumps({"message": message, "table": table_html})
+    else:
+        message = "not found"
+        return simplejson.dumps({"message": message})
+
 from base64 import b64encode as b64en
 from adminStaff.utility import get_manager
 import jsonrpclib
@@ -601,18 +616,22 @@ def project_sync(request,project_sync_list,username,password):
             proj_single = ProjectSingle.objects.get(project_id=proj)
         except:
             print "proj %s not exist!" % proj
-            return simplejson.dumps({'status':'1', 'result': "proj %s not exist!" % proj})
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 不存在" % proj_single.title})
         proj_dict = get_projsingle_dict(proj_single)
-        if proj_single.project_category.category == CATE_INNOVATION:
-            proj_dict['presubmit_type'] = 'presubmit'
-            proj_dict.update(get_presubmit_dict(proj_single))
-        else:
-            proj_dict['presubmit_type'] = 'presubmitenterprise'
-            proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        try:
+            if proj_single.project_category.category == CATE_INNOVATION:
+                proj_dict['presubmit_type'] = 'presubmit'
+                proj_dict.update(get_presubmit_dict(proj_single))
+            else:
+                proj_dict['presubmit_type'] = 'presubmitenterprise'
+                proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        except:
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 申请书存在问题 !" % proj_single.title})
         dict_obj['projects'].append(proj_dict)
     try:
         server = jsonrpclib.Server(RPC_SITE)
         result = server.SyncProjects(simplejson.dumps(dict_obj))
+        loginfo(result)
     except:
         return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
     return simplejson.dumps({'status':'0', 'result': result})
