@@ -207,11 +207,10 @@ def info_xls_summaryinnovate(request):
             xls_obj.write(row, 2, unicode(student.classInfo)) 
         if row_project_start > row :
             row = row_project_start
-        print row 
         print row_project_start
         xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
-        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_ob>j.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
         xls_obj.write_merge(row_project_start,row,6,10)
         # _index += 1  
     # write xls file
@@ -414,35 +413,34 @@ def info_xls_projectsummary(request):
     proj_set = proj_set.order_by('school','project_grade')
     xls_obj, workbook = info_xls_province_gen()
 
-    # _index = 1
     _number= 1
     for proj_obj in proj_set:
         teammember = get_manager(proj_obj)
+        try:
+            pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+            loginfo(p=proj_obj.school.school,label="school")
+            row = 4 + _number
+            xls_obj.write(row, 0, "%s" % _format_number(_number))
+            xls_obj.write(row, 1, unicode(proj_obj.school.school))
+            xls_obj.write(row, 2, unicode(proj_obj.project_unique_code))
+            xls_obj.write(row, 3, unicode(proj_obj.title))
+            xls_obj.write(row, 4, unicode(proj_obj.project_grade))
+            xls_obj.write(row, 5, unicode(proj_obj.project_category))
+            xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
+            xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
+            xls_obj.write(row, 8, unicode(teammember['count'])) # 学生人数
+            xls_obj.write(row, 9, unicode(teammember['memberlist'])) # 项目其他成员
+            xls_obj.write(row, 10, unicode(proj_obj.adminuser.get_name()))
+            xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
+            xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
+            xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
+            xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
-        pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
-        loginfo(p=proj_obj.title, label="project category") 
-        innovation = pro_type.objects.get(project_id=proj_obj.project_id)
-
-        row = 4 + _number
-        xls_obj.write(row, 0, "%s" % _format_number(_number))
-        xls_obj.write(row, 1, unicode(proj_obj.school.school))
-        loginfo(p=proj_obj.school.school,label="school")
-        xls_obj.write(row, 2, unicode(proj_obj.project_unique_code))
-        xls_obj.write(row, 3, unicode(proj_obj.title))
-        xls_obj.write(row, 4, unicode(proj_obj.project_grade))
-        xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
-        xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
-        xls_obj.write(row, 8, unicode(teammember['count'])) # 学生人数
-        xls_obj.write(row, 9, unicode(teammember['memberlist'])) # 项目其他成员
-        xls_obj.write(row, 10, unicode(proj_obj.adminuser.get_name()))
-        xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
-        xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
-        xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
-        xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
-
-        # _index += 1
-        _number+= 1
+            # _index += 1
+            _number+= 1
+        except:
+            pass
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新创业训练计划项目信息汇总表"))
     workbook.save(save_path)
