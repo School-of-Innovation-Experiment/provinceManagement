@@ -15,6 +15,7 @@ from school.models import *
 from users.models import *
 from backend.decorators import check_auth
 
+from school.utility import get_current_project_query_set
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 from const import *
@@ -491,10 +492,10 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set = ProjectSingle.objects.all()
+        proj_set =  get_current_project_query_set()
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
-        proj_set = ProjectSingle.objects.filter(school_id=school)
+        proj_set = get_current_project_query_set().filter(school_id=school)
     return proj_set
 def file_download_gen(request,fileid = None,filename = None):
     """
