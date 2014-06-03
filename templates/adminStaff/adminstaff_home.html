@@ -31,6 +31,7 @@
           <th>项目汇编</th>
           {% endif %}
           <th>申请学分</th>
+          <th>联系方式</th>
           <th>是否结题</th>
         </tr>
       </thead>
@@ -73,6 +74,9 @@
 
           <td>
             {% if item.score_application %}<span class="label label-important"><a href="/adminStaff/memberchange/{{item.project_id}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
+          </td>
+          <td>
+            {{item.telephone}}
           </td>
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->

@@ -284,7 +284,6 @@ def info_xls_summaryentrepreneuship(request):
             xls_obj.write(row, 3, unicode(student.classInfo)) 
         if row_project_start > row :
             row = row_project_start
-            
         xls_obj.write_merge(row_project_start,row,0,0,unicode(number),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.project_category),style)
@@ -293,7 +292,7 @@ def info_xls_summaryentrepreneuship(request):
         xls_obj.write_merge(row_project_start,row,8,8,unicode(teacher_enterprise.name),style)
         xls_obj.write_merge(row_project_start,row,9,9,unicode(teacher_enterprise.jobs)+'/'+unicode(teacher_enterprise.titles),style)
         xls_obj.write_merge(row_project_start,row,10,13)
-        # _index += 1  
+        # _index += 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创业训练项目汇总表"))
     workbook.save(save_path)

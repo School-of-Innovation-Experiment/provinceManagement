@@ -266,7 +266,7 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     height: 30px;
 }
 .usoft-listview-header div {
-    background-color:rgb(245,79,81);
+    /* background-color:rgb(245,79,81); */
     height: 30px;
     width: 280px;
     border-left: 10px solid rgb(32, 183, 240);
@@ -312,10 +312,10 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     padding-left: 15px;
 }
 .usoft-listview-header h3 {
-    border-bottom: 1px solid rgb(248,248,248);
+    border-bottom: 1px solid rgb(245,79,81);
     margin: 0px;
     float: left;
-    color: rgb(248,248,248);
+    color: rgb(84,128,176);
     font-size: 15px;
     line-height: 25px;
     font-weight: bold;
@@ -324,7 +324,7 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     padding-left: 10px;
     margin: 0 10px;
     float: left;
-    color: rgb(248,248,248);
+    color: rgb(84,128,176);
     border-left: 1px solid rgb(248,248,248);
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;

@@ -701,10 +701,9 @@ class AdminStaffService(object):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
             add_fileurl(pro_obj)
+            add_telephone(pro_obj)
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-        context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
-        context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
     @csrf.csrf_protect
