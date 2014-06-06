@@ -478,3 +478,6 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     }
 
 }
+#myCarousel .carousel-inner{
+    top:-20px;
+}
