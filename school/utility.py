@@ -475,7 +475,6 @@ def add_fileurl(project):
     for filetemp in uploadfiles:
         if filetemp.name == u"申报书":
             project.fileid_application = filetemp.file_id
-            loginfo(project.project_unique_code)
             project.applicationfilename = project.project_unique_code + project.title + u"申报书"
         elif filetemp.name == u"中期检查表":
             project.fileurl_interimchecklist = filetemp.file_obj.url
