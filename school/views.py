@@ -113,7 +113,7 @@ def home_view(request, is_expired=False):
     school home management page
     """
 #    current_list = get_running_project_query_set().filter(adminuser = request.user)
-    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('-is_over')
+    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('is_over')
     readonly=is_expired
     readonly=False
     try:
