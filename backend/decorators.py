@@ -183,8 +183,8 @@ class time_controller(object):
             return True
 
         # check year
-        if self.check_year(pid) is False:
-            return False
+#        if self.check_year(pid) is False:
+#            return False
 
         # check day
         today = datetime.date.today()
@@ -204,6 +204,7 @@ class time_controller(object):
         else:
             is_passed = False
 
+        loginfo(p=control,label="control")
         return is_passed
 
     def __call__(self, method):

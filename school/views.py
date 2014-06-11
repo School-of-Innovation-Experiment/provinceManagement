@@ -112,7 +112,8 @@ def home_view(request, is_expired=False):
     """
     school home management page
     """
-    current_list = get_running_project_query_set().filter(adminuser = request.user)
+#    current_list = get_running_project_query_set().filter(adminuser = request.user)
+    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('-is_over')
     readonly=is_expired
     readonly=False
     try:
@@ -388,7 +389,7 @@ def history_view(request):
     school history report list
     """
 
-    history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year)
+    history_list = ProjectSingle.objects.filter(adminuser=request.user,is_over = True)
 
     page = request.GET.get('page')
     context = getContext(history_list, page, 'item', 0)
@@ -404,7 +405,8 @@ def file_view(request, pid=None, is_expired=False):
     """
     file management view
     """
-    readonly = check_history_readonly(pid) or is_expired
+    readonly = is_expired
+    print readonly
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
