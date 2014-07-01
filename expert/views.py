@@ -59,8 +59,6 @@ def home_view(request):
     limitnum_b = expert.numlimit_b
     really_b = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
     remaining_b = limitnum_b - really_b
-    # loginfo(p=re_project, label="EXPERT HOME")
-    
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
     for item in context["item_list"]:
@@ -146,8 +144,7 @@ def review_report_pass_p(request, pid, pass_p):
         limitnum = expert.numlimit_b
         really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
 
-    if pass_p:
-   # if pass_p and (limitnum > really):
+    if pass_p and (limitnum > really):
         proj.pass_p = True
     else:
         proj.pass_p = False
@@ -168,7 +165,6 @@ def download_view(request, file_id=None):
             else:
                 break
         f.close()
-    
     doc = UploadedFiles.objects.get(file_id = file_id)
     doc_path = doc.file_obj.path
     response = HttpResponse(read_file(doc_path), content_type='application/vnd.ms-excel')  
