@@ -124,7 +124,7 @@ def review_report_view(request, pid=None):
             "review": review_form,
             "doc_list": doc_list,
             'teacher_enterpriseform':teacher_enterpriseform,
-            'page':page,
+
             }
 
     return render(request, 'expert/review.html', data)
