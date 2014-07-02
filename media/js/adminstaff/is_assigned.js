@@ -18,3 +18,11 @@ function is_assigned_callback(data){
     alert(data.message);
   }
 }
+
+function first_round_recommend(){
+    alert("here");
+    Dajaxice.adminStaff.first_round_recommend(first_round_callback, {});
+}
+function first_round_callback(data){
+    
+}
