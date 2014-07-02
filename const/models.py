@@ -205,6 +205,9 @@ class SchoolRecommendRate(models.Model):
     """
     """
     rate = models.FloatField(default=0)
+    firstRoundFinished = models.BooleanField(null=False, blank=True, default=False)
+    firstRoundStart = models.BooleanField(null=False, blank=True, default=False)
+    secondRoundFinished = models.BooleanField(null=False, blank=True, default=False)
     class Meta:
         verbose_name = "项目结束状态"
         verbose_name_plural = "项目结束状态"

@@ -36,7 +36,7 @@ from const import *
 from school.utility import *
 from backend.logging import logger, loginfo
 from backend.decorators import *
-
+import math
 """
 About the decorators sequence, it will impact the the function squeneces,
 the top will be called first!
@@ -52,12 +52,15 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
-    limitnum = expert.numlimit
-    really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A).filter(pass_p=True).count()
+    rate = SchoolRecommendRate.load().rate
+    project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
+    limitnum = int(math.ceil(project_listA.count()*rate/100))
+    really = project_listA.filter(pass_p=True).count()
     remaining = limitnum - really
 
-    limitnum_b = expert.numlimit_b
-    really_b = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
+    project_listB = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
+    limitnum_b = int(math.ceil(project_listB.count()*rate/100))
+    really_b = project_listB.filter(pass_p=True).count()
     remaining_b = limitnum_b - really_b
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
@@ -89,6 +92,8 @@ def review_report_view(request, pid=None):
     doc_list = UploadedFiles.objects.filter(project_id=pid)
 
     info_form = InfoForm(instance=re_project.project,pid=pid)
+    logger.info(project.project_category.category)
+    teacher_enterpriseform = None
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
         application = get_object_or_404(PreSubmit, project_id = pid)
@@ -98,7 +103,7 @@ def review_report_view(request, pid=None):
         pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
         application_form = EnterpriseApplicationReportForm(instance=pre)
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
-    teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+        teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=re_project)
         if review_form.is_valid():
@@ -137,13 +142,15 @@ def review_report_pass_p(request, pid, pass_p):
     re_project = Re_Project_Expert.objects.filter(expert=expert)
 
     proj_single = ProjectSingle.objects.get(project_id = pid)
+    rate = SchoolRecommendRate.load().rate
     if proj_single.financial_category.category == FINANCIAL_CATE_A:
-        limitnum = expert.numlimit
-        really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A).filter(pass_p=True).count()
+         project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
+         limitnum = int(math.ceil(project_listA.count()*rate/100))
+         really = project_listA.filter(pass_p=True).count()
     else:
-        limitnum = expert.numlimit_b
-        really = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B).filter(pass_p=True).count()
-
+         project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
+         limitnum = int(math.ceil(project_listA.count()*rate/100))
+         really = project_listA.filter(pass_p=True).count()
     if pass_p and (limitnum > really):
         proj.pass_p = True
     else:
