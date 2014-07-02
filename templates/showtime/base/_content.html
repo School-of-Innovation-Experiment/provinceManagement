@@ -1,11 +1,9 @@
 <!--content for calculate, layout, basic widgets-->
+{% extends 'base/base_home.html' %}
 
-{% extends "base/base.html" %}
-{% load i18n %}
-
-{% block content %}
-<!-- index style -->
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+{% block home_content %}
+  <!-- index style -->
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
 
@@ -18,9 +16,5 @@
 <script src="{{STATIC_URL}}showtime/js/WebApplication.js" language="javascript" type="text/javascript"></script>
 <script src="{{STATIC_URL}}showtime/js/BizProduct090713.js" language="javascript" type="text/javascript"></script>
 <script src="{{STATIC_URL}}showtime/js/BizCommon090801.js" language="javascript" type="text/javascript"></script>
-
-<div class="container form-container ">
-	{%block show-content%} {% endblock %}
-</div>
-
+  {%block show-content%} {% endblock%}
 {% endblock %}

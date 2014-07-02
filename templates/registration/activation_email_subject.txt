@@ -1,1 +1,1 @@
-{% load i18n %}{% trans "Account activation on" %} {{ site.name }}
+{% load i18n %}辽宁省大学生创新创业网账户激活邮件

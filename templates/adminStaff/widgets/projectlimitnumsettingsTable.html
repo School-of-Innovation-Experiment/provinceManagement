@@ -1,0 +1,27 @@
+<div class="well">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>
+        <strong>学校名称</strong>
+          </td>
+          <td>
+        <strong>甲类项目数目上限</strong>
+          </td>
+              <td>
+        <strong>乙类项目数目上限</strong>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        {%for limitnum in item_list%}
+          <tr>
+        <td>{{limitnum.school}}</td>
+        <td>{{limitnum.a_cate_number}}</td>
+                <td>{{limitnum.b_cate_number}}</td>
+          </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    {% include "adminStaff/widgets/paginator.html" %}
+</div>

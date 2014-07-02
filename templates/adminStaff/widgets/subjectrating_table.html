@@ -9,14 +9,14 @@
 	</tr>
     </thead>
     <tbody id="subject_table_body">
-	{% for subject in subject_list%}
+	{% for subject in item_list%}
 	<tr>
 	  <td>{{subject.title}}</td>
 	  <td>{{subject.school}}</td>
 	  <td>{{subject.inspector}}</td>
 	  <!-- <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td> -->
           <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家审核结果</td>
-	  <td><a data-toggle="modal" href="#grade_choice"  onclick="get_subject_id('{{subject.project_id}}','{{subject_page.number}}','{{school_name}}');" >{{subject.project_grade}}</td>
+	  <td><a data-toggle="modal" href="#grade_choice"  onclick="get_subject_id('{{subject.project_id}}','{{item_page.number}}','{{school_name}}');" >{{subject.project_grade}}</td>
 	</tr>
 	{%endfor%}
     </tbody>

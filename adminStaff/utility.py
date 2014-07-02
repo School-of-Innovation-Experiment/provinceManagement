@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from student.models import Student_Group
 from school.models import *
 from users.models import *
+from school.utility import *
 
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
@@ -70,14 +71,13 @@ def info_xls(request):
     # name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     # school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = ProjectSingle.objects.all().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
+    proj_set = get_current_project_query_set().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
     xls_obj, workbook = info_xls_province_gen()
 
     # _index = 1
     _number= 1
     for proj_obj in proj_set:
-        manager_name,manager_id = get_manager(proj_obj)
-        memberlist,count = get_memberlist(manager_name,proj_obj)
+        teammember = get_studentmessage(proj_obj)       
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
@@ -101,17 +101,17 @@ def info_xls(request):
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.financial_category))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(manager_name))# 负责人
-        xls_obj.write(row, 7, unicode(manager_id)) # 学号
-        xls_obj.write(row, 8, unicode(count)) # 学生人数
-        xls_obj.write(row, 9, unicode(memberlist)) # 项目其他成员
+        xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 8, unicode(teammember['member_number'])) # 学生人数
+        xls_obj.write(row, 9, unicode(teammember['othermember'])) # 项目其他成员
         xls_obj.write(row, 10, unicode(proj_obj.inspector))
         xls_obj.write(row, 11, unicode(proj_obj.inspector_title)) # 指导老师职称
         xls_obj.write(row, 12, fin_type[0]) # 经费
         xls_obj.write(row, 13, fin_type[1]) # 经费
         xls_obj.write(row, 14, fin_type[2]) # 经费
         xls_obj.write(row, 15, unicode(proj_obj.insitute))
-        xls_obj.write_merge(row, row, 16, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+        xls_obj.write_merge(row, row, 16, 18, unicode(innovation.proj_introduction)) # both enterprise and innovation has innovation attr
 
         # _index += 1
         _number+= 1

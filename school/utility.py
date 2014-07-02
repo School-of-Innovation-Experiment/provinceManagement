@@ -42,6 +42,21 @@ from settings import TMP_FILES_PATH
 from django.contrib.auth.models import User
 from student.models import Student_Group
 
+from django.db.models import Q
+
+def get_current_project_query_set():
+    """
+    得到当前数据库中当前届的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_past = False)
+def get_running_project_query_set():
+    """
+    得到当前数据库中正在进行的项目集合
+    返回：QuerySet对象
+    """
+    return ProjectSingle.objects.filter(is_over = False)
+
 def check_limits(user):
     """
     Check school limits of quota
@@ -54,7 +69,7 @@ def check_limits(user):
     except:
         limits = None
 
-    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year).count()
+    currents = ProjectSingle.objects.filter(adminuser=user, year=get_current_year()).count()
     total = limits.number if limits is not None else 0
 
     return True if total > currents else False
@@ -237,9 +252,9 @@ def get_categorycount(user,des_type,current):
             return history categorycount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type,year=get_current_year()).count()
     else:
-        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year).count()
+        statistics_number=statistics_number=ProjectSingle.objects.filter(adminuser=user,project_category__category=des_type).exclude(year=get_current_year()).count()
     return statistics_number
 
 def get_gradecount(user,des_type,current):
@@ -250,10 +265,12 @@ def get_gradecount(user,des_type,current):
             return history gradecount
     """
     if current==True:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year).count()
+        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type,year=get_current_year()).count()
         return statistics_number
     else:
-        statistics_number=ProjectSingle.objects.filter(adminuser=user,project_grade__grade=des_type).exclude(year=get_current_year()).count()
+        grade = ProjectGrade.objects.get(grade=des_type)
+        statistics_proj=ProjectSingle.objects.filter(adminuser=user, project_grade__grade=des_type).exclude(year=get_current_year())
+        statistics_number = statistics_proj.count()
         return statistics_number
 
 def get_real_category(category):
@@ -341,11 +358,11 @@ def get_statistics_from_user(user):
 
     trend_lines = get_trend_lines(user)
     grade_lines = get_grade_lines(user)
-    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year))
+    current_numbers = len(ProjectSingle.objects.filter(adminuser=user, year=get_current_year()))
     currentnation_numbers = get_gradecount(user, GRADE_NATION, True)
     currentprovince_numbers = get_gradecount(user, GRADE_PROVINCE, True)
 
-    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year))
+    history_numbers = len(ProjectSingle.objects.filter(adminuser=user).exclude(year=get_current_year()))
     historynation_numbers = get_gradecount(user, GRADE_NATION, False)
     historyprovince_numbers = get_gradecount(user, GRADE_PROVINCE, False)
 
@@ -418,7 +435,7 @@ def get_province_trend_lines():
 
 
 
-def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CATE_UN):
+def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CATE_UN, pid=None):
     """
     create a new project for this usr, it is student profile
     """
@@ -427,7 +444,8 @@ def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CA
     student = get_object_or_404(StudentProfile, user=new_user)
 
     try:
-        pid = uuid.uuid4()
+        if pid == None:
+            pid = uuid.uuid4()
         project = ProjectSingle()
         project.project_id = pid
         project.adminuser = request.user
@@ -460,6 +478,12 @@ def create_newproject(request, new_user, managername,financial_cate=FINANCIAL_CA
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()
+        
+        # create midsubmit
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
 
         #create final report
         final = FinalSubmit()
@@ -521,13 +545,12 @@ def info_xls(request):
     name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = ProjectSingle.objects.filter(school=school_prof.school).order_by('financial_category')
+    proj_set = get_current_project_query_set().filter(school=school_prof.school).order_by('financial_category')
     xls_obj, workbook = info_xls_school_gen(school_prof)
 
     _index = 1
     for proj_obj in proj_set:
-        manager_name,manager_id = get_manager(proj_obj)
-        memberlist,count = get_memberlist(manager_name,proj_obj)
+        teammember = get_studentmessage(proj_obj)
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
@@ -538,28 +561,28 @@ def info_xls(request):
             loginfo(p=proj_obj.project_category.category, label="project category")
 
         row = 4 + _index
-        pro_code = name_code+_format_index(_index)
+        # pro_code = name_code+_format_index(_index)
 
         #保存项目编号
-        project_temp = ProjectSingle.objects.get(project_id = proj_obj.project_id)
-        project_temp.project_code = pro_code
-        project_temp.save()
+        # project_temp = ProjectSingle.objects.get(project_id = proj_obj.project_id)
+        # project_temp.project_code = pro_code
+        # project_temp.save()
 
-        xls_obj.write(row, 0, unicode(pro_code))
+        xls_obj.write(row, 0, unicode(proj_obj.project_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.financial_category))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
-        xls_obj.write(row, 4, unicode(manager_name))# 负责人
-        xls_obj.write(row, 5, unicode(manager_id)) # 学号
-        xls_obj.write(row, 6, unicode(count)) # 学生人数
-        xls_obj.write(row, 7, unicode(memberlist)) # 项目其他成员
+        xls_obj.write(row, 4, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 5, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 6, unicode(teammember['member_number'])) # 学生人数
+        xls_obj.write(row, 7, unicode(teammember['othermember'])) # 项目其他成员
         xls_obj.write(row, 8, unicode(proj_obj.inspector))
         xls_obj.write(row, 9, unicode(proj_obj.inspector_title)) # 指导老师职称
         xls_obj.write(row, 10, fin_type[0]) # 经费
         xls_obj.write(row, 11, fin_type[1]) # 经费
         xls_obj.write(row, 12, fin_type[2]) # 经费
         xls_obj.write(row, 13, unicode(proj_obj.insitute))
-        xls_obj.write_merge(row, row, 14, 17, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+        xls_obj.write_merge(row, row, 14, 17, unicode(innovation.proj_introduction)) # both enterprise and innovation has innovation attr
 
         _index += 1
 
@@ -583,20 +606,28 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
     teacher.telephone = telephones[1]
     teacher_enterpriseform.save()
 
+# def get_manager(project):
+#     """
+#         old version get teammanager's name and student_id
+#     """
+#     managerid=StudentProfile.objects.get(id=project.student_id)
+#     teammanager = User.objects.get(id=managerid.user_id)
+#     manager_name = teammanager.first_name
+#     manager_studentid = ""
+#     group = project.student_group_set
+#     for student in group.all():
+#         if student.studentName == manager_name:
+#             manager_studentid = student.studentId
+#             loginfo(p=manager_studentid,label="manager_studentid")
+#     return manager_name , manager_studentid
+
 def get_manager(project):
     """
         get teammanager's name and student_id
     """
-    managerid=StudentProfile.objects.get(id=project.student_id)
-    teammanager = User.objects.get(id=managerid.user_id)
-    manager_name = teammanager.first_name
-    manager_studentid = ""
-    group = project.student_group_set
-    for student in group.all():
-        if student.studentName == manager_name:
-            manager_studentid = student.studentId
-            loginfo(p=manager_studentid,label="manager_studentid")
-    return manager_name , manager_studentid
+    teammanager = project.student_group_set.all()[0]
+    return teammanager
+
 def get_memberlist(manager_name,project):
     """
         get other members
@@ -610,6 +641,33 @@ def get_memberlist(manager_name,project):
     count=len(memberlist)+1
     memberlist=','.join(memberlist)
     return memberlist,count
+
+def get_studentmessage(project):
+    """
+        get  manager and student message
+    """
+    memberlist=[]
+    # teammember = {'manager_name':'None','manager_studentid':'None','memberlist':'None','count':0,'telephone':'',}
+    teammember={'manager_name':'','manager_studentid':'','member_number':'','othermember':''}
+    if project.student_group_set.all().count()>0:
+        group=project.student_group_set
+        loginfo(p=group,label="group")
+        manager = group.all()[0]
+        loginfo(p=manager,label="manager")
+        teammember['manager_name']=manager.studentName
+        teammember['manager_studentid']=manager.studentId
+        teammember['member_number'] = project.student_group_set.count()
+        for student in group.all():
+            group=project.student_group_set
+            loginfo(p=student.studentName,label="student")
+            if student.studentName != manager.studentName:
+                member=student.studentName+"("+student.studentId+")"
+                memberlist.append(member)
+        teammember['othermember']=','.join(memberlist)
+    return teammember
+
+
+
 # def get_memberlist(members):
 #     """
 #         get all members in project

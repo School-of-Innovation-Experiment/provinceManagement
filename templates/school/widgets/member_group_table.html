@@ -55,7 +55,7 @@
           <td>{{student.email}}</td>
           <td>{{student.telephone}}</td>
           <td>{{student.classInfo}}</td>
-          <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info('{{student.studentId}}');">修改个人信息</td>
+          <td><a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息</td>
           <td><button class="btn btn-success" onclick="delete_member(this);">删除</button></td>
         </tr>
       {%endfor%}

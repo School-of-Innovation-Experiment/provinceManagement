@@ -18,11 +18,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from const import *
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
-
+from school.utility import get_running_project_query_set, get_current_project_query_set
 from registration.models import *
 from registration.models import RegistrationProfile
 
@@ -51,7 +52,6 @@ class AdminStaffService(object):
             return True
         else:
             return False
-    
     @staticmethod
     def GetRegisterSchoolList():
         res_list = []
@@ -125,11 +125,13 @@ class AdminStaffService(object):
     def Dispatch(request):
         if request.method == "GET":
             school_form = forms.SchoolDispatchForm()
+            resetSchoolPasswd_form = forms.ResetSchoolPasswordForm()
             email_list  = AdminStaffService.GetRegisterSchoolList()
             page = request.GET.get('page')
             loginfo(p=page, label="current page num")
-            context = getContext(email_list, page, 'email', 0)
+            context = getContext(email_list, page, 'item', 0)
             context['school_form'] = school_form
+            context['resetSchoolPasswd_form'] = resetSchoolPasswd_form
 
             #loginfo(p=email_list, label="news email_list ")
             return render(request, "adminStaff/dispatch.html", context)
@@ -156,9 +158,9 @@ class AdminStaffService(object):
         if request.method == "GET":
             expert_form = forms.ExpertDispatchForm()
             email_list = AdminStaffService.GetRegisterExpertList()
-            
+
             page = request.GET.get('page')
-            context = getContext(email_list, page, 'email', 0)
+            context = getContext(email_list, page, 'item', 0)
             context.update({'expert_form': expert_form})
             return render(request, "adminStaff/ImportExpert.html", context)
 
@@ -244,14 +246,36 @@ class AdminStaffService(object):
         '''
         学校上传数量限制
         '''
+        print "LLLLLLLLLLLLLLLZZZZZZZZZZZZZZZZZ"
         if request.method == "GET":
             #timeform = forms.TimeSettingForm()
             num_limit_form = forms.NumLimitForm()
             school_limit_num_list = AdminStaffService.SchoolLimitNumList()
             page = request.GET.get('page')
-            context = getContext(school_limit_num_list, page, 'school_limit', 0)
+            context = getContext(school_limit_num_list, page, 'item', 0)
             context.update({'num_limit_form':num_limit_form})
             return render(request, "adminStaff/projectlimitnumSettings.html", context)
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def ProjectLimitNumReset(request):
+        '''
+        学校上传数量重置
+        '''
+        num_limit_form = forms.NumLimitForm()
+        school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+        ProjectPerLimits.objects.all().delete()
+        for p in ProjectSingle.objects.filter(is_past=False):
+            p.is_past = True
+            p.save()
+        for p in ProjectSingle.objects.filter(is_over=False):
+            p.is_over = True
+            p.save()
+        return HttpResponseRedirect('ProjectLimitNumSettings')
+        # return render_to_response("adminStaff/projectlimitnumSettings.html", {'num_limit_form': num_limit_form, 'school_limit_list':school_limit_num_list}, context_instance=RequestContext(request))
+
     @staticmethod
     def SchoolLimitNumList():
         '''
@@ -279,18 +303,22 @@ class AdminStaffService(object):
     def SubjectFeedback(request,is_expired=False):
         exist_message = ''
         readonly=is_expired
+        context = {}
         if request.method == "GET":
             page = request.GET.get('page')
             subject_insitute_form = forms.SubjectInsituteForm()
-            subject_list =  AdminStaffService.GetSubject_list()
+            #subject_list =  AdminStaffService.GetSubject_list()
+            subject_list = get_current_project_query_set()
             context = getContext(subject_list, page, 'subject', 0) 
 
         else:
             subject_insitute_form = forms.SubjectInsituteForm(request.POST)
             if subject_insitute_form.is_valid():
                 category = subject_insitute_form.cleaned_data["insitute_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(category=category)
-
+                #subject_list =  AdminStaffService.GetSubject_list(category=category)
+                subject_list = get_current_project_query_set().filter(insitute_id=category)
+                page = request.GET.get('page')
+                context = getContext(subject_list, page, 'subject', 0)
                 expert_category = InsituteCategory.objects.get(id=category)
                 try:
                     obj = Project_Is_Assigned.objects.get(insitute = expert_category)
@@ -310,7 +338,6 @@ class AdminStaffService(object):
                             re_dict = AdminStaffService.Assign_Expert_For_Subject(extra_subject_list, expert_list, done_num)
                             for subject in re_dict.keys():
                                 for expert in re_dict[subject]:
-                                    print subject, expert
                                     Re_Project_Expert(project=subject, expert=expert).save()
 
                     #没有指派专家，则进行专家指派
@@ -365,15 +392,17 @@ class AdminStaffService(object):
             page = request.GET.get('page')
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
-            subject_list = AdminStaffService.GetSubject_list(school = school_name)
-            context = getContext(subject_list, page, 'subject', 0) 
+            #subject_list = AdminStaffService.GetSubject_list(school = school_name)
+            subject_list = get_running_project_query_set().filter(school = school_name)
+            context = getContext(subject_list, page, 'item', 0) 
 
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
                 school_name = school_category_form.cleaned_data["school_choice"]
-                subject_list =  AdminStaffService.GetSubject_list(school=school_name)
-                context = getContext(subject_list, 1, 'subject', 0)
+                #subject_list =  AdminStaffService.GetSubject_list(school=school_name)
+                subject_list = get_running_project_query_set().filter(school = school_name)
+                context = getContext(subject_list, 1, 'item', 0)
         context.update({'school_category_form':school_category_form, 
                         'subject_grade_form':subject_grade_form,
                         'school_name':school_name,
@@ -452,9 +481,10 @@ class AdminStaffService(object):
                 new_news = News(news_title = newsform.cleaned_data["news_title"],
                                 news_content = newsform.cleaned_data["news_content"],
                                 news_date = newsform.cleaned_data["news_date"],
-                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),)
-                                # news_document = request.FILES["news_document"],)
+                                news_category = NewsCategory.objects.get(id=newsform.cleaned_data["news_category"]),
+                                news_document = request.FILES.get("news_document", None),)
                 new_news.save()
+                loginfo(newsform.cleaned_data["news_content"])
             else:
                 loginfo(p=newsform.errors.keys(), label="news form error")
             return redirect('/newslist/%d' % new_news.id)

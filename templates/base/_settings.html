@@ -1,15 +1,29 @@
 <!-- features for user profile edit -->
 {% extends "base/base.html" %}
 {% load i18n %}
+{% block before_css %}
+   {{ block.super }}
+   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
+   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
+   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css">
+{% endblock  %}
 
+{% block nav_content%}
+   {%if userauth.is_schooler  or userauth.is_student%}
+   {% include "school/widgets/features_item_navbar.html" %}
+   {%endif%}
+
+   {%if userauth.is_adminstaff %}
+   {% include "adminStaff/widgets/features_item_navbar.html" %}
+   {%endif%}
+
+   {%if userauth.is_experter %}
+   {% include "expert/widgets/features_item_navbar.html" %}
+   {%endif%}
+{% endblock %}
 {% block content %}
-<!-- index style -->
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
-
-<div class="container form-container ">
-  <div class = "row"> 
+<div class="container content-container">
+  <div class = "row" id="setting_div">
     <div class="span3 bs-docs-sidebar">
       <!--left navigation-->
       <ul class="nav nav-pills nav-stacked nav-list bs-docs-sidenav affix-top">

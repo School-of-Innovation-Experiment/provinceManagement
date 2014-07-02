@@ -1,20 +1,23 @@
 {% extends "base/base_home.html" %}
-
-{% block home_content %}
+{% block forejs %}
+{{ block.super }}
+<script type='text/javascript' src="{{STATIC_URL}}js/home/checkbrowser.js"></script>
+{% endblock %}
+{% block before_home_content%}
 <!--pictures and import news-->
-<div class="row-fluid news_frame">
-  <div class="span12">
-    {% include "home/widgets/new_pictures.html" %}
-  </div><!--end pictures-->
+
+<div class="homepage-picture">
+  {% include "home/widgets/new_pictures.html" %}
 </div>
-<br/>
+{% endblock %}
+{% block home_content %}
 <!--other news item -->
 <div class="row-fluid news_frame">
   <div class="span6">
     {% include "home/widgets/import_info.html" %}
   </div>
   <div class="span6">
-    {% include "home/widgets/files.html" %}
+    {% include "home/widgets/dynamic.html" %}
   </div>
 </div>
 <div class="row-fluid news_frame">
@@ -30,8 +33,7 @@
 <div>
   {% include "home/widgets/school_show.html" %}
 </div>
+{% include "base/checkbrowser.html" %}
 <!--links-->
-<div>
-  {% include "home/widgets/links.html" %}
-</div>
+
 {% endblock %}

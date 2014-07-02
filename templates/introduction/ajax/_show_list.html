@@ -1,34 +1,33 @@
-<div class="clearfix" id="flow_container">
+<!-- <div class="clearfix" id="flow_container"> -->
+<div class="clearfix">
   {% if project_list %}
     {% for project in project_list %}
       <div class="box photo col3">
-        {% ifequal project.project_grade.id 1 %}
-        <div class="github-fork-ribbon-wrapper left">
-          <div class="github-fork-ribbon">
-            <a href="{% url showtime.views.show_project project.project_id %}">{{ project.project_grade.get_grade_display }}</a>
-          </div>
-        </div>
-        {% endifequal %}
+        <!-- {% ifequal project.project_grade.id 1 %} -->
+        <!-- <div class="github-fork-ribbon-wrapper left"> -->
+        <!--   <div class="github-fork-ribbon"> -->
+        <!--     <a href="{% url showtime.views.show_project project.project_id %}">{{ project.project_grade.get_grade_display }}</a> -->
+        <!--   </div> -->
+        <!-- </div> -->
+        <!-- {% endifequal %} -->
         <a href="{% url showtime.views.show_project project.project_id %}" title="{{ project.title }}"><img src="{{ project.img }}"  /></a>
-        <h4 class="title">{{ project.title }}</h4>
+        <h4 class="title">{{ project.title|truncatechars:16 }}</h4>
         <hr/>
-        <span class="label label-info pull-right">{{ project.school }}</span>
-        <p class="member-name">参赛团队: {{ project.members }}</p>
-        <!-- <br/> -->
-        <small class="pull-left">
-          {{ project.project_status }}
-        </small>
+        <p><strong>参赛团队:</strong>&nbsp;&nbsp;{{ project.members|truncatechars:16 }}</p>
+        <p class="title">{{ project.school}}</p>
       </div>
     {% endfor %}
     <!--content-->
   {% endif %}
 </div>
-<div id="page-nav" style="display=none;">
+<!-- <div id="page-nav" style="display=none;"> -->
+<div id="page-nav">
   {% if project_page %}
-    {% if project_page.has_next %}
-      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
-    {% else %}
-      <a href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page=-1">下一页</a>
-    {% endif %}
+  {% if project_page.has_previous %}
+  <a class="search-news" href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.previous_page_number }}">上一页</a>
+  {% endif %}
+  {% if project_page.has_next %}
+  <a class="search-news" href="?search_school={{ search_school }}&search_year={{ search_year }}&search_grade={{ search_grade }}&project_page={{ project_page.next_page_number }}">下一页</a>
+  {% endif %}
   {% endif %}
 </div>

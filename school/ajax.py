@@ -45,7 +45,8 @@ def  StudentDispatch(request, form):
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
             if financial_cate == FINANCIAL_CATE_A:
-                current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+                #current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+                current_list = get_current_project_query_set().filter(adminuser = request.user)
                 limits = ProjectPerLimits.objects.get(school__userid=request.user)
                 a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
                 if a_remainings <= 0:
@@ -95,7 +96,8 @@ def ProjInsituteChange(request, cate):
 def FinancialCateChange(request, cate, pid):
     #dajax = Dajax()
     if cate == FINANCIAL_CATE_A:
-        current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+        #current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
+        current_list = get_current_project_query_set().filter(adminuser = request.user)
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
         a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
         if a_remainings <= 0:
@@ -233,6 +235,20 @@ def MemberChange(request, form, origin):
         ret = change_member(request, stugroup_form, origin)
     return simplejson.dumps(ret)
 
+@dajaxice_register
+def change_project_code(request, pid, project_code):
+    message = ""
+    project = ProjectSingle.objects.get(project_id = pid)
+    try:
+        if ProjectSingle.objects.filter(project_code = project_code).count(): 
+            raise
+        project.project_code = project_code
+        project.save()
+    except:
+        message = "error"
+        return simplejson.dumps({"message": message})
+    return simplejson.dumps({"message": message, "res": project_code})
+
 def change_member(request, stugroup_form, origin):
     student_id = stugroup_form.cleaned_data["student_id"]
     student_name = stugroup_form.cleaned_data["student_name"]
@@ -313,3 +329,4 @@ def refresh_member_table(request):
     return render_to_string("school/widgets/member_group_table.html",
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
+

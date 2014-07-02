@@ -32,8 +32,11 @@ function file_delete_callback(data){
 $('[rel="student_delete"]').click(function(){
   
   var uid = $(this).attr("uid");
-  Dajaxice.school.StudentDeleteConsistence(student_delete_callback,
+  var is_active = $(this).attr("arg");
+  if(is_active == "False" || confirm("删除帐号后，将删除关联的历史数据，确认删除？")){
+      Dajaxice.school.StudentDeleteConsistence(student_delete_callback,
                                          {'uid':uid});
+  }
 });
 
 function student_delete_callback(data){

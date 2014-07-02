@@ -6,13 +6,14 @@
     <title>创新创业*省级版</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% block meta_description %}
-      <meta name="description" content="" />
+    <meta name="description" content="" />
     {% endblock %}
     <meta name="keywords" content="" />
     <meta name="author" content="" />
     <!-- CSS Config. -->
-    {% block before_css %}{% endblock  %}
+
     {% include "meta/html_head_stylesheets.html" %}
+     {% block before_css %}{% endblock  %}
     <!-- JavaScript Config. -->
     {% block forestyle %}{% endblock %}
     {% include "meta/html_head_javascript.html" %}
@@ -23,31 +24,37 @@
 
   <body >
     <div class="github-fork-ribbon-wrapper right">
-    <div class="github-fork-ribbon">
-      <a href="/">创新创业＊省级版</a>
+      <div class="github-fork-ribbon">
+        <a href="/">创新创业＊省级版</a>
+      </div>
     </div>
-  </div>
-    {# navigator bar#}
-    {% block top-nav-bar %}
-      {% include "widgets/navbar.html" %}
-    {% endblock %}
-
+    <div class="container" id="nav-container">
+       <!--head content-->
+       <div class="masthead">
+         <!--Head title-->
+         <a href="/"><h1 class="muted head-title">辽宁省大学生创新创业网</h1></a>
+         <p class="head-title-low">Liao Ning the University Students' Innovation Undertaking Network</p>
+         <hr class="head-hr">
+        {% block nav_content %}
+        {% endblock %}
+       </div><!--end mashhead-->
+    </div><!--end whole container-->
     {# Main-Content Section #}
     {% block content %}{% endblock %}
 
     {# Footer Section #}
     {% block home-footer %}
-      {% include "widgets/footer.html" %}
+    {% include "widgets/footer.html" %}
     {% endblock %}
     {% block bottom_js %}
-      {% include "meta/bottom_scripts.html" %}
+    {% include "meta/bottom_scripts.html" %}
     {% endblock %}
     {% block endjs %}{% endblock %}
     {% block footer-alert-bar %}
     {% endblock %}
     <!-- 百度推广JS -->
     <script type="text/javascript">
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+  var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F467a2b45543928de4d32a9f7c3bfc175' type='text/javascript'%3E%3C/script%3E"));
     </script>
     <!-- 百度推广JS END -->

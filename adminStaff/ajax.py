@@ -9,7 +9,9 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
-from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm
+from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm, SchoolDispatchForm, SchoolCategoryForm, ResetSchoolPasswordForm
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
 from const.models import SchoolDict, NewsCategory
 from const import *
@@ -22,6 +24,7 @@ import datetime
 from backend.logging import logger, loginfo
 from django.template.loader import render_to_string
 from backend.utility import getContext
+from school.utility import *
 
 @dajaxice_register
 def NumLimit(request, form):
@@ -43,11 +46,22 @@ def NumLimit(request, form):
                 object.number = a_limited_num + b_limited_num
                 object.a_cate_number = a_limited_num
                 object.save()
-            return simplejson.dumps({'status':'1','message':u'更新成功'})
+
+            # num_limit_form = forms.NumLimitForm()
+            school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+            page = request.GET.get('page')
+
+            context = getContext(school_limit_num_list, page, 'item', 0)
+            table = render_to_string("adminStaff/widgets/projectlimitnumsettingsTable.html",
+                           context)
+            return simplejson.dumps(
+                {'status':'1',
+                 'table': table, 
+                 'message':u'更新成功'})
         except SchoolProfile.DoesNotExist:
-            return simplejson.dumps({'status':'1','message':u'更新失败，选定的学校没有进行注册'})
+            return simplejson.dumps({'status':'0','message':u'更新失败，选定的学校没有进行注册'})
     else:
-        return simplejson.dumps({'id':form.errors.keys(),'message':u'输入错误'})
+        return simplejson.dumps({'status':'0', 'id':form.errors.keys(),'message':u'输入错误'})
 
 @dajaxice_register
 def DeadlineSettings(request, form):
@@ -86,7 +100,8 @@ def RemoveExpert(request, email):
     """
     Remove the exist expert user from database
     """
-    ExpertProfile.objects.get(userid__email = email).delete()
+    User.objects.get(email = email).delete()
+    #ExpertProfile.objects.get(userid__email = email).delete()
     return simplejson.dumps({"status":"1"})
 
 @dajaxice_register
@@ -195,6 +210,7 @@ def change_subject_grade(request, project_id, changed_grade,page,school_name):
     '''
     change subject grade secretly
     '''
+    
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     table = refresh_to_table(page,school_name)
     return simplejson.dumps({'status':'1','table':table})
@@ -250,12 +266,31 @@ def get_news_list(request,uid):
     except Exception, err:
         logger.info(err)
 
+@dajaxice_register
+def refresh_alloc_table(request, insitute):
+    subject_list = get_current_project_query_set().filter(insitute_id=insitute)
+    page = request.GET.get("page")
+    context = getContext(subject_list, page, 'subject', 0)
+    table_html = render_to_string("adminStaff/widgets/subjectalloc_table.html", context)
+    return simplejson.dumps({"table": table_html})
 def refresh_to_table(page,school_name):
-    print page,school_name
     if school_name == "None": school_name = None
-    subject_list = AdminStaffService.GetSubject_list(school = school_name)
-    context = getContext(subject_list, page, 'subject', 0) 
-
+   # subject_list = AdminStaffService.GetSubject_list(school = school_name)
+    subject_list = get_current_project_query_set().filter(school = school_name)
+    context = getContext(subject_list, page, 'item', 0) 
+    context.update({"school_name": school_name})
     return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
 
- 
+@dajaxice_register
+def ResetSchoolPassword(request, form):
+    resetSchoolPassword_form = ResetSchoolPasswordForm(deserialize_form(form))
+    if resetSchoolPassword_form.is_valid():
+        password = resetSchoolPassword_form.cleaned_data["reset_password"]
+        for register in SchoolProfile.objects.all():
+            user = User.objects.get(username__exact = register.userid.username)
+            if user:
+                user.set_password(password)
+                user.save()
+        return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
+    else:
+        return simplejson.dumps({'status':'1', 'message':u"密码不能为空"})

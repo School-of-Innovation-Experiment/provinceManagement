@@ -1,15 +1,19 @@
-{% extends "base/base.html" %}
+{% extends "base/base_home.html" %}
 {% load i18n %}
+{% block before_css %}
+   {{ block.super }}
+   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+{% endblock  %}
 
-{% block content %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
+{% block home_content %}
+
 <div id='login'>
-	<div id='content'>
-		<!--div class='login-image'></div-->
-		<div id="login-form-wrap">
-			{%block form-content%}
-  			{%endblock%}
-		</div>
-	</div>
+  <div id='content'>
+    <!--div class='login-image'></div-->
+    <div id="login-form-wrap">
+      {%block form-content%}
+      {%endblock%}
+    </div>
+  </div>
 </div><!--end login form-->
 {% endblock %}

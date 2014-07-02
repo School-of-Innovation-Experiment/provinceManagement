@@ -53,7 +53,7 @@ class ProjectSingle(models.Model):
                                  verbose_name=u"联系方式")
     inspector = models.CharField(max_length=200, blank=False,
                                  verbose_name=u"指导教师")
-    inspector_title = models.CharField(blank=False, null=True, max_length=10,
+    inspector_title = models.CharField(blank=False,max_length=10,
                                        verbose_name=u"指导老师职称")
     members = models.CharField(max_length=400, blank=False,
                                verbose_name=u"团队成员")
@@ -68,7 +68,7 @@ class ProjectSingle(models.Model):
                                   verbose_name=u"是否结束")
     keywords = models.CharField(blank=True, max_length=300,
                                 verbose_name=u"关键字")
-    project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目编号")
+    project_code = models.CharField(blank=False, null=True, max_length=20, verbose_name=u"项目编号")
 
     class Meta:
         verbose_name = u"参赛项目"
@@ -138,7 +138,7 @@ class PreSubmit(models.Model):
     inheribit table, which use ProjectSingle to show pre-submit content
     """
     content_id = models.CharField(max_length=50,
-                                  primary_key=True, default=str(uuid.uuid4()),
+                                  primary_key=True, default=make_uuid,
                                   verbose_name=u"初审报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,

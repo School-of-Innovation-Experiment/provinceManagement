@@ -1,74 +1,33 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-<div class="well form-inline">
-  <b>
-    <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
-      {% csrf_token %}
-      <div class="alert alert-info">
-	<a class="close" data-dismiss="alert">×</a>
-	<strong>注意:</strong>指定专家审阅是针对所选学科，一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
+<div>
+  <div class="well form-inline">
+    <b>
+      <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
+        {% csrf_token %}
+        <div class="alert alert-info">
+	  <a class="close" data-dismiss="alert">×</a>
+	  <strong>注意:</strong>指定专家审阅是针对所选学科，一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
+        </div>
+        {{subject_insitute_form.insitute_choice}}
+        {% if not readonly %}
+        <input type="submit" class="btn btn-primary" id="filter_button" value=""/>
+        {%endif%}
+        {% if readonly %}
+        <div class="alert alert-error" style="margin-top:20px;">
+	  <a class="close" data-dismiss="alert">x</a>
+	  <h4 class="alert-heading">系统提示！</h4>
+	  <p>目前不能给专家指派项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+        </div><!--end alert block-->
+        {%endif%}
+        {{exist_message}}
+      </form><!--end category form -->
+      <div id="subjectalloc_table">
+        {% include "adminStaff/widgets/subjectalloc_table.html" %}
       </div>
-      {{subject_insitute_form.insitute_choice}}
-      {% if not readonly %}
-      <input type="submit" class="btn btn-primary" id="filter_button" value=""/>
-      {%endif%}
-      {% if readonly %}
-      <div class="alert alert-error" style="margin-top:20px;">
-	<a class="close" data-dismiss="alert">x</a>
-	<h4 class="alert-heading">系统提示！</h4>
-	<p>目前不能给专家指派项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
-      </div><!--end alert block-->
-      {%endif%}
-      {{exist_message}}
-    </form><!--end category form -->
-    <table class="table table-condensed" id="subject_table">
-      <thead>
-	<tr>
-	  <th>发布题目名称</th>
-	  <th>所属学校</th>
-	  <th>所属分类</th>
-	  <th>所属学科</th>
-	  <th>题目状态</th>
-	</tr>
-      </thead>
-      <tbody id="subject_table_body">
-	{% for subject in subject_list%}
-	<tr>
-	  <td>{{subject.title}}</td>
-	  <td>{{subject.school}}</td>
-	  <td>{{subject.project_category}}</td>
-	  <td>{{subject.insitute}}</td>
-	  <td>{{subject.project_status}}</td>
-	</tr>
-	{%endfor%}
-      </tbody>
-    </table>
-	<div class="pagination pagination-right">
-		<ul>
-		{% if subject_page.has_previous %}
-      <li><a href="?page={{ subject_page.previous_page_number }}" id="subject-previous-page" arg="{{subject_page.previous_page_number}}"><上一页</a></li>
-		{% endif %}
-		{% if not contain_begin %}
-		<li><a href="?page=1">1</a></li>
-	  <li><span>...</span></li>
-		{% endif %}
-		{% for index in index_list %}
-			{% ifequal index subject_page.number %}
-				<li><span>{{ index }}</span></li>
-			{% else %}
-				<li><a href="?page={{ index }}">{{ index }}</a></li>
-			{% endifequal %}
-		{% endfor %}
-		{% if not contain_end %}
-    <li><span>...</span></li>
-		<li><a href="?page={{ subject_page.paginator.num_pages }}">{{ subject_page.paginator.num_pages }}</a></li>
-		{% endif %}
-		{% if subject_page.has_next %}
-    <li><a href="?page={{ subject_page.next_page_number }}" id="subject-next-page" arg="{{subject_page.next_page_number}}">下一页></a></li>
-    {% endif %}
-		</ul>
-	</div>
-</div><!-- end the whole form -->
+  </div><!-- end the whole form -->
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/refresh_table.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/is_assigned.js" onload="is_assigned();"></script>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>

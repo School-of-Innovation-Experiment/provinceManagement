@@ -1,0 +1,48 @@
+<div class="tab-pane active" id="project_review">
+<!--     <table class="table table-bordered">
+        <thead>
+            <tr>项目编号</tr>
+            <tr>项目名称</tr>
+        </thead>
+    </table> -->
+    <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>项目编号</th>
+                  <th>项目名称</th>
+                  <th>项目类别</th>
+                  <th>项目类型</th>
+                  <th>负责人</th>
+                  <th>学号</th>
+                  <th>参与人数</th>
+                  <th>项目其他成员</th>
+                  <th>教师</th>
+                  <th>职称</th>
+                  <th>总经费</th>
+                  <th>财政拨款</th>
+                  <th>校拨</th>
+                  <th>所属学科</th>
+                  <th>项目简介</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="10%">{{project.project_code}}</td>
+                  <td width="15%">{{project.title|truncatechars:15}}</td>
+                  <td>{{project.financial_category}}</td>
+                  <td>{{project.project_category}}</td>
+                  <td>{{teammember.manager_name}}</td>
+                  <td>{{teammember.manager_studentid}}</td>
+                  <td>{{teammember.member_number}}</td>
+                  <td width="10%">{{teammember.othermember}}</td>
+                  <td>{{project.inspector}}</td>
+                  <td>{{project.inspector_title}}</td>
+                  {% for fin_tmp in fin_type %}
+                  <td>{{fin_tmp}}</td>
+                  {% endfor %}
+                  <td>{{project.insitute}}</td>
+                  <td width="20%">{{innovation.proj_introduction}}</td>
+                </tr>
+              </tbody>
+            </table>
+</div>

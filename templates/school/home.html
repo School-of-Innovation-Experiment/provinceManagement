@@ -11,13 +11,13 @@
     </div><!--end new button-->
     {%endif%}
     {% if readonly %}
-    <div class="alert alert-error" style="margin-top:20px;">
+    <div class="alert alert-error alert_position" >
       <a class="close" data-dismiss="alert">x</a>
       <h4 class="alert-heading">系统提示！</h4>
       <p>目前不能增加项目，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
     </div><!--end alert block-->
     {%endif%}
-    <div class="alert alert-error" style="margin-top:20px;">
+    <div class="alert alert-error alert_position">
       <a class="close" data-dismiss="alert">x</a>
       <h4 class="alert-heading">敬爱的校级管理员</h4>
       <p>请您仔细审阅每个创新创业项目的初期报告、结题报告以及成果上传的内容，避免出现违反法律法规以及相关规定的内容!</p>
@@ -29,12 +29,16 @@
       <span class="label label-info">甲类剩余数量:{{info.applications_a_remaining}}</span>
     </h3>
     <a href="get_xls/" class="btn btn-primary">下载信息统计表</a>
+    <a href="auto_index/" class="btn btn-primary">项目自动编号</a>
   </div><!--end page header-->
+  <div class="alert" id="error_message" style="display:none">
+  </div>
   <table class="table table-hover studenttable">
     <thead>
       <tr>
+        <th>项目编号</th>
         <th>名称</th>
-        <th>注册邮箱</th>
+        <!--th>注册邮箱</th-->
         <th>项目类型</th>
         <th>类型(甲/乙类)</th>
         <th>初期报告审核</th>
@@ -46,17 +50,19 @@
       </tr>
     </thead>
     <tbody>
-      {%for item in current_list%}
+      {%for item in item_list%}
       <tr>
+        <td><a data-toggle="modal" onclick="get_element(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}">{{item.project_code}}</a></td>
         <td title="{{item.title}}">{{item.title|truncatechars:15}}</td>
-        <td>{{item.reg_email}}</td>
+        <!--td>{{item.reg_email}}</td-->
         <td>{{item.project_category}}</td>
         <td>
           <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">
             {% for choice in financial_cate_choice %}
             <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
             {% endfor %}
-          </select><span id="error_message{{item.project_id}}"></span>
+          </select>
+          <span id="error_message{{item.project_id}}"></span>
         </td>
         <td>
           {% if item.pre_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
@@ -71,13 +77,28 @@
         <td>{{item.project_grade}}</td>
         <td>
           <span><a href="{% url school.views.application_report_view item.project_id%}" class='btn btn-primary'>申请</a></span>
-<!--           <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span> -->
-        <span><a href="{% url school.views.file_view item.project_id%}" class='btn btn-primary'>文件操作</a></span>
+          <span><a href="{% url school.views.mid_report_view item.project_id%}" class='btn btn-primary'>中期</a></span>
+          <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span>
+          <span><a href="{% url school.views.file_view item.project_id%}" class='btn btn-primary'>文件操作</a></span>
         </td>
       </tr>
       {%endfor%}
     </tbody>
   </table><!--end current_list table-->
+  {% include "adminStaff/widgets/paginator.html" %}
+  <div class="modal hide fade" style="display: none;" id="project_code_add">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>项目编号</h3>
+    </div>
+    <div class="modal-body">
+      <input class="span2" id="project_code" type="text">
+    </div>
+    <div class="modal-footer">
+      <a class="btn" data-dismiss="modal">关闭</a>
+      <a class="btn btn-primary" data-dismiss="modal" onclick="project_code_add()">保存更新</a>
+   </div>
+ </div>
 </div><!--end current list content-->
 <script type='text/javascript' src="{{STATIC_URL}}js/school/school_home.js"></script>
 {% endblock %}

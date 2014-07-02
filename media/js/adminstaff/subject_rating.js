@@ -15,14 +15,10 @@ function get_review_list(project_id){
 }
 
 function review_list_pass_p_callback(data){
-  $("#review_table").append("<thead><tr><th>是否通过审核</th><tbody id="+"review_table_body"+"><t></tbody></thead>");
+  $("#review_table").append("<tbody id=review_table_body><t></tbody>");
   $.each(data.review_list, function(i, item)
 	 {
-	   $("#review_table_body").append("<tr>");
-	   $.each(item, function(i ,content){
-	     $("#review_table_body").append("<td>"+content+"</td>");
-	   });
-	   $("#review_table_body").append("</tr>");
+	   $("#review_table_body").append("<tr><td>"+item+"</td></tr>");
 	 });
 }
 

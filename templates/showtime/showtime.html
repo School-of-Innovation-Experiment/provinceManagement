@@ -1,31 +1,29 @@
 {% extends "showtime/base/_content.html" %}
 {%block show-content%}
-  <div class="container">
-    <div class="row">
-      <div class="span6" >
-	<div class="introShow">
-	  <div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" title="project-photo"><img title="project-img" id="midImg" src="{{ first_img }}" class="Picture220"/></a>
-	  </div>
-	  <div class="scroll" id="scroll">
-	    <a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
-	    <a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
-	    <ul id="thumList">
-	      {% for img in imgs %}
-		<li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem"><img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
-	      {% endfor %}
-</ul>
-</div>
-</div>
-</div>
-<div class="span4 well" style="margin-top:10px">
-  <div><h4>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4>
-<div><a href="#content">{{ project.title }}</a></div>
-<div><label><h4>高校名称</h4><a href="#">{{ project.school }}</a></label></div>
-<div><label><h4>指导教师</h4><a href="#">{{ project.inspector }}</a></label></div>
-<div><label><h4>团队负责人</h4><a href="#">{{ project.members }}</a></label></div>
-<div><label><h4>关键字</h4><a href="#">{{ project.keywords }}</a></label></div>
-</div>
-</div>
+<div class="row">
+  <div class="span6" >
+    <div class="introShow">
+      <div class="mainShow"><a id="bigImg" href="{{ first_img }}" class="jqzoom" title="project-photo"><img title="project-img" id="midImg" src="{{ first_img }}" class="Picture220"/></a>
+      </div>
+      <div class="scroll" id="scroll">
+        <a href="#prev" class="prevView prevStop" ><span>显示上一幅图片</span></a>
+        <a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
+        <ul id="thumList">
+          {% for img in imgs %}
+          <li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem"><img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="span4 well" style="margin-top:10px">
+    <div><h4><strong>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4></div>
+    <div><a href="#content">{{ project.title }}</a></div>
+    <div><label><h4>高校名称</h4><a href="#">{{ project.school }}</a></label></div>
+    <div><label><h4>指导教师</h4><a href="#">{{ project.inspector }}</a></label></div>
+    <div><label><h4>团队负责人</h4><a href="#">{{ project.members }}</a></label></div>
+    <div><label><h4>关键字</h4><a href="#">{{ project.keywords }}</a></label></div>
+  </div>
 </div>
 <br>
 <br>
@@ -39,10 +37,8 @@
     <h3>成果概述</h3>
     <br>
     <p>{{ project.summary }}</p>
-
   </section>
 </div>
-<div>
   <script type="text/javascript" language="jscript">
   jQuery(function($) {
     Biz.Product.Product.turn();
@@ -78,5 +74,4 @@
     $(".jqzoom").jqzoom(options);
   });
 </script>
-
-{%endblock%}
+  {%endblock%}

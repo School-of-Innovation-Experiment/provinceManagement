@@ -1,73 +1,51 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-<div class="well form-inline">
-  <b>
-    <form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
-      {% csrf_token %}
-      {% if not readonly %}
-      {{school_category_form.school_choice}}
-      <input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
-      {%endif%}
-      {% if readonly %}
-      <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/>
-      <span class="help-inline">项目级别分配完以后可以发布新闻</span>
-      <div class="alert alert-error" style="margin-top:20px;">
-	<a class="close" data-dismiss="alert">x</a>
-	<h4 class="alert-heading">系统提示！</h4>
-	<p>目前不能按学校筛选，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
-      </div><!--end alert block-->
-      {%endif%}
-    </form><!--end category form -->
-    <div id="subjectrating_table">
-    {% include "adminStaff/widgets/subjectrating_table.html" %}
-    </div>
-	<div class="pagination pagination-right">
-		<ul>
-		{% if subject_page.has_previous %}
-      <li><a href="?page={{ subject_page.previous_page_number }}&school_name={{ school_name }}" id="subject-previous-page" arg="{{subject_page.previous_page_number}}"><上一页</a></li>
-		{% endif %}
-		{% if not contain_begin %}
-		<li><a href="?page=1&school_name={{ school_name }}">1</a></li>
-	  <li><span>...</span></li>
-		{% endif %}
-		{% for index in index_list %}
-			{% ifequal index subject_page.number %}
-				<li><span>{{ index }}</span></li>
-			{% else %}
-				<li><a href="?page={{ index }}&school_name={{ school_name }}">{{ index }}</a></li>
-			{% endifequal %}
-		{% endfor %}
-		{% if not contain_end %}
-    <li><span>...</span></li>
-		<li><a href="?page={{ subject_page.paginator.num_pages }}&school_name={{ school_name }}">{{ subject_page.paginator.num_pages }}</a></li>
-		{% endif %}
-		{% if subject_page.has_next %}
-    <li><a href="?page={{ subject_page.next_page_number }}&school_name={{ school_name }}" id="subject-next-page" arg="{{subject_page.next_page_number}}">下一页></a></li>
-    {% endif %}
-		</ul>
-	</div>
-    <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
-      <div class="modal-header">
-    	<a class="close" data-dismiss="modal">×</a>
-    	<h3>专家得分/评价列表</h3>
+<div>
+  <div class="well form-inline">
+    <b>
+      <form id="school_category_form" method="POST" action="/adminStaff/subject_rating/"><!-- begin category form-->
+        {% csrf_token %}
+        {% if not readonly %}
+        {{school_category_form.school_choice}}
+        <input type="submit" class="btn btn-primary" id="filter_button" value="按照学校进行筛选"/>
+        {%endif%}
+        {% if readonly %}
+        <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/>
+        <span class="help-inline">项目级别分配完以后可以发布新闻</span>
+        <div class="alert alert-error" style="margin-top:20px;">
+	  <a class="close" data-dismiss="alert">x</a>
+	  <h4 class="alert-heading">系统提示！</h4>
+	  <p>目前不能按学校筛选，原因可能是日期未到或已过截至日期，如有任何疑问请咨询系统管理员，谢谢!</p>
+        </div><!--end alert block-->
+        {%endif%}
+      </form><!--end category form -->
+      <div id="subjectrating_table">
+        {% include "adminStaff/widgets/subjectrating_table.html" %}
       </div>
-      <div class="modal-body">
-        <table id="review_table"class="table table-condensed"></table>
+      {% include "adminStaff/widgets/paginator.html" %}
+      <div id="review_subject" class="modal hide fade" style="display: none;"><!--subject_review-->
+        <div class="modal-header">
+    	  <a class="close" data-dismiss="modal">×</a>
+    	  <h3>是否通过审核：</h3>
+        </div>
+        <div class="modal-body">
+          <table id="review_table"class="table table-condensed"></table>
+        </div>
+      </div><!--end subject_review-->
+      <div class="modal hide fade" style="display: none;" id="grade_choice">
+        <div class="modal-header">
+    	  <a class="close" data-dismiss="modal">×</a>
+    	  <h3>选择项目级别</h3>
+        </div>
+        <div class="modal-body">
+          {{subject_grade_form.subject_grade}}
+        </div>
+        <div class="modal-footer">
+    	  <a class="btn" data-dismiss="modal">关闭</a>
+    	  <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
+        </div>
       </div>
-    </div><!--end subject_review-->
-    <div class="modal hide fade" style="display: none;" id="grade_choice">
-      <div class="modal-header">
-    	<a class="close" data-dismiss="modal">×</a>
-    	<h3>选择项目级别</h3>
-      </div>
-      <div class="modal-body">
-        {{subject_grade_form.subject_grade}}
-      </div>
-      <div class="modal-footer">
-    	<a class="btn" data-dismiss="modal">关闭</a>
-    	<a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
-      </div>
-    </div>
+  </div>
 </div><!--end grade_choice-->
 
 </div><!-- end the whole form -->

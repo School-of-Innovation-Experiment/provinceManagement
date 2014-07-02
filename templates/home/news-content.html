@@ -1,30 +1,48 @@
 {% extends 'base/base_home.html' %}
 
+{% block before_home_content%}
+<div class="news-content-nav">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="{{announcement_active}}">
+      <a href="/newslist/news_cate=announcement">通知公告</a>
+    </li>
+    <li class="{{dynamic_active}}">
+      <a href="/newslist/news_cate=dynamic">高校动态</a>
+    </li>
+    <li class="{{outstanding_active}}">
+      <a href="/newslist/news_cate=outstanding">优秀作品</a>
+    </li>
+    <li class="{{others_active}}">
+      <a href="/newslist/news_cate=others">他山之石</a>
+    </li>
+  </ul>
+</div>
+{% endblock%}
 {% block home_content %}
-  <div class="news-body">
-    <div class="news-main">
-      <div>
-        <h3>{{news_cate}} <small>{{news_cate.category}}</small></h3>
-        <h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
-        <h6><a href="/newslist/news_cate={{news_cate.category}}"><<更多</a></h6>
-        <div class="news-content">
-          <div>
-            {% autoescape off %}
-            {{ news.news_content|safe }}
-            {% endautoescape %}
-            <br/>
-            <br />
-            {% if news.news_document %}
-            <!--p>附件：<a href="{{request.path}}/download_news_doc">{{ news.document_name }}</a></p-->
-            <p>附件：<a href="{{news.news_document.url}}" target="_blank" >{{ news.document_name }}</a></p>
-            <br />
-            {% endif %}
-          </div>
+<div class="news-body">
+  <div class="news-main">
+      <h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
+      <span class="usoft-listview-more">
+        <h6><a href="/newslist/news_cate={{news_cate.category}}"><sub>《</sub>更多 More</a></h6>
+      </span>
+      <div class="news-content">
+        <div>
+          {% autoescape off %}
+          {{ news.news_content|safe }}
+          {% endautoescape %}
+          <br/>
+          <br />
+          {% if news.news_document %}
+          <!--p>附件：<a href="{{request.path}}/download_news_doc">{{ news.document_name }}</a></p-->
+          <p>附件：<a href="{{news.news_document.url}}" target="_blank" >{{ news.document_name }}</a></p>
+          <br />
+          {% endif %}
         </div>
       </div>
-    </div> <!-- news-list -->
-  </div> <!-- news-main -->
+     </div>
+   </div> <!-- news-list -->
+ </div> <!-- news-main -->
 
-{% endblock %}
+ {% endblock %}
 
 

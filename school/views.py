@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
 from school.models import UploadedFiles
-from school.forms import InfoForm, ApplicationReportForm, FinalReportForm, StudentDispatchForm,EnterpriseApplicationReportForm,Teacher_EnterpriseForm
+from school.forms import *
 
 from adminStaff.models import ProjectPerLimits
 
@@ -93,7 +93,12 @@ def member_change(request):
     student_group = Student_Group.objects.filter(project = project)
 
     student_group_form = StudentGroupForm()
+
     student_group_info_form = StudentGroupInfoForm()
+
+    # student_group_info_form.email = student_group[0].email
+
+
     return render(request, "school/member_change.html",
                   {"student_group": student_group,
                    "student_group_form": student_group_form,
@@ -107,9 +112,10 @@ def home_view(request, is_expired=False):
     """
     school home management page
     """
-    current_list = ProjectSingle.objects.filter(adminuser=request.user,
-                                               year=get_current_year)
+#    current_list = get_running_project_query_set().filter(adminuser = request.user)
+    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('-is_over')
     readonly=is_expired
+    readonly=False
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
@@ -124,17 +130,22 @@ def home_view(request, is_expired=False):
         remainings = 0
         a_remainings = 0
     add_current_list = current_list_add(list=current_list)
+    
+    add_current_list = sorted(list(add_current_list), key = lambda x: (x.financial_category.category, x.project_code))
+    
+    page = request.GET.get('page')
+    context = getContext(add_current_list, page, "item", 0)
 
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
-    data = {"current_list": add_current_list,
-            "financial_cate_choice": FINANCIAL_CATE_CHOICES,
+    data = {"financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings,
                      "applications_a_remaining": a_remainings,
                      }
             }
-    return render(request, 'school/home.html', data)
+    context.update(data)
+    return render(request, 'school/home.html', context)
 
 
 @csrf.csrf_protect
@@ -150,30 +161,46 @@ def application_report_view(request, pid=None, is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
+    teammember=get_studentmessage(project)
+    pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+    fin_type = ("15000", "5000", "10000") if project.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
+    try:
+        innovation = pro_type.objects.get(project_id=project.project_id)
+    except Exception, err:
+        loginfo(p=err, label="get innovation")
+        loginfo(p=project.project_category.category, label="project category")
 
+    loginfo(p=teammember, label="in teammember")
     readonly = check_history_readonly(pid) or is_expired
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
+        imodel = PreSubmit
         pre = get_object_or_404(PreSubmit, project_id=pid)
         teacher_enterprise=None
         is_innovation = True
     else:
         iform = EnterpriseApplicationReportForm
+        imodel = PreSubmitEnterprise
         pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
+
+    isRedirect = False
+
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         info_form = InfoForm(request.POST, pid=pid,instance=project)
         application_form = iform(request.POST, instance=pre)
+        loginfo(p=application_form,label='test')
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+                    isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
@@ -187,6 +214,7 @@ def application_report_view(request, pid=None, is_expired=False):
                 if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
+                    isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
                 logger.info("Form Valid Failed"+"**"*10)
@@ -197,6 +225,7 @@ def application_report_view(request, pid=None, is_expired=False):
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)
+        isRedirect = True
 
     data = {'pid': pid,
             'info': info_form,
@@ -204,11 +233,60 @@ def application_report_view(request, pid=None, is_expired=False):
             'teacher_enterpriseform':teacher_enterpriseform,
             'readonly': readonly,
             'is_innovation':is_innovation,
-            'is_show':is_show
+            'is_show':is_show,
+            'project':project,
+            'teammember':teammember,
+            'pro_type':pro_type,
+            'fin_type':fin_type,
+            'innovation':innovation,
+            'isRedirect':isRedirect,
             }
 
     return render(request, 'school/application.html', data)
 
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER, STUDENT_USER)
+@only_user_required
+#@time_controller(phase=STATUS_MIDSUBMIT)
+#TODO add time controller
+def mid_report_view(request, pid = None, is_expired = False):
+    """
+    school mid report
+    Arguments:
+        In: id, it is project id
+    """
+    loginfo(p=pid+str(is_expired), label="in applicatioan")
+    try:
+        mid = get_object_or_404(MidSubmit, project_id=pid)
+    except:
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = ProjectSingle.objects.get(project_id = pid)
+        mid.save()
+
+    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    readonly = check_history_readonly(pid) or is_expired
+    if request.method == "POST" and readonly is not True:
+        role=check_is_audited(user=request.user,presubmit=mid,checkuser=SCHOOL_USER)
+        mid_form = MidReportForm(request.POST, instance=mid)
+        if mid_form.is_valid():
+            mid_form.save()
+            return HttpResponseRedirect(reverse('school.views.%s_view' % role))
+        else:
+            logger.info("Mid Form Valid Failed"+"**"*10)
+            logger.info(mid_form.errors)
+            logger.info("--"*10)
+    else:
+        mid_form = MidReportForm(instance=mid)
+
+    data = {'pid': pid,
+            'mid': mid_form,
+            'readonly': readonly,
+            'is_show':is_show,
+            }
+
+    return render(request, 'school/mid.html', data)
 
 @csrf.csrf_protect
 @login_required
@@ -285,6 +363,12 @@ def new_report_view(request, is_expired=False):
         pre.content_id = uuid.uuid4()
         pre.project_id = project
         pre.save()
+        
+        #create mid report
+        mid = MidSubmit()
+        mid.content_id = uuid.uuid4()
+        mid.project_id = project
+        mid.save()
 
         #create final report
         final = FinalSubmit()
@@ -305,11 +389,11 @@ def history_view(request):
     school history report list
     """
 
-    history_list = ProjectSingle.objects.filter(adminuser=request.user).exclude(year=get_current_year)
+    history_list = ProjectSingle.objects.filter(adminuser=request.user,is_over = True)
 
-    data = {"history_list": history_list}
-
-    return render(request, 'school/history.html', data)
+    page = request.GET.get('page')
+    context = getContext(history_list, page, 'item', 0)
+    return render(request, 'school/history.html', context)
 
 
 @csrf.csrf_protect
@@ -321,7 +405,8 @@ def file_view(request, pid=None, is_expired=False):
     """
     file management view
     """
-    readonly = check_history_readonly(pid) or is_expired
+    readonly = is_expired
+    print readonly
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
@@ -402,12 +487,16 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
 def Count_email_already_exist(request):
     school_staff = request.user
     school_profile = SchoolProfile.objects.get(userid = school_staff)
-    num = StudentProfile.objects.filter(school = school_profile).count()
+    num = StudentProfile.objects.filter(school = school_profile).filter(projectsingle__is_past = False).count()
     return num
 
 
 def school_limit_num(request):
-    limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    try:
+        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+    except:
+        school = SchoolProfile.objects.get(userid=request.user)
+        limits = ProjectPerLimits(school=school, number=0, a_cate_number=0)
     limit_num = limits.number
     return limit_num
 
@@ -427,7 +516,12 @@ def StudentDispatch(request):
         email_num = Count_email_already_exist(request)
         limited_num = school_limit_num(request)
         remaining_activation_times = limited_num-email_num
-        return render_to_response("school/dispatch.html",{'student_form':student_form, 'email_list':email_list,'remaining_activation_times':remaining_activation_times},context_instance=RequestContext(request))
+
+        page = request.GET.get('page')
+        context = getContext(email_list, page, 'item', 0)
+
+        context.update({'student_form':student_form,'remaining_activation_times':remaining_activation_times})
+        return render(request, "school/dispatch.html", context)
 
 def check_is_audited(user,presubmit,checkuser):
     if check_auth(user=user, authority=checkuser):
@@ -458,3 +552,19 @@ def current_list_add(list=None):
 def get_xls(request):
     file_path = info_xls(request)
     return redirect(MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):])
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def auto_index(request):
+    
+    project_set = get_current_project_query_set().filter(adminuser = request.user)
+    project_set = sorted(list(project_set), key = lambda x: (x.financial_category.category, x.project_code))
+    
+
+    for i in xrange(len(project_set)):
+        project_set[i].project_code = "%d%s000%03d" % (get_current_year(), request.user, i)
+        project_set[i].save()
+
+    return HttpResponseRedirect(reverse('school.views.home_view'))

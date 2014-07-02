@@ -5,10 +5,10 @@ function proj_cate_select_onchange(select)
 }
 
 function proj_cate_change_callback(data){
-  var error = $("#error_message");
+  var error = $("#student_home_error_message");
   error.empty();
+  error.show();
   error.append(data.message);
-  // alert(data.message);
 }
 function proj_insitute_select_onchange(select)
 {
@@ -17,8 +17,9 @@ function proj_insitute_select_onchange(select)
 }
 
 function proj_insitute_change_callback(data){
-  var error = $("#insitute_error_message");
+  var error = $("#student_home_error_message");
   error.empty();
+  error.show();
   error.append(data.message);
 
   // alert(data.message);

@@ -1,5 +1,8 @@
 
 input:
-{	
+{
 	background-color:white;
+}
+#num_limit_form select{
+    width:180px;
 }
