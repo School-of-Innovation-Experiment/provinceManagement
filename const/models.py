@@ -17,7 +17,7 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import PROJECT_INNOVATION_ORIGIN_CHOICES
-from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES, INSITUTE_CATEGORY_CHOICES, FINANCIAL_CATE_UN, FINANCIAL_CATE_CHOICES
+from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES, INSITUTE_CATEGORY_CHOICES, FINANCIAL_CATE_UN, FINANCIAL_CATE_CHOICES,PROJECT_RECOMMEND_CHOICES
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
@@ -188,3 +188,33 @@ class NewsCategory(models.Model):
 
     def __unicode__(self):
         return self.get_category_display()
+class ProjectRecommendStatus(models.Model):
+    status = models.CharField(max_length=50, blank=False, unique=True,
+                              choices=PROJECT_RECOMMEND_CHOICES,
+                              default=STATUS_FIRST,
+                              verbose_name="项目推荐状态")
+
+    class Meta:
+        verbose_name = "项目推荐状态"
+        verbose_name_plural = "项目推荐状态"
+
+    def __unicode__(self):
+        return self.get_status_display()
+
+class SchoolRecommendRate(models.Model):
+    """
+    """
+    rate = models.FloatField(default=0)
+    class Meta:
+        verbose_name = "项目结束状态"
+        verbose_name_plural = "项目结束状态"
+
+    def __unicode__(self):
+        return self.get_status_display()
+
+    @classmethod
+    def load(cls):
+        """
+        """
+        try: return cls.objects.get()
+        except: return cls()

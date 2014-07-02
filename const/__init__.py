@@ -102,6 +102,7 @@ INSITUTE_CATEGORY_CHOICES = (
     ("9", u"医学"),
     ("10", u"管理学"),
     ("11", u"艺术学"),
+    ("12", u"全部"),
 )
 
 #Project Review
@@ -119,6 +120,10 @@ PROJECT_STATUS_CHOICES = (
     (STATUS_FINREVIEW, u'结题评审'),
     (STATUS_ONGOING, u'正在进行'),
     (STATUS_FIRST, u'初始状态'),
+)
+
+PROJECT_RECOMMEND_CHOICES =(
+
 )
 
 
