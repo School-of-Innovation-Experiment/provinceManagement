@@ -13,7 +13,7 @@ from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm,
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
-from const.models import SchoolDict, NewsCategory, InsituteCategory
+from const.models import SchoolDict, NewsCategory, InsituteCategory, ProjectRecommendStatus
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -310,16 +310,32 @@ def ResetSchoolPassword(request, form):
 
 @dajaxice_register
 def first_round_recommend(request):
-    recommend_rate = SchoolRecommendRate.load().rate / 100.0
-    import math
-    result_set = []
-    for insitute in InsituteCategory.objects.all():
-        print insitute
-        category_project_list = get_current_project_query_set().exclude(school__schoolName=u"测试用学校").filter(Q(year = 2014) & Q(insitute_id = insitute))
-        recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
-        pending_list = []
-        for project in category_project_list:
-            score = sum(1 for item in Re_Project_Expert.objects.filter(project = project) if item.pass_p)
-            pending_list.append((score, project))
-        result_set.extend(pending_list[:recommend_num])
+    message = ""
+    try:
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_rate = recommend_obj.rate / 100.0
+        import math, random
+        result_set = []
+        for insitute in InsituteCategory.objects.all():
+            print insitute
+            category_project_list = get_current_project_query_set().exclude(school__schoolName=u"测试用学校").filter(Q(year = 2014) & Q(insitute_id = insitute))
+            recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
+            pending_list = []
+            for project in category_project_list:
+                score = sum(1 for item in Re_Project_Expert.objects.filter(project = project) if item.pass_p)
+                pending_list.append((score, project))
+            random.shuffle(pending_list)
+            pending_list.sort(reverse = True)
+            result_set.extend(pending_list[:recommend_num])
+        for item in result_set:
+            project = item[1]
+            #project.project_recommend_status = ProjectRecommendStatus(status = "初审通过")
+            #project.save()
+        
+        #recommend_obj.firstRoundFinished = True
+        #recommend_obj.save()
 
+        message = "ok"
+    except:
+        message = "fail"
+    return simplejson.dumps({"message": message, })

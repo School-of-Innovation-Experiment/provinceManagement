@@ -366,6 +366,9 @@ class AdminStaffService(object):
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         context.update({'subject_insitute_form':subject_insitute_form,'exist_message':exist_message,'readonly':readonly})
+
+        recommend_obj = SchoolRecommendRate.load()
+        context.update({"recommend_obj": recommend_obj, })
         return render(request, "adminStaff/subject_feedback.html", context)
 
     @staticmethod

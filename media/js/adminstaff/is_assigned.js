@@ -20,9 +20,18 @@ function is_assigned_callback(data){
 }
 
 function first_round_recommend(){
-    alert("here");
-    Dajaxice.adminStaff.first_round_recommend(first_round_callback, {});
+    if(confirm("请再次确定是否开始本届第一轮推荐分级？（请确认项目是否全部申报完成，专家帐号是否全部导入成功）")){
+        $("#excelprogress").modal();
+        Dajaxice.adminStaff.first_round_recommend(first_round_callback, {});
+    }
 }
 function first_round_callback(data){
-    
+    $("#excelprogress").modal("hide");
+    if(data.message = "ok"){
+        $("#id_first_round_finish").attr({"class": "btn btn-warning", "onclick": ""})
+        $("#id_first_round_finish").html("第一轮推荐分级已结束")
+        alert("初审分级成功");
+    }
+    else
+        alert("分级失败，请联系后台管理员");
 }
