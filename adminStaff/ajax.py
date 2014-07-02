@@ -13,11 +13,11 @@ from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm,
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
-from const.models import SchoolDict, NewsCategory
+from const.models import SchoolDict, NewsCategory, InsituteCategory
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory ,ProjectSingle
+from school.models import Project_Is_Assigned, ProjectSingle
 from users.models import SchoolProfile, ExpertProfile
 from news.models import News
 import datetime
@@ -307,3 +307,19 @@ def ResetSchoolPassword(request, form):
         return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
     else:
         return simplejson.dumps({'status':'1', 'message':u"密码不能为空"})
+
+@dajaxice_register
+def first_round_recommend(request):
+    recommend_rate = SchoolRecommendRate.load().rate / 100.0
+    import math
+    result_set = []
+    for insitute in InsituteCategory.objects.all():
+        print insitute
+        category_project_list = get_current_project_query_set().exclude(school__schoolName=u"测试用学校").filter(Q(year = 2014) & Q(insitute_id = insitute))
+        recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
+        pending_list = []
+        for project in category_project_list:
+            score = sum(1 for item in Re_Project_Expert.objects.filter(project = project) if item.pass_p)
+            pending_list.append((score, project))
+        result_set.extend(pending_list[:recommend_num])
+
