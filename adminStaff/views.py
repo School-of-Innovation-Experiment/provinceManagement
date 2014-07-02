@@ -450,7 +450,8 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def RecommendRatingSetting(request):
-        context = {}
+        recommend_rate_obj = SchoolRecommendRate.load()
+        context = {"recommend_rate": recommend_rate_obj,}
         return render(request, "adminStaff/rating_setting.html", context)
     @staticmethod
     @csrf.csrf_protect

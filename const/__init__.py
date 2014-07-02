@@ -123,7 +123,9 @@ PROJECT_STATUS_CHOICES = (
 )
 
 PROJECT_RECOMMEND_CHOICES =(
-
+    ("0", u"未通过"),
+    ("1", u"初审通过"),
+    ("2", u"终审通过"),
 )
 
 
@@ -160,6 +162,7 @@ MESSAGE_SCHOOL_HEAD = '__school__'
 
 # download file size
 DOWNLOAD_BUF_SIZE=262144
+
 
 MEMBER_NUM_LIMIT = {
     CATE_INNOVATION: 5,
