@@ -51,7 +51,7 @@ def home_view(request):
     expert home management page
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
-    re_project = Re_Project_Expert.objects.filter(expert=expert)
+    re_project = Re_Project_Expert.objects.filter(expert=expert).order_by("project__financial_category")
     rate = SchoolRecommendRate.load().rate
     project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
     limitnum = int(math.ceil(project_listA.count()*rate/100))
