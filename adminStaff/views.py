@@ -445,8 +445,13 @@ class AdminStaffService(object):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
         subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         subject_obj.save()
-
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def RecommendRatingSetting(request):
+        context = {}
+        return render(request, "adminStaff/rating_setting.html", context)
     @staticmethod
     @csrf.csrf_protect
     @login_required

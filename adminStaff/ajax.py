@@ -279,7 +279,20 @@ def refresh_to_table(page,school_name):
     subject_list = get_current_project_query_set().filter(school = school_name)
     context = getContext(subject_list, page, 'item', 0) 
     context.update({"school_name": school_name})
-    return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
+    return render_to_string("adminStaff/widgets/subjectrating_table.html", context)   
+@dajaxice_register
+def set_recommend_rate(request, set_val):
+    message = ""
+    try:
+        set_val = float(set_val)
+        if set_val < 0 or set_val > 100: raise
+    except:
+        message = "wrong input"
+        return simplejson.dumps({'message': message})
+    recommend_rate_obj = SchoolRecommendRate.load()
+    recommend_rate_obj.rate = set_val
+    recommend_rate_obj.save()
+    return simplejson.dumps({'message': message, 'set_val': str(set_val)})
 
 @dajaxice_register
 def ResetSchoolPassword(request, form):

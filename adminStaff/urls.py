@@ -32,6 +32,7 @@ urlpatterns = patterns('',
                         AdminStaffService.NoticeMessageSetting),
     (r'^news_release$',AdminStaffService.NewsRelease),
     (r'^ImportExpert$',AdminStaffService.ImportExpert),
+    (r'^RecommendRatingSetting', AdminStaffService.RecommendRatingSetting),
     # url(
     #     r'get_xls/$',
     #     AdminStaffService.get_xls_path,
