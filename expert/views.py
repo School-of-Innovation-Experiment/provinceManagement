@@ -73,7 +73,8 @@ def home_view(request):
             'remaining': remaining,
             'limitnum_b': limitnum_b,
             'really_b': really_b,
-            'remaining_b': remaining_b}
+            'remaining_b': remaining_b,
+            'page':page}
     context.update(data)
     return render(request, 'expert/home.html', context)
 
@@ -110,7 +111,6 @@ def review_report_view(request, pid=None):
             review_form.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
         else:
-            #loginfo(p = review_form.errors)
             return HttpResponseRedirect(reverse('expert.views.home_view'))
     else:
         review_form = ReviewForm(instance=re_project)
@@ -124,6 +124,7 @@ def review_report_view(request, pid=None):
             "review": review_form,
             "doc_list": doc_list,
             'teacher_enterpriseform':teacher_enterpriseform,
+            'page':page,
             }
 
     return render(request, 'expert/review.html', data)
@@ -140,6 +141,7 @@ def review_report_pass_p(request, pid, pass_p):
         pass_p = 0
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
+    page = request.GET.get('page')
 
     proj_single = ProjectSingle.objects.get(project_id = pid)
     rate = SchoolRecommendRate.load().rate
@@ -156,8 +158,8 @@ def review_report_pass_p(request, pid, pass_p):
     else:
         proj.pass_p = False
     proj.save()
-    return HttpResponseRedirect(reverse('expert.views.home_view'))
-
+    url_str= '/expert/?page=%s'% page
+    return HttpResponseRedirect(url_str)
 BUF_SIZE = 262144
 def download_view(request, file_id=None):
     """
@@ -174,6 +176,6 @@ def download_view(request, file_id=None):
         f.close()
     doc = UploadedFiles.objects.get(file_id = file_id)
     doc_path = doc.file_obj.path
-    response = HttpResponse(read_file(doc_path), content_type='application/vnd.ms-excel')  
+    response = HttpResponse(read_file(doc_path), content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(doc_path).encode("UTF-8")
     return response

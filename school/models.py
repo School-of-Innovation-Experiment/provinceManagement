@@ -72,7 +72,6 @@ class ProjectSingle(models.Model):
     project_recommend_status = models.ForeignKey(ProjectRecommendStatus, verbose_name=u"项目推荐状态",
                                        blank=True, null=True,
                                        default=None)
-   
     class Meta:
         verbose_name = u"参赛项目"
         verbose_name_plural = u"参赛项目"
