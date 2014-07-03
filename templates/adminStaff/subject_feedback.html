@@ -5,6 +5,9 @@
     <b>
       <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
         {% csrf_token %}
+        <button class="btn btn-primary" onclick="first_round_recommend();">第一轮推荐分级</button>
+        <button class="btn btn-primary">第二轮推荐分级</button>
+
         <div class="alert alert-info">
 	  <a class="close" data-dismiss="alert">×</a>
 	  <strong>注意:</strong>指定专家审阅是针对所选学科，一旦指定，本期创新创业训练不可更改指定专家，只可进行筛选。
@@ -22,8 +25,6 @@
         {%endif%}
         {{exist_message}}
       </form><!--end category form -->
-      <button class="btn btn-primary" onclick="first_round_recommend();">第一轮推荐分级</button>
-      <button class="btn btn-primary">第二轮推荐分级</button>
       <div id="subjectalloc_table">
         {% include "adminStaff/widgets/subjectalloc_table.html" %}
       </div>

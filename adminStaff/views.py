@@ -80,6 +80,7 @@ class AdminStaffService(object):
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
             dict["first_name"] = register.userid.first_name
+            dict["category"] = register.subject
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__() + ' '
             res_list.append(dict)
