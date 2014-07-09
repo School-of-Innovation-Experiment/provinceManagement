@@ -169,7 +169,7 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
-EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
