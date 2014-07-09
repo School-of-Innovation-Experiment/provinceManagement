@@ -471,9 +471,11 @@ def get_schooluser_project_modify_status(project):
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
+    check_flagtofile(project)
     for filetemp in uploadfiles:
         if filetemp.name == u"申报书":
-            project.fileurl_application = filetemp.file_obj.url 
+            project.fileid_application = filetemp.file_id
+            project.applicationfilename = project.project_unique_code + project.title + u"申报书"
         elif filetemp.name == u"中期检查表":
             project.fileurl_interimchecklist = filetemp.file_obj.url
         elif filetemp.name == u"结题验收表":
@@ -482,6 +484,37 @@ def add_fileurl(project):
             project.fileurl_projectcompilation = filetemp.file_obj.url
         elif filetemp.name == u"开题报告":
             project.fileurl_opencheck = filetemp.file_obj.url
+
+def check_flagtofile(project):
+    """
+    检查文件上传标志与存在的文件是否对应
+    """
+    if project.file_application:
+        if not check_flieexistflag(project,u"申报书"):
+            project.file_application = False
+    if project.file_opencheck:
+        if not check_flieexistflag(project,u"开题报告"):
+            project.file_opencheck = False
+    if project.file_interimchecklist:
+        if not  check_flieexistflag(project,u"中期检查表"):
+            project.file_interimchecklist = False
+    if project.file_summary:		
+        if not check_flieexistflag(project,u"结题验收表"):
+            project.file_summary = False
+    if project.file_projectcompilation:
+        if not check_flieexistflag(project,u"项目汇编"):
+            project.file_projectcompilation = False
+    project.save()
+
+def check_flieexistflag(project,filekeyname):
+	"""
+	文件存在返回 True ,不存在返回False
+	"""
+	uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
+	if len(uploadfiles) == 0:
+		return False
+	else:
+		return True
 
 class error_flag(object):
     """
@@ -636,3 +669,20 @@ def get_studentmessage(project):
                 memberlist.append(member)
         teammember['othermember']=','.join(memberlist)
     return teammember
+def get_student_member(project):
+    student_group = Student_Group.objects.filter(project = project)
+    return ','.join([student.studentName for student in student_group])
+def get_opencheck_readonly(request,project):
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = project.is_past
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = project.is_past
+    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user = request.user, authority = SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    elif check_auth(user = request.user, authority = EXPERT_USER):
+        readonly = False
+    else:
+        readonly = False
+    return readonly

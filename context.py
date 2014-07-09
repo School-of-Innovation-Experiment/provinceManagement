@@ -13,7 +13,7 @@ from users.models import *
 from django.db.models import Q
 from backend.logging import loginfo
 from adminStaff.models import NoticeMessage, ProjectControl
-from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD,IS_DLUT_SCHOOL,IS_MINZU_SCHOOL
+from const import MESSAGE_EXPERT_HEAD, MESSAGE_SCHOOL_HEAD ,MESSAGE_STUDENT_HEAD,IS_DLUT_SCHOOL,IS_MINZU_SCHOOL,SCHOOL_NAME,SCHOOL_NAME_ENGLISH
 
 all_required = ('WEB_TITLE',)
 
@@ -38,7 +38,9 @@ def userauth_settings(request):
                 "is_experter": False,
                 "is_teacher": False,
                 "is_student": False,
+                "notice_message": "",
                 }
+
 
     if check_auth(user=request.user, authority=SCHOOL_USER):
         userauth["is_schooler"] = True
@@ -113,15 +115,20 @@ def userauth_settings(request):
     if userauth["is_adminstaff"]:
         userauth["notice_message"] = ""
 
-    context = {"userauth": userauth}
-    if IS_DLUT_SCHOOL:
-        context["IS_DLUT_SCHOOL"] = True
-    else:
-        context["IS_DLUT_SCHOOL"] = False
-    if IS_MINZU_SCHOOL:
-        context["IS_MINZU_SCHOOL"] = True
-    else:
-        context["IS_MINZU_SCHOOL"] = False
+    # notice_message = userauth["notice_message"]
+    context = {"userauth": userauth,
+               "notice_message": userauth["notice_message"],
+    }
+
+
+    # print "KKIOIOIO " + str(context['notice_message'])
+
+
+    context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
+    context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
+    context["IS_SCHOOL_BASIC"] = IS_SCHOOL_BASIC
+    context["SCHOOL_NAME"] = SCHOOL_NAME
+    context["SCHOOL_NAME_ENGLISH"] = SCHOOL_NAME_ENGLISH
     return context
 
 def notice_message_settings(request):

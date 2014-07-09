@@ -1,46 +1,48 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
-<h3>
-  项目列表
-</h3>
-<form id="project_manage_form" method="POST" action="/adminStaff/processrecord" >
-  {% csrf_token %}
-  {{project_manage_form.project_grade}}
-  {{project_manage_form.project_year}}
-  {{project_manage_form.project_overstatus}}
-  {{project_manage_form.project_scoreapplication}}
-  {{project_manage_form.project_school}}
-  <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button">检索</button>
-</form>
-{% if havedata_p %}
-<div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
+<div class="well form">
+  <h3>
+    项目列表
+  </h3>
+  <form id="project_manage_form" method="POST" action="/adminStaff/processrecord" >
+    {% csrf_token %}
+    {{project_manage_form.project_grade}}
+    {{project_manage_form.project_year}}
+    {{project_manage_form.project_overstatus}}
+    {{project_manage_form.project_scoreapplication}}
+    {{project_manage_form.project_school}}
+    <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button">检索</button>
+  </form>
+  {% if havedata_p %}
+  <div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
           <th>项目编号</th>
           <th>名称</th>
           <th>项目级别</th>
           <th>指导教师</th>
           <th>过程记录</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in pro_list%}
-      <tr>
-        <td>{{item.project_unique_code}}</td>
-        <td>{{item.title|truncatechars:15}}</td>
-        <td>{{item.project_grade}}</td>
-        <td>{{item.adminuser.get_name}}</td>
-        <td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in pro_list%}
+        <tr>
+          <td>{{item.project_unique_code}}</td>
+          <td>{{item.title|truncatechars:15}}</td>
+          <td>{{item.project_grade}}</td>
+          <td>{{item.adminuser.get_name}}</td>
+          <td>
             <span><a href="/adminStaff/processrecord_view/{{item.project_id}}" class='btn btn-primary'>过程记录管理</a></span>
-        </td>
-      </tr>
-      {%endfor%}
-    </tbody>
-  </table>
+          </td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  目前没有正在进行的项目
+  {% endif %}
 </div>
-{% else %}
-目前没有正在进行的项目
-{% endif %}
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}

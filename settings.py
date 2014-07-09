@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     #Project
     'registration',
+    'teacher',
     'users',
     'const',
     'expert',
@@ -143,7 +144,6 @@ INSTALLED_APPS = (
     'adminStaff',
     'news',
     'showtime',
-    'teacher',
     'student',
     #Add-on
     'south',
@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'dajax',
     'chartit',
 )
+
 
 #Add support  to user profile
 ACCOUNT_ACTIVATION_DAYS = 30
@@ -175,6 +176,19 @@ EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
 EMAIL_HOST_PASSWORD = '9683096830'
 DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
 EMAIL_USE_TLS = False
+
+
+
+
+
+# EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+# SERVER_EMAIL = "757289247@qq.com"
+# EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+# EMAIL_HOST = 'smtp.qq.com'
+# EMAIL_PORT = '465'
+# EMAIL_HOST_USER = '757289247@qq.com'
+# EMAIL_HOST_PASSWORD = ''
+# DEFAULT_FROM_EMAIL = '757289247@qq.com'
 
 
 #########################
@@ -258,8 +272,8 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 #school information
 IS_MINZU_SCHOOL = False
 IS_DLUT_SCHOOL = True
+IS_SCHOOL_BASIC = False
 
 # RPC_SITE
-RPC_SITE_TEST = "http://202.118.67.200:9003/rpc/"
 RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"
-RPC_SITE = RPC_SITE_TEST
+RPC_SITE = RPC_SITE_PRODUCTION

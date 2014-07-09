@@ -3,15 +3,19 @@
 import os
 import sys
 import xlwt
+import mimetypes
 
 from const import *
 
 from django.contrib.auth.models import User
+from django.core.servers.basehttp import FileWrapper  
+from django.http import HttpResponse, Http404
 from student.models import Student_Group
 from school.models import *
 from users.models import *
 from backend.decorators import check_auth
 
+from school.utility import get_current_project_query_set
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 from const import *
@@ -279,7 +283,6 @@ def info_xls_summaryentrepreneuship(request):
             xls_obj.write(row, 3, unicode(student.classInfo)) 
         if row_project_start > row :
             row = row_project_start
-            
         xls_obj.write_merge(row_project_start,row,0,0,unicode(number),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.project_category),style)
@@ -288,7 +291,7 @@ def info_xls_summaryentrepreneuship(request):
         xls_obj.write_merge(row_project_start,row,8,8,unicode(teacher_enterprise.name),style)
         xls_obj.write_merge(row_project_start,row,9,9,unicode(teacher_enterprise.jobs)+'/'+unicode(teacher_enterprise.titles),style)
         xls_obj.write_merge(row_project_start,row,10,13)
-        # _index += 1  
+        # _index += 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创业训练项目汇总表"))
     workbook.save(save_path)
@@ -416,31 +419,35 @@ def info_xls_projectsummary(request):
     _number= 1
     for proj_obj in proj_set:
         teammember = get_manager(proj_obj)
-        try:
-            pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
-            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
-            loginfo(p=proj_obj.school.school,label="school")
-            row = 4 + _number
-            xls_obj.write(row, 0, "%s" % _format_number(_number))
-            xls_obj.write(row, 1, unicode(proj_obj.school.school))
-            xls_obj.write(row, 2, unicode(proj_obj.project_unique_code))
-            xls_obj.write(row, 3, unicode(proj_obj.title))
-            xls_obj.write(row, 4, unicode(proj_obj.project_grade))
-            xls_obj.write(row, 5, unicode(proj_obj.project_category))
-            xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
-            xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
-            xls_obj.write(row, 8, unicode(teammember['count'])) # 学生人数
-            xls_obj.write(row, 9, unicode(teammember['memberlist'])) # 项目其他成员
-            xls_obj.write(row, 10, unicode(proj_obj.adminuser.get_name()))
-            xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
-            xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
-            xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
-            xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
-            # _index += 1
-            _number+= 1
-        except:
-            pass
+        pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+        loginfo(p=proj_obj.title, label="project category") 
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
+
+        row = 4 + _number
+        xls_obj.write(row, 0, "%s" % _format_number(_number))
+        xls_obj.write(row, 1, unicode(proj_obj.school.school))
+        loginfo(p=proj_obj.school.school,label="school")
+        xls_obj.write(row, 2, unicode(proj_obj.project_unique_code))
+        xls_obj.write(row, 3, unicode(proj_obj.title))
+        xls_obj.write(row, 4, unicode(proj_obj.project_grade))
+        xls_obj.write(row, 5, unicode(proj_obj.project_category))
+        xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 8, unicode(teammember['count'])) # 学生人数
+        xls_obj.write(row, 9, unicode(teammember['memberlist'])) # 项目其他成员
+        xls_obj.write(row, 10, unicode(proj_obj.adminuser.get_name()))
+        xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
+        xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
+        xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
+        xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+
+        # _index += 1
+        _number+= 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新创业训练计划项目信息汇总表"))
     workbook.save(save_path)
@@ -482,8 +489,29 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set = ProjectSingle.objects.all()
+        proj_set =  get_current_project_query_set()
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
-        proj_set = ProjectSingle.objects.filter(school_id=school)
+        proj_set = get_current_project_query_set().filter(school_id=school)
     return proj_set
+def file_download_gen(request,fileid = None,filename = None):
+    """
+    按照前台的文件名，在下载文件时对文件名进行修改，不改变存储文件的名称
+    """
+    try:
+        uploadfile = UploadedFiles.objects.get(file_id = fileid)
+        currenturl = os.path.dirname(os.path.abspath('__file__'))
+        fileurl = str(uploadfile.file_obj)
+        filepath = currenturl+'/media/'+fileurl
+        filename =  filename.encode('gb2312') 
+        wrapper = FileWrapper(open(filepath,'rb'))
+    except UploadedFiles.DoesNotExist,err:
+        loginfo(p = err , label = "err")
+        raise Http404
+
+    filetype = "." + uploadfile.file_type
+    content_type = mimetypes.guess_type(filepath)[0]  
+    loginfo(p=content_type,label = "content_type")
+    response = HttpResponse(wrapper, mimetype='content_type')  
+    response['Content-Disposition'] = "attachment; filename= %s%s" % (filename,str(filetype))
+    return response

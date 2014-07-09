@@ -7,7 +7,7 @@ Created on 2013-03-27
 Desc: const defination
 '''
 
-from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL, IS_SCHOOL_BASIC
 
 UNDIFINED = "undifined"
 
@@ -155,11 +155,11 @@ MESSAGE_STUDENT_HEAD = '__student__'
 MESSAGE_TEACHER_HEAD = '__teacher__'
 MESSAGE_ALL_HEAD     = '__allmess__'
 MESSAGE_ROLE_CHOICES =(
-    ('1',u"专家"),
-    ('2',u"学院"),
-    ('3',u"学生"),
-    ('4',u"教师"),
-    ('5',u"全部"),
+    ('1',u"专家",MESSAGE_EXPERT_HEAD),
+    ('2',u"学院",MESSAGE_SCHOOL_HEAD),
+    ('3',u"学生", MESSAGE_STUDENT_HEAD),
+    ('4',u"教师", MESSAGE_TEACHER_HEAD),
+    ('5',u"全部", MESSAGE_ALL_HEAD),
 )
 # APP student
 DEFAULT_NATION = u"汉族"
@@ -319,10 +319,15 @@ MINZU_MAJOR_CHOICES = (
 
 if IS_MINZU_SCHOOL: MAJOR_CHOICES = MINZU_MAJOR_CHOICES
 if IS_DLUT_SCHOOL: MAJOR_CHOICES = DLUT_MAJOR_CHOICES
+if IS_SCHOOL_BASIC: MAJOR_CHOICES = DLUT_MAJOR_CHOICES
 DLUT_SCHOOL_NAME = u"大连理工大学"
 MINZU_SCHOOL_NAME = u"大连民族大学"
 if IS_MINZU_SCHOOL: SCHOOL_NAME = MINZU_SCHOOL_NAME
 if IS_DLUT_SCHOOL: SCHOOL_NAME = DLUT_SCHOOL_NAME
+DLUT_SCHOOL_NAME_ENGLISH = u"Dalian University of Technology"
+MINZU_SCHOOL_NAME_ENGLISH = u"Dalian Nationalities University"
+if IS_MINZU_SCHOOL: SCHOOL_NAME_ENGLISH = MINZU_SCHOOL_NAME_ENGLISH
+if IS_DLUT_SCHOOL: SCHOOL_NAME_ENGLISH = DLUT_SCHOOL_NAME_ENGLISH
 
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {
@@ -344,6 +349,8 @@ PROGRESS_RECORD_MAX = 20
 # school code
 if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code
 elif IS_DLUT_SCHOOL: DUT_code = "10141"
+else:
+    DUT_code = "10141"
 # DUT_code = "10141"
 
 EXCEL_TYPE_BASEINFORMATION = "baseinformation"

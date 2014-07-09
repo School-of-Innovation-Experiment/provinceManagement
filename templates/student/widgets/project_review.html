@@ -19,7 +19,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{project.project_code}}</td>
+                  <td>{{project.project_unique_code}}</td>
                   <td>{{project.title}}</td>
                   <td>{{project.financial_category}}</td>
                   <td>{{project.project_category}}</td>
@@ -31,7 +31,8 @@
                   <td>{{project.adminuser.titles}}</td>
 				  <td>{{project.funds_total}}</td>
                   <td>{{project.school.school}}</td>
-                  <td class="span4">{{innovation.innovation}}</td>
+                  {{ unco}}
+                  <td class="span4">{#innovation.innovation#}</td>
                 </tr>
               </tbody>
             </table>

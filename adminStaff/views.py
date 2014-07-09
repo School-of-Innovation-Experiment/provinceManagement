@@ -98,7 +98,7 @@ class AdminStaffService(object):
 
         if not AdminStaffService.AuthUserExist(email, identity, **kwargs):
             # if kwargs.has_key('school_name'):
-            #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
+           #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
             # elif kwargs.has_key('expert_user'):
             #     RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
             # elif kwargs.has_key('teacher_school'):
@@ -603,7 +603,7 @@ class AdminStaffService(object):
                     break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
-                message = NoticeMessage(noticemessage = _message)
+                message = NoticeMessage(noticemessage = _message)                
                 message.save()
         templatenotice_group_form = forms.TemplateNoticeForm()
         templatenotice_group = TemplateNoticeMessage.objects.all()
@@ -668,6 +668,13 @@ class AdminStaffService(object):
                     {
 
                     })
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def file_download(request,fileid = None,filename = None):
+        response = file_download_gen(request,fileid,filename)
+        return response
 
     @staticmethod
     @csrf.csrf_protect
@@ -693,11 +700,10 @@ class AdminStaffService(object):
     def home_view(request):
         context = AdminStaffService.projectListInfor(request)
         for pro_obj in context["pro_list"]:
+            add_fileurl(pro_obj)
+            add_telephone(pro_obj)
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
-            add_fileurl(pro_obj)
-        context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
-        context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
         return render(request, "adminStaff/adminstaff_home.html",context)
     @staticmethod
     @csrf.csrf_protect

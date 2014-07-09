@@ -53,6 +53,7 @@ from school.forms import InfoForm, ApplicationReportForm, FinalReportForm,Enterp
 from student.forms import StudentGroupForm, StudentGroupInfoForm,ProcessRecordForm
 from student.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
 from adminStaff.views import member_change_work
+from adminStaff.utility import file_download_gen
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
@@ -87,7 +88,7 @@ def mid_report_view(request, pid = None):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def application_report_view(request, pid=None):        
+def application_report_view(request, pid=None):
     data = application_report_view_work(request, pid)
     return render(request, 'school/application.html', data)
 
@@ -96,8 +97,6 @@ def application_report_view(request, pid=None):
 @authority_required(SCHOOL_USER)
 def home_view(request):
     context = projectListInfor(request)
-    context["IS_MINZU_SCHOOL"] = IS_MINZU_SCHOOL
-    context["IS_DLUT_SCHOOL"] = IS_DLUT_SCHOOL
     context["pro_list"] = is_showoverstatus(context["pro_list"])#添加是否显示结题的属性以及文件下载链接
     return render(request, "school/school_home.html",context)
 
@@ -382,3 +381,9 @@ def project_informationexport(request):
                 {
 
                 })
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def file_download(request,fileid = None,filename = None):
+    response = file_download_gen(request,fileid,filename)
+    return response

@@ -95,31 +95,21 @@ def read_news(request, news_id):
 
     html = 'home/news-content.html' if IS_MINZU_SCHOOL else 'home/news-content-new.html'
     return render(request, html, context)
-def list_news_by_cate_document(request):
-    news_cate = "文件下载"
-    news_cate_small = "documents"
-    try:
-        news_list = News.objects.exclude(news_document=u'').order_by('-news_date')
-    except:
-        raise Http404
-    news_page = request.GET.get('news_page')
-    context = getContext(news_list, news_page, 'docs')
-    context["news_cate"] = news_cate
-    context["news_cate_small"] = news_cate_small
-    return render(request, 'home/news-list-by-cate-documents.html', \
-                  Context(context))
 
 def list_news_by_cate(request, news_cate):
-    if news_cate == NEWS_CATEGORY_DOCUMENTS:
-        return list_news_by_cate_document(request)
     try:
-        news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
-        news_cate = NewsCategory.objects.get(category=news_cate)
+        if news_cate == NEWS_CATEGORY_DOCUMENTS:
+            news_list = News.objects.exclude(news_document=u'').order_by('-news_date')
+        else:
+            news_list = News.objects.filter(news_category__category=news_cate).order_by('-news_date')
+            news_cate = NewsCategory.objects.get(category=news_cate)
     except:
         raise Http404
     news_page = request.GET.get('news_page')
     context = getContext(news_list, news_page, 'news')
-    context["news_cate"] = news_cate
+    if not news_cate == NEWS_CATEGORY_DOCUMENTS:
+        context["news_cate"] = news_cate
+        context['%s_active' % news_cate.category] = 'active'
     return render(request, 'home/news-list-by-cate.html', \
                   Context(context))
 
