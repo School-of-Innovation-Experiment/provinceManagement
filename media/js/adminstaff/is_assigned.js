@@ -35,3 +35,21 @@ function first_round_callback(data){
     else
         alert("分级失败，请联系后台管理员");
 }
+
+function second_round_start(data){
+    if(confirm("请再次确定是否开始本届第二轮分配？（请确认第一轮推荐分级是否结束，第二轮专家帐号是否全部导入成功）")){
+        $("#excelprogress").modal();
+        Dajaxice.adminStaff.second_round_start(second_round_start_callback, {});
+    }
+}
+function second_round_start_callback(data){
+    $("#excelprogress").modal("hide");
+    if(data.message = "ok"){
+        $("#id_second_round_start").attr({"class": "btn btn-warning", "onclick": ""})
+        $("#id_second_round_start").html("第二轮分配已结束")
+        alert("初审分级成功");
+    }
+    else
+        alert("分级失败，请联系后台管理员");
+
+}

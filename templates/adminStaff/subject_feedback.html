@@ -8,8 +8,8 @@
         {% else %}
         <button class="btn btn-warning">第一轮推荐分级已结束</button>
         {% endif %}
-        {% if not recommend_obj.firstRoundStart %}
-         <button id="id_second_round_start" class="btn btn-primary">第二轮分配</button>
+        {% if not recommend_obj.secondRoundStart %}
+         <button id="id_second_round_start" class="btn btn-primary" onclick="second_round_start();">第二轮分配</button>
         {% else %}
         <button class="btn btn-warning">第二轮分配已结束</button>
         {% endif %}

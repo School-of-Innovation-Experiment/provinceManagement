@@ -323,9 +323,7 @@ def first_round_recommend(request):
         result_set = []
         project_list = get_current_project_query_set().exclude(exclude_query_set).filter(year = current_year)
         for insitute in InsituteCategory.objects.all():
-            print insitute
             category_project_list = project_list.filter(insitute_id = insitute)
-            print len(category_project_list)
             recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
             pending_list = []
             for project in category_project_list:
@@ -344,4 +342,25 @@ def first_round_recommend(request):
         message = "ok"
     except:
         message = "fail"
+    return simplejson.dumps({"message": message, })
+
+@dajaxice_register
+def second_round_start(request):
+    message = ''
+    try:
+        expert_group = ExpertProfile.objects.filter(subject__category = "12")
+        # category="12"为所有学科标为“全部”的专家
+        project_list = list(get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_FIRST_ROUND_PASSED))
+        for i, expert in enumerate(expert_group):
+            group_id = i / 3
+            for project in project_list[group_id::5]:
+                re_project_expert = Re_Project_Expert(project = project, expert = expert)
+                re_project_expert.save()
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_obj.secondRoundStart = True
+        recommend_obj.save()
+        message = "ok"
+    except:
+        message = "fail"
+
     return simplejson.dumps({"message": message, })
