@@ -314,11 +314,18 @@ def first_round_recommend(request):
     try:
         recommend_obj = SchoolRecommendRate.load()
         recommend_rate = recommend_obj.rate / 100.0
-        import math, random
+        
+        exclude_schools = [u"东北大学", u"大连理工大学", u"大连海事大学", u"大连民族大学",]
+        exclude_query_set = reduce(lambda x, y: x | y, [Q(school__schoolName = name) for name in exclude_schools])
+        
+        import math, random, datetime
+        current_year = datetime.datetime.now().year
         result_set = []
+        project_list = get_current_project_query_set().exclude(exclude_query_set).filter(year = current_year)
         for insitute in InsituteCategory.objects.all():
             print insitute
-            category_project_list = get_current_project_query_set().exclude(school__schoolName=u"测试用学校").filter(Q(year = 2014) & Q(insitute_id = insitute))
+            category_project_list = project_list.filter(insitute_id = insitute)
+            print len(category_project_list)
             recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
             pending_list = []
             for project in category_project_list:
