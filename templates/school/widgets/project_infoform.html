@@ -1,10 +1,7 @@
     <!--Project Basic Infomation-->
     <!--Basic Infomation-->
-{% if userauth.is_experter %}
-<div class="tab-pane active" id="project_infoform">
-{% else %}
+
 <div class="tab-pane" id="project_infoform">
-{% endif %}
    <div class="row-fluid show-grid">
       <div class="span4">
          <div class="control-group {% if info.title.errors %}error{% endif %}">
@@ -90,6 +87,7 @@
           {% endif %}
         </div><!--end insitute-->
         <hr class="school-display"/>
+        {% if not userauth.is_experter%}
         <div class="control-group {% if info.inspector.errors %}error{% endif %}">
           <label class="school-display"><i class="icon-user"></i>{{info.inspector.label}}</span></label>
           {{info.inspector}}
@@ -111,6 +109,7 @@
           </div>
           {% endif %}
         </div><!--end inspector-->
+        {% endif %}
       </div>
    </div>
 </div>

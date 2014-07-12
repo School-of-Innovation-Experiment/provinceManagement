@@ -1,4 +1,9 @@
+{% if userauth.is_experter %}
+<div class="tab-pane active" id="project_brief">
+{% else %}
+
 <div class="tab-pane" id="project_brief">
+{% endif%}
   {% if is_innovation %}
   <fieldset>
     <legend>项目来源</legend>

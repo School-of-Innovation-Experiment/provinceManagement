@@ -25,10 +25,12 @@
       <!-- </li> -->
     </ul><!--end ul title-->
     <div class="tab-content">
+      {% comment %}
       {% include "school/widgets/project_infoform.html" %} 
+      {% endcomment %}
+      {% include "school/widgets/project_brief.html" %}
       {% include "school/widgets/teacher_enterprise.html" %}
       <!--Application Infomation-->
-      {% include "school/widgets/project_brief.html" %}
       <!--Application Infomation-->
       {% include "school/widgets/project_plan.html" %}
       <!--Comments info-->
