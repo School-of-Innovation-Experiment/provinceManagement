@@ -56,7 +56,6 @@
         <th>名称</th>
         <th>项目类型</th>
         <th>项目类别</th>
-        <th>参赛学校</th>
         <th>评审状态</th>
         <th>审核结果</th>
         <th>操作</th>
@@ -71,7 +70,6 @@
         <td title="{{item.project}}">{{item.project.title|truncatechars:15}}</td>
         <td>{{item.project.project_category}}</td>
         <td>{{item.financial_category}}</td>
-        <td>{{item.project.school}}</td>
         <td>
           {% if item.comments != None and item.comments != "" %}
             已审核
