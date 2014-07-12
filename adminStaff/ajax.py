@@ -351,11 +351,19 @@ def second_round_start(request):
         expert_group = ExpertProfile.objects.filter(subject__category = "12")
         # category="12"为所有学科标为“全部”的专家
         project_list = list(get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_FIRST_ROUND_PASSED))
+        
+        score_project_set = {0:[], 1:[], 2:[], 3:[]}
+        for project in project_list:
+            score = Re_Project_Expert.objects.filter(project = project).filter(pass_p = True).count()
+            score_project_set[score].append(project)
+        
+        print [len(score_project_set[i]) for i in xrange(4)]
         for i, expert in enumerate(expert_group):
             group_id = i / 3
-            for project in project_list[group_id::5]:
-                re_project_expert = Re_Project_Expert(project = project, expert = expert)
-                re_project_expert.save()
+            for cnt in xrange(4):
+                for project in score_project_set[cnt][group_id::5]:
+                    re_project_expert = Re_Project_Expert(project = project, expert = expert)
+                    re_project_expert.save()
         recommend_obj = SchoolRecommendRate.load()
         recommend_obj.secondRoundStart = True
         recommend_obj.save()
