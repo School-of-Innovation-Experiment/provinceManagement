@@ -28,6 +28,12 @@
       <span class="label label-info">国家级项目数量上限:{{limitnum}}</span>
       <span class="label label-info">已通过国家级项目数量:{{really}}</span>
       <span class="label label-important">国家级项目剩余数量:{{remaining}}</span>
+      <br>
+      初审项目投票数
+      <span class="label label-info">初审为3票项目数:{{score_pro.3}}</span>
+      <span class="label label-info">初审为2票项目数:{{score_pro.2}}</span>
+      <span class="label label-info">初审为1票项目数:{{score_pro.1}}</span>
+      <span class="label label-info">初审为0票项目数:{{score_pro.0}}</span>
     </h4>
     {% else %}
     <h4>
@@ -53,8 +59,10 @@
         <th>参赛学校</th>
         <th>评审状态</th>
         <th>审核结果</th>
-        <!-- <th>评分</th> -->
         <th>操作</th>
+        {% if is_expert_all %}
+        <th>初审结果</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -71,13 +79,25 @@
             未评审
           {%endif%}
         </td>
-        <td>{{item.pass_p}}</td>
+        {% if item.comments != None and item.comments != "" %}
+          {% if item.pass_p%}
+             <td style="color:blue">
+          {% else %}
+             <td style="color:red">
+          {% endif %}
+        {% else %}
+        <td>
+        {% endif%}
+          {{item.pass_pstr}}</td>
         <!-- <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td> -->
         <td>
           <span><a href="/expert/review/{{item.project.project_id}}?page={{page}}" class='btn btn-primary'>审阅</a></span>
           <span><a href="/expert/review/{{item.project.project_id}}/1?page={{page}}" class='btn btn-success'>通过</a></span>
           <span><a href="/expert/review/{{item.project.project_id}}/0?page={{page}}" class='btn'>不通过</a></span>
         </td>
+        {% if is_expert_all %}
+        <td>{{item.firstTrial}}</td>
+        {% endif%}
       </tr>
       {%endfor%}
     </tbody>
