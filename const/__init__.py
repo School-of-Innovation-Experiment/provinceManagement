@@ -122,10 +122,14 @@ PROJECT_STATUS_CHOICES = (
     (STATUS_FIRST, u'初始状态'),
 )
 
+RECOMMEND_UNPASS = "unpass"
+RECOMMEND_FIRST_ROUND_PASSED = "first_round_passed"
+RECOMMEND_SECOND_ROUND_PASSED = "second_round_passed"
+
 PROJECT_RECOMMEND_CHOICES =(
-    ("0", u"未通过"),
-    ("1", u"初审通过"),
-    ("2", u"终审通过"),
+    (RECOMMEND_UNPASS, u"未通过"),
+    (RECOMMEND_FIRST_ROUND_PASSED, u"初审通过"),
+    (RECOMMEND_SECOND_ROUND_PASSED, u"终审通过"),
 )
 
 

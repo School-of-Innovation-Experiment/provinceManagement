@@ -20,6 +20,7 @@ RegisterClass = (SchoolDict,
                  ProjectEnterpriseOrigin,
                  ProjectEnterpriseMaturity,
                  NewsCategory,
+                 ProjectRecommendStatus,
                 )
 
 for item in RegisterClass:

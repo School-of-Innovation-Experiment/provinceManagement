@@ -336,11 +336,10 @@ def first_round_recommend(request):
             result_set.extend(pending_list[:recommend_num])
         for item in result_set:
             project = item[1]
-            #project.project_recommend_status = ProjectRecommendStatus(status = "初审通过")
-            #project.save()
-        
-        #recommend_obj.firstRoundFinished = True
-        #recommend_obj.save()
+            project.project_recommend_status = ProjectRecommendStatus.objects.get(status = RECOMMEND_FIRST_ROUND_PASSED)
+            project.save()
+        recommend_obj.firstRoundFinished = True
+        recommend_obj.save()
 
         message = "ok"
     except:
