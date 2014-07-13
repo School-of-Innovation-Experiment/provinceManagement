@@ -53,15 +53,25 @@ def home_view(request):
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert).order_by("project__financial_category")
     rate = SchoolRecommendRate.load().rate
-    project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
-    limitnum = int(math.ceil(project_listA.count()*rate/100))
-    really = project_listA.filter(pass_p=True).count()
-    remaining = limitnum - really
+    is_expert_all = False
+    if expert.subject.category == "12":
+        is_expert_all = True
+        limitnum = int(math.ceil(re_project.count()*rate/100))
+        really = re_project.filter(pass_p=True).count()
+        remaining = limitnum - really
+        limitnum_b = really_b = remaining_b =0
+    else:
+        project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
+        limitnum = int(math.ceil(project_listA.count()*rate/100))
+        really = project_listA.filter(pass_p=True).count()
+        remaining = limitnum - really
 
-    project_listB = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
-    limitnum_b = int(math.ceil(project_listB.count()*rate/100))
-    really_b = project_listB.filter(pass_p=True).count()
-    remaining_b = limitnum_b - really_b
+        project_listB = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
+        limitnum_b = int(math.ceil(project_listB.count()*rate/100))
+        really_b = project_listB.filter(pass_p=True).count()
+        remaining_b = limitnum_b - really_b
+
+
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
     for item in context["item_list"]:
@@ -74,6 +84,7 @@ def home_view(request):
             'limitnum_b': limitnum_b,
             'really_b': really_b,
             'remaining_b': remaining_b,
+            'is_expert_all':is_expert_all,
             'page':page}
     context.update(data)
     return render(request, 'expert/home.html', context)
@@ -95,6 +106,7 @@ def review_report_view(request, pid=None):
     info_form = InfoForm(instance=re_project.project,pid=pid)
     logger.info(project.project_category.category)
     teacher_enterpriseform = None
+    page = request.GET.get('page')
     if project.project_category.category == CATE_INNOVATION:
         is_innovation = True
         application = get_object_or_404(PreSubmit, project_id = pid)
@@ -124,7 +136,7 @@ def review_report_view(request, pid=None):
             "review": review_form,
             "doc_list": doc_list,
             'teacher_enterpriseform':teacher_enterpriseform,
-
+            'page':page,
             }
 
     return render(request, 'expert/review.html', data)
@@ -142,17 +154,20 @@ def review_report_pass_p(request, pid, pass_p):
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
     page = request.GET.get('page')
-
     proj_single = ProjectSingle.objects.get(project_id = pid)
     rate = SchoolRecommendRate.load().rate
-    if proj_single.financial_category.category == FINANCIAL_CATE_A:
-         project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
-         limitnum = int(math.ceil(project_listA.count()*rate/100))
-         really = project_listA.filter(pass_p=True).count()
+    if expert.subject.category == "12":
+        limitnum = int(math.ceil(re_project.count()*rate/100))
+        really = re_project.filter(pass_p=True).count()
     else:
-         project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
-         limitnum = int(math.ceil(project_listA.count()*rate/100))
-         really = project_listA.filter(pass_p=True).count()
+        if proj_single.financial_category.category == FINANCIAL_CATE_A:
+            project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
+            limitnum = int(math.ceil(project_listA.count()*rate/100))
+            really = project_listA.filter(pass_p=True).count()
+        else:
+            project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
+            limitnum = int(math.ceil(project_listA.count()*rate/100))
+            really = project_listA.filter(pass_p=True).count()
     if pass_p and (limitnum > really):
         proj.pass_p = True
     else:

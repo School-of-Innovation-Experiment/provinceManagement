@@ -5,16 +5,31 @@
 {% block calculate-content%}
 <div class="container">
   <div class="page-header">
+
     <div class="alert alert-success" >
         <button type="button" class="close" data-dismiss="alert">x</button>
         <h3><strong>尊敬的专家!</strong></h3>
+        {%if is_expert_all %}
+        您评审的项目类型分为甲乙类。
+        请您根据国家级项目数量上限数，选择项目“通过”的数量。
+        {% else %}
         您评审的项目类型分为甲类、乙类。
         请您根据国家级项目数量上限数，选择项目“通过”的数量。
+        {% endif%}
     </div>
     <br>
+
     <h3>
       本年度评审列表
+    {%if is_expert_all%}
     </h3>
+    <h4>
+      甲乙类项目：
+      <span class="label label-info">国家级项目数量上限:{{limitnum}}</span>
+      <span class="label label-info">已通过国家级项目数量:{{really}}</span>
+      <span class="label label-important">国家级项目剩余数量:{{remaining}}</span>
+    </h4>
+    {% else %}
     <h4>
       甲类项目：
       <span class="label label-info">国家级项目数量上限:{{limitnum}}</span>
@@ -27,7 +42,7 @@
       <span class="label label-info">已通过国家级项目数量:{{really_b}}</span>
       <span class="label label-important">国家级项目剩余数量:{{remaining_b}}</span>
     </h4>
-
+    {%endif%}
   </div><!--end page header-->
   <table class="table table-hover">
     <thead>
@@ -59,9 +74,9 @@
         <td>{{item.pass_p}}</td>
         <!-- <td>{{item.score_significant}}, {{item.score_value}}, {{item.score_innovation}}, {{item.score_practice}} ...</td> -->
         <td>
-          <span><a href="{% url expert.views.review_report_view item.project.project_id%}" class='btn btn-primary'>审阅</a></span>
+          <span><a href="/expert/review/{{item.project.project_id}}?page={{page}}" class='btn btn-primary'>审阅</a></span>
           <span><a href="/expert/review/{{item.project.project_id}}/1?page={{page}}" class='btn btn-success'>通过</a></span>
-          <span><a href="/expert/review/{{item.project.project_id}}/1?page={{page}}" class='btn'>不通过</a></span>
+          <span><a href="/expert/review/{{item.project.project_id}}/0?page={{page}}" class='btn'>不通过</a></span>
         </td>
       </tr>
       {%endfor%}
