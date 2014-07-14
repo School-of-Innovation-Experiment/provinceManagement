@@ -30,10 +30,10 @@ function first_round_callback(data){
     if(data.message = "ok"){
         $("#id_first_round_finish").attr({"class": "btn btn-warning", "onclick": ""})
         $("#id_first_round_finish").html("第一轮推荐分级已结束")
-        alert("初审分级成功");
+        alert("第一轮分级成功");
     }
     else
-        alert("分级失败，请联系后台管理员");
+        alert("操作失败，请联系后台管理员");
 }
 
 function second_round_start(data){
@@ -47,9 +47,41 @@ function second_round_start_callback(data){
     if(data.message = "ok"){
         $("#id_second_round_start").attr({"class": "btn btn-warning", "onclick": ""})
         $("#id_second_round_start").html("第二轮分配已结束")
-        alert("初审分级成功");
+        alert("第二轮分配成功");
     }
     else
-        alert("分级失败，请联系后台管理员");
+        alert("操作失败，请联系后台管理员");
+}
+
+function second_round_recommend(){
+    if(confirm("请再次确定是否开始本届第二轮推荐分级？（请确认第二轮分配与评审工作是否全部结束）")){
+        $("#excelprogress").modal();
+        Dajaxice.adminStaff.second_round_recommend(second_round_callback, {});
+    }
+}
+function second_round_callback(data){
+    $("#excelprogress").modal("hide");
+    if(data.message = "ok"){
+        $("#id_second_round_finish").attr({"class": "btn btn-warning", "onclick": ""})
+        $("#id_second_round_finish").html("第二轮推荐分级已结束")
+        alert("第二轮分级成功");
+    }
+    else
+        alert("操作失败，请联系后台管理员");
+}
+
+function show_result(){
+    if(confirm("请再次确定是否？（）")){
+        $("#excelprogress").modal();
+        Dajaxice.adminStaff.show_result(show_result_callback, {});
+    }
+}
+function show_result_callback(data){
+    $("#excelprogress").modal("hide");
+    if(data.message = "ok"){
+        alert("show result successfully");
+    }
+    else
+        alert("操作失败，请联系后台管理员");
 
 }
