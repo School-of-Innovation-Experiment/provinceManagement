@@ -102,6 +102,7 @@ INSITUTE_CATEGORY_CHOICES = (
     ("9", u"医学"),
     ("10", u"管理学"),
     ("11", u"艺术学"),
+    ("12", u"全部"),
 )
 
 #Project Review
@@ -119,6 +120,16 @@ PROJECT_STATUS_CHOICES = (
     (STATUS_FINREVIEW, u'结题评审'),
     (STATUS_ONGOING, u'正在进行'),
     (STATUS_FIRST, u'初始状态'),
+)
+
+RECOMMEND_UNPASS = "unpass"
+RECOMMEND_FIRST_ROUND_PASSED = "first_round_passed"
+RECOMMEND_SECOND_ROUND_PASSED = "second_round_passed"
+
+PROJECT_RECOMMEND_CHOICES =(
+    (RECOMMEND_UNPASS, u"未通过"),
+    (RECOMMEND_FIRST_ROUND_PASSED, u"初审通过"),
+    (RECOMMEND_SECOND_ROUND_PASSED, u"终审通过"),
 )
 
 
@@ -155,6 +166,7 @@ MESSAGE_SCHOOL_HEAD = '__school__'
 
 # download file size
 DOWNLOAD_BUF_SIZE=262144
+
 
 MEMBER_NUM_LIMIT = {
     CATE_INNOVATION: 5,

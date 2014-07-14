@@ -25,10 +25,12 @@
       <!-- </li> -->
     </ul><!--end ul title-->
     <div class="tab-content">
+      {% comment %}
       {% include "school/widgets/project_infoform.html" %} 
+      {% endcomment %}
+      {% include "school/widgets/project_brief.html" %}
       {% include "school/widgets/teacher_enterprise.html" %}
       <!--Application Infomation-->
-      {% include "school/widgets/project_brief.html" %}
       <!--Application Infomation-->
       {% include "school/widgets/project_plan.html" %}
       <!--Comments info-->
@@ -41,8 +43,8 @@
         {% include "expert/widgets/score_review.html" %}
       </div><!--end review section-->
       <div class="form-actions" id="pass-check">
-          <a href="{{pid}}/1" class="btn btn-primary">通过</a>
-          <a href="{{pid}}/0" class="btn">不通过</a>
+          <a href="{{pid}}/1?page={{page}}" class="btn btn-primary">通过</a>
+          <a href="{{pid}}/0?page={{page}}" class="btn">不通过</a>
       </div>
     </div><!--end tab content-->
   </div><!--end tab pane-->

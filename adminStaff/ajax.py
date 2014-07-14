@@ -13,11 +13,11 @@ from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm,
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from adminStaff.models import  ProjectPerLimits, ProjectControl
-from const.models import SchoolDict, NewsCategory
+from const.models import SchoolDict, NewsCategory, InsituteCategory, ProjectRecommendStatus
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, InsituteCategory ,ProjectSingle
+from school.models import Project_Is_Assigned, ProjectSingle
 from users.models import SchoolProfile, ExpertProfile
 from news.models import News
 import datetime
@@ -279,7 +279,20 @@ def refresh_to_table(page,school_name):
     subject_list = get_current_project_query_set().filter(school = school_name)
     context = getContext(subject_list, page, 'item', 0) 
     context.update({"school_name": school_name})
-    return render_to_string("adminStaff/widgets/subjectrating_table.html", context)    
+    return render_to_string("adminStaff/widgets/subjectrating_table.html", context)   
+@dajaxice_register
+def set_recommend_rate(request, set_val):
+    message = ""
+    try:
+        set_val = float(set_val)
+        if set_val < 0 or set_val > 100: raise
+    except:
+        message = "wrong input"
+        return simplejson.dumps({'message': message})
+    recommend_rate_obj = SchoolRecommendRate.load()
+    recommend_rate_obj.rate = set_val
+    recommend_rate_obj.save()
+    return simplejson.dumps({'message': message, 'set_val': str(set_val)})
 
 @dajaxice_register
 def ResetSchoolPassword(request, form):
@@ -294,3 +307,68 @@ def ResetSchoolPassword(request, form):
         return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
     else:
         return simplejson.dumps({'status':'1', 'message':u"密码不能为空"})
+
+@dajaxice_register
+def first_round_recommend(request):
+    message = ""
+    try:
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_rate = recommend_obj.rate / 100.0
+        
+        exclude_schools = [u"东北大学", u"大连理工大学", u"大连海事大学", u"大连民族大学",]
+        exclude_query_set = reduce(lambda x, y: x | y, [Q(school__schoolName = name) for name in exclude_schools])
+        
+        import math, random, datetime
+        current_year = datetime.datetime.now().year
+        result_set = []
+        project_list = get_current_project_query_set().exclude(exclude_query_set).filter(year = current_year)
+        for insitute in InsituteCategory.objects.all():
+            category_project_list = project_list.filter(insitute_id = insitute)
+            recommend_num = int(math.ceil(len(category_project_list) * recommend_rate))
+            pending_list = []
+            for project in category_project_list:
+                score = sum(1 for item in Re_Project_Expert.objects.filter(project = project) if item.pass_p)
+                pending_list.append((score, project))
+            random.shuffle(pending_list)
+            pending_list.sort(reverse = True)
+            result_set.extend(pending_list[:recommend_num])
+        for item in result_set:
+            project = item[1]
+            project.project_recommend_status = ProjectRecommendStatus.objects.get(status = RECOMMEND_FIRST_ROUND_PASSED)
+            project.save()
+        recommend_obj.firstRoundFinished = True
+        recommend_obj.save()
+
+        message = "ok"
+    except:
+        message = "fail"
+    return simplejson.dumps({"message": message, })
+
+@dajaxice_register
+def second_round_start(request):
+    message = ''
+    try:
+        expert_group = ExpertProfile.objects.filter(subject__category = "12")
+        # category="12"为所有学科标为“全部”的专家
+        project_list = list(get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_FIRST_ROUND_PASSED))
+        
+        score_project_set = {0:[], 1:[], 2:[], 3:[]}
+        for project in project_list:
+            score = Re_Project_Expert.objects.filter(project = project).filter(pass_p = True).count()
+            score_project_set[score].append(project)
+        
+        print [len(score_project_set[i]) for i in xrange(4)]
+        for i, expert in enumerate(expert_group):
+            group_id = i / 3
+            for cnt in xrange(4):
+                for project in score_project_set[cnt][group_id::5]:
+                    re_project_expert = Re_Project_Expert(project = project, expert = expert)
+                    re_project_expert.save()
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_obj.secondRoundStart = True
+        recommend_obj.save()
+        message = "ok"
+    except:
+        message = "fail"
+
+    return simplejson.dumps({"message": message, })

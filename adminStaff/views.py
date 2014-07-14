@@ -80,6 +80,7 @@ class AdminStaffService(object):
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
             dict["first_name"] = register.userid.first_name
+            dict["category"] = register.subject
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__() + ' '
             res_list.append(dict)
@@ -365,6 +366,9 @@ class AdminStaffService(object):
                 except Project_Is_Assigned.DoesNotExist:
                     obj = None
         context.update({'subject_insitute_form':subject_insitute_form,'exist_message':exist_message,'readonly':readonly})
+
+        recommend_obj = SchoolRecommendRate.load()
+        context.update({"recommend_obj": recommend_obj, })
         return render(request, "adminStaff/subject_feedback.html", context)
 
     @staticmethod
@@ -445,8 +449,14 @@ class AdminStaffService(object):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
         subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
         subject_obj.save()
-
-
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def RecommendRatingSetting(request):
+        recommend_rate_obj = SchoolRecommendRate.load()
+        context = {"recommend_rate": recommend_rate_obj,}
+        return render(request, "adminStaff/rating_setting.html", context)
     @staticmethod
     @csrf.csrf_protect
     @login_required
