@@ -18,9 +18,9 @@ from settings import TMP_FILES_PATH
 def info_xls_province_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
-
+    year = get_current_year()
     # generate header
-    worksheet.write_merge(0, 0, 0, 19, '2013年辽宁省大学生创新创业训练计划项目信息表')
+    worksheet.write_merge(0, 0, 0, 19, str(year)+'年辽宁省大学生创新创业训练计划项目信息表')
 
     # generate body
     worksheet.write_merge(1, 4, 0, 0, '序号')
@@ -117,6 +117,72 @@ def info_xls(request):
         _number+= 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年辽宁省大学生创新创业训练计划项目信息表"))
+    workbook.save(save_path)
+    return save_path
+
+
+def info_result_xls(request,project_list):
+    """
+    """
+    # def _format_index(i):
+    #     i = str(i)
+    #     i = '0' * (3-len(i)) + i
+    #     return i
+
+    def _format_number(i):
+        i = str(i)
+        i = '0' * (4-len(i)) + i
+        return i
+
+    # name_code = '2013' + request.user.username
+    # loginfo(p=teammanager.first_name, label="get first_name")
+    # school_prof = SchoolProfile.objects.get(userid=request.user)
+    proj_set = project_list
+    xls_obj, workbook = info_xls_province_gen()
+
+    # _index = 1
+    _number= 1
+    for proj_obj in proj_set:
+        teammember = get_studentmessage(proj_obj)       
+
+        pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+        fin_type = ("15000", "5000", "10000") if proj_obj.financial_category.category == FINANCIAL_CATE_A else ("10000", "0", "10000")
+        try:
+            innovation = pro_type.objects.get(project_id=proj_obj.project_id)
+        except Exception, err:
+            loginfo(p=err, label="get innovation")
+            loginfo(p=proj_obj.project_category.category, label="project category")
+        # if _index==1:
+        #     schoolname = proj_obj.school
+        #     name_code = get_shcoolcode(schoolname)
+        # if schoolname!=proj_obj.school:
+        #     _index=1
+        #     schoolname = proj_obj.school
+        #     name_code = get_shcoolcode(schoolname)   
+
+        row = 4 + _number
+        xls_obj.write(row, 0, "%s" % _format_number(_number))
+        xls_obj.write(row, 1, unicode(proj_obj.school))
+        xls_obj.write(row, 2, unicode(proj_obj.project_code))
+        xls_obj.write(row, 3, unicode(proj_obj.title))
+        xls_obj.write(row, 4, unicode(proj_obj.financial_category))
+        xls_obj.write(row, 5, unicode(proj_obj.project_category))
+        xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 8, unicode(teammember['member_number'])) # 学生人数
+        xls_obj.write(row, 9, unicode(teammember['othermember'])) # 项目其他成员
+        xls_obj.write(row, 10, unicode(proj_obj.inspector))
+        xls_obj.write(row, 11, unicode(proj_obj.inspector_title)) # 指导老师职称
+        xls_obj.write(row, 12, fin_type[0]) # 经费
+        xls_obj.write(row, 13, fin_type[1]) # 经费
+        xls_obj.write(row, 14, fin_type[2]) # 经费
+        xls_obj.write(row, 15, unicode(proj_obj.insitute))
+        xls_obj.write_merge(row, row, 16, 18, unicode(innovation.proj_introduction)) # both enterprise and innovation has innovation attr
+
+        # _index += 1
+        _number+= 1
+    # write xls file
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年辽宁省大学生创新创业训练计划评审项目信息表"))
     workbook.save(save_path)
     return save_path
 
