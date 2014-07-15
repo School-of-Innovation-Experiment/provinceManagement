@@ -26,6 +26,8 @@ from django.template.loader import render_to_string
 from backend.utility import getContext
 from school.utility import *
 
+import random, math, datetime
+
 @dajaxice_register
 def NumLimit(request, form):
     dajax = Dajax()
@@ -318,7 +320,6 @@ def first_round_recommend(request):
         exclude_schools = [u"东北大学", u"大连理工大学", u"大连海事大学", u"大连民族大学",]
         exclude_query_set = reduce(lambda x, y: x | y, [Q(school__schoolName = name) for name in exclude_schools])
         
-        import math, random, datetime
         current_year = datetime.datetime.now().year
         result_set = []
         project_list = get_current_project_query_set().exclude(exclude_query_set).filter(year = current_year)
@@ -372,3 +373,46 @@ def second_round_start(request):
         message = "fail"
 
     return simplejson.dumps({"message": message, })
+
+@dajaxice_register
+def second_round_recommend(request):
+    message = ""
+    try:
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_rate = recommend_obj.rate / 100.0
+        project_list = get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_FIRST_ROUND_PASSED)
+        recommend_num = int(math.ceil(project_list.count() * recommend_rate))
+
+        project_list = [(Re_Project_Expert.objects.filter(project = project).filter(pass_p = True).count(), project) for project in project_list]
+        
+        random.shuffle(project_list)
+        project_list.sort(reverse = True)
+        
+        result_set = project_list[:recommend_num]
+        
+        print len(result_set)
+        for (score, project) in result_set:
+            project.project_recommend_status = ProjectRecommendStatus.objects.get(status = RECOMMEND_SECOND_ROUND_PASSED)
+            project.save()
+
+        recommend_obj.secondRoundFinished = True
+        recommend_obj.save()
+
+        message = "ok"
+    except:
+        message = "fail"
+
+    return simplejson.dumps({"message": message, })
+
+@dajaxice_register
+def show_result(request):
+    message = ""
+    try:
+        project_list = get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_SECOND_ROUND_PASSED)
+        print project_list.count()
+        message = "ok"
+    except:
+        message = "fail"
+
+    return simplejson.dumps({"message": message, })
+
