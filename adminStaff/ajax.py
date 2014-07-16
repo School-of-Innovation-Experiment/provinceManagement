@@ -317,7 +317,7 @@ def first_round_recommend(request):
         recommend_obj = SchoolRecommendRate.load()
         recommend_rate = recommend_obj.rate / 100.0
         
-        exclude_schools = [u"东北大学", u"大连理工大学", u"大连海事大学", u"大连民族大学",]
+        exclude_schools = [u"东北大学", u"大连理工大学", u"大连海事大学", u"大连民族学院",]
         exclude_query_set = reduce(lambda x, y: x | y, [Q(school__schoolName = name) for name in exclude_schools])
         
         current_year = datetime.datetime.now().year
