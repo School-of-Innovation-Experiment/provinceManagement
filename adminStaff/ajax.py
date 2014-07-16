@@ -407,12 +407,16 @@ def second_round_recommend(request):
 @dajaxice_register
 def show_result(request):
     message = ""
+    path = ""
     try:
         project_list = get_current_project_query_set().filter(project_recommend_status__status = RECOMMEND_SECOND_ROUND_PASSED)
+        path = AdminStaffService.get_show_result_xls_path(request,project_list)
         print project_list.count()
+        print path
         message = "ok"
     except:
         message = "fail"
 
-    return simplejson.dumps({"message": message, })
+
+    return simplejson.dumps({"message": message, 'path':path})
 

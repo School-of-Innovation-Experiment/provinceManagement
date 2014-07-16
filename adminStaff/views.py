@@ -512,3 +512,14 @@ class AdminStaffService(object):
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
         file_path = info_xls(request)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_show_result_xls_path(request,project_list):
+
+        # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
+        # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+        file_path = info_result_xls(request,project_list)
+        return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]

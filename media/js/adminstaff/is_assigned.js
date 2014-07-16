@@ -71,7 +71,7 @@ function second_round_callback(data){
 }
 
 function show_result(){
-    if(confirm("请再次确定是否？（）")){
+    if(confirm("请再次确定是否导出评审结果？（请确认第二轮评审工作全部结束）")){
         $("#excelprogress").modal();
         Dajaxice.adminStaff.show_result(show_result_callback, {});
     }
@@ -79,7 +79,8 @@ function show_result(){
 function show_result_callback(data){
     $("#excelprogress").modal("hide");
     if(data.message = "ok"){
-        alert("show result successfully");
+        location.href = data.path
+        alert("导出成功");
     }
     else
         alert("操作失败，请联系后台管理员");
