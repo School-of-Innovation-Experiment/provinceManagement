@@ -212,7 +212,6 @@ def info_xls_summaryinnovate(request):
             xls_obj.write(row, 2, unicode(student.classInfo)) 
         if row_project_start > row :
             row = row_project_start
-        print row 
         print row_project_start
         xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
@@ -418,7 +417,6 @@ def info_xls_projectsummary(request):
     proj_set = proj_set.order_by('school','project_grade')
     xls_obj, workbook = info_xls_province_gen()
 
-    # _index = 1
     _number= 1
     for proj_obj in proj_set:
         teammember = get_manager(proj_obj)

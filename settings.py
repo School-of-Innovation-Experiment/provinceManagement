@@ -169,7 +169,7 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
-EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
@@ -275,6 +275,5 @@ IS_DLUT_SCHOOL = True
 IS_SCHOOL_BASIC = False
 
 # RPC_SITE
-RPC_SITE_TEST = "http://192.168.2.202:8000/rpc/"
 RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"
 RPC_SITE = RPC_SITE_PRODUCTION

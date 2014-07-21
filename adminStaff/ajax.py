@@ -538,6 +538,21 @@ def student_code_project_query(request, student_code):
         message = "not found"
         return simplejson.dumps({"message": message})
 
+def student_code_project_query(request, student_code):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    message = ""
+    project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)]
+    if project:
+        #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
+        message = 'ok'
+        table_html = render_to_string("adminStaff/widgets/project_table.html", {"item": project[0], "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        return simplejson.dumps({"message": message, "table": table_html})
+    else:
+        message = "not found"
+        return simplejson.dumps({"message": message})
+
 from base64 import b64encode as b64en
 from adminStaff.utility import get_manager
 import jsonrpclib
