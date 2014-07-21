@@ -699,6 +699,7 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
         context = AdminStaffService.projectListInfor(request)
+        fix_bad_flag(context["pro_list"])
         for pro_obj in context["pro_list"]:
             add_fileurl(pro_obj)
             add_telephone(pro_obj)

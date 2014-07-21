@@ -10,6 +10,7 @@ from const import *
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper  
 from django.http import HttpResponse, Http404
+from django.core.files.storage import default_storage
 from student.models import Student_Group
 from school.models import *
 from users.models import *
@@ -517,3 +518,20 @@ def file_download_gen(request,fileid = None,filename = None):
     response = HttpResponse(wrapper, mimetype='content_type')  
     response['Content-Disposition'] = "attachment; filename= %s%s" % (filename,str(filetype))
     return response
+
+def fix_bad_flag(proj_set):
+    for pro_temp in proj_set:    
+        uploadfiles = UploadedFiles.objects.filter(project_id_id = pro_temp)
+        for filetmp in uploadfiles:
+            if default_storage.exists(filetmp.file_obj.path):
+                if filetmp.name == u"申报书" and not pro_temp.file_application:
+                    pro_temp.file_application = True
+                if filetmp.name == u"开题报告" and not pro_temp.file_opencheck:
+                    pro_temp.file_opencheck = True
+                if filetmp.name == u"中期检查表" and not pro_temp.file_interimchecklist:
+                    pro_temp.file_interimchecklist = True
+                if filetmp.name == u"结题验收表" and not pro_temp.file_summary:
+                    pro_temp.file_summary = True
+                if filetmp.name == u"项目汇编" and not pro_temp.file_projectcompilation:
+                    pro_temp.file_projectcompilation = True
+        pro_temp.save()
