@@ -18,11 +18,15 @@
         {% endif %}
         <!--th>申请学分</th!-->
         <th>是否结题</th>
+        {% if IS_DELETE_TABLE %}
+        <th>是否删除</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><a href="/adminStaff/application/{{item.project_id}}">{{item.title|truncatechars:15}}</td>
+      {% for item in proj_list %}
+      <tr id="{{item.project_id}}">
+        <td><a href="/adminStaff/application/{{item.project_id}}" title="{{item.title}}">{{item.title|truncatechars:15}}</td>
         <td>
            <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
         </td>
@@ -60,7 +64,13 @@
           <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
           <a data-toggle="modal" id="overstatus_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}')" href="#overstatus_choice"   pid="{{item.project_id}}" class="btn btn-primary">{{item.over_status}}</a>
         </td>
+        {% if IS_DELETE_TABLE %}
+        <td>
+          <a onclick="delete_project_id('{{item.project_id}}')" pid="{{item.project_id}}" class="btn btn-danger">删除</a>
+        </td>
+        {% endif %}
       </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

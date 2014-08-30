@@ -29,7 +29,8 @@ class Student_Group(models.Model):
     project = models.ForeignKey(ProjectSingle, blank=True)
 
     scoreFile = models.ForeignKey(UploadedFiles, blank=True, null=True, verbose_name=u"学分申请表")
-
+    is_manager = models.BooleanField(null=False, default=False,
+                                  verbose_name=u"负责人")
     def get_sex_display(self):
         if sex == 'male':
             return u"男"

@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for item in pro_list%}
+        {% for item in pro_list %}
         <tr>
           <td>
              <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
