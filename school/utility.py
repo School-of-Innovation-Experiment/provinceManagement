@@ -129,7 +129,8 @@ def get_recommend_limit(school = None):
     rate = SchoolRecommendRate.load().rate / 100.0
     project_list = get_current_project_query_set().filter(school = school)
     limit = int(math.ceil(project_list.count() * rate)) # 向上取整
-    used = project_list.filter(recommend = True).count()
+    used = project_list.filter((Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade = GRADE_PROVINCE))&Q(project_category__category = CATE_INNOVATION)&Q(recommend = True)).count()
+    loginfo(p=limit - used,label="limit - used")
     return limit, limit - used
 
 def save_enterpriseapplication(project=None, pre=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
