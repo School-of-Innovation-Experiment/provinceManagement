@@ -508,6 +508,9 @@ def FileDeleteConsistence(request, fid):
                                  "message": "Warning! Only POST accepted!"})
 @dajaxice_register
 def auto_ranking(request):
+    """
+        minzu require code is current year plus 1
+    """
     message = ""
     project_set = list(get_current_project_query_set())
     project_set.sort(key = lambda x: (x.school.school.schoolName,
@@ -518,7 +521,7 @@ def auto_ranking(request):
         return "%04d" % x
 
     for i, project in enumerate(project_set):
-        project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
+        project.project_unique_code = str(get_current_year()+1) + DUT_code + auto_completion(i + 1)
         project.save()
     return simplejson.dumps({"message": message})
 
