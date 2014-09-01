@@ -310,7 +310,6 @@ def SetManager(request,studentid):
     """
         set studnet manager
     """
-    print "haha"
     loginfo(p=studentid,label="studentid")
     try:
         newmanager = Student_Group.objects.get(id = studentid)
@@ -320,6 +319,10 @@ def SetManager(request,studentid):
             oldmanager[0].save()
         newmanager.is_manager = True
         newmanager.save()
+        project = ProjectSingle.objects.get(project_id = newmanager.project_id)
+        users_student = project.student
+        users_student.name = newmanager.studentName
+        users_student.save()
         table = refresh_member_info_table(request)
         return simplejson.dumps({'table':table,'message':u'负责人设定成功','flag':True})
     except Exception, e:
