@@ -62,67 +62,11 @@
     <a class="btn btn-primary" data-dismiss="modal" onclick="delete_member();">确认</a>
   </div>
 </div>
-
-<table class="well table">
-  <thead>
-    <tr>
-      <td><strong>学号</strong></td>
-      <td><strong>姓名</strong></td>
-      <td><strong>性别</strong></td>
-      <td><strong>民族</strong></td>
-      <td><strong>邮箱</strong></td>
-      <td><strong>电话</strong></td>
-      <td><strong>学院</strong></td>
-      <td><strong>专业</strong></td>
-      <td><strong>年级</strong></td>
-      <td><strong>班级</strong></td>
-
-      {% if not readonly %}
-      <td><strong>更新信息</strong></td>
-      <td><strong>人员变更</strong></td>
-      {% endif %}
-      <td><strong>学分申请</strong></td>
-    </tr>
-  </thead>
-  <tbody>
-    {% if student_group %}
-      {%for student in student_group%}
-        <tr>
-          <td>{{student.studentId}}</td>
-          <td>{{student.studentName}}</td>
-          <td val={{student.sex_val}}>{{student.sex}}</td>
-          <td>{{student.nation}}</td>
-          <td>{{student.email}}</td>
-          <td>{{student.telephone}}</td>
-          <td val={{student.school.id}}>{{student.school}}</td>
-          <td val={{student.major.id}}>{{student.major}}</td>
-          <td>{{student.grade}}</td>
-          <td disabled>{{student.classInfo}}</td>
-          {% if not readonly %}
-          <td>
-
-            {% if lock %}
-            已申报，无法修改
-            {% else %}
-            <a class="btn btn-success" data-toggle="modal" href="#student_profile_info" onclick="get_student_info(this);">修改个人信息
-            {% endif %}
-          </td>
-          <td>
-            {% if lock %}
-            已申报，无法修改
-            {% else %}
-            <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
-            {% endif %}
-          </td>
-          {% endif %} 
-          <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td>              
-        </tr>
-        {% endfor %}
-    {% endif %}
-  </tbody>
-
-</table>
+<div id="member_info_table">
+{% include "student/widgets/member_info_table.html" %}
+</div>
 {%if userauth.is_student%}
+{% if files %}
 <h3>学分申请名单</h3>
 <table class="table table-hover table-striped" >
   <thead>
@@ -151,4 +95,5 @@
     {%endfor%}
   </tbody>
 </table><!--end history list table-->
+{% endif %}
 {% endif %}

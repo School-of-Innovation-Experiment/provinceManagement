@@ -532,7 +532,7 @@ def student_code_project_query(request, student_code):
     if project:
         #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
         message = 'ok'
-        table_html = render_to_string("adminStaff/widgets/project_table.html", {"item": project[0], "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        table_html = render_to_string("adminStaff/widgets/project_table.html", {"proj_list": project, "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL,"IS_DELETE_TABLE": False, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
         return simplejson.dumps({"message": message, "table": table_html})
     else:
         message = "not found"
@@ -548,8 +548,37 @@ def student_code_project_query(request, student_code):
         #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
         message = 'ok'
         table_html = render_to_string("adminStaff/widgets/project_table.html", {"item": project[0], "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+@dajaxice_register
+def delete_project_query(request, delete_info):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    loginfo(p=delete_info,label="delete_info")
+    message = ""
+    project_list = ProjectSingle.objects.filter(Q(adminuser__name = delete_info))
+    if project_list:
+        #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
+        message = 'ok'
+        table_html = render_to_string("adminStaff/widgets/project_table.html", {"proj_list": project_list, "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_DELETE_TABLE": True,"IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
         return simplejson.dumps({"message": message, "table": table_html})
     else:
+        message = "not found"
+        return simplejson.dumps({"message": message})
+
+@dajaxice_register
+def delete_project_id(request, pid):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    loginfo(p=pid,label="pid")
+    message = ""
+    try:
+        project = ProjectSingle.objects.get(Q(project_id = pid))
+        project.delete()
+        message = 'ok'
+        return simplejson.dumps({"message": message, "pid": pid})
+    except Exception, e:
+        print e
         message = "not found"
         return simplejson.dumps({"message": message})
 

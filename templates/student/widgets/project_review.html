@@ -4,7 +4,7 @@
                 <tr>
                   <th>项目编号</th>
                   <th>项目名称</th>
-                  <th>项目类别</th>
+                  <th>项目级别</th>
                   <th>项目类型</th>
                   <th>负责人</th>
                   <th>学号</th>
@@ -21,7 +21,7 @@
                 <tr>
                   <td>{{project.project_unique_code}}</td>
                   <td>{{project.title}}</td>
-                  <td>{{project.financial_category}}</td>
+                  <td>{{project.project_grade}}</td>
                   <td>{{project.project_category}}</td>
                   <td>{{teammember.manager_name}}</td>
                   <td>{{teammember.manager_studentid}}</td>
@@ -29,10 +29,9 @@
                   <td>{{teammember.othermember}}</td>
                   <td>{{project.adminuser.name}}</td>
                   <td>{{project.adminuser.titles}}</td>
-				  <td>{{project.funds_total}}</td>
+				          <td>{{project.funds_total}}</td>
                   <td>{{project.school.school}}</td>
-                  {{ unco}}
-                  <td class="span4">{#innovation.innovation#}</td>
+                  <td class="span4" id="innovation">{{innovation.innovation}}</td>
                 </tr>
               </tbody>
             </table>

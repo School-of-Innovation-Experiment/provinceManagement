@@ -129,7 +129,8 @@ def get_recommend_limit(school = None):
     rate = SchoolRecommendRate.load().rate / 100.0
     project_list = get_current_project_query_set().filter(school = school)
     limit = int(math.ceil(project_list.count() * rate)) # 向上取整
-    used = project_list.filter(recommend = True).count()
+    used = project_list.filter((Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade = GRADE_PROVINCE))&Q(project_category__category = CATE_INNOVATION)&Q(recommend = True)).count()
+    loginfo(p=limit - used,label="limit - used")
     return limit, limit - used
 
 def save_enterpriseapplication(project=None, pre=None, info_form=None, application_form=None,teacher_enterpriseform=None, user=None):
@@ -455,10 +456,14 @@ def is_showoverstatus(project_list):
     return project_list
 
 def add_telephone(project):
-    student_groups = Student_Group.objects.filter(project = project)
-    for student_group in student_groups:
-        project.telephone =student_group.get_telephone_display
-        break
+    # student_groups = Student_Group.objects.filter(project = project)
+    # for student_group in student_groups:
+    #     project.telephone =student_group.get_telephone_display
+    #     break
+    if  project.student_group_set.all().count()>0:
+        manager = get_manager(project)
+        project.telephone = manager.get_telephone_display()
+
 def is_addFundDetail(project_list):
     for temp in project_list:
         temp.is_addFundDetail = get_schooluser_project_modify_status(temp)
@@ -654,19 +659,22 @@ def get_studentmessage(project):
     # teammember = {'manager_name':'None','manager_studentid':'None','memberlist':'None','count':0,'telephone':'',}
     teammember={'manager_name':'','manager_studentid':'','member_number':'','othermember':''}
     if project.student_group_set.all().count()>0:
-        group=project.student_group_set
+        try:
+            manager = get_manager(project)
+            loginfo(p=manager,label="manager")
+            teammember['manager_name']=manager.studentName
+            teammember['manager_studentid']=manager.studentId
+        except Exception, e:
+            loginfo(p=e,label="manager is not fund")
+
+        group=project.student_group_set.all()
         loginfo(p=group,label="group")
-        manager = group.all()[0]
-        loginfo(p=manager,label="manager")
-        teammember['manager_name']=manager.studentName
-        teammember['manager_studentid']=manager.studentId
-        teammember['member_number'] = project.student_group_set.count()
-        for student in group.all():
-            group=project.student_group_set
+        for student in group:
             loginfo(p=student.studentName,label="student")
-            if student.studentName != manager.studentName:
+            if student.studentName != teammember['manager_name']:
                 member=student.studentName+"("+student.studentId+")"
                 memberlist.append(member)
+        teammember['member_number'] = project.student_group_set.count()
         teammember['othermember']=','.join(memberlist)
     return teammember
 def get_student_member(project):
@@ -686,3 +694,12 @@ def get_opencheck_readonly(request,project):
     else:
         readonly = False
     return readonly
+
+def get_manager(project):
+    try:
+        manager = Student_Group.objects.get(project = project,is_manager = True)
+    except Exception, e:
+        manager = Student_Group.objects.filter(project = project)[0]
+        loginfo(p =  e ,label = "get_manager")
+        
+    return manager

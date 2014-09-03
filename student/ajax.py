@@ -305,4 +305,41 @@ def FileDeleteConsistence(request, pid, fid):
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
 
-    
+@dajaxice_register   
+def SetManager(request,studentid):
+    """
+        set studnet manager
+    """
+    loginfo(p=studentid,label="studentid")
+    try:
+        newmanager = Student_Group.objects.get(id = studentid)
+        oldmanager = Student_Group.objects.filter(project_id = newmanager.project_id,is_manager=True)
+        if oldmanager:
+            oldmanager[0].is_manager = False
+            oldmanager[0].save()
+        newmanager.is_manager = True
+        newmanager.save()
+        project = ProjectSingle.objects.get(project_id = newmanager.project_id)
+        users_student = project.student
+        users_student.name = newmanager.studentName
+        users_student.save()
+        table = refresh_member_info_table(request)
+        return simplejson.dumps({'table':table,'message':u'负责人设定成功','flag':True})
+    except Exception, e:
+        logger.info(e)
+        return simplejson.dumps({'message':u'负责人不存在','flag':False})
+
+
+def refresh_member_info_table(request):
+    project = getProject(request)
+    lock = project.recommend or (project.project_grade.grade != GRADE_UN)
+    student_group = Student_Group.objects.filter(project = project)
+
+    for student in student_group:
+        student.sex_val = student.sex
+        student.sex = student.get_sex_display()
+    return render_to_string("student/widgets/member_info_table.html",
+                            {
+                                "student_group": student_group,
+                                "lock":lock,
+                            })

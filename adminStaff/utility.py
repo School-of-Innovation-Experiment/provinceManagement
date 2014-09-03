@@ -16,7 +16,7 @@ from school.models import *
 from users.models import *
 from backend.decorators import check_auth
 
-from school.utility import get_current_project_query_set
+from school.utility import get_current_project_query_set,get_manager
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 from const import *
@@ -73,7 +73,7 @@ def info_xls_baseinformation(request):
         proj_obj.score_application = check_scoreapplication(proj_obj.score_application)
         proj_obj.file_opencheck = check_fileupload(proj_obj.file_opencheck)
         get_expertscore(proj_obj)
-        teammember = get_manager(proj_obj)
+        teammember = get_teammember(proj_obj)
 
         row = 1 + _number
         xls_obj.write(row, 0, unicode(proj_obj.project_unique_code)) 
@@ -419,7 +419,7 @@ def info_xls_projectsummary(request):
 
     _number= 1
     for proj_obj in proj_set:
-        teammember = get_manager(proj_obj)
+        teammember = get_teammember(proj_obj)
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
         loginfo(p=proj_obj.title, label="project category") 
@@ -455,16 +455,17 @@ def info_xls_projectsummary(request):
     return save_path
 
 
-def get_manager(project):
+def get_teammember(project):
     """
         get teammanager's name and student_id
     """
     teammember = {'manager_name':'','manager_studentid':'','memberlist':'','count':0,'telephone':''}
     loginfo(p=teammember,label="teammember")
     student_Group=Student_Group.objects.filter(project_id=project.project_id)
+    print project.title
     loginfo(p=student_Group,label="student_Group")
     if student_Group.count() > 0:
-        manager = student_Group[0]
+        manager = get_manager(project)
         teammember['telephone'] = manager.telephone
         teammember['manager_name'] = manager.studentName
         teammember['manager_studentid'] = manager.studentId
