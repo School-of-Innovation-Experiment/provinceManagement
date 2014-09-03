@@ -46,7 +46,10 @@ function finish_control_callback(data){
   if (data.flag == 0){
     $('#finish_button').attr("class","btn btn-primary");
     $('#finish_button').val("打开结题");
-    $('#year_finishing_span').text("目前没有打开结题开关");
+    $("input[name='check_box_list']").each(function(){
+       $(this).prop("checked",false);
+    });
+	$('#year_finishing_span').text("目前没有打开结题开关");
     //alert("已经关闭结题，学生现在不能填报结题报告");
     $('#finishing-information').hide();
   }

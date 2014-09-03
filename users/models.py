@@ -52,6 +52,8 @@ class SchoolProfile(models.Model):
          return "%s(%s)"% (self.name, self.school.schoolName)
      def get_name(self):
          return "%s(%s)"% (self.name, self.school.schoolName)
+     def get_school_name(self):
+         return "%s"% (self.school.schoolName)
      def save(self, *args, **kwargs):
          super(SchoolProfile, self).save()
          auth, created = UserIdentity.objects.get_or_create(identity=SCHOOL_USER)

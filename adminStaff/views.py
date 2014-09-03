@@ -573,15 +573,15 @@ class AdminStaffService(object):
     @staticmethod
     def ProjectUniqueCodeChange(project_id, project_unique_code):
         project_obj = ProjectSingle.objects.get(project_id = project_id)
-        loginfo(project_obj)
         try:
-            if ProjectSingle.objects.filter(project_code = project_code).count():
+            if ProjectSingle.objects.filter(project_code = project_unique_code).count():
                 raise
             project_obj.project_unique_code = project_unique_code
             project_obj.save()
             if len(project_unique_code.strip()) == 0:
                project_unique_code = "无"
-        except:
+        except Exception, e:
+            loginfo(e)
             project_unique_code = "error"
         return project_unique_code
     @staticmethod
@@ -1008,7 +1008,6 @@ class AdminStaffService(object):
 #        else:
         sync_form = Sync_form()
 
-        logger.info("sync_form Valid Failed"+"**"*10)
         logger.info(sync_form.errors)
         import jsonrpclib
         from settings import RPC_SITE

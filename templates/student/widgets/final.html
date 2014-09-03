@@ -42,6 +42,11 @@
           </div>
           {% endif %} 
         </div>
+        <div class="alert" style="display: none" id="id_comment_warning">
+           <button type="button" class="close" data-dismiss="alert">x</button>
+           <strong>指导教师还未填写教师评语，请学生提醒教师及时填写。</strong>
+        </div>
+
       </fieldset>
       <br/>
       <fieldset>
@@ -55,5 +60,12 @@
           </div>
           {% endif %}  
         </div>
+        <div class="alert" style="display: none" id="id_school_comment_warning">
+           <button type="button" class="close" data-dismiss="alert">x</button>
+           <strong>学校还未填写学校推荐语，请学生提醒学校及时填写。</strong>
+        </div>
+
       </fieldset> 
     </blockquote><!--end project evaluate-->
+     <script type="text/javascript" src="{{STATIC_URL}}js/student/comment_display.js" onload="comment_show_checker('{{ is_show }}');"></script>
+

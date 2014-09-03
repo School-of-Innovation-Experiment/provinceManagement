@@ -11,35 +11,37 @@
 	  <a href="#next" class="nextView nextStop" ><span>显示下一幅图片</span></a>
 	  <ul id="thumList">
 	    {% for img in imgs %}
-	    <li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem"><img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/></a></li>
-{% endfor %}
-</ul>
-</div>
-</div>
-</div>
-<div class="span4 well" style="margin-top:10px">
-  <div><h4>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4>
-<div><a href="#content">{{ project.title }}</a></div>
-<div><label><h4>高校名称</h4>{{ project.school }}</label></div>
-<div><label><h4>团队成员</h4>{{ project.members }}</label></div>
-</div>
-</div>
-</div>
-<br>
-<br>
-<div class="row well">
-  <section id="content">
-    <h2 style="text-align:center">{{ project.title }}</h2>
-    <h3>项目背景</h3>
-    <br />
-    <p>{{ project.background }}</p>
-    <br />
-    <h3>成果概述</h3>
-    <br>
-    <p>{{ project.summary }}</p>
+	    <li class="a"><moveUnit href="javascript:void(0)" title="" class="currentItem">
+                <img src="{{ img }}" alt="" ref1="{{ img }}" ref2="{{ img }}" onmouseover="Biz.Product.Product.ChangePic(this);" class="Picture40"/>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="span4 well" style="margin-top:10px">
+      <div><h4><strong>项目名称 </strong><span class="label label-info">{{ project.project_grade.get_grade_display }}</span></h4>
+        <div><a href="#content">{{ project.title }}</a></div>
+        <div><label><h4>高校名称</h4>{{ project.school }}</label></div>
+        <div><label><h4>团队成员</h4>{{ project.members }}</label></div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row well">
+    <section id="content">
+      <h2 style="text-align:center">{{ project.title }}</h2>
+      <h3>项目背景</h3>
+      <br />
+      <p>{{ project.background }}</p>
+      <br />
+      <h3>成果概述</h3>
+      <br>
+      <p>{{ project.summary }}</p>
 
-  </section>
-</div>
+    </section>
+  </div>
 <div>
   <script type="text/javascript" language="jscript">
   jQuery(function($) {
@@ -77,4 +79,4 @@
   });
 </script>
 
-  {%endblock%}
+{%endblock%}

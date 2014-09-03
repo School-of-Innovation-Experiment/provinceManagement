@@ -1,5 +1,6 @@
 {% extends "adminStaff/administrator.html" %}
 {%block nav_admin_content%}
+<div class="well form">
   <h3>
       项目列表
   </h3>
@@ -7,6 +8,7 @@
         {% include "widgets/project_filter_form.html" %}
       </form><!--end category form -->
       {% include "widgets/fund/fund_project_table.html" %}
+</div>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
 

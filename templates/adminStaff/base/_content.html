@@ -2,17 +2,23 @@
 
 {% extends "base/base.html" %}
 {% load i18n %}
-
-{% block content %}
+{% block before_css%}
+{{block.super}}
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/index.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/content.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/adminStaff/settings.css" >
   <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/adminStaff/content.css" >
-  <!-- customize css -->
   <link rel="stylesheet" href="{{ STATIC_URL}}style/expert/content.css" type="text/css" media="screen" >
-  <div class="container form-container ">
-    {% include "widgets/userinfo_basicbar.html" %}
-    {%block staffadmin_content%} {% endblock %}
-  </div>
-{% endblock %}
+{% endblock%}
+
+  {% block nav_content%}
+     {% include "adminStaff/widgets/features_item_navbar.html" %}
+  {% endblock%}
+  {% block content %}
+    <div class="container content-container">
+      <div>
+        {%block staffadmin_content%} {% endblock %}
+      </div>
+    </div>
+  {% endblock %}
