@@ -699,6 +699,7 @@ class AdminStaffService(object):
     @authority_required(ADMINSTAFF_USER)
     def home_view(request):
         context = AdminStaffService.projectListInfor(request)
+        # fix_bad_flag(context["pro_list"])
         for pro_obj in context["pro_list"]:
             add_fileurl(pro_obj)
             add_telephone(pro_obj)
@@ -731,7 +732,7 @@ class AdminStaffService(object):
             elif auth_identity == EXPERT_USER:
                 pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-        pro_list = pro_list.order_by('adminuser')
+        pro_list = pro_list.order_by('project_unique_code')
         loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True

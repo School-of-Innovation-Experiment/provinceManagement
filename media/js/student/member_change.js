@@ -74,3 +74,18 @@ function show_upload_input (studentid) {
   var new_actionurl = actionstr + '?student_id=' + studentid;
   $("#score_upload_form").attr('action',new_actionurl);
 }
+
+function set_manager(studentid){
+  Dajaxice.student.SetManager(set_manager_callback,
+                                {'studentid':studentid});
+}
+
+function set_manager_callback(data){
+  if(data.flag){
+    $("#member_info_table").html(data.table);
+    alert(data.message);
+  }
+  else{
+    alert(data.message);
+  }
+}
