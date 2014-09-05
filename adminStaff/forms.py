@@ -201,14 +201,14 @@ class FundsChangeForm(forms.Form):
     student_name = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)    
-    funds_amount = forms.IntegerField(
+    funds_amount = forms.FloatField(
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)    
     funds_detail = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.Textarea(attrs={'class':'span4 fundsTextarea','id':'funds_detail','placeholder':u"报销明细",
                                                                     'rows':"3",'cols':"20"}),)    
-    funds_total = forms.IntegerField(
+    funds_total = forms.FloatField(
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"初始化/修改明细填写"}),) 
 
