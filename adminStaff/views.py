@@ -485,13 +485,15 @@ class AdminStaffService(object):
         subject_list = get_current_project_query_set()
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
+            tab=request.GET.get("tab", "None")
+            if tab == "None": tab = "nrec"
             page1 = request.GET.get('page1')
             if page1 == "None": page1 = None
             page2 = request.GET.get('page2')
             if page2 == "None": page2 = None
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
-
+			
             if (not school_name) or int(school_name) == -1:
                 subject_list =  subject_list.filter(recommend = True)
             else:
@@ -502,6 +504,7 @@ class AdminStaffService(object):
                 page1 = 1
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
+                tab="nrec"
                 if int(school_name) == -1:
                     subject_list = subject_list.filter(recommend = True)
                 else:
@@ -526,6 +529,7 @@ class AdminStaffService(object):
             'subject_grade_form': subject_grade_form,
             'school_name': school_name,
             'readonly': readonly,
+			'tab': tab,
             }
         return render(request, "adminStaff/subject_rating.html", context)
 
