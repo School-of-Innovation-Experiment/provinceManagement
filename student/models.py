@@ -66,13 +66,13 @@ class Funds_Group(models.Model):
                                   verbose_name=u"报销日期")
     student_name = models.CharField(blank=False, max_length=100,
                                    verbose_name=u"报销人")
-    funds_amount = models.IntegerField(blank=False,
+    funds_amount = models.FloatField(blank=False,
                                  verbose_name=u"报销金额")
     funds_detail = models.CharField(blank=False, max_length=100,
                                  verbose_name=u"经费明细")
-    funds_remaining = models.IntegerField(blank=False,
+    funds_remaining = models.FloatField(blank=False,
                                  verbose_name=u"经费余额",default=0)
-    funds_total = models.IntegerField(blank=True,
+    funds_total = models.FloatField(blank=True,
                                  verbose_name=u"经费总额",default=0)
     class Meta:
         verbose_name = "项目经费"
