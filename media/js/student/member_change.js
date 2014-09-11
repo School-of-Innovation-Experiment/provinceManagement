@@ -82,7 +82,6 @@ function set_manager(studentid){
 
 function set_manager_callback(data){
   if(data.flag){
-    $("#member_info_table").html(data.table);
     alert(data.message);
   }
   else{

@@ -13,11 +13,12 @@
       <td><strong>班级</strong></td>
 
       {% if not readonly %}
+      <td><strong>负责人</strong></td>
       <td><strong>更新信息</strong></td>
       <td><strong>人员变更</strong></td>
       {% endif %}
       <td><strong>学分申请</strong></td>
-      <td><strong>负责人</strong></td>
+
     </tr>
   </thead>
   <tbody>
@@ -36,7 +37,13 @@
           <td disabled>{{student.classInfo}}</td>
           {% if not readonly %}
           <td>
-
+            {% if lock %}
+            已申报，无法修改
+            {% else %}
+            <input type="radio" name="scoreapply" rid="{{student.id}}" onclick="set_manager({{student.id}});" {% if student.is_manager %} checked="checked" {% endif %} />
+            {% endif %}
+          </td>
+          <td>
             {% if lock %}
             已申报，无法修改
             {% else %}
@@ -49,10 +56,9 @@
             {% else %}
             <button class="btn btn-success"  data-toggle="modal" href="#student_delete_confirm" onclick="get_student_deleteid(this);" >删除</button>
             {% endif %}
-          </td>
+          </td> 
           {% endif %} 
-          <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td>    
-          <td><input type="radio" name="scoreapply" rid="{{student.id}}" onclick="set_manager({{student.id}});" {% if student.is_manager %} checked="checked" {% endif %} /></td>          
+          <td><a href="#score_upload" role="button" class="btn btn-success" onclick="show_upload_input({{student.id}})" data-toggle="modal">学分申请</a></td>             
         </tr>
         {% endfor %}
     {% endif %}

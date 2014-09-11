@@ -34,7 +34,7 @@ from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign, split_name
+from school.utility import check_project_is_assign, split_name,get_manager
 #liuzhuo add
 import datetime
 import os
@@ -482,7 +482,7 @@ class AdminStaffService(object):
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
-        subject_list = get_current_project_query_set()
+        subject_list = get_current_project_query_set().order_by("project_unique_code")
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
             tab=request.GET.get("tab", "None")
@@ -513,7 +513,7 @@ class AdminStaffService(object):
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
-                subject.members = student_group[0]
+                subject.members = get_manager(subject) 
             except:
                 pass
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.grade != GRADE_UN]
