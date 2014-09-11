@@ -172,14 +172,14 @@ def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
     school = SchoolProfile.objects.get(userid = request.user)
-    subject_list = get_current_project_query_set().filter(school = school)
+    subject_list = get_current_project_query_set().filter(school = school).order_by("project_unique_code")
     #subject_list =  AdminStaffService.GetSubject_list(school)
     limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
         student_group = Student_Group.objects.filter(project = subject) 
        # subject.members = ','.join([student.studentName for student in student_group])
         try:
-            subject.members = student_group[0]
+            subject.members = get_manager(subject) 
         except:
             pass
     undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
@@ -347,6 +347,7 @@ def projectListInfor(request):
         grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
         grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
         pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
+	pro_list = pro_list.order_by('project_unique_code')
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else:
