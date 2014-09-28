@@ -1,0 +1,43 @@
+<div class="tab-pane active" id="project_review">
+    <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>项目编号</th>
+                  <th>项目名称</th>
+                  <th>项目类别</th>
+                  <th>项目类型</th>
+                  <th>负责人</th>
+                  <th>学号</th>
+                  <th>参与人数</th>
+                  <th>项目其他成员</th>
+                  <th>教师</th>
+                  <th>职称</th>
+                  <th>总经费</th>
+				  <th>所属学科</th>
+				  {% comment %}
+				  <th>项目简介</th>
+				  {% endcomment %}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{project.project_code}}</td>
+                  <td>{{project.title}}</td>
+                  <td>{{project.financial_category}}</td>
+                  <td>{{project.project_category}}</td>
+                  <td>{{teammember.manager_name}}</td>
+                  <td>{{teammember.manager_studentid}}</td>
+                  <td>{{teammember.member_number}}</td>
+                  <td>{{teammember.othermember}}</td>
+                  <td>{{project.adminuser.name}}</td>
+                  <td>{{project.adminuser.titles}}</td>
+				  <td>{{project.funds_total}}</td>
+				  <td>{{project.school.school}}</td>
+				  {% comment %}
+                  {{ unco}}
+				  <td class="span4">{#innovation.innovation#}</td>
+				  {% endcomment %}
+                </tr>
+              </tbody>
+            </table>
+</div>

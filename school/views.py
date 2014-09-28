@@ -87,7 +87,7 @@ def mid_report_view(request, pid = None):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def application_report_view(request, pid=None):        
+def application_report_view(request, pid=None):
     data = application_report_view_work(request, pid)
     return render(request, 'school/application.html', data)
 
@@ -382,3 +382,9 @@ def project_informationexport(request):
                 {
 
                 })
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def file_download(request,fileid = None,filename = None):
+    response = file_download_gen(request,fileid,filename)
+    return response

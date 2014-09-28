@@ -1,0 +1,27 @@
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}style/student/news_edit.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
+  <script>function gettext(txt){return txt}</script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/student/application.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>
+  <script type='text/javascript' src="{{STATIC_URL}}js/news/news_toolbar.js"></script>
+  <script type="text/javascript" src="/admin/jsi18n/"></script>
+  <script type="text/javascript" src="/static/admin/js/core.js"></script>
+  <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/student/comment_display.js" onload="comment_show_checker('{{ is_show }}');"></script>
+
+
+<div class="modal hide fade" style="display: none;" id="Richtext_edit">
+   <div class="modal-header">
+     <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+       {% include "news/news_toolbar.html" %}
+     </div>
+   </div>
+   <div class="modal-body" id="editor">
+   </div>
+   <div class="modal-footer">
+     <a class="btn btn-primary" data-dismiss="modal" onclick="">保存更新</a>
+   </div>
+</div>

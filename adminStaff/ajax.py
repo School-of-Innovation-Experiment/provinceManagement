@@ -508,6 +508,9 @@ def FileDeleteConsistence(request, fid):
                                  "message": "Warning! Only POST accepted!"})
 @dajaxice_register
 def auto_ranking(request):
+    """
+        minzu require code is current year plus 1
+    """
     message = ""
     project_set = list(get_current_project_query_set())
     project_set.sort(key = lambda x: (x.school.school.schoolName,
@@ -518,7 +521,7 @@ def auto_ranking(request):
         return "%04d" % x
 
     for i, project in enumerate(project_set):
-        project.project_unique_code = str(get_current_year()) + DUT_code + auto_completion(i + 1)
+        project.project_unique_code = str(get_current_year()+1) + DUT_code + auto_completion(i + 1)
         project.save()
     return simplejson.dumps({"message": message})
 
@@ -601,18 +604,22 @@ def project_sync(request,project_sync_list,username,password):
             proj_single = ProjectSingle.objects.get(project_id=proj)
         except:
             print "proj %s not exist!" % proj
-            return simplejson.dumps({'status':'1', 'result': "proj %s not exist!" % proj})
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 不存在" % proj_single.title})
         proj_dict = get_projsingle_dict(proj_single)
-        if proj_single.project_category.category == CATE_INNOVATION:
-            proj_dict['presubmit_type'] = 'presubmit'
-            proj_dict.update(get_presubmit_dict(proj_single))
-        else:
-            proj_dict['presubmit_type'] = 'presubmitenterprise'
-            proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        try:
+            if proj_single.project_category.category == CATE_INNOVATION:
+                proj_dict['presubmit_type'] = 'presubmit'
+                proj_dict.update(get_presubmit_dict(proj_single))
+            else:
+                proj_dict['presubmit_type'] = 'presubmitenterprise'
+                proj_dict.update(get_presubmitenterprise_dict(proj_single))
+        except:
+            return simplejson.dumps({'status':'1', 'result': u"项目 %s 申请书存在问题 !" % proj_single.title})
         dict_obj['projects'].append(proj_dict)
     try:
         server = jsonrpclib.Server(RPC_SITE)
         result = server.SyncProjects(simplejson.dumps(dict_obj))
+        loginfo(result)
     except:
         return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
     return simplejson.dumps({'status':'0', 'result': result})

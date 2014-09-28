@@ -149,6 +149,7 @@ def info_xls_expertscore(request):
         # _index += 1
         _number+= 1
     # write xls file
+
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院创新创业项目评分统计表"))
     workbook.save(save_path)
     return save_path

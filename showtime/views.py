@@ -10,7 +10,7 @@ from const import PROJECT_GRADE_CHOICES, GRADE_NATION, DEFAULT_IMG_URL
 from const.models import SchoolDict, ProjectGrade
 from student.models import Student_Group
 from backend.logging import loginfo
-
+from school.utility import get_student_member
 GRADE_DICT = dict(PROJECT_GRADE_CHOICES)
 
 def show_project(request, project_id = ""):
@@ -62,6 +62,7 @@ def show_index_get_context(request, project_page):
                 Q(file_obj__iendswith="png") )
         project.img = (imgs.count() and convert2media_url(imgs[0].file_obj.url)) or \
             DEFAULT_IMG_URL
+        project.members = get_student_member(project)
 
     yearset = set()
     for project in ProjectSingle.objects.all():
