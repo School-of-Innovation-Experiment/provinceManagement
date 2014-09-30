@@ -135,7 +135,6 @@ INSTALLED_APPS = (
     'djangocms_admin_style',
     'django.contrib.admin',
     #Project
-    'teacher',
     'registration',
     'users',
     'const',
@@ -144,6 +143,7 @@ INSTALLED_APPS = (
     'adminStaff',
     'news',
     'showtime',
+    'teacher',
     'student',
     #Add-on
     'south',
@@ -167,13 +167,13 @@ LOGIN_REDIRECT_URL = '/'
 # EMAIL_USE_TLS = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "tianweidut@mail.dlut.edu.cn"
+SERVER_EMAIL = "innovation_dut@163.com"
 EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
-EMAIL_HOST = 'mail.dlut.edu.cn'
+EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'tianweidut@mail.dlut.edu.cn'
-EMAIL_HOST_PASSWORD = '9683096830'
-DEFAULT_FROM_EMAIL = 'tianweidut@mail.dlut.edu.cn'
+EMAIL_HOST_USER = 'innovation_dut@163.com'
+EMAIL_HOST_PASSWORD = 'dutsie'
+DEFAULT_FROM_EMAIL = 'innovation_dut@163.com'
 EMAIL_USE_TLS = False
 
 # EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
