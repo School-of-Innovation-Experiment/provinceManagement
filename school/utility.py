@@ -55,7 +55,7 @@ def get_running_project_query_set():
 
 def get_alloced_num(expert_list, flag):
     for expert in expert_list:
-        expert.num = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = flag)).count()
+        expert.num = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = flag)&Q(project__is_past=False)).count()
     return expert_list
 
 def check_limits(user):

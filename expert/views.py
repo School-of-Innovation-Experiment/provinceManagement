@@ -53,8 +53,8 @@ def home_view(request):
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
     
-    school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False))
-    adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True))
+    school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False)&Q(project__is_past=False))
+    adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True)&Q(project__is_past=False))
     
     for project in school_project_list:
         project.is_assigned_by_adminStaff = False
