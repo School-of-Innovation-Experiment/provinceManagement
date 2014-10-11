@@ -16,7 +16,7 @@ from django.db.models import Q
 
 
 def get_project_count():
-    return "%04d" % ProjectSingle.objects.all().count()
+    return "%04d" % ProjectSingle.objects.filter(is_past = False).count()
 
 def create_newproject(request, new_user, category):
     student = get_object_or_404(StudentProfile, userid = new_user)
