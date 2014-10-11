@@ -30,7 +30,7 @@ def create_newproject(request, new_user, category):
         project.student = student
         project.school = teacher.school
         project.project_category = ProjectCategory.objects.get(category = category)
-        project.year = get_current_year()
+        project.year = get_current_year()+1
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
         project.project_code = str(get_current_year() + 1) + DUT_code + str(get_project_count())
