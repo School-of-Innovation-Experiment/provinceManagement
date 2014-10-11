@@ -38,7 +38,7 @@ def home_view(request, is_expired = False):
         return redirect("/settings/profile")
     else:
         limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
-        project_list = get_running_project_query_set().filter(adminuser__userid = request.user)
+        project_list = get_running_project_query_set().filter(adminuser__userid = request.user).order_by('is_past')
         for pro_obj in project_list:
             add_fileurl(pro_obj)
         data = {

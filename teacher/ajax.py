@@ -112,9 +112,12 @@ def StudentDispatch(request, form):
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
         email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
-        email_num = email_list and len(email_list) or 0
+        email_num = ProjectSingle.objects.filter(adminuser=TeacherProfile.objects.get(userid=request.user)).filter(is_past=False).count()
         limited_num = TeacherLimitNumber(request)
+        loginfo(p=email_num,label="email_num")
+        loginfo(p=limited_num,label="limited_num")
         remaining_activation_times = limited_num - email_num
+        loginfo(p=remaining_activation_times,label="remaining_activation_times")
         if remaining_activation_times==0:
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
