@@ -347,7 +347,7 @@ def projectListInfor(request):
         grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
         grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
         grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
-        pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
+        pro_list=ProjectSingle.objects.filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute))).filter(is_past = False)
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else:
