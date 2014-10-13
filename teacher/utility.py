@@ -9,7 +9,7 @@ from users.models import StudentProfile, TeacherProfile
 from school.models import *
 from const import *
 from const.models import *
-from school.utility import get_current_year
+from school.utility import get_current_year,get_current_project_query_set
 from backend.logging import logger, loginfo
 from django.db.models import Q
 
@@ -17,6 +17,21 @@ from django.db.models import Q
 
 def get_project_count():
     return "%04d" % ProjectSingle.objects.filter(is_past = False).count()
+def get_project_codemax():
+    pro_currentlist = get_current_project_query_set()
+    max_code = 0
+    if pro_currentlist:
+        try:
+            for pro_obj in pro_currentlist:
+                if pro_obj.project_code > max_code:
+                    max_code = pro_obj.project_code
+            max_code = str( int(max_code) + 1 )  
+        except err:
+            loginfo(p=err,label="error")
+        loginfo(p=max_code,label="max_code")
+    else:
+        max_code=str(get_current_year() + 1) + DUT_code+"0000"
+    return max_code
 
 def create_newproject(request, new_user, category):
     student = get_object_or_404(StudentProfile, userid = new_user)
@@ -33,7 +48,8 @@ def create_newproject(request, new_user, category):
         project.year = get_current_year()+1
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
-        project.project_code = str(get_current_year() + 1) + DUT_code + str(get_project_count())
+        #project.project_code = str(get_current_year() + 1) + DUT_code + str(get_project_codemax())
+        project.project_code = get_project_codemax()
         project.save()
 
 
