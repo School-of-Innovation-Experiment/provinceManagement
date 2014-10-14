@@ -167,17 +167,26 @@ LOGIN_REDIRECT_URL = '/'
 # DEFAULT_FROM_EMAIL = 'dut200921049@gmail.com'
 # EMAIL_USE_TLS = False
 
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#SERVER_EMAIL = "innovation_dut@163.com"
+#EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
+#EMAIL_HOST = 'smtp.163.com'
+#EMAIL_PORT = '25'
+#EMAIL_HOST_USER = 'innovation_dut@163.com'
+#EMAIL_HOST_PASSWORD = 'dutsie'
+#DEFAULT_FROM_EMAIL = 'innovation_dut@163.com'
+#EMAIL_USE_TLS = False
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "innovation_dut@163.com"
+SERVER_EMAIL = "dachuang@dlnu.edu.cn"
 EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
-EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST = 'mail.dlnu.edu.cn'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'innovation_dut@163.com'
-EMAIL_HOST_PASSWORD = 'dutsie'
-DEFAULT_FROM_EMAIL = 'innovation_dut@163.com'
+EMAIL_HOST_USER = 'dachuang@dlnu.edu.cn'
+EMAIL_HOST_PASSWORD = 'dachuangjiaowuchu'
+DEFAULT_FROM_EMAIL = 'dachuang@dlnu.edu.cn'
 EMAIL_USE_TLS = False
-
-
 
 
 
