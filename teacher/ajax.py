@@ -74,7 +74,10 @@ def simple_delete(request, email):
    #     project.delete()
    # except:
    #     pass
-    user.delete()
+    try:
+        user.delete()
+    except e:
+        loginfo(e)
 
     return simplejson.dumps({"message": message})
 
