@@ -58,28 +58,6 @@ def ext_delete_project_ralated(project):
     for uploaderfile in UploadedFiles.objects.filter(project_id = project):
         uploaderfile.delete()
 
-@dajaxice_register
-def simple_delete(request, email):
-    """
-    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
-    """
-    message = ""
-    user = User.objects.get(email = email)
-
-   # student = StudentProfile.objects.get(userid = user)
-   # student.delete()
-   # try:
-   #     project = ProjectSingle.objects.get(student__userid = user)
-   #     delete_project_ralated(project)
-   #     project.delete()
-   # except:
-   #     pass
-    try:
-        user.delete()
-    except e:
-        loginfo(e)
-
-    return simplejson.dumps({"message": message})
 
 @dajaxice_register
 def brute_delete(request, email):
@@ -200,5 +178,17 @@ def CommentDelete(request,deleteMonthId,pid):
         ret = {'status': '1', 'message': u"所要删除评语记录不存在，请刷新页面"}
     return simplejson.dumps(ret)
 
+@dajaxice_register
+def simple_delete(request, email):
+    """
+    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
+    """
+    message = ""
+    try:
+        user = User.objects.get(email = email)
+        user.delete()
+    except e:
+        loginfo(e)
+    return simplejson.dumps({"message": message})
 
 
