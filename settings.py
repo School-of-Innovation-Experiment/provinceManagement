@@ -136,7 +136,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     #Project
     'registration',
-    'teacher',
     'users',
     'const',
     'expert',
@@ -144,6 +143,7 @@ INSTALLED_APPS = (
     'adminStaff',
     'news',
     'showtime',
+    'teacher',
     'student',
     #Add-on
     'south',
