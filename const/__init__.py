@@ -344,7 +344,7 @@ SCHOOL_RECOMMEND_RATE = 0.3 # 30 %
 # Message noticeMessage
 TEMPLATE_NOTICE_MESSAGE_MAX = 8
 # Progress Record
-PROGRESS_RECORD_MAX = 20
+PROGRESS_RECORD_MAX = 100
 
 # school code
 if IS_MINZU_SCHOOL: DUT_code = "12026" # MINZU_code

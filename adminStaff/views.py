@@ -34,7 +34,7 @@ from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign, split_name
+from school.utility import check_project_is_assign, split_name,get_manager
 #liuzhuo add
 import datetime
 import os
@@ -482,16 +482,18 @@ class AdminStaffService(object):
     def SubjectRating(request,is_expired=False):
         readonly=is_expired
         subject_grade_form = forms.SubjectGradeForm()
-        subject_list = get_current_project_query_set()
+        subject_list = get_current_project_query_set().order_by("project_unique_code")
         if request.method == "GET":
             school_category_form = forms.SchoolCategoryForm()
+            tab=request.GET.get("tab", "None")
+            if tab == "None": tab = "nrec"
             page1 = request.GET.get('page1')
             if page1 == "None": page1 = None
             page2 = request.GET.get('page2')
             if page2 == "None": page2 = None
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
-
+			
             if (not school_name) or int(school_name) == -1:
                 subject_list =  subject_list.filter(recommend = True)
             else:
@@ -502,6 +504,7 @@ class AdminStaffService(object):
                 page1 = 1
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
+                tab="nrec"
                 if int(school_name) == -1:
                     subject_list = subject_list.filter(recommend = True)
                 else:
@@ -510,7 +513,7 @@ class AdminStaffService(object):
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
-                subject.members = student_group[0]
+                subject.members = get_manager(subject) 
             except:
                 pass
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.grade != GRADE_UN]
@@ -526,6 +529,7 @@ class AdminStaffService(object):
             'subject_grade_form': subject_grade_form,
             'school_name': school_name,
             'readonly': readonly,
+			'tab': tab,
             }
         return render(request, "adminStaff/subject_rating.html", context)
 

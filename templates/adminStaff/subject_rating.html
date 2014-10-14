@@ -20,17 +20,17 @@
   <div class="tab-content">
     <div class="tab-pane fade active in" id="review-page">
       <ul class="nav nav-tabs">
-        <li class="active">
+		  <li {% if tab == "nrec" %} class="active" {% endif %}>
           <a href="#undefined-section" data-toggle="tab">未分级</a>
         </li>
-        <li>
+		<li {% if tab == "rec" %} class="active" {% endif %}>
           <a href="#defined-section" data-toggle="tab">已分级</a>
         </li>
 
       </ul><!--end ul title-->
 
       <div class="tab-content">
-        <div class="tab-pane fade active in" id="undefined-section">
+		  <div class="tab-pane fade {% if tab == "nrec" %} active in {% endif %}" id="undefined-section">
 	  <table class="table table-condensed" id="undefined_subject_table">
 	    <thead>
 	      <tr>
@@ -58,31 +58,31 @@
 	  <div class="pagination pagination-right">
 	    <ul>
 	      {% if nrec.subject_page.has_previous %}
-	      <li><a href="?page1={{ page1 }}&page2={{ nrec.subject_page.previous_page_number }}&school_name={{ school_name }}" id="subject-previous-page" arg="{{nrec.subject_page.previous_page_number}}"><上一页</a></li>
+	      <li><a href="?page1={{ page1 }}&page2={{ nrec.subject_page.previous_page_number }}&school_name={{ school_name }}&tab=nrec" id="subject-previous-page" arg="{{nrec.subject_page.previous_page_number}}"><上一页</a></li>
         {% endif %}
         {% if not nrec.contain_begin %}
-				                                                                                                                                                                               <li><a href="?page1={{ page1 }}&page2=1&school_name={{ school_name }}">1</a></li>
+				                                                                                                                                                                               <li><a href="?page1={{ page1 }}&page2=1&school_name={{ school_name }}&tab=nrec">1</a></li>
 	      <li><span>...</span></li>
 	      {% endif %}
 	      {% for index in nrec.index_list %}
 	      {% ifequal index nrec.subject_page.number %}
 	      <li><span>{{ index }}</span></li>
 	      {% else %}
-	      <li><a href="?page1={{ page1 }}&page2={{ index }}&school_name={{ school_name }}">{{ index }}</a></li>
+	      <li><a href="?page1={{ page1 }}&page2={{ index }}&school_name={{ school_name }}&tab=nrec">{{ index }}</a></li>
 	      {% endifequal %}
 	      {% endfor %}
 	      {% if not nrec.contain_end %}
 	      <li><span>...</span></li>
-	      <li><a href="?page1={{ page1 }}&page2={{ subject_page.paginator.num_pages }}&school_name={{ school_name }}">{{ nrec.subject_page.paginator.num_pages }}</a></li>
+	      <li><a href="?page1={{ page1 }}&page2={{ nrec.subject_page.paginator.num_pages }}&school_name={{ school_name }}"&tab=nrec>{{ nrec.subject_page.paginator.num_pages }}</a></li>
 	      {% endif %}
 	      {% if nrec.subject_page.has_next %}
-	      <li><a href="?page1={{ page1 }}&page2={{ subject_page.next_page_number }}&school_name={{ school_name }}" id="subject-next-page" arg="{{nrec.subject_page.next_page_number}}">下一页></a></li>
+	      <li><a href="?page1={{ page1 }}&page2={{ nrec.subject_page.next_page_number }}&school_name={{ school_name }}&tab=nrec" id="subject-next-page" arg="{{nrec.subject_page.next_page_number}}">下一页></a></li>
 	      {% endif %}
 	    </ul>
 	  </div>
         </div><!--end content section-->
 
-        <div class="tab-pane fade " id="defined-section">
+		<div class="tab-pane fade {% if tab == "rec" %} active in {% endif %}" id="defined-section">
 	  <table class="table table-condensed" id="defined_subject_table">
 	    <thead>
 	      <tr>
@@ -110,26 +110,25 @@
 	  <div class="pagination pagination-right">
 	    <ul>
 	      {% if rec.subject_page.has_previous %}
-	      <li><a href="?page1={{ rec.subject_page.previous_page_number }}&page2={{ page2 }}&school_name={{ school_name }}" id="subject-previous-page" arg="{{rec.subject_page.previous_page_number}}"><上一页</a></li>
+	      <li><a href="?page1={{ rec.subject_page.previous_page_number }}&page2={{ page2 }}&school_name={{ school_name }}&tab=rec" id="subject-previous-page" arg="{{rec.subject_page.previous_page_number}}"><上一页</a></li>
 				                                                                                                                                                                             {% endif %}
 				                                                                                                                                                                             {% if not rec.contain_begin %}
-				                                                                                                                                                                             <li><a href="?page1=1&page2={{ page2 }}&school_name={{ school_name }}">1</a></li>
+				                                                                                                                                                                             <li><a href="?page1=1&page2={{ page2 }}&school_name={{ school_name }}&tab=rec">1</a></li>
 	      <li><span>...</span></li>
 	      {% endif %}
 	      {% for index in rec.index_list %}
 	      {% ifequal index rec.subject_page.number %}
 	      <li><span>{{ index }}</span></li>
 	      {% else %}
-	      <li><a href="?page1={{ index }}&page2={{ page2 }}&school_name={{ school_name }}">{{ index }}</a></li>
+	      <li><a href="?page1={{ index }}&page2={{ page2 }}&school_name={{ school_name }}&tab=rec">{{ index }}</a></li>
 	      {% endifequal %}
 	      {% endfor %}
 	      {% if not rec.contain_end %}
 	      <li><span>...</span></li>
-	      <li><a href="?page1={{ subject_page.paginator.num_pages }}&page2={{ page2 }}&school_name={{ school_name }}">{{ rec.subject_
-                  page.paginator.num_pages }}</a></li>
+	      <li><a href="?page1={{ rec.subject_page.paginator.num_pages }}&page2={{ page2 }}&school_name={{ school_name }}&tab=rec">{{ rec.subject_page.paginator.num_pages }}</a></li>
 	      {% endif %}
 	      {% if rec.subject_page.has_next %}
-	      <li><a href="?page1={{ subject_page.next_page_number }}&page2={{ page2 }}&school_name={{ school_name }}" id="subject-next-page" arg="{{rec.subject_page.next_page_number}}">下一页></a></li>
+	      <li><a href="?page1={{ rec.subject_page.next_page_number }}&page2={{ page2 }}&school_name={{ school_name }}&tab=rec" id="subject-next-page" arg="{{rec.subject_page.next_page_number}}">下一页></a></li>
 	      {% endif %}
 	    </ul>
 	  </div>
