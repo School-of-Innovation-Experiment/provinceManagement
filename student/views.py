@@ -200,7 +200,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     student mid report
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
-    readonly = get_opencheck_readonly(request,project)
+    #readonly = get_opencheck_readonly(request,project)
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -224,7 +224,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 
     data = {'pid': pid,
             'mid': mid_form,
-            'readonly':readonly,
+            'readonly':False,
             'isRedirect': isRedirect,
             'is_show': is_show,
             }
