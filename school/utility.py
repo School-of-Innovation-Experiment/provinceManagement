@@ -505,7 +505,7 @@ def check_flieexistflag(project,filekeyname):
     文件存在返回 True ,不存在返回False
     """
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id).filter(name__contains=filekeyname)
-    loginfo(p = filekeyname,label="filekeyname")
+    # loginfo(p = filekeyname,label="filekeyname")
     print len(uploadfiles)
     if len(uploadfiles) == 0:
         return False
