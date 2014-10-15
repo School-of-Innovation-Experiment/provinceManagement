@@ -700,6 +700,6 @@ def get_manager(project):
         manager = Student_Group.objects.get(project = project,is_manager = True)
     except Exception, e:
         manager = Student_Group.objects.filter(project = project)[0]
-        loginfo(p =  e ,label = "get_manager")
+        # loginfo(p =  e ,label = "get_manager")
         
     return manager
