@@ -179,13 +179,13 @@ LOGIN_REDIRECT_URL = '/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "dachuang@dlnu.edu.cn"
-EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
-EMAIL_HOST = 'mail.dlnu.edu.cn'
+SERVER_EMAIL = "cxlt@dlut.edu.cn"
+EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
+EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'dachuang@dlnu.edu.cn'
-EMAIL_HOST_PASSWORD = 'dachuangjiaowuchu'
-DEFAULT_FROM_EMAIL = 'dachuang@dlnu.edu.cn'
+EMAIL_HOST_USER = 'cxlt@dlut.edu.cn'
+EMAIL_HOST_PASSWORD = 'dlut2014'
+DEFAULT_FROM_EMAIL = 'cxlt@dlnu.edu.cn'
 EMAIL_USE_TLS = False
 
 
