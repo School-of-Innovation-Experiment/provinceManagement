@@ -201,6 +201,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
     #readonly = get_opencheck_readonly(request,project)
+    readonly = False
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -224,7 +225,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 
     data = {'pid': pid,
             'mid': mid_form,
-            'readonly':False,
+            'readonly':readonly,
             'isRedirect': isRedirect,
             'is_show': is_show,
             }
