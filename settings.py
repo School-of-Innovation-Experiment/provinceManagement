@@ -184,8 +184,8 @@ EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'cxlt@dlut.edu.cn'
-EMAIL_HOST_PASSWORD = 'dlut2014'
-DEFAULT_FROM_EMAIL = 'cxlt@dlnu.edu.cn'
+EMAIL_HOST_PASSWORD = '2014dlutcxcy'
+DEFAULT_FROM_EMAIL = 'cxlt@dlut.edu.cn'
 EMAIL_USE_TLS = False
 
 
