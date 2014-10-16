@@ -328,7 +328,7 @@ def get_expertscore(proj_obj):
     cnt_of_list = len(review_list)
     # average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
     average_list = [sum(map(float, a)) / len(filter(bool, a)) if len(filter(bool, a)) else 0 for a in zip(*review_list)[1:]]
-    loginfo(p=average_list,label="average_list")
+    #loginfo(p=average_list,label="average_list")
     return average_list
 
 
@@ -348,7 +348,7 @@ def getSubjectReviewList(project_id):
             inital_list = [u""]
             inital_list.extend([0.0]*7)
             review_list.append(inital_list)
-        loginfo(p=review_list,label="review_list")
+       # loginfo(p=review_list,label="review_list")
         return review_list
 
 def cell_style(horizontal,vertical):
@@ -460,10 +460,10 @@ def get_teammember(project):
         get teammanager's name and student_id
     """
     teammember = {'manager_name':'','manager_studentid':'','memberlist':'','count':0,'telephone':''}
-    loginfo(p=teammember,label="teammember")
+    #loginfo(p=teammember,label="teammember")
     student_Group=Student_Group.objects.filter(project_id=project.project_id)
     print project.title
-    loginfo(p=student_Group,label="student_Group")
+   # loginfo(p=student_Group,label="student_Group")
     if student_Group.count() > 0:
         manager = get_manager(project)
         teammember['telephone'] = manager.telephone
