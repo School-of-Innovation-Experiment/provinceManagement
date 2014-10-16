@@ -462,7 +462,7 @@ def get_teammember(project):
     teammember = {'manager_name':'','manager_studentid':'','memberlist':'','count':0,'telephone':''}
     #loginfo(p=teammember,label="teammember")
     student_Group=Student_Group.objects.filter(project_id=project.project_id)
-    print project.title
+    #print project.title
    # loginfo(p=student_Group,label="student_Group")
     if student_Group.count() > 0:
         manager = get_manager(project)
