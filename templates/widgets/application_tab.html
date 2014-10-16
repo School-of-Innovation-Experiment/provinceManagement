@@ -9,4 +9,6 @@
    <li><a href="#team_product" data-toggle="tab"><strong>团队产品介绍</strong></a></li>
    <li><a href="#project_plan" data-toggle="tab"><strong>项目预测</strong></a></li>
 {%endif%}
-<!-- <li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li> -->
+{% if not userauth.is_student  %}
+<li><a href="#comment" data-toggle="tab"><strong>推荐意见</strong></a></li>
+{% endif  %}

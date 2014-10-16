@@ -13,7 +13,9 @@
         <!--Application Infomation-->
        {% include "student/widgets/project_plan.html" %} 
         <!--Comments info-->
-        {#   {% include "student/widgets/comments_info.html" %} #}
+        {% if not userauth.is_student %}
+        {% include "student/widgets/comments_info.html" %}
+        {% endif  %}
       </div>
     </div>
     <!--submit button-->
