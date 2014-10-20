@@ -343,6 +343,7 @@ MINZU_MAJOR_CHOICES = (
     ('77', "产品设计（原艺术设计分设）"),
     ('78', "动画"),
     ('79',"统计学"),
+    ('80',"文科实验中心"),
 )
 
 if IS_MINZU_SCHOOL: MAJOR_CHOICES = MINZU_MAJOR_CHOICES
