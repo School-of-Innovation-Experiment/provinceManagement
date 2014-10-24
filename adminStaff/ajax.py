@@ -366,7 +366,6 @@ def change_temnotice(request, temnotice_form, origin):
 
 @dajaxice_register
 def finish_control(request,year_list):
-    print 'haha'
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:

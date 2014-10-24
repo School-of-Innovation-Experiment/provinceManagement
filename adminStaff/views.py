@@ -368,7 +368,7 @@ class AdminStaffService(object):
         """
         exist_message = ''
         readonly=is_expired
-        subject_list = get_current_project_query_set().filter(recommend = True)
+        subject_list = get_current_project_query_set().filter(recommend = True).order_by('school')
         #subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
         expert_list = get_alloced_num(expert_list, 1)
@@ -389,7 +389,7 @@ class AdminStaffService(object):
 
             if subject_insitute_form.is_valid():
                 school = subject_insitute_form.cleaned_data["school_choice"]
-                subject_list =  ProjectSingle.objects.filter(Q(recommend = True) & Q(school__id = school))
+                subject_list =  get_current_project_query_set().filter(Q(recommend = True) & Q(school__id = school))
 
         alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject, True)]
         unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)] 
