@@ -13,7 +13,8 @@ from users.models import *
 
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
-
+from backend.decorators import check_auth
+from school.utility import get_current_project_query_set 
 def get_average_score_list(review_list):
     cnt_of_list = len(review_list)
     return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)]
@@ -52,7 +53,7 @@ def info_xls_baseinformation(request):
         i = '0' * (4-len(i)) + i
         return i
 
-    proj_set = ProjectSingle.objects.all()
+    proj_set = get_projectlist(request)
     xls_obj, workbook = info_xls_baseinformation_gen()
 
     # _index = 1
@@ -85,7 +86,7 @@ def info_xls_baseinformation(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院创新创业项目基本信息统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连民族学院创新创业项目基本信息统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -123,7 +124,7 @@ def info_xls_expertscore(request):
         i = '0' * (4-len(i)) + i
         return i
 
-    proj_set = ProjectSingle.objects.all()
+    proj_set = get_projectlist(request).filter(recommend = True)
     xls_obj, workbook = info_xls_expertscore_gen()
 
     # _index = 1
@@ -150,7 +151,7 @@ def info_xls_expertscore(request):
         _number+= 1
     # write xls file
 
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院创新创业项目评分统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连民族学院创新创业项目评分统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -186,7 +187,6 @@ def get_expertscore(proj_obj):
     cnt_of_list = len(review_list)
     # average_list = [sum(map(float, a)) / cnt_of_list for a in zip(*review_list)[1:]]
     average_list = [round(sum(map(float, a)) / len(filter(bool, a)), 2) if len(filter(bool, a)) else 0 for a in zip(*review_list)[1:]]
-    loginfo(p=average_list,label="average_list")
     return average_list
 
 
@@ -200,13 +200,11 @@ def getSubjectReviewList(project_id):
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
             obj_list.append(sum(map(float, obj_list[1:])))
-            loginfo(p=obj_list,label="obj_list")
             review_list.append(obj_list)
         if review_list == []:
             inital_list = [u""]
             inital_list.extend([0.0]*7)
             review_list.append(inital_list)
-        loginfo(p=review_list,label="review_list")
         return review_list
 
 def info_xls_province_gen():
@@ -240,7 +238,7 @@ def info_xls_province_gen():
     worksheet.write_merge(1, 2, 12, 13, '项目经费（元）')
     worksheet.write_merge(3, 4, 12, 12, '总经费')
     worksheet.write_merge(3, 4, 13, 13, '剩余经费')
-    worksheet.write_merge(1, 4, 14, 18, '项目简介（100字以内）')
+    #worksheet.write_merge(1, 4, 14, 18, '项目简介（100字以内）')
 
     return worksheet, workbook
 
@@ -253,7 +251,7 @@ def info_xls_projectsummary(request):
         i = '0' * (4-len(i)) + i
         return i
 
-    proj_set = ProjectSingle.objects.all().order_by('school','project_grade')
+    proj_set = get_projectlist(request).order_by('school','project_grade')
     xls_obj, workbook = info_xls_province_gen()
 
     # _index = 1
@@ -262,7 +260,6 @@ def info_xls_projectsummary(request):
         teammember = get_manager(proj_obj)
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
-        loginfo(p=proj_obj.title, label="project category") 
         innovation = pro_type.objects.get(project_id=proj_obj.project_id)
 
         row = 4 + _number
@@ -280,12 +277,12 @@ def info_xls_projectsummary(request):
         xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
         xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
         xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
-        xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+        #xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连民族学院大学生创新创业训练计划项目信息汇总表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连民族学院创新创业项目信息统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -295,9 +292,7 @@ def get_manager(project):
         get teammanager's name and student_id
     """
     teammember = {'manager_name':'None','manager_studentid':'None','memberlist':'None','count':0,'telephone':'',}
-    loginfo(p=teammember,label="teammember")
     student_Group=Student_Group.objects.filter(project_id=project.project_id)
-    loginfo(p=student_Group,label="student_Group")
     if student_Group.count() > 0:
         manager = student_Group[0]
         teammember['manager_name'] = manager.studentName
@@ -325,8 +320,8 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set = ProjectSingle.objects.all()
+        proj_set = get_current_project_query_set().order_by('project_code')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
-        proj_set = ProjectSingle.objects.filter(school_id=school)
+        proj_set = get_current_project_query_set().filter(school_id=school).order_by('project_code')
     return proj_set
