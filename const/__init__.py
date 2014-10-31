@@ -94,6 +94,8 @@ PROJECT_GRADE_CHOICES = (
 #Project Review
 STATUS_PRESUBMIT = "presubmit"
 STATUS_PREREVIEW = "prereview"
+STATUS_OPENCHECK = "opencheck"
+STATUS_MIDCHECK = "midcheck"
 STATUS_FINSUBMIT = "finsubmit"
 STATUS_FINREVIEW = "finreview"
 STATUS_ONGOING = "ongoing"
@@ -102,6 +104,8 @@ STATUS_FIRST = "undifined"
 PROJECT_STATUS_CHOICES = (
     (STATUS_PRESUBMIT, u'申请提交'),
     (STATUS_PREREVIEW, u'申请评审'),
+    (STATUS_OPENCHECK, u'开题报告提交'),
+    (STATUS_MIDCHECK, u'中期检查提交'),
     (STATUS_FINSUBMIT, u'结题提交'),
     (STATUS_FINREVIEW, u'结题评审'),
     (STATUS_ONGOING, u'正在进行'),

@@ -166,6 +166,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
         if open_form.is_valid():
             open_form.save()
             # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_OPENCHECK)
             project.save()
 
             isRedirect = True
@@ -215,6 +216,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
         mid_form = MidReportForm(request.POST, instance = mid)
         if mid_form.is_valid():
             mid_form.save()
+            project.project_status = ProjectStatus.objects.get(status=STATUS_MIDCHECK)
             project.save()
             isRedirect = True
         else:
