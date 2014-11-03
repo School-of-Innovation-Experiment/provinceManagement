@@ -45,13 +45,13 @@ def get_current_project_query_set():
     得到当前数据库中当前届的项目集合
     返回：QuerySet对象
     """
-    return ProjectSingle.objects.filter(is_past = False)
+    return get_running_project_query_set().filter(is_past = False)
 def get_running_project_query_set():
     """
     得到当前数据库中正在进行的项目集合
     返回：QuerySet对象
     """
-    return ProjectSingle.objects.filter(over_status__status = OVER_STATUS_NOTOVER)
+    return ProjectSingle.objects.filter(Q(over_status__status = OVER_STATUS_NOTOVER)|Q(over_status__status = OVER_STATUS_DELAY))
 
 def get_alloced_num(expert_list, flag):
     for expert in expert_list:

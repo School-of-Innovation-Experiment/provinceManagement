@@ -46,7 +46,7 @@ def home_view(request):
     display project at the current year
     """
     delete_bad_files(request)
-    item_list = get_running_project_query_set().filter(student__userid=request.user)
+    item_list = ProjectSingle.objects.filter(student__userid=request.user)
     #item_list = ProjectSingle.objects.filter(student__userid=request.user)
     return render(request, "student/student_home.html", {"item_list": item_list})
 

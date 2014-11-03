@@ -7,6 +7,7 @@
                <th>项目名称</th>
                <th>指导教师</th>
                <th>项目负责人</th>
+               <th>项目状态</th>
                <th>经费总额</th>
                <th>经费余额</th>
                <th>经费管理</th>
@@ -19,6 +20,7 @@
                <td>{{item.title|truncatechars:15}}</td>
                <td>{{item.adminuser.get_name}}</td>
                <td>{{item.student.get_name}}</td>
+               <td>{{item.over_status}}</td>
                <td>{{item.funds_total}}</td>
                <td>{{item.funds_remain}}</td>
                {%if userauth.is_adminstaff  %}

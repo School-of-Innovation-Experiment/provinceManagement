@@ -37,9 +37,9 @@
         <td>{{item.project_category}}</td>
         <td>{{item.adminuser.get_name}}</td>
         <td>{{item.school}}</td>
-        <td>{{item.project_status}}</td>
+        <td>{{item.over_status}}</td>
         <td>{{item.project_grade}}</td>
-        <td>
+        <td style="width:30%;">
           <span><a href="{% url student.views.application_report_view item.project_id%}" class='btn btn-primary'>申请表</a></span>
          {% if not IS_MINZU_SCHOOL %}  <span><a href="{% url student.views.open_report_view item.project_id%}" class="btn btn-primary">开题检查表</a></span> {% endif %}
           <span><a href="{% url student.views.mid_report_view item.project_id%}" class="btn btn-primary">中期检查表</a></span>
