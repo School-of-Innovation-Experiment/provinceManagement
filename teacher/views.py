@@ -55,7 +55,10 @@ def home_view(request, is_expired = False):
 @time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
     data = application_report_view_work(request, pid, is_expired)
-    return render(request, 'teacher/application.html', data)
+    if request.method == 'POST' and data['isRedirect'] :
+        return HttpResponseRedirect('/teacher/')
+    else :         
+        return render(request, 'teacher/application.html', data)
 
 
 @csrf.csrf_protect
@@ -65,7 +68,10 @@ def application_report_view(request,pid=None,is_expired=False):
 @time_controller(phase=STATUS_FINSUBMIT)
 def open_report_view(request, pid=None,is_expired=False):
     data = open_report_view_work(request, pid, is_expired)
-    return render(request, 'teacher/open.html', data)
+    if request.method == 'POST' and data['isRedirect'] :
+        return HttpResponseRedirect('/teacher/')
+    else :         
+        return render(request, 'teacher/open.html', data)
 
 
 
@@ -76,7 +82,10 @@ def open_report_view(request, pid=None,is_expired=False):
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
-    return render(request, 'teacher/final.html', data)
+    if request.method == 'POST' and data['isRedirect'] :
+        return HttpResponseRedirect('/teacher/')
+    else :            
+        return render(request, 'teacher/final.html', data)
 
 @csrf.csrf_protect
 @login_required
@@ -84,7 +93,10 @@ def final_report_view(request, pid=None,is_expired=False):
 @only_user_required
 def mid_report_view(request,pid=None, is_expired=False):
     data = mid_report_view_work(request, pid, is_expired)
-    return render(request, 'teacher/mid.html', data)
+    if request.method == 'POST' and data['isRedirect'] :
+        return HttpResponseRedirect('/teacher/')
+    else :         
+        return render(request, 'teacher/mid.html', data)
     
 @csrf.csrf_protect
 @login_required

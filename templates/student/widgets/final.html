@@ -1,7 +1,6 @@
     <div class="page-header">
       <h3> 项目完成情况概述 </h3>
     </div>
-    <blockquote>
       <div class="control-group form-inline {% if final.achievement_summary.errors %}error{% endif %}">
         {{final.achievement_summary}} 
         {% if final.achievement_summary.errors %}
@@ -11,16 +10,14 @@
         </div>
         {% endif %}  
       </div>
-    </blockquote><!--end project content-->
     
     <br/>
     <div class="page-header">
       <h3>项目评价</h3> 
     </div>
-    <blockquote>
       <fieldset>
-        <legend>成果形式</legend>
         <div  class="control-group form-inline {% if final.achievement_fashion.errors %}error{% endif %}">
+          <legend>成果形式</legend>
           {{final.achievement_fashion}} 
           {% if final.achievement_fashion.errors %}
           <div class="row alert alert-error school-display">
@@ -50,6 +47,7 @@
       </fieldset>
       <br/>
       <fieldset>
+        {% if userauth.is_adminstaff  %}  
         <legend>学校推荐语</legend>
         <div class="control-group form-inline {% if final.school_comments.errors %}error{% endif %}">
           {{final.school_comments}} 
@@ -60,12 +58,12 @@
           </div>
           {% endif %}  
         </div>
+        {% endif %}
         <div class="alert" style="display: none" id="id_school_comment_warning">
            <button type="button" class="close" data-dismiss="alert">x</button>
            <strong>学校还未填写学校推荐语，请学生提醒学校及时填写。</strong>
         </div>
 
       </fieldset> 
-    </blockquote><!--end project evaluate-->
      <script type="text/javascript" src="{{STATIC_URL}}js/student/comment_display.js" onload="comment_show_checker('{{ is_show }}');"></script>
 

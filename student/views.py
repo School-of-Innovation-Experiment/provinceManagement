@@ -285,8 +285,8 @@ def final_report_view_work(request, pid=None,is_expired=False):
             pass
             logger.info("Final Form Valid Failed"+"**"*10)
             logger.info(final_form.errors)
-
-    final_form = FinalReportForm(instance=final)
+    else:
+        final_form = FinalReportForm(instance=final)
     # techcompetition_form = TechCompetitionForm(instance=techcompetition)
 
     data = {'pid': pid,

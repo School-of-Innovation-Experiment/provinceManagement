@@ -281,13 +281,13 @@ class FinalSubmit(models.Model):
                                   verbose_name="结题报告唯一ID")
     project_id = models.ForeignKey(ProjectSingle)
 
-    achievement_fashion = models.CharField(max_length=200, blank=True, null=True,
+    achievement_fashion = models.CharField(max_length=200, blank=False, null=True,
                                            verbose_name="成果形式")
     achievement_summary = models.TextField(blank=False, null=True,
                                            verbose_name="研究成果概述")
-    inspector_comments = models.TextField(blank=False, null=True,
+    inspector_comments = models.TextField(blank=True, null=True,
                                           verbose_name="指导教师推荐语")
-    school_comments = models.TextField(blank=False, null=True,
+    school_comments = models.TextField(blank=True, null=True,
                                        verbose_name="学校推荐语")
 
     # tech_competitions = models.TextField(blank=True, null=True, verbose_name="科技竞赛成果")
