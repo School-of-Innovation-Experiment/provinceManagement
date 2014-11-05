@@ -175,7 +175,7 @@ class AdminStaffService(object):
         '''
         获得对应`学院`的指导教师用户列表
         '''
-        src=StudentProfile.objects.filter(teacher = teacher.id)
+        src=StudentProfile.objects.filter(teacher = teacher.id,projectsingle__is_past = False)
         res_list = AdminStaffService.getUserInfoList(src, teacher.userid.email)
         return res_list
 

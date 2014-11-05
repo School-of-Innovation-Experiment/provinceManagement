@@ -152,7 +152,7 @@ def open_report_view(request, pid = None, is_expired = False):
 
 def open_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    readonly = get_opencheck_readonly(request,project)
+    readonly = get_check_readonly(request,project)
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
@@ -201,8 +201,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     student mid report
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
-    #readonly = get_opencheck_readonly(request,project)
-    readonly = False
+    readonly = get_check_readonly(request,project)
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -595,7 +594,7 @@ def funds_view(request):
     ret = CFundManage.get_form_tabledata(project)
     return render(request, 'student/funds_change.html',ret)
 
-def get_opencheck_readonly(request,project):
+def get_check_readonly(request,project):
     if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = project.is_past
     elif check_auth(user=request.user,authority=TEACHER_USER):
