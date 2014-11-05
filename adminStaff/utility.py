@@ -204,7 +204,6 @@ def info_xls_summaryinnovate(request):
     for proj_obj in proj_set:
         studentlist=get_students(proj_obj)
         row_project_start = row + 1
-        print row
         for student in studentlist:
             row += 1
             xls_obj.write(row, 0, unicode(student.studentName)) 
@@ -422,7 +421,6 @@ def info_xls_projectsummary(request):
         teammember = get_teammember(proj_obj)
 
         pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
-        loginfo(p=proj_obj.title, label="project category") 
         try:
             innovation = pro_type.objects.get(project_id=proj_obj.project_id)
         except Exception, err:
@@ -432,7 +430,6 @@ def info_xls_projectsummary(request):
         row = 4 + _number
         xls_obj.write(row, 0, "%s" % _format_number(_number))
         xls_obj.write(row, 1, unicode(proj_obj.school.school))
-        loginfo(p=proj_obj.school.school,label="school")
         xls_obj.write(row, 2, unicode(proj_obj.project_unique_code))
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
@@ -491,7 +488,7 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set =  get_current_project_query_set()
+        proj_set =  get_current_project_query_set().order_by('project_code')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
         proj_set = get_current_project_query_set().filter(school_id=school)

@@ -38,11 +38,15 @@ def home_view(request, is_expired = False):
         return redirect("/settings/profile")
     else:
         limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
-        project_list = get_running_project_query_set().filter(adminuser__userid = request.user)
-        for pro_obj in project_list:
+        project_list_cur = get_running_project_query_set().filter(adminuser__userid = request.user,is_past = False)
+        project_list_past = get_running_project_query_set().filter(adminuser__userid = request.user,is_past = True)
+        for pro_obj in project_list_cur:
+            add_fileurl(pro_obj)
+        for pro_obj in project_list_past:
             add_fileurl(pro_obj)
         data = {
-            "project_list": project_list,
+            "project_list_cur": project_list_cur,
+            "project_list_past":project_list_past,
             "limited_num": limited_num,
             "remaining_activation_times": remaining_activation_times,
             }

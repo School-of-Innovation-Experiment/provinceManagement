@@ -29,7 +29,77 @@
       </tr>
     </thead>
     <tbody>
-      {% for project in project_list %}
+      {% for project in project_list_cur %}
+      <tr>
+        <td>{{project.project_unique_code}}</td>
+	<td>{{ project.title|truncatechars:15}}</td>
+	<td>{{ project.project_category }}</td>
+	<!--td>
+	    <span class="label label-warning">{{ project.project_status }}</span>
+	</td!-->
+	<td>
+	  <span class="label label-important">{{ project.project_grade }}</span>
+	</td>
+
+        <td>
+          {% if project.file_application %}<span class="label label-success"><a href="{{project.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not project.file_application %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+            {% if project.file_opencheck %}<span class="label label-success"><a href="{{project.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not project.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+
+        <td>
+          {% if project.file_interimchecklist %}<span class="label label-success"><a href="{{project.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not project.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if project.file_summary %}<span class="label label-success"><a href="{{project.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not project.file_summary %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if project.file_projectcompilation %}<span class="label label-success"><a href="{{project.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not project.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
+        </td>
+
+	<td>
+	  <span><a href="{% url teacher.views.application_report_view project.project_id%}" class='btn btn-primary'>申报表</a></span>
+      {% if not IS_MINZU_SCHOOL %} <span><a  href="{% url teacher.views.open_report_view project.project_id%}" class="btn btn-primary">开题检查表</a></span> {% endif %}
+      <span><a href="{% url teacher.views.mid_report_view project.project_id%}" class="btn btn-primary">中期检查表</a></span>
+	  <span><a href="{% url teacher.views.final_report_view project.project_id%}" class='btn btn-primary'>结题验收表</a></span>
+      <span><a href="{% url teacher.views.processrecord_view project.project_id%}" class='btn btn-primary'>过程记录管理</a></span>
+	</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+<div class="page-header">
+   <h3>
+     往届项目列表
+   </h3>
+ </div>
+ <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>项目编号</th>
+        <th>名称</th>
+        <th>项目类型</th>
+        <!--th>当前状态</th!-->
+        <th>评审级别</th>
+
+        <th>申报书</th>
+        <th>开题报告</th>
+        <th>中期检查表</th>
+        <th>结题验收表</th>
+        <th>项目汇编</th>
+
+        <th>详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in project_list_past %}
       <tr>
         <td>{{project.project_unique_code}}</td>
 	<td>{{ project.title|truncatechars:15}}</td>
@@ -76,5 +146,4 @@
 
   </table>
 </div>
-
 {% endblock %}
