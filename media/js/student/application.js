@@ -1,7 +1,4 @@
 $().ready(function(){
-  var text_innovation = $('#innovation').text();
-  text_innovation = text_innovation.replace(/<\/?[^>]*>/gi,'');
-  $('#innovation').text(text_innovation);
   $('.richtext_div').each(function(){
     var div_id = $(this).attr('id');
     $(this).html($('textarea[name='+div_id+']').val());

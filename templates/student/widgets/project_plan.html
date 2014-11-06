@@ -4,8 +4,6 @@
     <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
       <legend>项目创新之处</legend>
       {{application.innovation}}
-      <div class="richtext_div" id="innovation">
-      </div>
       {% if application.innovation.errors %}
       <div class="row alert alert-error school-display">
         <button class="close" data-dismiss="alert">×</button>
