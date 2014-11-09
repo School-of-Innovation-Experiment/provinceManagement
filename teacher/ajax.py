@@ -110,7 +110,11 @@ def StudentDispatch(request, form):
                 message = u"相同邮件已经发送，中断发送或发生内部错误"
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
     else:
-        return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误,"})
+        email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
+        email_num = email_list and len(email_list) or 0
+        limited_num = TeacherLimitNumber(request)
+        remaining_activation_times = limited_num - email_num
+        return simplejson.dumps({'field':student_form.data.keys(),'error_id':student_form.errors.keys(),'message':u"输入有误",'remaining_activation_times':remaining_activation_times})
 
 @dajaxice_register
 def commentChange(request, form, pid):
@@ -189,6 +193,11 @@ def simple_delete(request, email):
         user.delete()
     except e:
         loginfo(e)
-    return simplejson.dumps({"message": message})
+    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
+    email_num = email_list and len(email_list) or 0
+    limited_num = TeacherLimitNumber(request)
+    remaining_activation_times = limited_num - email_num
+
+    return simplejson.dumps({"message": message,"remaining_activation_times":remaining_activation_times})
 
 

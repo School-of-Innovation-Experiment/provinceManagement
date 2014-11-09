@@ -28,6 +28,7 @@ from school.utility import *
 from adminStaff.views import AdminStaffService
 from backend.fund import CFundManage
 from school.views import application_report_view_work, final_report_view_work, mid_report_view_work, open_report_view_work
+from adminStaff.utility import file_download_gen
 
 @csrf.csrf_protect
 @login_required
@@ -215,4 +216,9 @@ def funds_view(request,pid):
     project = ProjectSingle.objects.get(project_id = pid)
     ret = CFundManage.get_form_tabledata(project)
     return render(request, 'teacher/funds_change.html',ret)
-
+@csrf.csrf_protect
+@login_required
+@authority_required(TEACHER_USER)
+def file_download(request,fileid = None,filename = None):
+    response = file_download_gen(request,fileid,filename)
+    return response

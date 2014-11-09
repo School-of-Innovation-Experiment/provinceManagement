@@ -74,8 +74,6 @@
         <div class="control-group form-inline {% if application.innovation.errors %}error{% endif %}">
           <legend>项目的基本情况及创新内容</legend>
           {{application.innovation}}
-          <div class="richtext_div" id="innovation">
-          </div>
           {% if application.innovation.errors %}
           <div class="row alert alert-error school-display">
             <button class="close" data-dismiss="alert">×</button>

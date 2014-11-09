@@ -10,6 +10,7 @@ function studentDispatch_callback(data){
       object.css("background","white");
       $("#project_table").html(data.table);
     });
+    $("#remaining_activation_times").text(data.remaining_activation_times)
     //$("#time_settings_form").css("background","white");
     $("#student_email_error_message").append("<strong>"+data.message+"</strong>");
   }

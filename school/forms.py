@@ -345,6 +345,7 @@ class ProjectManageForm(forms.Form):
         for temp in project_list:
             if (temp.year, str(temp.year)+"年") not in yearlist:
               yearlist.append((temp.year, str(temp.year)+"年"))
+        yearlist.sort(key = lambda x:x[0])
         YEAR_CHOICE = list(yearlist)
         YEAR_CHOICE.insert(0,('-1',u"年份"))
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
