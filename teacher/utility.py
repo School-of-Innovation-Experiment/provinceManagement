@@ -12,7 +12,7 @@ from const.models import *
 from school.utility import get_current_year,get_current_project_query_set
 from backend.logging import logger, loginfo
 from django.db.models import Q
-
+from adminStaff.models import ProjectControl
 
 
 def get_project_count():
@@ -21,6 +21,9 @@ def get_project_count():
 def create_newproject(request, new_user, category):
     student = get_object_or_404(StudentProfile, userid = new_user)
     teacher = get_object_or_404(TeacherProfile, userid = request.user)
+    project_control = ProjectControl.objects.all()[0]
+    year = project_control.pre_start_day.year
+    loginfo(p=year,label="year")
     try:
         pid = uuid.uuid4()
         project = ProjectSingle()
@@ -30,10 +33,10 @@ def create_newproject(request, new_user, category):
         project.student = student
         project.school = teacher.school
         project.project_category = ProjectCategory.objects.get(category = category)
-        project.year = get_current_year()+1
+        project.year = year+1
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
-        project.project_code = str(get_current_year()+ 1 ) + DUT_code + str(get_project_count())
+        project.project_code = str(year + 1 ) + DUT_code + str(get_project_count())
         project.save()
 
 

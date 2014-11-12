@@ -514,11 +514,14 @@ def auto_ranking(request):
                                       x.adminuser.name,
                                       x.project_category.category))
     
+
+    project_control = ProjectControl.objects.all()[0]
+    year = project_control.pre_start_day.year
     def auto_completion(x):
         return "%04d" % x
 
     for i, project in enumerate(project_set):
-        project.project_unique_code = str(get_current_year()+1) + DUT_code + auto_completion(i + 1)
+        project.project_unique_code = str(year+1) + DUT_code + auto_completion(i + 1)
         project.save()
     return simplejson.dumps({"message": message})
 
