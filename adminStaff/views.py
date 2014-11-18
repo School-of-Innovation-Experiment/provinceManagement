@@ -787,10 +787,13 @@ class AdminStaffService(object):
             project_scoreapplication=''
         if project_school  == '-1':
             project_school = '';
+
         q1 = (project_year and Q(year=project_year)) or None
         # q2 = (project_isover and Q(is_over=project_isover)) or None
         q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+        if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
+            q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE)) 
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
         q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
