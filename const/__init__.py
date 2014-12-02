@@ -118,6 +118,7 @@ OVER_STATUS_MIDCHECK = "midcheck"
 OVER_STATUS_FINCHECK = "fincheck"
 OVER_STATUS_NORMAL = "normal"
 OVER_STATUS_DELAY = "delay"
+OVER_STATUS_STOP = "stop"
 OVER_STATUS_CHOICES = (
     (OVER_STATUS_NOTOVER, u"没有结束"),
     (OVER_STATUS_OPENCHECK, u"开题不通过"),
@@ -125,6 +126,7 @@ OVER_STATUS_CHOICES = (
     (OVER_STATUS_FINCHECK, u"结题验收不通过"),
     (OVER_STATUS_DELAY,u"项目延期"),
     (OVER_STATUS_NORMAL, u"正常结题"),
+    (OVER_STATUS_STOP, u"终止"),
 )
 
 # APP: news
@@ -380,4 +382,4 @@ FileList={
     'show_scoreapplication' : u"学分申请表",
     'show_opencheck':u'开题报告',
     'show_other':u'其他附件',
-} 
+}
