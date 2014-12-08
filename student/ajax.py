@@ -57,7 +57,7 @@ def MemberChangeInfo(request, form, origin):
     # except:
     #     raise Http404
     #sdfasdf
-    
+
     project = getProject(request)
 
     stugroup_form = StudentGroupInfoForm(deserialize_form(form))
@@ -150,7 +150,7 @@ def recordChange(request, form):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def GetStudentInfo(request, selectedId):    
+def GetStudentInfo(request, selectedId):
     try:
         project = ProjectSingle.objects.get(student__userid=request.user)
     except:
@@ -225,7 +225,7 @@ def refresh_member_table(request):
     for student in student_group:
         student.sex_val = student.sex
         student.sex = student.get_sex_display()
-    loginfo(p=student_group_info_form,label ="test")
+    # loginfo(p=student_group_info_form,label ="test")
     return render_to_string("student/widgets/member_group_table.html",
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
@@ -305,7 +305,7 @@ def FileDeleteConsistence(request, pid, fid):
         return simplejson.dumps({"is_deleted": False,
                                  "message": "Warning! Only POST accepted!"})
 
-@dajaxice_register   
+@dajaxice_register
 def SetManager(request,studentid):
     """
         set studnet manager

@@ -52,7 +52,7 @@ def NumLimit(request, form):
     if form.is_valid():
         #school = SchoolProfile.objects.get(id=form.cleaned_data["school_name"])
         limited_num = form.cleaned_data["limited_num"]
-        
+
         print form.cleaned_data['school_name']
         if form.cleaned_data["school_name"] == "-1": #处理所有学院的情况
             for school_obj in SchoolProfile.objects.all():
@@ -193,7 +193,7 @@ def get_subject_review_list(request, project_id):
 
     review_list = AdminStaffService.GetSubjectReviewList(project_id, identity)
     average_list = get_average_score_list(review_list)
-    
+
     data = {"review_list": review_list,
             "average_list": average_list,
             }
@@ -513,7 +513,7 @@ def auto_ranking(request):
     project_set.sort(key = lambda x: (x.school.school.schoolName,
                                       x.adminuser.name,
                                       x.project_category.category))
-    
+
 
     project_control = ProjectControl.objects.all()[0]
     year = project_control.pre_start_day.year
@@ -531,7 +531,8 @@ def student_code_project_query(request, student_code):
     根据学生的学号查询与之相关的进行中项目
     """
     message = ""
-    project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)]
+    project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)\
+    or project.student.userid.username == student_code]
     if project:
         #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
         message = 'ok'

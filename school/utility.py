@@ -13,7 +13,7 @@ import sys
 import time
 import datetime
 
-from django.shortcuts import get_object_or_404 
+from django.shortcuts import get_object_or_404
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
@@ -79,7 +79,7 @@ def check_project_is_assign(project, is_assign_by_adminStaff = False):
     """
     check a project is assign by someone
     """
-    return Re_Project_Expert.objects.filter(Q(project = project) & 
+    return Re_Project_Expert.objects.filter(Q(project = project) &
                                    Q(is_assign_by_adminStaff = is_assign_by_adminStaff)).count()
 
 def get_current_year():
@@ -201,7 +201,7 @@ def upload_save_process(request, pid):
     obj.name = name
     obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
-    obj.file_obj.save(filename,f,save=False) 
+    obj.file_obj.save(filename,f,save=False)
     obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
     obj.file_type = filetype
     obj.file_size = size
@@ -355,7 +355,7 @@ def check_finishingyear(project):
         user = User.objects.get(id=adminObj[0].userid_id)
     else:
         schoolObj=SchoolProfile.objects.get(id=project.school_id)
-        user = User.objects.get(id=schoolObj.userid_id)  
+        user = User.objects.get(id=schoolObj.userid_id)
     projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
     year_list=get_yearlist(projectcontrol_list)
     if  project.year in year_list:
@@ -372,7 +372,7 @@ def check_applycontrol(project):
 
     if school.is_applying :
         return True
-    else : 
+    else :
         return False
 
 def get_yearlist(object_list):
@@ -390,11 +390,11 @@ def check_uploadfile_name(request,des_name=None):
         des_name:上传入口对应的文件要求类型
         functions:将上传文件的类型与上传入口要求的类型比较
     """
-    f = request.FILES["file"]    
+    f = request.FILES["file"]
     wrapper_f = UploadedFile(f)
     name, filetype = split_name(wrapper_f.name)
     loginfo(p=des_name,label="des_name")
-    important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告',u'学分申请表']
+    important_filelist=[u"申报书",u"中期检查表",u"项目汇编",u'开题报告',u'学分申请表',u"结题报告"]
     if des_name == name:
         return True
     elif des_name == u'其他附件' :
@@ -403,7 +403,7 @@ def check_uploadfile_name(request,des_name=None):
                 return False
         else:
             return True
- 
+
     else :
         return False
 
@@ -424,7 +424,7 @@ def check_uploadfile_exist(des_name,pid):
 
 def enabledelete_file(file_list):
 
-    undelete_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u'开题报告']
+    undelete_filelist=[u"申报书",u"中期检查表",u"结题报告",u"项目汇编",u'开题报告']
     for temp in file_list:
         if temp.name in undelete_filelist:
             temp.enabledelete = False
@@ -433,7 +433,7 @@ def enabledelete_file(file_list):
     return file_list
 
 # def check_othername(request):
-#     f = request.FILES["file"]    
+#     f = request.FILES["file"]
 #     wrapper_f = UploadedFile(f)
 #     name, filetype = split_name(wrapper_f.name)
 #     important_filelist=[u"申报书",u"中期检查表",u"结题验收表",u"项目汇编",u"学分申请表"]
@@ -476,14 +476,14 @@ def get_schooluser_project_modify_status(project):
 
 def add_fileurl(project):
     uploadfiles = UploadedFiles.objects.filter(project_id = project.project_id)
-    check_flagtofile(project)
+    #check_flagtofile(project)
     for filetemp in uploadfiles:
         if filetemp.name == u"申报书":
             project.fileid_application = filetemp.file_id
             project.applicationfilename = project.project_unique_code + project.title + u"申报书"
         elif filetemp.name == u"中期检查表":
             project.fileurl_interimchecklist = filetemp.file_obj.url
-        elif filetemp.name == u"结题验收表":
+        elif filetemp.name == u"结题报告":
             project.fileurl_file_summary = filetemp.file_obj.url
         elif filetemp.name == u"项目汇编":
             project.fileurl_projectcompilation = filetemp.file_obj.url
@@ -503,8 +503,8 @@ def check_flagtofile(project):
     if project.file_interimchecklist:
         if not  check_flieexistflag(project,u"中期检查表"):
             project.file_interimchecklist = False
-    if project.file_summary:		
-        if not check_flieexistflag(project,u"结题验收表"):
+    if project.file_summary:
+        if not check_flieexistflag(project,u"结题报告"):
             project.file_summary = False
     if project.file_projectcompilation:
         if not check_flieexistflag(project,u"项目汇编"):
@@ -558,7 +558,7 @@ def get_errorflag_object(errortype,error_flagset):
             return error_temp
     else:
         return None
-    
+
 def check_filename(errortype,error_flagset):
     """
         返回上传文件对应类型的中文名称
@@ -581,12 +581,12 @@ def project_fileupload_flag(project,errortype):
     elif errortype == 'show_opencheck':
         project.file_opencheck = True
     project.save()
-    
+
 def fileupload_flag_init():
     error_flagset = set()
     for errorkey in FileList :
         error_flagset.add(error_flag(errorkey,FileList[errorkey]))
-    return error_flagset 
+    return error_flagset
 
 
 def upload_score_save_process(request, pid,des_name):
@@ -603,7 +603,7 @@ def upload_score_save_process(request, pid,des_name):
     obj.name = des_name
     obj.project_id = ProjectSingle.objects.get(project_id=pid)
     obj.file_id = uuid.uuid4()
-    obj.file_obj.save(filename,f,save=False) 
+    obj.file_obj.save(filename,f,save=False)
     obj.uploadtime = time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
     obj.file_type = filetype
     obj.file_size = size
@@ -618,7 +618,7 @@ def upload_score_save_process(request, pid,des_name):
 
 def delete_file(uploadfile,project=None):
     """
-        delete  uploadfileobject and local file 
+        delete  uploadfileobject and local file
     """
     currenturl = os.path.dirname(os.path.abspath('__file__'))
     fileurl = str(uploadfile.file_obj)
@@ -637,7 +637,7 @@ def delete_file(uploadfile,project=None):
     check_scoreaplication(project,project.project_id)
 
 def check_scoreaplication(project,pid):
-    uploadfiles = UploadedFiles.objects.filter(project_id = pid) 
+    uploadfiles = UploadedFiles.objects.filter(project_id = pid)
     loginfo(p=uploadfiles,label="uploadfiles")
     loginfo(p=project.score_application,label="project.score_application")
     for file_temp in uploadfiles:
@@ -701,5 +701,5 @@ def get_manager(project):
     except Exception, e:
         manager = Student_Group.objects.filter(project = project)[0]
         # loginfo(p =  e ,label = "get_manager")
-        
+
     return manager

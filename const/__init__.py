@@ -381,7 +381,7 @@ EXCEL_TYPE_CHOICES = (
 FileList={
     'show_applicationwarn' : u"申报书",
     'show_interimchecklist' : u"中期检查表",
-    'show_summary' : u"结题验收表",
+    'show_summary' : u"结题报告",
     'show_projectcompilation' : u"项目汇编",
     'show_scoreapplication' : u"学分申请表",
     'show_opencheck':u'开题报告',

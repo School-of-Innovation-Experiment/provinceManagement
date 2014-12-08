@@ -24,7 +24,6 @@ class StudentGroupInfoForm(forms.Form):
     for obj in major_list:
         MAJOR_CHOICES_list.append((obj.id, obj.__unicode__()))
     MAJOR_CHOICE = tuple(MAJOR_CHOICES_list)
-
     email = forms.EmailField(required=False,
                              widget=forms.TextInput(attrs={'class':'span2 studentchange', 'placeholder':u"邮箱",'id':'email'}))
     telephone = forms.CharField(max_length=20,

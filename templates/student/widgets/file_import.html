@@ -43,7 +43,7 @@
     {% endif %}
   {% endfor %}
   <br/>
-<div class="row span12" style="margin-left:0px;"> 
+<div class="row span12" style="margin-left:0px;">
   <div class="span4 student_file_upload" >
     <form method="POST"  action={% url student.views.file_upload_view pid 'show_applicationwarn'%} enctype="multipart/form-data">
       {% csrf_token %}
@@ -73,8 +73,8 @@
  <div class="span4 student_file_upload" >
     <form method="POST"  action={% url student.views.file_upload_view pid 'show_summary'%} enctype="multipart/form-data">
       {% csrf_token %}
-      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>结题验收表上传</h4></span>
-      <p>上传的文件请命名为<strong>“结题验收表”</strong></p>
+      <span class="label label-info span4" style="padding:0px;text-align: center;margin-left:0px;"><h4>结题报告上传</h4></span>
+      <p>上传的文件请命名为<strong>“结题报告”</strong></p>
       <input type="file"  style="filter:alpha(opacity=0);padding:0px;border:0px;margin:0px;" size="1" hidefocus enctype="multipart/form-data" name="file" accept="text/csv/doc/pdf/jpg/png"/ >
       <button type="submit" class="btn btn-success start" style="margin-left:15px;" rel="fileupload_operation">
         <i class="icon-upload icon-white"></i>
@@ -140,7 +140,7 @@
   </div>
   {% endif %}
   {% if IS_MINZU_SCHOOL %}
-  {% endif %}    
+  {% endif %}
 </div>
 <div class="alert alert-success" id="filesupload-tips" >
     <button type="button" class="close" data-dismiss="alert">x</button>
@@ -149,7 +149,7 @@
     {% if IS_MINZU_SCHOOL %}
     <ul>
         <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
-        <li>对于申报书，中期检查表和结题验收表三个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
+        <li>对于申报书，中期检查表和结题报告三个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
         <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
         <li>文件大小不要超过<strong>50M</strong></li>
     </ul>
@@ -158,8 +158,8 @@
     <ul>
         <li>文件名务必按照要求命名，如申报书上传中文件名为<strong>申报书</strong>，上传文件为“<strong>申报书.doc</strong>”</li>
 
-        <li>对于申报书，开题报告，中期检查表，结题验收表，和项目汇编五个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
-        <li>其他附件上传入口，用来上传与项目有关的介绍图片等，命名时不能与<strong>前五个入口</strong>的<strong>名字相同</strong>，不能为“申报书”，“开题报告”，“中期检查表”，“结题验收表”，“项目汇编”五个关键字段</li>
+        <li>对于申报书，开题报告，中期检查表，结题报告，和项目汇编五个入口的上传文件，只允许上传<strong>覆盖原文件</strong>，不提供删除操作</li>
+        <li>其他附件上传入口，用来上传与项目有关的介绍图片等，命名时不能与<strong>前五个入口</strong>的<strong>名字相同</strong>，不能为“申报书”，“开题报告”，“中期检查表”，“结题报告”，“项目汇编”五个关键字段</li>
         <li>只有文件格式为 <strong> (PDF,JPG,PNG,DOC) </strong>的文件才被允许上传.</li>
         <li>文件大小不要超过<strong>50M</strong></li>
     </ul>

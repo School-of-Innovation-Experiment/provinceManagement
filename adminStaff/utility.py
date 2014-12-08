@@ -8,7 +8,7 @@ import mimetypes
 from const import *
 
 from django.contrib.auth.models import User
-from django.core.servers.basehttp import FileWrapper  
+from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, Http404
 from django.core.files.storage import default_storage
 from student.models import Student_Group
@@ -42,7 +42,7 @@ def info_xls_baseinformation_gen():
     worksheet.write_merge(1, 1, 4, 4, '申报书')
     worksheet.write_merge(1, 1, 5, 5, '开题报告')
     worksheet.write_merge(1, 1, 6, 6, '中期检查表')
-    worksheet.write_merge(1, 1, 7, 7, '结题验收表')
+    worksheet.write_merge(1, 1, 7, 7, '结题报告')
     worksheet.write_merge(1, 1, 8, 8, '项目汇编')
     worksheet.write_merge(1, 1, 9, 9, '申请学分')
     worksheet.write_merge(1, 1, 10, 10, '是否结题')
@@ -76,17 +76,17 @@ def info_xls_baseinformation(request):
         teammember = get_teammember(proj_obj)
 
         row = 1 + _number
-        xls_obj.write(row, 0, unicode(proj_obj.project_unique_code)) 
-        xls_obj.write(row, 1, unicode(proj_obj.title)) 
-        xls_obj.write(row, 2, unicode(proj_obj.project_grade)) 
-        xls_obj.write(row, 3, unicode(proj_obj.adminuser.get_name())) 
+        xls_obj.write(row, 0, unicode(proj_obj.project_unique_code))
+        xls_obj.write(row, 1, unicode(proj_obj.title))
+        xls_obj.write(row, 2, unicode(proj_obj.project_grade))
+        xls_obj.write(row, 3, unicode(proj_obj.adminuser.get_name()))
         xls_obj.write(row, 4, unicode(proj_obj.file_application))
-        xls_obj.write(row, 5, unicode(proj_obj.file_opencheck))  
-        xls_obj.write(row, 6, unicode(proj_obj.file_interimchecklist)) 
+        xls_obj.write(row, 5, unicode(proj_obj.file_opencheck))
+        xls_obj.write(row, 6, unicode(proj_obj.file_interimchecklist))
         xls_obj.write(row, 7, unicode(proj_obj.file_summary))
-        xls_obj.write(row, 8, unicode(proj_obj.file_projectcompilation)) 
-        xls_obj.write(row, 9, unicode(proj_obj.score_application))  
-        xls_obj.write(row, 10, unicode(proj_obj.over_status)) 
+        xls_obj.write(row, 8, unicode(proj_obj.file_projectcompilation))
+        xls_obj.write(row, 9, unicode(proj_obj.score_application))
+        xls_obj.write(row, 10, unicode(proj_obj.over_status))
         xls_obj.write(row, 11, unicode(teammember['telephone']))
 
 
@@ -141,18 +141,18 @@ def info_xls_expertscore(request):
         scorelist=get_expertscore(proj_obj)
 
         row = 1 + _number
-        xls_obj.write(row, 0, unicode(proj_obj.project_code)) 
+        xls_obj.write(row, 0, unicode(proj_obj.project_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
         xls_obj.write(row, 2, unicode(proj_obj.school.school))
-        xls_obj.write(row, 3, unicode(proj_obj.project_grade)) 
-        xls_obj.write(row, 4, unicode(proj_obj.adminuser.get_name())) 
-        xls_obj.write(row, 5, unicode(scorelist[0])) 
-        xls_obj.write(row, 6, unicode(scorelist[1])) 
+        xls_obj.write(row, 3, unicode(proj_obj.project_grade))
+        xls_obj.write(row, 4, unicode(proj_obj.adminuser.get_name()))
+        xls_obj.write(row, 5, unicode(scorelist[0]))
+        xls_obj.write(row, 6, unicode(scorelist[1]))
         xls_obj.write(row, 7, unicode(scorelist[2]))
-        xls_obj.write(row, 8, unicode(scorelist[3])) 
-        xls_obj.write(row, 9, unicode(scorelist[4]))  
-        xls_obj.write(row, 10, unicode(scorelist[5])) 
-        xls_obj.write(row, 11, unicode(scorelist[6])) 
+        xls_obj.write(row, 8, unicode(scorelist[3]))
+        xls_obj.write(row, 9, unicode(scorelist[4]))
+        xls_obj.write(row, 10, unicode(scorelist[5]))
+        xls_obj.write(row, 11, unicode(scorelist[6]))
 
 
 
@@ -206,9 +206,9 @@ def info_xls_summaryinnovate(request):
         row_project_start = row + 1
         for student in studentlist:
             row += 1
-            xls_obj.write(row, 0, unicode(student.studentName)) 
-            xls_obj.write(row, 1, unicode(student.studentId)) 
-            xls_obj.write(row, 2, unicode(student.classInfo)) 
+            xls_obj.write(row, 0, unicode(student.studentName))
+            xls_obj.write(row, 1, unicode(student.studentId))
+            xls_obj.write(row, 2, unicode(student.classInfo))
         if row_project_start > row :
             row = row_project_start
         print row_project_start
@@ -216,7 +216,7 @@ def info_xls_summaryinnovate(request):
         xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
         xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
         xls_obj.write_merge(row_project_start,row,6,10)
-        # _index += 1  
+        # _index += 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新训练项目汇总表"))
     workbook.save(save_path)
@@ -278,9 +278,9 @@ def info_xls_summaryentrepreneuship(request):
             teacher_enterprise = Teacher_Enterprise()
         for student in studentlist:
             row += 1
-            xls_obj.write(row, 1, unicode(student.studentName)) 
-            xls_obj.write(row, 2, unicode(student.studentId)) 
-            xls_obj.write(row, 3, unicode(student.classInfo)) 
+            xls_obj.write(row, 1, unicode(student.studentName))
+            xls_obj.write(row, 2, unicode(student.studentId))
+            xls_obj.write(row, 3, unicode(student.classInfo))
         if row_project_start > row :
             row = row_project_start
         xls_obj.write_merge(row_project_start,row,0,0,unicode(number),style)
@@ -314,12 +314,12 @@ def check_scoreapplication(check_obj):
     if check_obj == True:
         return u"申请学分"
     else:
-        return u""    
+        return u""
 
 def get_expertscore(proj_obj):
     """
         get expert score
-    """  
+    """
 
     project_id = proj_obj.project_id
     review_list = getSubjectReviewList(project_id)
@@ -368,7 +368,7 @@ def get_students(project):
     studentlist = Student_Group.objects.filter(project=project_id)
     return studentlist
 
-    
+
 def info_xls_province_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')
@@ -381,7 +381,7 @@ def info_xls_province_gen():
     worksheet.write_merge(1, 4, 1, 1, '学院')
     worksheet.col(1).width = len('学院') * 800
     worksheet.write_merge(1, 4, 2, 2, '项目编号')
-    worksheet.col(2).width = len('项目编号') * 400    
+    worksheet.col(2).width = len('项目编号') * 400
     worksheet.write_merge(1, 4, 3, 3, '项目名称')
     worksheet.col(3).width = len('项目名称') * 800
     worksheet.write_merge(1, 4, 4, 4, '项目级别')
@@ -502,21 +502,21 @@ def file_download_gen(request,fileid = None,filename = None):
         currenturl = os.path.dirname(os.path.abspath('__file__'))
         fileurl = str(uploadfile.file_obj)
         filepath = currenturl+'/media/'+fileurl
-        filename =  filename.encode('gb2312') 
+        filename =  filename.encode('gb2312')
         wrapper = FileWrapper(open(filepath,'rb'))
     except UploadedFiles.DoesNotExist,err:
         loginfo(p = err , label = "err")
         raise Http404
 
     filetype = "." + uploadfile.file_type
-    content_type = mimetypes.guess_type(filepath)[0]  
+    content_type = mimetypes.guess_type(filepath)[0]
     loginfo(p=content_type,label = "content_type")
-    response = HttpResponse(wrapper, mimetype='content_type')  
+    response = HttpResponse(wrapper, mimetype='content_type')
     response['Content-Disposition'] = "attachment; filename= %s%s" % (filename,str(filetype))
     return response
 
 def fix_bad_flag(proj_set):
-    for pro_temp in proj_set:    
+    for pro_temp in proj_set:
         uploadfiles = UploadedFiles.objects.filter(project_id_id = pro_temp)
         for filetmp in uploadfiles:
             if default_storage.exists(filetmp.file_obj.path):
@@ -526,7 +526,7 @@ def fix_bad_flag(proj_set):
                     pro_temp.file_opencheck = True
                 if filetmp.name == u"中期检查表" and not pro_temp.file_interimchecklist:
                     pro_temp.file_interimchecklist = True
-                if filetmp.name == u"结题验收表" and not pro_temp.file_summary:
+                if filetmp.name == u"结题报告" and not pro_temp.file_summary:
                     pro_temp.file_summary = True
                 if filetmp.name == u"项目汇编" and not pro_temp.file_projectcompilation:
                     pro_temp.file_projectcompilation = True
