@@ -481,8 +481,8 @@ def add_fileurl(project):
         if filetemp.name == u"申报书":
             project.fileid_application = filetemp.file_id
             project.applicationfilename = project.project_unique_code + project.title.replace(" ","") + u"申报书"
-            print project.applicationfilename
-            print project.fileid_application
+            # print project.applicationfilename
+            # print project.fileid_application
         elif filetemp.name == u"中期检查表":
             project.fileurl_interimchecklist = filetemp.file_obj.url
         elif filetemp.name == u"结题报告":
@@ -643,8 +643,8 @@ def check_scoreaplication(project,pid):
     loginfo(p=uploadfiles,label="uploadfiles")
     loginfo(p=project.score_application,label="project.score_application")
     for file_temp in uploadfiles:
-        loginfo(p=file_temp,label="file_temp")
-        loginfo(p=file_temp.name,label="file_temp.name")
+        # loginfo(p=file_temp,label="file_temp")
+        # loginfo(p=file_temp.name,label="file_temp.name")
         if u'学分申请' in file_temp.name:
             break
     else:
