@@ -16,7 +16,7 @@ from school import views as school_views
 
 urlpatterns = patterns(
     '',
-    url(        
+    url(
         r'^application/(?P<pid>.{36})$',
         school_views.application_report_view,
         ),
@@ -31,7 +31,7 @@ urlpatterns = patterns(
         school_views.mid_report_view,
         ),
 
-    url(r'^memberchange/(?P<pid>.{36})$', 
+    url(r'^memberchange/(?P<pid>.{36})$',
         school_views.member_change),
     url(
         r'^$',
@@ -77,6 +77,6 @@ urlpatterns = patterns(
         r'^project_informationexport$',
         school_views.project_informationexport
         ),
-    url(r'^file_download/(?P<fileid>.{36})/(?P<filename>\w+)$',
+    url(r'^file_download/(?P<fileid>.{36})$',
         school_views.file_download,name="school_downloadfile"),
 )

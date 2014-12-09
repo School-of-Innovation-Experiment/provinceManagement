@@ -176,10 +176,10 @@ def SubjectRating(request,is_expired=False):
     #subject_list =  AdminStaffService.GetSubject_list(school)
     limit, remaining = get_recommend_limit(school)
     for subject in subject_list:
-        student_group = Student_Group.objects.filter(project = subject) 
+        student_group = Student_Group.objects.filter(project = subject)
        # subject.members = ','.join([student.studentName for student in student_group])
         try:
-            subject.members = get_manager(subject) 
+            subject.members = get_manager(subject)
         except:
             pass
     undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
@@ -213,7 +213,7 @@ def NewSubjectAlloc(request, is_expired = False):
     #subject_list = AdminStaffService.GetSubject_list(school)
     expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
     expert_list = get_alloced_num(expert_list, 0)
-   
+
     alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
     unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject)]
     context = {'subject_list': subject_list,
@@ -254,13 +254,13 @@ def SubjectAlloc(request, is_expired = False):
                     for subject in re_dict.keys():
                         for expert in re_dict[subject]:
                             try:
-                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id, 
+                                re_project_expert = Re_Project_Expert.objects.get(project_id=subject.project_id,
                                     expert_id=expert.id)
                                 re_project_expert.delete()
                             except:
                                 pass
                             finally:
-                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save() 
+                                Re_Project_Expert(project_id=subject.project_id, expert_id=expert.id).save()
                     obj.is_assigned_in_presubmit = True
                     obj.save()
         except Project_Is_Assigned.DoesNotExist:
@@ -287,14 +287,14 @@ def project_control(request):
 
 
     year_finishing_list = []
-    schoolObj = SchoolProfile.objects.get(userid = request.user)    
+    schoolObj = SchoolProfile.objects.get(userid = request.user)
     user = User.objects.get(id=schoolObj.userid_id)
     projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
     for finishtemp in projectfinish :
         if finishtemp.project_year not in year_finishing_list:
             year_finishing_list.append(finishtemp.project_year)
 
-    year_list = sorted(year_list)       
+    year_list = sorted(year_list)
     year_finishing_list = sorted(year_finishing_list)
 
     havedata_p = True if year_list else False
@@ -385,6 +385,6 @@ def project_informationexport(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def file_download(request,fileid = None,filename = None):
-    response = file_download_gen(request,fileid,filename)
+def file_download(request,fileid = None):
+    response = file_download_gen(request,fileid)
     return response

@@ -493,12 +493,14 @@ def get_projectlist(request):
         school = SchoolProfile.objects.get(userid=request.user)
         proj_set = get_current_project_query_set().filter(school_id=school)
     return proj_set
-def file_download_gen(request,fileid = None,filename = None):
+def file_download_gen(request,fileid = None):
     """
     按照前台的文件名，在下载文件时对文件名进行修改，不改变存储文件的名称
     """
     try:
         uploadfile = UploadedFiles.objects.get(file_id = fileid)
+        project = uploadfile.project_id
+        filename = project.project_unique_code + project.title + uploadfile.name
         currenturl = os.path.dirname(os.path.abspath('__file__'))
         fileurl = str(uploadfile.file_obj)
         filepath = currenturl+'/media/'+fileurl

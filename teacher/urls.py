@@ -52,6 +52,6 @@ urlpatterns = patterns('',
         r'^fundsview/(?P<pid>.{36}$)',
         teacher_views.funds_view,
         ),
-    url(r'^file_download/(?P<fileid>.{36})/(?P<filename>\w+)$',
+    url(r'^file_download/(?P<fileid>.{36})$',
         teacher_views.file_download,name="teacher_downloadfile"),
 )

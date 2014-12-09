@@ -21,7 +21,7 @@ from school.models import TeacherProjectPerLimits, ProjectSingle, PreSubmit, Fin
 from student.forms import  ProcessRecordForm
 from school.forms import *
 from teacher.forms import   MonthCommentForm
-from adminStaff.forms import StudentDispatchForm 
+from adminStaff.forms import StudentDispatchForm
 from registration.models import *
 from teacher.utility import *
 from school.utility import *
@@ -62,7 +62,7 @@ def application_report_view(request,pid=None,is_expired=False):
     data = application_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect('/teacher/')
-    else :         
+    else :
         return render(request, 'teacher/application.html', data)
 
 
@@ -75,7 +75,7 @@ def open_report_view(request, pid=None,is_expired=False):
     data = open_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect('/teacher/')
-    else :         
+    else :
         return render(request, 'teacher/open.html', data)
 
 
@@ -89,7 +89,7 @@ def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect('/teacher/')
-    else :            
+    else :
         return render(request, 'teacher/final.html', data)
 
 @csrf.csrf_protect
@@ -100,9 +100,9 @@ def mid_report_view(request,pid=None, is_expired=False):
     data = mid_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect('/teacher/')
-    else :         
+    else :
         return render(request, 'teacher/mid.html', data)
-    
+
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
@@ -219,6 +219,6 @@ def funds_view(request,pid):
 @csrf.csrf_protect
 @login_required
 @authority_required(TEACHER_USER)
-def file_download(request,fileid = None,filename = None):
-    response = file_download_gen(request,fileid,filename)
+def file_download(request,fileid = None):
+    response = file_download_gen(request,fileid)
     return response
