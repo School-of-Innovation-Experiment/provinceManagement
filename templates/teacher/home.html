@@ -112,7 +112,7 @@
 	</td>
 
         <td>
-          {% if project.file_application %}<span class="label label-success"><a href="{{project.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if project.file_application %}<span class="label label-success"><a href="/teacher/file_download/{{project.fileid_application}}/{{project.applicationfilename}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
           {% if not project.file_application %}<span class="label label-important">未上传</span>{% endif %}
         </td>
         <td>
