@@ -392,7 +392,7 @@ class AdminStaffService(object):
                 subject_list =  ProjectSingle.objects.filter(Q(recommend = True) & Q(school__id = school))
 
         alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject, True)]
-        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)] 
+        unalloced_subject_list = [subject for subject in subject_list if not check_project_is_assign(subject, True)]
         context = {'subject_list': subject_list,
                    'alloced_subject_list': alloced_subject_list,
                    'unalloced_subject_list': unalloced_subject_list,
@@ -493,7 +493,7 @@ class AdminStaffService(object):
             if page2 == "None": page2 = None
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
-			
+
             if (not school_name) or int(school_name) == -1:
                 subject_list =  subject_list.filter(recommend = True)
             else:
@@ -513,7 +513,7 @@ class AdminStaffService(object):
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
             try:
-                subject.members = get_manager(subject) 
+                subject.members = get_manager(subject)
             except:
                 pass
         rec_subject_list = [subject for subject in subject_list if subject.project_grade.grade != GRADE_UN]
@@ -607,7 +607,7 @@ class AdminStaffService(object):
                     break
             if rolemessage:
                 _message = rolemessage + request.POST["message_content"] + "  " + datemessage
-                message = NoticeMessage(noticemessage = _message)                
+                message = NoticeMessage(noticemessage = _message)
                 message.save()
         templatenotice_group_form = forms.TemplateNoticeForm()
         templatenotice_group = TemplateNoticeMessage.objects.all()
@@ -646,7 +646,7 @@ class AdminStaffService(object):
             if finishtemp.project_year not in year_finishing_list:
                 year_finishing_list.append(finishtemp.project_year)
 
-        year_list = sorted(year_list)       
+        year_list = sorted(year_list)
         year_finishing_list = sorted(year_finishing_list)
 
         loginfo(p=year_finishing_list,label="year_finishing_list")
@@ -677,7 +677,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def file_download(request,fileid = None,filename = None):
-        response = file_download_gen(request,fileid,filename)
+        response = file_download_gen(request,fileid)
         return response
 
     @staticmethod
@@ -793,7 +793,7 @@ class AdminStaffService(object):
         q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
         if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
-            q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE)) 
+            q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
         q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
@@ -872,7 +872,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def open_report_view(request, pid=None):
-        data = open_report_view_work(request, pid)    
+        data = open_report_view_work(request, pid)
         return render(request, 'adminStaff/open.html', data)
 
     @staticmethod
@@ -880,7 +880,7 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def mid_report_view(request, pid=None):
-        data = mid_report_view_work(request, pid)    
+        data = mid_report_view_work(request, pid)
         return render(request, 'adminStaff/mid.html', data)
 
 
@@ -891,7 +891,7 @@ class AdminStaffService(object):
     def application_report_view(request, pid=None):
         data = application_report_view_work(request, pid)
         # if data['isRedirect'] :
-        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid))
         # else:
         return render(request, 'adminStaff/application.html', data)
 
@@ -907,8 +907,8 @@ class AdminStaffService(object):
 
 
         # if data['isRedirect'] :
-        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid)) 
-        # else: 
+        #     return HttpResponseRedirect( '/adminStaff/memberchange/' + str(pid))
+        # else:
 
         return render(request, 'adminStaff/final.html', data)
 
@@ -916,7 +916,7 @@ class AdminStaffService(object):
     @staticmethod
     @csrf.csrf_protect
     #@login_required
-    #@authority_required(ADMINSTAFF_USER)    
+    #@authority_required(ADMINSTAFF_USER)
     def member_change(request, pid):
 
         data = member_change_work(request, pid)
@@ -953,7 +953,7 @@ class AdminStaffService(object):
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
                 file_path = info_xls_summaryinnovate(request)
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
-                file_path  = info_xls_summaryentrepreneuship(request)       
+                file_path  = info_xls_summaryentrepreneuship(request)
             elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
                 file_path = info_xls_projectsummary(request)
         except e:
@@ -1018,7 +1018,7 @@ class AdminStaffService(object):
 #                loginfo(p=username,label="username")
 #                loginfo(p=password,label="password")
 #                check_box_list = request.POST.getlist("check_box")
-#                loginfo(p=check_box_list,label="checkbox_temp")     
+#                loginfo(p=check_box_list,label="checkbox_temp")
 #                for checkbox_temp in check_box_list:
 #                    loginfo(p=checkbox_temp,label="checkbox_temp")
 #                    if checkbox_temp.checked:
