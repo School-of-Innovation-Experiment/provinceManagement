@@ -275,6 +275,7 @@ DLUT_MAJOR_CHOICES = (
     ('92',"海洋技术"),
     ('93',"化工与制药类"),
     ('94',"热能与动力工程"),
+    ('95',"俄语"),
 )
 # minzu major
 MINZU_MAJOR_CHOICES = (
@@ -344,8 +345,8 @@ if IS_DLUT_SCHOOL: SCHOOL_NAME_ENGLISH = DLUT_SCHOOL_NAME_ENGLISH
 
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {
-    CATE_INNOVATION: 5,
-    # CATE_INNOVATION: 3,
+    #CATE_INNOVATION: 5,
+    CATE_INNOVATION: 3,
     CATE_ENTERPRISE: 5,
     CATE_ENTERPRISE_EE: 5,
 }
