@@ -49,6 +49,8 @@ def info_xls_baseinformation_gen():
     worksheet.col(10).width = len('是否结题') * 300
     worksheet.write_merge(1, 1, 11, 11, '负责人电话')
     worksheet.col(11).width = len('负责人电话') * 200
+    worksheet.write_merge(1, 1, 12, 12, '所在院系')
+
     return worksheet, workbook
 
 def info_xls_baseinformation(request):
@@ -88,12 +90,12 @@ def info_xls_baseinformation(request):
         xls_obj.write(row, 9, unicode(proj_obj.score_application))
         xls_obj.write(row, 10, unicode(proj_obj.over_status))
         xls_obj.write(row, 11, unicode(teammember['telephone']))
-
+        xls_obj.write(row, 12, unicode(proj_obj.school.get_school_name()))
 
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学创新创业项目基本信息统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学创新创业项目基本信息统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -159,7 +161,7 @@ def info_xls_expertscore(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学创新创业项目评分统计表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学创新创业项目评分统计表"))
     workbook.save(save_path)
     return save_path
 
@@ -169,7 +171,7 @@ def info_xls_summaryinnovate_gen():
     style = cell_style(horizontal=True,vertical=True)
 
     # generate header
-    worksheet.write_merge(0, 0, 0, 10, '大连理工大学大学生创新训练项目汇总表(%s年)' % str(datetime.date.today().year),style)
+    worksheet.write_merge(0, 0, 0, 10, '大连理工大学大学生创新训练项目汇总表(%s年)' % str(datetime.date.today().year+1),style)
 
     # generate body
     worksheet.write_merge(1, 1, 0, 0, '学生姓名')
@@ -218,7 +220,7 @@ def info_xls_summaryinnovate(request):
         xls_obj.write_merge(row_project_start,row,6,10)
         # _index += 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新训练项目汇总表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新训练项目汇总表"))
     workbook.save(save_path)
     return save_path
 
@@ -293,7 +295,7 @@ def info_xls_summaryentrepreneuship(request):
         xls_obj.write_merge(row_project_start,row,10,13)
         # _index += 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创业训练项目汇总表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创业训练项目汇总表"))
     workbook.save(save_path)
     return save_path
 
@@ -341,7 +343,6 @@ def getSubjectReviewList(project_id):
                         obj.score_practice, obj.score_achievement,
                         obj.score_capacity,]
             obj_list.append(sum(map(float, obj_list[1:])))
-            loginfo(p=obj_list,label="obj_list")
             review_list.append(obj_list)
         if review_list == []:
             inital_list = [u""]
@@ -447,7 +448,7 @@ def info_xls_projectsummary(request):
         # _index += 1
         _number+= 1
     # write xls file
-    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year), "年大连理工大学大学生创新创业训练计划项目信息汇总表"))
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目信息汇总表"))
     workbook.save(save_path)
     return save_path
 
@@ -488,7 +489,7 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set =  get_current_project_query_set().order_by('project_code')
+        proj_set =  get_current_project_query_set().order_by('project_code','adminuser')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
         proj_set = get_current_project_query_set().filter(school_id=school)

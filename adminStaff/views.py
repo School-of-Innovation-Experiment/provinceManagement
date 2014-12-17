@@ -956,8 +956,8 @@ class AdminStaffService(object):
                 file_path  = info_xls_summaryentrepreneuship(request)
             elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
                 file_path = info_xls_projectsummary(request)
-        except e:
-            loginfo(e)
+        except Exception,err:
+            loginfo(err)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
 
     @staticmethod
