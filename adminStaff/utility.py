@@ -32,24 +32,25 @@ def info_xls_baseinformation_gen():
     worksheet.write_merge(0, 0, 0, 10, '大连理工大学创新创业项目基本信息统计表',style)
 
     # generate body
-    worksheet.write_merge(1, 1, 0, 0, '项目编号')
-    worksheet.col(0).width = len('项目编号') * 300
-    worksheet.write_merge(1, 1, 1, 1, '项目名称')
-    worksheet.col(1).width = len('项目名称') * 800
-    worksheet.write_merge(1, 1, 2, 2, '项目级别')
-    worksheet.write_merge(1, 1, 3, 3, '指导教师')
-    worksheet.col(3).width = len('指导教师') * 200
-    worksheet.write_merge(1, 1, 4, 4, '申报书')
-    worksheet.write_merge(1, 1, 5, 5, '开题报告')
-    worksheet.write_merge(1, 1, 6, 6, '中期检查表')
-    worksheet.write_merge(1, 1, 7, 7, '结题报告')
-    worksheet.write_merge(1, 1, 8, 8, '项目汇编')
-    worksheet.write_merge(1, 1, 9, 9, '申请学分')
-    worksheet.write_merge(1, 1, 10, 10, '是否结题')
-    worksheet.col(10).width = len('是否结题') * 300
-    worksheet.write_merge(1, 1, 11, 11, '负责人电话')
-    worksheet.col(11).width = len('负责人电话') * 200
-    worksheet.write_merge(1, 1, 12, 12, '所在院系')
+    worksheet.write_merge(1, 1, 0, 0, '序号')
+    worksheet.write_merge(1, 1, 1, 1, '项目编号')
+    worksheet.col(1).width = len('项目编号') * 300
+    worksheet.write_merge(1, 1, 2, 2, '项目名称')
+    worksheet.col(2).width = len('项目名称') * 800
+    worksheet.write_merge(1, 1, 3, 3, '项目级别')
+    worksheet.write_merge(1, 1, 4, 4, '指导教师')
+    worksheet.col(4).width = len('指导教师') * 200
+    worksheet.write_merge(1, 1, 5, 5, '申报书')
+    worksheet.write_merge(1, 1, 6, 6, '开题报告')
+    worksheet.write_merge(1, 1, 7, 7, '中期检查表')
+    worksheet.write_merge(1, 1, 8, 8, '结题报告')
+    worksheet.write_merge(1, 1, 9, 9, '项目汇编')
+    worksheet.write_merge(1, 1, 10, 10, '申请学分')
+    worksheet.write_merge(1, 1, 11, 11, '是否结题')
+    worksheet.col(11).width = len('是否结题') * 300
+    worksheet.write_merge(1, 1, 12, 12, '负责人电话')
+    worksheet.col(12).width = len('负责人电话') * 200
+    worksheet.write_merge(1, 1, 13, 13, '所在院系')
 
     return worksheet, workbook
 
@@ -78,19 +79,20 @@ def info_xls_baseinformation(request):
         teammember = get_teammember(proj_obj)
 
         row = 1 + _number
-        xls_obj.write(row, 0, unicode(proj_obj.project_unique_code))
-        xls_obj.write(row, 1, unicode(proj_obj.title))
-        xls_obj.write(row, 2, unicode(proj_obj.project_grade))
-        xls_obj.write(row, 3, unicode(proj_obj.adminuser.get_name()))
-        xls_obj.write(row, 4, unicode(proj_obj.file_application))
-        xls_obj.write(row, 5, unicode(proj_obj.file_opencheck))
-        xls_obj.write(row, 6, unicode(proj_obj.file_interimchecklist))
-        xls_obj.write(row, 7, unicode(proj_obj.file_summary))
-        xls_obj.write(row, 8, unicode(proj_obj.file_projectcompilation))
-        xls_obj.write(row, 9, unicode(proj_obj.score_application))
-        xls_obj.write(row, 10, unicode(proj_obj.over_status))
-        xls_obj.write(row, 11, unicode(teammember['telephone']))
-        xls_obj.write(row, 12, unicode(proj_obj.school.get_school_name()))
+        xls_obj.write(row, 0, str(_number))
+        xls_obj.write(row, 1, unicode(proj_obj.project_unique_code))
+        xls_obj.write(row, 2, unicode(proj_obj.title))
+        xls_obj.write(row, 3, unicode(proj_obj.project_grade))
+        xls_obj.write(row, 4, unicode(proj_obj.adminuser.get_name()))
+        xls_obj.write(row, 5, unicode(proj_obj.file_application))
+        xls_obj.write(row, 6, unicode(proj_obj.file_opencheck))
+        xls_obj.write(row, 7, unicode(proj_obj.file_interimchecklist))
+        xls_obj.write(row, 8, unicode(proj_obj.file_summary))
+        xls_obj.write(row, 9, unicode(proj_obj.file_projectcompilation))
+        xls_obj.write(row, 10, unicode(proj_obj.score_application))
+        xls_obj.write(row, 11, unicode(proj_obj.over_status))
+        xls_obj.write(row, 12, unicode(teammember['telephone']))
+        xls_obj.write(row, 13, unicode(proj_obj.school.get_school_name()))
 
         # _index += 1
         _number+= 1
@@ -174,18 +176,20 @@ def info_xls_summaryinnovate_gen():
     worksheet.write_merge(0, 0, 0, 10, '大连理工大学大学生创新训练项目汇总表(%s年)' % str(datetime.date.today().year+1),style)
 
     # generate body
-    worksheet.write_merge(1, 1, 0, 0, '学生姓名')
-    worksheet.col(0).width = len('学生姓名')*200
-    worksheet.write_merge(1, 1, 1, 1, '学号')
-    worksheet.col(1).width = len('学号')*400
-    worksheet.write_merge(1, 1, 2, 2, '班级')
-    worksheet.col(2).width = len('班级')*300
-    worksheet.write_merge(1, 1, 3, 3, '项目名称')
-    worksheet.col(3).width = len('项目名称')*800
-    worksheet.write_merge(1, 1, 4, 4, '指导教师')
-    worksheet.col(4).width = len('指导教师')*200
-    worksheet.write_merge(1, 1, 5, 5, '职称')
-    worksheet.write_merge(1, 1, 6, 10, '备注')
+    worksheet.write_merge(1, 1, 0, 0, '序号')
+    worksheet.write_merge(1, 1, 1, 1, '学生姓名')
+    worksheet.col(1).width = len('学生姓名')*200
+    worksheet.write_merge(1, 1, 2, 2, '学号')
+    worksheet.col(2).width = len('学号')*400
+    worksheet.write_merge(1, 1, 3, 3, '班级')
+    worksheet.col(3).width = len('班级')*300
+    worksheet.write_merge(1, 1, 4, 4, '项目名称')
+    worksheet.col(4).width = len('项目名称')*800
+    worksheet.write_merge(1, 1, 5, 5, '指导教师')
+    worksheet.col(5).width = len('指导教师')*200
+    worksheet.write_merge(1, 1, 6, 6, '职称')
+    worksheet.write_merge(1, 1, 7, 7, '所在院系')
+    worksheet.write_merge(1, 1, 8, 10, '备注')
     return worksheet, workbook
 
 def info_xls_summaryinnovate(request):
@@ -203,21 +207,24 @@ def info_xls_summaryinnovate(request):
 
     # _index = 1
     row = 1
+    number = 0
     for proj_obj in proj_set:
+        number += 1
         studentlist=get_students(proj_obj)
         row_project_start = row + 1
         for student in studentlist:
             row += 1
-            xls_obj.write(row, 0, unicode(student.studentName))
-            xls_obj.write(row, 1, unicode(student.studentId))
-            xls_obj.write(row, 2, unicode(student.classInfo))
+            xls_obj.write(row, 1, unicode(student.studentName))
+            xls_obj.write(row, 2, unicode(student.studentId))
+            xls_obj.write(row, 3, unicode(student.classInfo))
         if row_project_start > row :
             row = row_project_start
-        print row_project_start
-        xls_obj.write_merge(row_project_start,row,3,3,unicode(proj_obj.title),style)
-        xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.adminuser.get_name()),style)
-        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.titles),style)
-        xls_obj.write_merge(row_project_start,row,6,10)
+        xls_obj.write_merge(row_project_start,row,0,0,str(number),style)
+        xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.title),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.get_name()),style)
+        xls_obj.write_merge(row_project_start,row,6,6,unicode(proj_obj.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,7,7,unicode(proj_obj.school.get_school_name()),style)
+        xls_obj.write_merge(row_project_start,row,8,10)
         # _index += 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新训练项目汇总表"))
@@ -233,7 +240,7 @@ def info_xls_summaryentrepreneuship_gen():
     worksheet.write_merge(0, 0, 0, 13, '大连理工大学大学生创业训练项目汇总表(%s年)' % str(datetime.date.today().year),style)
 
     # generate body
-    worksheet.write_merge(1, 1, 0, 0, '排序')
+    worksheet.write_merge(1, 1, 0, 0, '序号')
     worksheet.write_merge(1, 1, 1, 1, '学生姓名')
     worksheet.col(1).width = len('学生姓名')*200
     worksheet.write_merge(1, 1, 2, 2, '学号')
@@ -249,7 +256,8 @@ def info_xls_summaryentrepreneuship_gen():
     worksheet.write_merge(1, 1, 8, 8, '企业导师')
     worksheet.col(8).width = len('企业导师')*200
     worksheet.write_merge(1, 1, 9, 9, '单位/职称')
-    worksheet.write_merge(1, 1, 10, 13, '备注')
+    worksheet.write_merge(1, 1, 10, 10, '所在院系')
+    worksheet.write_merge(1, 1, 11, 13, '备注')
     return worksheet, workbook
 
 def info_xls_summaryentrepreneuship(request):
@@ -292,7 +300,8 @@ def info_xls_summaryentrepreneuship(request):
         xls_obj.write_merge(row_project_start,row,7,7,unicode(proj_obj.adminuser.titles),style)
         xls_obj.write_merge(row_project_start,row,8,8,unicode(teacher_enterprise.name),style)
         xls_obj.write_merge(row_project_start,row,9,9,unicode(teacher_enterprise.jobs)+'/'+unicode(teacher_enterprise.titles),style)
-        xls_obj.write_merge(row_project_start,row,10,13)
+        xls_obj.write_merge(row_project_start,row,10,10,unicode(proj_obj.school.get_school_name()),style)
+        xls_obj.write_merge(row_project_start,row,11,13)
         # _index += 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创业训练项目汇总表"))
@@ -489,7 +498,7 @@ def get_projectlist(request):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set =  get_current_project_query_set().order_by('project_code','adminuser')
+        proj_set =  get_current_project_query_set().order_by('project_unique_code','school','adminuser')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
         proj_set = get_current_project_query_set().filter(school_id=school)
