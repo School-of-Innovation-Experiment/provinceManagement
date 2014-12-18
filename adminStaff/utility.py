@@ -514,7 +514,7 @@ def file_download_gen(request,fileid = None):
         currenturl = os.path.dirname(os.path.abspath('__file__'))
         fileurl = str(uploadfile.file_obj)
         filepath = currenturl+'/media/'+fileurl
-        filename =  filename.encode('gb2312')
+        filename =  filename.encode('GBK')
         wrapper = FileWrapper(open(filepath,'rb'))
     except UploadedFiles.DoesNotExist,err:
         loginfo(p = err , label = "err")
