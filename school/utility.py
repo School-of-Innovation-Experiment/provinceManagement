@@ -375,14 +375,15 @@ def check_applycontrol(project):
     else :
         return False
 
-def get_yearlist(object_list):
+def get_yearlist(object_list,year_field):
     """
     返回年份列表
     """
     year_list=[]
+    object_list = object_list.values(year_field).distinct().order_by('-'+year_field)
     for pro_obj in object_list :
-        if pro_obj.project_year not in year_list :
-            year_list.append(pro_obj.project_year)
+        for key in pro_obj:
+            year_list.append(pro_obj[key])
     return year_list
 
 def check_uploadfile_name(request,des_name=None):
@@ -702,3 +703,11 @@ def get_manager(project):
         # loginfo(p =  e ,label = "get_manager")
 
     return manager
+
+def get_yearlist_forform(pro_set):
+    project_list = pro_set.values('year').distinct().order_by('-year')
+    yearlist = []
+    for temp in project_list:
+        for key in temp:
+            yearlist.append((temp[key], str(temp[key])+"年"))
+    return yearlist

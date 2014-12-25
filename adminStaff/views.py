@@ -34,7 +34,7 @@ from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign, split_name,get_manager
+from school.utility import check_project_is_assign, split_name,get_manager,get_yearlist_forform,get_yearlist
 #liuzhuo add
 import datetime
 import os
@@ -628,11 +628,8 @@ class AdminStaffService(object):
         is_finishing = adminStaff.is_finishing
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
         pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
-        year_list=[]
 
-        for pro_obj in pro_list :
-            if pro_obj.year not in year_list :
-                year_list.append(pro_obj.year)
+        year_list = get_yearlist(pro_list,'year')
         if year_list:
             havedata_p = True
         else:
@@ -646,8 +643,7 @@ class AdminStaffService(object):
             if finishtemp.project_year not in year_finishing_list:
                 year_finishing_list.append(finishtemp.project_year)
 
-        year_list = sorted(year_list)
-        year_finishing_list = sorted(year_finishing_list)
+        year_finishing_list = get_yearlist(projectfinish,'project_year')
 
         loginfo(p=year_finishing_list,label="year_finishing_list")
 
@@ -668,9 +664,11 @@ class AdminStaffService(object):
     @login_required
     @authority_required(ADMINSTAFF_USER)
     def project_informationexport(request):
+
+        project_manage_form = forms.ProjectManageForm()
         return render(request, "adminStaff/project_informationexport.html",
                     {
-
+                        "project_manage_form":project_manage_form,
                     })
     @staticmethod
     @csrf.csrf_protect
@@ -941,21 +939,22 @@ class AdminStaffService(object):
     @csrf.csrf_protect
     @login_required
     # @authority_required(ADMINSTAFF_USER)
-    def get_xls_path(request,exceltype):
+    def get_xls_path(request,exceltype,project_manage_form):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
         try:
+            pro_set = get_projectlist(request,project_manage_form)
             if exceltype == EXCEL_TYPE_BASEINFORMATION:
-                file_path = info_xls_baseinformation(request)
+                file_path = info_xls_baseinformation(request,pro_set)
             elif exceltype == EXCEL_TYPE_APPLICATIONSCORE:
-                file_path = info_xls_expertscore(request)
+                file_path = info_xls_expertscore(request,pro_set)
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
-                file_path = info_xls_summaryinnovate(request)
+                file_path = info_xls_summaryinnovate(request,pro_set)
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
-                file_path  = info_xls_summaryentrepreneuship(request)
+                file_path  = info_xls_summaryentrepreneuship(request,pro_set)
             elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
-                file_path = info_xls_projectsummary(request)
+                file_path = info_xls_projectsummary(request,pro_set)
         except Exception,err:
             loginfo(err)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]

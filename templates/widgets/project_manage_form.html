@@ -1,0 +1,8 @@
+    {{project_manage_form.project_grade}}
+    {{project_manage_form.project_year}}
+    {{project_manage_form.project_overstatus}}
+    {%if userauth.is_adminstaff  %}
+        {{project_manage_form.project_scoreapplication}}
+        {{project_manage_form.project_school}}
+    {%endif%}
+    {{project_manage_form.teacher_student_name}}

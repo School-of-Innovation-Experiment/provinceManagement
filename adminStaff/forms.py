@@ -13,6 +13,7 @@ from const import *
 from users.models import *
 from school.models import *
 from student.models import Student_Group
+from school.utility import get_yearlist_forform
 from const.models import SchoolDict, PROJECT_CATE_CHOICES, ProjectCategory #, InsituteCategory
 class ExpertDispatchForm(forms.Form):
     expert_password = forms.CharField(max_length=20, required=False,
@@ -267,11 +268,7 @@ class ProjectManageForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ProjectManageForm, self).__init__(*args, **kwargs)
         project_list = ProjectSingle.objects.all()
-        yearlist = []
-        for temp in project_list:
-            if (temp.year, str(temp.year)+"年") not in yearlist:
-              yearlist.append((temp.year, str(temp.year)+"年"))
-        yearlist.sort(key=lambda x:x[0])
+        yearlist = get_yearlist_forform(project_list)
         loginfo(p = yearlist,label="yearlist")
         YEAR_CHOICE = list(yearlist)
         YEAR_CHOICE.insert(0,('-1',u"年份"))

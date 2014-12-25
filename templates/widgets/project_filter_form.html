@@ -1,13 +1,6 @@
 
    {% csrf_token %}
-       {{project_manage_form.project_grade}}
-       {{project_manage_form.project_year}}
-       {{project_manage_form.project_overstatus}}
-       {%if userauth.is_adminstaff  %}
-         {{project_manage_form.project_scoreapplication}}
-         {{project_manage_form.project_school}}
-       {%endif%}
-       {{project_manage_form.teacher_student_name}}
+   {% include "widgets/project_manage_form.html" %} 
        <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button">检索</button>
        <h4>
          符合搜索条件的项目数量为 {{pro_list.count}}.

@@ -279,23 +279,12 @@ def project_control(request):
     grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
     grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
     pro_list=ProjectSingle.objects.filter(Q(school_id = school.id)&Q(over_status=over_notover_status)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)))
-    loginfo(p=pro_list,label="pro_list in school %s" % request.user)
-    year_list=[]
-    for pro_obj in pro_list :
-        if pro_obj.year not in year_list :
-            year_list.append(pro_obj.year)
-
-
-    year_finishing_list = []
+    #loginfo(p=pro_list,label="pro_list in school %s" % request.user)
+    year_list= get_yearlist(pro_list,'year')
     schoolObj = SchoolProfile.objects.get(userid = request.user)
     user = User.objects.get(id=schoolObj.userid_id)
     projectfinish = ProjectFinishControl.objects.filter(userid =user.id)
-    for finishtemp in projectfinish :
-        if finishtemp.project_year not in year_finishing_list:
-            year_finishing_list.append(finishtemp.project_year)
-
-    year_list = sorted(year_list)
-    year_finishing_list = sorted(year_finishing_list)
+    year_finishing_list = get_yearlist(projectfinish,'project_year')
 
     havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
@@ -339,7 +328,7 @@ def projectListInfor(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
-        pro_list = projectFilterList(request,project_manage_form,school)
+        pro_list = projectFilterList(request,project_manage_form,school).order_by('-year','adminuser')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
         over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
@@ -347,7 +336,7 @@ def projectListInfor(request):
         grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
         grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
         pro_list=get_current_project_query_set().filter(Q(school_id=school)&(Q(project_grade=grade_un)|Q(project_grade=grade_school)|Q(project_grade=grade_insitute)))
-	pro_list = pro_list.order_by('project_unique_code')
+	pro_list = pro_list.order_by('project_unique_code','adminuser')
     if pro_list.count() != 0 or request.method == "POST":
         havedata_p = True
     else:
@@ -378,9 +367,11 @@ def projectFilterList(request,project_manage_form,school):
 @login_required
 @authority_required(SCHOOL_USER)
 def project_informationexport(request):
+    school = SchoolProfile.objects.get(userid=request.user)
+    project_manage_form = forms.ProjectManageForm(school = school)
     return render(request, "school/project_informationexport.html",
                 {
-
+                    'project_manage_form':project_manage_form,    
                 })
 @csrf.csrf_protect
 @login_required

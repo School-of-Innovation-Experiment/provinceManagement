@@ -262,9 +262,9 @@ def change_project_unique_code(request, project_id,project_unique_code):
     return simplejson.dumps({'status':'1', 'res':res})
 
 @dajaxice_register
-def Release_Excel(request,exceltype):
+def Release_Excel(request,exceltype,project_manage_form):
     print exceltype
-    path = AdminStaffService.get_xls_path(request,exceltype)
+    path = AdminStaffService.get_xls_path(request,exceltype,project_manage_form)
     loginfo(p=path,label="path")
     return simplejson.dumps({'path':path})
 

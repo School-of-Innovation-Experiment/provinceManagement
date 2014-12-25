@@ -15,12 +15,14 @@ from student.models import Student_Group
 from school.models import *
 from users.models import *
 from backend.decorators import check_auth
-
 from school.utility import get_current_project_query_set,get_manager
 from backend.logging import logger, loginfo
 from settings import TMP_FILES_PATH
 from const import *
-
+from django.db.models import Q
+from adminStaff.forms import ProjectManageForm as AdminstaffProjectManageForm
+from school.forms import ProjectManageForm as SchoolProjectManageForm
+from dajaxice.utils import deserialize_form
 def get_average_score_list(review_list):
     cnt_of_list = len(review_list)
     return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)]
@@ -54,7 +56,7 @@ def info_xls_baseinformation_gen():
 
     return worksheet, workbook
 
-def info_xls_baseinformation(request):
+def info_xls_baseinformation(request,proj_set):
     """
     """
     def _format_number(i):
@@ -63,9 +65,7 @@ def info_xls_baseinformation(request):
         return i
 
     # proj_set = ProjectSingle.objects.all()
-    proj_set = get_projectlist(request)
     xls_obj, workbook = info_xls_baseinformation_gen()
-
     # _index = 1
     _number= 1
     for proj_obj in proj_set:
@@ -128,7 +128,7 @@ def info_xls_expertscore_gen():
     worksheet.write_merge(1, 1,11, 11, '总分')
     return worksheet, workbook
 
-def info_xls_expertscore(request):
+def info_xls_expertscore(request,proj_set):
     """
     """
     def _format_number(i):
@@ -136,7 +136,6 @@ def info_xls_expertscore(request):
         i = '0' * (4-len(i)) + i
         return i
 
-    proj_set = get_projectlist(request)
     xls_obj, workbook = info_xls_expertscore_gen()
 
     # _index = 1
@@ -192,7 +191,7 @@ def info_xls_summaryinnovate_gen():
     worksheet.write_merge(1, 1, 8, 10, '备注')
     return worksheet, workbook
 
-def info_xls_summaryinnovate(request):
+def info_xls_summaryinnovate(request,proj_set):
     """
     """
     def _format_number(i):
@@ -200,7 +199,6 @@ def info_xls_summaryinnovate(request):
         i = '0' * (4-len(i)) + i
         return i
     print CATE_INNOVATION
-    proj_set = get_projectlist(request)
     proj_set = proj_set.filter(project_category__category = CATE_INNOVATION)
     xls_obj, workbook = info_xls_summaryinnovate_gen()
     style = cell_style(horizontal=True,vertical=True)
@@ -260,14 +258,13 @@ def info_xls_summaryentrepreneuship_gen():
     worksheet.write_merge(1, 1, 11, 13, '备注')
     return worksheet, workbook
 
-def info_xls_summaryentrepreneuship(request):
+def info_xls_summaryentrepreneuship(request,proj_set):
     """
     """
     def _format_number(i):
         i = str(i)
         i = '0' * (4-len(i)) + i
         return i
-    proj_set = get_projectlist(request)
     proj_set = proj_set.exclude(project_category__category = CATE_INNOVATION)
     xls_obj, workbook = info_xls_summaryentrepreneuship_gen()
     style = cell_style(horizontal=True,vertical=True)
@@ -414,7 +411,7 @@ def info_xls_province_gen():
 
     return worksheet, workbook
 
-def info_xls_projectsummary(request):
+def info_xls_projectsummary(request,proj_set):
     """
     """
 
@@ -422,7 +419,6 @@ def info_xls_projectsummary(request):
         i = str(i)
         i = '0' * (4-len(i)) + i
         return i
-    proj_set = get_projectlist(request)
     proj_set = proj_set.order_by('school','project_grade')
     xls_obj, workbook = info_xls_province_gen()
 
@@ -492,16 +488,20 @@ def get_memberlist(manager_studentid,student_Group):
     memberlist=','.join(memberlist)
     return memberlist,count
 
-def get_projectlist(request):
+def get_projectlist(request,project_manage_form):
     """
     根据身份筛选项目
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        proj_set =  get_current_project_query_set().order_by('project_unique_code','school','adminuser')
+        project_manage_form = AdminstaffProjectManageForm(deserialize_form(project_manage_form)) 
+        proj_set = projectFilterList(request,project_manage_form)
+        proj_set =  proj_set.order_by('project_unique_code','school','adminuser')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
-        proj_set = get_current_project_query_set().filter(school_id=school)
+        project_manage_form = SchoolProjectManageForm(deserialize_form(project_manage_form),school = school) 
+        proj_set = projectFilterList(request,project_manage_form)
+        proj_set = proj_set.filter(school_id=school).order_by('-year','adminuser')
     return proj_set
 def file_download_gen(request,fileid = None):
     """
@@ -543,3 +543,60 @@ def fix_bad_flag(proj_set):
                 if filetmp.name == u"项目汇编" and not pro_temp.file_projectcompilation:
                     pro_temp.file_projectcompilation = True
         pro_temp.save()
+
+
+def projectFilterList(request,project_manage_form):
+    if project_manage_form.is_valid():
+        project_grade = project_manage_form.cleaned_data["project_grade"]
+        project_year =  project_manage_form.cleaned_data["project_year"]
+        project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
+        project_scoreapplication = "-1"
+        project_school = "-1"
+        if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+            project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
+            project_school = project_manage_form.cleaned_data["project_school"]
+        project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
+        loginfo(project_teacher_student_name)
+        # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
+        qset = get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
+        if qset :
+            qset = reduce(lambda x, y: x & y, qset)
+            # if project_grade == "-1" and project_scoreapplication == "-1":
+            #     pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
+            # else:
+            pro_list = ProjectSingle.objects.filter(qset)
+        else:
+            pro_list = ProjectSingle.objects.all()
+    else:
+        print  project_manage_form.errors
+    #loginfo(p=qset,label="qset")
+    return pro_list
+
+##
+# TODO: fixed the `isover` to over status
+    
+def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
+    if project_grade == "-1":
+        project_grade=''
+    if project_year == '-1':
+        project_year=''
+    # if project_isover == '-1':
+    #     project_isover=''
+    if project_overstatus == '-1':
+        project_overstatus=''
+    if project_scoreapplication == '-1':
+        project_scoreapplication=''
+    if project_school  == '-1':
+        project_school = '';
+
+    q1 = (project_year and Q(year=project_year)) or None
+    # q2 = (project_isover and Q(is_over=project_isover)) or None
+    q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
+    q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
+    if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
+        q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
+    q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
+    q5 = (project_school and Q(school_id = project_school)) or None
+    q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
+    qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
+    return qset

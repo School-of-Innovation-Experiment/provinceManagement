@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.forms.util import ErrorList
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
-
+from school.utility import get_yearlist_forform
 from school.models import *
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile, TeacherProfile,StudentProfile
@@ -341,11 +341,7 @@ class ProjectManageForm(forms.Form):
         if not school:
             return
         project_list = ProjectSingle.objects.filter(Q(school_id=school))
-        yearlist = []
-        for temp in project_list:
-            if (temp.year, str(temp.year)+"年") not in yearlist:
-              yearlist.append((temp.year, str(temp.year)+"年"))
-        yearlist.sort(key = lambda x:x[0])
+        yearlist = get_yearlist_forform(project_list)
         YEAR_CHOICE = list(yearlist)
         YEAR_CHOICE.insert(0,('-1',u"年份"))
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
