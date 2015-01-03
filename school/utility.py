@@ -357,7 +357,7 @@ def check_finishingyear(project):
         schoolObj=SchoolProfile.objects.get(id=project.school_id)
         user = User.objects.get(id=schoolObj.userid_id)
     projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
-    year_list=get_yearlist(projectcontrol_list)
+    year_list=get_yearlist(projectcontrol_list,'project_year')
     if  project.year in year_list:
         return True
     else:
@@ -378,6 +378,8 @@ def check_applycontrol(project):
 def get_yearlist(object_list,year_field):
     """
     返回年份列表
+    ProjectFinishControl  'project_year'
+    ProjectSingle         'year'
     """
     year_list=[]
     object_list = object_list.values(year_field).distinct().order_by('-'+year_field)
