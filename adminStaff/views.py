@@ -578,9 +578,9 @@ class AdminStaffService(object):
     def ProjectUniqueCodeChange(project_id, project_unique_code):
         project_obj = ProjectSingle.objects.get(project_id = project_id)
         try:
-            if ProjectSingle.objects.filter(project_code = project_unique_code).count():
+            if ProjectSingle.objects.filter(project_unique_code = project_unique_code).count():
                 raise
-            project_obj.project_unique_code = project_unique_code
+            project_obj.project_unique_code = project_unique_code  
             project_obj.save()
             if len(project_unique_code.strip()) == 0:
                project_unique_code = "无"
