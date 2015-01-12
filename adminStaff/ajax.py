@@ -304,7 +304,7 @@ def Release_News(request, html):
     '''
     Release_News
     '''
-    title=datetime.datetime.today().year
+    title=datetime.datetime.today().year + 1
     data = News(news_title =title.__str__()+'年创新项目级别汇总', news_content = html);
     data.save();
 @dajaxice_register

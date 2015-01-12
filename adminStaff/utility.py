@@ -372,7 +372,7 @@ def cell_style(horizontal,vertical):
 
 def get_students(project):
     project_id = project.project_id
-    studentlist = Student_Group.objects.filter(project=project_id)
+    studentlist = Student_Group.objects.filter(project=project_id).order_by('-is_manager')
     return studentlist
 
 
