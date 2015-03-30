@@ -489,14 +489,11 @@ def info_xls_scoreapplication(request,proj_set):
     _number= 2
     for proj_obj in proj_set:
         stu_set = proj_obj.student_group_set.all()
-        print stu_set
         for stu in stu_set:
-            print stu.studentName
-            print stu.studentId
             xls_obj.write(_number, 0, unicode(proj_obj.project_grade))
             xls_obj.write(_number, 1, unicode(proj_obj.project_unique_code))
             xls_obj.write(_number, 2, unicode(proj_obj.title))
-            xls_obj.write(_number, 3, unicode(proj_obj.adminuser.name))
+            xls_obj.write(_number, 3, unicode(proj_obj.adminuser.get_name()))
             xls_obj.write(_number, 4, unicode(stu.studentName))
             xls_obj.write(_number, 5, unicode(stu.studentId))
             xls_obj.write(_number, 6, "是")
