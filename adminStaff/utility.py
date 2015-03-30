@@ -457,6 +457,56 @@ def info_xls_projectsummary(request,proj_set):
     workbook.save(save_path)
     return save_path
 
+def info_xls_scoreapplication_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 19, '大连理工大学大学生创新创业训练计划项目学分认定表')
+
+    # generate body
+    worksheet.write_merge(1, 1, 0, 0, '项目级别')
+    worksheet.write_merge(1, 1, 1, 1, '项目编号')
+    worksheet.write_merge(1, 1, 2, 2, '项目名称')
+    worksheet.write_merge(1, 1, 3, 3, '指导教师')
+    worksheet.write_merge(1, 1, 4, 4, '学生姓名')
+    worksheet.write_merge(1, 1, 5, 5, '学号')
+    worksheet.write_merge(1, 1, 6, 6, '是否认定学分')
+    worksheet.write_merge(1, 1, 7, 7, '学生签字')
+    return worksheet, workbook
+
+def info_xls_scoreapplication(request,proj_set):
+    """
+    """
+
+    def _format_number(i):
+        i = str(i)
+        i = '0' * (4-len(i)) + i
+        return i
+    proj_set = proj_set.filter(score_application = True).order_by('school','project_grade')
+    xls_obj, workbook = info_xls_scoreapplication_gen()
+
+    _number= 2
+    for proj_obj in proj_set:
+        stu_set = proj_obj.student_group_set.all()
+        print stu_set
+        for stu in stu_set:
+            print stu.studentName
+            print stu.studentId
+            xls_obj.write(_number, 0, unicode(proj_obj.project_grade))
+            xls_obj.write(_number, 1, unicode(proj_obj.project_unique_code))
+            xls_obj.write(_number, 2, unicode(proj_obj.title))
+            xls_obj.write(_number, 3, unicode(proj_obj.adminuser.name))
+            xls_obj.write(_number, 4, unicode(stu.studentName))
+            xls_obj.write(_number, 5, unicode(stu.studentId))
+            xls_obj.write(_number, 6, "是")
+            xls_obj.write(_number, 7,) 
+            _number+= 1
+    # write xls file
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目学分认定表"))
+    workbook.save(save_path)
+    return save_path
+
 
 def get_teammember(project):
     """
