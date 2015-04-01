@@ -24,7 +24,25 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 import datetime
 
+class ShowProjectSingle(models.Model):
+    project_id = models.CharField(max_length=50, primary_key=True,
+                                  default=make_uuid,
+                                  verbose_name=u"题目唯一ID")
+    title = models.CharField(max_length=400, blank=False, verbose_name=u"参赛题目")
+    school = models.ForeignKey(SchoolDict, blank=True, null=True, default=None)
+    teacher = models.CharField(max_length=50, blank=False, verbose_name=u"指导教师")
+    members = models.CharField(max_length=400, blank=False,
+                               verbose_name=u"团队成员")
+    keywords = models.CharField(blank=True, max_length=300,
+                                verbose_name=u"关键字")
+    background = models.TextField(blank=False, null=True, verbose_name=u"项目背景")
+    result_overview = models.TextField(blank=False, null=True,verbose_name=u"成果概述")
+    class Meta:
+        verbose_name = u"展示项目"
+        verbose_name_plural = u"展示项目"
 
+    def __unicode__(self):
+        return self.title
 class ProjectSingle(models.Model):
     """
     Every single projects, include basic infomation, it is the base table.
