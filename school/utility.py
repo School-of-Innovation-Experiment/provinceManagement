@@ -350,12 +350,8 @@ def check_finishingyear(project):
     """
     if project.project_grade == GRADE_UN:
         return False
-    elif project.project_grade.grade == GRADE_NATION or project.project_grade.grade ==GRADE_PROVINCE:
-        adminObj = AdminStaffProfile.objects.all()
-        user = User.objects.get(id=adminObj[0].userid_id)
-    else:
-        schoolObj=SchoolProfile.objects.get(id=project.school_id)
-        user = User.objects.get(id=schoolObj.userid_id)
+    adminObj = AdminStaffProfile.objects.all()
+    user = User.objects.get(id=adminObj[0].userid_id)
     projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
     year_list=get_yearlist(projectcontrol_list,'project_year')
     if  project.year in year_list:

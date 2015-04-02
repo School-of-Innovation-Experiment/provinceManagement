@@ -257,7 +257,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
-   
+    loginfo(p=is_finishing ,label ="is_finishing") 
     if check_auth(user=request.user,authority=STUDENT_USER):
         readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
     elif check_auth(user=request.user,authority=TEACHER_USER):
