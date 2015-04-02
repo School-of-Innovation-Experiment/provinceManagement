@@ -77,7 +77,6 @@ def show_index_get_context(request, project_page,new_show):
     if project_page != context["project_page"].number:
         raise Http404
     for project in context["project_list"]:
-        print project.title
         if new_show:
             imgs = project.showfiles_set.filter( \
                 Q(file_obj__iendswith="jpg") | \
