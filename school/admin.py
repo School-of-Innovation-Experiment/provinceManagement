@@ -15,6 +15,8 @@ RegisterClass = (# ProjectSingle,
                  Project_Is_Assigned,
                  FinalSubmit,
                  Teacher_Enterprise,
+                 ShowProjectSingle,
+                 ShowFiles,
                  # PreSubmitEnterprise,
                  UploadedFiles)
 class Re_Project_ExpertAdmin(admin.ModelAdmin):

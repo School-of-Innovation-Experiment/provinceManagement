@@ -15,12 +15,13 @@ from adminStaff.models import ProjectPerLimits, ProjectControl, NoticeMessage
 from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import  RequestContext
 from django.views.decorators.csrf import csrf_protect
+from django.core.files.uploadedfile import UploadedFile
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from const import *
-from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert
+from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert, ShowProjectSingle
 from const.models import UserIdentity, InsituteCategory, ProjectGrade
 from users.models import ExpertProfile
 from school.utility import get_running_project_query_set, get_current_project_query_set
@@ -36,7 +37,7 @@ from news.models import News
 from news.forms import NewsForm
 from backend.utility import getContext
 from adminStaff.utility import *
-
+from showtime.form import ShowForm
 import SocketServer
 from wsgiref import handlers
 
@@ -477,6 +478,29 @@ class AdminStaffService(object):
             message = NoticeMessage(noticemessage = _message)
             message.save()
         return render(request, "adminStaff/noticeMessageSettings.html")
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def ShowRelease(request):
+        if request.method == "POST":
+            form = ShowForm(request.POST)
+            if form.is_valid():
+                new_show = form.save()
+                for f in request.FILES.getlist('myfiles'):
+                    wrapper_f = UploadedFile(f)
+                    name, filetype = split_name(wrapper_f.name)
+                    obj = ShowFiles()
+                    obj.name = name
+                    obj.project_id = new_show
+                    obj.file_obj = f
+                    obj.file_type = filetype
+                    obj.save()
+        else:
+            form = ShowForm()
+        context = {"form": form,}
+        return render(request, "adminStaff/show_release.html", context)
 
     @staticmethod
     @csrf.csrf_protect

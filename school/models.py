@@ -43,6 +43,31 @@ class ShowProjectSingle(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class ShowFiles(models.Model):
+    """
+    content files upload, which include images, and pdf
+    """
+    file_id = models.CharField(max_length=50,
+                               primary_key=True, default=lambda:str(uuid.uuid4()),
+                               verbose_name=u"文件上传唯一ID")
+    project_id = models.ForeignKey(ShowProjectSingle)
+    name = models.CharField(max_length=100, blank=False,
+                            verbose_name=u"文件名称")
+    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",
+                                verbose_name=u"文件对象")
+    file_type = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name=u"文件类型")
+
+    class Meta:
+        verbose_name = u"展示附件"
+        verbose_name_plural = u"展示附件"
+
+    def __unicode__(self):
+        return self.project_id.title
+    def file_name(self):
+        return os.path.basename(self.file_obj.name)
+ 
 class ProjectSingle(models.Model):
     """
     Every single projects, include basic infomation, it is the base table.

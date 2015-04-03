@@ -1,0 +1,66 @@
+{% extends "adminStaff/administrator.html" %}
+{% load admin_static %}{% load url from future %}
+
+{%block nav_admin_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/news_release.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
+
+<!-- set for datetimeshortcuts.js -->
+<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+
+<form id="show_form" action="/adminStaff/show_release" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h2>项目信息</h2>
+  <div class="row-fluid show-grid">
+  <div class="span4">
+  <div>
+    项目名称: {{form.title}}
+  </div>
+  <div>
+    高校名称: {{form.school}}
+  </div>
+  <div>
+    指导教师: {{form.teacher}}
+  </div>
+  </div>
+  <div class="span4">
+  <div>
+    团队负责人: {{form.members}}
+  </div>
+  <div>
+    关键字: {{form.keywords}}
+  </div>
+  </div>
+  </div>
+  <h2>项目背景</h2>
+  <div>
+    {{form.background}}
+  </div>
+  <h2>成果概述</h2>
+  <div>
+    {{form.result_overview}}
+  </div>
+
+  <br/>
+  <h2>附件</h2>
+  <div>
+    <input type="file" name="myfiles" multiple="">
+  </div>
+  <div class="form-actions">
+    <span class="pull-right" style="padding-right: 10px">
+    <button type="submit" class="btn btn-primary">发布</button>
+    </span>
+  </div>
+</form>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>
+
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+{%endblock%}

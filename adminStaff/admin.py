@@ -10,7 +10,7 @@ from adminStaff.models import *
 
 
 RegisterClass = (ProjectControl,
-                 ProjectPerLimits
+                 ProjectPerLimits,
                  )
 
 for item in RegisterClass:

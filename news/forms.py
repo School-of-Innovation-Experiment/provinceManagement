@@ -21,3 +21,5 @@ class NewsForm(forms.Form):
         choice_list.append((obj.id, obj.get_category_display()))
     news_category = forms.ChoiceField(choices=choice_list)
     news_document = forms.FileField(label='select', help_text='文件上传', required=False)
+
+
