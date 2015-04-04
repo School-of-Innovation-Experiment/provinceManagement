@@ -29,6 +29,12 @@ from school.utility import *
 import random, math, datetime
 
 @dajaxice_register
+def ShowDelete(request, uid):
+    show = ShowProjectSingle.objects.get(project_id = uid)
+    show.delete()
+    return ""
+
+@dajaxice_register
 def NumLimit(request, form):
     dajax = Dajax()
     form = NumLimitForm(deserialize_form(form))

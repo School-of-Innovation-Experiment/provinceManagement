@@ -501,6 +501,19 @@ class AdminStaffService(object):
             form = ShowForm()
         context = {"form": form,}
         return render(request, "adminStaff/show_release.html", context)
+    
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def ShowManage(request):
+        show_list = ShowProjectSingle.objects.all()
+        page = request.GET.get('page')
+        context = getContext(show_list, page, 'show', 0)
+        for show in context['show_list']:
+            show.filenumber = ShowFiles.objects.filter(project_id = show).count()
+
+        return render(request, "adminStaff/show_manage.html", context)
 
     @staticmethod
     @csrf.csrf_protect

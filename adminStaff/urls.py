@@ -32,6 +32,7 @@ urlpatterns = patterns('',
                         AdminStaffService.NoticeMessageSetting),
     (r'^news_release$',AdminStaffService.NewsRelease),
     (r'^show_release$',AdminStaffService.ShowRelease),
+    (r'^show_manage$',AdminStaffService.ShowManage),
     (r'^ImportExpert$',AdminStaffService.ImportExpert),
     (r'^RecommendRatingSetting', AdminStaffService.RecommendRatingSetting),
     # url(

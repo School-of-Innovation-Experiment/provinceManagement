@@ -1,0 +1,49 @@
+  <h3>优秀项目管理</h3>
+  <table class="well table">
+    <thead>
+      <tr>
+        <td><strong>项目标题</strong></td>
+	<td><strong>附件数量</strong></td>
+        <td><strong>操作</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      {%for show in show_list%}
+      <tr id="{{show.project_id}}">
+        <td>{{show.title|truncatechars:25}}</td>
+	<td>{{show.filenumber}}</td>
+        <td>
+          <button class="btn btn-danger" rel="show_delete" uid="{{show.project_id}}">
+                <i class="icon-trash icon-white"></i>
+                <span>删除</span>
+          </button>
+        </td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+  <div class="pagination pagination-right">
+    <ul>
+    {% if subject_page.has_previous %}
+      <li><a href="?page={{ subject_page.previous_page_number }}" id="subject-previous-page" arg="{{subject_page.previous_page_number}}"><上一页</a></li>
+    {% endif %}
+    {% if not contain_begin %}
+    <li><a href="?page=1">1</a></li>
+    <li><span>...</span></li>
+    {% endif %}
+    {% for index in index_list %}
+      {% ifequal index subject_page.number %}
+        <li><span>{{ index }}</span></li>
+      {% else %}
+        <li><a href="?page={{ index }}">{{ index }}</a></li>
+      {% endifequal %}
+    {% endfor %}
+    {% if not contain_end %}
+    <li><span>...</span></li>
+    <li><a href="?page={{ subject_page.paginator.num_pages }}">{{ subject_page.paginator.num_pages }}</a></li>
+    {% endif %}
+    {% if subject_page.has_next %}
+    <li><a href="?page={{ subject_page.next_page_number }}" id="subject-next-page" arg="{{subject_page.next_page_number}}">下一页></a></li>
+    {% endif %}
+    </ul>
+  </div>

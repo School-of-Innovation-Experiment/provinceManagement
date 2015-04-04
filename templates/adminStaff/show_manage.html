@@ -1,0 +1,13 @@
+{% extends "adminStaff/administrator.html" %}
+{% load admin_static %}{% load url from future %}
+
+{%block nav_admin_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/news_release.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
+
+{% include "adminStaff/widgets/showslist.html" %}
+
+<script type='text/javascript' src="{{STATIC_URL}}js/show/show_delete.js"></script>
+
+{%endblock%}
