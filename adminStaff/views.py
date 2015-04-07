@@ -497,10 +497,15 @@ class AdminStaffService(object):
                     obj.file_obj = f
                     obj.file_type = filetype
                     obj.save()
+                is_ok = True
+            else:
+                is_ok = False
+            context = {"form": form, "is_ok": is_ok, }
+            return render(request, "adminStaff/show_release.html", context)
         else:
             form = ShowForm()
-        context = {"form": form,}
-        return render(request, "adminStaff/show_release.html", context)
+            context = {"form": form,}
+            return render(request, "adminStaff/show_release.html", context)
     
     @staticmethod
     @csrf.csrf_protect
