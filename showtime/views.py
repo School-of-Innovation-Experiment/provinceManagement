@@ -108,19 +108,15 @@ def show_index_get_search_context(request, project_page,new_show = False):
     q1 = (search_year and Q(year=search_year)) or None
     q2 = (search_school and Q(school=search_school)) or None
     q3 = (search_grade and Q(project_grade=search_grade)) or None
-    q4 = search_keywords or None
-    qset = filter(lambda x: x != None, [q1, q2, q3])
+    q4 = (search_keywords and  (Q(keywords__icontains=search_keywords) | \
+            Q(title__icontains=search_keywords) | Q(background__icontains=search_keywords) \
+            | Q(result_overview__icontains=search_keywords))) or None
+    qset = filter(lambda x: x != None, [q1, q2, q3,q4])
     loginfo(p=q4, label="in q4")
     loginfo(p=qset, label="in qset")
-    if qset and q4:
-        qset = reduce(lambda x, y: x & y, qset)
-        project_list = pro_type.objects.filter(qset,keywords__icontains=q4)
-
-    elif qset:
+    if qset:
         qset = reduce(lambda x, y: x & y, qset)
         project_list = pro_type.objects.filter(qset)
-    elif q4:
-        project_list = pro_type.objects.filter(keywords__icontains=q4)
     else:
         project_list = pro_type.objects.all()
 
