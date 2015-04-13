@@ -33,7 +33,7 @@ import datetime
 from backend.logging import logger, loginfo
 from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
-from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
+from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL,MEDIA_URL,TMP_FILES_PATH
 from adminStaff.utility import get_average_score_list,get_zipfiles_path
 from backend.decorators import check_auth
 
@@ -672,4 +672,5 @@ def project_sync(request,project_sync_list,username,password):
 @dajaxice_register
 def download_zipfiles(request,filetype,project_manage_form):
     path = get_zipfiles_path(request,filetype,project_manage_form) 
+    path = MEDIA_URL + "tmp" + path[len(TMP_FILES_PATH):]
     return simplejson.dumps({'path':path})
