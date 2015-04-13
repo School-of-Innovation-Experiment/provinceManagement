@@ -391,3 +391,11 @@ FileList={
     'show_opencheck':u'开题报告',
     'show_other':u'其他附件',
 }
+
+FILE_TYPE_APPLCATION = "application"
+FILE_TYPE_OPENCHECK = "opencheck"
+FILE_TYPE_MIDCHECK = "midecheck"
+FILE_TYPE_SUMMARY = "summary"
+FILE_TYPE_COMPILATION = "compilation"
+
+FILE_TYPE_DICT = {"application":"申报书","opencheck":"开题报告","midcheck":"中期检查表"}

@@ -34,7 +34,7 @@ from backend.logging import logger, loginfo
 from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
-from adminStaff.utility import get_average_score_list
+from adminStaff.utility import get_average_score_list,get_zipfiles_path
 from backend.decorators import check_auth
 
 def refresh_mail_table(request):
@@ -668,3 +668,8 @@ def project_sync(request,project_sync_list,username,password):
     except:
         return simplejson.dumps({'status':'1', 'result': '省级版服务器异常，请稍后再试'})
     return simplejson.dumps({'status':'0', 'result': result})
+
+@dajaxice_register
+def download_zipfiles(request,filetype,project_manage_form):
+    path = get_zipfiles_path(request,filetype,project_manage_form) 
+    return simplejson.dumps({'path':path})

@@ -4,9 +4,9 @@ import os
 import sys
 import xlwt
 import mimetypes
-
+import zipfile
 from const import *
-
+from django.core.files.storage import default_storage
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, Http404
@@ -647,3 +647,15 @@ def get_filter(project_grade,project_year,project_overstatus, project_teacher_st
     q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
     qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
     return qset
+
+def get_zipfiles_path(request,filetype,project_manage_form):
+    proj_set = get_projectlist(request,project_manage_form)
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.zip" % ("大连理工大学大学生创新训练项目",FILE_TYPE_DICT[filetype]+"压缩包"))
+    f = zipfile.ZipFile(save_path,'w',zipfile.ZIP_DEFLATED)
+    for pro_obj in proj_set:    
+        upfile = pro_obj.uploadedfiles_set.filter(name = FILE_TYPE_DICT[filetype])
+        if upfile:
+            if default_storage.exists(upfile[0].file_obj):
+                f.write(upfile[0].file_obj.path)
+    f.close()
+    return save_path

@@ -123,3 +123,11 @@ function auto_ranking(){
 function auto_ranking_callback(data){
     $("#success_bar_2").show();
 }
+
+function download(filetype){
+    Dajaxice.adminStaff.download_zipfiles(download_callback,{"filetype":filetype,'project_manage_form':$('#project_manage_form').serialize(true)})
+}
+
+function download_callback(data){
+   location.href = data.path; 
+}
