@@ -163,7 +163,7 @@ def SchoolDispatch(request, form):
     if school_form.is_valid():
         password = school_form.cleaned_data["school_password"]
         email = school_form.cleaned_data["school_email"]
-        name = email
+        name = email.split('@')[0]
         school_name = school_form.cleaned_data["school_name"]
         person_firstname = school_form.cleaned_data["person_firstname"]
         if password == "":
