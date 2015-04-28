@@ -27,6 +27,8 @@ class SchoolProfile(models.Model):
 
     def __unicode__(self):
         return self.school.schoolName
+    def get_name(self):
+        return "%s(%s)" % (self.userid.first_name,self.school.schoolName) 
 
     def save(self, *args, **kwargs):
         super(SchoolProfile, self).save()
