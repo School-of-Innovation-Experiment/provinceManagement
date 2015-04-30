@@ -20,6 +20,7 @@ import datetime
 from backend.logging import logger, loginfo
 from school.utility import *
 from users.models import SchoolProfile, StudentProfile
+from adminStaff.forms import ProjectManageForm
 from student.forms import StudentGroupForm, StudentGroupInfoForm
 from student.models import Student_Group
 from django.template.loader import render_to_string

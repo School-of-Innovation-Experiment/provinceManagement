@@ -1,0 +1,25 @@
+<div class="pagination pagination-right">
+  <ul>
+    {% if item_page.has_previous %}
+    <li><a href="?{{url_para}}&page={{ item_page.previous_page_number }}" id="item-previous-page" arg="{{item_page.previous_page_number}}"><上一页</a></li>
+                                                                                                                                 {% endif %}
+                                                                                                                                 {% if not contain_begin %}
+                                                                                                                                 <li><a href="?{{url_para}}&page=1">1</a></li>
+    <li><span>...</span></li>
+    {% endif %}
+    {% for index in index_list %}
+    {% ifequal index item_page.number %}
+    <li><span>{{ index }}</span></li>
+    {% else %}
+    <li><a href="?{{url_para}}&page={{ index }}">{{ index }}</a></li>
+    {% endifequal %}
+    {% endfor %}
+    {% if not contain_end %}
+    <li><span>...</span></li>
+    <li><a href="?{{url_para}}&page={{ item_page.paginator.num_pages }}">{{ item_page.paginator.num_pages }}</a></li>
+    {% endif %}
+    {% if item_page.has_next %}
+    <li><a href="?{{url_para}}&page={{ item_page.next_page_number }}" id="item-next-page" arg="{{item_page.next_page_number}}">下一页></a></li>
+    {% endif %}
+  </ul>
+</div>

@@ -33,3 +33,16 @@ function change_project_code_callback(data){
         $(target).html(data.res);
     }
 }
+
+function getPagination(page){
+    Dajaxice.school.getPagination(getPaginationCallBack,{
+        "page":page,
+        "form":$("#schedule_form").serialize(true)
+    });
+}
+function getPaginationCallBack(data){
+    $("#project_page").html(data.table);
+}
+$("#filter_button").click(function(){
+    getPagination(1);
+});

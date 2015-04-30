@@ -1,0 +1,53 @@
+<table class="table table-hover studenttable">
+  <thead>
+    <tr>
+      <th>项目编号</th>
+      <th>名称</th>
+      <!--th>注册邮箱</th-->
+      <th>项目类型</th>
+      <th>类型(甲/乙类)</th>
+      <th>初期报告审核</th>
+      <th>结题报告审核</th>
+      <th>指导教师</th>
+      <th>当前状态</th>
+      <th>评审级别</th>
+      <th>详情</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for item in item_list%}
+    <tr>
+      <td><a data-toggle="modal" onclick="get_element(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}">{{item.project_code}}</a></td>
+      <td title="{{item.title}}">{{item.title|truncatechars:15}}</td>
+      <!--td>{{item.reg_email}}</td-->
+      <td>{{item.project_category}}</td>
+      <td>
+        <select id="financial_cate_select{{item.project_id}}" onchange="financial_cate_select_onchange('{{item.project_id}}');">
+          {% for choice in financial_cate_choice %}
+          <option {%if choice.0 == item.financial_category.category %}selected{%endif%} value="{{choice.0}}">{{choice.1}}</option>
+          {% endfor %}
+        </select>
+        <span id="error_message{{item.project_id}}"></span>
+      </td>
+      <td>
+        {% if item.pre_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
+        {% if not item.pre_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
+      </td>
+      <td>
+        {% if item.final_isaudited %}<span class="span label label-success">已审核</span>{% endif %}
+        {% if not item.final_isaudited %}<span class="span label label-important">未审核</span>{% endif %}
+      </td>
+      <td>{{item.inspector}}</td>
+      <td>{{item.project_status}}</td>
+      <td>{{item.project_grade}}</td>
+      <td>
+        <span><a href="{% url school.views.application_report_view item.project_id%}" class='btn btn-primary'>申请</a></span>
+        <span><a href="{% url school.views.mid_report_view item.project_id%}" class='btn btn-primary'>中期</a></span>
+        <span><a href="{% url school.views.final_report_view item.project_id%}" class='btn btn-primary'>结题</a></span>
+        <span><a href="{% url school.views.file_view item.project_id%}" class='btn btn-primary'>文件操作</a></span>
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table><!--end current_list table-->
+{% include "adminStaff/widgets/paginator1.html" %}
