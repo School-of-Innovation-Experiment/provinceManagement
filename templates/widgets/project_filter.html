@@ -1,0 +1,13 @@
+<form id="schedule_form" class= "form-inline" role="form" method="post">
+  {% csrf_token %}
+  <div class="form-inline" role="form" id="searchForm">
+      {{project_form.project_cate}}
+      {{project_form.financial_cate}}
+      {{project_form.project_grade}}
+      {{project_form.project_status}}
+      {{project_form.project_year}}
+      {{project_form.title_teacher_name}}
+      <button type="submit" class="btn btn-primary" id="filter_button">检索</button>
+  </div>
+
+</form>

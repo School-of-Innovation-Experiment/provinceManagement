@@ -367,3 +367,7 @@ span.form-error{
 #platform_intro .span9{
     width:60%;
 }
+#schedule_form select{
+    width:130px!important;
+
+}

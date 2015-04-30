@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.conf import settings
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http import HttpResponseForbidden, Http404, HttpResponseBadRequest
@@ -32,7 +33,7 @@ from school.models import UploadedFiles
 from school.forms import *
 
 from adminStaff.models import ProjectPerLimits
-
+from adminStaff.forms import ProjectManageForm
 from users.models import SchoolProfile, StudentProfile
 
 from registration.models import RegistrationProfile
@@ -113,32 +114,43 @@ def home_view(request, is_expired=False):
     school home management page
     """
 #    current_list = get_running_project_query_set().filter(adminuser = request.user)
-    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('is_over')
+    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('financial_category__category','project_code')
+    url_para=''
+    try:
+        if request.method == 'POST':
+            project_form = ProjectManageForm(request.POST)
+        else:
+            project_form = ProjectManageForm(request.GET)
+        if project_form.is_valid():
+            current_list = current_list.filter(project_form.get_qset())
+            url_para     = project_form.get_url_para()
+    except:
+        pass
     readonly=is_expired
     readonly=False
+
     try:
         limits = ProjectPerLimits.objects.get(school__userid=request.user)
     except Exception, err:
         logger.info(err)
         limits = None
     if limits is not None:
-        remainings = int(limits.number) - len(current_list)
+        pro_list =ProjectSingle.objects.filter(Q(adminuser = request.user) & Q(is_past = False))
+        remainings = int(limits.number) - pro_list.count()
         total = limits.number
-        a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A]) 
+        a_remainings = int(limits.a_cate_number) - pro_list.filter(financial_category__category = FINANCIAL_CATE_A).count()
     else:
         total = 0
         remainings = 0
         a_remainings = 0
     add_current_list = current_list_add(list=current_list)
-    
-    add_current_list = sorted(list(add_current_list), key = lambda x: (x.financial_category.category, x.project_code))
-    
-    page = request.GET.get('page')
+    page = request.GET.get('page') or 1
     context = getContext(add_current_list, page, "item", 0)
-
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
     data = {"financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
+            "project_form":project_form,
+            "url_para":url_para,
             "info": {"applications_limits": total,
                      "applications_remaining": remainings,
                      "applications_a_remaining": a_remainings,
