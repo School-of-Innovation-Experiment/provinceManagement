@@ -63,7 +63,7 @@ class AdminStaffService(object):
             dict["auth"] = ''
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
-            dict["first_name"] = register.userid.first_name
+            dict["first_name"] = register.get_name()
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__() + ' '
             res_list.append(dict)
@@ -103,7 +103,8 @@ class AdminStaffService(object):
             dict["auth"] = ''
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
-            dict["first_name"] = register.userid.first_name
+            dict["first_name"] = register.get_name()
+            print dict["first_name"]
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__()+' '
             ##########################################################################
