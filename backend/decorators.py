@@ -203,7 +203,6 @@ class time_controller(object):
             is_passed = True
         else:
             is_passed = False
-
         loginfo(p=control,label="control")
         return is_passed
 
