@@ -143,9 +143,12 @@ def home_view(request, is_expired=False):
         total = 0
         remainings = 0
         a_remainings = 0
-    add_current_list = current_list_add(list=current_list)
+    #add_current_list = current_list_add(list=current_list)
     page = request.GET.get('page') or 1
-    context = getContext(add_current_list, page, "item", 0)
+    context = getContext(current_list, page, "item", 0)
+    
+    context["item_list"] = current_list_add(list = context["item_list"])
+    #context = getContext(add_current_list, page, "item", 0)
     # loginfo(p=add_current_list[0].final_isaudited, label="in add_current_list") 
     data = {"financial_cate_choice": FINANCIAL_CATE_CHOICES,
             "readonly":readonly,
