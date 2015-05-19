@@ -151,7 +151,7 @@ class ProjectManageForm(forms.Form):
     financial_cate_choice.insert(0,('-1',u"类型(甲/乙类)"))
     project_grade_choice = list(PROJECT_GRADE_CHOICES)
     project_grade_choice.insert(0,('-1',u"评审级别"))
-    project_status_choice = list(PROJECT_STATUS_CHOICES)
+    project_status_choice = list(PROJECT_ISOVER_STATUS_CHOICES)
     project_status_choice.insert(0,('-1',u"当前状态"))
     project_cate       = forms.ChoiceField(choices =project_cate_choice)
     financial_cate     = forms.ChoiceField(choices =financial_cate_choice)
@@ -203,7 +203,7 @@ class ProjectManageForm(forms.Form):
         q0 =(project_cate       and Q( project_category__category   = project_cate   ))or None
         q1 =(financial_cate     and Q( financial_category__category = financial_cate ))or None
         q2 =(project_grade      and Q( project_grade__grade         = project_grade  ))or None
-        q3 =(project_status     and Q( project_status__status       = project_status ))or None
+        q3 =(project_status     and Q( is_over  = project_status ))or None
         q4 =(project_year       and Q( year                         = project_year   ))or None
         if title_teacher_name:
             q5_1 = Q(title__contains = title_teacher_name)
