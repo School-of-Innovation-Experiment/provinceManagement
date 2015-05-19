@@ -203,7 +203,7 @@ class ProjectManageForm(forms.Form):
         q0 =(project_cate       and Q( project_category__category   = project_cate   ))or None
         q1 =(financial_cate     and Q( financial_category__category = financial_cate ))or None
         q2 =(project_grade      and Q( project_grade__grade         = project_grade  ))or None
-        q3 =(project_status     and Q( project_status__status       = project_status ))or None
+        q3 =(project_status     and Q( is_over  = project_status ))or None
         q4 =(project_year       and Q( year                         = project_year   ))or None
         if title_teacher_name:
             q5_1 = Q(title__contains = title_teacher_name)

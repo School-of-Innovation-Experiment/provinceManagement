@@ -113,13 +113,18 @@ STATUS_FINREVIEW = "finreview"
 STATUS_ONGOING = "ongoing"
 STATUS_FIRST = "undifined"
 
+#PROJECT_STATUS_CHOICES = (
+#    (STATUS_PRESUBMIT, u'申请提交'),
+#    (STATUS_PREREVIEW, u'申请评审'),
+#    (STATUS_FINSUBMIT, u'结题提交'),
+#    (STATUS_FINREVIEW, u'结题评审'),
+#    (STATUS_ONGOING, u'正在进行'),
+#    (STATUS_FIRST, u'初始状态'),
+#)
+
 PROJECT_STATUS_CHOICES = (
-    (STATUS_PRESUBMIT, u'申请提交'),
-    (STATUS_PREREVIEW, u'申请评审'),
-    (STATUS_FINSUBMIT, u'结题提交'),
-    (STATUS_FINREVIEW, u'结题评审'),
-    (STATUS_ONGOING, u'正在进行'),
-    (STATUS_FIRST, u'初始状态'),
+    (0,u"未结束"),
+    (1,u"已结束"),
 )
 
 RECOMMEND_UNPASS = "unpass"
