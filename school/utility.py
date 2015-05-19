@@ -231,6 +231,7 @@ def check_history_readonly(pid):
             readonly, True or False
     """
     project = get_object_or_404(ProjectSingle, project_id=pid)
+    loginfo(p=project.is_over,label="is_over")
     return project.is_past
 
 def get_current_gradecount(user,des_type):

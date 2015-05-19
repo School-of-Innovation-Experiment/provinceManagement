@@ -273,9 +273,6 @@ class AdminStaffService(object):
         for p in ProjectSingle.objects.filter(is_past=False):
             p.is_past = True
             p.save()
-        for p in ProjectSingle.objects.filter(is_over=False):
-            p.is_over = True
-            p.save()
         return HttpResponseRedirect('ProjectLimitNumSettings')
         # return render_to_response("adminStaff/projectlimitnumSettings.html", {'num_limit_form': num_limit_form, 'school_limit_list':school_limit_num_list}, context_instance=RequestContext(request))
 
