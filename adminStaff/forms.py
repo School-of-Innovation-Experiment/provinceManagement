@@ -151,7 +151,7 @@ class ProjectManageForm(forms.Form):
     financial_cate_choice.insert(0,('-1',u"类型(甲/乙类)"))
     project_grade_choice = list(PROJECT_GRADE_CHOICES)
     project_grade_choice.insert(0,('-1',u"评审级别"))
-    project_status_choice = list(PROJECT_STATUS_CHOICES)
+    project_status_choice = list(PROJECT_ISOVER_STATUS_CHOICES)
     project_status_choice.insert(0,('-1',u"当前状态"))
     project_cate       = forms.ChoiceField(choices =project_cate_choice)
     financial_cate     = forms.ChoiceField(choices =financial_cate_choice)
