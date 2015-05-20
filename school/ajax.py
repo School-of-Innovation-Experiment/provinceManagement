@@ -26,6 +26,14 @@ from student.models import Student_Group
 from django.template.loader import render_to_string
 
 @dajaxice_register
+def setOver(request, pid):
+    project = ProjectSingle.objects.get(project_id = pid)
+    project.is_over = True
+    project.save()
+    return "ok"
+
+
+@dajaxice_register
 def  StudentDispatch(request, form):
     #dajax = Dajax()
     student_form =  StudentDispatchForm(deserialize_form(form))

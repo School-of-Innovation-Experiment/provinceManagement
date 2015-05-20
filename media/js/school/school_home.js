@@ -46,3 +46,12 @@ function getPaginationCallBack(data){
 $("#filter_button").click(function(){
     getPagination(1);
 });
+
+
+$(".over-button").click(function(){
+    Dajaxice.school.setOver(setOverCallBack, {"pid" : $(this).attr("pid")} );
+});
+
+function setOverCallBack(data) {
+    location.reload();
+}
