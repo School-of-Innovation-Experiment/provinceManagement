@@ -220,4 +220,7 @@ class SchoolRecommendRate(models.Model):
         """
         """
         try: return cls.objects.get()
-        except: return cls()
+        except:
+            obj = cls()
+            obj.save()
+            return obj
