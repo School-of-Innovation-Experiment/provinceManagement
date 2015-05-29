@@ -133,7 +133,7 @@ class Project_Is_Assigned(models.Model):
         verbose_name_plural = u"项目分配判断"
 
     def __unicode__(self):
-        return self.insitute
+        return self.insitute.__unicode__()
 
 
 class Re_Project_Expert(models.Model):
