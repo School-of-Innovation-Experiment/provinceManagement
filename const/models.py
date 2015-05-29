@@ -219,7 +219,10 @@ class SchoolRecommendRate(models.Model):
     def load(cls):
         """
         """
-        try: return cls.objects.get()
+        try:
+            obj = cls.objects.get()
+            obj.save()
+            return obj
         except:
             obj = cls()
             obj.save()
