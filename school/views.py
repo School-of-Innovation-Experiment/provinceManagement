@@ -114,7 +114,7 @@ def home_view(request, is_expired=False):
     school home management page
     """
 #    current_list = get_running_project_query_set().filter(adminuser = request.user)
-    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('financial_category__category','project_code')
+    current_list = ProjectSingle.objects.filter(adminuser = request.user).order_by('-year','financial_category__category','project_code')
     url_para=''
     try:
         if request.method == 'POST':

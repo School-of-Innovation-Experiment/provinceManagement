@@ -270,6 +270,20 @@ class AdminStaffService(object):
         num_limit_form = forms.NumLimitForm()
         school_limit_num_list = AdminStaffService.SchoolLimitNumList()
         ProjectPerLimits.objects.all().delete()
+
+        recommend_obj = SchoolRecommendRate.load()
+        recommend_obj.firstRoundFinished = False
+        recommend_obj.secondRoundStart = False
+        recommend_obj.secondRoundFinished = False
+
+        allInsitute = InsituteCategory.objects.all()
+        for insobj in allInsitute:
+            try:
+                obj = Project_Is_Assigned.objects.get(insitute = insobj)
+                obj.is_assigned = False
+            except:
+                pass
+
         for p in ProjectSingle.objects.filter(is_past=False):
             p.is_past = True
             p.save()
