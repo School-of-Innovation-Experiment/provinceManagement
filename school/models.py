@@ -133,7 +133,7 @@ class Project_Is_Assigned(models.Model):
         verbose_name_plural = u"项目分配判断"
 
     def __unicode__(self):
-        return self.insitute.__unicode__() + (u"已分配" if self.is_assigned else u"未分配")
+        return self.insitute.__unicode__() + u' ' + (u"(已分配)" if self.is_assigned else u"(未分配)")
 
 
 class Re_Project_Expert(models.Model):
