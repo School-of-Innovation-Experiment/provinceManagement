@@ -132,6 +132,9 @@ class Project_Is_Assigned(models.Model):
         verbose_name = u"项目分配判断"
         verbose_name_plural = u"项目分配判断"
 
+    def __unicode__(self):
+        return self.insitute
+
 
 class Re_Project_Expert(models.Model):
     project = models.ForeignKey(ProjectSingle)
