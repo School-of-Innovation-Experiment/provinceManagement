@@ -51,7 +51,7 @@ def home_view(request):
     expert home management page
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
-    re_project = Re_Project_Expert.objects.filter(expert=expert).order_by("project__financial_category")
+    re_project = Re_Project_Expert.objects.filter(expert=expert, project__is_past=False).order_by("project__financial_category")
     rate = SchoolRecommendRate.load().rate
     is_expert_all = False
     score_pro ={0:0,1:0,2:0,3:0}
