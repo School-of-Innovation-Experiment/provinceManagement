@@ -213,7 +213,7 @@ class SchoolRecommendRate(models.Model):
         verbose_name_plural = "项目结束状态"
 
     def __unicode__(self):
-        return self.get_status_display()
+        return u"项目结束状态"
 
     @classmethod
     def load(cls):
@@ -221,7 +221,6 @@ class SchoolRecommendRate(models.Model):
         """
         try:
             obj = cls.objects.get()
-            obj.save()
             return obj
         except:
             obj = cls()
