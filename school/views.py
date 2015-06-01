@@ -190,6 +190,10 @@ def application_report_view(request, pid=None, is_expired=False):
     if check_auth(user = request.user,authority = SCHOOL_USER):
         readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+
+    # ... sb requirement
+    readonly = False
+
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
         imodel = PreSubmit
@@ -286,6 +290,10 @@ def mid_report_view(request, pid = None, is_expired = False):
     readonly = check_history_readonly(pid) or is_expired
     if check_auth(user = request.user,authority = SCHOOL_USER):
         readonly = False
+
+    # ... sb requirement
+    readonly = False
+
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=mid,checkuser=SCHOOL_USER)
         mid_form = MidReportForm(request.POST, instance=mid)
@@ -324,6 +332,10 @@ def final_report_view(request, pid=None, is_expired=False):
     readonly = check_history_readonly(pid) or is_expired
     if check_auth(user = request.user,authority = SCHOOL_USER):
         readonly = False
+
+    # ... sb requirement
+    readonly = False
+
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=final,checkuser=SCHOOL_USER)
         final_form = FinalReportForm(request.POST, instance=final)
@@ -428,6 +440,10 @@ def file_view(request, pid=None, is_expired=False):
     """
     readonly = is_expired
     print readonly
+
+    # ... sb requirement
+    readonly = False
+
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
         if request.FILES is not None:
