@@ -111,7 +111,7 @@ class ProjectSingle(models.Model):
                                   verbose_name=u"是否结束")
     keywords = models.CharField(blank=True, max_length=300,
                                 verbose_name=u"关键字")
-    project_code = models.CharField(blank=False, null=True, max_length=20, verbose_name=u"项目编号")
+    project_code = models.CharField(blank=True, null=True, max_length=20, verbose_name=u"项目编号")
     project_recommend_status = models.ForeignKey(ProjectRecommendStatus, verbose_name=u"项目推荐状态",
                                        blank=True, null=True,
                                        default=None)
