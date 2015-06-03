@@ -135,7 +135,7 @@ def home_view(request, is_expired=False):
         logger.info(err)
         limits = None
     if limits is not None:
-        pro_list =ProjectSingle.objects.filter(Q(adminuser = request.user) & Q(is_past = False))
+        pro_list =ProjectSingle.objects.filter(Q(adminuser = request.user) & Q(year=get_current_year()))
         remainings = int(limits.number) - pro_list.count()
         total = limits.number
         a_remainings = int(limits.a_cate_number) - pro_list.filter(financial_category__category = FINANCIAL_CATE_A).count()
