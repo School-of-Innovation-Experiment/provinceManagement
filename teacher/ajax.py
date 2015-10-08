@@ -13,12 +13,13 @@ from teacher.forms import  MonthCommentForm
 from teacher.views import  TeacherLimitNumber, Send_email_to_student
 from teacher.models import TeacherMonthComment
 from school.models import *
-from users.models import StudentProfile
+from users.models import StudentProfile,TeacherProfile,SchoolProfile
 from const.models import SchoolDict
 from adminStaff.views import AdminStaffService
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+from backend.decorators import check_auth
 
 def refresh_project_table(request):
     teacher_profile = TeacherProfile.objects.get(userid = request.user)
@@ -67,7 +68,8 @@ def brute_delete(request, email):
     """
     message = ""
     user = User.objects.get(email = email)
-
+    if not has_delete_access(request,user):
+        return simplejson.dumps({"message":message})
     student = StudentProfile.objects.get(userid = user)
     student.delete()
     try:
@@ -182,22 +184,31 @@ def CommentDelete(request,deleteMonthId,pid):
         ret = {'status': '1', 'message': u"所要删除评语记录不存在，请刷新页面"}
     return simplejson.dumps(ret)
 
-@dajaxice_register
-def simple_delete(request, email):
-    """
-    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
-    """
-    message = ""
-    try:
-        user = User.objects.get(email = email)
-        user.delete()
-    except e:
-        loginfo(e)
-    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
-    email_num = email_list and len(email_list) or 0
-    limited_num = TeacherLimitNumber(request)
-    remaining_activation_times = limited_num - email_num
+#@dajaxice_register
+#def simple_delete(request, email):
+#    """
+#    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
+#    """
+#    message = ""
+#    try:
+#        user = User.objects.get(email = email)
+#        if not has_delete_access(request,user):
+#           user.delete()
+#    except e:
+#        loginfo(e)
+#    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
+#    email_num = email_list and len(email_list) or 0
+#    limited_num = TeacherLimitNumber(request)
+#    remaining_activation_times = limited_num - email_num
+#
+#    return simplejson.dumps({"message": message,"remaining_activation_times":remaining_activation_times})
 
-    return simplejson.dumps({"message": message,"remaining_activation_times":remaining_activation_times})
-
-
+def has_delete_access(request,user):
+    access_flag = False
+    if check_auth(request.user, TEACHER_USER):
+        teacher = TeacherProfile.objects.get(userid = request.user)
+        student_list = StudentProfile.objects.filter(teacher = teacher)
+        for stu in student_list:
+            if stu.userid == user:
+                access_flag = True
+    return access_flag
