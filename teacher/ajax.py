@@ -69,6 +69,7 @@ def brute_delete(request, email):
     message = ""
     user = User.objects.get(email = email)
     if not has_delete_access(request,user):
+        message = u"超出权限，删除失败"
         return simplejson.dumps({"message":message})
     student = StudentProfile.objects.get(userid = user)
     student.delete()
@@ -184,24 +185,26 @@ def CommentDelete(request,deleteMonthId,pid):
         ret = {'status': '1', 'message': u"所要删除评语记录不存在，请刷新页面"}
     return simplejson.dumps(ret)
 
-#@dajaxice_register
-#def simple_delete(request, email):
-#    """
-#    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
-#    """
-#    message = ""
-#    try:
-#        user = User.objects.get(email = email)
-#        if not has_delete_access(request,user):
-#           user.delete()
-#    except e:
-#        loginfo(e)
-#    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
-#    email_num = email_list and len(email_list) or 0
-#    limited_num = TeacherLimitNumber(request)
-#    remaining_activation_times = limited_num - email_num
-#
-#    return simplejson.dumps({"message": message,"remaining_activation_times":remaining_activation_times})
+@dajaxice_register
+def simple_delete(request, email):
+    """
+    删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
+    """
+    message = ""
+    try:
+        user = User.objects.get(email = email)
+        if not has_delete_access(request,user):
+            message = u"超出权限，删除失败"
+            return simplejson.dumps({"message": message,})
+        user.delete()
+    except Exception, e:
+        loginfo(e)
+    email_list  = AdminStaffService.GetRegisterListByTeacher(teacher = TeacherProfile.objects.get(userid = request.user))
+    email_num = email_list and len(email_list) or 0
+    limited_num = TeacherLimitNumber(request)
+    remaining_activation_times = limited_num - email_num
+    message = u"删除成功"
+    return simplejson.dumps({"message": message,"remaining_activation_times":remaining_activation_times})
 
 def has_delete_access(request,user):
     access_flag = False
@@ -210,5 +213,11 @@ def has_delete_access(request,user):
         student_list = StudentProfile.objects.filter(teacher = teacher)
         for stu in student_list:
             if stu.userid == user:
+                access_flag = True
+    if check_auth(request.user,SCHOOL_USER):
+        schooler = SchoolProfile.objects.get(userid = request.user)
+        teacher_list = TeacherProfile.objects.filter(school = schooler.id)
+        for teacher in teacher_list:
+            if teacher.userid == user:
                 access_flag = True
     return access_flag
