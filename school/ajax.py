@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 import datetime
 from adminStaff.forms import TeacherDispatchForm, ExpertDispatchForm
 from school.forms import TeacherNumLimitForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert, AchievementObjects
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 from django.db.models import Q
@@ -297,3 +297,13 @@ def isover_control(request,pid):
         project.is_over = True
     project.save()
     return simplejson.dumps({"flag":project.is_over,"pid":pid})
+
+
+@dajaxice_register
+def achievement_save(request):
+    pass
+
+
+@dajaxice_register
+def achievement_delete(request):
+    pass

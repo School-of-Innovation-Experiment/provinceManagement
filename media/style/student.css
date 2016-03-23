@@ -39,3 +39,11 @@ div.time{
 div.details{
   font-size: 14px;
 }
+
+table.center tr th,table.center tr td{
+    text-align:center;
+}
+
+table.fix{
+  table-layout: fixed;
+}

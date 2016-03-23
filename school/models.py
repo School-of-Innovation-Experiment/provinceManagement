@@ -23,6 +23,9 @@ from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import OVER_STATUS_NOTOVER
+from const import ACHIEVEMENT_CATEGORY_OBJECT, ACHIEVEMENT_CATEGORY_PAPER
+from const import ACHIEVEMENT_CATEGORY_PATENT, ACHIEVEMENT_CATEGORY_COMPETITON
+from const import ACHIEVEMENT_CATEGORYS
 # from const import YEAR_CHOICES
 import datetime, os
 
@@ -392,10 +395,13 @@ class AchievementObjects(models.Model):
     finish_date = models.DateField(blank=False,
                                    verbose_name="完成时间")
     comments = models.TextField(blank=True, verbose_name="备注")
+    category = models.IntegerField(blank=False, choices=ACHIEVEMENT_CATEGORYS,
+                                   default=ACHIEVEMENT_CATEGORY_OBJECT,
+                                   verbose_name="成果类别")
 
     class Meta:
-        verbose_name = "实物"
-        verbose_name_plural = "实物"
+        verbose_name = "项目成果"
+        verbose_name_plural = "项目成果"
 
     def __unicode__(self):
         return self.project_id.project_id.title

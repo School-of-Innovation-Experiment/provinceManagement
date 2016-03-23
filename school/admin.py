@@ -19,7 +19,8 @@ RegisterClass = (
                  Teacher_Enterprise,
                  OpenSubmit,
                  TeacherProjectPerLimits,
-                 ProjectFinishControl)
+                 ProjectFinishControl,
+                 AchievementObjects,)
 
 for item in RegisterClass:
     admin.site.register(item)

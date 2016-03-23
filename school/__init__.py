@@ -1,3 +1,4 @@
+# coding:UTF-8
 from const import GRADE_SCHOOL,GRADE_INSITUTE,GRADE_UN
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL
 if IS_MINZU_SCHOOL:
