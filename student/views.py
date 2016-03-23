@@ -238,6 +238,12 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
+    related_ao = AchievementObjects.objects.filter(project_id=data['pid'])
+    data['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
+    data['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
+    data['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
+    data['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
+
     if data['isRedirect'] :
         return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         

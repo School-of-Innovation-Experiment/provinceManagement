@@ -11,6 +11,17 @@
 			<th>备注</th>
 			<th style="width:10%">操作</th>
 		</tr>
+		{% if objects %}
+		{% for object in objects %}
+		<tr>
+			<td>{{object.title}}</td>
+			<td>{{object.member}}</td>
+			<td>{{object.addition1}}</td>
+			<td>{{object.addition2}}</td>
+			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+		</tr>
+		{% endfor %}
+		{% endif %}
 	</table>
 </div>
 <div class="span11">
@@ -26,6 +37,17 @@
 			<th>期刊、期数</th>
 			<th style="width:10%">操作</th>
 		</tr>
+		{% if papers %}
+		{% for object in papers %}
+		<tr>
+			<td>{{object.title}}</td>
+			<td>{{object.member}}</td>
+			<td>{{object.addition1}}</td>
+			<td>{{object.addition2}}</td>
+			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+		</tr>
+		{% endfor %}
+		{% endif %}
 	</table>
 </div>
 <div class="span11">
@@ -41,6 +63,17 @@
 			<th>专利号</th>
 			<th style="width:10%">操作</th>
 		</tr>
+		{% if patents %}
+		{% for object in patents %}
+		<tr>
+			<td>{{object.title}}</td>
+			<td>{{object.member}}</td>
+			<td>{{object.addition1}}</td>
+			<td>{{object.addition2}}</td>
+			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+		</tr>
+		{% endfor %}
+		{% endif %}
 	</table>
 </div>
 <div class="span11">
@@ -56,5 +89,16 @@
 			<th>获奖等级</th>
 			<th style="width:10%">操作</th>
 		</tr>
+		{% if competitions %}
+		{% for object in competitions %}
+		<tr>
+			<td>{{object.title}}</td>
+			<td>{{object.member}}</td>
+			<td>{{object.addition1}}</td>
+			<td>{{object.addition2}}</td>
+			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+		</tr>
+		{% endfor %}
+		{% endif %}
 	</table>
 </div>

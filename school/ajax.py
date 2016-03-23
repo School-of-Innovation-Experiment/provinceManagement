@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 import datetime
 from adminStaff.forms import TeacherDispatchForm, ExpertDispatchForm
 from school.forms import TeacherNumLimitForm
-from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert, AchievementObjects
+from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert, AchievementObjects, ProjectSingle
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 from django.db.models import Q
@@ -300,10 +300,30 @@ def isover_control(request,pid):
 
 
 @dajaxice_register
-def achievement_save(request):
-    pass
+def achievement_save(request, project_id, values, category):
+    context = {}
+    project = get_object_or_404(ProjectSingle, project_id = project_id)
+    ao = AchievementObjects(project_id=project, title=values[0], member=values[1],
+                            addition1=values[2], addition2=values[3],
+                            category=int(category))
+    ao.save()
+    related_ao = AchievementObjects.objects.filter(project_id=project)
+    context['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
+    context['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
+    context['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
+    context['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
+    return render_to_string("student/widgets/achievements.html", context)
 
 
 @dajaxice_register
-def achievement_delete(request):
-    pass
+def achievement_delete(request, project_id, id):
+    context = {}
+    ao = get_object_or_404(AchievementObjects, id=id)
+    ao.delete()
+    project = get_object_or_404(ProjectSingle, project_id=project_id)
+    related_ao = AchievementObjects.objects.filter(project_id=project)
+    context['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
+    context['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
+    context['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
+    context['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
+    return render_to_string("student/widgets/achievements.html", context)

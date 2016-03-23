@@ -24,7 +24,7 @@ from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import OVER_STATUS_NOTOVER
 from const import ACHIEVEMENT_CATEGORY_OBJECT, ACHIEVEMENT_CATEGORY_PAPER
-from const import ACHIEVEMENT_CATEGORY_PATENT, ACHIEVEMENT_CATEGORY_COMPETITON
+from const import ACHIEVEMENT_CATEGORY_PATENT, ACHIEVEMENT_CATEGORY_COMPETITION
 from const import ACHIEVEMENT_CATEGORYS
 # from const import YEAR_CHOICES
 import datetime, os
@@ -384,17 +384,15 @@ class AchievementObjects(models.Model):
     """
     Achievement Objects, which follows FinalSubmit
     """
-    content_id = models.CharField(max_length=50, blank=False, unique=True,
-                                  primary_key=True, default=lambda: str(uuid.uuid4()),
-                                  verbose_name="实物成果唯一ID")
-    project_id = models.ForeignKey(FinalSubmit)
+    project_id = models.ForeignKey(ProjectSingle)
     title = models.CharField(max_length=100, blank=False,
-                             verbose_name="名称")
-    members = models.CharField(max_length=100, blank=False,
-                               verbose_name="参加人")
-    finish_date = models.DateField(blank=False,
-                                   verbose_name="完成时间")
-    comments = models.TextField(blank=True, verbose_name="备注")
+                             verbose_name="相关名称")
+    member = models.CharField(max_length=100, blank=False,
+                               verbose_name="相关人员")
+    addition1 = models.CharField(max_length=100, blank=False,
+                                   verbose_name="附加信息1")
+    addition2 = models.CharField(max_length=100, blank=False,
+                                 verbose_name="附加信息2")
     category = models.IntegerField(blank=False, choices=ACHIEVEMENT_CATEGORYS,
                                    default=ACHIEVEMENT_CATEGORY_OBJECT,
                                    verbose_name="成果类别")
@@ -404,7 +402,7 @@ class AchievementObjects(models.Model):
         verbose_name_plural = "项目成果"
 
     def __unicode__(self):
-        return self.project_id.project_id.title
+        return self.project_id.title+self.title
 
 class UploadedFiles(models.Model):
     """
