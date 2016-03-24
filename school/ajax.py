@@ -303,6 +303,10 @@ def isover_control(request,pid):
 def achievement_save(request, project_id, values, category):
     context = {}
     project = get_object_or_404(ProjectSingle, project_id = project_id)
+    is_finishing = check_finishingyear(project)
+    readonly = project.over_status.status != OVER_STATUS_NOTOVER or not is_finishing
+    if readonly:
+        return HttpResponse("readonly")
     ao = AchievementObjects(project_id=project, title=values[0], member=values[1],
                             addition1=values[2], addition2=values[3],
                             category=int(category))
@@ -318,9 +322,13 @@ def achievement_save(request, project_id, values, category):
 @dajaxice_register
 def achievement_delete(request, project_id, id):
     context = {}
+    project = get_object_or_404(ProjectSingle, project_id=project_id)
+    is_finishing = check_finishingyear(project)
+    readonly = project.over_status.status != OVER_STATUS_NOTOVER or not is_finishing
+    if readonly:
+        return HttpResponse("readonly")
     ao = get_object_or_404(AchievementObjects, id=id)
     ao.delete()
-    project = get_object_or_404(ProjectSingle, project_id=project_id)
     related_ao = AchievementObjects.objects.filter(project_id=project)
     context['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
     context['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)

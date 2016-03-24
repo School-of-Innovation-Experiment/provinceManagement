@@ -1,7 +1,7 @@
 <div class="span11">
 	<div style="margin:10px;">
 		<h4 style="display:inline;">实物</h4>
-		<a class="btn btn-info add" style="float:right;" category="0">新增一项</a>
+		<a class="btn btn-info add {% if readonly %} disabled{% endif %}" style="float:right;" category="0">新增一项</a>
 	</div>
 	<table class="table center fix">
 		<tr>
@@ -18,7 +18,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete{% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
 		{% endif %}
@@ -27,7 +27,7 @@
 <div class="span11">
 	<div style="margin:10px;">
 		<h4 style="display:inline;">论文</h4>
-		<a class="btn btn-info add" style="float:right;" category="1">新增一项</a>
+		<a class="btn btn-info add {% if readonly %} disabled{% endif %}" style="float:right;" category="1">新增一项</a>
 	</div>
 	<table class="table center fix">
 		<tr>
@@ -44,7 +44,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
 		{% endif %}
@@ -53,7 +53,7 @@
 <div class="span11">
 	<div style="margin:10px;">
 		<h4 style="display:inline;">专利</h4>
-		<a class="btn btn-info add" style="float:right;" category="2">新增一项</a>
+		<a class="btn btn-info add {% if readonly %} disabled{% endif %}" style="float:right;" category="2">新增一项</a>
 	</div>
 	<table class="table center fix">
 		<tr>
@@ -70,7 +70,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
 		{% endif %}
@@ -79,7 +79,7 @@
 <div class="span11">
 	<div style="margin:10px;">
 		<h4 style="display:inline;">竞赛</h4>
-		<a class="btn btn-info add" style="float:right;" category="3">新增一项</a>
+		<a class="btn btn-info add {% if readonly %} disabled{% endif %}" style="float:right;" category="3">新增一项</a>
 	</div>
 	<table class="table center fix">
 		<tr>
@@ -96,7 +96,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
 		{% endif %}
