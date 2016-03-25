@@ -45,7 +45,7 @@ $(function(){
 		var items=target.find("input");
 		for(var i=0;i<items.length;i++)
 		{
-			if(items[i].value=="")
+			if(items[i].value==""&&!(category==0&&i==3))
 			{
 				alert("请输入有效值");
 				items[i].focus();
