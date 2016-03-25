@@ -50,9 +50,13 @@ def info_xls_baseinformation_gen():
     worksheet.write_merge(1, 1, 10, 10, '申请学分')
     worksheet.write_merge(1, 1, 11, 11, '是否结题')
     worksheet.col(11).width = len('是否结题') * 300
-    worksheet.write_merge(1, 1, 12, 12, '负责人电话')
-    worksheet.col(12).width = len('负责人电话') * 200
-    worksheet.write_merge(1, 1, 13, 13, '所在院系')
+    worksheet.write_merge(1, 1, 12, 12, '负责人')
+    worksheet.col(12).width = len('负责人') * 200
+    worksheet.write_merge(1, 1, 13, 13, '负责人电话')
+    worksheet.col(13).width = len('负责人电话') * 200
+    worksheet.write_merge(1, 1, 14, 14, '负责人邮箱')
+    worksheet.col(14).width = len('负责人邮箱') * 200
+    worksheet.write_merge(1, 1, 15, 15, '所在院系')
 
     return worksheet, workbook
 
@@ -91,8 +95,10 @@ def info_xls_baseinformation(request,proj_set):
         xls_obj.write(row, 9, unicode(proj_obj.file_projectcompilation))
         xls_obj.write(row, 10, unicode(proj_obj.score_application))
         xls_obj.write(row, 11, unicode(proj_obj.over_status))
-        xls_obj.write(row, 12, unicode(teammember['telephone']))
-        xls_obj.write(row, 13, unicode(proj_obj.school.get_school_name()))
+        xls_obj.write(row, 12, unicode(teammember['manager_name']))
+        xls_obj.write(row, 13, unicode(teammember['telephone']))
+        xls_obj.write(row, 14, unicode(teammember['email']))
+        xls_obj.write(row, 15, unicode(proj_obj.school.get_school_name()))
 
         # _index += 1
         _number+= 1
@@ -509,7 +515,7 @@ def get_teammember(project):
     """
         get teammanager's name and student_id
     """
-    teammember = {'manager_name':'','manager_studentid':'','memberlist':'','count':0,'telephone':''}
+    teammember = {'manager_name':'','manager_studentid':'','memberlist':'','count':0,'telephone':'','email':''}
     #loginfo(p=teammember,label="teammember")
     student_Group=Student_Group.objects.filter(project_id=project.project_id)
     #print project.title
@@ -518,6 +524,7 @@ def get_teammember(project):
         manager = get_manager(project)
         teammember['telephone'] = manager.telephone
         teammember['manager_name'] = manager.studentName
+        teammember['email'] = manager.email
         teammember['manager_studentid'] = manager.studentId
         teammember['memberlist'],teammember['count'] = get_memberlist(manager.studentId,student_Group)
     return teammember

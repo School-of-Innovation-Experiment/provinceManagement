@@ -400,7 +400,7 @@ FILE_TYPE_MIDCHECK = "midecheck"
 FILE_TYPE_SUMMARY = "summary"
 FILE_TYPE_COMPILATION = "compilation"
 
-FILE_TYPE_DICT = {"application":"申报书","opencheck":"开题报告","midcheck":"中期检查表"}
+FILE_TYPE_DICT = {"application":"申报书","opencheck":"开题报告","midcheck":"中期检查表","summary":"结题报告","projectcompilation":"项目汇编"}
 
 ACHIEVEMENT_CATEGORY_OBJECT = 0
 ACHIEVEMENT_CATEGORY_PAPER = 1
