@@ -34,6 +34,7 @@
         <td><strong>负责人</strong></td>
         <td><strong>用户权限</strong></td>
         <td><strong>用户状态</strong></td>
+        <td><strong>重置密码</strong></td>
       </tr>
     </thead>
     <tbody>
@@ -47,11 +48,32 @@
         {%else%}
         <td><button class="btn btn-warning">已发送，尚未激活</button></td>
         {%endif%}
+        <td><a class="btn btn-success" data-toggle="modal" href="#reset_user_password" onclick="get_user_id({{user.id}});">重置密码</td>
       </tr>
       {%endfor%}
     </tbody>
   </table>
   {% include "adminStaff/widgets/paginator.html" %}
+</div>
+<div class="modal hide fade" style="display: none;width:600px;" id="reset_user_password">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>修改个人信息:</h3>
+    <small id="change_info_student_id"></small>
+  </div>
+  <div class="modal-body">
+   <form class="well form-inline" id="reset_user_password_form">
+    {% csrf_token %}
+    <div class="input-prepend">
+      <span class="add-on"><i class="icon-th-large"></i></span>{{resetUserPasswd_form.reset_password}}
+    </div>
+    <span id="reset_user_password_error_message"></span>
+  </form> 
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="reset_user_password();">保存更新</a>
+  </div>
 </div>
 <!-- ajax_csrf-->
 <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>

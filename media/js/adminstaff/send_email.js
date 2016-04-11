@@ -73,3 +73,16 @@ function SchoolDispatch_callback(data){
     $("#school_email_error_message").append("<strong>"+data.message+"</strong>")
   }
 }
+
+var change_user;
+function get_user_id(uid){
+    change_user = uid;
+}
+
+function reset_user_password(){
+  $("#reset_user_password_error_message").empty();
+  Dajaxice.adminStaff.ResetUserPassword(ResetUserPassword_callback,{'form':$('form#reset_user_password_form').serialize(true),'uid':change_user});
+}
+function ResetUserPassword_callback(data){
+    alert(data.message);
+}

@@ -142,6 +142,10 @@ class ResetSchoolPasswordForm(forms.Form):
     reset_password = forms.CharField(max_length=20, required=True,
                                      widget=forms.TextInput(attrs={'class':'span2','id':"reset_school_password",'placeholder':u"请输入要重置的密码",'id':'reset_password_text'}
                                     ),)
+class ResetUserPasswordForm(forms.Form):
+    reset_password = forms.CharField(max_length=20, required=True,
+                                     widget=forms.TextInput(attrs={'class':'span2','placeholder':u"请输入要重置的密码",'id':'reset_user_password_text'}
+                                    ),)
 
 
 class ProjectManageForm(forms.Form):
