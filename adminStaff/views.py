@@ -64,6 +64,7 @@ class AdminStaffService(object):
             dict["email"] = register.userid.email
             dict["is_active"] = register.userid.is_active
             dict["first_name"] = register.get_name()
+            dict["id"] = register.userid.id
             for auth in auth_list:
                 dict["auth"] += auth.__unicode__() + ' '
             res_list.append(dict)
@@ -135,7 +136,7 @@ class AdminStaffService(object):
             context = getContext(email_list, page, 'item', 0)
             context['school_form'] = school_form
             context['resetSchoolPasswd_form'] = resetSchoolPasswd_form
-
+            context['resetUserPasswd_form'] = forms.ResetUserPasswordForm()
             #loginfo(p=email_list, label="news email_list ")
             return render(request, "adminStaff/dispatch.html", context)
     @staticmethod

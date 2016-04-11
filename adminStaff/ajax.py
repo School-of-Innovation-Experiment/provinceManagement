@@ -425,4 +425,19 @@ def show_result(request):
 
 
     return simplejson.dumps({"message": message, 'path':path})
+@dajaxice_register
+def ResetUserPassword(request, form,uid):
 
+    resetSchoolPassword_form = ResetSchoolPasswordForm(deserialize_form(form))
+    print form
+    if resetSchoolPassword_form.is_valid():
+        password = resetSchoolPassword_form.cleaned_data["reset_password"]
+        try:
+            user = User.objects.get(id = uid)
+            user.set_password(password)
+            user.save()
+        except Exception,e:
+            print e
+        return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
+    else:
+        return simplejson.dumps({'status':'0', 'message':u"密码不能为空"})
