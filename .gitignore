@@ -54,3 +54,4 @@ nosetests.xml
 .orig
 *#
 */migrations/
+*.DS_Store

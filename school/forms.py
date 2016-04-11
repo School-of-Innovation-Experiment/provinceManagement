@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding:UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-04-11 15:54
+# Last modified: 2016-04-11 17:58
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -22,6 +30,13 @@ from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile
 from const import *
 from student.models import Student_Group
+from django.core.exceptions import ValidationError
+
+
+def blank_validator(value, msg="这个字段是必填项。"):
+    print '[BLANK VALIDATOR]', value
+    if value.strip(' ') == '':
+        raise ValidationError(msg)
 
 class InfoForm(ModelForm):
     """
@@ -29,6 +44,7 @@ class InfoForm(ModelForm):
     """
     def __init__(self, *args, **kwargs):
         pid = kwargs.pop('pid', None)
+        self.__pid = pid
         if not pid:
             return
         project = ProjectSingle.objects.get(project_id=pid)
@@ -42,6 +58,37 @@ class InfoForm(ModelForm):
 
     memberlist = forms.CharField(
                            widget=forms.TextInput(attrs={'class':"school-display",'readonly':'readonly','placeholder': '请在“团队成员”标签中添加组员'}))    
+    
+    def clean_memberlist(self):
+        pid = self.__pid
+        project = ProjectSingle.objects.get(project_id=pid)
+        student_group = Student_Group.objects.filter(project = project)
+        for student in student_group:
+            blank_validator(student.studentId, "请完善学号信息。")
+        memberlist = self.cleaned_data['memberlist']
+        return memberlist
+
+    def clean_telephone(self):
+        telephone = self.cleaned_data['telephone']
+        blank_validator(telephone)
+        return telephone
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        blank_validator(title)
+        return title
+
+    def clean_inspector(self):
+        inspector = self.cleaned_data['inspector']
+        blank_validator(inspector)
+        return inspector
+
+    def clean_inspector_title(self):
+        inspector_title = self.cleaned_data['inspector_title']
+        blank_validator(inspector_title)
+        return inspector_title
+
+
     class Meta:
         model = ProjectSingle
         #TODO: add css into widgets
@@ -50,7 +97,7 @@ class InfoForm(ModelForm):
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector_title':forms.TextInput(attrs={'class':"school-display"}),
-                 'telephone':forms.TextInput(attrs={'class':"school-display"}),
+                 'telephone':forms.TextInput(attrs={'class':"school-display"}), 
                  'email':forms.TextInput(attrs={'class':"school-display"}),
                  'im':forms.TextInput(attrs={'class':"school-display"}),
                  'insitute':forms.Select(attrs={'class':"school-display"}),
