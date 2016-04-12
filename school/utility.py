@@ -596,6 +596,7 @@ def set_unique_telphone(request, info_form, teacher_enterpriseform):
 
     info = info_form.save(commit=False)
     info.telephone = telephones[0]
+
     info_form.save()
 
     teacher = teacher_enterpriseform.save(commit=False)

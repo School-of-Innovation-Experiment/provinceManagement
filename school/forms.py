@@ -45,6 +45,10 @@ class InfoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         pid = kwargs.pop('pid', None)
         self.__pid = pid
+        phone = kwargs.pop('phone',None)
+        print phone
+        if phone != None:
+            self.phone = phone
         if not pid:
             return
         project = ProjectSingle.objects.get(project_id=pid)
@@ -55,6 +59,8 @@ class InfoForm(ModelForm):
         memberlist=','.join(member)
         super(InfoForm, self).__init__(*args, **kwargs)
         self.fields['memberlist'].widget.attrs["value"] = memberlist
+        if phone:
+            self.fields['telephone'].widget.attrs["value"] = phone
 
     memberlist = forms.CharField(
                            widget=forms.TextInput(attrs={'class':"school-display",'readonly':'readonly','placeholder': '请在“团队成员”标签中添加组员'}))    
@@ -69,7 +75,7 @@ class InfoForm(ModelForm):
         return memberlist
 
     def clean_telephone(self):
-        telephone = self.cleaned_data['telephone']
+        telephone = self.phone
         blank_validator(telephone)
         return telephone
 
