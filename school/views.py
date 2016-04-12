@@ -192,8 +192,6 @@ def application_report_view(request, pid=None, is_expired=False):
         readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
-    # ... sb requirement
-    readonly = False
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -596,8 +594,8 @@ def get_xls(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def auto_index(request):
-    
-    project_set = get_current_project_query_set().filter(adminuser = request.user)
+    school = SchoolProfile.objects.get( userid = request.user )
+    project_set = get_current_project_query_set().filter(school = school.school)
     project_set = sorted(list(project_set), key = lambda x: (x.financial_category.category, x.project_code))
     
 
