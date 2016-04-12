@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-11 15:54
-# Last modified: 2016-04-11 17:58
+# Last modified: 2016-04-12 10:05
 # Filename: forms.py
 # Description:
 # coding: UTF-8
@@ -311,5 +311,5 @@ class StudentDispatchForm(forms.Form):
     student_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2','id':"student_mailbox",'placeholder':u"邮箱",'id':'student_email'}
                            ))
-    proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_UN,widget=forms.Select(attrs={'class':'studispatch'}))
+    proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_A,widget=forms.Select(attrs={'class':'studispatch'}))
     person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'studispatch','id':"person_firstname",'placeholder':u"负责人"}))

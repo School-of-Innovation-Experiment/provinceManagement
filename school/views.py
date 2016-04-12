@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding:UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-04-12 10:05
+# Last modified: 2016-04-12 10:05
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
