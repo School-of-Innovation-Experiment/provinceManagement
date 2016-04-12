@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding:UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-04-12 09:56
+# Last modified: 2016-04-12 10:04
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-4-17
@@ -18,6 +26,7 @@ from const.models import SchoolDict, ProjectCategory, FinancialCategory, Insitut
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+from django.shortcuts import get_object_or_404
 from school.utility import *
 from users.models import SchoolProfile, StudentProfile
 from adminStaff.forms import ProjectManageForm
@@ -55,11 +64,22 @@ def  StudentDispatch(request, form):
         else:
             if financial_cate == FINANCIAL_CATE_A:
                 #current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
-                current_list = get_current_project_query_set().filter(adminuser = request.user)
+                school = get_object_or_404(SchoolProfile, userid=request.user).school
+
+                current_list = get_current_project_query_set().filter(school=school)
                 limits = ProjectPerLimits.objects.get(school__userid=request.user)
                 a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
                 if a_remainings <= 0:
                     message = u"甲类项目达到最大限度，无权发送"
+                    return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
+            if financial_cate == FINANCIAL_CATE_B:
+                school = get_object_or_404(SchoolProfile, userid=request.user).school
+                current_list = get_current_project_query_set().filter(school=school)
+                limits = ProjectPerLimits.objects.get(school__userid=request.user)
+                a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
+                b_remainings = int(limits.number) - int(limits.a_cate_number)
+                if b_remainings <= 0:
+                    message = u"乙类项目达到最大限度，无权发送"
                     return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
 
             flag = Send_email_to_student(request, name, person_firstname,password, email,STUDENT_USER, financial_cate=financial_cate)
