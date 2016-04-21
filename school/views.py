@@ -176,7 +176,6 @@ def application_report_view(request, pid=None, is_expired=False):
     Arguments:
         In: id, it is project id
     """
-    loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     teammember=get_studentmessage(project)
     pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
@@ -184,10 +183,8 @@ def application_report_view(request, pid=None, is_expired=False):
     try:
         innovation = pro_type.objects.get(project_id=project.project_id)
     except Exception, err:
-        loginfo(p=err, label="get innovation")
-        loginfo(p=project.project_category.category, label="project category")
+        pass
 
-    loginfo(p=teammember, label="in teammember")
     readonly = check_history_readonly(pid) or is_expired
     if check_auth(user = request.user,authority = SCHOOL_USER):
         readonly = False
@@ -216,7 +213,6 @@ def application_report_view(request, pid=None, is_expired=False):
         phones= request.POST.getlist("telephone")
         info_form = InfoForm(request.POST, pid=pid,instance=project,phone=phones[0])
         application_form = iform(request.POST, instance=pre)
-        loginfo(p=info_form,label='test')
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
@@ -225,10 +221,7 @@ def application_report_view(request, pid=None, is_expired=False):
                     isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
-                logger.info(info_form.errors)
-                logger.info(application_form.errors)
-                logger.info("--"*10)
+                pass
         else:
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
@@ -239,11 +232,7 @@ def application_report_view(request, pid=None, is_expired=False):
                     isRedirect = True
                     return HttpResponseRedirect(reverse('school.views.%s_view' % role))
             else:
-                logger.info("Form Valid Failed"+"**"*10)
-                logger.info(info_form.errors)
-                logger.info(application_form.errors)
-                logger.info(teacher_enterpriseform.errors)
-                logger.info("--"*10)
+                pass
     else:
         info_form = InfoForm(instance=project,pid=pid)
         application_form = iform(instance=pre)

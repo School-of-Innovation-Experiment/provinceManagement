@@ -34,7 +34,6 @@ from django.core.exceptions import ValidationError
 
 
 def blank_validator(value, msg="这个字段是必填项。"):
-    print '[BLANK VALIDATOR]', value
     if value.strip(' ') == '':
         raise ValidationError(msg)
 
