@@ -5,9 +5,10 @@
 {%if not isRedirect %}
 <div class="alert alert-error">
   <button class="close" data-dismiss="alert">×</button>
-  {% if info.title.errors or info.memberlist.errors or info.im.errors or info.email.errors or info.inspector.errors or info.inspector_title.errors %}
+  {% if info.title.errors or info.memberlist.errors or info.im.errors or info.email.errors or info.inspector.errors or info.inspector_title.errors or info.telephone.errors %}
   <p>
     “基本信息“ 标签下的
+    {% if info.telephone.errors %} “{{info.telephone.label}}”  &nbsp; {% endif %}
     {% if info.title.errors %} “{{info.title.label}}”  &nbsp; {% endif %}
     {% if info.memberlist.errors %} “团队成员“ &nbsp;  {% endif %}
     {% if info.im.errors %} “{{info.im.label}}”&nbsp;  {% endif %}

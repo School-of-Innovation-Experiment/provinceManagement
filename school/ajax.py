@@ -359,3 +359,28 @@ def refresh_member_table(request):
                             {"student_group": student_group,
                              "student_group_info_form": student_group_info_form})
 
+
+@dajaxice_register
+def checkStudentSno(request):
+    def check_no_space(x):
+        return x.strip(" ") != ""
+    message = ""
+    url = ""
+    status = 0
+    try:
+        student = StudentProfile.objects.get(user = request.user)
+        project =  ProjectSingle.objects.get(student = student)
+        stu_set = Student_Group.objects.filter(project = project)
+        for stu in stu_set:
+            if check_no_space(stu.studentId) and check_no_space(stu.studentName):
+                status = 1
+                url = "/school/application/"+str(project.project_id)
+                print url
+            else:
+                message = "不能填写申请书，请完善学号内容"
+        if stu_set.count() == 0:
+            message = "不能填写申请书，请先完善团队成员信息"
+    except Exception,e:
+            message = "学生信息验证失败"
+            print e
+    return simplejson.dumps({"status":status,"message":message,"url":url})

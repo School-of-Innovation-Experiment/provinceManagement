@@ -63,3 +63,17 @@ function change_member_info()
                                 {'form': $('#member_change_info_form').serialize(true),
                                  'origin': change_id});
 }
+
+$(document).ready(function(){
+    $(document).on("click","#application_btn",function(){
+        Dajaxice.school.checkStudentSno(check_studentsno_callback,{});
+    })
+    function check_studentsno_callback(data){
+        if(data.status){
+            location.href=data.url;
+        }
+        else{
+            alert(data.message)
+        }
+    }
+})

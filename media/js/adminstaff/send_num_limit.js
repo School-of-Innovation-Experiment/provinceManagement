@@ -5,7 +5,7 @@ function send_num_limit(){
 $('[rel="project_limit_num_reset"]').click(function() {
   var bln = window.confirm("是否确认重置所有项目数量限制？（此操作不可撤销）");
   if(bln) {
-    location.href = "ProjectLimitNumReset";
+    location.href = "/adminStaff/ProjectLimitNumReset";
   }
 });
 function limitednum_callback(data){

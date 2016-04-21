@@ -103,7 +103,8 @@ def member_change(request):
     return render(request, "school/member_change.html",
                   {"student_group": student_group,
                    "student_group_form": student_group_form,
-                   "student_group_info_form": student_group_info_form})
+                   "student_group_info_form": student_group_info_form,
+                  })
 
 @csrf.csrf_protect
 @login_required
@@ -192,8 +193,6 @@ def application_report_view(request, pid=None, is_expired=False):
         readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
-    # ... sb requirement
-    readonly = False
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -214,9 +213,10 @@ def application_report_view(request, pid=None, is_expired=False):
 
     if request.method == "POST" and readonly is not True:
         role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
-        info_form = InfoForm(request.POST, pid=pid,instance=project)
+        phones= request.POST.getlist("telephone")
+        info_form = InfoForm(request.POST, pid=pid,instance=project,phone=phones[0])
         application_form = iform(request.POST, instance=pre)
-        loginfo(p=application_form,label='test')
+        loginfo(p=info_form,label='test')
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
@@ -596,8 +596,8 @@ def get_xls(request):
 @login_required
 @authority_required(SCHOOL_USER)
 def auto_index(request):
-    
-    project_set = get_current_project_query_set().filter(adminuser = request.user)
+    school = SchoolProfile.objects.get( userid = request.user )
+    project_set = get_current_project_query_set().filter(school = school.school)
     project_set = sorted(list(project_set), key = lambda x: (x.financial_category.category, x.project_code))
     
 

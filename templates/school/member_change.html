@@ -10,6 +10,7 @@
         <li>如果学号已存在团队中，视为更新学生姓名</li>
       </ol>
     </div>
+    
     <form class="well form-inline" id="member_change_form" method="POST" action="">
       {% csrf_token %}
       <div class="input-prepend">
@@ -24,7 +25,10 @@
     <div id="member_group_table">
       {% include "school/widgets/member_group_table.html" %}
     </div>
-  </div>
+    <div class="pull-right">
+        <a class='btn btn-primary' type="button" id="application_btn">前往申请书</a>
+    </div>
+    </div>
   <!-- ajax_csrf-->
   <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
   <!-- dajax-->
