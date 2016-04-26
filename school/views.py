@@ -591,7 +591,7 @@ def auto_index(request):
     
 
     for i in xrange(len(project_set)):
-        project_set[i].project_code = "%d%s000%03d" % (get_current_year(), request.user, i)
+        project_set[i].project_code = "%d%s000%03d" % (get_current_year(), request.user, i+1)
         project_set[i].save()
 
     return HttpResponseRedirect(reverse('school.views.home_view'))
