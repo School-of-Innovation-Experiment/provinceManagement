@@ -24,7 +24,7 @@ if not 2000 < year < 2100:
 assert year
 
 emails = StudentProfile.objects.filter(school=school_profile).filter(projectsingle__is_past=False)
-error_emails = filter(lambda x: x.projectsingle.year != year, emails)
+error_emails = filter(lambda x: x.projectsingle.year != long(year), emails)
 for item in error_emails:
     print '%s:%s' % (item.projectsingle.title, item)
 
