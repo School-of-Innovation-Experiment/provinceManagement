@@ -541,7 +541,7 @@ def info_xls(request):
     name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     school_prof = SchoolProfile.objects.get(userid=request.user)
-    proj_set = get_current_project_query_set().filter(school=school_prof.school, year=get_current_year()).order_by('financial_category')
+    proj_set = get_current_project_query_set().filter(school=school_prof.school, year=get_current_year()).order_by('project_code')
     xls_obj, workbook = info_xls_school_gen(school_prof)
 
     _index = 1
