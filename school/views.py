@@ -186,8 +186,6 @@ def application_report_view(request, pid=None, is_expired=False):
         pass
 
     readonly = check_history_readonly(pid) or is_expired
-    if check_auth(user = request.user,authority = SCHOOL_USER):
-        readonly = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
 
@@ -195,14 +193,19 @@ def application_report_view(request, pid=None, is_expired=False):
         iform = ApplicationReportForm
         imodel = PreSubmit
         pre = get_object_or_404(PreSubmit, project_id=pid)
+        readonly = readonly or pre.is_audited
         teacher_enterprise=None
         is_innovation = True
     else:
         iform = EnterpriseApplicationReportForm
         imodel = PreSubmitEnterprise
         pre = get_object_or_404(PreSubmitEnterprise, project_id=pid)
+        readonly = readonly or pre.is_audited
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         is_innovation = False
+
+    if check_auth(user = request.user,authority = SCHOOL_USER):
+        readonly = False
 
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
 
