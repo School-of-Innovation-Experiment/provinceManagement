@@ -72,7 +72,7 @@ def info_xls(request):
     # loginfo(p=teammanager.first_name, label="get first_name")
     # school_prof = SchoolProfile.objects.get(userid=request.user)
     proj_set = get_current_project_query_set().order_by('school','financial_category').exclude(school__schoolName=u'测试用学校')
-    proj_set = filter(lambda x: x.presubmit.is_audited if x.project_category == CATE_INNOVATION else x.presubmitenterprise.is_audited, proj_set)
+    proj_set = filter(lambda x: x.presubmit_set[0].is_audited if x.project_category == CATE_INNOVATION else x.presubmitenterprise_set[0].is_audited, proj_set)
 
     xls_obj, workbook = info_xls_province_gen()
 
