@@ -664,7 +664,7 @@ def get_zipfiles_path(request,filetype,project_manage_form):
         if upfile:
             upfile_obj = upfile[0]
             if default_storage.exists(upfile_obj.file_obj):
-                newname = pro_obj.title + upfile_obj.name + '.' + upfile_obj.file_type
+                newname = pro_obj.project_unique_code + pro_obj.title + upfile_obj.name + '.' + upfile_obj.file_type
                 f.write(upfile_obj.file_obj.path,newname)
     f.close()
     return save_path
