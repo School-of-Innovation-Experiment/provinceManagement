@@ -478,15 +478,15 @@ def add_fileurl(project):
     #check_flagtofile(project)
     for filetemp in uploadfiles:
         if filetemp.name == u"申报书":
-            project.fileid_application = filetemp.file_id
+            project.fileurl_application = filetemp.file_id
         elif filetemp.name == u"中期检查表":
-            project.fileurl_interimchecklist = filetemp.file_obj.url
+            project.fileurl_interimchecklist = filetemp.file_id
         elif filetemp.name == u"结题报告":
-            project.fileurl_file_summary = filetemp.file_obj.url
+            project.fileurl_file_summary = filetemp.file_id
         elif filetemp.name == u"项目汇编":
-            project.fileurl_projectcompilation = filetemp.file_obj.url
+            project.fileurl_projectcompilation = filetemp.file_id
         elif filetemp.name == u"开题报告":
-            project.fileurl_opencheck = filetemp.file_obj.url
+            project.fileurl_opencheck = filetemp.file_id
 
 def check_flagtofile(project):
     """
