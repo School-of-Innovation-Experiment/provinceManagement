@@ -538,7 +538,6 @@ def info_xls(request):
         i = '0' * (4-len(i)) + i
         return i
 
-    name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
     school_prof = SchoolProfile.objects.get(userid=request.user)
     proj_set = get_current_project_query_set().filter(school=school_prof.school, year=get_current_year()).order_by('project_code')
@@ -648,15 +647,12 @@ def get_studentmessage(project):
     teammember={'manager_name':'','manager_studentid':'','member_number':'','othermember':''}
     if project.student_group_set.all().count()>0:
         group=project.student_group_set
-        loginfo(p=group,label="group")
         manager = group.all()[0]
-        loginfo(p=manager,label="manager")
         teammember['manager_name']=manager.studentName
         teammember['manager_studentid']=manager.studentId
         teammember['member_number'] = project.student_group_set.count()
         for student in group.all():
             group=project.student_group_set
-            loginfo(p=student.studentName,label="student")
             if student.studentName != manager.studentName:
                 member=student.studentName+"("+student.studentId+")"
                 memberlist.append(member)
