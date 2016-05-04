@@ -49,7 +49,8 @@ def  StudentDispatch(request, form):
     if student_form.is_valid():
         password = student_form.cleaned_data["student_password"]
         email = student_form.cleaned_data["student_email"]
-        financial_cate = student_form.cleaned_data["proj_cate"]
+        financial_cate = FINANCIAL_CATE_A
+        #financial_cate = student_form.cleaned_data["proj_cate"]
         person_firstname = student_form.cleaned_data["person_firstname"]
         name = email
         if password == "":
