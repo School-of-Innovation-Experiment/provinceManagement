@@ -171,6 +171,7 @@ def teacherLimitNumList(request):
 def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()
+    users_search_form = forms.UsersForm()
     school = SchoolProfile.objects.get(userid = request.user)
     subject_list = get_current_project_query_set().filter(school = school).order_by("project_unique_code")
     #subject_list =  AdminStaffService.GetSubject_list(school)
@@ -196,6 +197,7 @@ def SubjectRating(request,is_expired=False):
                'limit': limit,
                'remaining': remaining,
                'is_minzu_school': IS_MINZU_SCHOOL,
+               'search_form': users_search_form,
                 }
     return render(request, "school/subject_rating.html",context)
 

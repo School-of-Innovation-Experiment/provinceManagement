@@ -347,3 +347,7 @@ class ProjectManageForm(forms.Form):
         loginfo(p=YEAR_CHOICE,label="YEAR_CHOICE")
         self.fields['project_year'].choices = YEAR_CHOICE
 
+class UsersForm(forms.Form):
+    teacher_student_name = forms.CharField(max_length=20,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class':'span2','id':'name','placeholder':u'输入需要筛选的老师或学生名字'}),)

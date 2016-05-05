@@ -1,4 +1,4 @@
-# coding: UTF8
+# coding: UTF-8
 from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -15,13 +15,13 @@ from news.models import News
 from django.contrib.auth.models import User
 import datetime
 from adminStaff.forms import TeacherDispatchForm, ExpertDispatchForm
-from school.forms import TeacherNumLimitForm
+from school.forms import TeacherNumLimitForm, UsersForm, SubjectGradeForm
 from school.models import Project_Is_Assigned, InsituteCategory, TeacherProjectPerLimits,ProjectFinishControl,ProjectSingle, Re_Project_Expert, AchievementObjects, ProjectSingle
 from school.views import get_project_num_and_remaining, teacherLimitNumList
 from backend.logging import logger, loginfo
 from django.db.models import Q
 from school.utility import *
-from backend.decorators import check_auth
+from backend.decorators import *
 def refresh_mail_table(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
@@ -335,3 +335,44 @@ def achievement_delete(request, project_id, id):
     context['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
     context['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
     return render_to_string("student/widgets/achievements.html", context)
+
+
+@time_controller(phase=STATUS_FINSUBMIT)
+@dajaxice_register
+def search_project_in_rating(request, form_data, is_expired=False):
+    readonly = is_expired
+    form = UsersForm(deserialize_form(form_data))
+    if not form.is_valid():
+        return HttpResponse('404')
+    name = form.cleaned_data['teacher_student_name']
+    school = SchoolProfile.objects.get(userid=request.user)
+    subject_grade_form = SubjectGradeForm()
+    users_search_form = UsersForm()
+    try:
+        subject_list = get_current_project_query_set().filter(Q(student__name=name)|Q(adminuser__name=name))
+    except:
+        return HttpResponse("404")
+    if not len(subject_list):
+        return HttpResponse('404')
+
+    limit, remaining = get_recommend_limit(school)
+    for subject in subject_list:
+        try:
+            subject.members = get_manager(subject)
+        except:
+            pass
+    undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
+    def_subject_list = filter(lambda x: (x.recommend) or (x.project_grade.grade != GRADE_UN), subject_list)
+    
+
+    context = {'subject_list': subject_list,
+               'undef_subject_list': undef_subject_list,
+               'def_subject_list': def_subject_list,
+               'subject_grade_form': subject_grade_form,
+               'readonly': readonly,
+               'limit': limit,
+               'remaining': remaining,
+               'is_minzu_school': IS_MINZU_SCHOOL,
+               'search_form': users_search_form,
+                }
+    return render_to_string('school/rating_project_table.html', context)

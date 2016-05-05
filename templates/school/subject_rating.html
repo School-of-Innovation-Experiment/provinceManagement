@@ -1,103 +1,39 @@
 {% extends "school/home.html" %}
 {%block nav_admin_content%}
 <div class="page-header">
-  <h3>
-    本年度项目列表
-    <span class="label label-info">推荐上限:{{limit}}</span>
-    <span class="label label-important" id="id_remaining">剩余数量:{{remaining}}</span>
-  </h3>
+    <h3>
+        本年度项目列表
+        <span class="label label-info">推荐上限:{{limit}}</span>
+        <span class="label label-important" id="id_remaining">剩余数量:{{remaining}}</span>
+    </h3>
 </div><!--end page header-->
 
 <div class="alert alert-error" style="display:none" id="alert_message">
-  <strong>注意！</strong>推荐数额超过限制，请进行调整。
+    <strong>注意！</strong>推荐数额超过限制，请进行调整。
 </div>
 <div class="tab-content">
-  <div class="tab-pane fade active in" id="review-page">
-    <ul class="nav nav-tabs">
-      <li class="active">
-        <a href="#undefined-section" data-toggle="tab">未分级</a>
-      </li>
-      <li>
-        <a href="#defined-section" data-toggle="tab">已分级</a>
-      </li>
+    <div class="tab-pane fade active in" id="review-page">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#undefined-section" data-toggle="tab">未分级</a>
+            </li>
+            <li>
+                <a href="#defined-section" data-toggle="tab">已分级</a>
+            </li>
+            <form id="search_form" class="form-inline" style="float:right;margin-bottom:0px;margin-right:10px">
+                <div class="form-group">
+                    <label for="teacher_student_name">请输入姓名</label>
+                    {{search_form.teacher_student_name}}
+                    <button id="search_project" type="button" class="btn btn-default" style="margin-bottom:10px">检索</button>
+                </div>
+            </form>
 
-    </ul><!--end ul title-->
+        </ul><!--end ul title-->
 
-    <div class="tab-content">
-      <div class="tab-pane fade active in" id="undefined-section">
-	<table class="table table-condensed" id="undefined_subject_table">
-	  <thead>
-	    <tr>
-	      <th>项目编号</th>
-	      <th>发布题目名称</th>
-	      <th>指导教师</th>
-	      <th>负责人</th>
-	      <th>专家评分</th>
-	      <th>修改等级</th>
-	    </tr>
-	  </thead>
-	  <tbody id="undefined_subject_table_body">
-	    {% for subject in undef_subject_list%}
-	    <tr>
-	      <td>{{subject.project_unique_code}}</td>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.adminuser}}</td>
-              <td>{{subject.members}}</td>
-	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-	      {% ifequal subject.project_grade.id 1%}
-	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
-                {% else %}
-		{% ifequal subject.project_grade.id 2%}
-	      <td><span>已推荐（{{ subject.project_grade }}）</span><td>
-		{% else %}
-	      <td><a data-toggle="modal" href="#grade_choice" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">
-		  {% if subject.recommend %}
-		  已推荐
-		  {% else %}
-		  未推荐（{{ subject.project_grade }}）
-		  {% endif %}
-	      </a></td>
-	      {% endifequal %}
-              {% endifequal %}
-	    </tr>
-	    {%endfor%}
-	  </tbody>
-        </table>
-      </div><!--end content section-->
-
-      <div class="tab-pane fade " id="defined-section">
-	<table class="table table-condensed" id="defined_subject_table">
-	  <thead>
-	    <tr>
-	      <th>项目编号</th>
-	      <th>发布题目名称</th>
-	      <th>指导教师</th>
-	      <th>负责人</th>
-	      <th>专家评分</th>
-	      <th>修改等级</th>
-	    </tr>
-	  </thead>
-	  <tbody id="defined_subject_table_body">
-	    {% for subject in def_subject_list%}
-	    <tr>
-	      <td>{{subject.project_unique_code}}</td>
-	      <td>{{subject.title}}</td>
-	      <td>{{subject.adminuser}}</td>
-              <td>{{subject.members}}</td>
-	      <td><a data-toggle="modal" href="#review_subject" onclick="get_review_list('{{subject.project_id}}');">察看专家评分</td>
-	              {% if subject.recommend %}
-                  <td><span>已推荐（{{ subject.project_grade }}）</span><td>
-                {% else %}
-                  <td><a data-toggle="modal" href="#grade_choice_2" id="gradeid_{{subject.project_id}}" onclick="get_subject_id('{{subject.project_id}}');">未推荐（{{ subject.project_grade }}）</a><td>
-                {% endif %}
-	     </tr>
-	    {%endfor%}
-	  </tbody>
-        </table>
-      </div>
-
-    </div><!--end tab content-->
-  </div><!--end tab pane-->
+        <div id="projects_content">
+            {% include 'school/rating_project_table.html' %}
+        </div>
+    </div><!--end tab pane-->
 </div><!--end tab content-->
 
 
@@ -105,69 +41,69 @@
 
 
 <div id="review_subject" class="modal hide fade" style="display: none; .modal width: 800px"><!--subject_review-->
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3>专家得分/评价列表</h3>
-  </div>
-  <div class="modal-body">
-    <table id="review_table"class="table table-condensed">
-    </table>
-  </div>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>专家得分/评价列表</h3>
+    </div>
+    <div class="modal-body">
+        <table id="review_table"class="table table-condensed">
+        </table>
+    </div>
 </div><!--end subject_review-->
 <div class="modal hide fade" style="display: none;" id="grade_choice">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3>选择是否推荐</h3>
-  </div>
-  <div class="modal-body">
-    <select name="subject_grade" id="id_subject_recommend">
-      {% if is_minzu_school %}
-        <option value="1">推荐（校级以及校级以上）</option>
-      {% else %}  
-        <option value="1">推荐(省级及省级以上)</option>
-        <option value="0">校级</option>
-      {% endif %}
-      <option value="-1">院级</option>
-    </select>
-  </div>
-  <div class="modal-footer">
-    <a class="btn" data-dismiss="modal">关闭</a>
-    <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
-  </div>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>选择是否推荐</h3>
+    </div>
+    <div class="modal-body">
+        <select name="subject_grade" id="id_subject_recommend">
+            {% if is_minzu_school %}
+            <option value="1">推荐（校级以及校级以上）</option>
+            {% else %}  
+            <option value="1">推荐(省级及省级以上)</option>
+            <option value="0">校级</option>
+            {% endif %}
+            <option value="-1">院级</option>
+        </select>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal">关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" onclick="change_subject_recommend();">保存更新</a>
+    </div>
 </div>
 </div><!--end grade_choice-->
 
 <div class="modal hide fade" style="display: none;" id="grade_choice_2">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3>选择修改后的等级</h3>
-  </div>
-  <div class="modal-body">
-    <select name="subject_grade" id="id_subject_grade">
-      <option value="school">校级</option>
-      <option value="institute">院级</option>
-      <option value="undefined">未指定</option>
-    </select>
-  </div>
-  <div class="modal-footer">
-    <a class="btn" data-dismiss="modal">关闭</a>
-    <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
-  </div>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>选择修改后的等级</h3>
+    </div>
+    <div class="modal-body">
+        <select name="subject_grade" id="id_subject_grade">
+            <option value="school">校级</option>
+            <option value="institute">院级</option>
+            <option value="undefined">未指定</option>
+        </select>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal">关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
+    </div>
 </div>
 </div><!--end grade_choice-->
 
 </div><!-- end the whole form -->
 <div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div style="border: 1px solid #fc6;text-align:center;">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>发布新闻成功</h3>
-  </div>
+    <div style="border: 1px solid #fc6;text-align:center;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>发布新闻成功</h3>
+    </div>
 </div>
 <div style="width:45%;background-color:#f2dede;border-color: #d6e9c6;" id="myunrelease" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div style="border: 1px solid #fc6;text-align:center;">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>发布新闻失败,有未指派级别的项目</h3>
-  </div>
+    <div style="border: 1px solid #fc6;text-align:center;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>发布新闻失败,有未指派级别的项目</h3>
+    </div>
 </div>
 </div>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/adminStaff/subject_rating.css" >
