@@ -135,8 +135,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #Enhanced Admin
-    #'djangocms_admin_style',
     'django.contrib.admin',
+    'djangocms_admin_style',
     #Project
     'registration',
     'users',
