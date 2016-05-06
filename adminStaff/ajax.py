@@ -17,7 +17,7 @@ from const.models import SchoolDict, NewsCategory, InsituteCategory, ProjectReco
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
-from school.models import Project_Is_Assigned, ProjectSingle
+from school.models import *
 from users.models import SchoolProfile, ExpertProfile
 from news.models import News
 import datetime
@@ -26,7 +26,7 @@ from django.template.loader import render_to_string
 from backend.utility import getContext
 from school.utility import *
 
-import random, math, datetime
+import random, math, datetime, time
 
 @dajaxice_register
 def ShowDelete(request, uid):
@@ -441,3 +441,45 @@ def ResetUserPassword(request, form,uid):
         return simplejson.dumps({'status':'1', 'message':u"重置密码成功"})
     else:
         return simplejson.dumps({'status':'0', 'message':u"密码不能为空"})
+
+
+@dajaxice_register
+def Expert_Project_Assign(request, group_num=20, expert_per_group=3, project_per_group=100):
+    # experts filter
+    # TODO: experts order by category if required
+    experts = ExpertProfile.objects.exclude(Q(group=-1) | Q(group=0))
+    expert_group = [experts.filter(group=i+1) for i in xrange(group_num)]
+    print expert_group
+    for index, group in enumerate(expert_group):
+        if len(group) != expert_per_group:
+            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n实际数量:%d\n请联系系统管理员处理' \
+                    % (index+1, expert_per_group, len(group))
+            return HttpResponse(response)
+    # projects filter and order by category
+    projects = get_current_project_query_set().exclude(
+            Q(school__schoolName=u'大连理工大学')
+            | Q(school__schoolName=u'东北大学')
+            | Q(school__schoolName=u'大连海事大学')
+            | Q(school__schoolName=u'大连民族大学')).order_by('project_category', 'project_id')
+    expect_num = group_num*project_per_group
+    actual_num = projects.count()
+    if actual_num < expect_num:
+        response = '项目数量与专家数量不匹配,请联系系统管理员处理\n期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
+        return HttpResponse(response)
+    assigned_count = 0
+    actual_assign_count = 0
+    for index, project in enumerate(projects):
+        if index == expect_num:
+            break
+        group = index / project_per_group
+        if group == group_num:
+            break
+        for expert in expert_group[group]:
+            proj_assign, created = Re_Project_Expert.objects.get_or_create(project=project, expert=expert)
+            proj_assign.save()
+            if created:
+                actual_assign_count += 1
+            assigned_count += 1
+    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n本次实际分配数量:%d\n已分配数量:%d' % \
+            (experts.count(), projects.count(), actual_assign_count, assigned_count)
+    return HttpResponse(response)

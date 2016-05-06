@@ -51,50 +51,10 @@ def home_view(request):
     expert home management page
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
-    re_project = Re_Project_Expert.objects.filter(expert=expert, project__is_past=False).order_by("project__financial_category")
-    rate = SchoolRecommendRate.load().rate
-    is_expert_all = False
-    score_pro ={0:0,1:0,2:0,3:0}
-    if expert.subject.category == "12":
-        is_expert_all = True
-        re_first_project = Re_Project_Expert.objects.exclude(expert__subject__category = "12")
-        limitnum = int(math.ceil(re_project.count()*rate/100))
-        really = re_project.filter(pass_p=True).count()
-        remaining = limitnum - really
-        limitnum_b = really_b = remaining_b =0
-        for pro in re_project:
-            re_experts = re_first_project.filter(project = pro.project)
-            pro.firstPass_p = re_experts.filter(pass_p=True).count()
-            score_pro[pro.firstPass_p]+=1
-            pro.firstTrial = "%d/%d" % (pro.firstPass_p,re_experts.count())
-        re_project = sorted(re_project,key = lambda pro : pro.firstPass_p)
-        re_project.reverse()
-    else:
-        project_listA = re_project.filter(project__financial_category__category=FINANCIAL_CATE_A)
-        limitnum = int(math.ceil(project_listA.count()*rate/100))
-        really = project_listA.filter(pass_p=True).count()
-        remaining = limitnum - really
-
-        project_listB = re_project.filter(project__financial_category__category=FINANCIAL_CATE_B)
-        limitnum_b = int(math.ceil(project_listB.count()*rate/100))
-        really_b = project_listB.filter(pass_p=True).count()
-        remaining_b = limitnum_b - really_b
-
-
+    re_project = Re_Project_Expert.objects.filter(expert=expert, project__is_past=False).order_by("pass_p")
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
-    for item in context["item_list"]:
-        item.pass_pstr = u"通过" if item.pass_p else u"未通过"
-        item.financial_category = item.project.financial_category
-    data = {'limitnum': limitnum,
-            'really': really,
-            'remaining': remaining,
-            'limitnum_b': limitnum_b,
-            'really_b': really_b,
-            'remaining_b': remaining_b,
-            'is_expert_all':is_expert_all,
-            'page':page,
-            'score_pro':score_pro}
+    data = {'page': page}
     context.update(data)
     return render(request, 'expert/home.html', context)
 
@@ -126,15 +86,6 @@ def review_report_view(request, pid=None):
         application_form = EnterpriseApplicationReportForm(instance=pre)
         teacher_enterprise = get_object_or_404(Teacher_Enterprise,id=pre.enterpriseTeacher_id)
         teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
-    if request.method == "POST":
-        review_form = ReviewForm(request.POST, instance=re_project)
-        if review_form.is_valid():
-            review_form.save()
-            return HttpResponseRedirect(reverse('expert.views.home_view'))
-        else:
-            return HttpResponseRedirect(reverse('expert.views.home_view'))
-    else:
-        review_form = ReviewForm(instance=re_project)
     for i, doc in enumerate(doc_list):
         doc.index = i + 1
     data = {
@@ -142,7 +93,6 @@ def review_report_view(request, pid=None):
             "pid": pid,
             "info": info_form,
             "application": application_form,
-            "review": review_form,
             "doc_list": doc_list,
             'teacher_enterpriseform':teacher_enterpriseform,
             'page':page,

@@ -17,9 +17,11 @@
       <li>
         <a href="#docs-section" data-toggle="tab"><strong>附件下载</strong></a>
       </li>
+      {% comment %}
       <li>
         <a href="#pass-check" data-toggle="tab"><strong>项目审核</strong></a>
       </li>
+      {% endcomment %}
       <!-- <li> -->
       <!--   <a href="#review-section" data-toggle="tab">项目评价</a> -->
       <!-- </li> -->
@@ -38,16 +40,31 @@
       <div class="tab-pane fade " id="docs-section">
         {% include "expert/widgets/_doc_list.html" %}
       </div>
+      {% comment %}
       <div class="tab-pane fade " id="review-section">
         <!--Expert Review-->
         {% include "expert/widgets/score_review.html" %}
       </div><!--end review section-->
-      <div class="form-actions" id="pass-check">
+      {% endcomment %}
+      <div style="float:right;margin-right:20px">
+          <form onsubmit="return submit_score('{{pid}}')" method="POST" class="form-search">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="score" class="control-label">评审分数:</label>
+                  <input type="input" class="input-small" id="score" name="score">
+                  <button type="submit" class="btn btn-primary">提交</button>
+              </div>
+          </form>
+      </div>
+                                                       
+          {% comment %}
           <a href="{{pid}}/1?page={{page}}" class="btn btn-primary">通过</a>
           <a href="{{pid}}/0?page={{page}}" class="btn">不通过</a>
+          {% endcomment %}
       </div>
     </div><!--end tab content-->
   </div><!--end tab pane-->
 </div><!--end tab content-->
+<script src="{{ STATIC_URL }}/js/expert/expert.js"></script>
 {% endblock %}
 
