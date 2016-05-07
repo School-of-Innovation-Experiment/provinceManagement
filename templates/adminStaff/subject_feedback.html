@@ -21,7 +21,8 @@
         {% endif %}
         {% endcomment %}
         <button class="btn btn-primary" onclick="expert_project_assign();">评审项目分配</button>
-        <button id="id_show_result" class="btn btn-primary" onclick="show_result();">评审结果导出</button>
+        <button id="id_show_result" class="btn btn-primary" onclick="get_scored_result();">评审结果导出</button>
+        <a href="/adminStaff/expert_scored_status" class="btn btn-primary">专家评审状态查询</a>
 
       <form id="subject_insitute_form" method="POST" action="/adminStaff/subject_feedback/"><!-- begin category form-->
         {% csrf_token %}

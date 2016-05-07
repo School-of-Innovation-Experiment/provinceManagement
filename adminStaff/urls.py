@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     (r'^show_manage$',AdminStaffService.ShowManage),
     (r'^ImportExpert$',AdminStaffService.ImportExpert),
     (r'^RecommendRatingSetting', AdminStaffService.RecommendRatingSetting),
+    (r'^expert_scored_status/$', AdminStaffService.expert_scored_status),
     # url(
     #     r'get_xls/$',
     #     AdminStaffService.get_xls_path,

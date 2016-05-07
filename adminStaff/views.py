@@ -40,6 +40,7 @@ from adminStaff.utility import *
 from showtime.form import ShowForm
 import SocketServer
 from wsgiref import handlers
+from users.models import *
 
 class AdminStaffService(object):
     @staticmethod
@@ -578,3 +579,46 @@ class AdminStaffService(object):
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
         file_path = info_result_xls(request,project_list)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def get_scored_result_xls_path(request, sorted_list):
+        file_path = scored_result_xls(request, sorted_list)
+        return MEDIA_URL+"tmp"+file_path[len(TMP_FILES_PATH):]
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def expert_scored_status(request):
+        context = {}
+        experts = ExpertProfile.objects.exclude(
+            Q(group=-1) | Q(group=0)).order_by('group')
+        ordered_experts = []
+        experts_num = len(experts)
+        experts_finished_scoring = 0
+        experts_unfinished_scoring = 0
+        for expert in experts:
+            re_project = Re_Project_Expert.objects.filter(
+                expert=expert,
+                project__is_past=False)
+            total_num = re_project.count()
+            scored_num = re_project.filter(pass_p=True).count()
+            unscored_num = re_project.filter(pass_p=False).count()
+            if unscored_num == 0:
+                experts_finished_scoring += 1
+            else:
+                experts_unfinished_scoring += 1
+            ordered_experts.append((
+                expert,
+                total_num,
+                scored_num,
+                unscored_num))
+        ordered_experts.sort(key=lambda x: x[3], reverse=True)
+        context['experts'] = ordered_experts
+        context['experts_num'] = experts_num
+        context['experts_finished_scoring'] = experts_finished_scoring
+        context['experts_unfinished_scoring'] = experts_unfinished_scoring
+        return render(request, 'adminStaff/expert_scored_status.html', context)

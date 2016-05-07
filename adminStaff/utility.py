@@ -222,4 +222,69 @@ def get_shcoolcode(school_id):
     schooluser=User.objects.get(id=school_prof.userid_id)
     school_code = '2013'+schooluser.username
     return school_code
-    
+
+
+def scored_xls_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+    year = get_current_year()
+
+    worksheet.write_merge(0, 0, 0, 15, str(year)+"年辽宁省大学生创新创业训练计划评审得分汇总表")
+    worksheet.write_merge(1, 4, 0, 0, '序号')
+    worksheet.write_merge(1, 4, 1, 1, '学校')
+    worksheet.write_merge(1, 4, 2, 2, '项目编号')
+    worksheet.write_merge(1, 4, 3, 3, '项目名称')
+    worksheet.write_merge(1, 4, 4, 4, '项目类别（甲类、乙类）')
+    worksheet.write_merge(1, 4, 5, 5, '项目类型')
+    worksheet.write_merge(1, 4, 6, 6, '项目负责人')
+    worksheet.write_merge(1, 2, 7, 8, '指导教师')
+    worksheet.write_merge(3, 4, 7, 7, '姓名')
+    worksheet.write_merge(3, 4, 8, 8, '职称')
+    worksheet.write_merge(1, 4, 9, 9, '项目所属一级学科')
+    worksheet.write_merge(1, 4, 10, 10, '评分小组')
+    worksheet.write_merge(1, 2, 11, 13, '专家评分')
+    worksheet.write_merge(3, 4, 11, 11, '专家1')
+    worksheet.write_merge(3, 4, 12, 12, '专家2')
+    worksheet.write_merge(3, 4, 13, 13, '专家3')
+    worksheet.write_merge(1, 4, 14, 14, '平均分')
+    worksheet.write_merge(1, 4, 15, 15, '排名')
+
+    worksheet.col(1).width = len('学校') * 600
+    worksheet.col(2).width = len('项目编号') * 300
+    worksheet.col(3).width = len('项目名称') * 800
+    worksheet.col(4).width = len('项目类别（甲类、乙类）') * 64
+
+    return worksheet, workbook
+
+
+def scored_result_xls(request, sorted_list):
+    xls_obj, workbook = scored_xls_gen()
+    row = 5
+    for index, group in enumerate(sorted_list):
+        group_index = index+1
+        for item_index, item in enumerate(group):
+            rating = item_index+1
+            proj, score1, score2, score3, total_score = item
+            xls_obj.write(row, 0, "%04d" % (row-4))
+            xls_obj.write(row, 1, unicode(proj.school))
+            xls_obj.write(row, 2, unicode(proj.school))
+            xls_obj.write(row, 3, unicode(proj.title))
+            xls_obj.write(row, 4, unicode(proj.financial_category))
+            xls_obj.write(row, 5, unicode(proj.project_category))
+            xls_obj.write(row, 6, unicode(proj.student.user.first_name))
+            xls_obj.write(row, 7, unicode(proj.inspector))
+            xls_obj.write(row, 8, unicode(proj.inspector_title))
+            xls_obj.write(row, 9, unicode(proj.insitute))
+            xls_obj.write(row, 10, unicode(group_index))
+            xls_obj.write(row, 11, unicode(score1))
+            xls_obj.write(row, 12, unicode(score2))
+            xls_obj.write(row, 13, unicode(score3))
+            xls_obj.write(row, 14, '%.3f' % (sum([score1, score2, score3])/3))
+            xls_obj.write(row, 15, unicode(rating))
+            row += 1
+    save_path = os.path.join(
+        TMP_FILES_PATH,
+        "%s%s.xls" % (str(datetime.date.today().year),
+                      "年辽宁省大学生创新创业训练计划评审得分汇总表"))
+    workbook.save(save_path)
+    return save_path

@@ -1,0 +1,43 @@
+{% extends "adminStaff/administrator.html" %}
+{%block nav_admin_content%}
+<div>
+    <div class="well form-inline">
+        <div>
+            <span class="label label-info"><h4>评审专家总数量:{{experts_num}}</h4></span>
+            <span class="label label-info"><h4>已完成评审数量:{{experts_finished_scoring}}</h4></span>
+            <span class="label label-warning"><h4>未完成评审数量:{{experts_unfinished_scoring}}</h4></span>
+            <table class="table table-condensed" id="subject_table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">专家账号</th>
+                        <th style="text-align:center">需要评审数量</th>
+                        <th style="text-align:center">已经评审数量</th>
+                        <th style="text-align:center">还需评审数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expert in experts %}
+                    <tr>
+                        <td style="text-align:center">{{expert.0}}</td>
+                        <td style="text-align:center"><span class="label label-info">{{expert.1}}</span></td>
+                        <td style="text-align:center"><span class="label label-info">{{expert.2}}</span></td>
+                        <td style="text-align:center">
+                            {% ifequal expert.3 0 %}
+                            <span class="label label-info">
+                                {% else %}
+                                <span class="label label-warning">
+                                    {% endifequal %}
+                                    {{expert.3}}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div><!-- end the whole form -->
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/refresh_table.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/is_assigned.js" onload="is_assigned();"></script>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+{%endblock%}

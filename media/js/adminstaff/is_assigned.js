@@ -86,3 +86,23 @@ function show_result_callback(data){
         alert("操作失败，请联系后台管理员");
 
 }
+
+function get_scored_result()
+{
+    $("#excelprogress").modal();
+    Dajaxice.adminStaff.scored_result(get_scored_result_callback);
+}
+
+function get_scored_result_callback(data)
+{
+    $("#excelprogress").modal("hide");
+    if(data.status == "SUCCESS")
+    {
+        location.href = data.path;
+        alert("导出成功");
+    }
+    else
+    {
+        alert("操作失败，请再次尝试，错误信息:\n"+data.message);
+    }
+}

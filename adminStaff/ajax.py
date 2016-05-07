@@ -444,27 +444,31 @@ def ResetUserPassword(request, form,uid):
 
 
 @dajaxice_register
-def Expert_Project_Assign(request, group_num=20, expert_per_group=3, project_per_group=100):
+def Expert_Project_Assign(request, group_num=20,
+                          expert_per_group=3, project_per_group=134):
     # experts filter
     # TODO: experts order by category if required
     experts = ExpertProfile.objects.exclude(Q(group=-1) | Q(group=0))
     expert_group = [experts.filter(group=i+1) for i in xrange(group_num)]
-    print expert_group
     for index, group in enumerate(expert_group):
         if len(group) != expert_per_group:
-            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n实际数量:%d\n请联系系统管理员处理' \
-                    % (index+1, expert_per_group, len(group))
+            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n\
+                实际数量:%d\n请联系系统管理员处理' \
+                % (index+1, expert_per_group, len(group))
             return HttpResponse(response)
     # projects filter and order by category
     projects = get_current_project_query_set().exclude(
-            Q(school__schoolName=u'大连理工大学')
-            | Q(school__schoolName=u'东北大学')
-            | Q(school__schoolName=u'大连海事大学')
-            | Q(school__schoolName=u'大连民族大学')).order_by('project_category', 'project_id')
+        Q(school__schoolName=u'大连理工大学')
+        | Q(school__schoolName=u'东北大学')
+        | Q(school__schoolName=u'大连海事大学')
+        | Q(school__schoolName=u'大连民族大学')).order_by(
+            'project_category',
+            'project_id')
     expect_num = group_num*project_per_group
     actual_num = projects.count()
     if actual_num < expect_num:
-        response = '项目数量与专家数量不匹配,请联系系统管理员处理\n期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
+        response = '项目数量与专家数量不匹配,请联系系统管理员处理\n\
+            期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
         return HttpResponse(response)
     assigned_count = 0
     actual_assign_count = 0
@@ -475,11 +479,54 @@ def Expert_Project_Assign(request, group_num=20, expert_per_group=3, project_per
         if group == group_num:
             break
         for expert in expert_group[group]:
-            proj_assign, created = Re_Project_Expert.objects.get_or_create(project=project, expert=expert)
+            proj_assign, created = Re_Project_Expert.objects.get_or_create(
+                project=project,
+                expert=expert)
             proj_assign.save()
             if created:
                 actual_assign_count += 1
             assigned_count += 1
-    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n本次实际分配数量:%d\n已分配数量:%d' % \
-            (experts.count(), projects.count(), actual_assign_count, assigned_count)
+    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n\
+        本次实际分配数量:%d\n已分配数量:%d' % \
+        (experts.count(), projects.count(),
+         actual_assign_count, assigned_count)
     return HttpResponse(response)
+
+
+@dajaxice_register
+def scored_result(request, group_num=20,
+                  expert_per_group=3, project_per_group=134):
+    experts = ExpertProfile.objects.exclude(Q(group=-1) | Q(group=0))
+    expert_groups = [experts.filter(group=i+1) for i in xrange(group_num)]
+    project_groups = [
+        map(lambda y: y.project, x[0].re_project_expert_set.all())
+        for x in expert_groups]
+    for index, pg in enumerate(project_groups):
+        for proj in pg:
+            all_scores = proj.re_project_expert_set.all()
+            scored_num = all_scores.filter(pass_p=True).count()
+            unscored_experts = map(lambda x: x.expert.userid.username,
+                                   all_scores.filter(pass_p=False))
+            if scored_num != expert_per_group:
+                experts = reduce(lambda x, y: x+'\n'+y, unscored_experts)
+                response = u'第 %d 组中项目<%s>存在未评分,对应专家为:\n' % (index+1, proj)
+                response += experts+u'\n请查证。'
+                return simplejson.dumps(
+                    {'status': 'ERROR',
+                     'message': response})
+    sorted_project_groups = [
+        map(lambda proj: (proj,
+            proj.re_project_expert_set.all()[0].score,
+            proj.re_project_expert_set.all()[1].score,
+            proj.re_project_expert_set.all()[2].score,
+            reduce(lambda i, j: i+j,
+                   map(lambda x: x.score, proj.re_project_expert_set.all()))),
+            pg)
+        for pg in project_groups]
+    for spg in sorted_project_groups:
+        spg.sort(key=lambda x: x[4], reverse=True)
+    sorted_project_groups = map(lambda x: x[:50], sorted_project_groups)
+    path = AdminStaffService.get_scored_result_xls_path(
+        request,
+        sorted_project_groups)
+    return simplejson.dumps({'status': 'SUCCESS', 'path': path})
