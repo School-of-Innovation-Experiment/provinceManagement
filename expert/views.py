@@ -52,9 +52,15 @@ def home_view(request):
     """
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert, project__is_past=False).order_by("pass_p")
+    total_num = re_project.count()
+    scored_num = re_project.filter(pass_p=True).count()
+    unscored_num = re_project.filter(pass_p=False).count()
     page = request.GET.get('page')
     context = getContext(re_project, page, 'item', 0)
-    data = {'page': page}
+    data = {'page': page,
+            'total_num': total_num,
+            'scored_num': scored_num,
+            'unscored_num': unscored_num}
     context.update(data)
     return render(request, 'expert/home.html', context)
 

@@ -23,6 +23,13 @@
         {% endif%}
     </div>
     {% endif %}
+    <div>
+        <h4>评审数量情况:
+        <span class="label">需要评审: {{total_num}} 件</span>
+        <span class="label label-info">已经评审: {{scored_num}} 件</span>
+        <span class="label label-warning">还需评审: {{unscored_num}} 件</span>
+        </h4>
+    </div>
 
   <table class="table table-hover">
     <thead>
