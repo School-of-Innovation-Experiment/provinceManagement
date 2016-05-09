@@ -452,9 +452,9 @@ def Expert_Project_Assign(request, group_num=20,
     expert_group = [experts.filter(group=i+1) for i in xrange(group_num)]
     for index, group in enumerate(expert_group):
         if len(group) != expert_per_group:
-            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n\
-                实际数量:%d\n请联系系统管理员处理' \
-                % (index+1, expert_per_group, len(group))
+            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n'
+            response += '实际数量:%d\n请联系系统管理员处理' % (
+                index+1, expert_per_group, len(group))
             return HttpResponse(response)
     # projects filter and order by category
     projects = get_current_project_query_set().exclude(
@@ -467,8 +467,8 @@ def Expert_Project_Assign(request, group_num=20,
     expect_num = group_num*project_per_group
     actual_num = projects.count()
     if actual_num < expect_num:
-        response = '项目数量与专家数量不匹配,请联系系统管理员处理\n\
-            期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
+        response = '项目数量与专家数量不匹配,请联系系统管理员处理\n'
+        response += '期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
         return HttpResponse(response)
     assigned_count = 0
     actual_assign_count = 0
@@ -486,8 +486,8 @@ def Expert_Project_Assign(request, group_num=20,
             if created:
                 actual_assign_count += 1
             assigned_count += 1
-    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n\
-        本次实际分配数量:%d\n已分配数量:%d' % \
+    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n'
+    response += '本次实际分配数量:%d\n已分配数量:%d' % \
         (experts.count(), projects.count(),
          actual_assign_count, assigned_count)
     return HttpResponse(response)
