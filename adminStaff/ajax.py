@@ -452,9 +452,9 @@ def Expert_Project_Assign(request, group_num=20,
     expert_group = [experts.filter(group=i+1) for i in xrange(group_num)]
     for index, group in enumerate(expert_group):
         if len(group) != expert_per_group:
-            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n'
-            response += '实际数量:%d\n请联系系统管理员处理' % (
-                index+1, expert_per_group, len(group))
+            response = '检测到第 %d 组专家数量与要求数量不一致\n期望数量:%d\n'\
+                % (index+1, expert_per_group)
+            response += '实际数量:%d\n请联系系统管理员处理' % len(group)
             return HttpResponse(response)
     # projects filter and order by category
     projects = get_current_project_query_set().exclude(
@@ -486,10 +486,10 @@ def Expert_Project_Assign(request, group_num=20,
             if created:
                 actual_assign_count += 1
             assigned_count += 1
-    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n'
-    response += '本次实际分配数量:%d\n已分配数量:%d' % \
-        (experts.count(), projects.count(),
-         actual_assign_count, assigned_count)
+    response = '项目评审成功分配\n专家数量:%d\n项目数量:%d\n' % (
+        experts.count(), projects.count())
+    response += '本次实际分配数量:%d\n已分配数量:%d' % (
+        actual_assign_count, assigned_count)
     return HttpResponse(response)
 
 
@@ -510,7 +510,8 @@ def scored_result(request, group_num=20, expert_per_group=3,
                                        all_scores.filter(pass_p=False))
                 if scored_num != expert_per_group:
                     experts = reduce(lambda x, y: x+'\n'+y, unscored_experts)
-                    response = u'第 %d 组中项目<%s>存在未评分,对应专家为:\n' % (index+1, proj)
+                    response = u'第 %d 组中项目<%s>存在未评分,对应专家为:\n'\
+                        % (index+1, proj)
                     response += experts+u'\n请查证。'
                     return simplejson.dumps(
                         {'status': 'ERROR',
