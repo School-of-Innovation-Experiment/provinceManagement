@@ -87,15 +87,19 @@ function show_result_callback(data){
 
 }
 
-function get_scored_result()
+function get_scored_result(forced)
 {
-    $("#excelprogress").modal();
-    Dajaxice.adminStaff.scored_result(get_scored_result_callback);
+    $("#excelprogress").modal("show");
+    Dajaxice.adminStaff.scored_result(get_scored_result_callback,{'forced':forced});
 }
 
 function get_scored_result_callback(data)
 {
     $("#excelprogress").modal("hide");
+    setTimeout(function(){scored_result_handler(data)},600);
+}
+function scored_result_handler(data)
+{
     if(data.status == "SUCCESS")
     {
         location.href = data.path;
@@ -103,6 +107,9 @@ function get_scored_result_callback(data)
     }
     else
     {
-        alert("操作失败，请再次尝试，错误信息:\n"+data.message);
+        var forced=confirm("操作失败，请再次尝试，错误信息:\n"+data.message+"\n是否确定继续导出？");
+        if(forced==true)
+            get_scored_result(forced);
     }
+
 }

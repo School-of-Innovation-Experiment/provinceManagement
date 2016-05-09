@@ -494,26 +494,27 @@ def Expert_Project_Assign(request, group_num=20,
 
 
 @dajaxice_register
-def scored_result(request, group_num=20,
-                  expert_per_group=3, project_per_group=134):
+def scored_result(request, group_num=20, expert_per_group=3,
+                  project_per_group=134, forced=False):
     experts = ExpertProfile.objects.exclude(Q(group=-1) | Q(group=0))
     expert_groups = [experts.filter(group=i+1) for i in xrange(group_num)]
     project_groups = [
         map(lambda y: y.project, x[0].re_project_expert_set.all())
         for x in expert_groups]
-    for index, pg in enumerate(project_groups):
-        for proj in pg:
-            all_scores = proj.re_project_expert_set.all()
-            scored_num = all_scores.filter(pass_p=True).count()
-            unscored_experts = map(lambda x: x.expert.userid.username,
-                                   all_scores.filter(pass_p=False))
-            if scored_num != expert_per_group:
-                experts = reduce(lambda x, y: x+'\n'+y, unscored_experts)
-                response = u'第 %d 组中项目<%s>存在未评分,对应专家为:\n' % (index+1, proj)
-                response += experts+u'\n请查证。'
-                return simplejson.dumps(
-                    {'status': 'ERROR',
-                     'message': response})
+    if not forced:
+        for index, pg in enumerate(project_groups):
+            for proj in pg:
+                all_scores = proj.re_project_expert_set.all()
+                scored_num = all_scores.filter(pass_p=True).count()
+                unscored_experts = map(lambda x: x.expert.userid.username,
+                                       all_scores.filter(pass_p=False))
+                if scored_num != expert_per_group:
+                    experts = reduce(lambda x, y: x+'\n'+y, unscored_experts)
+                    response = u'第 %d 组中项目<%s>存在未评分,对应专家为:\n' % (index+1, proj)
+                    response += experts+u'\n请查证。'
+                    return simplejson.dumps(
+                        {'status': 'ERROR',
+                         'message': response})
     sorted_project_groups = [
         map(lambda proj: (proj,
             proj.re_project_expert_set.all()[0].score,
