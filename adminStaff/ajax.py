@@ -466,7 +466,7 @@ def Expert_Project_Assign(request, group_num=20,
             'project_id')
     expect_num = group_num*project_per_group
     actual_num = projects.count()
-    if actual_num < expect_num:
+    if actual_num != expect_num:
         response = '项目数量与专家数量不匹配,请联系系统管理员处理\n'
         response += '期望项目数量: %d\n实际项目数量: %d' % (expect_num, actual_num)
         return HttpResponse(response)
