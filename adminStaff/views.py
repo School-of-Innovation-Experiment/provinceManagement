@@ -957,6 +957,8 @@ class AdminStaffService(object):
                 file_path = info_xls_projectsummary(request,pro_set)
             elif exceltype == EXCEL_TYPE_SCOREAPPLICATION:
                 file_path = info_xls_scoreapplication(request,pro_set)
+            elif exceltype == EXCEL_TYPE_CERTIFICATES:
+                file_path = info_xls_certificates(request, pro_set)
         except Exception,err:
             loginfo(err)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]
