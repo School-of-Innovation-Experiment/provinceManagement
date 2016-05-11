@@ -98,7 +98,7 @@ class InfoForm(ModelForm):
         model = ProjectSingle
         #TODO: add css into widgets
         exclude = ('project_id', 'adminuser', 'school', 'student','project_category','financial_category',
-                   'year', 'project_grade', 'project_status', 'expert','members','project_code')
+                   'year', 'project_grade', 'project_status', 'expert','members','project_code', 'is_past')
         widgets={'title':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector':forms.TextInput(attrs={'class':"school-display"}),
                  'inspector_title':forms.TextInput(attrs={'class':"school-display"}),
