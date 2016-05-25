@@ -616,7 +616,7 @@ class AdminStaffService(object):
                 total_num,
                 scored_num,
                 unscored_num))
-        ordered_experts.sort(key=lambda x: x[3], reverse=True)
+        ordered_experts.sort(key=lambda x: (x[3],x[0].userid.username), reverse=True)
         context['experts'] = ordered_experts
         context['experts_num'] = experts_num
         context['experts_finished_scoring'] = experts_finished_scoring
