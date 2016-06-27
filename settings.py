@@ -7,6 +7,7 @@
 
 import os
 from os.path import join
+from restricted_settings import EMAIL_USER, EMAIL_PASS
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
@@ -175,9 +176,9 @@ SERVER_EMAIL = "cxln@dlut.edu.cn"
 EMAIL_SUBJECT_PREFIX = '[MinzuInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'cxln@dlut.edu.cn'
-EMAIL_HOST_PASSWORD = '84709114'
-DEFAULT_FROM_EMAIL = 'cxln@dlut.edu.cn'
+EMAIL_HOST_USER = EMAIL_USER
+EMAIL_HOST_PASSWORD = EMAIL_PASS
+DEFAULT_FROM_EMAIL = EMAIL_USER
 EMAIL_USE_TLS = False
 
 
