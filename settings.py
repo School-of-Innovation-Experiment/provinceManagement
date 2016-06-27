@@ -7,6 +7,7 @@
 
 import os
 from os.path import join
+from restricted_settings import EMAIL_USER, EMAIL_PASS
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 
@@ -179,13 +180,13 @@ LOGIN_REDIRECT_URL = '/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SERVER_EMAIL = "cxlt@dlut.edu.cn"
+SERVER_EMAIL = EMAIL_USER
 EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
 EMAIL_HOST = 'mail.dlut.edu.cn'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'cxlt@dlut.edu.cn'
-EMAIL_HOST_PASSWORD = '2014dlutcxcy'
-DEFAULT_FROM_EMAIL = 'cxlt@dlut.edu.cn'
+EMAIL_HOST_USER = EMAIL_USER
+EMAIL_HOST_PASSWORD = EMAIL_PASS
+DEFAULT_FROM_EMAIL = EMAIL_USER
 EMAIL_USE_TLS = False
 
 
