@@ -1,1 +1,1 @@
-{% load i18n %}{{school_name}}大学生创新创业管理平台账户激活邮件
+{% load i18n %}{{school_name}}创新创业管理平台帐号开通邮件

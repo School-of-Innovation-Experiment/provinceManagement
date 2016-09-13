@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 10:51
+# Last modified: 2016-09-13 13:24
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -213,7 +221,8 @@ def NewSubjectAlloc(request, is_expired = False):
     school = get_object_or_404(SchoolProfile, userid = request.user)
     subject_list = get_current_project_query_set().filter(school = school)
     #subject_list = AdminStaffService.GetSubject_list(school)
-    expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+    #expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
+    expert_list = ExpertProfile.objects.all()
     expert_list = get_alloced_num(expert_list, 0)
 
     alloced_subject_list = [subject for subject in subject_list if check_project_is_assign(subject)]
@@ -333,7 +342,6 @@ def projectListInfor(request):
         pro_list = projectFilterList(request,project_manage_form,school).order_by('-year','adminuser')
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
-        over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
         grade_un = ProjectGrade.objects.get(grade=GRADE_UN)
         grade_insitute = ProjectGrade.objects.get(grade=GRADE_INSITUTE)
         grade_school = ProjectGrade.objects.get(grade=GRADE_SCHOOL)

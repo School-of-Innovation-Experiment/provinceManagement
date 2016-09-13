@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 13:19
+# Last modified: 2016-09-13 16:17
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 from django.shortcuts import get_object_or_404
 from dajax.core import Dajax
@@ -136,14 +144,23 @@ def Alloc_Project_to_Expert(request, expert_list, project_list):
     for project_id in project_list:
         project = get_object_or_404(ProjectSingle, project_id = project_id)
         for expert_id in expert_list:
-            expert = ExpertProfile.objects.get(userid__email = expert_id)
+            expert = ExpertProfile.objects.get(userid__id = expert_id)
             try:
                 re_project_expert = Re_Project_Expert.objects.get(project = project, expert = expert, is_assign_by_adminStaff = flag)
                 re_project_expert.delete()
-            except:
+            except Exception, e:
+                loginfo(e)
                 pass
             finally:
-                Re_Project_Expert(project = project, expert = expert, is_assign_by_adminStaff = flag).save()
+                re = Re_Project_Expert.objects.create(project = project, expert = expert, is_assign_by_adminStaff = flag)
+                re.save()
+                if flag:
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_FINREVIEW)
+                    project.save()
+                else:
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PREREVIEW)
+                    project.save()
+                    
     if flag:
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
     else:

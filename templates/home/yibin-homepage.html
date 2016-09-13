@@ -1,0 +1,28 @@
+{% extends "base/base_home.html" %}
+
+{% block before_home_content %}
+<!--pictures and import news-->
+<div class="homepage-picture">
+  {% include "home/widgets/new_pictures.html" %}
+</div>
+{% endblock %}
+{% block home_content%}
+<!--other news item -->
+<div class="row-fluid news_frame">
+  <div class="span6">
+    {% include "home/widgets/import_info.html" %}
+  </div>
+  <div class="span6">
+    {% include "home/widgets/files.html" %}
+  </div>
+</div>
+<div class="row-fluid news_frame">
+  <div class="span6">
+    {% include "home/widgets/articles.html" %}
+  </div>
+  <div class="span6">
+    {% include "home/widgets/filedownload.html" %}
+  </div>
+</div>
+{% include "base/checkbrowser.html" %}
+{% endblock %}

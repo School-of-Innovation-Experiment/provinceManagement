@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 20:44
+# Last modified: 2016-09-13 12:48
+# Filename: settings.py
+# Description:
 """
     Author: tianwei
     Email: liutianweidlut@gmail.com
@@ -181,9 +189,8 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SERVER_EMAIL = EMAIL_USER
-EMAIL_SUBJECT_PREFIX = '[DlutInnovationManagement]'
-EMAIL_HOST = 'mail.dlut.edu.cn'
-EMAIL_PORT = '25'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
 EMAIL_HOST_USER = EMAIL_USER
 EMAIL_HOST_PASSWORD = EMAIL_PASS
 DEFAULT_FROM_EMAIL = EMAIL_USER
@@ -281,8 +288,9 @@ CHARTIT_JS_REL_PATH = '/js/chartit-highchart/chartit/js/'
 
 #school information
 IS_MINZU_SCHOOL = False
-IS_DLUT_SCHOOL = True
+IS_DLUT_SCHOOL = False
 IS_SCHOOL_BASIC = False
+IS_YIBIN_SCHOOL = True 
 
 # RPC_SITE
 RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"

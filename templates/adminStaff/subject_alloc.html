@@ -108,8 +108,8 @@
 		<div class="modal-body">
 			{% for expert in expert_list %}
 				<label class="checkbox">
-					<input type="checkbox" name="checkbox_expert" value="{{ expert.userid }}">
-					{{ expert.name }}（{{expert.userid}}）
+					<input type="checkbox" name="checkbox_expert" value="{{ expert.userid.id }}">
+					{{ expert.name }}（{{expert.userid.id}}）
 				</label>
 				<br>
 			{% endfor %}

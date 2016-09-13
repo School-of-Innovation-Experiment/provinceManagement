@@ -16,8 +16,11 @@ function simple_delete(email){
     if(ret) Dajaxice.teacher.simple_delete(simple_delete_callback,{'email': email});
 }
 function simple_delete_callback(data){
-    var target_tr = "[name='" + "tr_" + glob_email + "']";
-    $(target_tr).remove();
+    if(data.code=="1")
+    {
+        var target_tr = "[name='" + "tr_" + glob_email + "']";
+        $(target_tr).remove();
+    }
     alert(data.message)
     //$("#remaining_activation_times").text(data.remaining_activation_times);
 }

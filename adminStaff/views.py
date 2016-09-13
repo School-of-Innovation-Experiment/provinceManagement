@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 21:18
+# Last modified: 2016-09-13 16:11
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -368,7 +376,7 @@ class AdminStaffService(object):
         """
         exist_message = ''
         readonly=is_expired
-        subject_list = get_current_project_query_set().filter(recommend = True)
+        subject_list = get_current_project_query_set().filter(project_status__status=STATUS_FINSUBMIT)
         #subject_list =  ProjectSingle.objects.filter(recommend = True)
         expert_list = ExpertProfile.objects.filter(assigned_by_adminstaff__userid = request.user)
         expert_list = get_alloced_num(expert_list, 1)
@@ -705,6 +713,7 @@ class AdminStaffService(object):
         for pro_obj in context["pro_list"]:
             add_fileurl(pro_obj)
             add_telephone(pro_obj)
+            add_final_score(pro_obj)
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
         return render(request, "adminStaff/adminstaff_home.html",context)
@@ -719,12 +728,8 @@ class AdminStaffService(object):
             pro_list = AdminStaffService.projectFilterList(request,project_manage_form)
         else:
             project_manage_form = forms.ProjectManageForm()
-            over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
-            grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
-            grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
             if auth_identity == ADMINSTAFF_USER:
-                pro_list=get_current_project_query_set().filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
-                                                      Q(over_status__status = OVER_STATUS_NOTOVER))
+                pro_list = get_current_project_query_set().filter(Q(over_status__status = OVER_STATUS_NOTOVER))
             elif auth_identity == SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))

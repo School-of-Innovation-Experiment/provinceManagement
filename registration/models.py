@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 21:31
+# Last modified: 2016-09-13 12:54
+# Filename: models.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2012-11-10
@@ -96,16 +104,18 @@ class RegistrationManager(models.Manager):
                                             'username':username,
                                             'password':password}
                                            )
-                logger.error(message)
+                loginfo('Send email:')
+                loginfo(message)
                 send_mail(subject,
-                          message,
-                          settings.DEFAULT_FROM_EMAIL,
-                          [new_user.email])
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [new_user.email])
+                loginfo('Send email done.')
         else:
             new_user = User.objects.get(email=email)
 
         #对用户权限写入数据库
-        new_authority = UserIdentity.objects.get(identity=Identity)
+        new_authority, status = UserIdentity.objects.get_or_create(identity=Identity)
         new_authority.auth_groups.add(new_user)
         new_authority.save()
 

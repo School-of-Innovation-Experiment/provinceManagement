@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 21:42
+# Last modified: 2016-09-12 21:51
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 
 from dajax.core import Dajax
@@ -191,10 +199,12 @@ def simple_delete(request, email):
     删除未激活User，删除User, Student及相关Project，presubmit，finalsubmit
     """
     message = ""
+    code = '1'
     try:
         user = User.objects.get(email = email)
         if not has_delete_access(request,user):
             message = u"超出权限，删除失败"
+            code = '-1'
             return simplejson.dumps({"message": message,})
         user.delete()
     except Exception, e:
@@ -204,7 +214,7 @@ def simple_delete(request, email):
     #limited_num = TeacherLimitNumber(request)
     #remaining_activation_times = limited_num - email_num
     message = u"删除成功"
-    return simplejson.dumps({"message": message})
+    return simplejson.dumps({"message": message, "code": code})
 
 def has_delete_access(request,user):
     access_flag = False
@@ -220,4 +230,6 @@ def has_delete_access(request,user):
         for teacher in teacher_list:
             if teacher.userid == user:
                 access_flag = True
+    if check_auth(request.user, ADMINSTAFF_USER):
+        access_flag = True
     return access_flag

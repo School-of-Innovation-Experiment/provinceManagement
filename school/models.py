@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 11:56
+# Last modified: 2016-09-13 16:11
+# Filename: models.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27
@@ -60,13 +68,9 @@ class ProjectSingle(models.Model):
                                     verbose_name=u"推荐")
     is_past = models.BooleanField(null=False, default=False,
                                   verbose_name=u"往届项目")
-    try:
-        default_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
-    except:
-        default_status = 1
     over_status = models.ForeignKey(OverStatus, verbose_name=u"结束状态",
                                     blank=True, null=True,
-                                       default=default_status)
+                                       default=None)
     file_application = models.BooleanField(null=False, default=False,
                                   verbose_name=u"申报书")
     file_opencheck = models.BooleanField(null=False, default=False,

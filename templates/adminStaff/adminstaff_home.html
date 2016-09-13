@@ -32,6 +32,7 @@
           {% endif %}
           <th>申请学分</th>
           <th>联系方式</th>
+          <th>终审得分</th>
           <th>是否结题</th>
         </tr>
       </thead>
@@ -77,6 +78,13 @@
           </td>
           <td>
             {{item.telephone}}
+          </td>
+          <td>
+              {% if item.score %}
+              {{item.score}}
+              {% else %}
+              未评分
+              {% endif %}
           </td>
           <td>
             <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->

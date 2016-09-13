@@ -15,11 +15,10 @@ $(function(){
 		{
 			str+="<td><input type=\"text\"></td>\
 			<td><select style=\"margin-top:12px\">\
-			<option value=\"国际级\">国际级</option>\
-			<option value=\"国家级\">国家级</option>\
 			<option value=\"省级\">省级</option>\
 			<option value=\"市级\">市级</option>\
 			<option value=\"校级\">校级</option>\
+			<option value=\"院级\">院级</option>\
 			</select></td>";
 		}
 		else
@@ -29,6 +28,7 @@ $(function(){
 		}
 		str+="<td><a class=\"btn btn-success save\" category=\""+category+"\" style=\"margin-top:12px\">保存</a></td></tr>";
 		target.append(str);
+        return;
 	});
 
 	$(document).on("click","a.save",function(){

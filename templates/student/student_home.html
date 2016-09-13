@@ -26,6 +26,7 @@
         <th>所属学院</th>
         <th>当前状态</th>
         <th>评审级别</th>
+        <th>结束状态</th>
         <th>详情</th>
       </tr>
     </thead>
@@ -37,14 +38,27 @@
         <td>{{item.project_category}}</td>
         <td>{{item.adminuser.get_name}}</td>
         <td>{{item.school}}</td>
-        <td>{{item.over_status}}</td>
+        <td>{{item.project_status}}</td>
         <td>{{item.project_grade}}</td>
+        <td>
+            {% if item.over_status.status == 'notover' or item.over_status.status == 'normal' %}
+            <span class="label label-info">
+            {{item.over_status}}
+            </span>
+            {% else %}
+            <span class="label label-important">
+            {{item.over_status}}
+            </span>
+            {% endif %}
+        </td>
         <td style="width:30%;">
+            {% if item.over_status.status == 'notover' or item.over_status.status == 'normal' %}
           <span><a href="{% url student.views.application_report_view item.project_id%}" class='btn btn-primary'>申请表</a></span>
          {% if not IS_MINZU_SCHOOL %}  <span><a href="{% url student.views.open_report_view item.project_id%}" class="btn btn-primary">开题检查表</a></span> {% endif %}
           <span><a href="{% url student.views.mid_report_view item.project_id%}" class="btn btn-primary">中期检查表</a></span>
           <span><a href="{% url student.views.final_report_view item.project_id%}" class='btn btn-primary'>结题验收表</a></span>
           <span><a href="{% url student.views.file_upload_view item.project_id %}" class='btn btn-primary'>文件上传</a></span>
+          {% endif %}
         </td>
       </tr>
       {%  endfor %}

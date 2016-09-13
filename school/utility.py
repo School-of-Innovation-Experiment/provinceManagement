@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 13:39
+# Last modified: 2016-09-13 16:11
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-29
@@ -462,6 +470,24 @@ def add_telephone(project):
     if  project.student_group_set.all().count()>0:
         manager = get_manager(project)
         project.telephone = manager.get_telephone_display()
+
+
+def add_final_score(project):
+    try:
+        re = Re_Project_Expert.objects.get(project=project, is_assign_by_adminStaff=True)
+        score = 0
+        score += re.score_significant
+        score += re.score_value
+        score += re.score_innovation
+        score += re.score_practice
+        score += re.score_achievement
+        score += re.score_capacity
+    except Exception, e:
+        logger.error(e)
+        score = 0
+    project.score = score
+
+
 
 def is_addFundDetail(project_list):
     for temp in project_list:

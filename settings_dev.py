@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 20:45
+# Last modified: 2016-09-12 20:45
+# Filename: settings_dev.py
+# Description:
 # coding: UTF-8
 """
     Author: tianwei
@@ -13,7 +21,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'DlutInnovationManagement',             # Or path to database file if using sqlite3.
+        'NAME': 'InnovationManagement',             # Or path to database file if using sqlite3.
         'USER': 'root',                       # Not used with sqlite3.
         'PASSWORD': 'root',                   # Not used with sqlite3.
         'HOST': '127.0.0.1',                           # Set to empty string for localhost. Not used with sqlite3.

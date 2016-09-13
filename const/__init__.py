@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 20:57
+# Last modified: 2016-09-13 15:52
+# Filename: __init__.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27
@@ -7,7 +15,7 @@ Created on 2013-03-27
 Desc: const defination
 '''
 
-from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL, IS_SCHOOL_BASIC
+from settings import STATIC_URL, MEDIA_URL, IS_MINZU_SCHOOL, IS_DLUT_SCHOOL, IS_SCHOOL_BASIC, IS_YIBIN_SCHOOL
 
 UNDIFINED = "undifined"
 
@@ -332,18 +340,43 @@ MINZU_MAJOR_CHOICES = (
     ('49', u"动画"),
     ('50', u"工业设计"),
 )
+YIBIN_MAJOR_CHOICES = (
+    ('1', u"经济与管理学院"),
+    ('2', u"文学与新闻传媒学院"),
+    ('3', u"物理与电子工程学院"),
+    ('4', u"生命科学与食品工程学院"),
+    ('5', u"马克思主义学院"),
+    ('6', u"教师教育学院 教育科学学院"),
+    ('7', u"音乐与表演艺术学院"),
+    ('8', u"法学院"),
+    ('9', u"政府管理学院"),
+    ('10', u"外国语学院"),
+    ('11', u"数学学院"),
+    ('12', u"计算机与信息工程学院"),
+    ('13', u"化学与化工学院"),
+    ('14', u"体育学院"),
+    ('15', u"美术与艺术设计学院"),
+    ('16', u"资源与环境工程学院"),
+    ('17', u"川茶学院"),
+    ('18', u"质检学院"),
+)
 
 if IS_MINZU_SCHOOL: MAJOR_CHOICES = MINZU_MAJOR_CHOICES
 if IS_DLUT_SCHOOL: MAJOR_CHOICES = DLUT_MAJOR_CHOICES
 if IS_SCHOOL_BASIC: MAJOR_CHOICES = DLUT_MAJOR_CHOICES
+if IS_YIBIN_SCHOOL: MAJOR_CHOICES = YIBIN_MAJOR_CHOICES
 DLUT_SCHOOL_NAME = u"大连理工大学"
 MINZU_SCHOOL_NAME = u"大连民族大学"
+YIBIN_SCHOOL_NAME = u'宜宾学院'
 if IS_MINZU_SCHOOL: SCHOOL_NAME = MINZU_SCHOOL_NAME
 if IS_DLUT_SCHOOL: SCHOOL_NAME = DLUT_SCHOOL_NAME
+if IS_YIBIN_SCHOOL: SCHOOL_NAME = YIBIN_SCHOOL_NAME
 DLUT_SCHOOL_NAME_ENGLISH = u"Dalian University of Technology"
 MINZU_SCHOOL_NAME_ENGLISH = u"Dalian Nationalities University"
+YIBIN_SCHOOL_NAME_ENGLISH = u'Yibin University'
 if IS_MINZU_SCHOOL: SCHOOL_NAME_ENGLISH = MINZU_SCHOOL_NAME_ENGLISH
 if IS_DLUT_SCHOOL: SCHOOL_NAME_ENGLISH = DLUT_SCHOOL_NAME_ENGLISH
+if IS_YIBIN_SCHOOL: SCHOOL_NAME_ENGLISH = YIBIN_SCHOOL_NAME_ENGLISH
 
 # 项目类型团队人员限制
 MEMBER_NUM_LIMIT = {

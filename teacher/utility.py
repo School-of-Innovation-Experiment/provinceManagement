@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 11:13
+# Last modified: 2016-09-13 12:06
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 
 import os, sys, datetime, uuid
@@ -37,6 +45,7 @@ def create_newproject(request, new_user, category):
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
         project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
         project.project_code = str(year + 1 ) + DUT_code + str(get_project_count())
+        project.over_status = OverStatus.objects.get_or_create(status=OVER_STATUS_NOTOVER)[0]
         project.save()
 
 

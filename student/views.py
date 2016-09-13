@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 13:36
+# Last modified: 2016-09-13 16:36
+# Filename: views.py
+# Description:
 # Create your views here.
 # coding: UTF-8
 import datetime
@@ -167,6 +175,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
             open_form.save()
             # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.project_status = ProjectStatus.objects.get(status=STATUS_OPENCHECK)
+            project.file_opencheck = True
             project.save()
 
             isRedirect = True
@@ -301,6 +310,12 @@ def final_report_view_work(request, pid=None,is_expired=False):
             'isRedirect': isRedirect,
             'is_show': is_show,
             }
+    related_ao = AchievementObjects.objects.filter(project_id=data['pid'])
+    data['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
+    data['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
+    data['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
+    data['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
+
     return data
 
 

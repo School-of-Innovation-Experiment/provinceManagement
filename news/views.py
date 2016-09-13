@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-12 21:01
+# Last modified: 2016-09-12 21:03
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-17
@@ -12,7 +20,7 @@ from django.shortcuts import render #, render_to_response
 from news.models import News
 from django.template import Context #, loader
 from django.http import HttpResponse, Http404
-from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL
+from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, IS_SCHOOL_BASIC, IS_YIBIN_SCHOOL
 from backend.utility import getContext, convert2media_url
 import datetime, os
 from settings import IS_DLUT_SCHOOL, IS_MINZU_SCHOOL, STATIC_URL, MEDIA_URL
@@ -83,6 +91,38 @@ def index_new(request):
     context.update(news_cate)
     return render(request, "home/new-homepage.html", context)
 
+
+def index_yibin(request):
+    context = {}
+    def convert_url(raw_url):
+        return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
+    homepage_pic = HomePagePic.objects.all()
+    flag = True
+    for pic in homepage_pic:
+        pic.url = convert_url(pic.pic_obj.url)
+        print pic.url
+        if flag:
+            pic.active = True
+            flag = False
+        else: pic.active = False
+    context.update({
+        'homepage_pic': homepage_pic,
+    })
+    context.update(
+        getContext(
+            News.objects.exclude(news_document=u'')[:5], \
+                1, 'homepage_docs'))
+    context.update(index_context(request))
+    news_cate = {}
+    news_cate["news_category_announcement"] = NEWS_CATEGORY_ANNOUNCEMENT
+    news_cate["news_category_policy"] = NEWS_CATEGORY_POLICY
+    news_cate["news_category_others"] = NEWS_CATEGORY_OTHERS
+    news_cate["news_category_outstanding"] = NEWS_CATEGORY_OUTSTANDING
+    news_cate["news_category_documents"] = NEWS_CATEGORY_DOCUMENTS
+    context.update(news_cate)
+    return render(request, "home/yibin-homepage.html", context)
+
+
 def read_news(request, news_id):
     news = get_news(news_id)
     news_cate = news.news_category
@@ -115,6 +155,7 @@ def list_news_by_cate(request, news_cate):
 
 def index(request):
     if IS_DLUT_SCHOOL: return index_new(request)
+    if IS_YIBIN_SCHOOL: return index_yibin(request)
     def convert_url(raw_url):
         return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
     the_latest_news = get_news()
