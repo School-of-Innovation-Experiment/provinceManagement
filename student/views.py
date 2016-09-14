@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 13:36
-# Last modified: 2016-09-13 16:36
+# Last modified: 2016-09-14 11:57
 # Filename: views.py
 # Description:
 # Create your views here.
@@ -150,7 +150,7 @@ def techcompetition_detail(request,pid=None):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+@time_controller(phase=STATUS_ONGOING)
 def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
@@ -160,7 +160,20 @@ def open_report_view(request, pid = None, is_expired = False):
 
 def open_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    readonly = get_check_readonly(request,project)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else :
+        readonly = False
+    readonly = readonly or is_expired
+
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
@@ -174,7 +187,6 @@ def open_report_view_work(request, pid = None, is_expired = False):
         if open_form.is_valid():
             open_form.save()
             # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
-            project.project_status = ProjectStatus.objects.get(status=STATUS_OPENCHECK)
             project.file_opencheck = True
             project.save()
 
@@ -197,9 +209,9 @@ def open_report_view_work(request, pid = None, is_expired = False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
+@time_controller(phase=STATUS_ONGOING)
 def mid_report_view(request, pid = None, is_expired = False):
     data = mid_report_view_work(request, pid, is_expired)
-    print data
     if data["isRedirect"]:
         return HttpResponseRedirect( '/student/file_upload_view/' + pid ) 
     else:
@@ -210,7 +222,20 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     student mid report
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
-    readonly = get_check_readonly(request,project)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else :
+        readonly = False
+    readonly = readonly or is_expired
+
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -224,7 +249,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
         mid_form = MidReportForm(request.POST, instance = mid)
         if mid_form.is_valid():
             mid_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_MIDCHECK)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.save()
             isRedirect = True
         else:
@@ -283,6 +308,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
         readonly = not get_schooluser_project_modify_status(project)
     else :
         readonly = False
+    readonly = readonly or is_expired
 
     isRedirect = False
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
@@ -290,9 +316,8 @@ def final_report_view_work(request, pid=None,is_expired=False):
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINREVIEW)
             project.save()
-
             isRedirect = True
             # return HttpResponseRedirect(reverse('student.views.home_view'))
         else:
@@ -343,6 +368,20 @@ def application_report_view_work(request, pid=None, is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     is_currentyear = check_year(project)
+    is_finishing = check_finishingyear(project)
+    over_status = project.over_status.status
+    if check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=TEACHER_USER):
+        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+    elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
+        readonly = False
+    elif check_auth(user=request.user,authority=SCHOOL_USER):
+        readonly = not get_schooluser_project_modify_status(project)
+    else :
+        readonly = False
+    readonly = readonly or is_expired
+
     teammember=get_studentmessage(project)
     is_applying = check_applycontrol(project)
     pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
@@ -351,17 +390,6 @@ def application_report_view_work(request, pid=None, is_expired=False):
     except Exception, err:
         loginfo(p=err, label="get innovation")
         loginfo(p=project.project_category.category, label="project category")
-
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.is_past    
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
-    elif check_auth(user = request.user, authority = SCHOOL_USER):
-        readonly = not get_schooluser_project_modify_status(project)
-    else:
-        readonly = False
 
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
 
@@ -389,7 +417,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, pre, info_form, application_form, request.user):
-                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PREREVIEW)
                     project.save()
                     isRedirect = True
                     # print "lzlzlzlzl " + str(pre.key_notes)

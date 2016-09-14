@@ -8,7 +8,9 @@
           </a>
           <ul class="dropdown-menu home_menu" role="menu">
             <li><a href="/adminStaff/">项目进度管理</a></li>
+            {% comment %}
             <li><a href="/adminStaff/subject_rating">项目等级设定</a></li>
+            {% endcomment %}
             <li><a href="/adminStaff/project_control">项目控制管理</a></li>
             <!--li><a href="/adminStaff/subject_feedback">项目分配</a></li-->
             <li><a href="/adminStaff/subject_alloc">项目分配</a></li><!--手动分配><-->
@@ -35,8 +37,10 @@
            <li><a href="/adminStaff/homepage_import">首页图片设置</a></li>
           </ul>
         </li>
+        {% comment %}
         <li class="divider-vertical"></li>
         <li><a href="/adminStaff/project_sync">项目同步</a></li>
+        {% endcomment %}
       </ul>
       {% include "widgets/userinfo_nav.html"%}
     </div>

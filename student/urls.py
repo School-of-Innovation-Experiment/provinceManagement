@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-14 11:41
+# Last modified: 2016-09-14 11:41
+# Filename: urls.py
+# Description:
 from django.conf.urls import patterns, url,include
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template

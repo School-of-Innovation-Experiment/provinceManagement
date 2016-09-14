@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-13 20:24
+# Last modified: 2016-09-14 11:56
+# Filename: decorators.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-04-01
@@ -160,7 +168,7 @@ class time_controller(object):
         project = get_object_or_404(ProjectSingle, project_id=pid)
 
         #If the project year is not this year, it also means you cannot edit it
-        if project.year != get_current_year():
+        if project.year < get_current_year() and project.overstatus.status != OVER_STATUS_DELAY:
             return False
 
 
@@ -202,11 +210,20 @@ class time_controller(object):
             is_passed = False
         return is_passed
 
+    def phase_passed(self, pid):
+        try:
+            project = ProjectSingle.objects.get(project_id=pid)
+        except Exception, e:
+            loginfo(p=e, label="time_controller phase_passed")
+            return false
+        return project.project_status.status == self.phase
+
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
             #check time control
             pid = kwargs.get("pid", None)
             is_expired = not self.check_day(pid)
+            is_expired = is_expired or not self.phase_passed(pid)
             loginfo(p=is_expired, label="time_controller decorator, is_expired")
 
             #Here, we should use history view strategy to replace forbidden

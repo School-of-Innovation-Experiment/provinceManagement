@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 11:13
-# Last modified: 2016-09-13 12:06
+# Last modified: 2016-09-14 11:24
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -43,7 +43,7 @@ def create_newproject(request, new_user, category):
         project.project_category = ProjectCategory.objects.get(category = category)
         project.year = year+1
         project.project_grade = ProjectGrade.objects.get(grade = GRADE_UN)
-        project.project_status = ProjectStatus.objects.get(status = STATUS_FIRST)
+        project.project_status = ProjectStatus.objects.get(status = STATUS_PRESUBMIT)
         project.project_code = str(year + 1 ) + DUT_code + str(get_project_count())
         project.over_status = OverStatus.objects.get_or_create(status=OVER_STATUS_NOTOVER)[0]
         project.save()

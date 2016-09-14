@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 15:25
-# Last modified: 2016-09-13 16:17
+# Last modified: 2016-09-14 12:02
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -61,8 +61,10 @@ def home_view(request):
     expert = get_object_or_404(ExpertProfile, userid=request.user)
     re_project = Re_Project_Expert.objects.filter(expert=expert)
     
-    school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False)&Q(project__is_past=False))
-    adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True)&Q(project__is_past=False))
+    school_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = False)&Q(project__is_past=False)&
+            (Q(score_significant=0)&Q(score_value=0)&Q(score_innovation=0)&Q(score_practice=0)&Q(score_achievement=0)&Q(score_capacity=0)))
+    adminStaff_project_list = Re_Project_Expert.objects.filter(Q(expert = expert) & Q(is_assign_by_adminStaff = True)&Q(project__is_past=False)&
+            (Q(score_significant=0)&Q(score_value=0)&Q(score_innovation=0)&Q(score_practice=0)&Q(score_achievement=0)&Q(score_capacity=0)))
     
     for project in school_project_list:
         project.is_assigned_by_adminStaff = False
@@ -105,9 +107,12 @@ def review_report_view(request):
     if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=re_project)
         if review_form.is_valid():
-            review_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_ONGOING) 
-            project.save()
+            if project.project_status.status == STATUS_PREREVIEW:
+                project.project_status = ProjectStatus.objects.get(status=STATUS_ONGOING) 
+                review_form.save()
+                project.save()
+            elif project.project_status.status == STATUS_FINREVIEW:
+                review_form.save()
             #re_project.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
         else:

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 10:51
-# Last modified: 2016-09-13 13:24
+# Last modified: 2016-09-13 20:10
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -219,7 +219,7 @@ def NewSubjectAlloc(request, is_expired = False):
     exist_message = ''
     readonly = is_expired
     school = get_object_or_404(SchoolProfile, userid = request.user)
-    subject_list = get_current_project_query_set().filter(school = school)
+    subject_list = get_current_project_query_set().filter(Q(school = school)&(Q(project_status__status=STATUS_PRESUBMIT)|Q(project_status__status=STATUS_FINSUBMIT)))
     #subject_list = AdminStaffService.GetSubject_list(school)
     #expert_list = ExpertProfile.objects.filter(assigned_by_school = school)
     expert_list = ExpertProfile.objects.all()
