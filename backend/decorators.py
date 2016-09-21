@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 20:24
-# Last modified: 2016-09-14 11:56
+# Last modified: 2016-09-21 09:44
 # Filename: decorators.py
 # Description:
 # coding: UTF-8
@@ -215,7 +215,7 @@ class time_controller(object):
             project = ProjectSingle.objects.get(project_id=pid)
         except Exception, e:
             loginfo(p=e, label="time_controller phase_passed")
-            return false
+            return False
         return project.project_status.status == self.phase
 
     def __call__(self, method):
