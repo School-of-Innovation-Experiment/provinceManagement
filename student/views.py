@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 13:36
-# Last modified: 2016-09-14 11:57
+# Last modified: 2016-09-24 07:54
 # Filename: views.py
 # Description:
 # Create your views here.
@@ -431,7 +431,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
                 if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
-                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PREREVIEW)
                     project.save()
                     isRedirect = True
                     # isRedirect = True
