@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-10-09 14:18
+# Last modified: 2016-10-09 14:18
+# Filename: ajax.py
+# Description:
 #coding=utf-8
 import os, sys,re
 from os.path import join
@@ -202,7 +210,8 @@ def new_or_update_member(request, stugroup_form):
             ret = {'status': '0', 'message': u"人员信息更新成功", 'table':table}
             break
     else: # new student
-        if group.count() >= MEMBER_NUM_LIMIT[project.project_category.category]:
+        # if group.count() >= MEMBER_NUM_LIMIT[project.project_category.category]:
+        if False:
             ret = {'status': '1', 'message': u"人员已满，不可添加"}
         elif sum(student_id in [student.studentId for student in project.student_group_set.all()] for project in get_running_project_query_set()):
             ret = {'status': '1', 'message': u"相同学号已存在于其它正在进行的项目中"}
