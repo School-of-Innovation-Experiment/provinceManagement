@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 20:24
-# Last modified: 2016-09-21 09:44
+# Last modified: 2016-10-09 14:05
 # Filename: decorators.py
 # Description:
 # coding: UTF-8
@@ -210,20 +210,12 @@ class time_controller(object):
             is_passed = False
         return is_passed
 
-    def phase_passed(self, pid):
-        try:
-            project = ProjectSingle.objects.get(project_id=pid)
-        except Exception, e:
-            loginfo(p=e, label="time_controller phase_passed")
-            return False
-        return project.project_status.status == self.phase
 
     def __call__(self, method):
         def wrappered_method(request, *args, **kwargs):
             #check time control
             pid = kwargs.get("pid", None)
             is_expired = not self.check_day(pid)
-            is_expired = is_expired or not self.phase_passed(pid)
             loginfo(p=is_expired, label="time_controller decorator, is_expired")
 
             #Here, we should use history view strategy to replace forbidden

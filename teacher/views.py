@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-10-09 14:06
+# Last modified: 2016-10-09 14:07
+# Filename: views.py
+# Description:
 import datetime, os, sys, uuid
 
 from django.contrib.auth.models import User
@@ -70,7 +78,7 @@ def application_report_view(request,pid=None,is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+@time_controller(phase=STATUS_ONGOING)
 def open_report_view(request, pid=None,is_expired=False):
     data = open_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
@@ -96,6 +104,7 @@ def final_report_view(request, pid=None,is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
+@time_controller(phase=STATUS_ONGOING)
 def mid_report_view(request,pid=None, is_expired=False):
     data = mid_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 13:36
-# Last modified: 2016-09-24 07:54
+# Last modified: 2016-10-09 14:07
 # Filename: views.py
 # Description:
 # Create your views here.
@@ -186,7 +186,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
         open_form = OpenReportForm(request.POST, instance=open_data)
         if open_form.is_valid():
             open_form.save()
-            # project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_ONGOING)
             project.file_opencheck = True
             project.save()
 
@@ -249,7 +249,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
         mid_form = MidReportForm(request.POST, instance = mid)
         if mid_form.is_valid():
             mid_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_MIDCHECK)
             project.save()
             isRedirect = True
         else:
@@ -316,7 +316,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
         final_form = FinalReportForm(request.POST, instance=final)
         if final_form.is_valid():
             final_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINREVIEW)
+            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
             project.save()
             isRedirect = True
             # return HttpResponseRedirect(reverse('student.views.home_view'))
@@ -417,7 +417,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
         if is_innovation == True:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, pre, info_form, application_form, request.user):
-                    project.project_status = ProjectStatus.objects.get(status=STATUS_PREREVIEW)
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     isRedirect = True
                     # print "lzlzlzlzl " + str(pre.key_notes)
@@ -431,7 +431,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
             teacher_enterpriseform=Teacher_EnterpriseForm(request.POST,instance=teacher_enterprise)
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
                 if save_enterpriseapplication(project, pre, info_form, application_form, teacher_enterpriseform,request.user):
-                    project.project_status = ProjectStatus.objects.get(status=STATUS_PREREVIEW)
+                    project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     isRedirect = True
                     # isRedirect = True

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 15:25
-# Last modified: 2016-09-14 12:02
+# Last modified: 2016-10-09 13:50
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -107,12 +107,7 @@ def review_report_view(request):
     if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=re_project)
         if review_form.is_valid():
-            if project.project_status.status == STATUS_PREREVIEW:
-                project.project_status = ProjectStatus.objects.get(status=STATUS_ONGOING) 
-                review_form.save()
-                project.save()
-            elif project.project_status.status == STATUS_FINREVIEW:
-                review_form.save()
+            review_form.save()
             #re_project.save()
             return HttpResponseRedirect(reverse('expert.views.home_view'))
         else:
