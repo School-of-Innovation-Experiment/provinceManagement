@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-10-12 17:52
+# Last modified: 2016-10-12 17:53
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 from django import forms
 from const import *
@@ -6,7 +14,7 @@ from const.models import *
 class StudentGroupForm(forms.Form):
     student_id = forms.CharField(max_length=20,
                                  required=True,
-                                 widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_id",'placeholder':u"学号","onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),)
+                                 widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_id",'placeholder':u"学号",}),)
     student_name = forms.CharField(max_length=100,
                                    required=True,
                                    widget=forms.TextInput(attrs={'class':'studentchange span2','id':"student_name",'placeholder':u"姓名"}),)
