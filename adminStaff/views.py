@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-10-20 10:16
+# Last modified: 2016-10-20 10:27
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -794,8 +802,8 @@ class AdminStaffService(object):
             q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
-        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
+        q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student_group__studentName__contains = project_teacher_student_name))) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3, q4, q5, q6])
         return qset
 
     @staticmethod
