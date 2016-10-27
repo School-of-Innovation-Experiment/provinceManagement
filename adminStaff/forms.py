@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-10-27 18:06
+# Last modified: 2016-10-27 18:16
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-28
@@ -66,7 +74,7 @@ class SchoolDispatchForm(forms.Form):
 
 class StudentDispatchForm(forms.Form):
     student_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
+                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password',"onkeyup":"this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" ,'onafterpaste':"this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');"}
                            ))
     student_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'}
