@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2016-10-20 10:27
+# Last modified: 2016-11-21 15:47
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -771,7 +771,7 @@ class AdminStaffService(object):
                 # if project_grade == "-1" and project_scoreapplication == "-1":
                 #     pro_list = ProjectSingle.objects.filter(qset).exclude(Q(project_grade__grade=GRADE_INSITUTE) or Q(project_grade__grade=GRADE_SCHOOL) or Q(project_grade__grade=GRADE_UN))
                 # else:
-                pro_list = ProjectSingle.objects.filter(qset)
+                pro_list = ProjectSingle.objects.filter(qset).distinct()
             else:
                 pro_list = ProjectSingle.objects.all()
         loginfo(p=qset,label="qset")
