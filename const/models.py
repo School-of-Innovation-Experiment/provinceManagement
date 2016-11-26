@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-11-26 14:30
+# Last modified: 2016-11-26 15:01
+# Filename: models.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27
@@ -21,6 +29,7 @@ from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
 from const import PROJECT_INNOVATION_ORIGIN_CHOICES
 from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES
 from const import MAJOR_CHOICES
+from const import DEPARTMENT_CODE
 from backend.utility import search_tuple
 from django.contrib.auth.models import User
 
@@ -40,6 +49,8 @@ class SchoolDict(models.Model):
     """
     schoolName = models.CharField(max_length=200, blank=False, unique=True,
                                   verbose_name="学院名称")
+    school_code = models.CharField(max_length=10, blank=True, null=True, choices=DEPARTMENT_CODE,
+                                   verbose_name=u'学院代码')
 
     class Meta:
         verbose_name = "学院列表"

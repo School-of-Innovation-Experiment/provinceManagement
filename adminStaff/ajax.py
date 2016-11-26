@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-11-26 14:43
+# Last modified: 2016-11-26 15:01
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-29
@@ -509,20 +517,22 @@ def FileDeleteConsistence(request, fid):
 @dajaxice_register
 def auto_ranking(request):
     message = ""
-    project_set = list(get_current_project_query_set())
+    project_set = list(get_current_project_query_set().select_related('school'))
     project_set.sort(key = lambda x: (x.school.school.schoolName,
                                       x.adminuser.name,
                                       x.project_category.category))
-
+    school_codes = {}
+    for p in project_set:
+        school_codes[p.school] = p.school.school.school_code
 
     project_control = ProjectControl.objects.all()[0]
     year = project_control.pre_start_day.year
     def auto_completion(x):
         return "%04d" % x
 
-    for i, project in enumerate(project_set):
-        project.project_unique_code = str(year+1) + DUT_code + auto_completion(i + 1)
-        project.save()
+    for i, p in enumerate(project_set, start=1):
+        p.project_unique_code = str(year+1) + DUT_code + school_codes[p.school] + auto_completion(i)
+        p.save()
     return simplejson.dumps({"message": message})
 
 @dajaxice_register
