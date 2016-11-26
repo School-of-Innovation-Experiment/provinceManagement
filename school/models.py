@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-11-26 10:46
+# Last modified: 2016-11-26 10:52
+# Filename: models.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27
@@ -85,9 +93,9 @@ class ProjectSingle(models.Model):
                                     default=0)
     funds_remain  = models.FloatField(blank=False, verbose_name=u"经费余额",
                                     default=0)
-    project_code = models.CharField(blank=False, null=True, max_length=14, verbose_name=u"项目申报编号")
+    project_code = models.CharField(blank=False, null=True, max_length=20, verbose_name=u"项目申报编号")
     project_unique_code = models.CharField(blank=True, null=True, default='',
-                                           max_length=14, verbose_name=u"项目编号")
+                                           max_length=20, verbose_name=u"项目编号")
     class Meta:
         verbose_name = "参赛项目"
         verbose_name_plural = "参赛项目"
