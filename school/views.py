@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-12-09 11:40
+# Last modified: 2016-12-09 11:40
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -330,7 +338,7 @@ def projectListInfor(request):
     school = SchoolProfile.objects.get(userid=request.user)
     if request.method =="POST":
         project_manage_form = forms.ProjectManageForm(request.POST,school=school)
-        pro_list = projectFilterList(request,project_manage_form,school).order_by('-year','adminuser')
+        pro_list = projectFilterList(request,project_manage_form,school).order_by('-year','adminuser').distinct()
     else:
         project_manage_form = forms.ProjectManageForm(school=school)
         over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
