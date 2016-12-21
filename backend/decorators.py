@@ -53,6 +53,9 @@ def check_auth(user=None, authority=None):
         loginfo(p=err, label="ERROR in check_auth function!!!")
         return False
 
+    if user.is_superuser:
+        return True
+
     for item in auth_list:
         if item.identity == auth.identity:
             return True
