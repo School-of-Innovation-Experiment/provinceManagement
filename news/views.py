@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-12-21 09:05
+# Last modified: 2016-12-21 09:05
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-17
@@ -56,7 +64,7 @@ def index_new(request):
     # context = {"schools_name_list": names}
     context = {}
     def convert_url(raw_url):
-        return STATIC_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
+        return MEDIA_URL + raw_url[raw_url.find(MEDIA_URL)+len(MEDIA_URL):]
     homepage_pic = HomePagePic.objects.all()
     flag = True
     for pic in homepage_pic:
