@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2016-11-21 15:47
+# Last modified: 2016-12-29 16:50
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -844,6 +844,17 @@ class AdminStaffService(object):
         for p in ProjectSingle.objects.filter(is_past=False):
             p.is_past = True
             p.save()
+        return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
+
+    @staticmethod
+    @csrf.csrf_protect
+    @login_required
+    @authority_required(ADMINSTAFF_USER)
+    def ProjectLimitNumRecycle(request):
+        num_limit_form = forms.NumLimitForm()
+        school_limit_num_list = AdminStaffService.SchoolLimitNumList()
+        TeacherProjectPerLimits.objects.all().delete()
+        ProjectPerLimits.objects.all().delete()
         return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
 
     @staticmethod

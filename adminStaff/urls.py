@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-12-29 16:50
+# Last modified: 2016-12-29 16:55
+# Filename: urls.py
+# Description:
 '''
 Created on 2013-3-18
 
@@ -31,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^DeadlineSettings$',AdminStaffService.DeadlineSetting),
     url(r'^ProjectLimitNumSettings$',AdminStaffService.ProjectLimitNumSetting),
     url(r'^ProjectLimitNumReset$',AdminStaffService.ProjectLimitNumReset),
+    url(r'^ProjectLimitNumRecycle$',AdminStaffService.ProjectLimitNumRecycle),
     url(r'^subject_alloc/$', AdminStaffService.SubjectAlloc),
     url(r'^subject_feedback/$',AdminStaffService.SubjectFeedback),
     url(r'^subject_rating/$',AdminStaffService.SubjectRating),

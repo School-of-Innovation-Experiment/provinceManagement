@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-12-29 16:57
+# Last modified: 2016-12-29 16:57
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 
 import os, sys, datetime, uuid
@@ -92,6 +100,5 @@ def get_limited_num_and_remaining_times(request):
     proj_list = get_current_project_query_set().filter(Q(adminuser = teacher_profile))
     proj_num = len(proj_list)
     limited_num = TeacherLimitNumber(request)
-    print proj_num, limited_num, "-"*100
-    remaining_activation_times = limited_num - proj_num
+    remaining_activation_times = max(0, limited_num - proj_num)
     return limited_num, remaining_activation_times

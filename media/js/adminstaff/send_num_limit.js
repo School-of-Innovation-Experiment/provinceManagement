@@ -12,6 +12,13 @@ $('[rel="project_limit_num_reset"]').click(function(){
     location.href = "ProjectLimitNumReset";
   }
 });
+
+$('[rel="project_limit_num_recycle"]').click(function(){
+  var bln = window.confirm("是否确认回收所有未分配项目数量?（此操作不可撤销）");
+  if(bln){
+    location.href = "ProjectLimitNumRecycle";
+  }
+});
 function limitednum_callback(data){
   if (data.status == "1"){
     $("#limited_num").css("background","white");

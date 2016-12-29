@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-12-29 16:57
+# Last modified: 2016-12-29 16:57
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 
 from dajax.core import Dajax
@@ -99,7 +107,7 @@ def StudentDispatch(request, form):
         email_num = email_list and len(email_list) or 0
         limited_num = TeacherLimitNumber(request)
         remaining_activation_times = limited_num - email_num
-        if remaining_activation_times==0:
+        if remaining_activation_times<=0:
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
