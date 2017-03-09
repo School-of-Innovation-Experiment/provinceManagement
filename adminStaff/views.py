@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2016-12-29 16:50
+# Last modified: 2017-03-09 13:59
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -731,7 +731,7 @@ class AdminStaffService(object):
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
             if auth_identity == ADMINSTAFF_USER:
-                pro_list=get_current_project_query_set().filter((Q(project_grade=grade_nation)|Q(project_grade=grade_province)) & \
+                pro_list=get_current_project_query_set().filter(Q(project_grade=grade_nation) & \
                                                       Q(over_status__status = OVER_STATUS_NOTOVER))
             elif auth_identity == SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
@@ -798,8 +798,6 @@ class AdminStaffService(object):
         # q2 = (project_isover and Q(is_over=project_isover)) or None
         q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
         q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-        if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
-            q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
         q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student_group__studentName__contains = project_teacher_student_name))) or None
