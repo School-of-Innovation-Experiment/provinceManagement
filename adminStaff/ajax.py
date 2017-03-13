@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2016-11-26 15:01
+# Last modified: 2017-03-13 15:57
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -519,19 +519,19 @@ def auto_ranking(request):
     message = ""
     project_set = list(get_current_project_query_set().select_related('school'))
     project_set.sort(key = lambda x: (x.school.school.schoolName,
-                                      x.adminuser.name,
-                                      x.project_category.category))
+                                      x.project_category.category,
+                                      x.adminuser.name))
     school_codes = {}
     for p in project_set:
         school_codes[p.school] = p.school.school.school_code
 
     project_control = ProjectControl.objects.all()[0]
     year = project_control.pre_start_day.year
-    def auto_completion(x):
-        return "%04d" % x
+
+    id_fmt = '{:04d}{}{}{:02d}{:04d}'
 
     for i, p in enumerate(project_set, start=1):
-        p.project_unique_code = str(year+1) + DUT_code + school_codes[p.school] + auto_completion(i)
+        p.project_unique_code = id_fmt.format(year + 1, DUT_code, school_codes[p.school], p.project_category.id, i)
         p.save()
     return simplejson.dumps({"message": message})
 

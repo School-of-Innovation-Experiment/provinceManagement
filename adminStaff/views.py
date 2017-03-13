@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-03-09 13:59
+# Last modified: 2017-03-13 15:54
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -731,8 +731,8 @@ class AdminStaffService(object):
             grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
             grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
             if auth_identity == ADMINSTAFF_USER:
-                pro_list=get_current_project_query_set().filter(Q(project_grade=grade_nation) & \
-                                                      Q(over_status__status = OVER_STATUS_NOTOVER))
+                pro_list = get_current_project_query_set().filter(Q(project_grade=grade_nation) & \
+                                                                  Q(over_status__status = OVER_STATUS_NOTOVER))
             elif auth_identity == SCHOOL_USER:
                 pro_list = ProjectSingle.objects.filter(Q(school__userid=request.user)& \
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
@@ -742,7 +742,7 @@ class AdminStaffService(object):
             elif auth_identity == EXPERT_USER:
                 pro_list = ProjectSingle.objects.filter(Q(expert__userid=request.user) &\
                                                         Q(over_status__status = OVER_STATUS_NOTOVER))
-        pro_list = pro_list.order_by('project_unique_code','school','adminuser')
+        pro_list = pro_list.order_by('project_unique_code')
         #loginfo(p=pro_list,label="pro_list")
         if pro_list.count() != 0 or request.method == "POST":
             havedata_p = True
