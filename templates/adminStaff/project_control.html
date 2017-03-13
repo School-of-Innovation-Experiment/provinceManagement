@@ -4,7 +4,7 @@
   {% csrf_token %}
 <fieldset>
    <legend>项目申请管理</legend>
-   <span class="label label-success" id="applying-information">{% if is_applying %}项目申请开关处于打开状态,学生可以进行填报 {% else %} 项目申请开关处于关闭状态,学生不能进行填报 {% endif %}</span>
+   <span class="label label-success" id="applying-information">{% if is_applying %}项目申请开关处于打开状态,若各学院也为打开状态,则学生可以进行填报 {% else %} 项目申请开关处于关闭状态,学生不能进行填报 {% endif %}</span>
    <br>
    <br>
    <input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 
@@ -24,6 +24,7 @@
     {% endfor%}
     <input type="button" id="finish_button"  onclick="finish_control()" {%if is_finishing %}value="关闭结题" class="btn btn-warning"{%endif%}{%if not is_finishing%} class="btn btn-primary" value="打开结题"{%endif%}>
     <span> 项目结题过程管理开关</span>
+    <input type="button" id="auto_finish_button"  onclick="auto_finish()" class="btn btn-danger" value="自动结题">
     <br>
     <span class="label label-important {% if not is_finishing %} hide {% endif%}" id = "finishing-information"> {% if is_finishing %}点击“关闭结题按钮”会取消所有结题年份
     {% endif %}
@@ -49,7 +50,7 @@
   </fieldset>
   <hr \>
   <fieldset>
-    <legend>项目自动编号</legend>
+    <legend>项目自动操作</legend>
     <div class="alert alert-success" style="display:none" id="success_bar_2">
         <button type="button" class="close" data-dismiss="alert">x</button>
         编号成功！

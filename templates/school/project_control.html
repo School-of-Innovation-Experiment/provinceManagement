@@ -3,7 +3,13 @@
 
 <fieldset>
    <legend>项目申请管理</legend>
-   <span class="label label-success" id="applying-information">{% if is_applying %}项目申请开关处于打开状态,学生可以进行填报 {% else %} 项目申请开关处于关闭状态,学生不能进行填报 {% endif %}</span>
+   <span class="label label-success" id="applying-information">{% if is_applying %}项目申请开关处于打开状态,学生可以进行填报{% else %} 项目申请开关处于关闭状态,学生不能进行填报 {% endif %}</span>
+   <br />
+   {% if admin_applying %}
+   <span class="label label-success" id="admin-applying-information">学校项目申请总开关处于打开状态,学生可以进行填报</span>
+   {% else %}
+   <span class="label label-important" id="admin-applying-information">学校项目申请总开关处于关闭状态,学生不能进行填报</span>
+   {% endif %}
    <br>
    <br>
    <input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 

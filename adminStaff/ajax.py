@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-13 16:49
+# Last modified: 2017-03-13 18:17
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -23,7 +23,7 @@ from django.template.loader import render_to_string
 #from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
 from adminStaff.forms import *
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
-from const.models import SchoolDict, ProjectGrade, ApplyControl
+from const.models import SchoolDict, ProjectGrade, ApplyControl, OverStatus
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -694,3 +694,17 @@ def applicaton_control(request):
     flag = ac.is_applying
     return simplejson.dumps({'flag': flag})
 
+
+@dajaxice_register
+def auto_finish(request, year_list):
+    os_ov = OverStatus.objects.get(status=OVER_STATUS_NORMAL)
+    no_nov = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
+    for year in year_list:
+        try:
+            pros = get_current_project_query_set().filter(
+                year=year, over_status=no_nov)
+            pros.update(over_status=os_ov)
+        except Exception, e:
+            loginfo(e)
+            return simplejson.dumps({'flag': 1})
+    return simplejson.dumps({'flag':'0', 'auto_finished': year_list})

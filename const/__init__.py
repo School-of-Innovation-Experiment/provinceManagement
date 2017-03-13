@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:10
-# Last modified: 2016-11-26 14:38
+# Last modified: 2017-03-13 18:19
 # Filename: __init__.py
 # Description:
 # coding: UTF-8
@@ -46,12 +46,14 @@ EXPERT_GRADE_CHOICES = (
 CATE_INNOVATION = "innovation"
 CATE_ENTERPRISE = "enterprise"
 CATE_ENTERPRISE_EE = "enterprise_ee"
+CATE_RESEARCH = 'research'
 CATE_UN = "undifined"
 
 PROJECT_CATE_CHOICES = (
     (CATE_INNOVATION, u"创新训练"),
     (CATE_ENTERPRISE, u"创业训练"),
     (CATE_ENTERPRISE_EE, u"创业实践"),
+    (CATE_RESEARCH, u"科研训练"),
     #  (CATE_UN, u"未指定"),
 )
 

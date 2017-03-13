@@ -39,6 +39,39 @@ function finish_control(){
   Dajaxice.adminStaff.finish_control(finish_control_callback,{"year_list":year_list});
 }
 
+function auto_finish(){
+  var year_list=new Array();
+  var j=0;
+  var checkBoxs = document.getElementsByTagName("input");//取得input标签的对象
+  for(var i=0; i<checkBoxs.length; i++)
+  {
+    if(checkBoxs[i].type=="checkbox" && checkBoxs[i].checked)
+    {
+      year_list[j]=checkBoxs[i].value;
+      j++;
+    }
+  }
+  Dajaxice.adminStaff.auto_finish(auto_finish_callback,{"year_list":year_list});
+}
+
+function auto_finish_callback(data)
+{
+    var content;
+    if(data.flag == 0)
+    {
+        content = "以下年份自动结题操作成功:\n";
+        for (var i = 0; i < data.auto_finished.length - 1; i++) {
+            content += data.auto_finished[i] + "\n";
+        };
+        content += data.auto_finished[data.auto_finished.length - 1];
+    }
+    else
+    {
+        content = '自动结题失败,请联系管理员操作';
+    }
+    alert(content);
+}
+
 function finish_control_callback(data){
   if (data.flag == 0){
     $('#finish_button').attr("class","btn btn-primary");

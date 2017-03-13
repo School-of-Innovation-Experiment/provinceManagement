@@ -19,7 +19,7 @@ function applicaton_control_callback(data){
     $('#application_button').attr("class","btn btn-warning");
     $('#application_button').val("关闭申请");
     //alert("已经打开申请，学生现在能填报申报书");
-    $('#applying-information').text("项目申请开关处于打开状态,若学校也为打开状态,则学生可以进行填报");
+    $('#applying-information').text("项目申请开关处于打开状态,学生可以进行填报");
   }
   else
   {

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-12-09 11:40
-# Last modified: 2016-12-09 11:40
+# Last modified: 2017-03-13 18:25
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -283,6 +283,7 @@ def SubjectAlloc(request, is_expired = False):
 def project_control(request):
     school = SchoolProfile.objects.get(userid = request.user)
     is_applying = school.is_applying
+    admin_applying = ApplyControl.objects.get(origin=None).is_applying
     is_finishing = school.is_finishing
     # try
     over_notover_status = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
@@ -299,6 +300,7 @@ def project_control(request):
     havedata_p = True if year_list else False
     return render(request, "school/project_control.html",
                 {   "is_applying":is_applying,
+                    "admin_applying": admin_applying,
                     "is_finishing":is_finishing,
                     "year_list":year_list,
                     "havedata_p":havedata_p,
