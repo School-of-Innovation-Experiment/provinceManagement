@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-13 15:57
+# Last modified: 2017-03-13 16:49
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -23,7 +23,7 @@ from django.template.loader import render_to_string
 #from adminStaff.forms import NumLimitForm, TimeSettingForm, SubjectCategoryForm, ExpertDispatchForm,SchoolDispatchForm,TemplateNoticeForm,FundsChangeForm,StudentNameForm, SchoolDictDispatchForm
 from adminStaff.forms import *
 from adminStaff.models import  ProjectPerLimits, ProjectControl,TemplateNoticeMessage
-from const.models import SchoolDict, ProjectGrade
+from const.models import SchoolDict, ProjectGrade, ApplyControl
 from const import *
 from adminStaff.utils import DateFormatTransfer
 from adminStaff.views import AdminStaffService
@@ -684,3 +684,13 @@ def download_zipfiles(request,filetype,project_manage_form):
     path = get_zipfiles_path(request,filetype,project_manage_form) 
     path = MEDIA_URL + "tmp" + path[len(TMP_FILES_PATH):]
     return simplejson.dumps({'path':path})
+
+
+@dajaxice_register
+def applicaton_control(request):
+    ac, _ = ApplyControl.objects.get_or_create(origin=None)
+    ac.is_applying = False if ac.is_applying else True
+    ac.save()
+    flag = ac.is_applying
+    return simplejson.dumps({'flag': flag})
+

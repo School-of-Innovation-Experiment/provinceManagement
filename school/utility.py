@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-03-13 16:23
+# Last modified: 2017-03-13 16:37
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-29
@@ -25,7 +33,7 @@ from chartit import PivotDataPool, PivotChart
 
 from school.models import *
 from const.models import SchoolDict, ProjectCategory, InsituteCategory, SchoolRecommendRate
-from const.models import UserIdentity, ProjectGrade, ProjectStatus
+from const.models import UserIdentity, ProjectGrade, ProjectStatus, ApplyControl
 from adminStaff.models import ProjectPerLimits
 from users.models import SchoolProfile,AdminStaffProfile
 from student.models import Student_Group
@@ -365,8 +373,9 @@ def check_applycontrol(project):
         检查申报开关是否打开，打开返回True,否则返回False
     """
     school = SchoolProfile.objects.get(id=project.school_id)
+    admin_control = ApplyControl.objects.get(origin=None)
 
-    if school.is_applying :
+    if school.is_applying and admin_control.is_applying:
         return True
     else :
         return False

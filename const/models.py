@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:30
-# Last modified: 2016-11-26 15:01
+# Last modified: 2017-03-13 16:36
 # Filename: models.py
 # Description:
 # coding: UTF-8
@@ -235,3 +235,26 @@ class SchoolRecommendRate(models.Model):
         """
         try: return cls.objects.get()
         except: return cls()
+
+
+class ApplyControl(models.Model):
+    """
+    Project apply control.
+
+    Before project is applied, this should be tested, if any of department and
+    school apply control is forbidden, then application should fail, due to 
+    history reasons, deparment apply control will be in SchoolProfile rather
+    than here, so this is just for school admin currently.
+
+    Author: David
+    """
+    origin = models.ForeignKey(SchoolDict, null=True, blank=True,
+                               verbose_name="设置来源")
+    is_applying = models.BooleanField(null=False, default=True,
+                                      verbose_name=u"允许申请")
+    class Meta:
+        verbose_name = u'项目申请控制'
+        verbose_name_plural = u'项目申请控制'
+
+    def __unicode__(self):
+        return '{}:{}'.format(self.origin or 'ADMIN', self.is_applying)

@@ -2,6 +2,16 @@
 {%block nav_admin_content%}
 <form id="project_control_form" class="bs-docs-example">
   {% csrf_token %}
+<fieldset>
+   <legend>项目申请管理</legend>
+   <span class="label label-success" id="applying-information">{% if is_applying %}项目申请开关处于打开状态,学生可以进行填报 {% else %} 项目申请开关处于关闭状态,学生不能进行填报 {% endif %}</span>
+   <br>
+   <br>
+   <input type="button" id="application_button"  onclick="applicaton_control()" {%if is_applying %}value="关闭申请" class="btn btn-warning"{%endif%}{%if not is_appying%} class="btn btn-primary" value="打开申请"{%endif%}> 
+   <span> 项目申请过程管理开关</span>
+</fieldset>
+<br />
+
   <fieldset>
     <legend>项目结题管理</legend>
     {% if havedata_p %}

@@ -2,6 +2,28 @@ var glo_project_id;
 function get_subject_id(project_id){
   glo_project_id = project_id;
 }
+function applicaton_control(){
+  Dajaxice.adminStaff.applicaton_control(applicaton_control_callback,{});
+}
+
+function applicaton_control_callback(data){
+  if (data.flag == 0){
+    $('#application_button').attr("class","btn btn-primary");
+    $('#application_button').val("打开申请");
+    $('#applying-information').text("项目申请开关处于关闭状态,学生不能进行填报");    
+  }
+  else if(data.flag == 1)
+  {
+    $('#application_button').attr("class","btn btn-warning");
+    $('#application_button').val("关闭申请");
+    $('#applying-information').text("项目申请开关处于打开状态,若各学院也为打开状态,则学生可以进行填报");
+  }
+  else
+  {
+    alert(data.message);
+  }
+}
+
 function finish_control(){
   var year_list=new Array();
   var j=0;
