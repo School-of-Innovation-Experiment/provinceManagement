@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-13 18:17
+# Last modified: 2017-03-14 11:13
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -701,7 +701,7 @@ def auto_finish(request, year_list):
     no_nov = OverStatus.objects.get(status=OVER_STATUS_NOTOVER)
     for year in year_list:
         try:
-            pros = get_current_project_query_set().filter(
+            pros = ProjectSingle.objects.filter(
                 year=year, over_status=no_nov)
             pros.update(over_status=os_ov)
         except Exception, e:
