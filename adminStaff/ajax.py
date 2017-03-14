@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-14 14:58
+# Last modified: 2017-03-14 16:41
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -717,8 +717,16 @@ def switch_category(request, pid, cname):
         project = ProjectSingle.objects.get(project_unique_code=pid)
     except ProjectSingle.DoesNotExist, e:
         loginfo(e)
-        ret['status'] = 1
-        return simplejson.dumps(ret)
+        try:
+            project = Student_Group.objects.get(studentId=pid).project
+            if not project:
+                raise ProjectSingle.DoesNotExist
+        except (Student_Group.DoesNotExist, ProjectSingle.DoesNotExist), e:
+            loginfo(e)
+            ret['status'] = 1
+    finally:
+        if ret['status'] == 1:
+            return simplejson.dumps(ret)
     if project.project_category.category.startswith('enterprise'):
         ret['status'] = 3
         return simplejson.dumps(ret)
