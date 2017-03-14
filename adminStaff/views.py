@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-03-13 16:49
+# Last modified: 2017-03-14 13:43
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -765,10 +765,14 @@ class AdminStaffService(object):
             project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
+            project_category = project_manage_form.cleaned_data['project_category']
             project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
             loginfo(project_teacher_student_name)
             # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-            qset = AdminStaffService.get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
+            qset = AdminStaffService.get_filter(
+                    project_grade,project_year,project_overstatus,
+                    project_teacher_student_name,project_scoreapplication,
+                    project_school, project_category)
             if qset :
                 qset = reduce(lambda x, y: x & y, qset)
                 # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -783,7 +787,10 @@ class AdminStaffService(object):
     ##
     # TODO: fixed the `isover` to over status
     @staticmethod
-    def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
+    def get_filter(project_grade,project_year,project_overstatus,
+                   project_teacher_student_name,
+                   project_scoreapplication = "-1",project_school= "-1",
+                   project_category="-1"):
         if project_grade == "-1":
             project_grade=''
         if project_year == '-1':
@@ -796,6 +803,8 @@ class AdminStaffService(object):
             project_scoreapplication=''
         if project_school  == '-1':
             project_school = '';
+        if project_category == "-1":
+            project_category = ''
 
         q1 = (project_year and Q(year=project_year)) or None
         # q2 = (project_isover and Q(is_over=project_isover)) or None
@@ -804,7 +813,8 @@ class AdminStaffService(object):
         q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
         q5 = (project_school and Q(school_id = project_school)) or None
         q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student_group__studentName__contains = project_teacher_student_name))) or None
-        qset = filter(lambda x: x != None, [q1, q2, q3, q4, q5, q6])
+        q7 = (project_category and Q(project_category__category=project_category)) or None
+        qset = filter(lambda x: x != None, [q1, q2, q3, q4, q5, q6, q7])
         return qset
 
     @staticmethod

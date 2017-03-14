@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-03-14 13:29
+# Last modified: 2017-03-14 13:43
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-28
@@ -251,10 +259,13 @@ class ProjectManageForm(forms.Form):
     project_scoreapplication_choice = [(-1, "学分申请状态"),(0,"未申请"),(1,"已申请")]
     project_scoreapplication_choice = tuple(project_scoreapplication_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
-    project_year = forms.ChoiceField() 
+    project_year = forms.ChoiceField()
     #project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
     project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
+    
+    project_category_choice = [(-1, u'项目类型')] + list(PROJECT_CATE_CHOICES)
+    project_category = forms.ChoiceField(choices=project_category_choice)
 
     SCHOOL_CHOICE_list = []
     school_list        = SchoolProfile.objects.all()

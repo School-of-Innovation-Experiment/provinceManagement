@@ -1,7 +1,7 @@
 
    {% csrf_token %}
    {% include "widgets/project_manage_form.html" %} 
-       <button type="submit" class="btn btn-primary" style="margin-bottom:10px;" id="filter_button">检索</button>
+       <button type="submit" class="btn btn-primary" style="float:right;margin-bottom:10px;" id="filter_button">检索</button>
        <h4>
          符合搜索条件的项目数量为 {{pro_list.count}}.
        </h4>

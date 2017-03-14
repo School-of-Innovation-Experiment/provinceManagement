@@ -2,6 +2,7 @@
     {{project_manage_form.project_year}}
     {{project_manage_form.project_overstatus}}
     {%if userauth.is_adminstaff  %}
+        {{project_manage_form.project_category}}
         {{project_manage_form.project_scoreapplication}}
         {{project_manage_form.project_school}}
     {%endif%}
