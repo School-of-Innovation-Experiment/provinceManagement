@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-03-14 13:43
+# Last modified: 2017-03-14 14:54
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -32,7 +32,7 @@ from const import *
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
-from const.models import UserIdentity, InsituteCategory, ProjectGrade
+from const.models import UserIdentity, InsituteCategory, ProjectGrade, ProjectCategory
 from users.models import ExpertProfile, AdminStaffProfile, ApplyControl
 from registration.models import RegistrationProfile
 from django.db import transaction
@@ -660,6 +660,8 @@ class AdminStaffService(object):
         ac, _ = ApplyControl.objects.get_or_create(origin=None)
         is_applying = ac.is_applying
 
+        cates = ProjectCategory.objects.exclude(category__startswith='enterprise')
+
         return render(request, "adminStaff/project_control.html",
                     {
                         "recommend_rate": recommend_rate_obj,
@@ -668,6 +670,7 @@ class AdminStaffService(object):
                         "havedata_p":havedata_p,
                         "year_finishing_list":year_finishing_list,
                         "is_applying": is_applying,
+                        'cates': cates,
                     })
 
     @staticmethod

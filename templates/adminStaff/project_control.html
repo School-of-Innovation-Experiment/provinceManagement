@@ -56,9 +56,24 @@
         编号成功！
     </div>
 
-  </fieldset>
     <input type="button" class="btn btn-warning" value="自动编号" onclick="auto_ranking();">
   </fieldset>
+  <hr \>
+  <fieldset>
+      <legend id="project_category_switch">项目类型切换</legend>
+      <input type="text" class="input-medium" id="switch_project_id" placeholder="项目id">
+      <select id="switch_type_name">
+          {% for cate in cates %}
+          <option value="{{cate.category}}">{{cate.get_category_display}}</option>
+          {% endfor %}
+      </select>
+      <span class="label label-success" id="switch_result"></span>
+      <br />
+    <input type="button" class="btn btn-warning" value="切换" onclick="switch_category();">
+  </fieldset>
+
+  </fieldset>
+
 </form>
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 {%endblock%}

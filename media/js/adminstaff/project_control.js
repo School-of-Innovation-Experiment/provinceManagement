@@ -24,6 +24,37 @@ function applicaton_control_callback(data){
   }
 }
 
+function switch_category()
+{
+    var rs = $('#switch_result');
+    var id = $('#switch_project_id').val();
+    var cate = $('#switch_type_name').val();
+    Dajaxice.adminStaff.switch_category(switch_category_callback,
+                                        {'pid': id, 'cname': cate})
+}
+
+function switch_category_callback(data)
+{
+    var rs = $('#switch_result');
+    if(data.status == 0)
+    {
+        rs.attr("class", "label label-success");
+        rs.html("更新成功!");
+    }
+    else 
+    {
+        rs.attr("class", "label label-important");
+        if(data.status == 1)
+            rs.html("更新失败，无该项目!");
+        else if(data.status == 2)
+            rs.html("更新失败，无此类型！");
+        else if(data.status == 3)
+            rs.html("更新失败，此项目为创业类项目！");
+        else
+            rs.html("未知错误!");
+    }
+}
+
 function finish_control(){
   var year_list=new Array();
   var j=0;

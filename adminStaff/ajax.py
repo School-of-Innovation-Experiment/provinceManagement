@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-14 11:13
+# Last modified: 2017-03-14 14:58
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -708,3 +708,26 @@ def auto_finish(request, year_list):
             loginfo(e)
             return simplejson.dumps({'flag': 1})
     return simplejson.dumps({'flag':'0', 'auto_finished': year_list})
+
+
+@dajaxice_register
+def switch_category(request, pid, cname):
+    ret = {'status': -1}
+    try:
+        project = ProjectSingle.objects.get(project_unique_code=pid)
+    except ProjectSingle.DoesNotExist, e:
+        loginfo(e)
+        ret['status'] = 1
+        return simplejson.dumps(ret)
+    if project.project_category.category.startswith('enterprise'):
+        ret['status'] = 3
+        return simplejson.dumps(ret)
+    try:
+        cate = ProjectCategory.objects.get(category=cname)
+    except ProjectCategory.DoesNotExist, e:
+        loginfo(e)
+        ret['status'] = 2
+        return simplejson.dumps(ret)
+    project.project_category = cate
+    project.save()
+    return simplejson.dumps({'status': 0})
