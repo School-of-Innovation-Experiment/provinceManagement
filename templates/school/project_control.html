@@ -16,6 +16,7 @@
    <span> 项目申请过程管理开关</span>
 </fieldset>
 <br />
+{% comment %}
 <form id="project_control_form">
   {% csrf_token %}
     <fieldset>
@@ -41,6 +42,7 @@
     {% endif %}
   </fieldset>
 </form>
+{% endcomment %}
 
 <script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
 {%endblock%}
