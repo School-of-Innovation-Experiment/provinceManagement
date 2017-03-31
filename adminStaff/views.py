@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-03-14 14:54
+# Last modified: 2017-03-31 10:51
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -660,7 +660,7 @@ class AdminStaffService(object):
         ac, _ = ApplyControl.objects.get_or_create(origin=None)
         is_applying = ac.is_applying
 
-        cates = ProjectCategory.objects.exclude(category__startswith='enterprise')
+        cates = ProjectCategory.objects.all()
 
         return render(request, "adminStaff/project_control.html",
                     {

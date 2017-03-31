@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-14 16:41
+# Last modified: 2017-03-31 10:57
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -727,14 +727,20 @@ def switch_category(request, pid, cname):
     finally:
         if ret['status'] == 1:
             return simplejson.dumps(ret)
-    if project.project_category.category.startswith('enterprise'):
-        ret['status'] = 3
-        return simplejson.dumps(ret)
     try:
         cate = ProjectCategory.objects.get(category=cname)
     except ProjectCategory.DoesNotExist, e:
         loginfo(e)
         ret['status'] = 2
+        return simplejson.dumps(ret)
+    if project.project_category.category.startswith('enterprise') and\
+            not cate.category.startswith('enterprise'):
+        loginfo('Wrong switch')
+        ret['status'] = 3
+        return simplejson.dumps(ret)
+    elif not project.project_category.category.startswith('enterprise') and\
+            cate.category.startswith('enterprise'):
+        ret['status'] = 4
         return simplejson.dumps(ret)
     project.project_category = cate
     project.save()

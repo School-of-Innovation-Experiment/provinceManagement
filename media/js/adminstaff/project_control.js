@@ -50,6 +50,8 @@ function switch_category_callback(data)
             rs.html("更新失败，无此类型！");
         else if(data.status == 3)
             rs.html("更新失败，此项目为创业类项目！");
+        else if(data.status == 4)
+            rs.html("更新失败，此项目为非创业类项目！");
         else
             rs.html("未知错误!");
     }
