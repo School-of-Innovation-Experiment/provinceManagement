@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-12-29 16:57
-# Last modified: 2016-12-29 16:57
+# Last modified: 2017-04-05 15:03
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -80,6 +80,10 @@ def brute_delete(request, email):
         message = u"超出权限，删除失败"
         return simplejson.dumps({"message":message})
     student = StudentProfile.objects.get(userid = user)
+    project = student.projectsingle
+    is_past = project.is_past
+    message = u'禁止删除往届项目' + str(is_past)
+    return simplejson.dumps({'message': message})
     student.delete()
     try:
         project = ProjectSingle.objects.get(student__userid = user)

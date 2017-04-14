@@ -7,8 +7,15 @@ function brute_delete(){
     Dajaxice.teacher.brute_delete(brute_delete_callback,{'email': glob_email});
 }
 function brute_delete_callback(data){
-    var target_tr = "[name='" + "tr_" + glob_email + "']";
-    $(target_tr).remove();
+    if(data == "")
+    {
+        var target_tr = "[name='" + "tr_" + glob_email + "']";
+        $(target_tr).remove();
+    }
+    else
+    {
+        alert(data.message);
+    }
 }
 function simple_delete(email){
     glob_email = email;
