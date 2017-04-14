@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-14 11:40
+# Last modified: 2017-04-14 11:52
+# Filename: ajax.py
+# Description:
 #coding=utf-8
 import os, sys,re
 from os.path import join
@@ -23,6 +31,7 @@ from const import MEMBER_NUM_LIMIT
 from const import *
 
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 def getProject(request):
     ok = check_auth(request.user, ADMINSTAFF_USER)
@@ -204,16 +213,20 @@ def new_or_update_member(request, stugroup_form):
     else: # new student
         if group.count() >= MEMBER_NUM_LIMIT[project.project_category.category]:
             ret = {'status': '1', 'message': u"人员已满，不可添加"}
-        elif sum(student_id in [student.studentId for student in project.student_group_set.all()] for project in get_running_project_query_set()):
-            ret = {'status': '1', 'message': u"相同学号已存在于其它正在进行的项目中"}
         else:
-            new_student = Student_Group(studentId = student_id,
-                                        studentName = student_name,
-                                        classInfo = "",
-                                        project=project)
-            new_student.save()
-            table = refresh_member_table(request)
-            ret = {'status': '0', 'message': u"人员添加成功", 'table':table}
+            illegal_projects = ProjectSingle.objects.exclude(
+                over_status__status=OVER_STATUS_NORMAL)
+            id_in_illegal = [student_id in [student.studentId for student in project.student_group_set.all()] for project in illegal_projects]
+            if any(id_in_illegal):
+                ret = {'status': '1', 'message': u"相同学号已存在于其它正在未正常结题项目中"}
+            else:
+                new_student = Student_Group(studentId = student_id,
+                                            studentName = student_name,
+                                            classInfo = "",
+                                            project=project)
+                new_student.save()
+                table = refresh_member_table(request)
+                ret = {'status': '0', 'message': u"人员添加成功", 'table':table}
     return ret
 
 def refresh_member_table(request):
