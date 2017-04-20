@@ -24,9 +24,11 @@
     </div>
     <h3>
       本年度项目列表
+    {% comment %}
       <span class="label label-info">申请上限:{{info.applications_limits}}</span>
       <span class="label label-important">剩余数量:{{info.applications_remaining}}</span>
       <span class="label label-info">甲类剩余数量:{{info.applications_a_remaining}}</span>
+    {% endcomment %}
     </h3>
     <a href="get_xls/" class="btn btn-primary">下载信息统计表</a>
     <a href="auto_index/" class="btn btn-primary">项目自动编号</a>

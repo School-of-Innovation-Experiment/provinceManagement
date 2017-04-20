@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2016-04-12 10:04
+# Last modified: 2017-04-20 09:26
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -56,10 +56,10 @@ def  StudentDispatch(request, form):
         if password == "":
             password = email.split('@')[0]
         #判断是否达到发送邮件的最大数量
-        email_num = Count_email_already_exist(request)
-        limited_num = school_limit_num(request)
-        remaining_activation_times = limited_num-email_num
-        if remaining_activation_times==0:
+        # email_num = Count_email_already_exist(request)
+        # limited_num = school_limit_num(request)
+        # remaining_activation_times = limited_num-email_num
+        if False and remaining_activation_times==0:
             message = u"已经达到最大限度，无权发送"
             return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
         else:
@@ -67,19 +67,21 @@ def  StudentDispatch(request, form):
                 #current_list = ProjectSingle.objects.filter(adminuser=request.user, year = get_current_year)
                 school = get_object_or_404(SchoolProfile, userid=request.user).school
 
-                current_list = get_current_project_query_set().filter(school=school)
-                limits = ProjectPerLimits.objects.get(school__userid=request.user)
-                a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
-                if a_remainings <= 0:
+                # current_list = get_current_project_query_set().filter(school=school)
+                # limits = ProjectPerLimits.objects.get(school__userid=request.user)
+                # a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
+                # if a_remainings <= 0:
+                if False:
                     message = u"甲类项目达到最大限度，无权发送"
                     return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
             if financial_cate == FINANCIAL_CATE_B:
                 school = get_object_or_404(SchoolProfile, userid=request.user).school
-                current_list = get_current_project_query_set().filter(school=school)
-                limits = ProjectPerLimits.objects.get(school__userid=request.user)
-                a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
-                b_remainings = int(limits.number) - int(limits.a_cate_number)
-                if b_remainings <= 0:
+                # current_list = get_current_project_query_set().filter(school=school)
+                # limits = ProjectPerLimits.objects.get(school__userid=request.user)
+                # a_remainings = int(limits.a_cate_number) - len([project for project in current_list if project.financial_category.category == FINANCIAL_CATE_A])
+                # b_remainings = int(limits.number) - int(limits.a_cate_number)
+                # if b_remainings <= 0:
+                if False:
                     message = u"乙类项目达到最大限度，无权发送"
                     return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
 

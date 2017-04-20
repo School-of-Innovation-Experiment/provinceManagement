@@ -11,8 +11,8 @@ function StudentDispatch_callback(data){
                 });
         $("#student_email_error_message").append("<strong>"+data.message+"</strong>")
          
-        $("#remaining_activation_times").empty();
-        $("#remaining_activation_times").append("<strong>"+''+data.remaining_activation_times+''+"</strong>")
+        //$("#remaining_activation_times").empty();
+        //$("#remaining_activation_times").append("<strong>"+''+data.remaining_activation_times+''+"</strong>")
         }
     else
         {

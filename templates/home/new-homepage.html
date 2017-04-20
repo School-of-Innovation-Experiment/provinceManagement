@@ -68,6 +68,9 @@
     <a href="/admin/"  >超级用户</a>
 </h3>
 {%endif%}
+<h3>
+    <a href="{% url auth_logout %}">注销</a>
+</h3>
 
 {% else %}
 <form class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={% url identity_redirect %}">

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-19 22:01
-# Last modified: 2017-04-20 09:05
+# Last modified: 2017-04-20 09:20
 # Filename: urls.py
 # Description:
 # coding: UTF-8
@@ -46,5 +46,5 @@ urlpatterns = patterns(
     url(r'^schoolredirect/$', schoollogin_redirect, name="auth_schoollogin_redirect"),
     url(r'^expertredirect/$', expertlogin_redirect, name="auth_expertlogin_redirect"),
     url(r'^studentredirect/$', studentlogin_redirect, name="auth_studentlogin_redirect"),
-    url(r'identity_redirect/$', identity_redirect, name="identity_redirect"),
+    url(r'^identity_redirect/$', identity_redirect, name="identity_redirect"),
 )

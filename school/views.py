@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-20 09:22
+# Last modified: 2017-04-20 09:29
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-28
@@ -131,20 +139,20 @@ def home_view(request, is_expired=False):
     readonly=is_expired
     readonly=False
 
-    try:
-        limits = ProjectPerLimits.objects.get(school__userid=request.user)
-    except Exception, err:
-        logger.info(err)
-        limits = None
-    if limits is not None:
-        pro_list =ProjectSingle.objects.filter(Q(adminuser = request.user) & Q(year=get_current_year()))
-        remainings = int(limits.number) - pro_list.count()
-        total = limits.number
-        a_remainings = int(limits.a_cate_number) - pro_list.filter(financial_category__category = FINANCIAL_CATE_A).count()
-    else:
-        total = 0
-        remainings = 0
-        a_remainings = 0
+#    try:
+#        limits = ProjectPerLimits.objects.get(school__userid=request.user)
+#    except Exception, err:
+#        logger.info(err)
+#        limits = None
+#    if limits is not None:
+#        pro_list =ProjectSingle.objects.filter(Q(adminuser = request.user) & Q(year=get_current_year()))
+#        remainings = int(limits.number) - pro_list.count()
+#        total = limits.number
+#        a_remainings = int(limits.a_cate_number) - pro_list.filter(financial_category__category = FINANCIAL_CATE_A).count()
+#    else:
+#        total = 0
+#        remainings = 0
+#        a_remainings = 0
     #add_current_list = current_list_add(list=current_list)
     page = request.GET.get('page') or 1
     context = getContext(current_list, page, "item", 0)
@@ -156,10 +164,10 @@ def home_view(request, is_expired=False):
             "readonly":readonly,
             "project_form":project_form,
             "url_para":url_para,
-            "info": {"applications_limits": total,
-                     "applications_remaining": remainings,
-                     "applications_a_remaining": a_remainings,
-                     }
+            # "info": {"applications_limits": total,
+            #          "applications_remaining": remainings,
+            #          "applications_a_remaining": a_remainings,
+            #         }
             }
     context.update(data)
     return render(request, 'school/home.html', context)
@@ -543,14 +551,15 @@ def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
         email_list  = GetStudentRegisterList(request)
-        email_num = Count_email_already_exist(request)
-        limited_num = school_limit_num(request)
-        remaining_activation_times = limited_num-email_num
+        # email_num = Count_email_already_exist(request)
+        # limited_num = school_limit_num(request)
+        # remaining_activation_times = limited_num-email_num
 
         page = request.GET.get('page')
         context = getContext(email_list, page, 'item', 0)
 
-        context.update({'student_form':student_form,'remaining_activation_times':remaining_activation_times})
+        # context.update({'student_form':student_form,'remaining_activation_times':remaining_activation_times})
+        context.update({'student_form':student_form})
         return render(request, "school/dispatch.html", context)
 
 def check_is_audited(user,presubmit,checkuser):
