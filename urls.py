@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-19 21:59
-# Last modified: 2017-04-19 22:13
+# Last modified: 2017-04-20 10:39
 # Filename: urls.py
 # Description:
 """
@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     # This must be placed before (r'^admin/(.*)', admin.site.root), as that gobals up everything
     url(r'^admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
     url(
-        r'^',
+        r'^$',
         include('news.urls'),
         name="news"
     ),

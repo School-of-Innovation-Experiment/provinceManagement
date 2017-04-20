@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-19 22:01
-# Last modified: 2017-04-20 09:20
+# Last modified: 2017-04-20 10:39
 # Filename: urls.py
 # Description:
 # coding: UTF-8
@@ -16,7 +16,7 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth import views as auth_views
 
-from registration.views import active
+from registration import views as reg_views
 from registration.views import register
 from registration.views import provincelogin_redirect, schoollogin_redirect
 from registration.views import expertlogin_redirect, studentlogin_redirect
@@ -26,7 +26,8 @@ urlpatterns = patterns(
     # Activation keys get matched by \w+ instead of the more specific
     # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
     # that way it can return a sensible "invalid key" message instead of a confusing 404.
-    url(r'^active/(?P<activation_key>\w+)/$',active,name='registration_avtive'),
+    '',
+    url(r'^active/(?P<activation_key>\w+)/$', reg_views.active,name='registration_active'),
     url(r'^provincelogin/$',auth_views.login,{'template_name':'registration/provincelogin.html'},name='auth_provincelogin'),
     url(r'^schoollogin/$',auth_views.login,{'template_name':'registration/schoollogin.html'},name='auth_schoollogin'),
     url(r'^expertlogin/$',auth_views.login,{'template_name':'registration/expertlogin.html'},name='auth_expertlogin'), 
