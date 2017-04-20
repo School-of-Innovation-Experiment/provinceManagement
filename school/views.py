@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-04-20 15:51
+# Last modified: 2017-04-20 17:00
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -630,11 +630,19 @@ def assign_grade(request):
     year = get_current_year()
 
     cur_list = ProjectSingle.objects.filter(school_id=school.school_id)
-    # cur_list = cur_list.filter(year=year).exclude(project_code=None)
-    cur_list = cur_list.filter(year=year)
+    cur_list = cur_list.filter(year=year).exclude(project_code=None)
     cur_list = cur_list.order_by('project_code')
+    audited_list = []
+    for project in cur_list:
+        if project.project_category.category == 'innovation':
+            if project.presubmit_set.all()[0].is_audited == True:
+                audited_list.append(project)
+        else:
+            if project.presubmitenterprise_set.all()[0].is_audited == True:
+                audited_list.append(project)
+    cur_list = audited_list
     page = request.GET.get('page') or 1
-    
+
     context = getContext(cur_list, page, "assign", 0)
     context['projects_list'] = context['assign_list']
 

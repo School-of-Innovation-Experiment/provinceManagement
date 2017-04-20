@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-04-20 15:31
+# Last modified: 2017-04-20 17:00
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -415,15 +415,28 @@ def update_project_grade(request, grade_num, project_id):
         year = get_current_year()
         cur_list = ProjectSingle.objects.filter(school_id=school.school_id)
         cur_list = cur_list.filter(year=year)
+        audited_list = []
+        for project in cur_list:
+            if project.project_category.category == 'innovation':
+                if project.presubmit_set.all()[0].is_audited == True:
+                    audited_list.append(project)
+            else:
+                if project.presubmitenterprise_set.all()[0].is_audited == True:
+                    audited_list.append(project)
+        cur_list = audited_list
 
         t, mp, mn, rp, rn = get_remain_grade_num(cur_list)
         if (grade_num == '1' and rp <= 0) or (grade_num == '2' and rn <= 0):
             return simplejson.dumps({'status': 4})
 
-        if not cur_list.filter(project_id=project_id).count():
+        proj = None
+        for p in cur_list:
+            if p.project_id == project_id:
+                proj = p
+
+        if proj is None:
             return simplejson.dumps({'status': 3})
 
-        proj = cur_list.filter(project_id=project_id)[0]
         proj.project_grade = new_grade
         proj.save()
         return simplejson.dumps({'status': 0})

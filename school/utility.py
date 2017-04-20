@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 15:02
-# Last modified: 2017-04-20 15:10
+# Last modified: 2017-04-20 17:00
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -677,11 +677,11 @@ def get_remain_grade_num(cur_list):
     """
     grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
     grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
-    t = cur_list.count()
+    t = len(cur_list)
     mp = int(math.ceil(0.3 * t))
     mn = int(math.ceil(0.3 * mp))
-    cp = cur_list.filter(project_grade=grade_province).count()
-    cn = cur_list.filter(project_grade=grade_nation).count()
+    cp = sum(p.project_grade == grade_province for p in cur_list)
+    cn = sum(p.project_grade == grade_nation for p in cur_list)
     rp = mp - cp - cn 
     rn = min(rp, mn - cn)
 
