@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-04-20 09:29
+# Last modified: 2017-04-20 11:06
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -220,13 +220,13 @@ def application_report_view(request, pid=None, is_expired=False):
     isRedirect = False
 
     if request.method == "POST" and readonly is not True:
-        role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
         phones= request.POST.getlist("telephone")
         info_form = InfoForm(request.POST, pid=pid,instance=project,phone=phones[0])
         application_form = iform(request.POST, instance=pre)
         if is_innovation:
             if info_form.is_valid() and application_form.is_valid():
                 if save_application(project, info_form, application_form, request.user):
+                    role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     isRedirect = True
@@ -238,6 +238,7 @@ def application_report_view(request, pid=None, is_expired=False):
             if info_form.is_valid() and application_form.is_valid() and teacher_enterpriseform.is_valid():
                 set_unique_telphone(request, info_form, teacher_enterpriseform)
                 if save_enterpriseapplication(project, info_form, application_form, teacher_enterpriseform,request.user):
+                    role=check_is_audited(user=request.user,presubmit=pre,checkuser=SCHOOL_USER)
                     project.project_status = ProjectStatus.objects.get(status=STATUS_PRESUBMIT)
                     project.save()
                     isRedirect = True

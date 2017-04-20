@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-04-20 09:26
+# Last modified: 2017-04-20 10:49
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -88,11 +88,13 @@ def  StudentDispatch(request, form):
             flag = Send_email_to_student(request, name, person_firstname,password, email,STUDENT_USER, financial_cate=financial_cate)
             if flag:
                 message = u"发送邮件成功"
-                remaining_activation_times -= 1
-                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
+                # remaining_activation_times -= 1
+                # return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
+                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message})
             else:
                 message = u"邮件发送失败，请重新发送"
-                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
+                # return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
+                return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message})
     else:
         logger.info("Form Valid Failed"+"**"*10)
         logger.info(student_form.errors)
