@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-20 17:15
+# Last modified: 2017-04-20 17:15
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 
 import os
@@ -691,7 +699,7 @@ def info_xls_certificates(request, proj_set):
     """
     """
 
-    proj_set = proj_set.filter(over_status__status=OVER_STATUS_NORMAL)
+    # proj_set = proj_set.filter(over_status__status=OVER_STATUS_NORMAL)
     xls_obj, workbook = info_xls_certificates_gen()
 
     row_num = 2
