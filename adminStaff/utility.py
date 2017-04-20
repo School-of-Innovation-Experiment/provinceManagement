@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 17:15
-# Last modified: 2017-04-20 17:15
+# Last modified: 2017-04-20 17:24
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -655,8 +655,8 @@ def get_filter(project_grade,project_year,project_overstatus, project_teacher_st
     # q2 = (project_isover and Q(is_over=project_isover)) or None
     q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None
     q3 = (project_grade and Q(project_grade__grade=project_grade)) or None
-    if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
-        q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
+    # if project_grade in [GRADE_NATION,GRADE_PROVINCE]:
+    #     q3 = (Q(project_grade__grade = GRADE_NATION)|Q(project_grade__grade= GRADE_PROVINCE))
     q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
     q5 = (project_school and Q(school_id = project_school)) or None
     q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
