@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-20 15:40
+# Last modified: 2017-04-20 15:40
+# Filename: models.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2012-11-10
@@ -46,8 +54,8 @@ class ExpertProfile(models.Model):
                                    verbose_name="甲类国家级项目上限")
     numlimit_b = models.IntegerField(blank=True, null=True, default=0,
                                    verbose_name="乙类国家级项目上限")
-    group = models.IntegerField(blank=True, null=True, default=-1,
-                                   verbose_name="组号")
+    # group = models.IntegerField(blank=True, null=True, default=-1,
+    #                                verbose_name="组号")
     class Meta:
         verbose_name = "评审专家"
         verbose_name_plural = "评审专家"

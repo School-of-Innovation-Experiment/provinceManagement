@@ -1,0 +1,54 @@
+<table class="table table-hover studenttable">
+    <thead>
+        <tr>
+            <th>项目编号</th>
+            <th>名称</th>
+            <th>项目类型</th>
+            <th>指导教师</th>
+            <th>详情</th>
+            <th>级别设置</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects_list %}
+        <tr>
+            <td>{{project.project_code}}</td>
+            <td title="{{project.title}}">{{project.title|truncatechars:15}}</td>
+            <td>{{project.project_category}}</td>
+            <td>{{item.inspector}}</td>
+            <td>
+                <span><a href="{% url school.views.application_report_view project.project_id%}" class='btn btn-primary'>申请</a></span>
+                <span><a href="{% url school.views.file_view project.project_id%}" class='btn btn-primary'>文件操作</a></span>
+            </td>
+            <td>
+                <label class="radio">
+                    {% if project.project_grade.grade == 'undifined' %}
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="0" checked>
+                    {% else %}
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="0">
+                    {% endif %}
+                    校级
+                </label>
+
+                <label class="radio">
+                    {% if project.project_grade.grade == 'province' %}
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="1" checked>
+                    {% else %}
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="1">
+                    {% endif %}
+                    省级
+                </label>
+                <label class="radio">
+                    {% if project.project_grade.grade == 'nation' %} 
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="2" checked>
+                    {% else %}
+                    <input type="radio" name="grade_{{project.project_id}}" class="assign_grade" pid="{{project.project_id}}" value="2">
+                    {% endif %}
+                    国家级
+                </label>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-04-20 10:49
+# Last modified: 2017-04-20 15:31
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -389,3 +389,44 @@ def checkStudentSno(request):
             message = "学生信息验证失败"
             print e
     return simplejson.dumps({"status":status,"message":message,"url":url})
+
+
+@dajaxice_register
+def update_project_grade(request, grade_num, project_id):
+    """
+    Update project grade by choice.
+
+    Return code non-zero means there is something wrong. The project grade
+    will be updated only if the remaining count of that grade > 0.
+
+    Author: David
+    """
+    try:
+        if grade_num == '0':
+            new_grade = ProjectGrade.objects.get(grade=GRADE_UN)
+        elif grade_num == '1':
+            new_grade = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
+        elif grade_num == '2':
+            new_grade = ProjectGrade.objects.get(grade=GRADE_NATION)
+        else:
+            return simplejson.dumps({'status': 2})
+
+        school = SchoolProfile.objects.get(userid=request.user)
+        year = get_current_year()
+        cur_list = ProjectSingle.objects.filter(school_id=school.school_id)
+        cur_list = cur_list.filter(year=year)
+
+        t, mp, mn, rp, rn = get_remain_grade_num(cur_list)
+        if (grade_num == '1' and rp <= 0) or (grade_num == '2' and rn <= 0):
+            return simplejson.dumps({'status': 4})
+
+        if not cur_list.filter(project_id=project_id).count():
+            return simplejson.dumps({'status': 3})
+
+        proj = cur_list.filter(project_id=project_id)[0]
+        proj.project_grade = new_grade
+        proj.save()
+        return simplejson.dumps({'status': 0})
+    except Exception, e:
+        logger.info(e)
+        return simplejson.dumps({'status': 1})

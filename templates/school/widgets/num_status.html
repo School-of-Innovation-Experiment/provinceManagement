@@ -1,0 +1,14 @@
+<span class="label label-info">有效项目数量:{{total_num}}</span>
+<span class="label label-important">最大省级项目数量:{{max_province_num}}</span>
+<span class="label label-important">最大国家级项目数量:{{max_nation_num}}</span>
+{% if not remain_province_num %}
+<span class="label label-warning">剩余省级项目数量:{{remain_province_num}}</span>
+<span class="label label-warning">剩余国家级项目数量:{{remain_nation_num}}</span>
+{% else %}
+<span class="label label-info">剩余省级项目数量:{{remain_province_num}}</span>
+{% if not remain_nation_num %}
+<span class="label label-warning">剩余国家级项目数量:{{remain_nation_num}}</span>
+{% else %}
+<span class="label label-info">剩余国家级项目数量:{{remain_nation_num}}</span>
+{% endif %}
+{% endif %}

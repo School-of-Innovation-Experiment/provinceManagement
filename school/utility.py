@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-20 15:02
+# Last modified: 2017-04-20 15:10
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-29
@@ -14,6 +22,7 @@ import time
 import datetime
 import xlwt
 import types
+import math
 
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson
@@ -658,6 +667,26 @@ def get_studentmessage(project):
                 memberlist.append(member)
         teammember['othermember']=','.join(memberlist)
     return teammember
+
+
+def get_remain_grade_num(cur_list):
+    """
+    Get different grade nums info.
+
+    Author: David
+    """
+    grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
+    grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
+    t = cur_list.count()
+    mp = int(math.ceil(0.3 * t))
+    mn = int(math.ceil(0.3 * mp))
+    cp = cur_list.filter(project_grade=grade_province).count()
+    cn = cur_list.filter(project_grade=grade_nation).count()
+    rp = mp - cp - cn 
+    rn = min(rp, mn - cn)
+
+    return t, mp, mn, rp, rn
+
 
 
 

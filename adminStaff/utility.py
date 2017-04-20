@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-20 16:04
+# Last modified: 2017-04-20 16:04
+# Filename: utility.py
+# Description:
 # coding: UTF-8
 
 import os
@@ -30,8 +38,8 @@ def info_xls_province_gen():
     worksheet.col(2).width = len('项目编号') * 400    
     worksheet.write_merge(1, 4, 3, 3, '项目名称')
     worksheet.col(3).width = len('项目名称') * 800
-    worksheet.write_merge(1, 4, 4, 4, '项目类别（甲类、乙类）')
-    worksheet.col(4).width = len('项目类别（甲类、乙类）') * 256
+    worksheet.write_merge(1, 4, 4, 4, '项目级别')
+    worksheet.col(4).width = len('项目级别') * 256
     worksheet.write_merge(1, 4, 5, 5, '项目类型')
     worksheet.write_merge(1, 2, 6, 7, '项目负责人')
     worksheet.write_merge(3, 4, 6, 6, '姓名')
@@ -103,7 +111,7 @@ def info_xls(request):
         #xls_obj.write(row, 2, unicode(proj_obj.project_code))
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.financial_category))
-        xls_obj.write(row, 5, unicode(proj_obj.project_category))
+        xls_obj.write(row, 5, unicode(proj_obj.project_grade))
         xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
         xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
         xls_obj.write(row, 8, unicode(teammember['member_number'])) # 学生人数

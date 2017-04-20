@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-04-20 11:06
+# Last modified: 2017-04-20 15:51
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -608,3 +608,41 @@ def auto_index(request):
         project_set[i].save()
 
     return HttpResponseRedirect(reverse('school.views.home_view'))
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def assign_grade(request):
+    """
+    Assgin grade manually by SCHOOL_USER.
+
+    What is noticeable is that all projects are GRADE_UN if not assigned, no
+    more than 30% of all projects should be GRADE_PROVINCE, no more than 30%
+    of the GRADE_PROVINCE projects should be GRADE_NATION. -- 2017
+
+    Author: David
+    """
+    context = {}
+    school = SchoolProfile.objects.get(userid=request.user)
+    grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
+    grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
+    year = get_current_year()
+
+    cur_list = ProjectSingle.objects.filter(school_id=school.school_id)
+    # cur_list = cur_list.filter(year=year).exclude(project_code=None)
+    cur_list = cur_list.filter(year=year)
+    cur_list = cur_list.order_by('project_code')
+    page = request.GET.get('page') or 1
+    
+    context = getContext(cur_list, page, "assign", 0)
+    context['projects_list'] = context['assign_list']
+
+    t, mp, mn, rp, rn = get_remain_grade_num(cur_list)
+    context['total_num'] = t
+    context['max_province_num'] = mp
+    context['max_nation_num'] = mn
+    context['remain_province_num'] = rp
+    context['remain_nation_num'] = rn 
+
+    return render(request, 'school/assign_grade.html', context)
