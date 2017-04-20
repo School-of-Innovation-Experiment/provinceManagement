@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-19 22:03
+# Last modified: 2017-04-20 08:51
+# Filename: views.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-04-02
@@ -137,4 +145,23 @@ def studentlogin_redirect(request):
         return HttpResponseRedirect(reverse('school.views.student_view'))
     else:
         logout(request)
-        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))        
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))
+
+
+def identity_redirect(request):
+    """
+    Redirect user based on identity.
+
+    Author: David
+    """
+    if check_auth(request.user, ADMINSTAFF_USER):
+        return HttpResponseRedirect('/adminStaff/')
+    elif check_auth(request.user, SCHOOL_USER):
+        return HttpResponseRedirect(reverse('school.views.home_view'))
+    elif check_auth(request.user, EXPERT_USER):
+        return HttpResponseRedirect(reverse('expert.views.home_view'))
+    elif check_auth(request.user, STUDENT_USER):
+        return HttpResponseRedirect(reverse('school.views.student_view'))
+    else:
+        logout(request)
+        return render_to_response('registration/logentry_error.html', context_instance=RequestContext(request))

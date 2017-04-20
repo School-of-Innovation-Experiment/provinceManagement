@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-19 21:59
+# Last modified: 2017-04-19 22:13
+# Filename: urls.py
+# Description:
 """
     Author: tianwei
     Email: liutianweidlut@gmail.com
@@ -27,19 +35,18 @@ urlpatterns = patterns('',
     # Add this to get widgets.AdminDateWidget() working for non is_staff, is_superuser
     # This must be placed before (r'^admin/(.*)', admin.site.root), as that gobals up everything
     url(r'^admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
-
     url(
         r'^',
         include('news.urls'),
         name="news"
     ),
     url(
-        r'^admin/',
-        include(admin.site.urls),
-    ),
-    url(
         r'^accounts/',
         include('registration.urls'),
+    ),
+    url(
+        r'^admin/',
+        include(admin.site.urls),
     ),
     url(
         r'^school/',

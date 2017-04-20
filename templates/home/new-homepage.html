@@ -1,3 +1,5 @@
+{% extends "registration/widgets/baseback.html" %}
+{% comment %}
 {% extends "base/base_home.html" %}
 {% block forejs %}
 {{ block.super }}
@@ -36,4 +38,57 @@
 {% include "base/checkbrowser.html" %}
 <!--links-->
 
+{% endblock %}
+{% endcomment %}
+{% block form-content %}
+{% if request.user.is_authenticated %}
+<h2 class="login">您已登陆，请勿重复登陆</2>
+{%if userauth.is_schooler %}
+<h3>
+    <a href={% url school.views.home_view %} >参赛学校</a>
+</h3>
+{%endif%}
+{%if userauth.is_adminstaff %}
+<h3>
+    <a href="/adminStaff/" >省级管理员</a>
+</h3>
+{%endif%}
+{%if userauth.is_experter %}
+<h3>
+    <a href={% url expert.views.home_view %} >评审专家</a>
+</h3>
+{%endif%}
+{%if userauth.is_student%}
+<h3>
+  <a href={% url school.views.student_view %}  >参赛学生</a>
+</h3>
+{%endif%}
+{%if request.user.is_superuser%}
+<h3>
+    <a href="/admin/"  >超级用户</a>
+</h3>
+{%endif%}
+
+{% else %}
+<form class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={% url identity_redirect %}">
+	{% csrf_token %}
+	<h2 class="login">欢迎登录创新创业训练管理平台</h2>			
+    <br/>
+	{% include 'base/_form.html' %}			
+    {% comment %}
+    <div style="text-align:left;" class="control-group {% if field.errors %}error{% endif %}">
+    <label style="text-align:left;font-size: 16px;width:100px;"  class="control-label login" >身份</label>
+    <select class="span3" name="identity" style="margin-left:-40px">
+        <option value="0">省级管理员</option>
+        <option value="1">校级管理员</option>
+        <option value="2">专家</option>
+        <option value="3">学生</option>
+    </select>
+    </div>
+    {% endcomment %}
+    <button class="btn btn-large btn-success pull-right" id="login-button" type="submit">登陆</button>
+	<p class="forget-text">想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
+</form>	
+{% endif %}
+{% include "base/checkbrowser.html" %}
 {% endblock %}
