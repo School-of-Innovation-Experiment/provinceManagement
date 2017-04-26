@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-11 15:54
-# Last modified: 2016-04-12 10:05
+# Last modified: 2017-04-26 14:38
 # Filename: forms.py
 # Description:
 # coding: UTF-8
@@ -318,3 +318,10 @@ class StudentDispatchForm(forms.Form):
                            ))
     #proj_cate = forms.ChoiceField(required=True,choices=FINANCIAL_CATE_CHOICES, initial=FINANCIAL_CATE_A,widget=forms.Select(attrs={'class':'studispatch'}))
     person_firstname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'studispatch','id':"person_firstname",'placeholder':u"负责人"}))
+
+
+class CommitmentFileForm(ModelForm):
+    class Meta:
+        model = CommitmentFile
+        exclude = {'file_id', 'file_type', 'file_size',
+                   'school', 'year', 'uploadtime'}

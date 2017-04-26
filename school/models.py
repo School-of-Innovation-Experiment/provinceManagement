@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 11:06
-# Last modified: 2017-04-20 11:06
+# Last modified: 2017-04-26 15:31
 # Filename: models.py
 # Description:
 # coding: UTF-8
@@ -24,7 +24,9 @@ from django.contrib.auth.models import User
 
 from const.models import *
 from backend.utility import *
-from users.models import ExpertProfile, StudentProfile, ProjectOrigin, ProjectEnterpriseOrigin, ProjectEnterpriseMaturity
+from users.models import SchoolProfile, ExpertProfile
+from users.models import StudentProfile, ProjectOrigin
+from users.models import ProjectEnterpriseOrigin, ProjectEnterpriseMaturity
 
 from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
@@ -439,5 +441,38 @@ class UploadedFiles(models.Model):
 
     def __unicode__(self):
         return self.project_id.title
+    def file_name(self):
+        return os.path.basename(self.file_obj.name)
+
+
+class CommitmentFile(models.Model):
+    """
+    School Commitment which clarifies the validity of all projects in the
+    specific year.
+
+    Author: David
+    """
+    file_id = models.CharField(
+        max_length=50, primary_key=True, default=lambda:str(uuid.uuid4()),
+        verbose_name=u'承诺书id')
+    file_obj = models.FileField(
+        upload_to=settings.PROCESS_FILE_PATH+'/%Y/%m/%d',
+        verbose_name=u'文件对象')
+    school = models.ForeignKey(SchoolProfile, verbose_name=u'对应学校')
+    year = models.IntegerField(verbose_name=u'对应年份')
+    uploadtime = models.DateTimeField(blank=True, null=True,
+                                      verbose_name=u"上传时间")
+    file_size = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name=u"文件大小")
+    file_type = models.CharField(max_length=50, blank=True, null=True,
+                                 default=None, verbose_name=u"文件类型")
+
+    class Meta:
+        verbose_name = u'学校承诺书'
+        verbose_name_plural = u'学校承诺书'
+
+    def __unicode__(self):
+        return u'{}:{}'.format(self.school, self.year)
+
     def file_name(self):
         return os.path.basename(self.file_obj.name)

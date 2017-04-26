@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:29
-# Last modified: 2017-04-20 13:26
+# Last modified: 2017-04-26 14:48
 # Filename: urls.py
 # Description:
 # coding: UTF-8
@@ -87,6 +87,11 @@ urlpatterns = patterns('',
     url(
         r'^assign_grade/$',
         school_views.assign_grade,
+    ),
+    url(
+        r'^commitment_submit/$',
+        school_views.commitment_submit,
+        name='commitment_submit',
     ),
 )
 

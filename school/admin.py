@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-04-26 12:05
+# Last modified: 2017-04-26 12:06
+# Filename: admin.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-27
@@ -18,7 +26,8 @@ RegisterClass = (# ProjectSingle,
                  ShowProjectSingle,
                  ShowFiles,
                  # PreSubmitEnterprise,
-                 UploadedFiles)
+                 UploadedFiles,
+                 CommitmentFile)
 class Re_Project_ExpertAdmin(admin.ModelAdmin):
     search_fields = ['project__inspector','project__title',]
 class ProjectSingleAdmin(admin.ModelAdmin):

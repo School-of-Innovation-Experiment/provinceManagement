@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-04-20 17:00
+# Last modified: 2017-04-26 15:31
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -37,7 +37,7 @@ from django.contrib.auth import *
 from django.contrib.auth.models import User
 
 from school.models import ProjectSingle, PreSubmit, FinalSubmit
-from school.models import UploadedFiles
+from school.models import UploadedFiles, CommitmentFile
 from school.forms import *
 
 from adminStaff.models import ProjectPerLimits
@@ -628,6 +628,13 @@ def assign_grade(request):
     grade_nation = ProjectGrade.objects.get(grade=GRADE_NATION)
     grade_province = ProjectGrade.objects.get(grade=GRADE_PROVINCE)
     year = get_current_year()
+    commitment, status = CommitmentFile.objects.get_or_create(
+        school=school, year=year)
+    if commitment.file_obj:
+        has_commit = True
+    else:
+        has_commit = False
+    commitment_form = CommitmentFileForm(instance=commitment)
 
     cur_list = ProjectSingle.objects.filter(school_id=school.school_id)
     cur_list = cur_list.filter(year=year).exclude(project_code=None)
@@ -653,4 +660,30 @@ def assign_grade(request):
     context['remain_province_num'] = rp
     context['remain_nation_num'] = rn 
 
+    context['has_commit'] = has_commit
+    context['commitment_form'] = commitment_form
+
     return render(request, 'school/assign_grade.html', context)
+
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def commitment_submit(request):
+    """
+    POST only, handle commitment submit.
+
+    Author: David
+    """
+    if request.method != "POST":
+        return HttpResponse(u'非法方法')
+    school = SchoolProfile.objects.get(userid=request.user)
+    year = get_current_year()
+    commitment, status = CommitmentFile.objects.get_or_create(
+        school=school, year=year)
+    form = CommitmentFileForm(request.POST, request.FILES, instance=commitment)
+    if form.is_valid():
+        commitment = form.save(commit=False)
+        commitment.uploadtime = datetime.datetime.now()
+        commitment.save()
+    return HttpResponseRedirect('/school/assign_grade/')
