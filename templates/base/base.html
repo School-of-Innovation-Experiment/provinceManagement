@@ -23,18 +23,22 @@
   </head>
 
   <body >
+    {% comment %}
     <div class="github-fork-ribbon-wrapper right">
       <div class="github-fork-ribbon">
         <a href="/">创新创业＊省级版</a>
       </div>
     </div>
+    {% endcomment %}
     <div class="container" id="nav-container">
        <!--head content-->
+       {% block head_content %}
        <div class="masthead">
          <!--Head title-->
-         <a href="/"><h1 class="muted head-title">辽宁省大学生创新创业网</h1></a>
+         <a href="/"><h1 class="muted head-title">辽宁省大学生创新创业训练计划项目管理平台</h1></a>
          <p class="head-title-low">Liao Ning the University Students' Innovation Undertaking Network</p>
          <hr class="head-hr">
+        {% endblock %}
         {% block nav_content %}
         {% endblock %}
        </div><!--end mashhead-->

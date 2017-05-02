@@ -1,4 +1,10 @@
 {% extends "registration/widgets/baseback.html" %}
+{% block head_content %}
+{% endblock %}
+{% block nav_content %}
+{% endblock %}
+{% block after_home_content %}
+{% endblock %}
 {% comment %}
 {% extends "base/base_home.html" %}
 {% block forejs %}
@@ -75,7 +81,8 @@
 {% else %}
 <form class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={% url identity_redirect %}">
 	{% csrf_token %}
-	<h2 class="login">欢迎登录创新创业训练管理平台</h2>			
+    <h2 style="text-align:center">欢迎登陆</h2>
+	<h3 style="font-size:2em;text-align:center">辽宁省大学生创新创业训练计划项目管理平台</h3>
     <br/>
 	{% include 'base/_form.html' %}			
     {% comment %}
@@ -93,5 +100,14 @@
 	<p class="forget-text">想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
 </form>	
 {% endif %}
+<!-- temporary css -->
+<style type="text/css">
+.main-content-container {
+    background-color: rgba(0,0,0,0);
+}
+h3, h2 {
+    color: rgb(0, 106, 183);
+}
+</style>
 {% include "base/checkbrowser.html" %}
 {% endblock %}
