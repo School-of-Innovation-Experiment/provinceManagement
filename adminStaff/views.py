@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-03-31 10:51
+# Last modified: 2017-05-04 10:23
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -992,6 +992,8 @@ class AdminStaffService(object):
                 file_path = info_xls_scoreapplication(request,pro_set)
             elif exceltype == EXCEL_TYPE_CERTIFICATES:
                 file_path = info_xls_certificates(request, pro_set)
+            elif exceltype == EXCEL_TYPE_ACHIEVEMENTS:
+                file_path = info_xls_achievements(request, pro_set)
         except Exception,err:
             loginfo(err)
         return MEDIA_URL + "tmp" + file_path[len(TMP_FILES_PATH):]

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 17:15
-# Last modified: 2017-04-20 17:24
+# Last modified: 2017-05-04 10:46
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -718,3 +718,65 @@ def info_xls_certificates(request, proj_set):
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目获得证书学生名单"))
     workbook.save(save_path)
     return save_path
+
+
+def info_xls_achievements_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 5, '大连理工大学大学生创新创业训练计划项目结题验收表项目成果汇总')
+
+    # generate body
+    worksheet.write_merge(1, 1, 0, 0, '项目级别')
+    worksheet.write_merge(1, 1, 1, 1, '项目编号')
+    worksheet.write_merge(1, 1, 2, 2, '项目名称')
+    worksheet.write_merge(1, 1, 3, 3, '指导教师')
+    worksheet.write_merge(1, 1, 4, 4, '成果类别')
+    worksheet.write_merge(1, 1, 5, 5, '相关名称')
+    worksheet.write_merge(1, 1, 6, 6, '相关人员')
+    worksheet.write_merge(1, 1, 7, 7, '附加信息1')
+    worksheet.write_merge(1, 1, 8, 8, '附加信息2')
+    worksheet.write_merge(1, 1, 9, 9, '成果类别')
+    worksheet.write_merge(1, 1, 10, 10, '相关名称')
+    worksheet.write_merge(1, 1, 11, 11, '相关人员')
+    worksheet.write_merge(1, 1, 12, 12, '附加信息1')
+    worksheet.write_merge(1, 1, 13, 13, '附加信息2')
+    worksheet.write_merge(1, 1, 14, 14, '成果类别')
+    worksheet.write_merge(1, 1, 15, 15, '相关名称')
+    worksheet.write_merge(1, 1, 16, 16, '相关人员')
+    worksheet.write_merge(1, 1, 17, 17, '附加信息1')
+    worksheet.write_merge(1, 1, 18, 18, '附加信息2')
+    worksheet.write_merge(1, 1, 19, 19, '成果类别')
+    worksheet.write_merge(1, 1, 20, 20, '相关名称')
+    worksheet.write_merge(1, 1, 21, 21, '相关人员')
+    worksheet.write_merge(1, 1, 22, 22, '附加信息1')
+    worksheet.write_merge(1, 1, 23, 23, '附加信息2')
+
+    return worksheet, workbook
+
+
+def info_xls_achievements(request, proj_set):
+    xls_obj, workbook = info_xls_achievements_gen()
+
+    row = 2
+    for proj in proj_set:
+        achievements = proj.achievementobjects_set.all()
+        if not achievements:
+            continue
+        xls_obj.write(row, 0, unicode(proj.project_grade))
+        xls_obj.write(row, 1, unicode(proj.project_unique_code))
+        xls_obj.write(row, 2, unicode(proj.title))
+        xls_obj.write(row, 3, unicode(proj.adminuser.get_name()))
+        col = 4
+        for item in achievements:
+            xls_obj.write(row, col, unicode(item.get_category_display()))
+            xls_obj.write(row, col+1, unicode(item.title))
+            xls_obj.write(row, col+2, unicode(item.member))
+            xls_obj.write(row, col+3, unicode(item.addition1))
+            xls_obj.write(row, col+4, unicode(item.addition2))
+            col += 5
+        row += 1
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目结题验收表项目成果汇总"))
+    workbook.save(save_path)
+    return save_path 

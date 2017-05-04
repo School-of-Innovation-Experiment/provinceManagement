@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:10
-# Last modified: 2017-03-13 18:19
+# Last modified: 2017-05-04 10:23
 # Filename: __init__.py
 # Description:
 # coding: UTF-8
@@ -386,6 +386,7 @@ EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP = "summary_entrepreneuship"
 EXCEL_TYPE_PROJECTSUMMARY = "projectsummary"
 EXCEL_TYPE_SCOREAPPLICATION = "scoreapplication"
 EXCEL_TYPE_CERTIFICATES = 'certificates'
+EXCEL_TYPE_ACHIEVEMENTS = 'achievements'
 EXCEL_TYPE_CHOICES = (
     (EXCEL_TYPE_BASEINFORMATION, u"基本状态表"),
     (EXCEL_TYPE_APPLICATIONSCORE, u"初期评分表"),
@@ -394,6 +395,7 @@ EXCEL_TYPE_CHOICES = (
     (EXCEL_TYPE_PROJECTSUMMARY,u"项目基本信息汇总表"),
     (EXCEL_TYPE_SCOREAPPLICATION,U"学分申请"),
     (EXCEL_TYPE_CERTIFICATES, u'获得证书学生名单统计表'),
+    (EXCEL_TYPE_ACHIEVEMENTS, u'结题验收表成果'),
 )
 
 FileList={
