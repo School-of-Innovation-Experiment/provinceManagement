@@ -21,7 +21,15 @@
 			<td><a class="btn btn-danger delete{% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
-		{% endif %}
+        {% elif not readonly %}
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text" placeholder="请按格式输入时间:如20160101"></td>
+            <td><input type="text"></td>
+            <td><a class="btn btn-success save" category="0" style="margin-top:12px">保存</a></td>
+        </tr>
+        {% endif %}
 	</table>
 </div>
 <div class="span11">
@@ -47,6 +55,14 @@
 			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
+        {% elif not readonly %}
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text" placeholder="请按格式输入时间:如20160101"></td>
+            <td><input type="text"></td>
+            <td><a class="btn btn-success save" category="0" style="margin-top:12px">保存</a></td>
+        </tr>
 		{% endif %}
 	</table>
 </div>
@@ -73,6 +89,14 @@
 			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
+        {% elif not readonly %}
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text" placeholder="请按格式输入时间:如20160101"></td>
+            <td><input type="text"></td>
+            <td><a class="btn btn-success save" category="0" style="margin-top:12px">保存</a></td>
+        </tr>
 		{% endif %}
 	</table>
 </div>
@@ -99,6 +123,14 @@
 			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
 		</tr>
 		{% endfor %}
+        {% elif not readonly %}
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><select style="margin-top:12px"><option value="国际级">国际级</option><option value="国家级">国家级</option><option value="省级">省级</option><option value="市级">市级</option><option value="校级">校级</option></select></td>
+            <td><a class="btn btn-success save" category="3" style="margin-top:12px">保存</a></td>
+        </tr>
 		{% endif %}
 	</table>
 </div>
