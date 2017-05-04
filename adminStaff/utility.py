@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 17:15
-# Last modified: 2017-05-04 10:46
+# Last modified: 2017-05-04 16:41
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -674,6 +674,27 @@ def get_zipfiles_path(request,filetype,project_manage_form):
             if default_storage.exists(upfile_obj.file_obj):
                 newname = pro_obj.project_unique_code + pro_obj.title + upfile_obj.name + '.' + upfile_obj.file_type
                 f.write(upfile_obj.file_obj.path,newname)
+    f.close()
+    return save_path
+
+
+def get_otherfiles_path(request, project_manage_form):
+    proj_set = get_projectlist(request, project_manage_form)
+    save_path = os.path.join(
+        TMP_FILES_PATH, '大连理工大学大学生创新训练项目项目相关文件压缩包.zip')
+    f = zipfile.ZipFile(save_path, 'w', zipfile.ZIP_DEFLATED)
+    for pro_obj in proj_set:    
+        upfiles = pro_obj.uploadedfiles_set.exclude(
+            Q(name=FILE_TYPE_DICT['application'])|
+            Q(name=FILE_TYPE_DICT['opencheck'])|
+            Q(name=FILE_TYPE_DICT['midcheck'])|
+            Q(name=FILE_TYPE_DICT['summary'])|
+            Q(name=FILE_TYPE_DICT['projectcompilation'])|
+            Q(name__contains=u'学分申请表'))
+        for upfile in upfiles:
+            if default_storage.exists(upfile.file_obj):
+                newname = pro_obj.project_unique_code + pro_obj.title + upfile_obj.name + '.' + upfile_obj.file_type
+                f.write(upfile.file_obj.path,newname)
     f.close()
     return save_path
 

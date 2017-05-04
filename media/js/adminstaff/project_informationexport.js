@@ -7,4 +7,10 @@ function export_excel(exceltype) {
     Dajaxice.adminStaff.Release_Excel(releaseexcel_callback,{'exceltype':exceltype,'project_manage_form':$('#project_manage_form').serialize(true)});
 
 }
+function download_files(filetype){
+    Dajaxice.adminStaff.download_zipfiles(download_callback,{"filetype":filetype,'project_manage_form':$('#project_manage_form').serialize(true)})
+}
 
+function download_callback(data){
+   location.href = data.path; 
+}

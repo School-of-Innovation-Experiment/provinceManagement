@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:43
-# Last modified: 2017-03-31 10:57
+# Last modified: 2017-05-04 16:41
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -43,6 +43,7 @@ from school.utility import get_current_project_query_set
 from adminStaff.models import HomePagePic
 from settings import IS_MINZU_SCHOOL, IS_DLUT_SCHOOL,MEDIA_URL,TMP_FILES_PATH
 from adminStaff.utility import get_average_score_list,get_zipfiles_path
+from adminStaff.utility import get_otherfiles_path
 from backend.decorators import check_auth
 
 def refresh_mail_table(request):
@@ -681,7 +682,10 @@ def project_sync(request,project_sync_list,username,password):
 
 @dajaxice_register
 def download_zipfiles(request,filetype,project_manage_form):
-    path = get_zipfiles_path(request,filetype,project_manage_form) 
+    if filetype == 'other_files':
+        path = get_otherfiles_path(request, project_manage_form)
+    else:
+        path = get_zipfiles_path(request,filetype,project_manage_form) 
     path = MEDIA_URL + "tmp" + path[len(TMP_FILES_PATH):]
     return simplejson.dumps({'path':path})
 
