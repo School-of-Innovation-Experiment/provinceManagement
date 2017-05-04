@@ -5,11 +5,7 @@
 {%block calculate-content%}
 <!--Project Choice-->
 <div class="row">
-  {% if IS_MINZU_SCHOOL%}
     <div class="span2">
-  {%else%}
-    <div class="span2">
-  {%endif%}
     <div class="alert alert-info" style=" text-align:center;">
       <h4>
           {#<a href="{% url adminstaff_home.AdminStaffService.application_report_view pid%}">#}
@@ -50,11 +46,7 @@
         结题验收表</a></h4>
     </div><!--end alert-->
   </div><!--mid right span-->
-  {% if IS_MINZU_SCHOOL%}
     <div class="span2">
-  {%else%}
-    <div class="span2">
-  {%endif%}
     <div class="alert alert-success" style=" text-align:center;">
       <h4>
          {#<a href="{% url student.views.file_upload_view%}"> #}
@@ -63,14 +55,12 @@
       </a></h4>
     </div><!--end alert-->
   </div><!--end right span-->
-  {% if IS_MINZU_SCHOOL%}
     <div class="span2">
       <div class="alert alert-success" style=" text-align:center;">
         <h4><a href="/adminStaff/files_upload_view/{{pid}}">
                成果上传</a></h4>
       </div><!--end alert-->
     </div><!--end right span-->
-  {%endif%}
 </div><!--end row-->
 <!--Notice Messager-->
 {% if readonly %}
