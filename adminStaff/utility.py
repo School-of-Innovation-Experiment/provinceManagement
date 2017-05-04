@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 17:15
-# Last modified: 2017-05-04 16:46
+# Last modified: 2017-05-04 16:50
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -693,7 +693,7 @@ def get_otherfiles_path(request, project_manage_form):
             Q(name__contains=u'学分申请表'))
         for upfile in upfiles:
             if default_storage.exists(upfile.file_obj):
-                newname = pro_obj.project_unique_code + pro_obj.title + upfile_obj.name + '.' + upfile_obj.file_type
+                newname = pro_obj.project_unique_code + pro_obj.title + upfile.name + '.' + upfile.file_type
                 f.write(upfile.file_obj.path,newname)
     f.close()
     return save_path
