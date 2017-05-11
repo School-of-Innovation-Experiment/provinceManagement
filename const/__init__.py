@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-05-11 19:04
+# Last modified: 2017-05-11 19:04
+# Filename: __init__.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27
@@ -224,4 +232,8 @@ School_Code = {
     '10163':"沈阳药科大学",
     '10164':"沈阳医学院",
     '10159':"中国医科大学",
+    '13582':"辽宁科技大学信息技术学院",
+    '13199':"沈阳工业大学工程学院",
+    '13200':"沈阳航空航天大学北方科技学院",
+    '13211':"中国医科大学临床医药学院",
 }
