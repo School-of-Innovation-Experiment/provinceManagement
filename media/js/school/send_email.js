@@ -29,9 +29,14 @@ function StudentDispatch_callback(data){
             
         }
     }
-
+var send_finished = true;
 function send_email_to_students()
 {
+    if(send_finished == false)
+    {
+        alert('请勿重复发送，耐心等待系统发送结果!');
+        return;
+    }
     var emails = $('#multi_emails').val();
     var students_array = emails.split('\n');
     var pattern =  /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -52,11 +57,14 @@ function send_email_to_students()
         }
         email_name.push(item);
     }
+    send_finished = false;
     Dajaxice.school.StudentsDispatch(students_dispatch_callback, {'emails': email_name});
+    alert('已提交发送请求，请等待系统确认，勿多次重复提交!\n等待时间长短根据邮箱数量多少而不同');
 }
 
 function students_dispatch_callback(data)
 {
+    send_finished = true;
     if(data.status == 0)
         alert('发送成功!');
     else if(data.status == 1)
