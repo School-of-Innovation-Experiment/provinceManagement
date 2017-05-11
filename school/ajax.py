@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-04-20 17:00
+# Last modified: 2017-05-11 14:29
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -12,6 +12,8 @@ Created on 2013-4-17
 
 @author: sytmac
 '''
+import re
+import time
 
 from dajax.core import Dajax
 from django.contrib.auth.models import User
@@ -443,3 +445,28 @@ def update_project_grade(request, grade_num, project_id):
     except Exception, e:
         logger.info(e)
         return simplejson.dumps({'status': 1})
+
+
+@dajaxice_register
+def StudentsDispatch(request, emails):
+    for email, name in emails:
+        student_form = StudentDispatchForm(
+            {'student_email': email, 'person_firstname': name})
+        if not student_form.is_valid():
+            return simplejson.dumps({
+                'status': 1, 'reason': student_form.errors.as_text(),
+                'context': {'email': email, 'name': name}})
+        password = student_form.cleaned_data["student_password"]
+        email = student_form.cleaned_data["student_email"]
+        financial_cate = FINANCIAL_CATE_A
+        person_firstname = student_form.cleaned_data["person_firstname"]
+        name = email
+        if password == "":
+            password = email.split('@')[0]
+        flag = Send_email_to_student(request, name, person_firstname, password,
+                                     email, STUDENT_USER,
+                                     financial_cate=financial_cate)
+        if not flag:
+            return simplejson.dumps(
+                {'status': 2, 'context': {'email': email, 'name': name}})
+    return simplejson.dumps({'status': 0})

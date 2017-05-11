@@ -23,6 +23,8 @@
   </head>
 
   <body >
+    {% block top_level %}
+    {% endblock %}
     {% comment %}
     <div class="github-fork-ribbon-wrapper right">
       <div class="github-fork-ribbon">
@@ -45,6 +47,7 @@
     </div><!--end whole container-->
     {# Main-Content Section #}
     {% block content %}{% endblock %}
+
 
     {# Footer Section #}
     {% block home-footer %}
