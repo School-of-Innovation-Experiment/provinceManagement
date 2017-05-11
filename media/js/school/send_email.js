@@ -67,9 +67,11 @@ function students_dispatch_callback(data)
     }
     else if(data.status == 2)
     {
-        var msg = '发送中途失败!原因可能是该邮箱已被使用或激活邮件服务器出现问题,';
+        var msg = '发送中途出现错误!原因可能是该邮箱已被使用或激活邮件服务器出现问题,';
         msg += '若您确认邮箱无误且频繁得到该类错误，请联系系统管理员。';
-        msg += '\n相关信息:\n邮箱:'+data.context.email+'\n负责人:'+data.context.name;
+        msg += '\n相关邮箱:\n';
+        for(var i = 0; i < data.emails.length; i++)
+            msg += data.emails[i] + '\n';
         alert(msg);
     }
 }
