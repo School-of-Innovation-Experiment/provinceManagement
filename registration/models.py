@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 10:20
-# Last modified: 2017-05-12 18:15
+# Last modified: 2017-05-12 20:15
 # Filename: models.py
 # Description:
 # coding: UTF-8
@@ -108,7 +108,6 @@ class RegistrationManager(models.Manager):
                 #此处加监控标志
                 send_mail_flag = send_mail(subject,
                           message,
-                          settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
         else:
             new_user = User.objects.get(email=email)
