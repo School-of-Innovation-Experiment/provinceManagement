@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 10:20
-# Last modified: 2017-04-20 10:37
+# Last modified: 2017-05-12 18:15
 # Filename: models.py
 # Description:
 # coding: UTF-8
@@ -31,6 +31,7 @@ from backend.logging import logger
 from users.models import SchoolProfile, ExpertProfile, StudentProfile
 from const.models import SchoolDict, InsituteCategory
 from adminStaff.models import  ProjectPerLimits
+from registration.utils import send_mail
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -88,7 +89,7 @@ class RegistrationManager(models.Manager):
             site_domain=current_site.domain
 
             if send_email:
-                from django.core.mail import send_mail
+                # from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
                                            {'site':get_current_site(request),
                                             'username':username,

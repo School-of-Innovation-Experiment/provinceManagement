@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-05-12 18:06
+# Last modified: 2017-05-12 18:06
+# Filename: settings.py
+# Description:
 """
     Author: tianwei
     Email: liutianweidlut@gmail.com
@@ -7,7 +15,7 @@
 
 import os
 from os.path import join
-from restricted_settings import EMAIL_USER, EMAIL_PASS
+from restricted_settings import EMAIL_USER, EMAIL_PASS, EMAIL_POOL
 
 SETTINGS_ROOT = os.path.dirname(__file__)
 

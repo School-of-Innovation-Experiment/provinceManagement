@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-05-11 16:52
+# Last modified: 2017-05-12 15:40
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -450,6 +450,7 @@ def update_project_grade(request, grade_num, project_id):
 @dajaxice_register
 def StudentsDispatch(request, emails):
     error_emails = []
+    datatuple = []
     for email, name in emails:
         student_form = StudentDispatchForm(
             {'student_email': email, 'person_firstname': name})
@@ -464,6 +465,9 @@ def StudentsDispatch(request, emails):
         name = email
         if password == "":
             password = email.split('@')[0]
+        # item = (name, person_firstname, password, email,
+        #         STUDENT_USER, financial_cate)
+        # datatuple.append(item)
         flag = Send_email_to_student(request, name, person_firstname, password,
                                      email, STUDENT_USER,
                                      financial_cate=financial_cate)

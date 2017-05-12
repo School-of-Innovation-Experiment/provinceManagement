@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-04-26 15:31
+# Last modified: 2017-05-12 15:40
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -521,6 +521,17 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
         return True and result and send_mail_flag
     else:
         return False
+
+
+@login_required
+def Send_email_to_students(request, datalist):
+    """
+    Send massive emails.
+
+    datalist is a list in which each element is in this format:
+        (name, person_firstname, password, email, identity, financial_cate)
+    """
+    raise NotImplementedError
 
 
 def Count_email_already_exist(request):
