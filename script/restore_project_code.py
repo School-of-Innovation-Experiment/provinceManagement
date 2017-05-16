@@ -37,7 +37,7 @@ for project_id, project_code in curs.fetchall():
 projs = ProjectSingle.objects.filter(year=year)
 cnt = projs.count()
 for idx, proj in enumerate(projs, 1):
-    if idx % (cnt / 5) == 0:
+    if idx % (cnt / 20) == 0:
         print '{:4d} / {:4d}'.format(idx, cnt)
     proj.project_code = id_codes[proj.project_id]
     proj.save()
