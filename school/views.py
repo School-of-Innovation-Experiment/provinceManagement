@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-05-17 18:46
+# Last modified: 2017-05-17 20:23
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -520,7 +520,7 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate,managername=person_firstname)
         return (True and result and send_mail_flag, '')
     else:
-        return (False, u'该邮箱帐号已被激活，请勿重复激活')
+        return (False, u'该邮箱已被激活，请勿重复激活')
 
 
 @login_required
