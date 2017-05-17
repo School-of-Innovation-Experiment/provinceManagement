@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-05-12 15:40
+# Last modified: 2017-05-17 18:46
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -518,9 +518,9 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
     if not AuthStudentExist(request, email):
         user,send_mail_flag = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate,managername=person_firstname)
-        return True and result and send_mail_flag
+        return (True and result and send_mail_flag, '')
     else:
-        return False
+        return (False, u'该邮箱帐号已被激活，请勿重复激活')
 
 
 @login_required

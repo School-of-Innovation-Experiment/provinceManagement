@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-05-12 15:40
+# Last modified: 2017-05-17 18:46
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -87,14 +87,14 @@ def  StudentDispatch(request, form):
                     message = u"乙类项目达到最大限度，无权发送"
                     return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'remaining_activation_times':remaining_activation_times, 'message':message})
 
-            flag = Send_email_to_student(request, name, person_firstname,password, email,STUDENT_USER, financial_cate=financial_cate)
+            flag, reason = Send_email_to_student(request, name, person_firstname,password, email,STUDENT_USER, financial_cate=financial_cate)
             if flag:
                 message = u"发送邮件成功"
                 # remaining_activation_times -= 1
                 # return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message})
             else:
-                message = u"邮件发送失败，请重新发送"
+                message = reason or u"邮件发送失败，请重新发送"
                 # return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message,'remaining_activation_times':remaining_activation_times})
                 return simplejson.dumps({'field':student_form.data.keys(), 'status':'1', 'message':message})
     else:
@@ -468,9 +468,9 @@ def StudentsDispatch(request, emails):
         # item = (name, person_firstname, password, email,
         #         STUDENT_USER, financial_cate)
         # datatuple.append(item)
-        flag = Send_email_to_student(request, name, person_firstname, password,
-                                     email, STUDENT_USER,
-                                     financial_cate=financial_cate)
+        flag, reason = Send_email_to_student(
+                request, name, person_firstname, password,
+                email, STUDENT_USER, financial_cate=financial_cate)
         if not flag:
             error_emails.append(email)
     if not error_emails:
