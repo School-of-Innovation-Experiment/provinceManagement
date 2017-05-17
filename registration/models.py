@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 10:20
-# Last modified: 2017-05-12 20:15
+# Last modified: 2017-05-17 09:47
 # Filename: models.py
 # Description:
 # coding: UTF-8
@@ -104,7 +104,7 @@ class RegistrationManager(models.Manager):
                                            'username':username,
                                            'password':password}
                                            )
-                logger.error(message)
+                logger.info(message)
                 #此处加监控标志
                 send_mail_flag = send_mail(subject,
                           message,
