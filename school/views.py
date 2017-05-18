@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-05-18 11:03
+# Last modified: 2017-05-18 18:08
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -528,7 +528,9 @@ def Send_email_to_student(request, username, person_firstname,password, email, i
     #判断用户名是否存在，存在的话直接返回
     loginfo(p=person_firstname, label="person_firstname")
     if not AuthStudentExist(request, email):
-        user,send_mail_flag = RegistrationManager().create_inactive_user(request,username,person_firstname,password,email,identity)
+        user,send_mail_flag = RegistrationManager().create_inactive_user(
+            request,username,person_firstname,password,
+            email,identity,send_email=False)
         result = create_newproject(request=request, new_user=user, financial_cate=financial_cate,managername=person_firstname)
         return (True and result and send_mail_flag, '')
     else:
