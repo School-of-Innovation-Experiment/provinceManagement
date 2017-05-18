@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-05-17 20:23
+# Last modified: 2017-05-18 11:03
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -124,7 +124,8 @@ def home_view(request, is_expired=False):
     """
 #    current_list = get_running_project_query_set().filter(adminuser = request.user)
     school_obj = SchoolProfile.objects.get(userid = request.user)
-    current_list = ProjectSingle.objects.filter(school_id = school_obj.school_id).order_by('-year','financial_category__category','project_code')
+    # current_list = ProjectSingle.objects.filter(school_id = school_obj.school_id).order_by('-year','financial_category__category','project_code')
+    current_list = ProjectSingle.objects.filter(school_id = school_obj.school_id)
     url_para=''
     try:
         if request.method == 'POST':
@@ -136,8 +137,19 @@ def home_view(request, is_expired=False):
             url_para     = project_form.get_url_para()
     except:
         pass
+
     readonly=is_expired
     readonly=False
+
+    current_list = list(current_list)
+
+    current_list.sort(key=lambda x: (
+        -x.year,
+        x.presubmit_set.all()[0].is_audited if\
+            x.project_category == CATE_INNOVATION else\
+            x.presubmitenterprise_set.all()[0].is_audited,
+        x.project_code,
+        x.project_id))
 
 #    try:
 #        limits = ProjectPerLimits.objects.get(school__userid=request.user)
