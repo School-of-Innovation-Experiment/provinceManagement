@@ -79,7 +79,7 @@ function students_dispatch_callback(data)
         msg += '若您确认邮箱无误且频繁得到该类错误，请联系系统管理员。';
         msg += '\n相关邮箱:\n';
         for(var i = 0; i < data.emails.length; i++)
-            msg += data.emails[i] + '\n';
+            msg += data.emails[i] + ' ' + data.reasons[i] + '\n';
         alert(msg);
     }
 }

@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-05-17 18:46
+# Last modified: 2017-05-18 08:47
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -450,6 +450,7 @@ def update_project_grade(request, grade_num, project_id):
 @dajaxice_register
 def StudentsDispatch(request, emails):
     error_emails = []
+    reasons = []
     datatuple = []
     for email, name in emails:
         student_form = StudentDispatchForm(
@@ -473,7 +474,9 @@ def StudentsDispatch(request, emails):
                 email, STUDENT_USER, financial_cate=financial_cate)
         if not flag:
             error_emails.append(email)
+            reasons.append(reason)
     if not error_emails:
         return simplejson.dumps({'status': 0})
     else:
-        return simplejson.dumps({'status': 2, 'emails': error_emails})
+        return simplejson.dumps({'status': 2, 'emails': error_emails,
+                                 'reasons': reasons})
