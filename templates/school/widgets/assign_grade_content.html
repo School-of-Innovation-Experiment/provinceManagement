@@ -15,7 +15,7 @@
             <td>{{project.project_code}}</td>
             <td title="{{project.title}}">{{project.title|truncatechars:15}}</td>
             <td>{{project.project_category}}</td>
-            <td>{{item.inspector}}</td>
+            <td>{{project.inspector}}</td>
             <td>
                 <span><a href="{% url school.views.application_report_view project.project_id%}" class='btn btn-primary'>申请</a></span>
                 <span><a href="{% url school.views.file_view project.project_id%}" class='btn btn-primary'>文件操作</a></span>
