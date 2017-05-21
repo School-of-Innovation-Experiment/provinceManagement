@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 15:02
-# Last modified: 2017-05-18 17:20
+# Last modified: 2017-05-21 08:26
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -516,8 +516,7 @@ def info_xls_school_gen(school):
     worksheet.col(0).width = len('项目编号') * 400  
     worksheet.write_merge(1, 4, 1, 1, '项目名称')
     worksheet.col(1).width = len('项目名称') * 800
-    worksheet.write_merge(1, 4, 2, 2, '项目类别（甲类、乙类）')
-    worksheet.col(2).width = len('项目类别（甲类、乙类）') * 256
+    worksheet.write_merge(1, 4, 2, 2, '项目级别')
     worksheet.write_merge(1, 4, 3, 3, '项目类型')
     worksheet.write_merge(1, 2, 4, 5, '项目负责人')
     worksheet.write_merge(3, 4, 4, 4, '姓名')
@@ -574,7 +573,7 @@ def info_xls(request):
 
         xls_obj.write(row, 0, unicode(proj_obj.project_code))
         xls_obj.write(row, 1, unicode(proj_obj.title))
-        xls_obj.write(row, 2, unicode(proj_obj.financial_category))
+        xls_obj.write(row, 2, unicode(proj_obj.project_grade))
         xls_obj.write(row, 3, unicode(proj_obj.project_category))
         xls_obj.write(row, 4, unicode(teammember['manager_name']))# 负责人
         xls_obj.write(row, 5, unicode(teammember['manager_studentid'])) # 学号
