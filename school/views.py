@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 09:22
-# Last modified: 2017-05-18 18:08
+# Last modified: 2017-05-22 15:45
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -638,7 +638,8 @@ def auto_index(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def assign_grade(request):
+@time_controller(phase=STATUS_PRESUBMIT)
+def assign_grade(request, is_expired=False):
     """
     Assgin grade manually by SCHOOL_USER.
 
@@ -687,6 +688,7 @@ def assign_grade(request):
 
     context['has_commit'] = has_commit
     context['commitment_form'] = commitment_form
+    context['read_only'] = is_expired
 
     return render(request, 'school/assign_grade.html', context)
 
@@ -694,12 +696,15 @@ def assign_grade(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-def commitment_submit(request):
+@time_controller(phase=STATUS_PRESUBMIT)
+def commitment_submit(request, is_expired=False):
     """
     POST only, handle commitment submit.
 
     Author: David
     """
+    if is_expired:
+        return HttpResponse(u'不在规定提交时间内')
     if request.method != "POST":
         return HttpResponse(u'非法方法')
     school = SchoolProfile.objects.get(userid=request.user)

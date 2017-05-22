@@ -30,16 +30,22 @@
         {% endif %}
 
         {% if has_commit %}
-        <h3>本年度项目列表
-            <span id="num_status">
-                {% include "school/widgets/num_status.html" %}
-            </span>
-        </h3>
-        <div id="assign_table">
-            {% include "school/widgets/assign_grade_content.html" %}
-        </div>
-        <script type='text/javascript' src="{{STATIC_URL}}js/school/assign_grade.js"></script>
-        {% include "adminStaff/widgets/paginator1.html" %}
+            <h3>本年度项目列表
+                <span id="num_status">
+                    {% include "school/widgets/num_status.html" %}
+                </span>
+            </h3>
+            {% if not read_only %}
+                <div id="assign_table">
+                    {% include "school/widgets/assign_grade_content.html" %}
+                </div>
+                <script type='text/javascript' src="{{STATIC_URL}}js/school/assign_grade.js"></script>
+                {% include "adminStaff/widgets/paginator1.html" %}
+            {% else %}
+                <div style="text-align:center">
+                    <h2>不在申报时间内，禁止使用该功能!</h2>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 </div>

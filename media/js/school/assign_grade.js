@@ -23,6 +23,8 @@ $(function(){
                 alert('无权限修改');
             else if(data.status == 4)
                 alert('达到该类申报最大数量');
+            else if(data.status == 5)
+                alert('不在申报时间内，禁止使用该功能!');
             window.location.reload();
         }
     }

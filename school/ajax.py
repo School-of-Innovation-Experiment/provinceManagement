@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-04-12 09:56
-# Last modified: 2017-05-18 08:47
+# Last modified: 2017-05-22 15:45
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -28,6 +28,7 @@ from const.models import SchoolDict, ProjectCategory, FinancialCategory, Insitut
 from const import *
 import datetime
 from backend.logging import logger, loginfo
+from backend.decorators import time_controller
 from django.shortcuts import get_object_or_404
 from school.utility import *
 from users.models import SchoolProfile, StudentProfile
@@ -403,6 +404,9 @@ def update_project_grade(request, grade_num, project_id):
 
     Author: David
     """
+    is_expired = not time_controller(phase=STATUS_PRESUBMIT).check_day()
+    if is_expired:
+        return simplejson.dumps({'status': 5})
     try:
         if grade_num == '0':
             new_grade = ProjectGrade.objects.get(grade=GRADE_UN)
