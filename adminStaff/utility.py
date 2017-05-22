@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 16:04
-# Last modified: 2017-04-20 16:04
+# Last modified: 2017-05-22 12:33
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -72,9 +72,7 @@ def info_xls(request):
     #     return i
 
     def _format_number(i):
-        i = str(i)
-        i = '0' * (4-len(i)) + i
-        return i
+        return '{:05d}'.format(i)
 
     # name_code = '2013' + request.user.username
     # loginfo(p=teammanager.first_name, label="get first_name")
