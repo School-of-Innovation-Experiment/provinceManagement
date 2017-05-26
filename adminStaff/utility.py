@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 16:04
-# Last modified: 2017-05-22 12:33
+# Last modified: 2017-05-26 15:31
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -255,13 +255,14 @@ def scored_xls_gen():
     worksheet.write_merge(1, 4, 15, 15, '总经费（元）')
     worksheet.write_merge(1, 4, 16, 16, '项目所属一级学科')
     worksheet.write_merge(1, 4, 17, 17, '项目简介（200字以内）')
-    worksheet.write_merge(1, 4, 18, 18, '评分小组')
-    worksheet.write_merge(1, 2, 19, 21, '专家评分')
-    worksheet.write_merge(3, 4, 19, 19, '专家1')
-    worksheet.write_merge(3, 4, 20, 20, '专家2')
-    worksheet.write_merge(3, 4, 21, 21, '专家3')
-    worksheet.write_merge(1, 4, 22, 22, '平均分')
-    worksheet.write_merge(1, 4, 23, 23, '排名')
+    worksheet.write_merge(1, 4, 18, 18, '审核状态')
+    # worksheet.write_merge(1, 4, 18, 18, '评分小组')
+    # worksheet.write_merge(1, 2, 19, 21, '专家评分')
+    # worksheet.write_merge(3, 4, 19, 19, '专家1')
+    # worksheet.write_merge(3, 4, 20, 20, '专家2')
+    # worksheet.write_merge(3, 4, 21, 21, '专家3')
+    # worksheet.write_merge(1, 4, 22, 22, '平均分')
+    # worksheet.write_merge(1, 4, 23, 23, '排名')
 
     worksheet.col(3).width = len('学校') * 600
     worksheet.col(4).width = len('项目编号') * 300
@@ -277,7 +278,8 @@ def scored_result_xls(request, sorted_list):
         group_index = index+1
         for item_index, item in enumerate(group):
             rating = item_index+1
-            proj, score1, score2, score3, total_score = item
+            # proj, score1, score2, score3, total_score = item
+            proj, is_pass = item
             school = proj.school.schoolprofile_set.all()[0]
             students = proj.student_group_set.all()
             charge_student = students[0]
@@ -303,16 +305,17 @@ def scored_result_xls(request, sorted_list):
             xls_obj.write(row, 15, '15000')
             xls_obj.write(row, 16, unicode(proj.project_category))
             xls_obj.write(row, 17, unicode(presubmit.proj_introduction))
-            xls_obj.write(row, 18, unicode(group_index))
-            xls_obj.write(row, 19, '%.3f' % score1)
-            xls_obj.write(row, 20, '%.3f' % score2)
-            xls_obj.write(row, 21, '%.3f' % score3)
-            xls_obj.write(row, 22, '%.3f' % (sum([score1, score2, score3])/3))
-            xls_obj.write(row, 23, unicode(rating))
+            xls_obj.write(row, 18, u'通过' if is_pass else u'不通过')
+            # xls_obj.write(row, 18, unicode(group_index))
+            # xls_obj.write(row, 19, '%.3f' % score1)
+            # xls_obj.write(row, 20, '%.3f' % score2)
+            # xls_obj.write(row, 21, '%.3f' % score3)
+            # xls_obj.write(row, 22, '%.3f' % (sum([score1, score2, score3])/3))
+            # xls_obj.write(row, 23, unicode(rating))
             row += 1
     save_path = os.path.join(
         TMP_FILES_PATH,
         "%s%s.xls" % (str(datetime.date.today().year),
-                      "年辽宁省大学生创新创业训练计划评审得分汇总表"))
+                      "年辽宁省大学生创新创业训练计划评审汇总表"))
     workbook.save(save_path)
     return save_path

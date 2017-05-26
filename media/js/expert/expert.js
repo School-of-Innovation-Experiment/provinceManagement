@@ -1,21 +1,17 @@
 function submit_score(pid)
 {
-    var score=$('#score').val();
+    var pass_status=$('#pass_status').prop('checked');
     var pid=pid;
-    Dajaxice.expert.expert_score(score_callback,{'pid':pid,'score':score});
+    Dajaxice.expert.expert_score(review_callback,{'pid':pid,'is_pass':pass_status});
     return false;
 }
-function score_callback(data)
+function review_callback(data)
 {
-    if(data=="ValueError")
-        alert("请检查输入内容！");
-    else if(data=="QueryError")
-        alert("评分失败，请重新评分！");
-    else if(data=="ScoreError")
-        alert("请输入有效评分(0-100)！");
+    if(data=="Error")
+        alert("审核失败,请刷新页面尝试重新提交！");
     else if(data=="SUCCESS")
     {
-        var redirect=confirm("评分成功！点击好返回项目列表，点击取消停留本页面。");
+        var redirect=confirm("审核成功！点击好返回项目列表，点击取消停留本页面。");
         if(redirect)
         {
             window.location="/expert";
@@ -23,6 +19,6 @@ function score_callback(data)
     }
     else
     {
-        alert("未知错误，请重新评分！");
+        alert("未知错误，请重试！");
     }
 }

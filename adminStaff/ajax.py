@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-05-26 13:57
+# Last modified: 2017-05-26 15:31
+# Filename: ajax.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-29
@@ -444,7 +452,37 @@ def ResetUserPassword(request, form,uid):
 
 
 @dajaxice_register
-def Expert_Project_Assign(request, group_num=20,
+def Expert_Project_Assign(request):
+    experts = ExpertProfile.objects.filter(group=2017)
+
+    projects = get_current_project_query_set()\
+        .exclude(school__schoolName=u'测试用学校')\
+        .exclude(project_grade__grade=GRADE_UN)\
+        .exclude(project_code__isnull=True)\
+        .order_by('school', 'project_grade')
+
+    current_school = None
+    current_cnt = 0
+    chunk_size = int(math.ceil(1.0 * projects.count() / experts.count()))
+
+    resp = ''
+
+    for chunk_idx, expert in enumerate(experts):
+        projs = projects[chunk_idx * chunk_size: (chunk_idx+1) * chunk_size]
+        for proj in projs:
+            proj_assign, created = Re_Project_Expert.objects.get_or_create(
+                project=proj,
+                expert=expert)
+            proj_assign.save()
+        resp += '专家{}被分配了{}个项目\n'.format(expert, len(projs))
+    resp += '{}个专家一共被分配了{}个项目,平均每个专家{}个项目\n'.format(
+        len(experts), len(projects), chunk_size)
+    return HttpResponse(resp)
+
+
+
+@dajaxice_register
+def _Expert_Project_Assign(request, group_num=20,
                           expert_per_group=3, project_per_group=134):
     # experts filter
     # TODO: experts order by category if required
@@ -494,7 +532,33 @@ def Expert_Project_Assign(request, group_num=20,
 
 
 @dajaxice_register
-def scored_result(request, group_num=20, expert_per_group=3,
+def scored_result(request, forced=False):
+    experts = ExpertProfile.objects.filter(group=2017)
+    projs = [map(lambda y: y.project, x.re_project_expert_set.all()) for 
+            x in experts]
+    if not forced:
+        for index, projs in enumerate(projs):
+            for proj in projs:
+                review = proj.re_project_expert_set.all()[0]
+                if review.pass_p is False:
+                    response = u'项目【{}】未审核,对应专家为:{}\n'.format(
+                        proj, review.expert)
+                    return simplejson.dumps(
+                        {'status': 'ERROR',
+                         'message': response})
+    sorted_project_groups = [
+        map(lambda proj: (proj, proj.re_project_expert_set.all()[0].score), pg)
+        for pg in projs]
+    for spg in sorted_project_groups:
+        spg.sort(key=lambda x: x[1], reverse=True)
+    path = AdminStaffService.get_scored_result_xls_path(
+        request,
+        sorted_project_groups)
+    return simplejson.dumps({'status': 'SUCCESS', 'path': path})
+
+
+@dajaxice_register
+def _scored_result(request, group_num=20, expert_per_group=3,
                   project_per_group=134, forced=False):
     experts = ExpertProfile.objects.exclude(Q(group=-1) | Q(group=0))
     expert_groups = [experts.filter(group=i+1) for i in xrange(group_num)]

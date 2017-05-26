@@ -38,7 +38,7 @@
         <th>项目类型</th>
         <th>项目类别</th>
         <th>评审状态</th>
-        <th>分数情况</th>
+        <th>通过状态</th>
         <th>操作</th>
       </tr>
     </thead>
@@ -56,7 +56,13 @@
           {% endif %}
         </td>
         <td>
-            {{ item.score|stringformat:"d" }}
+            {% if item.pass_p %}
+            {% if item.score == 1 %}
+            <span class="label label-info">通过</span>
+            {% else %}
+            <span class="label label-important">不通过</span>
+            {% endif %}
+            {% endif %}
         </td>
         <td>
           <span><a href="/expert/review/{{item.project.project_id}}?page={{page}}" class='btn btn-primary'>审阅</a></span>
