@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-11-26 14:10
-# Last modified: 2017-05-04 10:23
+# Last modified: 2017-05-27 11:48
 # Filename: __init__.py
 # Description:
 # coding: UTF-8
@@ -477,7 +477,7 @@ DEPARTMENT_CODE = (
     ('1300', u'体育教学部'),
     ('1400', u'国际文化交流学院'),
     ('1500', u'国防教育学院'),
-    ('1600', u'创新实验学院'),
+    ('1600', u'创新创业学院'),
     ('1700', u'城市学院'),
     ('1800', u'继续教育学院'),
     ('1900', u'机关'),
