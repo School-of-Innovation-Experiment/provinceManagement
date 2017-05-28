@@ -1,3 +1,11 @@
+#!/usr/local/bin/python3
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2017-05-28 08:47
+# Last modified: 2017-05-28 08:47
+# Filename: urls.py
+# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-28
@@ -45,10 +53,10 @@ urlpatterns = patterns(
         r'^project_limitnumSettings$',
         school_views.project_limitnumSettings,
         ),
-	url(
-		r'^subject_rating$',
-		school_views.SubjectRating,
-		),
+#    url(
+#       r'^subject_rating$',
+#       school_views.SubjectRating,
+#       ),
     url(
         r'^fundsmanage/$',
         school_views.funds_manage,

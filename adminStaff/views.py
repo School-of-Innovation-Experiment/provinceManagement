@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-20 10:16
-# Last modified: 2017-05-04 10:23
+# Last modified: 2017-05-28 08:51
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -502,10 +502,8 @@ class AdminStaffService(object):
             school_name = request.GET.get('school_name')
             if school_name == "None": school_name = None
 
-            if (not school_name) or int(school_name) == -1:
-                subject_list =  subject_list.filter(recommend = True)
-            else:
-                subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+            if school_name and int(school_name) != -1:
+                subject_list = subject_list.filter(Q(school=SchoolProfile.objects.get(id = school_name)))
         else:
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
@@ -513,10 +511,8 @@ class AdminStaffService(object):
                 page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
                 tab="nrec"
-                if int(school_name) == -1:
-                    subject_list = subject_list.filter(recommend = True)
-                else:
-                    subject_list = subject_list.filter(Q(recommend = True) & Q(school = SchoolProfile.objects.get(id = school_name)))
+                if int(school_name) != -1:
+                    subject_list = subject_list.filter(Q(school = SchoolProfile.objects.get(id = school_name)))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
@@ -568,6 +564,7 @@ class AdminStaffService(object):
         subject_obj = ProjectSingle.objects.get(project_id = project_id)
         try:
             subject_obj.project_grade = ProjectGrade.objects.get(grade=changed_grade)
+            subject_obj.recommend = True
             subject_obj.save()
         except:
             pass
