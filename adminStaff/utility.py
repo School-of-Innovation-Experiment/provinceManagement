@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-20 16:04
-# Last modified: 2017-05-26 15:31
+# Last modified: 2017-05-31 12:31
 # Filename: utility.py
 # Description:
 # coding: UTF-8
@@ -238,7 +238,7 @@ def scored_xls_gen():
 
     worksheet.write_merge(0, 0, 0, 23, str(year)+"年辽宁省大学生创新创业训练计划评审得分汇总表")
     worksheet.write_merge(1, 4, 0, 0, '立项年份')
-    worksheet.write_merge(1, 4, 1, 1, '省（区、市）')
+    worksheet.write_merge(1, 4, 1, 1, '项目级别')
     worksheet.write_merge(1, 4, 2, 2, '高校代码')
     worksheet.write_merge(1, 4, 3, 3, '高校名称')
     worksheet.write_merge(1, 4, 4, 4, '项目编号')
@@ -287,7 +287,7 @@ def scored_result_xls(request, sorted_list):
             presubmit_type = PreSubmit if proj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
             presubmit = presubmit_type.objects.get(project_id=proj.project_id)
             xls_obj.write(row, 0, unicode(proj.year)) 
-            xls_obj.write(row, 1, '辽宁省')
+            xls_obj.write(row, 1, unicode(proj.project_grade))
             xls_obj.write(row, 2, unicode(school.userid))
             xls_obj.write(row, 3, unicode(school.school))
             xls_obj.write(row, 4, unicode(proj.project_code[:9]+proj.project_code[-3:]))
@@ -303,7 +303,7 @@ def scored_result_xls(request, sorted_list):
             xls_obj.write(row, 13, '10000')
             xls_obj.write(row, 14, '5000')
             xls_obj.write(row, 15, '15000')
-            xls_obj.write(row, 16, unicode(proj.project_category))
+            xls_obj.write(row, 16, unicode(proj.insitute))
             xls_obj.write(row, 17, unicode(presubmit.proj_introduction))
             xls_obj.write(row, 18, u'通过' if is_pass else u'不通过')
             # xls_obj.write(row, 18, unicode(group_index))
