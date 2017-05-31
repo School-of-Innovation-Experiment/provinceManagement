@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 13:36
-# Last modified: 2016-10-09 14:07
+# Last modified: 2017-05-31 18:29
 # Filename: views.py
 # Description:
 # Create your views here.
@@ -209,7 +209,7 @@ def open_report_view_work(request, pid = None, is_expired = False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_ONGOING)
+#@time_controller(phase=STATUS_ONGOING)
 def mid_report_view(request, pid = None, is_expired = False):
     data = mid_report_view_work(request, pid, is_expired)
     if data["isRedirect"]:
@@ -269,7 +269,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     related_ao = AchievementObjects.objects.filter(project_id=data['pid'])
@@ -470,7 +470,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None,is_expired = False):
     """
     file management view
@@ -495,7 +495,7 @@ def file_view(request, pid=None,is_expired = False):
 @login_required
 # @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):
     """
     file delete view
