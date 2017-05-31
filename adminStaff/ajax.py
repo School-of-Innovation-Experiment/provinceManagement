@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-05-26 13:57
-# Last modified: 2017-05-26 15:31
+# Last modified: 2017-05-31 13:05
 # Filename: ajax.py
 # Description:
 # coding: UTF-8
@@ -547,7 +547,8 @@ def scored_result(request, forced=False):
                         {'status': 'ERROR',
                          'message': response})
     sorted_project_groups = [
-        map(lambda proj: (proj, proj.re_project_expert_set.all()[0].score), pg)
+        map(lambda proj: (proj, proj.re_project_expert_set.all()[0].score or \
+            not proj.re_project_expert_set.all()[0].pass_p), pg)
         for pg in projs]
     for spg in sorted_project_groups:
         spg.sort(key=lambda x: x[1], reverse=True)
