@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2017-04-14 11:40
-# Last modified: 2017-04-14 11:52
+# Last modified: 2017-06-01 16:07
 # Filename: ajax.py
 # Description:
 #coding=utf-8
@@ -216,7 +216,7 @@ def new_or_update_member(request, stugroup_form):
         else:
             illegal_projects = ProjectSingle.objects.exclude(
                 over_status__status=OVER_STATUS_NORMAL)
-            id_in_illegal = [student_id in [student.studentId for student in project.student_group_set.all()] for project in illegal_projects]
+            id_in_illegal = [student_id in [student.studentId for student in _project.student_group_set.all()] for _project in illegal_projects]
             if any(id_in_illegal):
                 ret = {'status': '1', 'message': u"相同学号已存在于其它正在未正常结题项目中"}
             else:
