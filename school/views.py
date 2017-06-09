@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 10:51
-# Last modified: 2016-09-13 20:10
+# Last modified: 2017-06-09 10:31
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -175,7 +175,7 @@ def teacherLimitNumList(request):
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def SubjectRating(request,is_expired=False):
     readonly=is_expired
     subject_grade_form = forms.SubjectGradeForm()

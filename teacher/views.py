@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-10-09 14:06
-# Last modified: 2016-10-09 14:07
+# Last modified: 2017-06-09 10:36
 # Filename: views.py
 # Description:
 import datetime, os, sys, uuid
@@ -65,7 +65,7 @@ def home_view(request, is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_PRESUBMIT)
+#@time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):
     data = application_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
@@ -78,7 +78,7 @@ def application_report_view(request,pid=None,is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_ONGOING)
+#@time_controller(phase=STATUS_ONGOING)
 def open_report_view(request, pid=None,is_expired=False):
     data = open_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
@@ -92,7 +92,7 @@ def open_report_view(request, pid=None,is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
@@ -104,7 +104,7 @@ def final_report_view(request, pid=None,is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_ONGOING)
+#@time_controller(phase=STATUS_ONGOING)
 def mid_report_view(request,pid=None, is_expired=False):
     data = mid_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
@@ -116,7 +116,7 @@ def mid_report_view(request,pid=None, is_expired=False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def file_view(request, pid=None,is_expired = False):
     """
     file management view
@@ -140,7 +140,7 @@ def file_view(request, pid=None,is_expired = False):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def file_delete_view(request, pid=None, fid=None, is_expired=False):
     """
     file delete view
@@ -197,7 +197,7 @@ def StudentDispatch(request):
 @login_required
 @authority_required(TEACHER_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def processrecord_view(request, pid=None,is_expired = False):
     """
     file management view
