@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-13 13:36
-# Last modified: 2017-05-31 18:29
+# Last modified: 2017-06-09 10:32
 # Filename: views.py
 # Description:
 # Create your views here.
@@ -150,7 +150,7 @@ def techcompetition_detail(request,pid=None):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_ONGOING)
+#@time_controller(phase=STATUS_ONGOING)
 def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
@@ -348,7 +348,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
 @login_required
 #@authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_PRESUBMIT)
+#@time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
