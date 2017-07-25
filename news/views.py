@@ -3,7 +3,7 @@
 # Author: David
 # Email: youchen.du@gmail.com
 # Created: 2016-09-12 21:01
-# Last modified: 2016-09-12 21:03
+# Last modified: 2017-07-25 10:22
 # Filename: views.py
 # Description:
 # coding: UTF-8
@@ -150,6 +150,8 @@ def list_news_by_cate(request, news_cate):
     if not news_cate == NEWS_CATEGORY_DOCUMENTS:
         context["news_cate"] = news_cate
         context['%s_active' % news_cate.category] = 'active'
+    else:
+        context['documents_active'] = 'active'
     return render(request, 'home/news-list-by-cate.html', \
                   Context(context))
 
