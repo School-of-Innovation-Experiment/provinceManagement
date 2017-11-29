@@ -338,9 +338,11 @@ def application_report_view_work(request, pid=None, is_expired=False):
         loginfo(p=project.project_category.category, label="project category")
 
     if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.is_past    
+        readonly = not is_applying or project.over_status.status not in (
+            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
     elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.is_past    
+        readonly = not is_applying or project.over_status.status not in (
+            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
     elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
         readonly = False
     elif check_auth(user = request.user, authority = SCHOOL_USER):
@@ -600,11 +602,13 @@ def funds_view(request):
     ret = CFundManage.get_form_tabledata(project)
     return render(request, 'student/funds_change.html',ret)
 
-def get_check_readonly(request,project):
+def get_check_readonly(request, project):
     if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = project.is_past
+        readonly = project.over_status.status not in (
+            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
     elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = project.is_past
+        readonly = project.over_status.status not in (
+            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
     elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
         readonly = False
     elif check_auth(user = request.user, authority = SCHOOL_USER):
@@ -613,5 +617,4 @@ def get_check_readonly(request,project):
         readonly = False
     else:
         readonly = False
-    return readonly
-
+    return readonly or other_cond
