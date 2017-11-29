@@ -617,4 +617,4 @@ def get_check_readonly(request, project):
         readonly = False
     else:
         readonly = False
-    return readonly or other_cond
+    return readonly
