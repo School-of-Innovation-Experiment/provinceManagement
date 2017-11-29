@@ -17,6 +17,7 @@ import random
 import re,sha
 import uuid
 from datetime import date
+from django.utils import timezone
 from django.http import HttpResponse, Http404
 from registration.models import *
 from adminStaff import forms
@@ -32,8 +33,8 @@ from const import *
 from teacher.models import TeacherMonthComment
 from student.models import  StudentWeeklySummary, Student_Group, Funds_Group
 from school.models import ProjectSingle, Project_Is_Assigned, Re_Project_Expert,UploadedFiles
-from const.models import UserIdentity, InsituteCategory, ProjectGrade, ProjectCategory
-from users.models import ExpertProfile, AdminStaffProfile, ApplyControl
+from const.models import UserIdentity, InsituteCategory, ProjectGrade, ProjectCategory, ApplyControl
+from users.models import ExpertProfile, AdminStaffProfile
 from registration.models import RegistrationProfile
 from django.db import transaction
 from django.db.models import Q
@@ -850,11 +851,17 @@ class AdminStaffService(object):
     def ProjectLimitNumReset(request):
         num_limit_form = forms.NumLimitForm()
         school_limit_num_list = AdminStaffService.SchoolLimitNumList()
-        TeacherProjectPerLimits.objects.all().delete()
-        ProjectPerLimits.objects.all().delete()
-        for p in ProjectSingle.objects.filter(is_past=False):
-            p.is_past = True
-            p.save()
+        TeacherProjectPerLimits.objects.all().delete()  # Delete teacher limits
+        ProjectPerLimits.objects.all().delete()  # Delete school limits
+        ProjectSingle.objects.filter(is_past=False).update(is_past=True)
+        # Allow to complete new application
+        ac, _ = ApplyControl.objects.get_or_create(origin=None)
+        ac.is_applying = True
+        ac.save()
+        # Reset time settings
+        pc = ProjectControl.objects.get()
+        pc.pre_start_day = timezone.now()
+        pc.save()
         return render_to_response("adminStaff/projectlimitnumSettings.html",{'num_limit_form':num_limit_form,'school_limit_list':school_limit_num_list},context_instance=RequestContext(request))
 
     @staticmethod

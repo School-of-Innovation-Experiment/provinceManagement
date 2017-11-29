@@ -142,7 +142,7 @@ def techcompetition_detail(request,pid=None):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+#@time_controller(phase=STATUS_FINSUBMIT)
 def open_report_view(request, pid = None, is_expired = False):
     data = open_report_view_work(request, pid, is_expired)
     if data['isRedirect'] :
@@ -235,7 +235,7 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 @login_required
 @authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_FINSUBMIT)
+# @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
     data = final_report_view_work(request, pid, is_expired)
     related_ao = AchievementObjects.objects.filter(project_id=data['pid'])
@@ -308,15 +308,13 @@ def final_report_view_work(request, pid=None,is_expired=False):
 @login_required
 #@authority_required(STUDENT_USER)
 @only_user_required
-@time_controller(phase=STATUS_PRESUBMIT)
+#@time_controller(phase=STATUS_PRESUBMIT)
 def application_report_view(request,pid=None,is_expired=False):    
     data = application_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
     else :         
         return render(request, 'student/application.html', data)
-
-
 
 
 def application_report_view_work(request, pid=None, is_expired=False):
@@ -327,9 +325,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
     """
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    is_currentyear = check_year(project)
     teammember=get_studentmessage(project)
-    is_applying = check_applycontrol(project)
     pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
     try:
         innovation = pro_type.objects.get(project_id=project.project_id)
@@ -337,20 +333,9 @@ def application_report_view_work(request, pid=None, is_expired=False):
         loginfo(p=err, label="get innovation")
         loginfo(p=project.project_category.category, label="project category")
 
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not is_applying or project.over_status.status not in (
-            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
-    elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not is_applying or project.over_status.status not in (
-            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
-    elif check_auth(user = request.user, authority = SCHOOL_USER):
-        readonly = not get_schooluser_project_modify_status(project)
-    else:
-        readonly = False
+    readonly = get_check_readonly(request, project)
 
-    is_show =  check_auth(user=request.user,authority=STUDENT_USER)
+    is_show = check_auth(user=request.user,authority=STUDENT_USER)
 
     if project.project_category.category == CATE_INNOVATION:
         iform = ApplicationReportForm
@@ -364,11 +349,6 @@ def application_report_view_work(request, pid=None, is_expired=False):
         is_innovation = False
 
     isRedirect = False
-    # print "^^^pre ^^^^^ " + str(pre.key_notes)
-    
-
-
-
     teacher_enterpriseform=Teacher_EnterpriseForm(instance=teacher_enterprise)
     if request.method == "POST" and readonly is not True:
         info_form = InfoForm(request.POST,pid=pid,instance=project)
@@ -603,18 +583,16 @@ def funds_view(request):
     return render(request, 'student/funds_change.html',ret)
 
 def get_check_readonly(request, project):
-    if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = project.over_status.status not in (
-            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
+    school = SchoolProfile.objects.get(id=project.school_id)
+    admin_control = ApplyControl.objects.get(origin=None)
+    if not request.user:
+        readonly = True
+    elif check_auth(user=request.user,authority=STUDENT_USER):
+        readonly = not school.is_applying or not admin_control.is_applying
     elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = project.over_status.status not in (
-            OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
-    elif check_auth(user = request.user, authority = ADMINSTAFF_USER):
-        readonly = False
+        readonly = not school.is_applying or not admin_control.is_applying
     elif check_auth(user = request.user, authority = SCHOOL_USER):
         readonly = not get_schooluser_project_modify_status(project)
-    elif check_auth(user = request.user, authority = EXPERT_USER):
-        readonly = False
     else:
         readonly = False
     return readonly
