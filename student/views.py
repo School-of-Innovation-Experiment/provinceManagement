@@ -76,7 +76,7 @@ def member_change(request):
     print student_account
     project = ProjectSingle.objects.get(student=student_account)
     student_group = Student_Group.objects.filter(project = project)
-    lock = project.recommend or (project.project_grade.grade != GRADE_SCHOOL)
+    lock = project.recommend or (project.project_grade.grade != GRADE_UN)
     files = set()
     for s in student_group:
         if s.scoreFile:
