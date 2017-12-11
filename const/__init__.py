@@ -361,6 +361,7 @@ MEMBER_NUM_LIMIT = {
     CATE_INNOVATION: 3,
     CATE_ENTERPRISE: 5,
     CATE_ENTERPRISE_EE: 5,
+    CATE_RESEARCH: 3,
 }
 
 # School recommend rate
