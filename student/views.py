@@ -337,7 +337,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
 
     is_show = check_auth(user=request.user,authority=STUDENT_USER)
 
-    if project.project_category.category == CATE_INNOVATION:
+    if project.project_category.category in (CATE_INNOVATION, CATE_RESEARCH):
         iform = ApplicationReportForm
         pre = get_object_or_404(PreSubmit, project_id=pid)
         teacher_enterprise=None

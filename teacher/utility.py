@@ -48,7 +48,7 @@ def create_newproject(request, new_user, category):
         project.save()
 
 
-        if category == CATE_INNOVATION:
+        if category == CATE_INNOVATION or category == CATE_RESEARCH:
             pre = PreSubmit()
             pre.content_id = uuid.uuid4()
             pre.project_id = project
