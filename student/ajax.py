@@ -207,10 +207,10 @@ def new_or_update_member(request, stugroup_form):
             ret = {'status': '1', 'message': u"人员已满，不可添加"}
         else:
             illegal_projects = ProjectSingle.objects.exclude(
-                over_status__status=OVER_STATUS_NORMAL)
+                Q(over_status__status=OVER_STATUS_NORMAL)|Q(over_status__status=OVER_STATUS_OPENCHECK))
             id_in_illegal = [student_id in [student.studentId for student in _project.student_group_set.all()] for _project in illegal_projects]
             if any(id_in_illegal):
-                ret = {'status': '1', 'message': u"相同学号已存在于其它正在未正常结题项目中"}
+                ret = {'status': '1', 'message': u"相同学号已存在于其它未正常结题项目中"}
             else:
                 new_student = Student_Group(studentId = student_id,
                                             studentName = student_name,
