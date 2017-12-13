@@ -1,11 +1,3 @@
-#!/usr/local/bin/python3
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2017-05-28 08:47
-# Last modified: 2017-05-28 08:47
-# Filename: urls.py
-# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-28

@@ -1,11 +1,3 @@
-#!/usr/local/bin/python3
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2016-12-29 16:57
-# Last modified: 2017-06-16 09:01
-# Filename: utility.py
-# Description:
 # coding: UTF-8
 
 import os, sys, datetime, uuid

@@ -1,11 +1,3 @@
-#!/usr/bin/python
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2016-11-26 14:30
-# Last modified: 2017-03-13 16:36
-# Filename: models.py
-# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27

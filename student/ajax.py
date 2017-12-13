@@ -1,11 +1,3 @@
-#!/usr/local/bin/python3
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2017-04-14 11:40
-# Last modified: 2017-06-01 16:07
-# Filename: ajax.py
-# Description:
 #coding=utf-8
 import os, sys,re
 from os.path import join

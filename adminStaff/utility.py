@@ -1,11 +1,3 @@
-#!/usr/local/bin/python3
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2017-04-20 17:15
-# Last modified: 2017-05-04 16:50
-# Filename: utility.py
-# Description:
 # coding: UTF-8
 
 import os

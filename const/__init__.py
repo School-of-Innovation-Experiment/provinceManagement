@@ -1,11 +1,3 @@
-#!/usr/bin/python
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2016-11-26 14:10
-# Last modified: 2017-05-27 11:48
-# Filename: __init__.py
-# Description:
 # coding: UTF-8
 '''
 Created on 2013-03-27

@@ -1,11 +1,4 @@
-#!/usr/local/bin/python3
 # coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2017-03-16 09:13
-# Last modified: 2017-03-16 09:27
-# Filename: update_project_category.py
-# Description:
 from .school.models import ProjectSingle
 from .const.models import ProjectCategory
 titles = []

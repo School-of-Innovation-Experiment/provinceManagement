@@ -1,11 +1,4 @@
-#!/usr/local/bin/python3
 # coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2017-03-14 11:57
-# Last modified: 2017-03-14 12:14
-# Filename: update_id_from_backup.py
-# Description:
 import MySQLdb
 
 con_local = MySQLdb.connect(host='localhost',user='root',passwd='root',

@@ -1,11 +1,4 @@
-#!/usr/bin/python
 # coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2016-12-01 15:42
-# Last modified: 2017-06-01 16:12
-# Filename: fab_update.py
-# Description:
 from fabric.api import cd, run, env, sudo
 
 

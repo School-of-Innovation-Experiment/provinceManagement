@@ -1,11 +1,3 @@
-#!/usr/bin/python
-# coding: UTF-8
-# Author: David
-# Email: youchen.du@gmail.com
-# Created: 2016-11-26 14:43
-# Last modified: 2017-05-04 16:41
-# Filename: ajax.py
-# Description:
 # coding: UTF-8
 '''
 Created on 2013-3-29
