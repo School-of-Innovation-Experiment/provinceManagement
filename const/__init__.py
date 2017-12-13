@@ -288,6 +288,7 @@ DLUT_MAJOR_CHOICES = (
     ('95',"俄语"),
     ('96',"化学工程与工业生物工程"),
     ('97',"药学"),
+    ('98',"运动训练"),
 )
 # minzu major
 MINZU_MAJOR_CHOICES = (
