@@ -326,7 +326,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
     loginfo(p=pid+str(is_expired), label="in application")
     project = get_object_or_404(ProjectSingle, project_id=pid)
     teammember=get_studentmessage(project)
-    pro_type = PreSubmit if project.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+    pro_type = PreSubmit if project.project_category.category in (CATE_INNOVATION, CATE_RESEARCH) else PreSubmitEnterprise
     try:
         innovation = pro_type.objects.get(project_id=project.project_id)
     except Exception, err:
