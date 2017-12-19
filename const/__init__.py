@@ -376,6 +376,7 @@ else:
 EXCEL_TYPE_BASEINFORMATION = "baseinformation"
 EXCEL_TYPE_APPLICATIONSCORE = "applicationscore"
 EXCEL_TYPE_SUMMARYSHEET_INNOVATE = "summary_innovate"
+EXCEL_TYPE_SUMMARYSHEET_RESEARCH = "summary_research"
 EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP = "summary_entrepreneuship"
 EXCEL_TYPE_PROJECTSUMMARY = "projectsummary"
 EXCEL_TYPE_SCOREAPPLICATION = "scoreapplication"

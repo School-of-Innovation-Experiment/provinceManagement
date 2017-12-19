@@ -235,6 +235,69 @@ def info_xls_summaryinnovate(request,proj_set):
     workbook.save(save_path)
     return save_path
 
+def info_xls_summaryresearch_gen():
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('sheet1')
+    style = cell_style(horizontal=True,vertical=True)
+
+    # generate header
+    worksheet.write_merge(0, 0, 0, 10, '大连理工大学大学生科研训练项目汇总表(%s年)' % str(datetime.date.today().year+1),style)
+
+    # generate body
+    worksheet.write_merge(1, 1, 0, 0, '序号')
+    worksheet.write_merge(1, 1, 1, 1, '学生姓名')
+    worksheet.col(1).width = len('学生姓名')*200
+    worksheet.write_merge(1, 1, 2, 2, '学号')
+    worksheet.col(2).width = len('学号')*400
+    worksheet.write_merge(1, 1, 3, 3, '班级')
+    worksheet.col(3).width = len('班级')*300
+    worksheet.write_merge(1, 1, 4, 4, '项目名称')
+    worksheet.col(4).width = len('项目名称')*800
+    worksheet.write_merge(1, 1, 5, 5, '指导教师')
+    worksheet.col(5).width = len('指导教师')*200
+    worksheet.write_merge(1, 1, 6, 6, '职称')
+    worksheet.write_merge(1, 1, 7, 7, '所在院系')
+    worksheet.write_merge(1, 1, 8, 10, '备注')
+    return worksheet, workbook
+
+def info_xls_summaryresearch(request,proj_set):
+    """
+    """
+    def _format_number(i):
+        i = str(i)
+        i = '0' * (4-len(i)) + i
+        return i
+    print CATE_RESEARCH
+    proj_set = proj_set.filter(project_category__category = CATE_RESEARCH)
+    xls_obj, workbook = info_xls_summaryresearch_gen()
+    style = cell_style(horizontal=True,vertical=True)
+
+    # _index = 1
+    row = 1
+    number = 0
+    for proj_obj in proj_set:
+        number += 1
+        studentlist=get_students(proj_obj)
+        row_project_start = row + 1
+        for student in studentlist:
+            row += 1
+            xls_obj.write(row, 1, unicode(student.studentName))
+            xls_obj.write(row, 2, unicode(student.studentId))
+            xls_obj.write(row, 3, unicode(student.classInfo))
+        if row_project_start > row :
+            row = row_project_start
+        xls_obj.write_merge(row_project_start,row,0,0,str(number),style)
+        xls_obj.write_merge(row_project_start,row,4,4,unicode(proj_obj.title),style)
+        xls_obj.write_merge(row_project_start,row,5,5,unicode(proj_obj.adminuser.get_name()),style)
+        xls_obj.write_merge(row_project_start,row,6,6,unicode(proj_obj.adminuser.titles),style)
+        xls_obj.write_merge(row_project_start,row,7,7,unicode(proj_obj.school.get_school_name()),style)
+        xls_obj.write_merge(row_project_start,row,8,10)
+        # _index += 1
+    # write xls file
+    save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生科研训练项目汇总表"))
+    workbook.save(save_path)
+    return save_path
+
 def info_xls_summaryentrepreneuship_gen():
     workbook = xlwt.Workbook(encoding='utf-8')
     worksheet = workbook.add_sheet('sheet1')

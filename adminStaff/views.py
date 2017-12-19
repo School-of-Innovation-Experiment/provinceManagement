@@ -980,6 +980,8 @@ class AdminStaffService(object):
                 file_path = info_xls_expertscore(request,pro_set)
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_INNOVATE:
                 file_path = info_xls_summaryinnovate(request,pro_set)
+            elif exceltype == EXCEL_TYPE_SUMMARYSHEET_RESEARCH:
+                file_path = info_xls_summaryresearch(request,pro_set)
             elif exceltype == EXCEL_TYPE_SUMMARYSHEET_ENTREPRENEUSHIP:
                 file_path  = info_xls_summaryentrepreneuship(request,pro_set)
             elif exceltype == EXCEL_TYPE_PROJECTSUMMARY:
