@@ -334,7 +334,8 @@ def info_xls_summaryentrepreneuship(request,proj_set):
         i = str(i)
         i = '0' * (4-len(i)) + i
         return i
-    proj_set = proj_set.exclude(project_category__category = CATE_INNOVATION)
+    proj_set = proj_set.filter(
+        project_category__category__in=(CATE_ENTERPRISE_EE, CATE_ENTERPRISE))
     xls_obj, workbook = info_xls_summaryentrepreneuship_gen()
     style = cell_style(horizontal=True,vertical=True)
 
