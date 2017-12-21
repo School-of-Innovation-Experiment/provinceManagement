@@ -581,7 +581,9 @@ def delete_project_id(request, pid):
     message = ""
     try:
         project = ProjectSingle.objects.get(Q(project_id = pid))
-        project.delete()
+        student = project.student
+        user = student.userid
+        user.delete()
         message = 'ok'
         return simplejson.dumps({"message": message, "pid": pid})
     except Exception, e:
