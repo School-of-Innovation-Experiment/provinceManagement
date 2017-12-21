@@ -66,7 +66,7 @@ def brute_delete(request, email):
     删除已激活User，删除User, Student及相关Project，Presubmit，finalsubmit
     追加删除Re_Project_Single, Papers, TechCompetition, patents, UploadedFiles
     """
-    message = ""
+    message = "删除成功"
     user = User.objects.get(email = email)
     if not has_delete_access(request,user):
         message = u"超出权限，删除失败"
