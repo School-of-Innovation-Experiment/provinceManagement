@@ -74,8 +74,9 @@ def brute_delete(request, email):
     student = StudentProfile.objects.get(userid = user)
     project = student.projectsingle
     is_past = project.is_past
-    message = u'禁止删除往届项目' + str(is_past)
-    return simplejson.dumps({'message': message})
+    if is_past:
+        message = u'禁止删除往届项目'
+        return simplejson.dumps({'message': message})
     student.delete()
     try:
         project = ProjectSingle.objects.get(student__userid = user)
