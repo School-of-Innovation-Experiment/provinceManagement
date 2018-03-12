@@ -152,7 +152,8 @@ def open_report_view(request, pid = None, is_expired = False):
 
 def open_report_view_work(request, pid = None, is_expired = False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
-    readonly = get_check_readonly(request,project)
+    # Only check restrictions by admin
+    readonly = get_check_readonly(request, project, bypass_school=True)
     try:
         open_data = OpenSubmit.objects.get(project_id=pid)
     except:
@@ -201,7 +202,9 @@ def mid_report_view_work(request, pid = None, is_expired = False):
     student mid report
     """
     project = get_object_or_404(ProjectSingle, project_id = pid)
-    readonly = get_check_readonly(request,project)
+    # No Check
+    readonly = get_check_readonly(request, project,
+                                  bypass_school=True, bypass_admin=True)
     try:
         mid = get_object_or_404(MidSubmit, project_id = pid)
     except:
@@ -333,6 +336,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
         loginfo(p=err, label="get innovation")
         loginfo(p=project.project_category.category, label="project category")
 
+    # Full check, admin and school
     readonly = get_check_readonly(request, project)
 
     is_show = check_auth(user=request.user,authority=STUDENT_USER)
@@ -582,15 +586,18 @@ def funds_view(request):
     ret = CFundManage.get_form_tabledata(project)
     return render(request, 'student/funds_change.html',ret)
 
-def get_check_readonly(request, project):
+def get_check_readonly(request, project, bypass_school=False,
+                       bypass_admin=False):
     school = SchoolProfile.objects.get(id=project.school_id)
     admin_control = ApplyControl.objects.get(origin=None)
+    school_applying = school.is_applying or bypass_school
+    admin_applying = admin_control.is_applying or bypass_admin
     if not request.user:
         readonly = True
     elif check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = not school.is_applying or not admin_control.is_applying
+        readonly = not school_applying or not admin_applying
     elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = not school.is_applying or not admin_control.is_applying
+        readonly = not school_applying or not admin_applying
     elif check_auth(user = request.user, authority = SCHOOL_USER):
         readonly = not get_schooluser_project_modify_status(project)
     else:
