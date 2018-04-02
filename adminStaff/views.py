@@ -578,7 +578,7 @@ class AdminStaffService(object):
         try:
             if ProjectSingle.objects.filter(project_unique_code = project_unique_code).count():
                 raise
-            project_obj.project_unique_code = project_unique_code  
+            project_obj.project_unique_code = project_unique_code
             project_obj.save()
             if len(project_unique_code.strip()) == 0:
                project_unique_code = "无"
@@ -625,7 +625,8 @@ class AdminStaffService(object):
         adminStaff = AdminStaffProfile.objects.get(userid = request.user)
         is_finishing = adminStaff.is_finishing
         # pro_list=ProjectSingle.objects.filter(Q(project_grade=1)|Q(project_grade=2))
-        pro_list = ProjectSingle.objects.filter(over_status__status=OVER_STATUS_NOTOVER)
+        pro_list = ProjectSingle.objects.filter(Q(over_status__status=OVER_STATUS_NOTOVER)
+                                                |Q(over_status__status=OVER_STATUS_DELAY))
 
         year_list = get_yearlist(pro_list,'year')
         if year_list:
