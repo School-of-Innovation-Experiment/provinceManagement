@@ -57,7 +57,7 @@ def delete_bad_files(request):
     若已损毁，则删除数据库对应记录
     """
     try:
-        project = get_current_project_query_set().get(student__userid = request.user)   
+        project = get_current_project_query_set().get(student__userid = request.user)
         file_set = UploadedFiles.objects.filter(project_id = project)
         for f in file_set:
             if not default_storage.exists(f.file_obj.path):
@@ -193,7 +193,7 @@ def mid_report_view(request, pid = None, is_expired = False):
     data = mid_report_view_work(request, pid, is_expired)
     print data
     if data["isRedirect"]:
-        return HttpResponseRedirect( '/student/file_upload_view/' + pid ) 
+        return HttpResponseRedirect( '/student/file_upload_view/' + pid )
     else:
         return render(request, "student/mid.html", data)
 
@@ -248,8 +248,8 @@ def final_report_view(request, pid=None,is_expired=False):
     data['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
 
     if data['isRedirect'] :
-        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
-    else :         
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
+    else :
         return render(request, 'student/final.html', data)
 
 
@@ -266,11 +266,15 @@ def final_report_view_work(request, pid=None,is_expired=False):
     project = get_object_or_404(ProjectSingle, project_id=pid)
     is_finishing = check_finishingyear(project)
     over_status = project.over_status.status
-    loginfo(p=is_finishing ,label ="is_finishing") 
+    loginfo(p=is_finishing ,label ="is_finishing")
     if check_auth(user=request.user,authority=STUDENT_USER):
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        readonly = (
+            over_status not in (OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
+            or not is_finishing)
     elif check_auth(user=request.user,authority=TEACHER_USER):
-        readonly = (over_status != OVER_STATUS_NOTOVER) or not is_finishing
+        readonly = (
+            over_status not in (OVER_STATUS_NOTOVER, OVER_STATUS_DELAY)
+            or not is_finishing)
     elif check_auth(user=request.user,authority=ADMINSTAFF_USER):
         readonly = False
     elif check_auth(user=request.user,authority=SCHOOL_USER):
@@ -312,18 +316,18 @@ def final_report_view_work(request, pid=None,is_expired=False):
 #@authority_required(STUDENT_USER)
 @only_user_required
 #@time_controller(phase=STATUS_PRESUBMIT)
-def application_report_view(request,pid=None,is_expired=False):    
+def application_report_view(request,pid=None,is_expired=False):
     data = application_report_view_work(request, pid, is_expired)
     if request.method == 'POST' and data['isRedirect'] :
-        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) ) 
-    else :         
+        return HttpResponseRedirect( '/student/file_upload_view/' + str(pid) )
+    else :
         return render(request, 'student/application.html', data)
 
 
 def application_report_view_work(request, pid=None, is_expired=False):
     """
         readonly determined by time
-        is_show determined by identity 
+        is_show determined by identity
         is_innovation determined by project_category
     """
     loginfo(p=pid+str(is_expired), label="in application")
@@ -365,7 +369,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
                     isRedirect = True
                     # print "lzlzlzlzl " + str(pre.key_notes)
                     # isRedirect = True
-                    
+
             else:
                 logger.info("Form Valid Failed"+"**"*10)
                 logger.info(info_form.errors)
@@ -404,7 +408,7 @@ def application_report_view_work(request, pid=None, is_expired=False):
             'teammember':teammember,
             'innovation':innovation,
             #lz add
-            'isRedirect':isRedirect, 
+            'isRedirect':isRedirect,
             }
     return data
 
@@ -506,7 +510,7 @@ def file_upload_view(request,errortype=None,pid=None,is_expired=False):
 
 
 def files_upload_view_work(request,pid=None,errortype=None):
-    project = get_object_or_404(ProjectSingle, project_id=pid) 
+    project = get_object_or_404(ProjectSingle, project_id=pid)
     error_flagset = fileupload_flag_init()
     if request.method == "POST" :
         if request.FILES != {}:
