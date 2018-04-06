@@ -19,6 +19,8 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http import HttpResponseForbidden, Http404
+from django.contrib.auth.models import User
+from django.contrib.auth import logout, login, load_backend, authenticate
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators import csrf
@@ -132,3 +134,56 @@ def admin_account_view(request):
 
     data = {"form": form}
     return render(request, "settings/admin.html", data)
+
+
+
+@login_required
+@csrf.csrf_protect
+def search_user_view(request):
+    user = request.user
+    query_set = User.objects.filter(username__endswith=user.username)
+    data = {"query_set": query_set}
+    return render(request, "registration/search_user.html", data)
+
+
+@login_required
+@csrf.csrf_protect
+def reset_login_view(request, name):
+    user = request.user
+    username = name
+    if username and user.username == username.split('_')[-1]:
+        logout(request)
+        new_user = User.objects.filter(username=username)[0]
+        if new_user is not None and new_user.is_active:
+            backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+            new_user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            login(request, new_user)
+    return HttpResponseRedirect('/')
+
+
+@login_required
+@csrf.csrf_protect
+def binding_view(request):
+    login_failed = False
+    data = {"login_failed": login_failed}
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = authenticate(username=username, password=password)
+        new_username = request.user.username
+        if user is not None and user.is_active:
+            if check_auth(user=user, authority=STUDENT_USER):
+                year = user.studentprofile_set.all()[0].projectsingle.year
+                user.username = "s_{0}".format(year)+ "_" + new_username
+                print("#"*10,user.username)
+                user.save()
+                return HttpResponseRedirect('/settings/search/')
+            elif check_auth(user=user, authority=TEACHER_USER):
+                user.username = "t_" + new_username
+                user.save()
+                return HttpResponseRedirect('/settings/search/')
+        else:
+            login_failed = True
+            data = {"login_failed": login_failed}
+            return render(request, "registration/binding.html", data)
+    return render(request, "registration/binding.html", data)

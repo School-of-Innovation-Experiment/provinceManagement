@@ -1,0 +1,50 @@
+{% extends "base/base_home.html" %}
+{% load i18n %}
+
+{% block home_content %}
+<div class="col-center-block">
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title" >绑定账号</h3>
+    </div>
+    <div class="panel-body">
+			<form  class="form-signin" method="post" action="{% url binding %}">
+			{% csrf_token %}
+				<div class="container-fluid">
+				<div class="row">
+		    <div class="col-md-4"><p class="helpblock">username:</p></div>
+				<div class="col-md-8"><input type="text" class="input-block-level" placeholder="Username" name="username"></div>
+				</div>
+				<div class="row">
+		    <div class="col-md-1"><p class="helpblock">password:</p></div>
+				<div class="col-md-4"><input type="password" class="input-block-level" placeholder="Password" name="password"></div>
+				</div>
+				</div>
+				<div>
+				<button class="btn btn-large btn-primary" type="submit" onclick="if(confirm('您确定要绑定吗?')==false)return false;">绑定</button>
+		    </div>
+			</form>
+		  {% if login_failed %}
+		  <script type='text/javascript' >
+		    alert("账号不存在或密码错误！");
+		  </script>
+		  {% endif %}
+    </div>
+</div>
+</div>
+
+<style>
+   p.helpblock {
+        font-size:20px;
+        font-style:italic;
+        color:#666666;
+   }
+	 div.col-center-block{
+		float: none;
+    display: block;
+    margin-left: 30%;
+    margin-right: 30%;
+	 }
+</style>
+
+{%endblock%}

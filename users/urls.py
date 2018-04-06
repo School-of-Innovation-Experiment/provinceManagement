@@ -27,4 +27,18 @@ urlpatterns = patterns('',
         r'^admin/$',
         users_views.admin_account_view
     ),
+    url(
+        r'^search/$',
+        users_views.search_user_view
+    ),
+    url(
+        r'^relogin/(?P<name>.+)$',
+        users_views.reset_login_view,
+        name="relogin"
+    ),
+    url(
+        r'^binding/$',
+        users_views.binding_view,
+        name="binding"
+    ),
 )
