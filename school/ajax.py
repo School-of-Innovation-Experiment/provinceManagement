@@ -202,7 +202,7 @@ def TeacherDispatch(request, form):
             table = refresh_mail_table(request)
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message, 'table': table})
         else:
-            message = u"相同邮件已经发送，中断发送"
+            message = u"相同邮件已经发送或内部错误"
             return simplejson.dumps({'field':teacher_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':teacher_form.data.keys(),'error_id':teacher_form.errors.keys(),'message':u"输入有误"})

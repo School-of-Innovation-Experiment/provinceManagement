@@ -24,46 +24,50 @@ class ExpertDispatchForm(forms.Form):
     expert_personname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"expert_personname",'placeholder':u"专家姓名"}))
 
 class SchoolDictDispatchForm(forms.Form):
-    SCHOOL_CHOICE_list = []
-    school_list        = SchoolDict.objects.all()
-    for obj in school_list:
-        SCHOOL_CHOICE_list.append((obj.id, obj.schoolName))
-    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-    school_password = forms.CharField(max_length=20, required=False,
-                                      widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
-                           ),
-)
-    school_email    = forms.EmailField(required=True,
-                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
-                           ))
-    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
-    school_personname = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'span2','id':"school_personname",'placeholder':u"学院管理员"}))
-    def __init__(self, *args, **kwargs):
-        super(SchoolDictDispatchForm, self).__init__(*args, **kwargs)
-        SCHOOL_CHOICE_list = []
-        school_list        = SchoolDict.objects.all()
-        for obj in school_list:
-            SCHOOL_CHOICE_list.append((obj.id, obj.schoolName))
-        SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-        self.fields["school_name"].choices = SCHOOL_CHOICE
+    school_email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'placeholder': u"邮箱",
+            'id': 'school_email'}))
+    school_choices = [(x.id, x.schoolName) for x in SchoolDict.objects.all()]
+    school_name = forms.ChoiceField(required=True,choices=school_choices)
+    school_personname = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "school_personname",
+            'placeholder': u"学院管理员"}))
+    school_uid = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "school_uid",
+            'placeholder': u"学院管理员工号"}))
+
+    def clean_school_uid(self):
+        uid = self.cleaned_data['school_uid']
+        if '_' in uid:
+            raise exceptions.ValidationError(u'工号不能包含特殊字符')
+        return uid
+
 
 # WARNING!! maybe delete this form, DONOT use it!
 class SchoolDispatchForm(forms.Form):
-    SCHOOL_CHOICE_list = []
-    school_list        = SchoolProfile.objects.all()
-    for obj in school_list:
-        SCHOOL_CHOICE_list.append((obj.id, obj.school))
-    SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-    school_password = forms.CharField(max_length=20, required=False,
-                                      widget=forms.TextInput(attrs={'class':'span2','id':"school_password",'placeholder':u"默认密码：邮箱名字",'id':'school_password'}
-                           ),
-)
-    school_email    = forms.EmailField(required=True,
-                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"邮箱",'id':'school_email'}
-                           ))
-    school_name     = forms.ChoiceField(required=True,choices=SCHOOL_CHOICE)
-    school_personname = forms.CharField(required=True,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"school_personname",'placeholder':u"学院管理员"}))
+    school_choices = [(x.id, x.school) for x in SchoolProfile.objects.all()]
+    school_email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'placeholder': u"邮箱",
+            'id':'school_email'}))
+    school_name = forms.ChoiceField(required=True,choices=school_choices)
+    school_personname = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "school_personname",
+            'placeholder': u"学院管理员"}))
 
 class StudentDispatchForm(forms.Form):
     student_email = forms.EmailField(

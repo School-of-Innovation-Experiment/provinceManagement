@@ -144,29 +144,41 @@ def  ExpertDispatch(request, form):
             return simplejson.dumps({'field':expert_form.data.keys(), 'status':'1', 'message':message})
     else:
         return simplejson.dumps({'field':expert_form.data.keys(),'error_id':expert_form.errors.keys(),'message':u"输入有误"})
+
+
 @dajaxice_register
 def SchoolDispatch(request, form):
-    #dajax = Dajax()
     school_form = SchoolDictDispatchForm(deserialize_form(form))
     if school_form.is_valid():
-        password = school_form.cleaned_data["school_password"]
+        uid = school_form.cleaned_data['school_uid']
         email = school_form.cleaned_data["school_email"]
-        name = email
         school_name = school_form.cleaned_data["school_name"]
         person_name = school_form.cleaned_data["school_personname"]
-        if password == "":
-            password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password,email,SCHOOL_USER, school_name=school_name,person_name = person_name)
-        loginfo(flag)
+        username = 'A_{}'.format(uid)
+        flag = AdminStaffService.sendemail(
+            request, username, None, email, SCHOOL_USER,
+            school_name=school_name, person_name=person_name)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)
-            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message, 'table': table})
+            return simplejson.dumps({
+                'field': school_form.data.keys(),
+                'status': '1',
+                'message': message,
+                'table': table})
         else:
-            message = u"相同邮件已经发送，中断发送"
-            return simplejson.dumps({'field':school_form.data.keys(), 'status':'1', 'message':message})
+            message = u"相同邮件已经发送或内部错误"
+            return simplejson.dumps({
+                'field': school_form.data.keys(),
+                'status': '1',
+                'message': message})
     else:
-        return simplejson.dumps({'field':school_form.data.keys(),'error_id':school_form.errors.keys(),'message':u"输入有误"})
+        return simplejson.dumps({
+            'field': school_form.data.keys(),
+            'error_id': school_form.errors.keys(),
+            'message': u"输入有误"})
+
+
 @dajaxice_register
 def judge_is_assigned(request, school):
     '''
