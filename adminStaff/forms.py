@@ -7,6 +7,7 @@ Created on 2013-3-28
 from datetime import *
 from django import  forms
 from django.db.models import Q 
+from django.core import exceptions
 from backend.logging import loginfo
 from adminStaff.models import ProjectControl
 from const import *
@@ -76,13 +77,22 @@ class StudentDispatchForm(forms.Form):
 
     student_personname = forms.CharField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2','id':"student_personname",'placeholder':u"学生姓名"}))
+
 class TeacherDispatchForm(forms.Form):
-    teacher_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','placeholder':u"默认密码：邮箱名字", 'id':'teacher_password'}))
     teacher_email    = forms.EmailField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
     teacher_personname = forms.CharField(required=True,
                                         widget=forms.TextInput(attrs={'class':'span2','id':"teacher_personname",'placeholder':u"指导教师姓名"}))
+    teacher_uid = forms.CharField(required=True,
+                                  widget=forms.TextInput(attrs={'class':'span2','id':"teacher_id",'placeholder':u"指导教师工号"}))
+
+    def clean_teacher_uid(self):
+        uid = self.cleaned_data['teacher_uid']
+        if '_' in uid:
+            raise exceptions.ValidationError(u'工号不能包含特殊字符')
+        return uid
+
+
 class TimeSettingForm(forms.Form):
     pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date',"data-date-format":"yyyy-mm-dd"}))
     pre_end_date = forms.DateField(required=True,widget=forms.DateInput(attrs={'class':'span2','id':'pre_end_date',"data-date-format":"yyyy-mm-dd"}))
