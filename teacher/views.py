@@ -159,9 +159,16 @@ def Send_email_to_student(request, username, password, email, category,person_na
     """
     check the existence of user
     """
-    if User.objects.filter(email = email).count() == 0:
-        user = RegistrationManager().create_inactive_user(request, username, password, email, identity,student_user=True,person_name=person_name )
-        result = create_newproject(request=request, new_user=user, category=category)
+    if User.objects.filter(username=username).count() == 0:
+        try:
+            user = RegistrationManager().create_inactive_user(
+                request, username, password, email, identity,
+                student_user=True, person_name=person_name)
+        except Exception, e:
+            logger.error(e)
+            return False 
+        result = create_newproject(request=request, new_user=user,
+                                   category=category)
         return True and result
     else:
         return False
@@ -174,8 +181,8 @@ def StudentDispatch(request):
     if request.method == "GET":
         student_form = StudentDispatchForm()
         teacher_profile = TeacherProfile.objects.get(userid = request.user)
-        email_list  = AdminStaffService.GetRegisterListByTeacher(teacher_profile)
-        limited_num ,remaining_activation_times = get_limited_num_and_remaining_times(request)
+        email_list = AdminStaffService.GetRegisterListByTeacher(teacher_profile)
+        limited_num, remaining_activation_times = get_limited_num_and_remaining_times(request)
         data = {
             'student_form': student_form,
             'email_list': email_list,
