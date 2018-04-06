@@ -186,19 +186,17 @@ def Cancel_Alloced_Experts(request, project_list):
     return simplejson.dumps({'message': message, 'expert_list_html': expert_list_html})
 
 @dajaxice_register
-def  TeacherDispatch(request, form):
-    #dajax = Dajax()
+def TeacherDispatch(request, form):
     teacher_form =  TeacherDispatchForm(deserialize_form(form))
     if teacher_form.is_valid():
-        password = teacher_form.cleaned_data["teacher_password"]
+        uid = teacher_form.cleaned_data['teacher_uid']
         email = teacher_form.cleaned_data["teacher_email"]
-        # school = teacher_form.cleaned_data["teacher_school"]
         school = SchoolProfile.objects.get(userid=request.user)
-        name = email
         person_name = teacher_form.cleaned_data["teacher_personname"]
-        if password == "":
-            password = email.split('@')[0]
-        flag = AdminStaffService.sendemail(request, name, password, email,TEACHER_USER, teacher_school=school,person_name = person_name)
+        username = 'T_{}'.format(uid)
+        flag = AdminStaffService.sendemail(
+            request, username, None, email, TEACHER_USER,
+            teacher_school=school, person_name=person_name)
         if flag:
             message = u"发送邮件成功"
             table = refresh_mail_table(request)

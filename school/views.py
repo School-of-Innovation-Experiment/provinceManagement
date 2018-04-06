@@ -105,7 +105,8 @@ def home_view(request):
 @authority_required(SCHOOL_USER)
 def dispatch(request):
     teacher_form = TeacherDispatchForm()
-    expert_form = ExpertDispatchForm()
+    # expert_form = ExpertDispatchForm()
+    expert_form = None
     school = SchoolProfile.objects.get(userid=request.user)
     if not school:
         raise Http404
