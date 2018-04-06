@@ -66,25 +66,51 @@ class SchoolDispatchForm(forms.Form):
                                        widget=forms.TextInput(attrs={'class':'span2','id':"school_personname",'placeholder':u"学院管理员"}))
 
 class StudentDispatchForm(forms.Form):
-    student_password = forms.CharField(max_length=20, required=False,
-                                       widget=forms.TextInput(attrs={'class':'span2','id':"student_password",'placeholder':u"默认密码：邮箱名字",'id':'student_password'}
-                           ))
-    student_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱",'id':'student_email'}
-                           ))
-    category         = forms.ChoiceField(choices = PROJECT_CATE_CHOICES
-    )
+    student_email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'placeholder': u"邮箱",
+            'id': 'student_email'}))
+    category = forms.ChoiceField(choices=PROJECT_CATE_CHOICES)
+    student_personname = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "student_personname",
+            'placeholder': u"学生姓名"}))
+    student_uid = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "teacher_id",
+            'placeholder': u"学生学号"}))
 
-    student_personname = forms.CharField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2','id':"student_personname",'placeholder':u"学生姓名"}))
+    def clean_student_uid(self):
+        uid = self.cleaned_data['student_uid']
+        if '_' in uid:
+            raise exceptions.ValidationError(u'学号不能包含特殊字符')
+        return uid
 
 class TeacherDispatchForm(forms.Form):
-    teacher_email    = forms.EmailField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2', 'placeholder':u"邮箱", 'id':'teacher_email'}))
-    teacher_personname = forms.CharField(required=True,
-                                        widget=forms.TextInput(attrs={'class':'span2','id':"teacher_personname",'placeholder':u"指导教师姓名"}))
-    teacher_uid = forms.CharField(required=True,
-                                  widget=forms.TextInput(attrs={'class':'span2','id':"teacher_id",'placeholder':u"指导教师工号"}))
+    teacher_email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'placeholder': u"邮箱",
+            'id':'teacher_email'}))
+    teacher_personname = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "teacher_personname",
+            'placeholder': u"指导教师姓名"}))
+    teacher_uid = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'span2',
+            'id': "teacher_id",
+            'placeholder': u"指导教师工号"}))
 
     def clean_teacher_uid(self):
         uid = self.cleaned_data['teacher_uid']
