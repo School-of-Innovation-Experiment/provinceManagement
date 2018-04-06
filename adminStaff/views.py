@@ -35,7 +35,9 @@ from backend.logging import loginfo
 from backend.fund import CFundManage
 from news.models import News
 from news.forms import NewsForm
-from school.utility import check_project_is_assign, split_name,get_manager,get_yearlist_forform,get_yearlist
+from school.utility import (
+    check_project_is_assign, split_name, get_manager,
+    get_yearlist_forform, get_yearlist)
 #liuzhuo add
 import datetime
 import os
@@ -80,30 +82,30 @@ from student.views import open_report_view_work, mid_report_view_work
 
 class AdminStaffService(object):
     @staticmethod
-    def sendemail(request,username,password,email,identity, **kwargs):
+    def sendemail(request, username, password, email, identity, **kwargs):
         #判断用户名是否存在存在直接返回
 
         #expert多重身份特殊处理
-        if identity == "expert" and ExpertProfile.objects.filter(userid__email = email).count():
+        if (identity == "expert"
+                and ExpertProfile.objects.filter(userid__email=email).count()):
             expert_obj = ExpertProfile.objects.get(userid__email = email)
             if kwargs["expert_user"] == "assigned_by_school":
-                if expert_obj.assigned_by_school: return False
-                expert_obj.assigned_by_school = SchoolProfile.objects.get(userid = request.user)
+                if expert_obj.assigned_by_school:
+                    return False
+                expert_obj.assigned_by_school = SchoolProfile.objects.get(
+                    userid=request.user)
                 expert_obj.save()
                 return True
             else:
-                if expert_obj.assigned_by_adminstaff: return False
-                expert_obj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
+                if expert_obj.assigned_by_adminstaff:
+                    return False
+                expert_obj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid=request.user)
                 expert_obj.save()
                 return True
 
-        if not AdminStaffService.AuthUserExist(email, identity, **kwargs):
-            # if kwargs.has_key('school_name'):
-           #     RegistrationManager().create_inactive_user(request,username,password,email,identity, **kwargs)
-            # elif kwargs.has_key('expert_user'):
-            #     RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
-            # elif kwargs.has_key('teacher_school'):
-            RegistrationManager().create_inactive_user(request,username,password,email,identity,**kwargs)
+        if not AdminStaffService.AuthUserExist(username, identity, **kwargs):
+            RegistrationManager().create_inactive_user(
+                request, username, password, email, identity, **kwargs)
             return True
         else:
             return False
@@ -271,17 +273,20 @@ class AdminStaffService(object):
                 AdminStaffService.sendemail(request, name, password, email, SCHOOL_USER)
                 school_form = forms.SchoolDispatchForm()
             return render_to_response("adminStaff/dispatch.html",{'expert_form':expert_form,'school_form':school_form},context_instance=RequestContext(request))
+
     @staticmethod
-    def AuthUserExist(email, identity, **kwargs):
-        if User.objects.filter(email=email).count():
-            user_obj = User.objects.get(email=email)
+    def AuthUserExist(username, identity, **kwargs):
+        user = User.objects.filter(username=username)
+        if user:
+            user = user[0]
             ui_obj = UserIdentity.objects.get(identity=identity)
-            if ui_obj.auth_groups.filter(id=user_obj.id).count():
+            if ui_obj.auth_groups.filter(id=user.id).count():
                 return True
             else:
                 return False
         else:
             return False
+
     @staticmethod
     @csrf.csrf_protect
     @login_required
