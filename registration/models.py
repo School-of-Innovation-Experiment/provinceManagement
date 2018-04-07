@@ -56,9 +56,10 @@ class RegistrationManager(models.Manager):
 
         return False
     @transaction.commit_on_success
-    def create_inactive_user(self,request,
-                             username,password,email,
-                             Identity,send_email=True, profile_callback=None, **kwargs):
+    def create_inactive_user(self, request,
+                             username, password, email,
+                             identity, send_email=True,
+                             profile_callback=None, **kwargs):
         """
         Create a new, inactive ``User``, generates a
         ``RegistrationProfile`` and email its activation key to the
@@ -69,8 +70,10 @@ class RegistrationManager(models.Manager):
         """
         #如果存在用户的话不必进行新建只需对权限表进行操作即可，否则新建用户
         loginfo("person_name:" + kwargs["person_name"])
-        if User.objects.filter(email=email).count() == 0:
-            new_user = User.objects.create_user(username, email, password)
+        year = get_current_year()
+        if User.objects.filter(username=username).count() == 0:
+            new_user = User.objects.create_user(username, password=password,
+                                                email=email)
             new_user.is_active = False
             new_user.save()
             registration_profile = self.create_profile(new_user)
@@ -81,36 +84,31 @@ class RegistrationManager(models.Manager):
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
                                            {'site':get_current_site(request),
-                                            'school_name':SCHOOL_NAME,
-                                            'username':username,
-                                            'password':password})
+                                            'school_name':SCHOOL_NAME})
 
                 # Email subject *must not* contain newlines
                 subject = ''.join(subject.splitlines())
-                message = render_to_string('registration/activation_email.txt',
-                                           {'activation_key':registration_profile.activation_key,
-                                            'expiration_days':settings.ACCOUNT_ACTIVATION_DAYS,
-                                            'school_name':SCHOOL_NAME,
-                                            'year':get_current_year(),
-                                            'site':site_domain,
-                                            'username':username,
-                                            'password':password}
-                                           )
-                logger.error(message)
+                message = render_to_string(
+                    'registration/activation_email.txt',
+                    {'activation_key': registration_profile.activation_key,
+                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+                     'school_name': SCHOOL_NAME,
+                     'year': year,
+                     'site': site_domain,})
                 send_mail(subject,
                           message,
                           settings.DEFAULT_FROM_EMAIL,
                           [new_user.email])
         else:
-            new_user = User.objects.get(email=email)
+            new_user = User.objects.get(username=username)
 
         #对用户权限写入数据库
-        new_authority = UserIdentity.objects.get(identity=Identity)
+        new_authority = UserIdentity.objects.get(identity=identity)
         new_authority.auth_groups.add(new_user)
         new_authority.save()
 
         #如果是学校注册 添加学校注册姓名
-        if kwargs.get('school_name',False):
+        if 'school_name' in kwargs:
             schoolObj = SchoolDict.objects.get(id = kwargs["school_name"])
             if SchoolProfile.objects.filter(school=schoolObj).count() == 0:
                 loginfo("person_name:"+kwargs["person_name"])
@@ -135,15 +133,14 @@ class RegistrationManager(models.Manager):
                 if ExpertProfile.objects.filter(userid = oldUserObj).count() == 0 \
                     and TeacherProfile.objects.filter(userid = oldUserObj).count() == 0:
                     oldUserObj.delete() #删除被覆盖用户
-
-        elif kwargs.get('teacher_school', False):
-            teacherProfileObj = TeacherProfile(school=kwargs["teacher_school"], userid =new_user,name = kwargs["person_name"])
-            teacherProfileObj.save()
-            teacherProjLimit = TeacherProjectPerLimits(teacher=teacherProfileObj,
-                                                       number=0)
-            teacherProjLimit.save()
-
-        elif kwargs.get("expert_user", False):
+        elif 'teacher_school' in kwargs:
+            TeacherProfile.objects.create(
+                school=kwargs["teacher_school"],
+                userid=new_user,
+                name=kwargs["person_name"])
+            TeacherProjectPerLimits.objects.create(
+                teacher=teacherProfileObj, number=0)
+        elif 'expert_user' in kwargs:
             # insituteObj = InsituteCategory.objects.get(id=kwargs["expert_insitute"])
             expertProfileObj = ExpertProfile(userid =new_user,name = kwargs["person_name"])
             if kwargs["expert_user"] == "assigned_by_school":
@@ -153,15 +150,16 @@ class RegistrationManager(models.Manager):
                 expertProfileObj.grade = "1"
                 expertProfileObj.assigned_by_adminstaff = AdminStaffProfile.objects.get(userid = request.user)
             expertProfileObj.save()
-
-        elif kwargs.get("student_user",False):
+        elif 'student_user' in kwargs:
             teacher_name = request.user.username
             teacher = User.objects.get(username=teacher_name)
-            teacher_profile = TeacherProfile.objects.get(userid = teacher)
-            student_obj = StudentProfile(userid = new_user,teacher = teacher_profile,name = kwargs["person_name"])
+            teacher_profile = TeacherProfile.objects.get(userid=teacher)
+            student_obj = StudentProfile(
+                userid=new_user, teacher=teacher_profile,
+                name=kwargs["person_name"])
             student_obj.save()
         else:
-            raise Http404
+            raise Http404()
         if profile_callback is not None:
             profile_callback(user=new_user)
         return new_user
@@ -171,7 +169,7 @@ class RegistrationManager(models.Manager):
         Create a ``RegistrationProfile`` for a given
         ``User``, and return the ``RegistrationProfile``.
         """
-        salt= sha.new(str(random.random())).hexdigest()[:5]
+        salt = sha.new(str(random.random())).hexdigest()[:5]
         activation_key = sha.new(salt+user.username).hexdigest()
 
         return RegistrationProfile(user=user,

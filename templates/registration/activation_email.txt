@@ -2,12 +2,10 @@
 {% blocktrans %}激活账户{% endblocktrans %}:
 您好:
 {{year}}年大学生创新创业训练计划项目目前进入网上申报环节，此邮件为账号激活邮件，
-欢迎您使用{{school_name}}创新创业项目管理平台，请您点击下面的激活链接进行账户激活。
+欢迎您使用{{school_name}}创新创业项目管理平台，请您点击下面的激活链接通过统一身份认证系统进行账户激活。
 激活链接：
-   http://{{ site }}{% url registration.views.active activation_key %}
+   {% url registration.views.active activation_key %}
 
-账户名：{{username}}
-密码： {{password}}
 创新创业项目管理平台网址：
    http://{{ site }}
 

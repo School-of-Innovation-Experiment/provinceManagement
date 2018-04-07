@@ -4,18 +4,23 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/accounts_form.css" >
 
-<div class="container form-container">
-  {% if account %}
+<div class="container form-container" id="login-form-wrap" style="text-align:center">
+    <h3>
+        {{ message }}
+    </h3>
+{% comment %}
+{% if account %}
 
-  <h3>恭喜您成功激活账户</h3>
+<h3>恭喜您成功激活账户</h3>
 
-  <h3><a href="{% url auth_login %}">>登录</a></h3>
+<h3><a href="{% url auth_login %}">>登录</a></h3>
 
-  {% else %}
+{% else %}
 
-  <h3>很抱歉！账户激活失败</h3>
+<h3>很抱歉！账户激活失败</h3>
 
-  {% endif %}
-
+{% endif %}
+{% endcomment %}
+<a type="button" href="/"><h3>点此返回主页</h3></a>
 </div>
 {% endblock %}

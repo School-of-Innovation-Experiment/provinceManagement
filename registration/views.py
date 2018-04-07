@@ -9,9 +9,11 @@ Desc: Registration and login redirect
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 from registration.forms import RegistrationFormUniqueEmail
 from registration.models import RegistrationProfile
@@ -19,25 +21,41 @@ from backend.decorators import check_auth
 from const import *
 
 
+@login_required
 def active(request, activation_key,
            template_name='registration/activate.html',
            extra_context=None):
     """
     Active the user account from an activation key.
     """
-    activation_key = activation_key.lower()
-    account = RegistrationProfile.objects.activate_user(activation_key)
+    identity = request.user.username[0]
+    if identity in ('T', 'S', 'A'):
+        # Logged in as a second-class user
+        # Logout and Re-Login
+        logout(request)
+        return HttpResponseRedirect(request.path)
     if extra_context is None:
         extra_context = {}
+    activation_key = activation_key.lower()
+    profile = RegistrationProfile.objects.filter(activation_key=activation_key)
+    if profile:
+        target_username = profile[0].user.username
+        username = request.user.username
+        if target_username.endswith(username):
+            # Activation key doesn't belong to this user
+            account = RegistrationProfile.objects.activate_user(activation_key)
+            return HttpResponseRedirect('/')
+        message = u'激活链接不属于本帐户'
+    else:
+        # Invalid activation key
+        message = u'激活链接无效!'
     context = RequestContext(request)
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
-
-    return render_to_response(template_name,
-                              {'account': account,
-                               'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS
-                               },
-                              context_instance=context)
+    return render_to_response(
+        template_name,
+        {'message': message},
+        context_instance=context)
 
 
 def register(request, success_url=None,
