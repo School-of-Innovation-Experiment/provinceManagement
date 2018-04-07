@@ -30,6 +30,7 @@ from backend.logging import logger, loginfo
 from backend.decorators import *
 from const import *
 from users.models import *
+from school.models import ProjectSingle
 from users.forms import *
 
 
@@ -139,44 +140,44 @@ def admin_account_view(request):
 
 @login_required
 @csrf.csrf_protect
-def search_user_view(request):
+def switch_user_list_view(request):
     user = request.user
-    if user.username.split('_')[0] in ['S', 'T', 'A']:
+    if user.username[0] in ('S', 'T', 'A'):
         return HttpResponseRedirect('/')
-    user_set = User.objects.filter(
-        username__endswith=user.username).exclude(username=user.username)
-    query_set = []
-    is_student = 0
-    if user_set.count() == 0:
-        data = {"query_set": query_set, "is_student": is_student}
-        return render(request, "registration/search_user.html", data)
-    is_student = 1 if user_set[0].username.split('_')[0] == 'S' else 2
-    if is_student == 1:
-        for user in user_set:
-            info = {}
-            project = user.studentprofile_set.all()[0].projectsingle
-            info['username'] = user.username
-            info['project_title'] = project.title
-            info['project_year'] = project.year
-            query_set.append(info)
-    elif is_student == 2:
-        for user in user_set:
-            query_set.append(user.username)
-    data = {"query_set": query_set, "is_student": is_student}
-    return render(request, "registration/search_user.html", data)
+    else:
+        user_set = User.objects.filter(
+            username__endswith=user.username,is_active=True).exclude(
+            username=user.username)
+        query_set = []
+        identity = 0
+        if user_set.count() == 0:
+            data = {"query_set": query_set, "identity": identity}
+            return render(request, "registration/search_user.html", data)
+        else:
+            identity = 1 if user_set[0].username[0] == 'S' else 2
+            if identity == 1:
+                for user in user_set:
+                    project = ProjectSingle.objects.select_related(
+                        'student__userid').filter(student__userid=user)[0]
+                    query_set.append(project)
+            elif identity == 2:
+                for user in user_set:
+                    query_set.append(user.username)
+            data = {"query_set": query_set, "identity": identity}
+            return render(request, "registration/search_user.html", data)
 
 
 @login_required
 @csrf.csrf_protect
-def reset_login_view(request, name):
+def relogin_view(request, username):
     user = request.user
-    username = name
-    if username and user.username == username.split('_')[-1]:
+    if user.username == username.split('_')[-1]:
         logout(request)
         new_user = User.objects.filter(username=username)[0]
         if new_user is not None and new_user.is_active:
             backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-            new_user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            new_user.backend = "%s.%s" % (
+                backend.__module__, backend.__class__.__name__)
             login(request, new_user)
     return HttpResponseRedirect('/')
 
@@ -184,52 +185,42 @@ def reset_login_view(request, name):
 @login_required
 @csrf.csrf_protect
 def binding_view(request):
-    login_failed = 0
-    data = {"login_failed": login_failed}
-    if request.user.username.split('_')[0] in ['S', 'T', 'A']:
+    error_code = 0
+    if request.user.username[0] in ('S', 'T', 'A'):
         return HttpResponseRedirect('/')
-    if request.method == 'POST':
-        new_username_end = request.user.username
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = authenticate(username=username, password=password)
-        if user is not None and user.is_active:
-            if check_auth(user=user, authority=STUDENT_USER):
-                year = user.studentprofile_set.all()[0].projectsingle.year
-                new_username = "S_{0}_{1}".format(year, new_username_end)
-                if User.objects.filter(username=new_username).count() == 0:
-                    user.username = new_username
-                    user.set_unusable_password()
-                    user.save()
-                    return HttpResponseRedirect('/settings/search/')
-                else:
-                    login_failed = 1
-                    data = {"login_failed": login_failed}
-                    return render(request, "registration/binding.html", data)
-            elif check_auth(user=user, authority=TEACHER_USER):
-                new_username = "T_" + new_username_end
-                if User.objects.filter(username=new_username).count() == 0:
-                    user.username = new_username
-                    user.set_unusable_password()
-                    user.save()
-                    return HttpResponseRedirect('/settings/search/')
-                else:
-                    login_failed = 2
-                    data = {"login_failed": login_failed}
-                    return render(request, "registration/binding.html", data)
-            elif check_auth(user=user, authority=SCHOOL_USER):
-                new_username = "A_" + new_username_end
-                if User.objects.filter(username=new_username).count() == 0:
-                    user.username = new_username
-                    user.set_unusable_password()
-                    user.save()
-                    return HttpResponseRedirect('/settings/search/')
-                else:
-                    login_failed = 3
-                    data = {"login_failed": login_failed}
-                    return render(request, "registration/binding.html", data)
-        else:
-            login_failed = -1
-            data = {"login_failed": login_failed}
-            return render(request, "registration/binding.html", data)
-    return render(request, "registration/binding.html", data)
+    else:
+        if request.method == 'POST':
+            new_username_end = request.user.username
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                if check_auth(user=user, authority=STUDENT_USER):
+                    year = user.studentprofile_set.all()[0].projectsingle.year
+                    new_username = "S_{0}_{1}".format(year, new_username_end)
+                    if User.objects.filter(username=new_username).count() > 0:
+                        error_code = 1
+                        return render(request, "registration/binding.html", {
+                            "error_code": error_code})
+                elif check_auth(user=user, authority=TEACHER_USER):
+                    new_username = "T_" + new_username_end
+                    if User.objects.filter(username=new_username).count() > 0:
+                        error_code = 2
+                        return render(request, "registration/binding.html", {
+                            "error_code": error_code})
+                elif check_auth(user=user, authority=SCHOOL_USER):
+                    new_username = "A_" + new_username_end
+                    if User.objects.filter(username=new_username).count() > 0:
+                        error_code = 3
+                        return render(request, "registration/binding.html", {
+                            "error_code": error_code})
+                user.username = new_username
+                user.set_unusable_password()
+                user.save()
+                return HttpResponseRedirect(reverse('switch'))
+            else:
+                error_code = -1
+                return render(request, "registration/binding.html", {
+                    "error_code": error_code})
+        return render(request, "registration/binding.html", {
+            "error_code": error_code})
