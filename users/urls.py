@@ -28,12 +28,13 @@ urlpatterns = patterns('',
         users_views.admin_account_view
     ),
     url(
-        r'^search/$',
-        users_views.search_user_view
+        r'^switch/$',
+        users_views.switch_user_list_view,
+        name="switch"
     ),
     url(
-        r'^relogin/(?P<name>.+)$',
-        users_views.reset_login_view,
+        r'^relogin/(?P<username>.+)$',
+        users_views.relogin_view,
         name="relogin"
     ),
     url(

@@ -10,7 +10,7 @@
   <div class="panel-body">
     <div>
     <table class="table table-condensed">
-      {% if is_student == 1 %}
+      {% if identity == 1 %}
           <thead>
           <tr>
             <td>账号</td>
@@ -20,16 +20,16 @@
           </tr>
         </thead>
           <tbody>
-            {% for user in query_set %}
+            {% for project in query_set %}
             <tr>
-              <td>{{ user.username }}</td>
-              <td>{{ user.project_title }}</td>
-              <td>{{ user.project_year }}</td>
-              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
+              <td>{{ project.student.userid.username }}</td>
+              <td>{{ project.title }}</td>
+              <td>{{ project.year }}</td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin project.student.userid.username %}">切换</a></td>
             </tr>
             {% endfor %}
           </tbody>
-      {% elif is_student == 2 %}
+      {% elif identity == 2 %}
           <thead>
           <tr>
             <td>账号</td>
@@ -37,10 +37,10 @@
           </tr>
         </thead>
           <tbody>
-            {% for username in query_set %}
+            {% for user in query_set %}
             <tr>
-              <td>{{ username }}</td>
-              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin username %}">切换</a></td>
+              <td>{{ user.username }}</td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
             </tr>
             {% endfor %}
           </tbody>
