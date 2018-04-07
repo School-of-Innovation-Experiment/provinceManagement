@@ -37,10 +37,10 @@
           </tr>
         </thead>
           <tbody>
-            {% for username in query_set %}
+            {% for user in query_set %}
             <tr>
-              <td>{{ username }}</td>
-              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin username %}">切换</a></td>
+              <td>{{ user.username }}</td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
             </tr>
             {% endfor %}
           </tbody>

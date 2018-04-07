@@ -156,13 +156,10 @@ def switch_user_list_view(request):
         else:
             identity = 1 if user_set[0].username[0] == 'S' else 2
             if identity == 1:
-                for user in user_set:
-                    project = ProjectSingle.objects.select_related(
-                        'student__userid').filter(student__userid=user)[0]
-                    query_set.append(project)
+                query_set = ProjectSingle.objects.select_related(
+                    'student__userid').filter(student__userid__in=user_set)
             elif identity == 2:
-                for user in user_set:
-                    query_set.append(user.username)
+                query_set = user_set
             data = {"query_set": query_set, "identity": identity}
             return render(request, "registration/search_user.html", data)
 
@@ -173,12 +170,15 @@ def relogin_view(request, username):
     user = request.user
     if user.username == username.split('_')[-1]:
         logout(request)
-        new_user = User.objects.filter(username=username)[0]
-        if new_user is not None and new_user.is_active:
-            backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
-            new_user.backend = "%s.%s" % (
-                backend.__module__, backend.__class__.__name__)
-            login(request, new_user)
+        new_user_set = User.objects.filter(username=username, is_active=True)
+        if new_user_set.count() > 0:
+            new_user = new_user_set[0]
+        else:
+            raise HttpResponseForbidden()
+        backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+        new_user.backend = "%s.%s" % (
+            backend.__module__, backend.__class__.__name__)
+        login(request, new_user)
     return HttpResponseRedirect('/')
 
 
@@ -198,26 +198,19 @@ def binding_view(request):
                 if check_auth(user=user, authority=STUDENT_USER):
                     year = user.studentprofile_set.all()[0].projectsingle.year
                     new_username = "S_{0}_{1}".format(year, new_username_end)
-                    if User.objects.filter(username=new_username).count() > 0:
-                        error_code = 1
-                        return render(request, "registration/binding.html", {
-                            "error_code": error_code})
                 elif check_auth(user=user, authority=TEACHER_USER):
                     new_username = "T_" + new_username_end
-                    if User.objects.filter(username=new_username).count() > 0:
-                        error_code = 2
-                        return render(request, "registration/binding.html", {
-                            "error_code": error_code})
                 elif check_auth(user=user, authority=SCHOOL_USER):
                     new_username = "A_" + new_username_end
-                    if User.objects.filter(username=new_username).count() > 0:
-                        error_code = 3
-                        return render(request, "registration/binding.html", {
-                            "error_code": error_code})
-                user.username = new_username
-                user.set_unusable_password()
-                user.save()
-                return HttpResponseRedirect(reverse('switch'))
+                if User.objects.filter(username=new_username).count() > 0:
+                    error_code = 1
+                    return render(request, "registration/binding.html", {
+                        "error_code": error_code})
+                else:
+                    user.username = new_username
+                    user.set_unusable_password()
+                    user.save()
+                    return HttpResponseRedirect(reverse('switch'))
             else:
                 error_code = -1
                 return render(request, "registration/binding.html", {
