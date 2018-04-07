@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block home_content %}
+<div class="align-center">
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">账号列表</h3>
@@ -9,20 +10,41 @@
   <div class="panel-body">
     <div>
     <table class="table table-condensed">
-      <thead>
-      <tr>
-        <td>账号</td>
-        <td>操作</td>
-      </tr>
-    </thead>
-      <tbody>
-        {% for user in query_set %}
-        <tr>
-          <td>{{ user.username }}</td>
-          <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
+      {% if is_student == 1 %}
+          <thead>
+          <tr>
+            <td>账号</td>
+            <td>项目名称</td>
+            <td>项目年份</td>
+            <td>操作</td>
+          </tr>
+        </thead>
+          <tbody>
+            {% for user in query_set %}
+            <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.project_title }}</td>
+              <td>{{ user.project_year }}</td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      {% elif is_student == 2 %}
+          <thead>
+          <tr>
+            <td>账号</td>
+            <td>操作</td>
+          </tr>
+        </thead>
+          <tbody>
+            {% for username in query_set %}
+            <tr>
+              <td>{{ username }}</td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin username %}">切换</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      {% endif %}
     </table>
   </div>
   <div>
@@ -32,4 +54,13 @@
   </div>
   </div>
 </div>
+</div>
+
+<style type="text/css">
+.align-center{
+margin-left:10%;
+margin-right:10%;
+margin-top:5%;
+}
+</style>
 {% endblock %}

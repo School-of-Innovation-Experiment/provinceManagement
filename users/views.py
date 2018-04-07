@@ -141,8 +141,28 @@ def admin_account_view(request):
 @csrf.csrf_protect
 def search_user_view(request):
     user = request.user
-    query_set = User.objects.filter(username__endswith=user.username)
-    data = {"query_set": query_set}
+    if user.username.split('_')[0] in ['S', 'T', 'A']:
+        return HttpResponseRedirect('/')
+    user_set = User.objects.filter(
+        username__endswith=user.username).exclude(username=user.username)
+    query_set = []
+    is_student = 0
+    if user_set.count() == 0:
+        data = {"query_set": query_set, "is_student": is_student}
+        return render(request, "registration/search_user.html", data)
+    is_student = 1 if user_set[0].username.split('_')[0] == 'S' else 2
+    if is_student == 1:
+        for user in user_set:
+            info = {}
+            project = user.studentprofile_set.all()[0].projectsingle
+            info['username'] = user.username
+            info['project_title'] = project.title
+            info['project_year'] = project.year
+            query_set.append(info)
+    elif is_student == 2:
+        for user in user_set:
+            query_set.append(user.username)
+    data = {"query_set": query_set, "is_student": is_student}
     return render(request, "registration/search_user.html", data)
 
 
@@ -164,26 +184,52 @@ def reset_login_view(request, name):
 @login_required
 @csrf.csrf_protect
 def binding_view(request):
-    login_failed = False
+    login_failed = 0
     data = {"login_failed": login_failed}
+    if request.user.username.split('_')[0] in ['S', 'T', 'A']:
+        return HttpResponseRedirect('/')
     if request.method == 'POST':
+        new_username_end = request.user.username
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
         user = authenticate(username=username, password=password)
-        new_username = request.user.username
         if user is not None and user.is_active:
             if check_auth(user=user, authority=STUDENT_USER):
                 year = user.studentprofile_set.all()[0].projectsingle.year
-                user.username = "s_{0}".format(year)+ "_" + new_username
-                print("#"*10,user.username)
-                user.save()
-                return HttpResponseRedirect('/settings/search/')
+                new_username = "S_{0}_{1}".format(year, new_username_end)
+                if User.objects.filter(username=new_username).count() == 0:
+                    user.username = new_username
+                    user.set_unusable_password()
+                    user.save()
+                    return HttpResponseRedirect('/settings/search/')
+                else:
+                    login_failed = 1
+                    data = {"login_failed": login_failed}
+                    return render(request, "registration/binding.html", data)
             elif check_auth(user=user, authority=TEACHER_USER):
-                user.username = "t_" + new_username
-                user.save()
-                return HttpResponseRedirect('/settings/search/')
+                new_username = "T_" + new_username_end
+                if User.objects.filter(username=new_username).count() == 0:
+                    user.username = new_username
+                    user.set_unusable_password()
+                    user.save()
+                    return HttpResponseRedirect('/settings/search/')
+                else:
+                    login_failed = 2
+                    data = {"login_failed": login_failed}
+                    return render(request, "registration/binding.html", data)
+            elif check_auth(user=user, authority=SCHOOL_USER):
+                new_username = "A_" + new_username_end
+                if User.objects.filter(username=new_username).count() == 0:
+                    user.username = new_username
+                    user.set_unusable_password()
+                    user.save()
+                    return HttpResponseRedirect('/settings/search/')
+                else:
+                    login_failed = 3
+                    data = {"login_failed": login_failed}
+                    return render(request, "registration/binding.html", data)
         else:
-            login_failed = True
+            login_failed = -1
             data = {"login_failed": login_failed}
             return render(request, "registration/binding.html", data)
     return render(request, "registration/binding.html", data)
