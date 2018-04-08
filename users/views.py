@@ -145,7 +145,8 @@ def switch_user_list_view(request):
     user_set = User.objects.filter(
         username__endswith=user.username.split('_')[-1],
             is_active=True).exclude(
-            username=user.username)
+            username=user.username,
+            username=user.username.split('_')[-1])
     query_set = []
     identity = 0
     if user_set.count() == 0:
