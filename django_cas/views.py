@@ -78,6 +78,8 @@ def login(request, next_page=None, required=False):
         from django.contrib import auth
         user = auth.authenticate(ticket=ticket, service=service, request=request)
         if user is not None:
+            if request.user.is_authenticated():
+                auth.logout(request)
             auth.login(request, user)
             name = user.first_name or user.username
             message = "Login succeeded. Welcome, %s." % name
