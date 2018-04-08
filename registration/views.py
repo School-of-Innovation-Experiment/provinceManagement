@@ -44,7 +44,7 @@ def active(request, activation_key,
         if target_username.endswith(username):
             # Activation key doesn't belong to this user
             account = RegistrationProfile.objects.activate_user(activation_key)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(reverse('switch'))
         message = u'激活链接不属于本帐户'
     else:
         # Invalid activation key
