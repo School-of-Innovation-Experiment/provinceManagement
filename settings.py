@@ -96,6 +96,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django_cas.middleware.CASMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (  
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas.backends.CASBackend',
 )
 
 ROOT_URLCONF = 'urls'
@@ -156,7 +162,7 @@ INSTALLED_APPS = (
 
 #Add support  to user profile
 ACCOUNT_ACTIVATION_DAYS = 30
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/login'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # SERVER_EMAIL = "dut200921049@gmail.com"
@@ -287,3 +293,6 @@ IS_SCHOOL_BASIC = False
 # RPC_SITE
 RPC_SITE_PRODUCTION = "http://202.118.67.200:9003/rpc/"
 RPC_SITE = RPC_SITE_PRODUCTION
+
+# CAS
+CAS_SERVER_URL = 'https://sso.dlut.edu.cn/cas'

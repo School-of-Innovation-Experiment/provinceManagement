@@ -13,7 +13,6 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
 
 from registration.forms import RegistrationFormUniqueEmail
 from registration.models import RegistrationProfile
@@ -28,6 +27,7 @@ def active(request, activation_key,
     """
     Active the user account from an activation key.
     """
+    from django.contrib.auth import logout
     identity = request.user.username[0]
     if identity in ('T', 'S', 'A'):
         # Logged in as a second-class user
@@ -101,3 +101,19 @@ def login_redirect(request):
         return HttpResponseRedirect('/adminStaff/')
     else:
         return HttpResponseRedirect(reverse('switch'))
+
+
+def login(request, template_name):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        if not username or username != 'admin':
+            raise Http404()
+    from django.contrib.auth.views import login
+    return login(request)
+
+
+def logout(request, next_page):
+    if not request.user.is_authenticated() or request.user.username != 'admin':
+        raise Http404()
+    from django.contrib.auth.views import logout
+    return logout(request, next_page)

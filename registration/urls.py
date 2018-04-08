@@ -8,9 +8,9 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth import views as auth_views
 
-from registration.views import active
-from registration.views import register
-from registration.views import login_redirect
+from registration.views import active, register, login_redirect
+from registration.views import (
+    login as school_admin_login, logout as school_admin_logout)
 
 from django_cas.views import login as login_view, logout as logout_view
 
@@ -19,10 +19,11 @@ urlpatterns = patterns('',
          # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
          # that way it can return a sensible "invalid key" message instead of a confusing 404.
           url(r'^active/(?P<activation_key>\w+)/$',active,name='registration_avtive'),
-          # url(r'^login/$', login_view, name='auth_login'),
-          # url(r'^logout/$', logout_view, name='auth_logout'),
-          url(r'^login/$',auth_views.login,{'template_name':'registration/login.html'},name='auth_login'),
-          url(r'^logout/$',auth_views.logout,{'next_page':'/'},name='auth_logout'),
+          url(r'^login/$', login_view, name='auth_login'),
+          url(r'^logout/$', logout_view, name='auth_logout'),
+          url(r'^school_admin_login/$', school_admin_login, {'template_name':'registration/login.html'},
+              name='school_admin_login'),
+          url(r'^school_admin_logout/$', school_admin_logout, {'next_page':'/'}, name='school_admin_logout'),
           url(r'^password/change/$',auth_views.password_change,name='auth_password_change'),
           url(r'^password/change/done/$',auth_views.password_change_done, name='auth_password_change_done'),
 

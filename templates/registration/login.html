@@ -2,7 +2,7 @@
 
 {%block form-content%}
 <script type='text/javascript' src="{{STATIC_URL}}js/home/checkbrowser.js"></script>
-	<form  class="form-signin form-horizontal" method="post" action="{% url auth_login %}?next={%url auth_login_redirect%}">
+	<form  class="form-signin form-horizontal" method="post" action="{% url school_admin_login %}?next={%url adminStaff_home %}">
 		{% csrf_token %}
 		<h2 class="login">欢迎登录创新创业管理平台</h2>
 		{% include 'base/_form.html' %}
@@ -11,7 +11,9 @@
 		<!--input type="hidden" name="text" value="/show/"-->
 		<br/>
 		<br/>
+        {% comment %}
 		<p>想不起来密码了？<a href="{% url auth_password_reset %}">点击重置</a>!</p>
+        {% endcomment %}
 	</form>	
     {% include "base/checkbrowser.html" %}
 {%endblock%}
