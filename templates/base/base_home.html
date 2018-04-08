@@ -22,6 +22,9 @@
                  <li>
                    <a href="#">用户信息: {{ request.user.username }}</a>
                  </li>
+                 <li>
+                   <a href="settings/switch/">切换账号</a>
+                 </li>
                  {%if userauth.is_adminstaff %}
                  <li>
                    <a href="/adminStaff/" >校级管理员</a>
@@ -58,17 +61,8 @@
                </ul>
              </li><!--end dropdown div-->
              {% else %}
-             <li class="dropdown">
-               <a href="#" class="dropdown-toggle" data-toggle="dropdown">登录入口
-                 <b class="caret"></b>
-               </a>
-               <ul class="dropdown-menu home_menu" role="menu">
-                 <li><a href="/accounts/login">校级管理员</a></li>
-                 <li><a href="/accounts/login">学院管理员</a></li>
-                 <li><a href="/accounts/login">指导老师</a></li>
-                 <li><a href="/accounts/login">评审专家</a></li>
-                 <li><a href="/accounts/login">参赛学生</a></li>
-               </ul>
+             <li >
+               <a href="/accounts/login">登录</a>
              </li>
              {% endif %}
              <li class=""><a href="/features/">平台指南</a></li>

@@ -152,7 +152,7 @@ def switch_user_list_view(request):
         identity = 0
         if user_set.count() == 0:
             data = {"query_set": query_set, "identity": identity}
-            return render(request, "registration/search_user.html", data)
+            return render(request, "registration/switch_user.html", data)
         else:
             identity = 1 if user_set[0].username[0] == 'S' else 2
             if identity == 1:
@@ -161,7 +161,7 @@ def switch_user_list_view(request):
             elif identity == 2:
                 query_set = user_set
             data = {"query_set": query_set, "identity": identity}
-            return render(request, "registration/search_user.html", data)
+            return render(request, "registration/switch_user.html", data)
 
 
 @login_required
