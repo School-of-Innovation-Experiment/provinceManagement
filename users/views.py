@@ -142,26 +142,24 @@ def admin_account_view(request):
 @csrf.csrf_protect
 def switch_user_list_view(request):
     user = request.user
-    if user.username[0] in ('S', 'T', 'A'):
-        return HttpResponseRedirect('/')
-    else:
-        user_set = User.objects.filter(
-            username__endswith=user.username,is_active=True).exclude(
+    user_set = User.objects.filter(
+        username__endswith=user.username.split('_')[-1],
+            is_active=True).exclude(
             username=user.username)
-        query_set = []
-        identity = 0
-        if user_set.count() == 0:
-            data = {"query_set": query_set, "identity": identity}
-            return render(request, "registration/switch_user.html", data)
-        else:
-            identity = 1 if user_set[0].username[0] == 'S' else 2
-            if identity == 1:
-                query_set = ProjectSingle.objects.select_related(
-                    'student__userid').filter(student__userid__in=user_set)
-            elif identity == 2:
-                query_set = user_set
-            data = {"query_set": query_set, "identity": identity}
-            return render(request, "registration/switch_user.html", data)
+    query_set = []
+    identity = 0
+    if user_set.count() == 0:
+        data = {"query_set": query_set, "identity": identity}
+        return render(request, "registration/switch_user.html", data)
+    else:
+        identity = 1 if user_set[0].username[0] == 'S' else 2
+        if identity == 1:
+            query_set = ProjectSingle.objects.select_related(
+                'student__userid').filter(student__userid__in=user_set)
+        elif identity == 2:
+            query_set = user_set
+        data = {"query_set": query_set, "identity": identity}
+        return render(request, "registration/switch_user.html", data)
 
 
 @login_required
@@ -169,7 +167,7 @@ def switch_user_list_view(request):
 def relogin_view(request, username):
     user = request.user
     identity = 'news'
-    if user.username == username.split('_')[-1]:
+    if user.username.split('_')[-1] == username.split('_')[-1]:
         logout(request)
         new_user_set = User.objects.filter(username=username, is_active=True)
         if new_user_set.count() > 0:
