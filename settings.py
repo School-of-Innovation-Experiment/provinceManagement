@@ -296,3 +296,5 @@ RPC_SITE = RPC_SITE_PRODUCTION
 
 # CAS
 CAS_SERVER_URL = 'https://sso.dlut.edu.cn/cas'
+CAS_IGNORE_REFERER = True
+CAS_REDIRECT_URL = '/settings/switch/'
