@@ -141,11 +141,9 @@ def admin_account_view(request):
 @login_required
 @csrf.csrf_protect
 def switch_user_list_view(request):
-    user = request.user
+    username = request.user.username.split('_')[-1]  # First-class username
     user_set = User.objects.filter(
-        username__endswith=user.username.split('_')[-1],
-            is_active=True).exclude(
-            username__in=(user.username,user.username.split('_')[-1]))
+        username__endswith=username, is_active=True).exclude(username=username)
     query_set = []
     identity = 0
     if user_set.count() == 0:
