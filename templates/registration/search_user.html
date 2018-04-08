@@ -10,7 +10,11 @@
   <div class="panel-body">
     <div>
     <table class="table table-condensed">
-      {% if identity == 1 %}
+      {% if identity == 0 %}
+      <div>
+        <h4>您还未绑定账号，请先绑定！</h4>
+      </div>
+      {% elif identity == 1 %}
           <thead>
           <tr>
             <td>账号</td>
@@ -51,6 +55,9 @@
     <tr>
       <a type = "button" class="btn btn-lg btn-success" href="{% url binding %}">绑定新账号</a>
     </tr>
+  </div>
+  <div>
+    <p>*说明：所绑定账号须已激活，且相同年份项目所关联的账号只能绑定一个账号，每个教师工号只能绑定一个账号。</p>
   </div>
   </div>
 </div>

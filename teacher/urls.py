@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(
         r'^$',
         teacher_views.home_view,
+        name="teacher_home"
     ),
     url(
         r'^application/(?P<pid>.{36})$',

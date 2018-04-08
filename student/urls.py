@@ -14,7 +14,8 @@ urlpatterns = patterns('',
     url(
         r'^$',
         student_views.home_view,
-    ),    
+        name="student_home"
+    ),
     url(
         r'^memberchange$',
         student_views.member_change,
@@ -27,7 +28,7 @@ urlpatterns = patterns('',
     url(
         r'^open/(?P<pid>.{36})$',
         student_views.open_report_view,
-    ), 
+    ),
 
     url(
         r'^application/(?P<pid>.{36})$',

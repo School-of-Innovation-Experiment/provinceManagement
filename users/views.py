@@ -168,6 +168,7 @@ def switch_user_list_view(request):
 @csrf.csrf_protect
 def relogin_view(request, username):
     user = request.user
+    identity = 'news'
     if user.username == username.split('_')[-1]:
         logout(request)
         new_user_set = User.objects.filter(username=username, is_active=True)
@@ -179,7 +180,13 @@ def relogin_view(request, username):
         new_user.backend = "%s.%s" % (
             backend.__module__, backend.__class__.__name__)
         login(request, new_user)
-    return HttpResponseRedirect('/')
+        if check_auth(user=new_user, authority=STUDENT_USER):
+            identity = 'student_home'
+        elif check_auth(user=new_user, authority=TEACHER_USER):
+            identity = 'teacher_home'
+        elif check_auth(user=new_user, authority=SCHOOL_USER):
+            identity = 'school_home'
+    return HttpResponseRedirect(reverse(identity))
 
 
 @login_required

@@ -36,6 +36,7 @@ urlpatterns = patterns(
     url(
         r'^$',
         school_views.home_view,
+        name='school_home'
   	    ),
     url(
         r'^dispatch$',
