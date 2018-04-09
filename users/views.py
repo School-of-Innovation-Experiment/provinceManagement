@@ -141,30 +141,40 @@ def admin_account_view(request):
 @login_required
 @csrf.csrf_protect
 def switch_user_list_view(request):
+    is_second_account = False
+    is_list_empty = False
+    if request.user.username[0] in ('S', 'T', 'A'):
+        is_second_account = True
+    def get_user_set(end_username,start_username):
+        return User.objects.filter(
+            username__endswith=end_username,
+            username__startswith=start_username,
+            is_active=True)
     username = request.user.username.split('_')[-1]  # First-class username
-    user_set = User.objects.filter(
-        username__endswith=username, is_active=True).exclude(username=username)
-    query_set = []
-    identity = 0
-    if user_set.count() == 0:
-        data = {"query_set": query_set, "identity": identity}
-        return render(request, "registration/switch_user.html", data)
-    else:
-        identity = 1 if user_set[0].username[0] == 'S' else 2
-        if identity == 1:
-            query_set = ProjectSingle.objects.select_related(
-                'student__userid').filter(student__userid__in=user_set)
-        elif identity == 2:
-            query_set = user_set
-        data = {"query_set": query_set, "identity": identity}
-        return render(request, "registration/switch_user.html", data)
+    student_user_set = get_user_set(username,'S')
+    teacher_user_set = get_user_set(username,'T')
+    admin_user_set = get_user_set(username,'A')
+    student_project_set = []
+    if (student_user_set.count() == 0
+        and teacher_user_set.count() == 0
+        and admin_user_set.count() == 0):
+        is_list_empty = True
+    if student_user_set.count() != 0:
+        student_project_set = ProjectSingle.objects.select_related(
+            'student__userid').filter(student__userid__in=student_user_set)
+    data = {"student_project_set": student_project_set,
+        "teacher_user_set": teacher_user_set,
+        "admin_user_set": admin_user_set,
+        "is_list_empty": is_list_empty,
+        "is_second_account": is_second_account}
+    return render(request, "registration/switch_user.html", data)
 
 
 @login_required
 @csrf.csrf_protect
 def relogin_view(request, username):
     user = request.user
-    identity = 'news'
+    redirect_to = 'news'
     if user.username.split('_')[-1] == username.split('_')[-1]:
         logout(request)
         new_user_set = User.objects.filter(username=username, is_active=True)
@@ -177,12 +187,12 @@ def relogin_view(request, username):
             backend.__module__, backend.__class__.__name__)
         login(request, new_user)
         if check_auth(user=new_user, authority=STUDENT_USER):
-            identity = 'student_home'
+            redirect_to = 'student_home'
         elif check_auth(user=new_user, authority=TEACHER_USER):
-            identity = 'teacher_home'
+            redirect_to = 'teacher_home'
         elif check_auth(user=new_user, authority=SCHOOL_USER):
-            identity = 'school_home'
-    return HttpResponseRedirect(reverse(identity))
+            redirect_to = 'school_home'
+    return HttpResponseRedirect(reverse(redirect_to))
 
 
 @login_required
@@ -190,7 +200,7 @@ def relogin_view(request, username):
 def binding_view(request):
     error_code = 0
     if request.user.username[0] in ('S', 'T', 'A'):
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('homepage'))
     else:
         if request.method == 'POST':
             new_username_end = request.user.username
