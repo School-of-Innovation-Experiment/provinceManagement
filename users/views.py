@@ -141,13 +141,17 @@ def admin_account_view(request):
 @login_required
 @csrf.csrf_protect
 def switch_user_list_view(request):
+    identity = 0
+    is_second_account = False
+    if request.user.username[0] in ('S', 'T', 'A'):
+        is_second_account = True
     username = request.user.username.split('_')[-1]  # First-class username
     user_set = User.objects.filter(
         username__endswith=username, is_active=True).exclude(username=username)
     query_set = []
-    identity = 0
     if user_set.count() == 0:
-        data = {"query_set": query_set, "identity": identity}
+        data = {"query_set": query_set, "identity": identity,
+            "is_second_account": is_second_account}
         return render(request, "registration/switch_user.html", data)
     else:
         identity = 1 if user_set[0].username[0] == 'S' else 2
@@ -156,7 +160,8 @@ def switch_user_list_view(request):
                 'student__userid').filter(student__userid__in=user_set)
         elif identity == 2:
             query_set = user_set
-        data = {"query_set": query_set, "identity": identity}
+        data = {"query_set": query_set, "identity": identity,
+            "is_second_account": is_second_account}
         return render(request, "registration/switch_user.html", data)
 
 
@@ -190,7 +195,7 @@ def relogin_view(request, username):
 def binding_view(request):
     error_code = 0
     if request.user.username[0] in ('S', 'T', 'A'):
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('homepage'))
     else:
         if request.method == 'POST':
             new_username_end = request.user.username

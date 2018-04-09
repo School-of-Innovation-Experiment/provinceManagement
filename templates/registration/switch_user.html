@@ -51,6 +51,7 @@
       {% endif %}
     </table>
   </div>
+  {% if not is_second_account %}
   <div>
     <tr>
       <a type = "button" class="btn btn-lg btn-success" href="{% url binding %}">绑定新账号</a>
@@ -60,6 +61,7 @@
     <p style="color:red">*说明：所绑定账号为旧版本大创账号（注册邮箱）并且须已激活，同一学号可以绑定多个不同年份项目，但同一年份项目只能绑定一个，每个教师工号只能绑定一个旧账号。
       每个旧账号只能被绑定一次，教师工号登录请不要绑定之前的学生账号，学生学号登录也不要绑定教师账号！</p>
   </div>
+  {% endif %}
   <br/>
   <div><p>*注：大创系统现在已经接入学校的统一身份认证服务（CAS），对于之前已经存在的项目需要进行绑定。</p></div>
   </div>
