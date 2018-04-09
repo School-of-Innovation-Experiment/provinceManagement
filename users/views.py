@@ -141,28 +141,33 @@ def admin_account_view(request):
 @login_required
 @csrf.csrf_protect
 def switch_user_list_view(request):
-    identity = 0
     is_second_account = False
+    is_list_empty = False
     if request.user.username[0] in ('S', 'T', 'A'):
         is_second_account = True
+    def get_user_set(end_username,start_username):
+        return User.objects.filter(
+            username__endswith=end_username,
+            username__startswith=start_username,
+            is_active=True)
     username = request.user.username.split('_')[-1]  # First-class username
-    user_set = User.objects.filter(
-        username__endswith=username, is_active=True).exclude(username=username)
-    query_set = []
-    if user_set.count() == 0:
-        data = {"query_set": query_set, "identity": identity,
-            "is_second_account": is_second_account}
-        return render(request, "registration/switch_user.html", data)
-    else:
-        identity = 1 if user_set[0].username[0] == 'S' else 2
-        if identity == 1:
-            query_set = ProjectSingle.objects.select_related(
-                'student__userid').filter(student__userid__in=user_set)
-        elif identity == 2:
-            query_set = user_set
-        data = {"query_set": query_set, "identity": identity,
-            "is_second_account": is_second_account}
-        return render(request, "registration/switch_user.html", data)
+    student_user_set = get_user_set(username,'S')
+    teacher_user_set = get_user_set(username,'T')
+    admin_user_set = get_user_set(username,'A')
+    student_project_set = []
+    if (student_user_set.count() == 0
+        and teacher_user_set.count() == 0
+        and admin_user_set.count() == 0):
+        is_list_empty = True
+    if student_user_set.count() != 0:
+        student_project_set = ProjectSingle.objects.select_related(
+            'student__userid').filter(student__userid__in=student_user_set)
+    data = {"student_project_set": student_project_set,
+        "teacher_user_set": teacher_user_set,
+        "admin_user_set": admin_user_set,
+        "is_list_empty": is_list_empty,
+        "is_second_account": is_second_account}
+    return render(request, "registration/switch_user.html", data)
 
 
 @login_required
