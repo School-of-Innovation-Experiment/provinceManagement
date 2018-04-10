@@ -32,6 +32,7 @@ from const import *
 from users.models import *
 from school.models import ProjectSingle
 from users.forms import *
+from users.chemical_admin_list import *
 
 
 def base_profile_view(request, authority=None):
@@ -146,27 +147,27 @@ def switch_user_list_view(request):
     if request.user.username[0] in ('S', 'T', 'A'):
         is_second_account = True
     def get_user_set(end_username,start_username):
+        if start_username == 'A':
+            end_username = admin_list.get(end_username,end_username)
         return User.objects.filter(
             username__endswith=end_username,
             username__startswith=start_username,
             is_active=True)
     username = request.user.username.split('_')[-1]  # First-class username
-    student_user_set = get_user_set(username,'S')
-    teacher_user_set = get_user_set(username,'T')
-    admin_user_set = get_user_set(username,'A')
+    student_user_set = get_user_set(username, 'S')
+    teacher_user_set = get_user_set(username, 'T')
+    admin_user_set = get_user_set(username, 'A')
     student_project_set = []
-    if (student_user_set.count() == 0
-        and teacher_user_set.count() == 0
-        and admin_user_set.count() == 0):
+    if not (student_user_set or teacher_user_set or admin_user_set):
         is_list_empty = True
-    if student_user_set.count() != 0:
+    if student_user_set:
         student_project_set = ProjectSingle.objects.select_related(
             'student__userid').filter(student__userid__in=student_user_set)
     data = {"student_project_set": student_project_set,
-        "teacher_user_set": teacher_user_set,
-        "admin_user_set": admin_user_set,
-        "is_list_empty": is_list_empty,
-        "is_second_account": is_second_account}
+            "teacher_user_set": teacher_user_set,
+            "admin_user_set": admin_user_set,
+            "is_list_empty": is_list_empty,
+            "is_second_account": is_second_account}
     return render(request, "registration/switch_user.html", data)
 
 
@@ -175,7 +176,9 @@ def switch_user_list_view(request):
 def relogin_view(request, username):
     user = request.user
     redirect_to = 'news'
-    if user.username.split('_')[-1] == username.split('_')[-1]:
+    ID = user.username.split('_')[-1]
+    request_name = admin_list.get(ID,ID)
+    if request_name == username.split('_')[-1]:
         logout(request)
         new_user_set = User.objects.filter(username=username, is_active=True)
         if new_user_set.count() > 0:
