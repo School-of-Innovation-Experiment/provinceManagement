@@ -68,7 +68,7 @@ def teacherProjNumLimit(request, form):
             limited_num = form.cleaned_data['limited_num']
             num_and_remaining = get_project_num_and_remaining(request)
             test_sum = 0
-            
+
             for teacher in TeacherProfile.objects.filter(school__userid = request.user):
                 if TeacherProjectPerLimits.objects.filter(teacher = teacher).count() == 0:
                     test_sum += limited_num
@@ -89,7 +89,7 @@ def teacherProjNumLimit(request, form):
             table = refresh_numlimit_table(request)
             projects_remaining = get_project_num_and_remaining(request)['projects_remaining']
             return simplejson.dumps({'message': "批量更新成功", 'status': "1", "table": table, 'projects_remaining': projects_remaining})
-            
+
         teacher_obj = TeacherProfile.objects.get(id=form.cleaned_data["teacher_name"])
         limited_num = form.cleaned_data["limited_num"]
         num_and_remaining = get_project_num_and_remaining(request)
@@ -212,11 +212,11 @@ def judge_is_assigned(request):
     try:
         schoolObj = SchoolProfile.objects.get(userid = request.user)
     except SchoolProfile.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     try:
         obj = Project_Is_Assigned.objects.get(school = schoolObj)
     except Project_Is_Assigned.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请联系管理员更新数据库"}) 
+        return simplejson.dumps({'flag':None,'message':u"Project_Is_Assigned 数据不完全，请联系管理员更新数据库"})
     return simplejson.dumps({'flag': obj.is_assigned_in_presubmit})
 
 @dajaxice_register
@@ -224,7 +224,7 @@ def applicaton_control(request):
     try:
         schoolObj = SchoolProfile.objects.get(userid = request.user)
     except SchoolProfile.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     if schoolObj.is_applying:
         schoolObj.is_applying = False
         schoolObj.save()
@@ -239,11 +239,11 @@ def finish_control(request,year_list):
     try:
         schoolObj = SchoolProfile.objects.get(userid = request.user)
     except SchoolProfile.DoesNotExist:
-        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"}) 
+        return simplejson.dumps({'flag':None,'message':u"SchoolProfile 数据不完全，请联系管理员更新数据库"})
     user = User.objects.get(id=schoolObj.userid_id)
     year_finishing_list = []
     if schoolObj.is_finishing ==False:
-        if year_list != []:            
+        if year_list != []:
             for temp in year_list:
                 projectcontrol=ProjectFinishControl()
                 projectcontrol.userid=user
@@ -259,13 +259,13 @@ def finish_control(request,year_list):
                     year_finishing_list.append(finishtemp.project_year)
             year_finishing_list = sorted(year_finishing_list)
         else:
-            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"}) 
+            return simplejson.dumps({'flag':None,'message':u"项目年份未选择或是没有未结题项目"})
     else:
         projectcontrol_list=ProjectFinishControl.objects.filter(userid=user)
         projectcontrol_list.delete()
         schoolObj.is_finishing=False
         schoolObj.save()
-    flag = schoolObj.is_finishing 
+    flag = schoolObj.is_finishing
     return simplejson.dumps({'flag': flag,'year_finishing_list':year_finishing_list})
 
 @dajaxice_register
@@ -302,7 +302,8 @@ def achievement_save(request, project_id, values, category):
     context = {}
     project = get_object_or_404(ProjectSingle, project_id = project_id)
     is_finishing = check_finishingyear(project)
-    readonly = project.over_status.status != OVER_STATUS_NOTOVER or not is_finishing
+    readonly = project.over_status.status not in (OVER_STATUS_NOTOVER,
+        OVER_STATUS_DELAY) or not is_finishing
     if readonly:
         return HttpResponse("readonly")
     ao = AchievementObjects(project_id=project, title=values[0], member=values[1],
@@ -361,7 +362,7 @@ def search_project_in_rating(request, form_data, is_expired=False):
             pass
     undef_subject_list = filter(lambda x: (not x.recommend) and (x.project_grade.grade == GRADE_UN), subject_list)
     def_subject_list = filter(lambda x: (x.recommend) or (x.project_grade.grade != GRADE_UN), subject_list)
-    
+
 
     context = {'subject_list': subject_list,
                'undef_subject_list': undef_subject_list,
