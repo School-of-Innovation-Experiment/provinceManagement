@@ -134,7 +134,7 @@ class RegistrationManager(models.Manager):
                     and TeacherProfile.objects.filter(userid = oldUserObj).count() == 0:
                     oldUserObj.delete() #删除被覆盖用户
         elif 'teacher_school' in kwargs:
-            TeacherProfile.objects.create(
+            teacherProfileObj = TeacherProfile.objects.create(
                 school=kwargs["teacher_school"],
                 userid=new_user,
                 name=kwargs["person_name"])

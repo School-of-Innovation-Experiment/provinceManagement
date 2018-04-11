@@ -21,6 +21,7 @@ from const import *
 import datetime
 from backend.logging import logger, loginfo
 from backend.decorators import check_auth
+from adminStaff.models import ProjectControl
 
 def refresh_project_table(request):
     teacher_profile = TeacherProfile.objects.get(userid = request.user)
@@ -96,7 +97,8 @@ def StudentDispatch(request, form):
         email = student_form.cleaned_data["student_email"]
         category = student_form.cleaned_data["category"]
         uid = student_form.cleaned_data['student_uid']
-        year = get_current_year()
+        project_control = ProjectControl.objects.all()[0]
+        year = project_control.pre_start_day.year+1
         fmt = 'S_{}_{}'
         username = fmt.format(year, uid)
         person_name = student_form.cleaned_data["student_personname"]
@@ -176,7 +178,7 @@ def new_or_update_comment(request,comment_form,pid):
             table = refresh_comment_table(request,pid)
             ret = {'status': '0', 'message': u"评论记录更新成功", 'table':table}
             break
-    else: 
+    else:
         if group.count() == PROGRESS_RECORD_MAX:
             ret = {'status': '1', 'message': u"评论记录已满，不可添加"}
         else:
