@@ -175,7 +175,7 @@ def switch_user_list_view(request):
 @csrf.csrf_protect
 def relogin_view(request, username):
     user = request.user
-    redirect_to = 'news'
+    redirect_to = 'homepage'
     ID = user.username.split('_')[-1]
     request_name = admin_list.get(ID,ID)
     if request_name == username.split('_')[-1]:
