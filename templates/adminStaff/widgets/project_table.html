@@ -66,7 +66,7 @@
         </td>
         {% if IS_DELETE_TABLE %}
         <td>
-          <a onclick="delete_project_id('{{item.project_id}}')" pid="{{item.project_id}}" class="btn btn-danger">删除</a>
+          <a onclick="if(confirm('您确定要删除吗？此功能将删除该项目对应学生账号以及项目相关文件，不可恢复！')==true)return delete_project_id('{{item.project_id}}')" pid="{{item.project_id}}" class="btn btn-danger">删除</a>
         </td>
         {% endif %}
       </tr>
