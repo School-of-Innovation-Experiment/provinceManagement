@@ -585,6 +585,42 @@ def delete_project_query(request, delete_info):
         return simplejson.dumps({"message": message})
 
 @dajaxice_register
+def changeyear_project_query(request, changeyear_info):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    loginfo(p=changeyear_info,label="changeyear_info")
+    message = ""
+    project_list = ProjectSingle.objects.filter(Q(adminuser__name = changeyear_info),
+        Q(project_category__category = 'research'))
+    if project_list:
+        #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
+        message = 'ok'
+        table_html = render_to_string("adminStaff/widgets/project_changeyear.html", {"proj_list": project_list, "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_DELETE_TABLE": True,"IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        return simplejson.dumps({"message": message, "table": table_html})
+    else:
+        message = "not found"
+        return simplejson.dumps({"message": message})
+
+@dajaxice_register
+def changeyear_project_id(request, pid, year):
+    """
+    根据学生的学号查询与之相关的进行中项目
+    """
+    loginfo(p=pid,label="pid")
+    message = ""
+    try:
+        project = ProjectSingle.objects.get(Q(project_id = pid))
+        project.year = int(year)
+        project.save()
+        message = 'ok'
+        return simplejson.dumps({"message": message, "pid": pid, "year": year})
+    except Exception, e:
+        print e
+        message = "not found"
+        return simplejson.dumps({"message": message})
+
+@dajaxice_register
 def delete_project_id(request, pid):
     """
     根据学生的学号查询与之相关的进行中项目
@@ -691,7 +727,7 @@ def download_zipfiles(request,filetype,project_manage_form):
     if filetype == 'other_files':
         path = get_otherfiles_path(request, project_manage_form)
     else:
-        path = get_zipfiles_path(request,filetype,project_manage_form) 
+        path = get_zipfiles_path(request,filetype,project_manage_form)
     path = MEDIA_URL + "tmp" + path[len(TMP_FILES_PATH):]
     return simplejson.dumps({'path':path})
 

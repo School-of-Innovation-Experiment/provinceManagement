@@ -1,0 +1,81 @@
+<div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>项目编号</th>
+        {% if IS_MINZU_SCHOOL %}
+        <th>项目类型</th>
+        {% endif %}
+        <th>项目级别</th>
+        <th>项目年份</th>
+        <th>申报书</th>
+        <th>开题报告</th>
+        <th>中期检查表</th>
+        <th>结题报告</th>
+        {% if IS_DLUT_SCHOOL %}
+        <th>项目汇编</th>
+        {% endif %}
+        <!--th>申请学分</th!-->
+        <th>更改年份</th>
+        {% if IS_DELETE_TABLE %}
+        <th>操作</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in proj_list %}
+      <tr>
+        <td><a href="/adminStaff/application/{{item.project_id}}" title="{{item.title}}">{{item.title|truncatechars:15}}</td>
+        <td>
+           <a data-toggle="modal" onclick="get_project_unique_code(this)" id="ProjectUniqueCode_{{item.project_id}}" href="#project_code_add" pid="{{item.project_id}}" >{{item.project_unique_code}}</a>
+        </td>
+        {% if IS_MINZU_SCHOOL %}
+        <td>{{item.project_category}}</td>
+        {% endif %}
+        <td>{{item.project_grade}}</td>
+        <td id="{{item.project_id}}">
+          {{item.year}}
+        </td>
+        <td>
+          {% if item.file_application %}<span class="label label-success"><a href="{{item.fileurl_application}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_application %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+            {% if item.file_opencheck %}<span class="label label-success"><a href="{{item.fileurl_opencheck }}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.file_opencheck %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+        <td>
+          {% if item.file_interimchecklist %}<span class="label label-success"><a href="{{item.fileurl_interimchecklist}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_interimchecklist %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        <td>
+          {% if item.file_summary %}<span class="label label-success"><a href="{{item.fileurl_file_summary}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_summary %}<span class="label label-important">未上传</span>{% endif %}
+        </td>
+        {% if IS_DLUT_SCHOOL %}
+        <td>
+          {% if item.file_projectcompilation %}<span class="label label-success"><a href="{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+          {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
+        </td>
+        {% endif %}
+        <!--td>
+          {% if item.score_application %}<span class="label label-important"><a href="{{item.scoreurl_application}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
+        </td!-->
+        <td >
+          <!-- <input type="button" id="isover_button"  pid="{{item.project_id}}" rel="isover" {%if item.is_over %}value="打开项目" class="btn btn-primary"{%endif%}{%if not item.is_over%} class="btn btn-primary btn-warning" value="关闭项目"{%endif%}> -->
+          <select style="width:100%" id="year_select_{{item.project_id}}" name="year_select_{{item.project_id}}" onclick="get_current_year('{{item.project_id}}')"  pid="{{item.project_id}}">
+            <option value="年份" selected = "selected">年份</option>
+          </select>
+
+        </td>
+        {% if IS_DELETE_TABLE %}
+        <td>
+          <a onclick="changeyear_project_id('{{item.project_id}}')" pid="{{item.project_id}}" class="btn btn-primary btn-xs">更改年份</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

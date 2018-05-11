@@ -22,5 +22,16 @@
     </div>
   </fieldset>
 </form>
+<form id="project_control_form" class="bs-docs-example">
+  <fieldset>
+    <legend>科研训练项目更改年份</legend>
+    <div class="form-inline">
+        <input type="text" id="changeyear_info_input" class="input-query span3" placeholder="输入你需要检索的项目指导教师">
+        <input type="button" value="检索" onclick="changeyear_project_query();">
+    </form>
+    <div id="changeyear_result_table">
+    </div>
+  </fieldset>
+</form>
 <script type='text/javascript' src="{{STATIC_URL}}js/adminstaff/project_assistant.js"></script>
 {%endblock%}
