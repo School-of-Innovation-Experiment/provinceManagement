@@ -720,6 +720,11 @@ class AdminStaffService(object):
         for pro_obj in context["pro_list"]:
             add_fileurl(pro_obj)
             add_telephone(pro_obj)
+            pro_obj.has_other_files = False
+            for files in pro_obj.uploadedfiles_set.all():
+                if files.name not in [u'申报书', u'中期检查表', u'结题报告', u'项目汇编', u'开题报告']:
+                    pro_obj.has_other_files = True
+                    break
             if len(pro_obj.project_unique_code.strip()) == 0:
                 pro_obj.project_unique_code = "无"
         return render(request, "adminStaff/adminstaff_home.html",context)

@@ -567,7 +567,7 @@ def info_xls_scoreapplication(request,proj_set):
             xls_obj.write(_number, 4, unicode(stu.studentName))
             xls_obj.write(_number, 5, unicode(stu.studentId))
             xls_obj.write(_number, 6, "是")
-            xls_obj.write(_number, 7,) 
+            xls_obj.write(_number, 7,)
             _number+= 1
     # write xls file
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目学分认定表"))
@@ -612,12 +612,12 @@ def get_projectlist(request,project_manage_form):
     返回：QuerySet对象
     """
     if check_auth(user=request.user, authority=ADMINSTAFF_USER):
-        project_manage_form = AdminstaffProjectManageForm(deserialize_form(project_manage_form)) 
+        project_manage_form = AdminstaffProjectManageForm(deserialize_form(project_manage_form))
         proj_set = projectFilterList(request,project_manage_form)
         proj_set =  proj_set.order_by('project_unique_code','school','adminuser')
     elif check_auth(user=request.user, authority=SCHOOL_USER):
         school = SchoolProfile.objects.get(userid=request.user)
-        project_manage_form = SchoolProjectManageForm(deserialize_form(project_manage_form),school = school) 
+        project_manage_form = SchoolProjectManageForm(deserialize_form(project_manage_form),school = school)
         proj_set = projectFilterList(request,project_manage_form)
         proj_set = proj_set.filter(school_id=school).order_by('-year','adminuser')
     return proj_set
@@ -671,12 +671,15 @@ def projectFilterList(request,project_manage_form):
         project_scoreapplication = "-1"
         project_school = "-1"
         if check_auth(user=request.user, authority=ADMINSTAFF_USER):
+            project_category = project_manage_form.cleaned_data['project_category']
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
             project_school = project_manage_form.cleaned_data["project_school"]
         project_teacher_student_name = project_manage_form.cleaned_data["teacher_student_name"]
         loginfo(project_teacher_student_name)
         # qset = AdminStaffService.get_filter(project_grade,project_year,project_isover,project_scoreapplication)
-        qset = get_filter(project_grade,project_year,project_overstatus,project_teacher_student_name,project_scoreapplication,project_school)
+        qset = get_filter(project_grade, project_year, project_overstatus,
+            project_teacher_student_name, project_category, project_scoreapplication,
+            project_school)
         if qset :
             qset = reduce(lambda x, y: x & y, qset)
             # if project_grade == "-1" and project_scoreapplication == "-1":
@@ -692,8 +695,8 @@ def projectFilterList(request,project_manage_form):
 
 ##
 # TODO: fixed the `isover` to over status
-    
-def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name,project_scoreapplication = "-1",project_school= "-1"):
+
+def get_filter(project_grade,project_year,project_overstatus, project_teacher_student_name, project_category, project_scoreapplication = "-1",project_school= "-1"):
     if project_grade == "-1":
         project_grade=''
     if project_year == '-1':
@@ -702,6 +705,8 @@ def get_filter(project_grade,project_year,project_overstatus, project_teacher_st
     #     project_isover=''
     if project_overstatus == '-1':
         project_overstatus=''
+    if project_category == '-1':
+        project_category=''
     if project_scoreapplication == '-1':
         project_scoreapplication=''
     if project_school  == '-1':
@@ -716,14 +721,15 @@ def get_filter(project_grade,project_year,project_overstatus, project_teacher_st
     q4 = (project_scoreapplication and Q(score_application=project_scoreapplication)) or None
     q5 = (project_school and Q(school_id = project_school)) or None
     q6 = (project_teacher_student_name and (Q(adminuser__name__contains = project_teacher_student_name) | Q(student__name__contains = project_teacher_student_name))) or None
-    qset = filter(lambda x: x != None, [q1, q2, q3,q4,q5,q6])
+    q7 = (project_category and Q(project_category__category = project_category)) or None
+    qset = filter(lambda x: x != None, [q1, q2, q3, q4, q5, q6, q7])
     return qset
 
 def get_zipfiles_path(request,filetype,project_manage_form):
     proj_set = get_projectlist(request,project_manage_form)
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.zip" % ("大连理工大学大学生创新训练项目",FILE_TYPE_DICT[filetype]+"压缩包"))
     f = zipfile.ZipFile(save_path,'w',zipfile.ZIP_DEFLATED)
-    for pro_obj in proj_set:    
+    for pro_obj in proj_set:
         upfile = pro_obj.uploadedfiles_set.filter(name = FILE_TYPE_DICT[filetype])
         if upfile:
             upfile_obj = upfile[0]
@@ -739,7 +745,7 @@ def get_otherfiles_path(request, project_manage_form):
     save_path = os.path.join(
         TMP_FILES_PATH, '大连理工大学大学生创新训练项目项目相关文件压缩包.zip')
     f = zipfile.ZipFile(save_path, 'w', zipfile.ZIP_DEFLATED)
-    for pro_obj in proj_set:    
+    for pro_obj in proj_set:
         upfiles = pro_obj.uploadedfiles_set.exclude(
             Q(name=FILE_TYPE_DICT['application'])|
             Q(name=FILE_TYPE_DICT['opencheck'])|
@@ -856,4 +862,4 @@ def info_xls_achievements(request, proj_set):
         row += 1
     save_path = os.path.join(TMP_FILES_PATH, "%s%s.xls" % (str(datetime.date.today().year+1), "年大连理工大学大学生创新创业训练计划项目结题验收表项目成果汇总"))
     workbook.save(save_path)
-    return save_path 
+    return save_path

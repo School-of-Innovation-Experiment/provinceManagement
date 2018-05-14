@@ -30,6 +30,7 @@
           {% if IS_DLUT_SCHOOL %}
           <th><button class = "btn btn-default" type = "button" onclick = "download('projectcompilation')">项目汇编</button></th>
           {% endif %}
+          <th><button class = "btn btn-default" type = "button" onclick = "download('other_files')">其他成果</button></th>
           <th>申请学分</th>
           <th>联系方式</th>
           <th>是否结题</th>
@@ -71,6 +72,10 @@
             {% if not item.file_projectcompilation %}<span class="label label-important">        未上传</span>{% endif %}
           </td>
           {% endif %}
+          <td>
+            {% if item.has_other_files %}<span class="label label-success">已上传</span>{% endif %}
+            {% if not item.has_other_files %}<span class="label label-important">        未上传</span>{% endif %}
+          </td>
 
           <td>
             {% if item.score_application %}<span class="label label-important"><a href="/adminStaff/memberchange/{{item.project_id}}" style="font-size:14px;color:white;" target="_blank">申请学分</a></span>{% endif %}
