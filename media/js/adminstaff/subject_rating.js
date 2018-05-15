@@ -13,6 +13,14 @@ function review_list_callback(data){
     $("#review_table").html(data.table);
 }
 
+function change_all_grade(){
+  Dajaxice.adminStaff.change_all_grade(change_all_grade_callback);
+}
+
+function change_all_grade_callback(data){
+  alert(data.message);
+}
+
 function subject_grade(){
     var changed_grade = $('#id_subject_grade').find("option:selected").val();
     Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
@@ -65,7 +73,7 @@ function release_news(){
         }
     });
     if (release)
-    { 
+    {
         var table = $("#defined_subject_table");
         html_originstr = $("#defined_subject_table")[0].outerHTML;
         $("#defined_subject_table thead tr").each(function(){

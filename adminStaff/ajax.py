@@ -793,3 +793,20 @@ def switch_category(request, pid, cname):
     project.project_category = cate
     project.save()
     return simplejson.dumps({'status': 0})
+
+@dajaxice_register
+def change_all_grade(request):
+    """
+    修改所有等级为未指定的项目的等级为校级
+    """
+    try:
+        project = ProjectSingle.objects.filter(project_grade__grade=GRADE_UN)
+        for p in project:
+            p.project_grade = ProjectGrade.objects.get(grade=GRADE_SCHOOL)
+            p.save()
+        message = '修改成功！'
+        return simplejson.dumps({"message": message})
+    except Exception, e:
+        print e
+        message = "修改失败！"
+        return simplejson.dumps({"message": message})

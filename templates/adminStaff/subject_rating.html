@@ -9,6 +9,7 @@
     {%endif%}
     {% if readonly %}
     <input type="button" style="width:150px;" class="btn btn-primary" id="release_button" onclick="release_news();" value="发布新闻"/><span class="help-inline">项目级别分配完以后可以发布新闻</span>
+    <a onclick="if(confirm('您确定修改吗？')==true)return change_all_grade()" class="btn btn-danger">设置所有未指定项目等级为校级</a>
     <div class="alert alert-error" style="margin-top:20px;">
       <a class="close" data-dismiss="alert">x</a>
       <h4 class="alert-heading">系统提示！</h4>
