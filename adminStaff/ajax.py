@@ -249,6 +249,7 @@ def change_subject_grade(request, project_id, changed_grade):
     '''
     change subject grade secretly
     '''
+    print(project_id,"#"*10)
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     project = ProjectSingle.objects.get(project_id = project_id)
     res = project.project_grade.get_grade_display()
@@ -591,12 +592,13 @@ def changeyear_project_query(request, changeyear_info):
     """
     loginfo(p=changeyear_info,label="changeyear_info")
     message = ""
+    subject_grade_form = SubjectGradeForm()
     project_list = ProjectSingle.objects.filter(Q(adminuser__name = changeyear_info),
         Q(project_category__category = 'research'))
     if project_list:
         #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
         message = 'ok'
-        table_html = render_to_string("adminStaff/widgets/project_changeyear.html", {"proj_list": project_list, "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_DELETE_TABLE": True,"IS_MINZU_SCHOOL": IS_MINZU_SCHOOL})
+        table_html = render_to_string("adminStaff/widgets/project_change_year_and_grade.html", {"proj_list": project_list, "IS_DLUT_SCHOOL": IS_DLUT_SCHOOL, "IS_DELETE_TABLE": True,"IS_MINZU_SCHOOL": IS_MINZU_SCHOOL, 'subject_grade_form': subject_grade_form})
         return simplejson.dumps({"message": message, "table": table_html})
     else:
         message = "not found"

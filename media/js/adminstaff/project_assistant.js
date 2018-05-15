@@ -1,3 +1,8 @@
+var glo_project_id;
+function get_subject_id(project_id){
+    glo_project_id = project_id;
+}
+
 function student_code_project_query(){
     var student_code = $("#student_code_input").val();
     Dajaxice.adminStaff.student_code_project_query(query_callback, {"student_code": student_code});
@@ -35,6 +40,15 @@ function changeyear_query_callback(data){
     else{
         $("#changeyear_result_table").html('<br \><div class="alert alert-warning">正在进行中的项目没有与该教师关联的对象存在</div>');
     }
+}
+
+function subject_grade(){
+    var changed_grade = $('#id_subject_grade').find("option:selected").val();
+    Dajaxice.adminStaff.change_subject_grade(change_grade_callback,{'project_id':glo_project_id,"changed_grade":changed_grade});
+}
+function change_grade_callback(data){
+    var target = "#gradeid_" + glo_project_id;
+    $(target).html(data.res);
 }
 
 function changeyear_project_id(pid){

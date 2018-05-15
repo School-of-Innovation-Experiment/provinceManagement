@@ -33,7 +33,9 @@
         {% if IS_MINZU_SCHOOL %}
         <td>{{item.project_category}}</td>
         {% endif %}
-        <td>{{item.project_grade}}</td>
+        <td>
+          <a data-toggle="modal" href="#grade_choice" id="gradeid_{{item.project_id}}" onclick="get_subject_id('{{item.project_id}}');">{{item.project_grade}}</a>
+        </td>
         <td id="{{item.project_id}}">
           {{item.year}}
         </td>
@@ -78,4 +80,17 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+<div class="modal hide fade" style="display: none;" id="grade_choice">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>选择项目级别</h3>
+  </div>
+  <div class="modal-body">
+    {{subject_grade_form.subject_grade}}
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="subject_grade();">保存更新</a>
+  </div>
 </div>
