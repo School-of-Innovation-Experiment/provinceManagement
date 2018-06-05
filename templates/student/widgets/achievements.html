@@ -18,7 +18,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete{% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete{% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td>
 		</tr>
 		{% endfor %}
         {% elif not readonly %}
@@ -52,7 +52,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td>
 		</tr>
 		{% endfor %}
         {% elif not readonly %}
@@ -86,7 +86,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td>
 		</tr>
 		{% endfor %}
         {% elif not readonly %}
@@ -120,7 +120,7 @@
 			<td>{{object.member}}</td>
 			<td>{{object.addition1}}</td>
 			<td>{{object.addition2}}</td>
-			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td> 
+			<td><a class="btn btn-danger delete {% if readonly %} disabled{% endif %}" uuid="{{object.id}}">删除</a></td>
 		</tr>
 		{% endfor %}
         {% elif not readonly %}
@@ -133,4 +133,11 @@
         </tr>
 		{% endif %}
 	</table>
+
+	{% if not have_achievement %}
+	<div class="row alert alert-error school-display">
+		<button class="close" data-dismiss="alert">×</button>
+		请至少填写实物，论文，专利，竞赛中的一项！！
+	</div>
+	{% endif %}
 </div>

@@ -240,8 +240,8 @@ def mid_report_view_work(request, pid = None, is_expired = False):
 @only_user_required
 # @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
-    data = final_report_view_work(request, pid, is_expired)
-    related_ao = AchievementObjects.objects.filter(project_id=data['pid'])
+    related_ao = AchievementObjects.objects.filter(project_id=pid)
+    data = final_report_view_work(request, pid, is_expired, related_ao)
     data['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
     data['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
     data['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
@@ -253,7 +253,7 @@ def final_report_view(request, pid=None,is_expired=False):
         return render(request, 'student/final.html', data)
 
 
-def final_report_view_work(request, pid=None,is_expired=False):
+def final_report_view_work(request, pid=None, is_expired=False, related_ao=None):
 
     """
     student final report
@@ -283,20 +283,25 @@ def final_report_view_work(request, pid=None,is_expired=False):
         readonly = False
 
     isRedirect = False
+    have_achievement = True
     is_show =  check_auth(user=request.user,authority=STUDENT_USER)
     if request.method == "POST" and readonly is not True:
-        final_form = FinalReportForm(request.POST, instance=final)
-        if final_form.is_valid():
-            final_form.save()
-            project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
-            project.save()
+        have_achievement = True if related_ao else False
+        if have_achievement:
+            final_form = FinalReportForm(request.POST, instance=final)
+            if final_form.is_valid():
+                final_form.save()
+                project.project_status = ProjectStatus.objects.get(status=STATUS_FINSUBMIT)
+                project.save()
 
-            isRedirect = True
-            # return HttpResponseRedirect(reverse('student.views.home_view'))
+                isRedirect = True
+                # return HttpResponseRedirect(reverse('student.views.home_view'))
+            else:
+                pass
+                logger.info("Final Form Valid Failed"+"**"*10)
+                logger.info(final_form.errors)
         else:
-            pass
-            logger.info("Final Form Valid Failed"+"**"*10)
-            logger.info(final_form.errors)
+            final_form = FinalReportForm(instance=final)
     else:
         final_form = FinalReportForm(instance=final)
     # techcompetition_form = TechCompetitionForm(instance=techcompetition)
@@ -307,6 +312,7 @@ def final_report_view_work(request, pid=None,is_expired=False):
             'readonly':readonly,
             'isRedirect': isRedirect,
             'is_show': is_show,
+            'have_achievement': have_achievement,
             }
     return data
 
