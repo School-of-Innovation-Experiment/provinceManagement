@@ -13,7 +13,7 @@ import time
 from django import forms
 from django.core.exceptions import PermissionDenied
 from django.db import models
-from django.db.models import Q 
+from django.db.models import Q
 from django.forms.util import ErrorList
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
@@ -78,6 +78,7 @@ class ApplicationReportForm(ModelForm):
         #TODO: add css into widgets
         widgets = {
                    'original':forms.Select(attrs={'class':'studentchange' }),
+                   'subject':forms.Select(attrs={'class':'studentchange' }),
                    "background": forms.Textarea(attrs={'rows': 8, 'cols': 100,
                                                        'style':'display:none',
                                                        'placeholder': '同类研究工作国内外研究现状与存在的问题等...',
@@ -328,7 +329,7 @@ class ProjectManageForm(forms.Form):
     project_overstatus_choice = list(OVER_STATUS_CHOICES)
     project_overstatus_choice = tuple([(-1, u"结题状态")] + project_overstatus_choice)
     project_grade = forms.ChoiceField(choices=project_grade_choice)
-    project_year = forms.ChoiceField() 
+    project_year = forms.ChoiceField()
     # project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
     teacher_student_name = forms.CharField(max_length = 20,

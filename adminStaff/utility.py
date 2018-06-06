@@ -477,7 +477,8 @@ def info_xls_province_gen():
     worksheet.write_merge(1, 2, 12, 13, '项目经费（元）')
     worksheet.write_merge(3, 4, 12, 12, '总经费')
     worksheet.write_merge(3, 4, 13, 13, '剩余经费')
-    worksheet.write_merge(1, 4, 14, 18, '项目简介（100字以内）')
+    worksheet.write_merge(1, 4, 14, 14, '一级学科代码')
+    worksheet.write_merge(1, 4, 15, 19, '项目简介（100字以内）')
 
     return worksheet, workbook
 
@@ -518,7 +519,9 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
         xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
         xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
-        xls_obj.write_merge(row, row, 14, 18, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+        if proj_obj.presubmit_set.all() and proj_obj.presubmit_set.all()[0].subject:
+            xls_obj.write(row, 14, unicode(proj_obj.presubmit_set.all()[0].subject.subject)) # 一级学科代码
+        xls_obj.write_merge(row, row, 15, 19, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
         # _index += 1
         _number+= 1

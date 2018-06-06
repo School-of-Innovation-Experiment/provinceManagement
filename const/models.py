@@ -18,7 +18,7 @@ from const import AUTH_CHOICES, VISITOR_USER
 from const import PROJECT_CATE_CHOICES, CATE_UN
 from const import PROJECT_GRADE_CHOICES, GRADE_UN
 from const import PROJECT_STATUS_CHOICES, STATUS_FIRST
-from const import PROJECT_INNOVATION_ORIGIN_CHOICES
+from const import PROJECT_INNOVATION_ORIGIN_CHOICES, PROJECT_INNOVATION_SUBJECT_CHOICES
 from const import PROJECT_ENTERPRISE_ORIGIN_CHOICES, PROJECT_ENTERPRISE_MATURITY_CHOICES
 from const import MAJOR_CHOICES
 from const import DEPARTMENT_CODE
@@ -147,6 +147,23 @@ class ProjectOrigin(models.Model):
     def __unicode__(self):
         return self.get_origin_display()
 
+
+class ProjectSubject(models.Model):
+    """
+    Project Subject for innovation
+    """
+    subject = models.CharField(blank=False, null=False, unique=True, max_length=5,
+                                 choices=PROJECT_INNOVATION_SUBJECT_CHOICES, \
+                                 default = "000",
+                                 verbose_name="学科")
+    class Meta:
+        verbose_name = "创新项目所属学科"
+        verbose_name_plural = "创新项目所属学科"
+
+    def __unicode__(self):
+        return self.get_subject_display()
+
+
 class ProjectEnterpriseOrigin(models.Model):
     """
     Project Origin for innovation
@@ -234,7 +251,7 @@ class ApplyControl(models.Model):
     Project apply control.
 
     Before project is applied, this should be tested, if any of department and
-    school apply control is forbidden, then application should fail, due to 
+    school apply control is forbidden, then application should fail, due to
     history reasons, deparment apply control will be in SchoolProfile rather
     than here, so this is just for school admin currently.
 

@@ -164,6 +164,8 @@ class PreSubmit(models.Model):
 
     original = models.ForeignKey(ProjectOrigin, blank=False, null=True,
                                  verbose_name=u"项目来源")
+    subject = models.ForeignKey(ProjectSubject, blank=False, null=True,
+                                 verbose_name=u"学科")
     background = models.TextField(blank=False, null=True, verbose_name="项目背景及研究意义")
     key_notes = models.TextField(blank=False, null=True,
                                  verbose_name="研究内容和拟解决的关键问题")

@@ -13,6 +13,19 @@
     </div><!--end form line, for choice-->
   </fieldset><!--Project origin-->
   <br/>
+  <fieldset>
+    <legend>学科</legend>
+    <div class="control-group form-inline {% if application.original.errors %}error{% endif %}">
+      {{application.subject}}
+      {% if application.subject.errors %}
+      <div class="row alert alert-error school-display">
+        <button class="close" data-dismiss="alert">×</button>
+        {{ application.subject.errors }}
+      </div>
+      {% endif %}
+    </div><!--end form line, for choice-->
+  </fieldset><!--Project origin-->
+  <br/>
      <fieldset>
         <div class="control-group {% if application.background.errors %}error{% endif %}">
           <legend>项目背景及研究意义</legend>
