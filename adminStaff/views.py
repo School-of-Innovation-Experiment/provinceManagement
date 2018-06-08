@@ -508,14 +508,18 @@ class AdminStaffService(object):
             if school_name and int(school_name) != -1:
                 subject_list = subject_list.filter(Q(school=SchoolProfile.objects.get(id = school_name)))
         else:
+            page1 = 1
+            page2 = 1
+            tab="nrec"
+            school_name = None
             school_category_form = forms.SchoolCategoryForm(request.POST)
             if school_category_form.is_valid():
-                page1 = 1
-                page2 = 1
                 school_name = school_category_form.cleaned_data["school_choice"]
-                tab="nrec"
                 if int(school_name) != -1:
                     subject_list = subject_list.filter(Q(school = SchoolProfile.objects.get(id = school_name)))
+            name = request.POST.get('search_info_input',None)
+            if name:
+                subject_list = subject_list.filter(Q(adminuser__name = name))
 
         for subject in subject_list:
             student_group = Student_Group.objects.filter(project = subject)
