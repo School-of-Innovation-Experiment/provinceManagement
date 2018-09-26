@@ -359,6 +359,9 @@ YIBIN_MAJOR_CHOICES = (
     ('16', u"资源与环境工程学院"),
     ('17', u"川茶学院"),
     ('18', u"质检学院"),
+    ('19', u"发展规划处"),
+    ('20', u"人事处"),
+    ('21', u"图书馆"),
 )
 
 if IS_MINZU_SCHOOL: MAJOR_CHOICES = MINZU_MAJOR_CHOICES
@@ -447,4 +450,3 @@ ACHIEVEMENT_CATEGORYS = (
     (ACHIEVEMENT_CATEGORY_PATENT, u'专利'),
     (ACHIEVEMENT_CATEGORY_COMPETITION, u'竞赛'),
 )
-                       
