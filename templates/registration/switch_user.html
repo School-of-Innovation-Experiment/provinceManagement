@@ -30,7 +30,7 @@
               <td>{{ project.student.userid.username }}</td>
               <td>{{ project.title }}</td>
               <td>{{ project.year }}</td>
-              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin project.student.userid.username %}">切换</a></td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin project.student.userid.username %}">管理此项目</a></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -46,7 +46,7 @@
             {% for user in teacher_user_set %}
             <tr>
               <td>{{ user.username }}</td>
-              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">切换</a></td>
+              <td><a type = "button" class="btn btn-xs btn-primary" href="{% url relogin user.username %}">进入账号</a></td>
             </tr>
             {% endfor %}
           </tbody>
