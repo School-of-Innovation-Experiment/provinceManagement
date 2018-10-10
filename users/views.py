@@ -209,6 +209,11 @@ def binding_view(request):
             new_username_end = request.user.username
             username = request.POST.get('username')
             password = request.POST.get('password')
+            binding_u = User.objects.get(email = username)
+            if binding_u is not None and binding_u.username.split('_')[-1] == request.user.username:
+                error_code = -2
+                return render(request, "registration/binding.html", {
+                    "error_code": error_code})
             user = authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 if check_auth(user=user, authority=STUDENT_USER):

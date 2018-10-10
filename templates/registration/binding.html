@@ -31,6 +31,10 @@
 		  <script type='text/javascript' >
 		    alert("账号不存在或密码错误！");
 		  </script>
+      {% elif error_code == -2 %}
+		  <script type='text/javascript' >
+		    alert("您已经绑定过该账号，在切换账号界面点击切换即可。");
+		  </script>
       {% elif error_code == 1 %}
 		  <script type='text/javascript' >
 		    alert("无法绑定该账号！");
