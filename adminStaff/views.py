@@ -992,6 +992,7 @@ class AdminStaffService(object):
 
         # SocketServer.BaseServer.handle_error = lambda *args, **kwargs: None
         # handlers.BaseHandler.log_exception = lambda *args, **kwargs: None
+
         try:
             pro_set = get_projectlist(request,project_manage_form)
             if exceltype == EXCEL_TYPE_BASEINFORMATION:

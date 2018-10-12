@@ -13,5 +13,5 @@ function download_files(filetype){
 
 function download_callback(data){
     $('#excelprogress').modal('hide');
-    location.href = data.path; 
+    location.href = data.path;
 }

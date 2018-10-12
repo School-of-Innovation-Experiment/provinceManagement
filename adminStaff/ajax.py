@@ -249,7 +249,6 @@ def change_subject_grade(request, project_id, changed_grade):
     '''
     change subject grade secretly
     '''
-    print(project_id,"#"*10)
     AdminStaffService.SubjectGradeChange(project_id, changed_grade)
     project = ProjectSingle.objects.get(project_id = project_id)
     res = project.project_grade.get_grade_display()
@@ -277,7 +276,6 @@ def change_project_unique_code(request, project_id,project_unique_code):
 
 @dajaxice_register
 def Release_Excel(request,exceltype,project_manage_form):
-    print exceltype
     path = AdminStaffService.get_xls_path(request,exceltype,project_manage_form)
     loginfo(p=path,label="path")
     return simplejson.dumps({'path':path})
@@ -380,7 +378,6 @@ def change_temnotice(request, temnotice_form, origin):
 
 @dajaxice_register
 def finish_control(request,year_list):
-    print 'haha'
     try:
         adminObj = AdminStaffProfile.objects.get(userid = request.user)
     except AdminStaffProfile.DoesNotExist:

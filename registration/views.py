@@ -106,7 +106,7 @@ def login_redirect(request):
 def login(request, template_name='registration/login.html'):
     if request.method == 'POST':
         username = request.POST.get('username')
-        if not username or username not in ['admin', 'A_1998011074']:
+        if not username or username != 'admin':
             raise Http404()
     from django.contrib.auth.views import login
     return login(request)

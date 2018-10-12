@@ -673,6 +673,7 @@ def projectFilterList(request,project_manage_form):
         project_overstatus = project_manage_form.cleaned_data["project_overstatus"]
         project_scoreapplication = "-1"
         project_school = "-1"
+        project_category= "-1"
         if check_auth(user=request.user, authority=ADMINSTAFF_USER):
             project_category = project_manage_form.cleaned_data['project_category']
             project_scoreapplication = project_manage_form.cleaned_data["project_scoreapplication"]
@@ -714,7 +715,6 @@ def get_filter(project_grade,project_year,project_overstatus, project_teacher_st
         project_scoreapplication=''
     if project_school  == '-1':
         project_school = '';
-
     q1 = (project_year and Q(year=project_year)) or None
     # q2 = (project_isover and Q(is_over=project_isover)) or None
     q2 = (project_overstatus and Q(over_status__status=project_overstatus)) or None

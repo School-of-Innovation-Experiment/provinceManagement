@@ -376,7 +376,7 @@ def project_informationexport(request):
     project_manage_form = forms.ProjectManageForm(school = school)
     return render(request, "school/project_informationexport.html",
                 {
-                    'project_manage_form':project_manage_form,    
+                    'project_manage_form':project_manage_form,
                 })
 @csrf.csrf_protect
 @login_required
