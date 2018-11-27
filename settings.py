@@ -26,6 +26,7 @@ TIME_ZONE = 'Asia/Shanghai'
 LANGUAGE_CODE = 'zh_cn'
 
 SITE_ID = 1
+CURRENT_SITE = '10.8.128.203:9001'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

@@ -25,6 +25,7 @@ from users.models import *
 from const.models import SchoolDict, InsituteCategory
 from school.utility import get_current_year
 from school.models import *
+from settings import CURRENT_SITE
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -79,7 +80,7 @@ class RegistrationManager(models.Manager):
             registration_profile = self.create_profile(new_user)
             registration_profile.save()
             current_site = Site.objects.get_current()
-            site_domain=current_site.domain
+            site_domain = CURRENT_SITE#current_site.domain
             if send_email:
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
