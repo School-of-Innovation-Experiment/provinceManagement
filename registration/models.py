@@ -9,6 +9,7 @@ import datetime
 import random
 import re,sha
 import uuid
+import traceback
 from django.db import transaction
 from django.conf import settings
 from django.shortcuts import render_to_response
@@ -25,7 +26,7 @@ from users.models import *
 from const.models import SchoolDict, InsituteCategory
 from school.utility import get_current_year
 from school.models import *
-from settings import CURRENT_SITE
+from email.mime.text import MIMEText
 SHA1_RE = re.compile('^[a-f0-9]{40}$')      #Activation Key
 
 class RegistrationManager(models.Manager):
@@ -80,13 +81,13 @@ class RegistrationManager(models.Manager):
             registration_profile = self.create_profile(new_user)
             registration_profile.save()
             current_site = Site.objects.get_current()
-            site_domain = CURRENT_SITE#current_site.domain
+            site_domain = current_site.domain
+            print site_domain
             if send_email:
                 from django.core.mail import send_mail
                 subject = render_to_string('registration/activation_email_subject.txt',
                                            {'site':get_current_site(request),
                                             'school_name':SCHOOL_NAME})
-
                 # Email subject *must not* contain newlines
                 subject = ''.join(subject.splitlines())
                 message = render_to_string(
@@ -95,7 +96,8 @@ class RegistrationManager(models.Manager):
                      'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
                      'school_name': SCHOOL_NAME,
                      'year': year,
-                     'site': site_domain,})
+                     'site': site_domain})
+                message = MIMEText(message, 'plain', 'utf-8').as_string()
                 send_mail(subject,
                           message,
                           settings.DEFAULT_FROM_EMAIL,
