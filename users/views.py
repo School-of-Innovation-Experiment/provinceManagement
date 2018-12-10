@@ -221,6 +221,7 @@ def binding_view(request):
                 backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
                 new_user.backend = "%s.%s" % (
                     backend.__module__, backend.__class__.__name__)
+                logout(request)
                 login(request, new_user)
                 return HttpResponseRedirect(reverse('homepage'))
 
