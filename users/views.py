@@ -226,8 +226,8 @@ def binding_view(request):
                 return HttpResponseRedirect(reverse('homepage'))
 
             password = request.POST.get('password')
-            binding_u = User.objects.get(email = username)
-            if binding_u is not None and binding_u.username.split('_')[-1] == request.user.username:
+            binding_u = User.objects.filter(email = username)
+            if len(binding_u) == 1 and binding_u[0].username.split('_')[-1] == request.user.username:
                 error_code = -2
                 return render(request, "registration/binding.html", {
                     "error_code": error_code})
