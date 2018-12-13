@@ -556,11 +556,7 @@ def student_code_project_query(request, student_code):
 
 """
 def student_code_project_query(request, student_code):
-    """
-    """
-    根据学生的学号查询与之相关的进行中项目
-    """
-    """
+
     message = ""
     project = [project for project in get_running_project_query_set() if project.student_group_set.filter(studentId = student_code)]
     if project:
