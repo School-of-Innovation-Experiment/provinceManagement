@@ -193,7 +193,7 @@ def TeacherDispatch(request, form):
         email = teacher_form.cleaned_data["teacher_email"]
         school = SchoolProfile.objects.get(userid=request.user)
         person_name = teacher_form.cleaned_data["teacher_personname"]
-        username = 'T_{}'.format(uid)
+        username = 'T_{}'.format(uid.strip(' '))
         flag = AdminStaffService.sendemail(
             request, username, None, email, TEACHER_USER,
             teacher_school=school, person_name=person_name)

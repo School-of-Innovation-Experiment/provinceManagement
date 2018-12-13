@@ -154,7 +154,7 @@ def SchoolDispatch(request, form):
         email = school_form.cleaned_data["school_email"]
         school_name = school_form.cleaned_data["school_name"]
         person_name = school_form.cleaned_data["school_personname"]
-        username = 'A_{}'.format(uid)
+        username = 'A_{}'.format(uid.strip(' '))
         flag = AdminStaffService.sendemail(
             request, username, None, email, SCHOOL_USER,
             school_name=school_name, person_name=person_name)

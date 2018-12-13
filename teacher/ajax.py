@@ -100,7 +100,7 @@ def StudentDispatch(request, form):
         project_control = ProjectControl.objects.all()[0]
         year = project_control.pre_start_day.year+1
         fmt = 'S_{}_{}'
-        username = fmt.format(year, uid)
+        username = fmt.format(year, uid.strip(' '))
         person_name = student_form.cleaned_data["student_personname"]
         #判断是否达到发送邮件的最大数量
         email_list = AdminStaffService.GetRegisterListByTeacher(
