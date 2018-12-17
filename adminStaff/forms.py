@@ -6,7 +6,7 @@ Created on 2013-3-28
 '''
 from datetime import *
 from django import  forms
-from django.db.models import Q 
+from django.db.models import Q
 from django.core import exceptions
 from backend.logging import loginfo
 from adminStaff.models import ProjectControl
@@ -115,13 +115,13 @@ class TeacherDispatchForm(forms.Form):
             'class': 'span2',
             'id': "teacher_id",
             'placeholder': u"指导教师工号"}))
-
+"""
     def clean_teacher_uid(self):
         uid = self.cleaned_data['teacher_uid']
         if '_' in uid:
             raise exceptions.ValidationError(u'工号不能包含特殊字符')
         return uid
-
+"""
 
 class TimeSettingForm(forms.Form):
     pre_start_date = forms.DateField(required=True,widget=forms.DateInput(attrs={ 'class':'span2','id':'pre_start_date',"data-date-format":"yyyy-mm-dd"}))
@@ -178,7 +178,7 @@ class NumLimitForm(forms.Form):
                            ) )
     def __init__(self, *args, **kwargs):
         super(NumLimitForm, self).__init__(*args, **kwargs)
-        
+
         SCHOOL_CHOICE_list = [(-1, "所有学部学院")]
         #学院项目数量设定特殊添加，待debug
 
@@ -238,20 +238,20 @@ class FundsChangeForm(forms.Form):
     fnuds_datetime = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_datetime','placeholder':datetime.datetime,
-                                        'cols':"6"}),)    
+                                        'cols':"6"}),)
     student_name = forms.CharField(max_length = 100,
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'student_name','placeholder':u""}),)
     funds_amount = forms.FloatField(
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)    
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_amount','placeholder':u""}),)
     funds_detail = forms.CharField(max_length = 100,
                                     required=False,
                                     widget=forms.Textarea(attrs={'class':'span4 fundsTextarea','id':'funds_detail','placeholder':u"报销明细",
-                                                                    'rows':"3",'cols':"20"}),)    
+                                                                    'rows':"3",'cols':"20"}),)
     funds_total = forms.FloatField(
                                     required=False,
-                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"初始化/修改明细填写"}),) 
+                                    widget=forms.TextInput(attrs={'class':'span2 fundschange','id':'funds_remaining','placeholder':u"初始化/修改明细填写"}),)
 
 class StudentNameForm(forms.Form):
     STUDENT_CHOICE_list = []
@@ -295,7 +295,7 @@ class ProjectManageForm(forms.Form):
     #project_isover = forms.ChoiceField(choices=project_isover_choice)
     project_overstatus = forms.ChoiceField(choices=project_overstatus_choice)
     project_scoreapplication = forms.ChoiceField(choices=project_scoreapplication_choice)
-    
+
     project_category_choice = [(-1, u'项目类型')] + list(PROJECT_CATE_CHOICES)
     project_category = forms.ChoiceField(choices=project_category_choice)
 
@@ -321,7 +321,7 @@ class ProjectManageForm(forms.Form):
         for object in school_list:
             SCHOOL_CHOICE_list.append((object.id, object.school))
         SCHOOL_CHOICE = tuple(SCHOOL_CHOICE_list)
-        self.fields["project_school"].choices = SCHOOL_CHOICE  
+        self.fields["project_school"].choices = SCHOOL_CHOICE
 
 
 # class Sync_form(forms.Form):
