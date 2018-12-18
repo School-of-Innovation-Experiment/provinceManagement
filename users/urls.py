@@ -23,10 +23,10 @@ urlpatterns = patterns('',
 #        r'^profile/$',
 #        users_views.profile_view
 #    ),
-#    url(
-#        r'^admin/$',
-#        users_views.admin_account_view
-#    ),
+    url(
+        r'^admin/$',
+        users_views.admin_account_view
+    ),
     url(
         r'^switch/$',
         users_views.switch_user_list_view,
