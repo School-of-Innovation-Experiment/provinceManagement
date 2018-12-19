@@ -513,7 +513,7 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(proj_obj.presubmit_set.all()[0].original))
+        xls_obj.write(row, 6, unicode(PROJECT_INNOVATION_ORIGIN_CHOICES[int(proj_obj.presubmit_set.all()[0].original.origin))][-1])
         xls_obj.write(row, 7, unicode(teammember['manager_name']))# 负责人
         xls_obj.write(row, 8, unicode(teammember['manager_studentid'])) # 学号
         xls_obj.write(row, 9, unicode(teammember['count'])) # 学生人数
