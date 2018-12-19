@@ -23,6 +23,8 @@ from django.db.models import Q
 from adminStaff.forms import ProjectManageForm as AdminstaffProjectManageForm
 from school.forms import ProjectManageForm as SchoolProjectManageForm
 from dajaxice.utils import deserialize_form
+from const.__init__ import PROJECT_INNOVATION_ORIGIN_CHOICES as PIOC
+
 def get_average_score_list(review_list):
     cnt_of_list = len(review_list)
     return [sum(a) / (cnt_of_list - a.count(0)) if cnt_of_list != a.count(0) else 0 for a in zip(*review_list)]
@@ -513,7 +515,7 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(PROJECT_INNOVATION_ORIGIN_CHOICES[int(proj_obj.presubmit_set.all()[0].original.origin))][-1])
+        xls_obj.write(row, 6, unicode(PIOC[int(proj_obj.presubmit_set.all()[0].original.origin)][-1]))
         xls_obj.write(row, 7, unicode(teammember['manager_name']))# 负责人
         xls_obj.write(row, 8, unicode(teammember['manager_studentid'])) # 学号
         xls_obj.write(row, 9, unicode(teammember['count'])) # 学生人数
