@@ -479,7 +479,7 @@ def info_xls_province_gen():
     worksheet.write_merge(3, 4, 11, 11, '姓名')
     worksheet.write_merge(3, 4, 12, 12, '职称')
     worksheet.write_merge(1, 2, 13, 14, '项目经费（元）')
-    worksheet.write_merge(3, 4, 13, 12, '总经费')
+    worksheet.write_merge(3, 4, 13, 13, '总经费')
     worksheet.write_merge(3, 4, 14, 14, '剩余经费')
     worksheet.write_merge(1, 4, 15, 15, '一级学科代码')
     worksheet.write_merge(1, 4, 16, 20, '项目简介（100字以内）')
@@ -515,7 +515,8 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(PIOC[int(proj_obj.presubmit_set.all()[0].original.origin)][-1]))
+        if proj_obj.presubmit_set.all() and proj_obj.presubmit_set.all()[0].original:
+            xls_obj.write(row, 6, unicode(PIOC[int(proj_obj.presubmit_set.all()[0].original.origin)][-1]))
         xls_obj.write(row, 7, unicode(teammember['manager_name']))# 负责人
         xls_obj.write(row, 8, unicode(teammember['manager_studentid'])) # 学号
         xls_obj.write(row, 9, unicode(teammember['count'])) # 学生人数
