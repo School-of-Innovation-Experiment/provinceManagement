@@ -451,7 +451,7 @@ def info_xls_province_gen():
     worksheet = workbook.add_sheet('sheet1')
 
     # generate header
-    worksheet.write_merge(0, 0, 0, 19, '大连理工大学大学生创新创业训练计划项目信息汇总表')
+    worksheet.write_merge(0, 0, 0, 20, '大连理工大学大学生创新创业训练计划项目信息汇总表')
 
     # generate body
     worksheet.write_merge(1, 4, 0, 0, '序号')
@@ -464,21 +464,23 @@ def info_xls_province_gen():
     worksheet.write_merge(1, 4, 4, 4, '项目级别')
     worksheet.col(4).width = len('项目级别') * 256
     worksheet.write_merge(1, 4, 5, 5, '项目类型')
-    worksheet.write_merge(1, 2, 6, 7, '项目负责人')
-    worksheet.write_merge(3, 4, 6, 6, '姓名')
-    worksheet.write_merge(3, 4, 7, 7, '学号')
-    worksheet.write_merge(1, 4, 8, 8, '参与学生人数')
+    worksheet.write_merge(1, 4, 6, 6, '项目来源')
+    worksheet.col(6).width = len('教师帮选，教师的科研项目') * 256
+    worksheet.write_merge(1, 2, 7, 8, '项目负责人')
+    worksheet.write_merge(3, 4, 7, 7, '姓名')
+    worksheet.write_merge(3, 4, 8, 8, '学号')
+    worksheet.write_merge(1, 4, 9, 9, '参与学生人数')
     worksheet.col(8).width = len('参与学生人数') * 256
-    worksheet.write_merge(1, 4, 9, 9, '项目其他成员信息')
+    worksheet.write_merge(1, 4, 10, 10, '项目其他成员信息')
     worksheet.col(9).width = len('项目其他成员信息') * 256
-    worksheet.write_merge(1, 2, 10, 11, '指导教师姓名')
-    worksheet.write_merge(3, 4, 10, 10, '姓名')
-    worksheet.write_merge(3, 4, 11, 11, '职称')
-    worksheet.write_merge(1, 2, 12, 13, '项目经费（元）')
-    worksheet.write_merge(3, 4, 12, 12, '总经费')
-    worksheet.write_merge(3, 4, 13, 13, '剩余经费')
-    worksheet.write_merge(1, 4, 14, 14, '一级学科代码')
-    worksheet.write_merge(1, 4, 15, 19, '项目简介（100字以内）')
+    worksheet.write_merge(1, 2, 11, 12, '指导教师姓名')
+    worksheet.write_merge(3, 4, 11, 11, '姓名')
+    worksheet.write_merge(3, 4, 12, 12, '职称')
+    worksheet.write_merge(1, 2, 13, 14, '项目经费（元）')
+    worksheet.write_merge(3, 4, 13, 12, '总经费')
+    worksheet.write_merge(3, 4, 14, 14, '剩余经费')
+    worksheet.write_merge(1, 4, 15, 15, '一级学科代码')
+    worksheet.write_merge(1, 4, 16, 20, '项目简介（100字以内）')
 
     return worksheet, workbook
 
@@ -511,17 +513,18 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 3, unicode(proj_obj.title))
         xls_obj.write(row, 4, unicode(proj_obj.project_grade))
         xls_obj.write(row, 5, unicode(proj_obj.project_category))
-        xls_obj.write(row, 6, unicode(teammember['manager_name']))# 负责人
-        xls_obj.write(row, 7, unicode(teammember['manager_studentid'])) # 学号
-        xls_obj.write(row, 8, unicode(teammember['count'])) # 学生人数
-        xls_obj.write(row, 9, unicode(teammember['memberlist'])) # 项目其他成员
-        xls_obj.write(row, 10, unicode(proj_obj.adminuser.get_name()))
-        xls_obj.write(row, 11, unicode(proj_obj.adminuser.titles)) # 指导老师职称
-        xls_obj.write(row, 12, unicode(proj_obj.funds_total)) # 总经费
-        xls_obj.write(row, 13, unicode(proj_obj.funds_remain)) # 剩余经费
+        xls_obj.write(row, 6, unicode(proj_obj.presubmit_set.all()[0].original))
+        xls_obj.write(row, 7, unicode(teammember['manager_name']))# 负责人
+        xls_obj.write(row, 8, unicode(teammember['manager_studentid'])) # 学号
+        xls_obj.write(row, 9, unicode(teammember['count'])) # 学生人数
+        xls_obj.write(row, 10, unicode(teammember['memberlist'])) # 项目其他成员
+        xls_obj.write(row, 11, unicode(proj_obj.adminuser.get_name()))
+        xls_obj.write(row, 12, unicode(proj_obj.adminuser.titles)) # 指导老师职称
+        xls_obj.write(row, 13, unicode(proj_obj.funds_total)) # 总经费
+        xls_obj.write(row, 14, unicode(proj_obj.funds_remain)) # 剩余经费
         if proj_obj.presubmit_set.all() and proj_obj.presubmit_set.all()[0].subject:
-            xls_obj.write(row, 14, unicode(proj_obj.presubmit_set.all()[0].subject.subject)) # 一级学科代码
-        xls_obj.write_merge(row, row, 15, 19, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
+            xls_obj.write(row, 15, unicode(proj_obj.presubmit_set.all()[0].subject.subject)) # 一级学科代码
+        xls_obj.write_merge(row, row, 16, 20, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
         # _index += 1
         _number+= 1
