@@ -808,3 +808,16 @@ def change_all_grade(request):
         print e
         message = "修改失败！"
         return simplejson.dumps({"message": message})
+
+@dajaxice_register
+def change_pass(request, username):
+    """
+    校级管理员修改用户密码
+    """
+    user = User.objects.filter(username = username)
+    if user:
+        user = user[0]
+        user.set_password('123456')
+        user.save()
+        return simplejson.dumps({"has_changed": True})
+    return simplejson.dumps({"has_changed": False})
