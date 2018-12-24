@@ -748,19 +748,6 @@ class AdminStaffService(object):
                 return render(request, "adminStaff/changepassword.html", context)
         return render(request, "adminStaff/changepassword.html", context)
 
-
-    @staticmethod
-    @csrf.csrf_protect
-    @login_required
-    @authority_required(ADMINSTAFF_USER)
-    def changepassword_change(request):
-        if request.method == 'POST':
-            username = request.POST.get('pid', None)
-            user_list = User.objects.filter(username__icontains = search_username)
-            if user_list:
-                context = {'user_list': user_list, 'havedata_u':1}
-                return render(request, "adminStaff/changepassword.html", context)
-
     @staticmethod
     @csrf.csrf_protect
     def projectListInfor(request,auth_identity = ADMINSTAFF_USER):
