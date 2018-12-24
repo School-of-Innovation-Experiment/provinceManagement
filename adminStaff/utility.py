@@ -350,11 +350,11 @@ def info_xls_summaryentrepreneuship(request,proj_set):
         studentlist=get_students(proj_obj)
         try:
             pre = PreSubmitEnterprise.objects.get(project_id=proj_obj.project_id)
-            teacher_enterprise = Teacher_Enterprise.objects.filter(id=pre.enterpriseTeacher_id)
+            teacher_enterprise = pre.enterpriseTeacher#Teacher_Enterprise.objects.filter(id=pre.enterpriseTeacher_id)
         except Exception, e:
             print e
-        finally:
-            teacher_enterprise = Teacher_Enterprise()
+        #finally:
+            #teacher_enterprise = Teacher_Enterprise()
         for student in studentlist:
             row += 1
             xls_obj.write(row, 1, unicode(student.studentName))
