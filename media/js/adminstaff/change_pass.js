@@ -1,6 +1,9 @@
 function change(username)
 {
-    Dajaxice.adminStaff.change_pass(change_callback,{"username":username});
+    if(confirm("您确定要重置用户 "+ username+" 的密码？"))
+    {
+      Dajaxice.adminStaff.change_pass(change_callback,{"username":username});
+    }
 }
 
 function change_callback(data)

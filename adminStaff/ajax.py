@@ -812,7 +812,7 @@ def change_all_grade(request):
 @dajaxice_register
 def change_pass(request, username):
     """
-    校级管理员修改用户密码
+    校级管理员重置用户密码
     """
     user = User.objects.filter(username = username)
     if user:

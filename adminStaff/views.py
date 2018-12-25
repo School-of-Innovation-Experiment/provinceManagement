@@ -742,7 +742,7 @@ class AdminStaffService(object):
         context = {'users': user_list, 'havedata_u': 0}
         if request.method == 'POST':
             search_username = request.POST.get('search_username', None)
-            user_list = User.objects.filter(username__icontains = search_username)
+            user_list = User.objects.filter(Q(username__icontains = search_username)|Q(email__icontains = search_username))
             if user_list:
                 context = {'user_list': user_list, 'havedata_u':1}
                 return render(request, "adminStaff/changepassword.html", context)
