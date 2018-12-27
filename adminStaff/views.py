@@ -156,6 +156,9 @@ class AdminStaffService(object):
             dict["name"] = register.get_name
             dict["email"] = register.userid.email or u"非邮箱注册"
             dict["is_active"] = register.userid.is_active
+            dict['titles'] = u'专家,无职称'
+            if isinstance(register, TeacherProfile):
+                dict["titles"] = register.titles
             dict["auth"] = []
             for auth in auth_list:
                 dict["auth"].append(auth.__unicode__())
@@ -176,7 +179,7 @@ class AdminStaffService(object):
     @staticmethod
     def GetRegisterListByTeacher(teacher):
         '''
-        获得对应`学院`的指导教师用户列表
+        获得对应`教师`的指导学生用户列表
         '''
         src=StudentProfile.objects.filter(teacher = teacher.id,projectsingle__is_past = False)
         res_list = AdminStaffService.getUserInfoList(src, teacher.userid.email)

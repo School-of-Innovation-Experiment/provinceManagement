@@ -375,3 +375,19 @@ def search_project_in_rating(request, form_data, is_expired=False):
                'search_form': users_search_form,
                 }
     return render_to_string('school/rating_project_table.html', context)
+
+
+@dajaxice_register
+def title_change(request, email, new_title):
+    user = User.objects.filter(email = email)
+    if user:
+        teacher = TeacherProfile.objects.filter(userid = user[0])
+        if not teacher and len(user) > 1:
+            teacher = TeacherProfile.objects.filter(userid = user[1])
+        if not teacher:
+            return simplejson.dumps({"has_finish": -1})
+        teacher = teacher[0]
+        teacher.titles = new_title
+        teacher.save()
+        return simplejson.dumps({"has_finish": 1})
+    return simplejson.dumps({"has_finish": 0})

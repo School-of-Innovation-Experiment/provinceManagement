@@ -30,6 +30,9 @@ urlpatterns = patterns(
     url(r'^mid/(?P<pid>.{36})$',
         school_views.mid_report_view,
         ),
+    url(r'^title_change/$',
+        school_views.title_change,
+        ),
 
     url(r'^memberchange/(?P<pid>.{36})$',
         school_views.member_change),

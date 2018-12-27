@@ -1,0 +1,35 @@
+<table class="well table">
+  <thead>
+    <tr>
+      <td><strong>用户姓名</strong></td>
+      <td><strong>用户邮箱</strong></td>
+      <td><strong>用户职称</strong></td>
+      <td><strong>操作</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    {%for user in email_list%}
+      <tr name="tr_{{user.email}}">
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.titles}}</td>
+        {% if user.titles != "专家,无职称" %}
+        <td><button data-toggle="modal" id="title_{{user.email}}" class="btn btn-primary" onclick="get_email('{{user.email}}')" href="#titles_choice" pid="{{user.email}}">更改职称</button></td>
+        {% endif %}
+      </tr>
+    {%endfor%}
+  </tbody>
+</table>
+<div class="modal hide fade" style="display: none;" id="titles_choice">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>选择职称</h3>
+  </div>
+  <div class="modal-body">
+      职称： <input type="text" id="new_title" />
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="change_titles();">保存更新</a>
+  </div>
+</div>

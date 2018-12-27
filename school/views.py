@@ -122,6 +122,30 @@ def dispatch(request):
 
     return render_to_response("school/dispatch.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
 
+
+@csrf.csrf_protect
+@login_required
+@authority_required(SCHOOL_USER)
+def title_change(request):
+    teacher_form = TeacherDispatchForm()
+    # expert_form = ExpertDispatchForm()
+    expert_form = None
+    school = SchoolProfile.objects.get(userid=request.user)
+    if not school:
+        raise Http404
+    email_list  = AdminStaffService.GetRegisterListBySchool(school)
+    email_list.extend(AdminStaffService.GetRegisterExpertListBySchool(school))
+
+    def unique(lst):
+        keys = {}
+        for item in lst:
+            keys[item["email"]] = item
+        return keys.values()
+    email_list = unique(email_list)
+
+    return render_to_response("school/title_change.html",{'expert_form':expert_form, 'teacher_form':teacher_form, 'teacher_school' : school, 'email_list':email_list},context_instance=RequestContext(request))
+
+
 @csrf.csrf_protect
 @login_required
 @authority_required(SCHOOL_USER)

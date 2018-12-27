@@ -1,0 +1,13 @@
+{% extends "school/home.html" %}
+{%block nav_admin_content%}
+
+<div>
+  <div id="teacher_or_expert_table">
+    {% include "school/widgets/title_list.html" %}
+  </div>
+</div>
+<!-- ajax_csrf-->
+<script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/school/title_change.js"></script>
+<!-- dajax-->
+{%endblock%}
