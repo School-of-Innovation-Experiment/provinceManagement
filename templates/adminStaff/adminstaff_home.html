@@ -73,7 +73,7 @@
           </td>
           {% endif %}
           <td>
-            {% if item.has_other_files %}<span class="label label-success">已上传</span>{% endif %}
+            {% if item.has_other_files %}<span class="label label-success"><a href="/adminStaff/file_download/{{item.fileurl_otherfile}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.has_other_files %}<span class="label label-important">        未上传</span>{% endif %}
           </td>
 

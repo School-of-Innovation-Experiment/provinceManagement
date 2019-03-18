@@ -488,6 +488,8 @@ def add_fileurl(project):
             project.fileurl_projectcompilation = filetemp.file_id
         elif filetemp.name == u"开题报告":
             project.fileurl_opencheck = filetemp.file_id
+        else:
+            project.fileurl_otherfile = filetemp.file_id
 
 def check_flagtofile(project):
     """

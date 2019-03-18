@@ -98,6 +98,12 @@ def application_report_view(request, pid=None):
 def home_view(request):
     context = projectListInfor(request)
     context["pro_list"] = is_showoverstatus(context["pro_list"])#添加是否显示结题的属性以及文件下载链接
+    for pro_obj in context["pro_list"]:
+        pro_obj.has_other_files = False
+        for files in pro_obj.uploadedfiles_set.all():
+            if files.name not in [u'申报书', u'中期检查表', u'结题报告', u'项目汇编', u'开题报告']:
+                pro_obj.has_other_files = True
+                break
     return render(request, "school/school_home.html",context)
 
 @csrf.csrf_protect

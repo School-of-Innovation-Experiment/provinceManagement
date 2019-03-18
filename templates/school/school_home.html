@@ -21,6 +21,7 @@
 	  <th>中期检查表</th>
 	  <th>结题验收</th>
 	  <th>项目汇编</th>
+	  <th>其他成果</th>
           <th>联系方式</th>
 	  <th>是否结题</th>
 	  <th>查看过程记录</th>
@@ -53,6 +54,10 @@
           <td>
             {% if item.file_projectcompilation %}<span class="label label-success"><a href="/school/file_download/{{item.fileurl_projectcompilation}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
             {% if not item.file_projectcompilation %}<span class="label label-important">未上传</span>{% endif %}
+          </td>
+          <td>
+            {% if item.has_other_files %}<span class="label label-success"><a href="/school/file_download/{{item.fileurl_otherfile}}" target="_blank" style="color:white">已上传</a></span>{% endif %}
+            {% if not item.has_other_files %}<span class="label label-important">未上传</span>{% endif %}
           </td>
           <td>{{item.telephone}}</td>
           <td>
