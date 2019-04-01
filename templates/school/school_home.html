@@ -16,12 +16,12 @@
 	  <th>名称</th>
 	  <th>项目级别</th>
 	  <th>指导教师</th>
-	  <th>申报书</th>
-          <th>开题报告</th>
-	  <th>中期检查表</th>
-	  <th>结题验收</th>
-	  <th>项目汇编</th>
-	  <th>其他成果</th>
+	  <th><button class = "layui-btn btn-default" type = "button" onclick = "download('application')">申报书</button></th>
+    <th><button class = "layui-btn btn-default" type = "button" onclick = "download('opencheck')">开题报告</button></th>
+	  <th><button class = "layui-btn btn-default" type = "button" onclick = "download('midcheck')">中期检查表</button></th>
+	  <th><button class = "layui-btn btn-default" type = "button" onclick = "download('summary')">结题验收</button></th>
+	  <th><button class = "layui-btn btn-default" type = "button" onclick = "download('projectcompilation')">项目汇编</button></th>
+	  <th><button class = "layui-btn btn-default" type = "button" onclick = "download('other_files')">其他成果</button></th>
           <th>联系方式</th>
 	  <th>是否结题</th>
 	  <th>查看过程记录</th>
@@ -103,5 +103,6 @@
   <a type="button" class="btn btn-primary" href="/school/subject_rating">项目等级设定</a>
   {% endif %}
 </div>
+<script type="text/javascript" src="{{STATIC_URL}}js/adminstaff/project_control.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/school/project_control.js"></script>
 {%endblock%}
