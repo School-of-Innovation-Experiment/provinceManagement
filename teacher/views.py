@@ -88,7 +88,13 @@ def open_report_view(request, pid=None,is_expired=False):
 @only_user_required
 @time_controller(phase=STATUS_FINSUBMIT)
 def final_report_view(request, pid=None,is_expired=False):
-    data = final_report_view_work(request, pid, is_expired)
+    #data = final_report_view_work(request, pid, is_expired)
+    related_ao = AchievementObjects.objects.filter(project_id=pid)
+    data = final_report_view_work(request, pid, is_expired, related_ao)
+    data['objects']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_OBJECT)
+    data['papers']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PAPER)
+    data['patents']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_PATENT)
+    data['competitions']=related_ao.filter(category=ACHIEVEMENT_CATEGORY_COMPETITION)
     if request.method == 'POST' and data['isRedirect'] :
         return HttpResponseRedirect('/teacher/')
     else :
