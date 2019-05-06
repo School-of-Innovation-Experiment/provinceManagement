@@ -568,6 +568,8 @@ def info_xls_scoreapplication(request,proj_set):
     _number= 2
     for proj_obj in proj_set:
         stu_set = proj_obj.student_group_set.all()
+        scorefile_set = proj_obj.uploadedfiles_set.filter(name__endswith="学分申请表")
+        scorefile_name_set = [f.name for f in scorefile_set]
         for stu in stu_set:
             xls_obj.write(_number, 0, unicode(proj_obj.project_grade))
             xls_obj.write(_number, 1, unicode(proj_obj.project_unique_code))
@@ -575,7 +577,10 @@ def info_xls_scoreapplication(request,proj_set):
             xls_obj.write(_number, 3, unicode(proj_obj.adminuser.get_name()))
             xls_obj.write(_number, 4, unicode(stu.studentName))
             xls_obj.write(_number, 5, unicode(stu.studentId))
-            xls_obj.write(_number, 6, "是")
+            if stu.studentName + u'学分申请表' in scorefile_name_set:
+                xls_obj.write(_number, 6, "是")
+            else:
+                xls_obj.write(_number, 6, "否")
             xls_obj.write(_number, 7,)
             _number+= 1
     # write xls file
