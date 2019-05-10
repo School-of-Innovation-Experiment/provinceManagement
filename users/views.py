@@ -60,14 +60,15 @@ def base_profile_view(request, authority=None):
         return None
 
     if request.method == "POST":
+        request_dict = {key: val.strip() for (key, val) in request.POST.items()}
         if authority == SCHOOL_USER:
-            form = SchoolProfileForm(request.POST, instance=user)
+            form = SchoolProfileForm(request_dict, instance=user)
         elif authority == EXPERT_USER:
-            form = ExpertProfileForm(request.POST, instance=user)
+            form = ExpertProfileForm(request_dict, instance=user)
         elif authority == ADMINSTAFF_USER:
-            form = AdminStaffProfileForm(request.POST, instance=user)
+            form = AdminStaffProfileForm(request_dict, instance=user)
         elif authority == TEACHER_USER:
-            form = TeacherProfileForm(request.POST, instance=user)
+            form = TeacherProfileForm(request_dict, instance=user)
         else:
             return None
         if form.is_valid():
