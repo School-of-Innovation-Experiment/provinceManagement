@@ -501,7 +501,7 @@ def info_xls_projectsummary(request,proj_set):
     for proj_obj in proj_set:
         teammember = get_teammember(proj_obj)
 
-        pro_type = PreSubmit if proj_obj.project_category.category == CATE_INNOVATION else PreSubmitEnterprise
+        pro_type = PreSubmit if proj_obj.project_category.category in (CATE_INNOVATION, CATE_RESEARCH) else PreSubmitEnterprise
         try:
             innovation = pro_type.objects.get(project_id=proj_obj.project_id)
         except Exception, err:
