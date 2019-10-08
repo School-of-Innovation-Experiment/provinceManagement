@@ -328,6 +328,11 @@ def SetManager(request,studentid):
         users_student = project.student
         users_student.name = newmanager.studentName
         users_student.save()
+        inside_user = users_student.userid
+        name_split_list = inside_user.username.split('_')
+        name_split_list[-1] = newmanager.studentId
+        inside_user.username = '_'.join(name_split_list)
+        inside_user.save()
         table = refresh_member_info_table(request)
         return simplejson.dumps({'table':table,'message':u'负责人设定成功','flag':True})
     except Exception, e:
