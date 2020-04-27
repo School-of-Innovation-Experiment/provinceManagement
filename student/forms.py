@@ -50,7 +50,7 @@ class StudentGroupInfoForm(forms.Form):
 
 
 class ProcessRecordForm(forms.Form):
-    weekId    = forms.IntegerField(max_value=50,
+    weekId    = forms.IntegerField(max_value=200,
                                        required=True,
                                        widget=forms.DateInput(attrs={'class':'studentchange span2 ','id':"weekId","onkeyup":"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" ,'onafterpaste':"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"}),
         )
