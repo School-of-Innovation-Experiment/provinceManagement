@@ -573,7 +573,7 @@ def delete_project_query(request, delete_info):
     """
     loginfo(p=delete_info,label="delete_info")
     message = ""
-    project_list = ProjectSingle.objects.filter(Q(adminuser__name = delete_info))
+    project_list = ProjectSingle.objects.filter(Q(adminuser__name__icontains = delete_info.strip(' ')))
     if project_list:
         #按照逻辑，每个学号只能存在于一个正在进行中项目，所以直接获取project[0]即可
         message = 'ok'
