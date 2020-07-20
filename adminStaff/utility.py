@@ -526,7 +526,7 @@ def info_xls_projectsummary(request,proj_set):
         xls_obj.write(row, 13, unicode(proj_obj.funds_total)) # 总经费
         xls_obj.write(row, 14, unicode(proj_obj.funds_remain)) # 剩余经费
         if proj_obj.presubmit_set.all() and proj_obj.presubmit_set.all()[0].subject:
-            xls_obj.write(row, 15, unicode(proj_obj.presubmit_set.all()[0].subject.subject)) # 一级学科代码
+            xls_obj.write(row, 15, unicode("0%s" % str(proj_obj.presubmit_set.all()[0].subject.subject))) # 一级学科代码
         xls_obj.write_merge(row, row, 16, 20, unicode(innovation.innovation)) # both enterprise and innovation has innovation attr
 
         # _index += 1
